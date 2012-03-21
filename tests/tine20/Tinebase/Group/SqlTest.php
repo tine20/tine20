@@ -43,9 +43,9 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Group_SqlTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Group_SqlTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -61,13 +61,13 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
             'id'            => 10,
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
-        )); 
+        ));
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'id'            => 10,
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
-        )); 
+        ));
     }
 
     /**
@@ -78,7 +78,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -156,7 +156,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $groups[] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit1',
             'description'   => 'group1'
-        )); 
+        ));
         
         $groups[] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit2',
@@ -188,7 +188,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $groups[] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit1',
             'description'   => 'group1'
-        )); 
+        ));
         
         $groups[] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit2',
@@ -216,8 +216,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         
         
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Group_SqlTest::main') {
     Tinebase_Group_SqlTest::main();

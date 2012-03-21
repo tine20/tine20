@@ -29,7 +29,7 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             layout: 'form',
             border: false,
@@ -55,7 +55,7 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     fieldLabel: this.app.i18n._('Software Version'),
                     displayField: 'name',
                     store: new Ext.data.Store({
-                    	fields: Tine.Voipmanager.Model.SnomSoftware,
+                        fields: Tine.Voipmanager.Model.SnomSoftware,
                         proxy: Tine.Voipmanager.SnomSoftwareBackend,
                         reader: Tine.Voipmanager.SnomSoftwareBackend.getReader(),
                         remoteSort: true,

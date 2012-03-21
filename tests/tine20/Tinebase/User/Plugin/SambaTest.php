@@ -89,11 +89,11 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
     public function testAddUser()
     {
         $user = Tinebase_User_LdapTest::getTestRecord();
-		$user->sambaSAM = new Tinebase_Model_SAMUser(array(
+        $user->sambaSAM = new Tinebase_Model_SAMUser(array(
             'homeDrive' => 'H:',
             'homePath'  => '\\\\smbserver\\homes'
-		));
-		
+        ));
+        
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
         
@@ -187,8 +187,8 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
         $this->assertEquals(null,                          $testUser->sambaSAM->kickoffTime);
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_User_Plugin_SambaTest::main') {
     Tinebase_Group_SqlTest::main();

@@ -79,7 +79,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initCM: function(){
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 resizable: true

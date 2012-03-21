@@ -169,7 +169,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             
             // add new members
             foreach ($_groupMembers as $accountId) {
-                $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);        
+                $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
                 $stmt->execute(array(
                     $groupId, 
                     $accountId
@@ -479,7 +479,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();            
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
     }
@@ -495,7 +495,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' groups');
         
         if(count($groups) > 0) {
-            $this->deleteGroups($groups);        
+            $this->deleteGroups($groups);
         }
     }
     
@@ -510,7 +510,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_Group
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
-    {        
+    {
         $select = $this->_getSelect();
         
         if($_filter !== NULL) {
@@ -540,7 +540,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupByName($_name)
-    {        
+    {
         $select = $this->_getSelect();
                 
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_name);
@@ -566,8 +566,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @throws  Tinebase_Exception_Record_NotDefined
      */
     public function getGroupById($_groupId)
-    {   
-        $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
+    {
+        $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $select = $this->_getSelect();
         
@@ -626,7 +626,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
         
-        if ($this->_addressBookInstalled === true) { 
+        if ($this->_addressBookInstalled === true) {
             $select->joinLeft(
                 array('addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'),
                 $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'), 

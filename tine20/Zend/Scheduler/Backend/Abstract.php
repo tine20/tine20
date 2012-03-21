@@ -64,7 +64,7 @@ abstract class Zend_Scheduler_Backend_Abstract
      * 
      * @param array $tasks Remaining tasks
      */ 
-    abstract public function saveQueue($tasks = array()); 
+    abstract public function saveQueue($tasks = array());
  
     /**
      * Gets the remaining tasks to perform.
@@ -121,7 +121,7 @@ abstract class Zend_Scheduler_Backend_Abstract
                 'hours'      =>    $task->getRule('hours')->getValue(),
                 'minutes'    =>    $task->getRule('minutes')->getValue(),
                 'requests'   =>    $requests
-            );        
+            );
         }
         return $__tasks;
     }

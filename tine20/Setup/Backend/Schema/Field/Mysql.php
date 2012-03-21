@@ -26,7 +26,7 @@ class Setup_Backend_Schema_Field_Mysql extends Setup_Backend_Schema_Field_Abstra
      * @param stdClass $_declaration
      */    
     protected function _setField($_declaration)
-    {    
+    {
         if (is_array($_declaration)) {
             $this->name = $_declaration['COLUMN_NAME'];
             $type       = $_declaration['DATA_TYPE'];

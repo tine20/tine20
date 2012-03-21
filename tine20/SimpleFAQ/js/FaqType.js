@@ -87,14 +87,14 @@ Tine.SimpleFAQ.FaqType.getStore = function() {
  * @return  {String} faqtype
  */
 Tine.SimpleFAQ.FaqType.Renderer = function(_faqtypeId) {
-	store = Tine.SimpleFAQ.FaqType.getStore();
-	record = store.getById(_faqtypeId);
+    store = Tine.SimpleFAQ.FaqType.getStore();
+    record = store.getById(_faqtypeId);
 
-	if (record) {
-	    return record.data.faqtype;
-	} else {
+    if (record) {
+        return record.data.faqtype;
+    } else {
             return 'undefined';
-	}
+    }
 };
 
 /**

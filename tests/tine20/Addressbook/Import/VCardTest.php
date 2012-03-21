@@ -36,9 +36,9 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook VCard Import Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook VCard Import Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -79,4 +79,4 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Eisenhüttenstraße 723', $result['results']->getFirstRecord()->adr_one_street, 'street not found');
         $this->assertEquals('http://www.vcard.de', $result['results']->getFirstRecord()->url, 'url not found');
     }
-}		
+}        

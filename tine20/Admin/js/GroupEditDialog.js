@@ -69,8 +69,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                     Ext.MessageBox.hide();
                 },
-                failure: function (result, request) { 
-                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save group.')); 
+                failure: function (result, request) {
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save group.'));
                 },
                 scope: this 
             });
@@ -97,7 +97,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * function updateToolbarButtons
      * 
      */
-    updateToolbarButtons: function (rights) {        
+    updateToolbarButtons: function (rights) {
     },
     
     /**
@@ -146,8 +146,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         select: function (combo, record) {
                             // disable container_id combo if hidden
                             this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
-                            if(record.data.field1 === 'hidden') { 
-                                this.getForm().findField('container_id').clearInvalid(); 
+                            if(record.data.field1 === 'hidden') {
+                                this.getForm().findField('container_id').clearInvalid();
                             } else {
                                 this.getForm().findField('container_id').isValid();
                             }

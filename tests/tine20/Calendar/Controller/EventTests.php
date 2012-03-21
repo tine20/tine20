@@ -32,7 +32,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function setUp()
     {
-    	parent::setUp();
+        parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
 
     }
@@ -264,7 +264,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testSearchFreeTime() {
         $persistentEvent = $this->testGetFreeBusyInfo();
         
-        $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee); 
+        $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee);
     }
     
     /**
@@ -274,7 +274,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $testCal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-        	'owner_id'       => Tinebase_Core::getUser(),
+            'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => $this->_backend->getType(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));
@@ -320,7 +320,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         try {
             $exectionRaised = FALSE;
-        	$this->_controller->create($conflictEvent, TRUE);
+            $this->_controller->create($conflictEvent, TRUE);
         } catch (Calendar_Exception_AttendeeBusy $busyException) {
             $fbData = $busyException->toArray();
             $this->assertGreaterThanOrEqual(2, count($fbData['freebusyinfo']));
@@ -408,7 +408,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'user_id'   => $defaultUserGroup->getId(),
             'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-        )));        
+        )));
         
         $this->setExpectedException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);

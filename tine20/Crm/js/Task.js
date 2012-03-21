@@ -88,7 +88,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         
         this.storeFields = Tine.Tasks.TaskArray;
         this.storeFields.push({name: 'relation'});   // the relation object           
-        this.storeFields.push({name: 'relation_type'});     
+        this.storeFields.push({name: 'relation_type'});
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -150,7 +150,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     grid.fireEvent('celldblclick', grid, row, 1, e);
                 });
             }
-        }, this);        
+        }, this);
         
         Tine.Crm.Task.GridPanel.superclass.initComponent.call(this);
     },
@@ -249,17 +249,17 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         
         var myTask = this.store.getById(task.id);
         
-        if (myTask) { 
+        if (myTask) {
             // copy values from edited task
             myTask.beginEdit();
-            for (var p in task.data) { 
+            for (var p in task.data) {
                 myTask.set(p, task.get(p));
             }
             myTask.endEdit();
             
         } else {
             task.data.relation_type = 'task';
-            this.store.add(task);        
+            this.store.add(task);
         }
     }
 });

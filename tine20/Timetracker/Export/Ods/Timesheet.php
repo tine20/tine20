@@ -3,7 +3,7 @@
  * Timesheet Ods generation class
  *
  * @package     Timetracker
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * Timetracker Ods generation class
  * 
  * @package     Timetracker
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
@@ -80,10 +80,10 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      */
     protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
-    	if (is_null($_key)) {
-    		throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
-    	}
-    	
+        if (is_null($_key)) {
+            throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
+        }
+        
         $value = '';
         
         switch($_param['type']) {

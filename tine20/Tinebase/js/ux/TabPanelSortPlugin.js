@@ -180,7 +180,7 @@ Ext.ux.TabPanelSortPlugin.prototype = {
         this.tabpanel.items.insert(this.pos, data.item);
         
         this.tabpanel.fireEvent('tabsort', this.tabpanel);
-        return true;  
+        return true;
     },
     
     /**

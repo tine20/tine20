@@ -23,7 +23,7 @@ Tine.Admin.user.show = function () {
         });
     }
     else {
-    	Tine.Admin.user.gridPanel.loadGridData.defer(100, Tine.Admin.user.gridPanel, []);
+        Tine.Admin.user.gridPanel.loadGridData.defer(100, Tine.Admin.user.gridPanel, []);
     }
     
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.user.gridPanel, true);
@@ -46,8 +46,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
-	{ name: 'groups' },
-	{ name: 'accountRoles' },
+    { name: 'groups' },
+    { name: 'accountRoles' },
     { name: 'accountPrimaryGroup' },
     { name: 'accountExpires', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },

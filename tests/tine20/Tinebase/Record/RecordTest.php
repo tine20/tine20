@@ -120,7 +120,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $record2->test_1 = 26;
         $diff = $record1->diff($record2);
         $this->assertEquals(2, count($diff));
-        $this->assertEquals('anders', $diff['string']);        
+        $this->assertEquals('anders', $diff['string']);
         $this->assertEquals(26, $diff['test_1']);
 
         $record2 = clone $record1;

@@ -129,7 +129,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.storeFields = Tine.Addressbook.Model.ContactArray;
         this.storeFields.push({name: 'relation'});   // the relation object           
-        this.storeFields.push({name: 'relation_type'});     
+        this.storeFields.push({name: 'relation_type'});
         
         // create delegates
         this.initStore = Tine.Crm.LinkGridPanel.initStore.createDelegate(this);
@@ -146,7 +146,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.actionAdd.contactType = 'customer';
 
         // init store stuff
-        this.store.setDefaultSort('type', 'asc');   
+        this.store.setDefaultSort('type', 'asc');
         
         Tine.Crm.Contact.GridPanel.superclass.initComponent.call(this);
     },
@@ -163,7 +163,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             iconCls: 'contactIconCustomer',
             scope: this,
             handler: this.onChangeContactType
-        }); 
+        });
         
         this.actionChangeContactTypeResponsible = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -173,7 +173,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             iconCls: 'contactIconResponsible',
             scope: this,
             handler: this.onChangeContactType
-        }); 
+        });
     
         this.actionChangeContactTypePartner = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -222,7 +222,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 {id:'n_fileas', header: this.app.i18n._('Name'), dataIndex: 'n_fileas', width: 200, sortable: true, renderer: 
                     function(val, meta, record) {
                         var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : ' ';
-                        var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : ' ';                            
+                        var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : ' ';
                         var formated_return = '<b>' + Ext.util.Format.htmlEncode(n_fileas) + '</b><br />' + Ext.util.Format.htmlEncode(org_name);
                         
                         return formated_return;
@@ -243,7 +243,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         var translation = new Locale.Gettext();
                         translation.textdomain('Crm');
                         var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? translation._('Phone') + ': ' + record.data.tel_work : ' ';
-                        var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';          
+                        var tel_cell           = Ext.isEmpty(record.data.tel_cell) === false ? translation._('Cellphone') + ': ' + record.data.tel_cell : ' ';
                         var formated_return = Ext.util.Format.htmlEncode(tel_work) + '<br/>' + Ext.util.Format.htmlEncode(tel_cell) + '<br/>';
                         return formated_return;
                     }
@@ -267,7 +267,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * onclick handler for changeContactType
      */
-    onChangeContactType: function(_button, _event) {          
+    onChangeContactType: function(_button, _event) {
         var selectedRows = this.getSelectionModel().getSelections();
         
         for (var i = 0; i < selectedRows.length; ++i) {
@@ -291,7 +291,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var myContact = this.store.getById(contact.id);
         if (myContact) {
             myContact.beginEdit();
-            for (var p in contact.data) { 
+            for (var p in contact.data) {
                 myContact.set(p, contact.get(p));
             }
             myContact.endEdit();
@@ -313,7 +313,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, { 
+Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @cfg {bool} autoExpand Autoexpand comboBox on focus.
      */

@@ -32,24 +32,24 @@ Ext.ux.PopupWindow = function(config) {
 };
 
 Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
-	/**
-	 * @cfg    {String}
-	 * @param  {String} url
-	 * @desc   url to open
-	 */
-	url: null,
-	/**
-	 * @cfg {String} internal name of new window
-	 */
-	name: 'new window',
-	/**
-	 * @cfg {Int} width of new window
-	 */
-	width: 500,
-	/**
-	 * @cfg {Int} height of new window
-	 */
-	height: 500,
+    /**
+     * @cfg    {String}
+     * @param  {String} url
+     * @desc   url to open
+     */
+    url: null,
+    /**
+     * @cfg {String} internal name of new window
+     */
+    name: 'new window',
+    /**
+     * @cfg {Int} width of new window
+     */
+    width: 500,
+    /**
+     * @cfg {Int} height of new window
+     */
+    height: 500,
     /**
      * @cfg {Bolean}
      */
@@ -79,10 +79,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     windowManager: null,
     
-	/**
-	 * @private
-	 */
-	initComponent: function(){
+    /**
+     * @private
+     */
+    initComponent: function(){
         if (! this.title) {
             this.title = Tine.title;
         }
@@ -140,7 +140,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             this.popup.onunload = this.onClose;
         }
         */
-	},
+    },
     
     /**
      * rename window name
@@ -179,16 +179,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         }
     },
     
-	/**
-	 * @private
+    /**
+     * @private
      * 
-	 * called after this.popups native onLoad
+     * called after this.popups native onLoad
      * note: 'this' references the popup, whereas window references the parent
-	 */
-	onLoad: function() {
+     */
+    onLoad: function() {
         this.Ext.onReady(function() {
-        	//console.log(this);
-        	//console.log(window);
+            //console.log(this);
+            //console.log(window);
         }, this);
     },
     

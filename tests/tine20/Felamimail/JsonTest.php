@@ -111,9 +111,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -480,7 +480,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessage()
     {
-        $message = $this->_sendMessage();     
+        $message = $this->_sendMessage();
         
         // get complete message
         $message = $this->_json->getMessage($message['id']);
@@ -501,7 +501,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetPlainTextMessage()
     {
         $accountBackend = new Felamimail_Backend_Account();
-        $message = $this->_sendMessage();     
+        $message = $this->_sendMessage();
         
         // get complete message
         $this->_account->display_format = Felamimail_Model_Account::DISPLAY_PLAIN;
@@ -724,7 +724,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_testFolderName);
         
         $inbox = $this->_getFolder('INBOX');
-        $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);        
+        $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);
         
         // move
         $testFolder = $this->_getFolder($this->_testFolderName);
@@ -882,7 +882,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveMessage($messageData);
         $this->_foldersToClear = array('INBOX', $this->_testFolderName);
         // check if message is in test folder
-        $message = $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);        
+        $message = $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
     }
     
     /**
@@ -983,7 +983,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId
         ));
         
-        return $result; 
+        return $result;
     }
     
     /**
@@ -1031,7 +1031,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage($messageToSend);
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder); 
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         
         //sleep(10);
         $result = $this->_getMessages($_folderName);
@@ -1051,7 +1051,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getMessageFromSearchResult($_result, $_subject)
     {
-        $message = array(); 
+        $message = array();
         foreach ($_result['results'] as $mail) {
             if ($mail['subject'] == $_subject) {
                 $message = $mail;

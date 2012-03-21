@@ -42,9 +42,9 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filemanager directory backend tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filemanager directory backend tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -153,12 +153,12 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
     {
         $object  = new Tinebase_Model_Tree_Node(array(
             'name'     => 'PHPUnit test node',
-        ), true); 
+        ), true);
         
         return $object;
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Tree_NodeTest::main') {
     Tinebase_Tree_NodeTest::main();

@@ -147,7 +147,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function getGroupByIdFromSyncBackend($_groupId)
     {
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
+        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
@@ -209,7 +209,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 'id'            => $group[$this->_groupUUIDAttribute][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
-            ), TRUE); 
+            ), TRUE);
 
             $result->addRecord($groupObject);
         }
@@ -239,7 +239,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $groupDn = $this->_getDn($_groupId);
         
-        $memberDn = array(); 
+        $memberDn = array();
         $memberUid = array();
         
         foreach ($membersMetaDatas as $memberMetadata) {
@@ -455,7 +455,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 // we need to add the group dn, as the member attribute is not allowed to be empty
                 $dataAdd = array(
                     'member' => $groupDn
-                ); 
+                );
                 $this->_ldap->insertProperty($groupDn, $dataAdd);
             } else {
                 $ldapData['member'] = $accountMetaData['dn'];
@@ -630,7 +630,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             throw new Tinebase_Exception_NotFound("Group with id $_groupId not found.");
         }
         
-        return $result->getFirst();        
+        return $result->getFirst();
     }
     
     /**

@@ -81,7 +81,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     {
         $this->testClearQueue();
         
-        $request = new Zend_Controller_Request_Simple(); 
+        $request = new Zend_Controller_Request_Simple();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');

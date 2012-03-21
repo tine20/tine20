@@ -48,7 +48,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
     }
     
     protected function setUp()
-    {   	
+    {
         ########### define test device
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
         
@@ -108,7 +108,7 @@ class ActiveSync_Controller_DeviceTests extends PHPUnit_Framework_TestCase
      * test setting content filter
      */
     public function testSetDeviceContentFilter()
-    {        
+    {
         ActiveSync_Controller_Device::getInstance()->setDeviceContentFilter(
             $this->objects['device']->getId(), 
             ActiveSync_Controller::CLASS_CONTACTS, 

@@ -55,7 +55,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                 
                 if (exception.existingnodesinfo) {
                     for (i = 0; i < exception.existingnodesinfo.length; i++) {
-                        existingFilenames.push(exception.existingnodesinfo[i].name); 
+                        existingFilenames.push(exception.existingnodesinfo[i].name);
                     }
                 }
                 

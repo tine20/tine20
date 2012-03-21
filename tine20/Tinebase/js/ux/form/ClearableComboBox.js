@@ -58,7 +58,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             t.addClassOnClick('x-form-trigger-click');
         }, this);
         this.triggers = ts.elements;
-        this.triggers[0].hide();                   
+        this.triggers[0].hide();
     },
     
     // clear contents of combobox

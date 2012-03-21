@@ -23,9 +23,9 @@ class Tinebase_Model_Registration extends Tinebase_Record_Abstract
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
      *
-     * @var 	array
+     * @var     array
      * 
-     * @todo 	add more filters
+     * @todo     add more filters
      */
     protected $_filters = array(
         'id'         => 'Digits',
@@ -39,16 +39,16 @@ class Tinebase_Model_Registration extends Tinebase_Record_Abstract
      * 
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
-     * @var 	array
+     * @var     array
      */
     protected $_validators = array(
         'id'            => array('allowEmpty' => true),
         'login_name'    => array('presence' => 'required'),
         'login_hash'    => array('presence' => 'required'),
         'email'         => array('presence' => 'required'),
-        'date'		    => array('allowEmpty' => true),
-        'expires_at'	=> array('allowEmpty' => true),
-        'status'	    => array('allowEmpty' => true),
+        'date'            => array('allowEmpty' => true),
+        'expires_at'    => array('allowEmpty' => true),
+        'status'        => array('allowEmpty' => true),
         'email_sent'    => array('allowEmpty' => true),
     );
     
@@ -56,7 +56,7 @@ class Tinebase_Model_Registration extends Tinebase_Record_Abstract
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
-     * @var 	string
+     * @var     string
      */    
     protected $_identifier = 'id';
 
@@ -70,7 +70,7 @@ class Tinebase_Model_Registration extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'date',
         'expires_at',
-    );   
+    );
 
  
 }

@@ -113,7 +113,7 @@ class Tinebase_Auth
      */
     private static $_backendConfigurationDefaults = array(
         self::SQL => array(
-        	'tryUsernameSplit' => '1',
+            'tryUsernameSplit' => '1',
             'accountCanonicalForm' => '2',
             'accountDomainName' => '',
             'accountDomainNameShort' => '',
@@ -237,7 +237,7 @@ class Tinebase_Auth
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
                 self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::AUTHENTICATIONBACKENDTYPE, null, self::SQL)->value);
             } else {
-                self::setBackendType(self::SQL); 
+                self::setBackendType(self::SQL);
             }
         }
         
@@ -251,7 +251,7 @@ class Tinebase_Auth
     {
         $backendType = self::getConfiguredBackend();
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
-        $this->_backend = Tinebase_Auth_Factory::factory($backendType);        
+        $this->_backend = Tinebase_Auth_Factory::factory($backendType);
     }
     
     /**
@@ -346,7 +346,7 @@ class Tinebase_Auth
         }
 
         if (isset($_key)) {
-            return array_key_exists($_key, self::$_backendConfiguration) ? self::$_backendConfiguration[$_key] : $_default; 
+            return array_key_exists($_key, self::$_backendConfiguration) ? self::$_backendConfiguration[$_key] : $_default;
         } else {
             return self::$_backendConfiguration;
         }
@@ -390,7 +390,7 @@ class Tinebase_Auth
             if (!array_key_exists($_backendType, self::$_backendConfigurationDefaults)) {
                 throw new Tinebase_Exception_InvalidArgument("Unknown backend type '$_backendType'");
             }
-            return self::$_backendConfigurationDefaults[$_backendType]; 
+            return self::$_backendConfigurationDefaults[$_backendType];
         } else {
             return self::$_backendConfigurationDefaults;
         }

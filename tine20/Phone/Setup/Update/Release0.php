@@ -56,7 +56,7 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
      *
      */
     public function update_3()
-    {        
+    {
         $tableDefinition = '
         <table>
             <name>phone_callhistory</name>
@@ -146,8 +146,8 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
             </declaration>
         </table>
         ';
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $this->setApplicationVersion('Phone', '0.4');
     }
@@ -157,7 +157,7 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
      *
      */
     public function update_4()
-    {        
+    {
         $this->_backend->dropPrimaryKey('phone_callhistory');
         $this->_backend->dropIndex('phone_callhistory', 'call_id-phone_id');
         $this->_backend->dropCol('phone_callhistory', 'call_id');
@@ -185,7 +185,7 @@ class Phone_Setup_Update_Release0 extends Setup_Update_Abstract
      *
      */
     public function update_5()
-    {        
+    {
         $fieldDefinition = '
         <field>
             <name>callerid</name>

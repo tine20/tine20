@@ -120,7 +120,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * 
      * @var string
      */
-    protected $_filterProperty = 'contactsfilter_id';        
+    protected $_filterProperty = 'contactsfilter_id';
     
     /**
      * field to sort search results by

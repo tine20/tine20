@@ -17,7 +17,7 @@ Tine.Admin = function () {
     /**
      * builds the admin applications tree
      */
-    var getInitialTree = function (translation) { 
+    var getInitialTree = function (translation) {
         
         return [{
             text: translation.ngettext('User', 'Users', 50),

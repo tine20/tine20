@@ -25,50 +25,50 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_THUNDERBIRD = 'thunderbird';
     
     /**
-	 * factory function to return a selected vcalendar backend class
-	 *
-	 * @param   string $_backend
-	 * @param   string $_version
-	 * @return  Tinebase_Convert_Interface
-	 */
-	static public function factory($_backend, $_version = null)
-	{
-	    switch ($_backend) {
-	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC:
-	            return new Calendar_Convert_Event_VCalendar_Generic($_version);
-	            
-	            break;
-	            
-	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
-	            return new Calendar_Convert_Event_VCalendar_Iphone($_version);
-	            
-	            break;
-	            
-	        case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
-	            return new Calendar_Convert_Event_VCalendar_KDE($_version);
-	            
-	            break;
-	            
+     * factory function to return a selected vcalendar backend class
+     *
+     * @param   string $_backend
+     * @param   string $_version
+     * @return  Tinebase_Convert_Interface
+     */
+    static public function factory($_backend, $_version = null)
+    {
+        switch ($_backend) {
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC:
+                return new Calendar_Convert_Event_VCalendar_Generic($_version);
+                
+                break;
+                
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
+                return new Calendar_Convert_Event_VCalendar_Iphone($_version);
+                
+                break;
+                
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
+                return new Calendar_Convert_Event_VCalendar_KDE($_version);
+                
+                break;
+                
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX:
-	            return new Calendar_Convert_Event_VCalendar_MacOSX($_version);
-	            
-	            break;
-	            
+                return new Calendar_Convert_Event_VCalendar_MacOSX($_version);
+                
+                break;
+                
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD:
                 return new Calendar_Convert_Event_VCalendar_Thunderbird($_version);
                  
                 break;
-	                 
-	    }
-	}
-	
-	/**
-	 * parse iseragent and return backend and version
-	 * 
-	 * @return array
-	 */
-	static public function parseUserAgent($_userAgent)
-	{
+                     
+        }
+    }
+    
+    /**
+     * parse iseragent and return backend and version
+     * 
+     * @return array
+     */
+    static public function parseUserAgent($_userAgent)
+    {
         // MacOS X
         if (preg_match(Calendar_Convert_Event_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
@@ -97,5 +97,5 @@ class Calendar_Convert_Event_VCalendar_Factory
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " backend: $backend version: $version");
         
         return array($backend, $version);
-	}
+    }
 }

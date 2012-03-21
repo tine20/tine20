@@ -49,12 +49,12 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
      * @todo generalize
      */
     public function getGroupCountForField($_filter, $_field)
-    {     
+    {
         $select = $this->_db->select();
         
         if ($this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
         }
                 
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array(

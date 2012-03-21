@@ -18,7 +18,7 @@
  * @subpackage  Controller
  */
 interface Tinebase_Controller_SearchInterface
-{    
+{
     /**
      * get list of records
      *

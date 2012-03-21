@@ -105,15 +105,15 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         if (! value || value === this.defaultImage) {
             this.setDefaultImage(this.defaultImage);
         } else {
-			if (value instanceof Ext.ux.util.ImageURL || (Ext.isString(value) && value.match(/&/))) {
-	            this.imageSrc = Ext.ux.util.ImageURL.prototype.parseURL(value);
-	            this.imageSrc.width = this.width;
-	            this.imageSrc.height = this.height;
-	            this.imageSrc.ratiomode = 0;
-			}
-			else {
-				this.setDefaultImage(! Ext.isEmpty(value) ? value : this.defaultImage);
-			}
+            if (value instanceof Ext.ux.util.ImageURL || (Ext.isString(value) && value.match(/&/))) {
+                this.imageSrc = Ext.ux.util.ImageURL.prototype.parseURL(value);
+                this.imageSrc.width = this.width;
+                this.imageSrc.height = this.height;
+                this.imageSrc.ratiomode = 0;
+            }
+            else {
+                this.setDefaultImage(! Ext.isEmpty(value) ? value : this.defaultImage);
+            }
         }
         this.updateImage();
     },
@@ -129,7 +129,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         var files = fileSelector.getFileList();
         var uploader = new Ext.ux.file.Upload({
-        	file: files[0],
+            file: files[0],
             fileSelector: fileSelector
         });
         
@@ -150,8 +150,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         this.loadMask.show();
         
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(uploader);        	
-        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(uploader);
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();
@@ -182,29 +182,29 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         this.ctxMenu = new Ext.menu.Menu({
             items: [upload, {
-	            text: _('Crop Image'),
-	            iconCls: 'action_cropImage',
-	            scope: this,
-	            disabled: true, //this.imageSrc == this.defaultImage,
-	            handler: function () {
-	                var cropper = new Ext.ux.form.ImageCropper({
-	                    imageURL: this.imageSrc
-	                });
-	                
-	                var dlg = new Tine.widgets.dialog.EditRecord({
-	                    handlerScope: this,
-	                    handlerCancle: this.close,
-	                    items: cropper
-	                });
-	                
-	                var win = Tine.WindowFactory.getWindow({
-	                    width: 320,
-	                    height: 320,
-	                    title: _('Crop Image'),
-	                    layout: 'fit',
-	                    items: dlg
-	                });
-	            }
+                text: _('Crop Image'),
+                iconCls: 'action_cropImage',
+                scope: this,
+                disabled: true, //this.imageSrc == this.defaultImage,
+                handler: function () {
+                    var cropper = new Ext.ux.form.ImageCropper({
+                        imageURL: this.imageSrc
+                    });
+                    
+                    var dlg = new Tine.widgets.dialog.EditRecord({
+                        handlerScope: this,
+                        handlerCancle: this.close,
+                        items: cropper
+                    });
+                    
+                    var win = Tine.WindowFactory.getWindow({
+                        width: 320,
+                        height: 320,
+                        title: _('Crop Image'),
+                        layout: 'fit',
+                        items: dlg
+                    });
+                }
             }, {
                 text: _('Delete Image'),
                 iconCls: 'action_delete',
@@ -233,8 +233,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }).toString();
         
         var window = Tine.WindowFactory.getWindow({
-        	url: url,
-        	name: 'showImage',
+            url: url,
+            name: 'showImage',
             width: 800,
             height: 600
         });
@@ -245,22 +245,22 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      * @param {String} image
      */
     setDefaultImage: function (image) {
-		this.defaultImage = image;
-		this.imageSrc = this.defaultImage;
-		
-		var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.defaultImage + '"/>' , true);
-		
-		this.imageCt.remove();
-		this.imageCt = img;
-		this.imageCt.setOpacity(0.2);
-		this.imageCt.setStyle({
+        this.defaultImage = image;
+        this.imageSrc = this.defaultImage;
+        
+        var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.defaultImage + '"/>' , true);
+        
+        this.imageCt.remove();
+        this.imageCt = img;
+        this.imageCt.setOpacity(0.2);
+        this.imageCt.setStyle({
             position: 'absolute',
             top: '18px'
         });
-		this.textCt.setVisible(true);
-		
-		// after setting new empty photo set field value to empty string
-		Ext.ux.form.ImageField.superclass.setValue.call(this, '');
+        this.textCt.setVisible(true);
+        
+        // after setting new empty photo set field value to empty string
+        Ext.ux.form.ImageField.superclass.setValue.call(this, '');
     },
     
     updateImage: function () {
@@ -299,7 +299,7 @@ Ext.ux.util.ImageURL = function (config) {
         height: 120,
         ratiomode: 0,
         mtime: new Date().getTime()
-    }); 
+    });
 };
 /**
  * generates an imageurl according to the class members
@@ -325,9 +325,9 @@ Ext.ux.util.ImageURL.prototype.toString = function () {
  */
 Ext.ux.util.ImageURL.prototype.parseURL = function (url) {
     var urlString = url.toString(),
-    	params = {},
-    	lparams = urlString.substr(urlString.indexOf('?') + 1).split('&');
-    	
+        params = {},
+        lparams = urlString.substr(urlString.indexOf('?') + 1).split('&');
+        
     for (var i = 0, j = lparams.length; i < j; i += 1) {
         var param = lparams[i].split('=');
         params[param[0]] = Ext.util.Format.htmlEncode(param[1]);

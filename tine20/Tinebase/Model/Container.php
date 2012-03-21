@@ -106,7 +106,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'creation_time',
         'last_modified_time',
         'deleted_time',
-    );    
+    );
     
     /**
     * name of fields that should not be persisted during create/update in backend

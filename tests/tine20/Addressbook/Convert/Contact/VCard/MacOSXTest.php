@@ -35,9 +35,9 @@ class Addressbook_Convert_Contact_VCard_MacOSXTest extends PHPUnit_Framework_Tes
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV MacOSX Contact Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV MacOSX Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

@@ -48,15 +48,15 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * record load
      */
     onRecordLoad: function() {
-    	// set lock combos
+        // set lock combos
         Ext.each(this.writableFields, function(_item, _index, _array) {
-        	var field = _item;
-        	field = field.replace(/_w/, '');
-        	if (this.record.get(_item) == '0') {
-        	   this.getForm().findField(field).onTrigger2Click();
-        	}
+            var field = _item;
+            field = field.replace(/_w/, '');
+            if (this.record.get(_item) == '0') {
+               this.getForm().findField(field).onTrigger2Click();
+            }
         }, this);
-    	
+        
         Tine.Voipmanager.SnomPhoneEditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -68,7 +68,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Ext.each(this.writableFields, function(_item, _index, _array) {
             if (Ext.getCmp(_item)) {
-            	var value = Ext.getCmp(_item).getValue();
+                var value = Ext.getCmp(_item).getValue();
             }
 
             this.record.set(_item, value);
@@ -80,7 +80,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -122,7 +122,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }], [{
                         fieldLabel: this.app.i18n._('web_language'),
                         name: 'web_language',
-						hiddenFieldId: 'web_language_w',
+                        hiddenFieldId: 'web_language_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -144,7 +144,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('language'),
                         name: 'language',
-						hiddenFieldId: 'language_w',
+                        hiddenFieldId: 'language_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -172,7 +172,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('display_method'),
                         name: 'display_method',
-						hiddenFieldId: 'display_method_w',
+                        hiddenFieldId: 'display_method_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -188,7 +188,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }], [{
                         fieldLabel: this.app.i18n._('call_waiting'),
                         name: 'call_waiting',
-						hiddenFieldId: 'call_waiting_w',
+                        hiddenFieldId: 'call_waiting_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -203,7 +203,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('mwi_notification'),
                         name: 'mwi_notification',
-						hiddenFieldId: 'mwi_notification_w',
+                        hiddenFieldId: 'mwi_notification_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -217,7 +217,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('mwi_dialtone'),
                         name: 'mwi_dialtone',
-						hiddenFieldId: 'mwi_dialtone_w',
+                        hiddenFieldId: 'mwi_dialtone_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -230,7 +230,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }], [{
                         fieldLabel: this.app.i18n._('headset_device'),
                         name: 'headset_device',
-						hiddenFieldId: 'headset_device_w',
+                        hiddenFieldId: 'headset_device_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -243,7 +243,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('message_led_other'),
                         name: 'message_led_other',
-						hiddenFieldId: 'message_led_other_w',
+                        hiddenFieldId: 'message_led_other_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -256,7 +256,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('global_missed_counter'),
                         name: 'global_missed_counter',
-						hiddenFieldId: 'global_missed_counter_w',
+                        hiddenFieldId: 'global_missed_counter_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -269,7 +269,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }], [{
                         fieldLabel: this.app.i18n._('scroll_outgoing'),
                         name: 'scroll_outgoing',
-						hiddenFieldId: 'scroll_outgoing_w',
+                        hiddenFieldId: 'scroll_outgoing_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -282,7 +282,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('show_local_line'),
                         name: 'show_local_line',
-						hiddenFieldId: 'show_local_line_w',
+                        hiddenFieldId: 'show_local_line_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],
@@ -295,7 +295,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, {
                         fieldLabel: this.app.i18n._('show_call_status'),
                         name: 'show_call_status',
-						hiddenFieldId: 'show_call_status_w',
+                        hiddenFieldId: 'show_call_status_w',
                         store: new Ext.data.SimpleStore({
                             id: 'id',
                             fields: ['id', 'name'],

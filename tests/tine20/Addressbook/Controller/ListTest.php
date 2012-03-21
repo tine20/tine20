@@ -36,9 +36,9 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook List Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook List Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -141,14 +141,14 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2'], FALSE);
         
         $this->objects['initialList'] = new Addressbook_Model_List(array(
-            'name'	=> 'initial list',
+            'name'    => 'initial list',
             'container_id' => $container->getId(),
             'members' => array($this->objects['contact1'], $this->objects['contact2'])
-        )); 
+        ));
     }
 
     /**

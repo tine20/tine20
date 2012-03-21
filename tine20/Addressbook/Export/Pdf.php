@@ -21,9 +21,9 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
     /**
      * create contact pdf
      *
-     * @param	Addressbook_Model_Contact $_contact contact data
+     * @param    Addressbook_Model_Contact $_contact contact data
      *
-     * @return	string	the contact pdf
+     * @return    string    the contact pdf
      */
     public function generate(Addressbook_Model_Contact $_contact)
     {
@@ -121,7 +121,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
          
         try {
             $tineImage = Addressbook_Controller::getInstance()->getImage($_contact->getId());
-            Tinebase_ImageHelper::resize($tineImage, 160, 240, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);            
+            Tinebase_ImageHelper::resize($tineImage, 160, 240, Tinebase_ImageHelper::RATIOMODE_PRESERVANDCROP);
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
             $tmpPath .= $tineImage->getImageExtension();
             file_put_contents($tmpPath, $tineImage->blob);
@@ -158,7 +158,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                         $keys = array ( $valueFields );
                     }
                     foreach ( $keys as $key ) {
-                        if ( $_contact->$key instanceof Tinebase_DateTime ) { 
+                        if ( $_contact->$key instanceof Tinebase_DateTime ) {
                             $content[] = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_contact->$key, NULL, NULL, 'date');
                         } elseif (!empty($_contact->$key) ) {
                             if (preg_match("/countryname/", $key)) {
@@ -177,7 +177,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                     $record[] = array ( 'label' => $fieldArray['label'],
                                         'type'  => ( isset($fieldArray['type']) ) ? $fieldArray['type'] : 'singleRow',
                                         'value' => ( sizeof($values) === 1 ) ? $values[0] : $values,
-                    ); 
+                    );
                 }
             } elseif ( isset($fieldArray['type']) && $fieldArray['type'] === 'separator' ) {
                 $record[] = $fieldArray;

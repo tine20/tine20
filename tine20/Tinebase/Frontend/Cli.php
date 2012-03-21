@@ -259,7 +259,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
 
-        $args = $this->_parseArgs($_opts, array(), 'tables'); 
+        $args = $this->_parseArgs($_opts, array(), 'tables');
 
         if (! array_key_exists('tables', $args) || empty($args['tables'])) {
             echo "No tables given.\nPurging records from all tables!\n";

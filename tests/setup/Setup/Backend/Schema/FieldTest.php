@@ -25,7 +25,7 @@ class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
                 <unsigned>true</unsigned>
             </field>";
 
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertTrue($field->isValid(), 'Test if a valid field is correctly marked as valid');
         $this->assertTrue($field->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
         

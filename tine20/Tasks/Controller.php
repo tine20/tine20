@@ -36,7 +36,7 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_Con
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

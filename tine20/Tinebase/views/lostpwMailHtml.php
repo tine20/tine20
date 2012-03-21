@@ -8,7 +8,7 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo		fill with more text
+ * @todo        fill with more text
  */
 ?>
 

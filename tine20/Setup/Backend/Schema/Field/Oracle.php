@@ -87,7 +87,7 @@ class Setup_Backend_Schema_Field_Oracle extends Setup_Backend_Schema_Field_Abstr
             $this->length   = $length;
             $this->scale    = $scale;
             $this->default  = $default;
-            $this->comment  = $_declaration['COLUMN_COMMENT'];            
+            $this->comment  = $_declaration['COLUMN_COMMENT'];
             
         }
     }

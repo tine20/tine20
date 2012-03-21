@@ -81,7 +81,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         Syncope_Registry::set('folderStateBackend',  $this->_folderBackend);
         Syncope_Registry::set('syncStateBackend',    $this->_syncStateBackend);
         Syncope_Registry::set('contentStateBackend', $this->_contentStateBackend);
-        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());  
+        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
 
         Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
@@ -104,7 +104,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
      * test sync of existing contacts folder
      */
     public function testPingForContacts()
-    {        
+    {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
             'Addressbook', 
@@ -205,7 +205,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
      * test sync of existing events folder
      */
     public function testPingForEvents()
-    {        
+    {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
             'Calendar', 
@@ -300,7 +300,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
      * test sync of existing imap folder
      */
     public function testPingForEmails()
-    {        
+    {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
             $this->markTestSkipped('IMAP backend not configured');

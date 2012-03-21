@@ -134,7 +134,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @return Tinebase_Model_CustomField_Config
      */
     public function getCustomField($_customFieldId)
-    {        
+    {
         return $this->_backendConfig->get($_customFieldId);
     }
 
@@ -297,13 +297,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $fA = array();
          
         foreach($cF as $field) {
-            $fA[$field->__get('name')] = $field->__get('id');    
+            $fA[$field->__get('name')] = $field->__get('id');
         }
         
         unset($cF);
         
         foreach($_recordIds as $recId) {
-            foreach($_customFieldValues as $cfKey => $cfValue) {             
+            foreach($_customFieldValues as $cfKey => $cfValue) {
                 $filterValues = array(
                     array(
                         'field'     => 'record_id',
@@ -530,7 +530,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $this->_clearCache();
             
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();            
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
     }
@@ -545,7 +545,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $user = Tinebase_Core::getUser();
         if (is_object($user)) {
-            $result = $this->_backendConfig->getByAcl($_grant, $user->getId()); 
+            $result = $this->_backendConfig->getByAcl($_grant, $user->getId());
         } else {
             $result = array();
         }

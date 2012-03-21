@@ -78,7 +78,7 @@ class Felamimail_Backend_ImapProxy
         try {
             $this->_backend->noop();
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Lost IMAP connection ... trying relogin. (' . $zmpe->getMessage() . ')'); 
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Lost IMAP connection ... trying relogin. (' . $zmpe->getMessage() . ')');
             $this->_backend->connectAndLogin($this->_params);
         }
         

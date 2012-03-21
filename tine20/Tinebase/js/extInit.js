@@ -166,7 +166,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
             return 'none';
         }
         if(!isNaN(v)) {
-            return v + " %";                        
+            return v + " %";
         } 
     },
     pad: function(v,l,s){

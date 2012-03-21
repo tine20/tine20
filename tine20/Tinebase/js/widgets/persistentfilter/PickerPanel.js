@@ -69,7 +69,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.recordCollection = this.store.queryBy(function(record, id) {
             if(record.get('application_id') == this.app.id) {
                 if(this.contentType) {
-                    var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter'; 
+                    var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter';
                     if(record.get('model') == modelName) {
                         return true;
                     } else {
@@ -106,7 +106,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
 
         this.on('nodedrop', function() {
-            this.saveState();           
+            this.saveState();
         }, this);
 
         this.filterNode = this.filterNode || new Ext.tree.AsyncTreeNode({
@@ -161,7 +161,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             node.attributes.sorting = i;
             var rec = this.recordCollection.get(node.attributes.id);
             var oldSort = rec.get('sorting');
-            if(oldSort != i) {    
+            if(oldSort != i) {
                 rec.set('sorting', i);
                 rec.commit();
             }
@@ -346,7 +346,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onOverwritePersistentFilter : function(node) {
         
-        var record = this.store.getById(node.id);        
+        var record = this.store.getById(node.id);
         Ext.MessageBox.confirm(_('Overwrite?'), String.format(_('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn) {
             if (_btn == 'yes') {
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));

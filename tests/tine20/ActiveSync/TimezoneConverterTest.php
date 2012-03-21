@@ -18,10 +18,10 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 
 class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 {
-	
-	protected $_uit = null;
-	
-	protected $_fixtures = array(
+    
+    protected $_uit = null;
+    
+    protected $_fixtures = array(
                /*'Europe/Berlin' => array(                                                                                                                            
                     'bias' => -60,
                     'standardName' => '',
@@ -139,7 +139,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	$this->_uit = ActiveSync_TimezoneConverter::getInstance(Tinebase_Core::getLogger());
+        $this->_uit = ActiveSync_TimezoneConverter::getInstance(Tinebase_Core::getLogger());
     }
         
     public function testGetPackedStringForTimezone()
@@ -150,10 +150,10 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     }
 
     public function testGetListOfTimezonesForOffsets()
-    {       
+    {
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
-        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
-        	$result = $this->_uit->getListOfTimezones($offsets);
+            $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
+            $result = $this->_uit->getListOfTimezones($offsets);
             $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
             $this->assertEquals($timezoneAbbr,$result[$timezoneIdentifier]);
         }        
@@ -162,8 +162,8 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     public function testGetListOfTimezonesForPackedStrings()
     {
         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
-        	$timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
-        	$result = $this->_uit->getListOfTimezones($packedTimezoneInfo);
+            $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
+            $result = $this->_uit->getListOfTimezones($packedTimezoneInfo);
             $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
             $this->assertEquals($timezoneAbbr, $result[$timezoneIdentifier]);
             
@@ -192,7 +192,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 
     public function testUnknownOffsets()
     {
-    	$this->setExpectedException('ActiveSync_TimezoneNotFoundException');
+        $this->setExpectedException('ActiveSync_TimezoneNotFoundException');
         $offsets = array(                                                                                                                            
                     'bias' => -600000,
                     'standardName' => '',

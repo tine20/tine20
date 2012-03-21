@@ -60,7 +60,7 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
             ), TRUE);
             
             $number = $this->create($number);
-        } else {        
+        } else {
             // increase and update
             $number = new Sales_Model_Number($queryResult);
             
@@ -71,6 +71,6 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
             $number = $this->update($number);
         }
         
-        return $number; 
+        return $number;
     }
 }

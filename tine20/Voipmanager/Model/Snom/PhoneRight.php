@@ -59,5 +59,5 @@ class Voipmanager_Model_Snom_PhoneRight extends Tinebase_Record_Abstract
         'read_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'write_right'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'dial_right'    => array(Zend_Filter_Input::ALLOW_EMPTY => true)
-    );    
+    );
 }

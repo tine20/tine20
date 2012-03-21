@@ -196,7 +196,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     updateAccessHandler: function(button, event) {
         
-        var courses = this.grid.getSelectionModel().getSelections();            
+        var courses = this.grid.getSelectionModel().getSelections();
         var toUpdateIds = [];
         for (var i = 0; i < courses.length; ++i) {
             toUpdateIds.push(courses[i].data.id);

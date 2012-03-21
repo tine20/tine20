@@ -59,7 +59,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     
     
     protected function setUp()
-    {       
+    {
         $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
         $appName = 'Addressbook';
@@ -112,7 +112,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
                 //Tinebase_Model_Grants::GRANT_EXPORT    => true,
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
-            );            
+            );
             $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
             
             $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
@@ -148,7 +148,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'n_given'               => 'Lars',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
-        )); 
+        ));
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         $this->objects['contact'] = $contact;
@@ -175,7 +175,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'n_given'               => 'Lars',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
-        )); 
+        ));
         
         $unSyncableContact = Addressbook_Controller_Contact::getInstance()->create($unSyncableContact, FALSE);
         $this->objects['unSyncableContact'] = $unSyncableContact;
@@ -291,7 +291,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime());       
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime());
         
         $controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
         
@@ -313,7 +313,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
-        $bday->setTimezone('UTC');        
+        $bday->setTimezone('UTC');
         
         $this->assertTrue(!empty($result));
     }
@@ -340,7 +340,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));     
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         $controller->appendXML($appData, null, $this->objects['contact']->getId(), array());
         

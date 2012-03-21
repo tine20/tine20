@@ -26,16 +26,16 @@ Tine.widgets.customfields.CustomfieldsCombo = Ext.extend(Ext.form.ComboBox, {
     triggerAction: 'all',    
     
     
-	initComponent: function() {
+    initComponent: function() {
         
         Tine.widgets.customfields.CustomfieldsCombo.superclass.initComponent.call(this);
 
     },
     
     
-   	stateEvents: ['select'],
- 	getState: function() { return this.getValue(); },
-	applyState: function(state) { this.setValue(state); }
+       stateEvents: ['select'],
+     getState: function() { return this.getValue(); },
+    applyState: function(state) { this.setValue(state); }
 });
 
 

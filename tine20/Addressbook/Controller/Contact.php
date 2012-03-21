@@ -56,7 +56,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -368,7 +368,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $nominatim->setCountry($country);
         }
         
-        try {            
+        try {
             $places = $nominatim->search();
             
             if (count($places) > 0) {
@@ -465,7 +465,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function parseAddressData($_address)
     {
-        $converter = new Addressbook_Convert_Contact_String(); 
+        $converter = new Addressbook_Convert_Contact_String();
         
         $result = array(
             'contact'             => $converter->toTine20Model($_address),

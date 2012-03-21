@@ -57,24 +57,24 @@ class Tinebase_Record_ContainerTest extends Tinebase_Record_AbstractTest
      */
     public function setUp()
     {
-		
+        
        $this->objects['TestRecord'] = new Tinebase_Record_Container(array(), true);
 
-	 	$this->objects['TestRecord']->setFromArray(array(
-	    	'container_id'      => 200,
-      	  	'container_name'    => 'test',
-     	   	'container_type'    => 'shared',
-    	    'container_backend' => 1,
-   	     	'application_id'    => 20,
-   	    	'account_grants'	=> 31,
+         $this->objects['TestRecord']->setFromArray(array(
+            'container_id'      => 200,
+                'container_name'    => 'test',
+                'container_type'    => 'shared',
+            'container_backend' => 1,
+                'application_id'    => 20,
+               'account_grants'    => 31,
             )
-		, true);
-		
-		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
-		$this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
-		
-		
-		}
+        , true);
+        
+        $this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
+        $this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
+        
+        
+        }
 
     /**
      * Tears down the fixture, for example, closes a network connection.

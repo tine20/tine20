@@ -70,7 +70,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -155,7 +155,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
             array(
                 'field'     => 'contentid',
                 'operator'  => 'equals',
-        		'value'     => $_state->contentid
+                'value'     => $_state->contentid
             )
         ));
         $stateIds = $this->_contentStateBackend->search($contentStateFilter, null, true);
@@ -189,7 +189,7 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
             array(
                 'field'     => 'contentid',
                 'operator'  => 'equals',
-        		'value'     => $_contentId
+                'value'     => $_contentId
             )
         ));
         $state = $this->_contentStateBackend->search($contentStateFilter)->getFirstRecord();

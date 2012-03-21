@@ -129,7 +129,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
             },
@@ -229,7 +229,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
  * 
  * @namespace   Tine.Crm
  */
-Tine.Crm.GridPanel.shortContactRenderer = function(data, type) {    
+Tine.Crm.GridPanel.shortContactRenderer = function(data, type) {
 
     if( Ext.isArray(data) && data.length > 0) {
         var index = 0;

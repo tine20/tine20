@@ -46,7 +46,7 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**

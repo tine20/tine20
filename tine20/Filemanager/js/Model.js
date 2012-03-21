@@ -242,7 +242,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             
             for(var i=0; i<items.length; i++) {
                 
-                var item = items[i];            
+                var item = items[i];
                 var itemData = item.data;
                 if(!itemData) {
                     itemData = item.attributes;
@@ -314,7 +314,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                             continue;
                         }
                         
-                        if(move) {   
+                        if(move) {
                             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
                                 nodeToCopyId = nodeToCopy.id,
                                 removeNode = treePanel.getNodeById(nodeToCopyId);
@@ -323,12 +323,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                                 removeNode.parentNode.removeChild(removeNode);
                             }
                             
-                            target.appendChild(copiedNode); 
-                            copiedNode.setId(nodeData[i].id);    
+                            target.appendChild(copiedNode);
+                            copiedNode.setId(nodeData[i].id);
                         } 
                         else {
                             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
-                            target.appendChild(copiedNode);  
+                            target.appendChild(copiedNode);
                             copiedNode.setId(nodeData[i].id);
                             
                         }
@@ -369,10 +369,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.uploadKey = uploadKey;
         params.addToGridStore = addToGridStore;
         
-        var onSuccess = (function(result, request){ 
+        var onSuccess = (function(result, request){
             
             var nodeData = Ext.util.JSON.decode(response.responseText),
-                fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
+                fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);
             
             if(addToGridStore) {
                 var recordToRemove = gridStore.query('name', fileRecord.get('name'));
@@ -427,7 +427,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         params.addToGridStore = addToGridStore;
         
         
-        var onSuccess = (function(response, request){ 
+        var onSuccess = (function(response, request){
             
             var nodeData = Ext.util.JSON.decode(response.responseText);
             
@@ -495,7 +495,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     updateNodeRecord : function(nodeData, nodeRecord) {
         
-        for(var field in nodeData) {         
+        for(var field in nodeData) {
             nodeRecord.set(field, nodeData[field]);
         };
         

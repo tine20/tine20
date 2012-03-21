@@ -128,7 +128,7 @@ class Tasks_Setup_MigrateFromTine14
                 $Task20->setFromArray($Task);
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
-                $validation_errors = $Task20->getValidationErrors(); 
+                $validation_errors = $Task20->getValidationErrors();
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     'Could not migrate Infolog with info_id ' . $infolog->info_id . "\n" . 
                     'Tasks_Setup_MigrateFromTine14::infolog2Task: ' . $e->getMessage() . "\n" .
@@ -173,7 +173,7 @@ class Tasks_Setup_MigrateFromTine14
                 Tasks_Backend_Factory::SQL
             );
         }
-        return $containers[$_owner];  
+        return $containers[$_owner];
     }
     
     /**

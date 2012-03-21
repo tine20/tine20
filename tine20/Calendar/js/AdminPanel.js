@@ -31,7 +31,7 @@ Ext.namespace('Tine.Calendar');
  */
 Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
 
-	border: false,
+    border: false,
     activeTab: 0,
 
     /**
@@ -63,5 +63,5 @@ Tine.Calendar.AdminPanel.openWindow = function (config) {
         name: 'cal-mange-resources',
         contentPanelConstructor: 'Tine.Calendar.AdminPanel',
         contentPanelConstructorConfig: config
-    }); 
+    });
 };

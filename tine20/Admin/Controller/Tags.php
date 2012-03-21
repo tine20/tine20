@@ -26,7 +26,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
         $this->_backend = Tinebase_Tags::getInstance();
         $this->_doContainerACLChecks = FALSE;
@@ -39,7 +39,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -166,7 +166,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
             Tinebase_Tags::getInstance()->purgeRights($_tagId);
         }
         $_tag->rights->tag_id = $_tagId;
-        Tinebase_Tags::getInstance()->setRights($_tag->rights);        
+        Tinebase_Tags::getInstance()->setRights($_tag->rights);
     }
     
     /**
@@ -178,7 +178,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * @todo replace this by parent::delete()
      */
     public function delete($_tagIds)
-    {        
+    {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
         Tinebase_Tags::getInstance()->deleteTags($_tagIds);

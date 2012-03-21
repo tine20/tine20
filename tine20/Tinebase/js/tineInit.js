@@ -137,7 +137,7 @@ Tine.Tinebase.tineInit = {
     initBootSplash: function () {
         
         this.splash = {
-        	xtype: 'container',
+            xtype: 'container',
             id: 'tine-viewport-waitcycle',
             border: false,
             layout: 'fit',
@@ -151,7 +151,7 @@ Tine.Tinebase.tineInit = {
             layout: 'fit',
             border: false,
             items: {
-            	xtype: 'container',
+                xtype: 'container',
                 id: 'tine-viewport-maincardpanel',
                 ref: 'tineViewportMaincardpanel',
                 isWindowMainCardPanel: true,
@@ -368,8 +368,8 @@ Tine.Tinebase.tineInit = {
                         options.cbs.callback.call(options.scope, options, false, response);
                     } else {
                         var responseData = Ext.decode(response.responseText);
-                        	
-                        exception = responseData.data ? responseData.data : responseData;	
+                            
+                        exception = responseData.data ? responseData.data : responseData;
                         exception.request = options.jsonData;
                         exception.response = response.responseText;
                         
@@ -519,12 +519,12 @@ Tine.Tinebase.tineInit = {
      * Applying registry entries to Tine classes
      */
     overrideFields: function () {
-    	
-    	Ext.override(Ext.ux.file.Upload, {
+        
+        Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
         });
-            	
+                
     },
     
     /**
@@ -700,7 +700,7 @@ Tine.Tinebase.tineInit = {
     /**
      * initialise upload manager
      */
-    initUploadMgr: function () {       
+    initUploadMgr: function () {
         Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
     },
     
@@ -721,7 +721,7 @@ Tine.Tinebase.tineInit = {
      * Last stage of initialisation, to be done after Tine.onReady!
      */
     onLangFilesLoad: function () {
-    	//Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
+        //Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }    
     
 };

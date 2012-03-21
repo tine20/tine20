@@ -31,7 +31,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-	    $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 

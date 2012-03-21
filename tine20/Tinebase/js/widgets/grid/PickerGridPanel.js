@@ -253,7 +253,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             newRecordDefaults: this.recordDefaults,
             emptyText: _('Search for records ...'),
             onSelect: this.onAddRecordFromCombo
-        }, this.searchComboConfig));        
+        }, this.searchComboConfig));
     },
     
     /**
@@ -279,7 +279,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} button
      * @param {} event
      */
-    onRemove: function(button, event) {                       
+    onRemove: function(button, event) {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);

@@ -342,7 +342,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             }
             
             // get records from defintion / grid store request
-            var records = []; 
+            var records = [];
             if (config.data) {
                 config.definitionsStore.each(function(definition) {
                     if (config.data[definition.id]) {

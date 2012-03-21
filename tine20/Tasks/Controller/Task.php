@@ -46,7 +46,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**

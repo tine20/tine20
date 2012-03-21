@@ -77,8 +77,8 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-    	$this->_backend = new Calendar_Backend_Sql();
-    	
+        $this->_backend = new Calendar_Backend_Sql();
+        
         $this->_personas = Zend_Registry::get('personas');
         foreach ($this->_personas as $loginName => $user) {
             $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
@@ -91,7 +91,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit test calendar',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-        	'owner_id'       => Tinebase_Core::getUser(),
+            'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => $this->_backend->getType(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));

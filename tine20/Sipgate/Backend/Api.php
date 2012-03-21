@@ -57,7 +57,7 @@ class Sipgate_Backend_Api {
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct($_username, $_password, $_url)	{
+    private function __construct($_username, $_password, $_url)    {
 
         $this->_url = (empty($_url)) ? 'https://samurai.sipgate.net/RPC2' : $_url;
         $this->_username = $_username;
@@ -70,11 +70,11 @@ class Sipgate_Backend_Api {
         $this->_rpc = new Zend_XmlRpc_Client($this->_url,$this->_http->setAuth($_username, $_password));
 
         $this->_rpc->call(
-			'samurai.ClientIdentify',
+            'samurai.ClientIdentify',
         array(0 => new Zend_XmlRpc_Value_Struct(array(
-				'ClientName' => new Zend_XmlRpc_Value_String('Tine 2.0 Sipgate'),
-				'ClientVersion' =>new Zend_XmlRpc_Value_String('0.4'),
-				'ClientVendor' =>new Zend_XmlRpc_Value_String('Alexander Stintzing')
+                'ClientName' => new Zend_XmlRpc_Value_String('Tine 2.0 Sipgate'),
+                'ClientVersion' =>new Zend_XmlRpc_Value_String('0.4'),
+                'ClientVendor' =>new Zend_XmlRpc_Value_String('Alexander Stintzing')
         )))
         );
     }
@@ -176,7 +176,7 @@ class Sipgate_Backend_Api {
         $ret = false;
 
         if($resp) {
-            $history = array_reverse($resp['History'],false); 
+            $history = array_reverse($resp['History'],false);
 
             if($resp['StatusCode'] === 200) {
                 for ($i = $_pstart; $i < $_pstart + $_plimit; $i++) {
@@ -194,22 +194,22 @@ class Sipgate_Backend_Api {
      * @param string $_sipUri
      * @return Zend_XmlRpc_Value_Struct
      */
-    //	public function getCallInfo($_sipUri) {
+    //    public function getCallInfo($_sipUri) {
     //
-    //		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
-    //		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
-    //		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-604800);
-    //		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime(time());
-    //		$struct = new Zend_XmlRpc_Value_Struct($structAr);
+    //        $localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
+    //        $structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
+    //        $structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-604800);
+    //        $structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime(time());
+    //        $struct = new Zend_XmlRpc_Value_Struct($structAr);
     //
-    //		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
-    //		$ret = false;
-    //		if($resp['StatusCode'] === 200) {
-    //			$ret = $resp['History'];
+    //        $resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
+    //        $ret = false;
+    //        if($resp['StatusCode'] === 200) {
+    //            $ret = $resp['History'];
     //
-    //		}
-    //		return $ret;
-    //	}
+    //        }
+    //        return $ret;
+    //    }
 
     /**
      * Get devices

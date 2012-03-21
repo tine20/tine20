@@ -50,7 +50,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function() {
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 hidden: true,
@@ -128,12 +128,12 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * Confirm application restart
      */
     confirmApplicationRestart: function () {
-    	Ext.Msg.confirm(this.app.i18n._('Confirm'), this.app.i18n._('Restart application to apply new cusomfields?'), function (btn) {
-    		if (btn == 'yes') {
-    			// reload mainscreen to make sure registry gets updated
-    			window.location = window.location.href.replace(/#+.*/, '');
-    		}
-    	}, this);
+        Ext.Msg.confirm(this.app.i18n._('Confirm'), this.app.i18n._('Restart application to apply new cusomfields?'), function (btn) {
+            if (btn == 'yes') {
+                // reload mainscreen to make sure registry gets updated
+                window.location = window.location.href.replace(/#+.*/, '');
+            }
+        }, this);
     },
     
     /**
@@ -142,9 +142,9 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function (record) {
-    	Tine.Admin.customfield.GridPanel.superclass.onUpdateRecord.apply(this, arguments);
-    	
-    	this.confirmApplicationRestart();
+        Tine.Admin.customfield.GridPanel.superclass.onUpdateRecord.apply(this, arguments);
+        
+        this.confirmApplicationRestart();
     },
     
     /**
@@ -154,8 +154,8 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} [ids]
      */
     onAfterDelete: function (ids) {
-    	Tine.Admin.customfield.GridPanel.superclass.onAfterDelete.apply(this, arguments);
-    	
-    	this.confirmApplicationRestart();
+        Tine.Admin.customfield.GridPanel.superclass.onAfterDelete.apply(this, arguments);
+        
+        this.confirmApplicationRestart();
     }
 });

@@ -152,7 +152,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $idField = $schema->fields[0];
         $this->assertEquals('true', $idField->notnull, 'Test idField->notnull');
         $this->assertEquals('true', $idField->primary, 'Test idField->primary');
-        $this->assertEquals('true', $idField->autoincrement, 'Test idField->auto_increment');       
+        $this->assertEquals('true', $idField->autoincrement, 'Test idField->auto_increment');
     }
 
     
@@ -191,10 +191,10 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
              
         $oldColumnName = $testCol->name;
         $newColumnName = "new_column_name";
-        $testCol->name = $newColumnName; 
+        $testCol->name = $newColumnName;
         $this->_backend->alterCol($this->_table->name, $testCol, $oldColumnName);
         $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals($existingSchema2->fields[1]->name, $newColumnName);     
+        $this->assertEquals($existingSchema2->fields[1]->name, $newColumnName);
     }
     
     public function testAlterCol()
@@ -203,7 +203,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $testCol = $existingSchema1->fields[1];
 
         $testCol->type = 'integer';
-        $testCol->length = 8;  
+        $testCol->length = 8;
         $this->_backend->alterCol($this->_table->name, $testCol, $testCol->name);
         $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
         $this->assertEquals($existingSchema2->fields[1]->type, 'integer');
@@ -213,7 +213,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
     public function testDropCol()
     {
         $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
-        $testCol = $existingSchema1->fields[1];     
+        $testCol = $existingSchema1->fields[1];
         
         $this->_backend->dropCol($this->_table->name, $testCol->name);
         $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
@@ -224,11 +224,11 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
     {
         $existingSchema1 = $this->_backend->getExistingSchema($this->_table->name);
         $testCol = $existingSchema1->fields[1];
-        $testCol->name = 'new_column_name';     
+        $testCol->name = 'new_column_name';
         
         $this->_backend->addCol($this->_table->name, $testCol);
         $existingSchema2 = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)-1);    
+        $this->assertEquals(count($existingSchema1->fields), count($existingSchema2->fields)-1);
     }
     
     public function testAddColWithPositionParameter() 
@@ -236,12 +236,12 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
         $testCol = $existingSchema->fields[1];
         
-        $testCol->name = 'new_column_name';     
+        $testCol->name = 'new_column_name';
         $this->_backend->addCol($this->_table->name, $testCol, 0);
         $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
-        $this->assertEquals($testCol->name, $existingSchema->fields[0]->name);     
+        $this->assertEquals($testCol->name, $existingSchema->fields[0]->name);
         
-        $testCol->name = 'new_column_name2';     
+        $testCol->name = 'new_column_name2';
         $this->_backend->addCol($this->_table->name, $testCol, 1);
         $existingSchema = $this->_backend->getExistingSchema($this->_table->name);
         $this->assertEquals($testCol->name, $existingSchema->fields[2]->name);
@@ -385,7 +385,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $newColumn = $this->_getLastField();
         $this->assertEquals(array('enabled', 'disabled'), $newColumn->value);
         $this->assertEquals('test', $newColumn->name);
-        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('true', $newColumn->notnull);
         $this->assertEquals('enum', $newColumn->type);
         $this->assertNotEquals('true', $newColumn->primary);
         $this->assertNotEquals('true', $newColumn->unique);
@@ -412,7 +412,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $newColumn = $this->_getLastField();
         $this->assertEquals('order', $newColumn->name);
         $this->assertEquals('11', $newColumn->length);
-        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('true', $newColumn->notnull);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertEquals('true', $newColumn->unsigned, 'Test unsigned');
         $this->assertNotEquals('true', $newColumn->primary);
@@ -520,8 +520,8 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
         $newColumn = $this->_getLastField();
-        $this->assertEquals('comment', $newColumn->comment);      
-        $this->assertTrue($newColumn->equals($field)); 
+        $this->assertEquals('comment', $newColumn->comment);
+        $this->assertTrue($newColumn->equals($field));
     }
     
     
@@ -547,7 +547,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
                     <type>integer</type>
                     <default>0</default>
                     <length>4</length>
-                </field>";  
+                </field>";
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
@@ -702,7 +702,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
                         <table>$referencedTableName</table>
                         <field>id</field>
                     </reference>
-                </index>";  
+                </index>";
         
         $foreignKey = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         

@@ -39,9 +39,9 @@ class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_ModelTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_ModelTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -107,4 +107,4 @@ class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, count($groups));
     }
-}		
+}        

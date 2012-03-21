@@ -156,7 +156,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         
         $ticket->History = $this->_rawDataToHistory($response->getBody());
         
-        return $ticket;        
+        return $ticket;
     }
     
     /**
@@ -278,11 +278,11 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         }
         
         foreach ($dataArray as $property => $value) {
-        	switch ($property) {
-        	    case 'id':
-        	        $dataArray[$property] = substr($value, 7);
-        	        break;
-        	    case 'Created':
+            switch ($property) {
+                case 'id':
+                    $dataArray[$property] = substr($value, 7);
+                    break;
+                case 'Created':
                 case 'Starts':
                 case 'Started':
                 case 'Due':
@@ -291,7 +291,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
                 case 'LastUpdated':
                     $dataArray[$property] = $value == 'Not set' ? NULL : new Tinebase_DateTime($value);
                     break;
-        	}
+            }
         }
         
         return new RequestTracker_Model_Ticket($dataArray);

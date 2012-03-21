@@ -290,7 +290,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // show only first condition
         if (value && value.length > 0) {
-            var condition = value[0]; 
+            var condition = value[0];
             
             // get header/comperator translation
             var filterModels = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app),

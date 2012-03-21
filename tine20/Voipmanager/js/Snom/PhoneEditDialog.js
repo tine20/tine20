@@ -91,7 +91,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * record load (get rights and put them into the store)
      */
     onRecordLoad: function() {
-    	
+        
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         
@@ -145,7 +145,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} setting_id
      */
     getWriteableFields: function(setting_id) {
-    	
+        
         Ext.Ajax.request({
             params: {
                 method: 'Voipmanager.getSnomSetting', 
@@ -162,20 +162,20 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
                     // update record
                     if(_data[_rwField] == '0' || !this.record.get(_item)) {
-                        this.record.set(_item, _data[_item]);                                                        
+                        this.record.set(_item, _data[_item]);
                     }                                                       
 
                     // set writeable fields
                     this.getForm().findField(_item).setDisabled(_data[_rwField] == '0');
                     this.getForm().findField(_item).setValue(this.record.get(_item));
-                }, this);                                     
+                }, this);
             },
-            failure: function ( result, request) { 
-                Ext.MessageBox.alert('Failed', 'No settings data found.'); 
+            failure: function ( result, request) {
+                Ext.MessageBox.alert('Failed', 'No settings data found.');
             },
             scope: this 
-        });                                   
-    	
+        });
+        
     },
     
     /**
@@ -187,18 +187,18 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onTemplateChange: function(_combo, _record, _index) {
 
-    	var setting_id = false;
-    	if (_record.data && _record.data.setting_id) {
-    		setting_id = _record.data.setting_id;
-    	}
-    	
-    	if (! setting_id && this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue())) {
-    	    setting_id = this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue()).data.setting_id;
-    	}
-    	
-    	if (setting_id) {
+        var setting_id = false;
+        if (_record.data && _record.data.setting_id) {
+            setting_id = _record.data.setting_id;
+        }
+        
+        if (! setting_id && this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue())) {
+            setting_id = this.getForm().findField('template_id').store.getById(this.getForm().findField('template_id').getValue()).data.setting_id;
+        }
+        
+        if (setting_id) {
             this.getWriteableFields(setting_id);
-    	}
+        }
     },
     
     /**
@@ -317,7 +317,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         fieldLabel: this.getTranslations().n_('Location', 'Locations', 1),
                         displayField: 'name',
                         store: new Ext.data.Store({
-                        	fields: Tine.Voipmanager.Model.SnomLocation,
+                            fields: Tine.Voipmanager.Model.SnomLocation,
                             proxy: Tine.Voipmanager.SnomLocationBackend,
                             reader: Tine.Voipmanager.SnomLocationBackend.getReader(),
                             remoteSort: true,
@@ -570,7 +570,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             // we need to init translations because it could be that we call this from Phone app without Voipmanager
             if (! this.app) {
                 this.i18n = new Locale.Gettext();
-                this.i18n.textdomain('Voipmanager');    
+                this.i18n.textdomain('Voipmanager');
             } else {
                 this.i18n = this.app.i18n;
             }            

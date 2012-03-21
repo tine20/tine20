@@ -46,18 +46,18 @@ Ext.ux.form.RecordsComboBox = Ext.extend(Ext.form.ComboBox, {
     editable: false,
     forceSelection: true,
     valueField: 'id',
-	
-	/**
-	 * overwrite setValue() to get records
-	 * 
-	 * @param value
-	 */
+    
+    /**
+     * overwrite setValue() to get records
+     * 
+     * @param value
+     */
     setValue: function(value) {
         var val = value;
         // check if object and load options from record
         if(typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
             if(value['records'] !== undefined) {
-            	this.mode = 'local';
+                this.mode = 'local';
                 this.store.loadData(value['records']);
             }
             val = value['value'];

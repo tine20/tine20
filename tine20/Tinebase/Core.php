@@ -866,7 +866,7 @@ class Tinebase_Core
             $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 
             if (! empty($config->profilerFilterElapsedSecs)) {
-                $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);    
+                $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);
             }
 
             $data = array(

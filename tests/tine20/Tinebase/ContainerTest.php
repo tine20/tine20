@@ -526,7 +526,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $newGrants, TRUE);        
+        Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $newGrants, TRUE);
         
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user1, 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ
@@ -541,7 +541,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         ));
         
         Tinebase_User::getInstance()->setStatus($user2, 'enabled');
-        Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $oldGrants, TRUE); 
+        Tinebase_Container::getInstance()->setGrants($container->getFirstRecord()->id, $oldGrants, TRUE);
         
         $this->assertEquals(0, $otherUsers->filter('accountId', $user2->accountId)->count());
     }

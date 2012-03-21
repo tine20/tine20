@@ -352,7 +352,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     var d = Ext.get(event.ui.domIds[0]).dom.cloneNode(true);
                     d.id = Ext.id();
                     
-                    if (event.get('is_all_day_event')) { 
+                    if (event.get('is_all_day_event')) {
                         Ext.fly(d).setLeft(0);
                     } else {
                         var width = (Ext.fly(this.view.dayCols[0]).getWidth() * 0.9);

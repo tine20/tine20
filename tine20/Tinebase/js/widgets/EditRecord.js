@@ -23,10 +23,10 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * @extends     Ext.FormPanel
  */
 Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
-	/**
-	 * @cfg {Array} additional toolbar items
-	 */
-	tbarItems: false,
+    /**
+     * @cfg {Array} additional toolbar items
+     */
+    tbarItems: false,
     /**
      * @cfg {String} internal app name
      */
@@ -85,8 +85,8 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: 'right',
     cls: 'tw-editdialog',
-	
-	//private
+    
+    //private
     initComponent: function () {
         this.addEvents(
             /**
@@ -115,8 +115,8 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         this.initActions();
         this.initButtons();
         
-		Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
-	},
+        Tine.widgets.dialog.EditRecord.superclass.initComponent.call(this);
+    },
     
     /**
      * @private
@@ -152,7 +152,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      * Init actions
      */
     initActions: function () {
-    	this.action_saveAndClose = new Ext.Action({
+        this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
             text: _('Ok'),
             //tooltip: 'Save changes and close this window',
@@ -198,7 +198,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
      * @private
      */
     initButtons: function () {
-    	var genericButtons = [
+        var genericButtons = [
             this.action_delete
         ];
         
@@ -208,7 +208,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             //this.action_applyChanges,
             this.action_cancel,
             this.action_saveAndClose
-		];
+        ];
        
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({
@@ -247,9 +247,9 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     /**
      * get top toolbar
      */
-	getToolbar: function () {
-		return this.getTopToolbar();
-	},
+    getToolbar: function () {
+        return this.getTopToolbar();
+    },
     
     /**
      * @private

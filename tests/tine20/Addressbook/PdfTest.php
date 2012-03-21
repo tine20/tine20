@@ -49,7 +49,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function setUp()
-    {   
+    {
         $this->objects['contact'] = NULL;
     }
 
@@ -80,11 +80,11 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         
         //$pdf->save("test.pdf");
         
-        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
-        $this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document');
+        $this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found');
         
         // check name and company name
-        $this->assertEquals(1, preg_match("/Metaways Infosystems GmbH/", $pdfOutput), 'name not found');    
+        $this->assertEquals(1, preg_match("/Metaways Infosystems GmbH/", $pdfOutput), 'name not found');
 
         // check notes (removed that because system notes are no longer shown in pdf)
         /*
@@ -113,7 +113,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");
-        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
+        $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found');
         $this->assertEquals(1, preg_match("/Private Kontaktdaten/", $pdfOutput), 'translation not found');
     }
     
@@ -176,7 +176,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         
         $this->objects['contact'] = Addressbook_Controller_Contact::getInstance()->create($contact);
         

@@ -79,8 +79,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                         this.onRecordLoad(response);
                     }
                 },
-                failure: function (result, request) { 
-                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save tag.')); 
+                failure: function (result, request) {
+                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save tag.'));
                 },
                 scope: this 
             });
@@ -123,7 +123,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     /**
      * function updateToolbarButtons
      */
-    updateToolbarButtons: function (rights) {        
+    updateToolbarButtons: function (rights) {
        /* if(_rights.editGrant === true) {
             Ext.getCmp('tagDialog').action_saveAndClose.enable();
             Ext.getCmp('tagDialog').action_applyChanges.enable();
@@ -149,7 +149,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }
             // get translated app title
             var app = Tine.Tinebase.appMgr.get(appData.name),
-            	appTitle = (app) ? app.getTitle() : appData.name;
+                appTitle = (app) ? app.getTitle() : appData.name;
             
             this.rootNode.appendChild(new Ext.tree.TreeNode({
                 text: appTitle,
@@ -182,7 +182,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var treeSorter = new Ext.tree.TreeSorter(contextPanel, {
             folderSort: true,
             dir: "asc"
-        });        
+        });
         
         this.rightsPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Account Rights'),
@@ -210,7 +210,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             layout: 'border',
             border: false,
             items: [{
-            	region: 'north',
+                region: 'north',
                 xtype: 'columnform',
                 border: false,
                 autoHeight: true,
@@ -233,7 +233,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'color'
                 }]]
             }, {
-            	region: 'center',
+                region: 'center',
                 xtype: 'tabpanel',
                 activeTab: 0,
                 deferredRender: false,
@@ -285,10 +285,10 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             ctrl: true,
             fn: this.handlerApplyChanges.createDelegate(this, [true], true),
             scope: this
-		}]);
+        }]);
 
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.translation.gettext('Tag'))});
-		this.loadMask.show();
+        this.loadMask.show();
     },
     
     onRecordLoad: function (response) {

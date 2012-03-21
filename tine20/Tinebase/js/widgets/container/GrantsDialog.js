@@ -83,7 +83,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             store: this.grantsStore,
             grantContainer: this.grantContainer
-        }); 
+        });
         
         return this.grantsGrid;
     },

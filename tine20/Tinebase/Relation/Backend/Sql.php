@@ -31,30 +31,30 @@
  */
 class Tinebase_Relation_Backend_Sql
 {
-	/**
+    /**
      * @var Zend_Db_Adapter_Abstract
      */
-	protected $_db;
-	
-	/**
+    protected $_db;
+    
+    /**
      * Holds instance for SQL_TABLE_PREFIX . 'record_relations' table
      * 
      * @var Tinebase_Db_Table
      */
     protected $_dbTable;
-	
-	/**
-	 * constructor
-	 */
+    
+    /**
+     * constructor
+     */
     public function __construct()
     {
-    	$this->_db = Tinebase_Core::getDb();
-    	
-    	// temporary on the fly creation of table
-    	$this->_dbTable = new Tinebase_Db_Table(array(
-    	    'name' => SQL_TABLE_PREFIX . 'relations',
-    	    'primary' => 'id'
-    	));
+        $this->_db = Tinebase_Core::getDb();
+        
+        // temporary on the fly creation of table
+        $this->_dbTable = new Tinebase_Db_Table(array(
+            'name' => SQL_TABLE_PREFIX . 'relations',
+            'primary' => 'id'
+        ));
     }
     
     /**
@@ -67,22 +67,22 @@ class Tinebase_Relation_Backend_Sql
      */
     public function addRelation($_relation)
     {
-    	if ($_relation->getId()) {
-    		throw new Tinebase_Exception_Record_NotAllowed('Could not add existing relation');
-    	}
-    	
-    	$relId = $_relation->generateUID();
-    	$_relation->setId($relId);
+        if ($_relation->getId()) {
+            throw new Tinebase_Exception_Record_NotAllowed('Could not add existing relation');
+        }
+        
+        $relId = $_relation->generateUID();
+        $_relation->setId($relId);
 
-		// check if relation is already set (with is_deleted=1)
-		if ($deletedRelId = $this->_checkExistance($_relation)) {
-		    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing existing relation (rel_id): ' . $deletedRelId);
-		    $where = array(
-		        $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' = ?', $deletedRelId)
+        // check if relation is already set (with is_deleted=1)
+        if ($deletedRelId = $this->_checkExistance($_relation)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing existing relation (rel_id): ' . $deletedRelId);
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' = ?', $deletedRelId)
             );
             $this->_dbTable->delete($where);
-		} 
-				
+        } 
+                
         $data = $_relation->toArray();
         $data['rel_id'] = $data['id'];
         $data['id'] = $_relation->generateUID();
@@ -91,14 +91,14 @@ class Tinebase_Relation_Backend_Sql
         if (isset($data['remark']) && is_array($data['remark'])) {
             $data['remark'] = Zend_Json::encode($data['remark']);
         }
-	    
-	    $this->_dbTable->insert($data);
-	    
-	    $swappedData = $this->_swapRoles($data);
-	    $swappedData['id'] = $_relation->generateUID();
-		$this->_dbTable->insert($swappedData);		
-				
-		return $this->getRelation($relId, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
+        
+        $this->_dbTable->insert($data);
+        
+        $swappedData = $this->_swapRoles($data);
+        $swappedData['id'] = $_relation->generateUID();
+        $this->_dbTable->insert($swappedData);
+                
+        return $this->getRelation($relId, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
     }
     
     /**
@@ -142,15 +142,15 @@ class Tinebase_Relation_Backend_Sql
      */
     public function breakRelation($_id)
     {
-    	$where = array(
-    	    $this->_db->quoteIdentifier('rel_id') . ' = ' . $this->_db->quote($_id)
-    	);
-    	
-    	$this->_dbTable->update(array(
-    	    'is_deleted'   => true,
-    	    'deleted_by'   => Tinebase_Core::getUser()->getId(),
-    	    'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-    	), $where);
+        $where = array(
+            $this->_db->quoteIdentifier('rel_id') . ' = ' . $this->_db->quote($_id)
+        );
+        
+        $this->_dbTable->update(array(
+            'is_deleted'   => true,
+            'deleted_by'   => Tinebase_Core::getUser()->getId(),
+            'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+        ), $where);
     }
     
     /**
@@ -193,16 +193,16 @@ class Tinebase_Relation_Backend_Sql
     public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_returnAll = false)
     {
         $_id = $_id ? (array)$_id : array('');
-    	$where = array(
-    	    $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') .' = ?', $_model),
-    	    $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') .' = ?',$_backend),
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') .' = ?', $_model),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') .' = ?',$_backend),
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' IN (?)' , $_id),
-    	);
-    	
-    	if (!$_returnAll) {
-    	    $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = FALSE';
-    	}
-    	if ($_degree) {
+        );
+        
+        if (!$_returnAll) {
+            $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = FALSE';
+        }
+        if ($_degree) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('own_degree') . ' = ?', $_degree);
         }
         if (! empty($_type)) {
@@ -211,9 +211,9 @@ class Tinebase_Relation_Backend_Sql
         
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(), true);
         foreach ($this->_dbTable->fetchAll($where) as $relation) {
-        	$relations->addRecord($this->_rawDataToRecord($relation->toArray(), true));
+            $relations->addRecord($this->_rawDataToRecord($relation->toArray(), true));
         }
-   		return $relations; 
+           return $relations;
     }
     
     /**
@@ -237,13 +237,13 @@ class Tinebase_Relation_Backend_Sql
         if ($_returnBroken !== true) {
             $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = FALSE';
         }
-    	$relationRow = $this->_dbTable->fetchRow($where);
-    	
-    	if($relationRow) {
-    		return $this->_rawDataToRecord($relationRow->toArray());
-    	} else {
-    		throw new Tinebase_Exception_Record_NotDefined("No relation found.");
-    	}
+        $relationRow = $this->_dbTable->fetchRow($where);
+        
+        if($relationRow) {
+            return $this->_rawDataToRecord($relationRow->toArray());
+        } else {
+            throw new Tinebase_Exception_Record_NotDefined("No relation found.");
+        }
     }
     
     /**

@@ -44,9 +44,9 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -56,7 +56,7 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = Phone_Controller::getInstance();    
+        $this->_backend = Phone_Controller::getInstance();
 
         $this->_objects['call'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallid',
@@ -75,7 +75,7 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {	
+    {
     }
 
     /**
@@ -88,7 +88,7 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
         try {
             $call = $this->_backend->getCall($this->_objects['call']->getId());
             $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
-            $backend->delete($this->_objects['call']->getId());        
+            $backend->delete($this->_objects['call']->getId());
         } catch (Exception $e) {
             // do nothing
         }
@@ -133,6 +133,6 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan($duration, $disconnectedCall->duration);
         $this->assertLessThan(4, $disconnectedCall->ringing);
         $this->assertLessThan(7, $disconnectedCall->duration);
-        $this->assertEquals(-1, $disconnectedCall->connected->compare($disconnectedCall->disconnected));        
+        $this->assertEquals(-1, $disconnectedCall->connected->compare($disconnectedCall->disconnected));
     }
-}		
+}        

@@ -82,7 +82,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                 success: function(_result, _request){
                                     var response = Ext.util.JSON.decode(_result.responseText);
                                     if (response.success) {
-                                        Ext.getCmp('changePassword_window').close(); 
+                                        Ext.getCmp('changePassword_window').close();
                                         Ext.MessageBox.show({
                                             title: _('Success'),
                                             msg: _('Your password has been changed.'),
@@ -111,7 +111,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                 msg: _('The new passwords mismatch, please correct them.'),
                                 buttons: Ext.MessageBox.OK,
                                 icon: Ext.MessageBox.ERROR 
-                            });    
+                            });
                         }
                     }
                 }                    

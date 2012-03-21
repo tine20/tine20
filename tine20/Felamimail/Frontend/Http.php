@@ -62,7 +62,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             if ($part instanceof Zend_Mime_Part) {
                 
-        		$filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
+                $filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
                 $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '

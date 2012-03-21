@@ -132,10 +132,10 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             }
             
             foreach ($attendee as $attender) {
-            	$gs->orWhere(
-            	    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
+                $gs->orWhere(
+                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
                     $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' = ?', $attender['user_id'])
-            	);
+                );
             }
         }
         $gs->appendWhere(Zend_Db_Select::SQL_OR);

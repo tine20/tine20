@@ -22,14 +22,14 @@
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
-{  
+{
     /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

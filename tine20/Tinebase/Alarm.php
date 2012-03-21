@@ -81,7 +81,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
      */
     public function sendPendingAlarms($_eventName)
-    {        
+    {
         $eventName = (is_array($_eventName)) ? $_eventName['eventName'] : $_eventName;
         
         $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
@@ -92,7 +92,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
         
-        try { 
+        try {
             // get all pending alarms
             $filter = new Tinebase_Model_AlarmFilter(array(
                 array(
@@ -148,7 +148,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' finished.');           
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Job ' . $eventName . ' finished.');
     }
     
     /**

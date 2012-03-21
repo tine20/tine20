@@ -80,7 +80,7 @@ Tine.Tinebase.data.schemaProc.sqlGenerator = {
         }
         
         var stmt = "CREATE TABLE IF NOT EXISTS" + this.qi(tableDef.name) + " ( \n";
-        stmt += body.join(", \n");       
+        stmt += body.join(", \n");
         stmt +=  ")";
 
         // charset is alwyas utf-16 according to html5 spec

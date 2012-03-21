@@ -119,7 +119,7 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         header('Content-Type: application/xml');
         // we must sent this header, as the snom phones can't work with chunked encoding
         header('Content-Length: ' . strlen($xmlFirmware));
-        echo $xmlFirmware;        
+        echo $xmlFirmware;
     }    
     
     /**

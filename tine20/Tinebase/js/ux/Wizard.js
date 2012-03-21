@@ -102,7 +102,7 @@ Ext.extend(Ext.ux.Wizard, Ext.Panel, {
                 this.layout.setActiveItem(item);
                 this.currentItem = item;
     
-                this.setStatus();                
+                this.setStatus();
                 this.fireEvent('activate', this.layout.activeItem);
             }
         }

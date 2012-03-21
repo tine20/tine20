@@ -38,8 +38,8 @@ Tine.widgets.customfields.Field = {
                             keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
                         });
                         break;
-                   	case 'record':
-                   		var options = def.options ? def.options : {},
+                       case 'record':
+                           var options = def.options ? def.options : {},
                             recordConfig = def.recordConfig ? def.recordConfig : null;
                             
                         Ext.apply(fieldDef, {

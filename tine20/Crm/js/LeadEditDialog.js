@@ -84,7 +84,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
         // add contacts from addressbook if any
-        if(this.additionalContacts) { 
+        if(this.additionalContacts) {
             var relations = this.record.get('relations');
             Ext.each(this.additionalContacts, function(contact) {
                 var add = true;
@@ -123,7 +123,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
         
-        Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);        
+        Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
@@ -134,7 +134,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
-        this.getAdditionalData();        
+        this.getAdditionalData();
     },
     
     /**
@@ -145,7 +145,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return  Object relation with record data
      */
     getRelationData: function(record) {
-        var relation = null; 
+        var relation = null;
         
         if (record.data.relation) {
             relation = record.data.relation;
@@ -190,7 +190,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // collect data of relations
         var relations = [];
-        this.contactGrid.store.each(function(record) {                     
+        this.contactGrid.store.each(function(record) {
             relations.push(this.getRelationData(record));
         }, this);
         if (this.tasksGrid.store) {
@@ -231,7 +231,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
               || newLinkObject.relation_type === 'customer' 
               || newLinkObject.relation_type === 'partner')) {
                 contacts.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'task') {                
+            } else if (newLinkObject.relation_type === 'task') {
                 tasks.push(newLinkObject);
             } else if (newLinkObject.relation_type === 'product') {
                 newLinkObject.remark_description = relations[i].remark.description;

@@ -27,10 +27,10 @@ Ext.ns('Tine', 'Tine.Setup');
  */
 Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
-	/**
-	 * @private
-	 */
-	recordClass: Tine.Setup.Model.Application,
+    /**
+     * @private
+     */
+    recordClass: Tine.Setup.Model.Application,
     recordProxy: Tine.Setup.ApplicationBackend,
     stateful: false,
     evalGrants: false,
@@ -40,8 +40,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     initComponent: function() {
                 
         this.gridConfig.columns = this.getColumns();
@@ -56,8 +56,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     getColumns: function() {
         return  [
             {id: 'name',            width: 350, sortable: true, dataIndex: 'name',            header: this.app.i18n._("Name")}, 
@@ -71,8 +71,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     initActions: function() {
         this.action_installApplications = new Ext.Action({
             text: this.app.i18n._('Install application'),
@@ -128,8 +128,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     initGrid: function() {
         Tine.Setup.ApplicationGridPanel.superclass.initGrid.call(this);
         this.selectionModel.purgeListeners();
@@ -138,8 +138,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
-	 * @private
-	 */
+     * @private
+     */
     onSelectionChange: function(sm) {
         var apps = sm.getSelections();
         var disabled = sm.getCount() == 0;
@@ -166,8 +166,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     onAlterApplications: function(btn, e) {
 
         if (btn.actionType == 'uninstall') {
@@ -228,8 +228,8 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     sendAlterApplicationsRequest: function(type, appNames, options) {
         var msg = this.app.i18n.n_('Updating Application "{0}".', 'Updating {0} Applications.', appNames.length);
         msg = String.format(msg, appNames.length == 1 ? appNames[0] : appNames.length ) + ' ' + this.app.i18n._('This may take a while');
@@ -279,15 +279,15 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     enabledRenderer: function(value) {
         return Tine.Tinebase.common.booleanRenderer(value == 'enabled');
     },
     
     /**
-	 * @private
-	 */
+     * @private
+     */
     upgradeStatusRenderer: function(value) {
         return this.app.i18n._hidden(value);
     }

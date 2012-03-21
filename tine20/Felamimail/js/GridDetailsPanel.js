@@ -292,7 +292,7 @@ Ext.ns('Tine.Felamimail');
                             id = Ext.id();
                             
                         if (height < 0) {
-                        	// sometimes the height is negative, fix this here
+                            // sometimes the height is negative, fix this here
                             height = 500;
                         }
                             

@@ -136,7 +136,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     onRender: function() {
        
-    	this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
+        this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
 
@@ -166,10 +166,10 @@ Ext.ux.file.BrowsePlugin.prototype = {
             }
             
             this.dropEl.on('dragleave', function(e) {
-            	e.stopPropagation();
-            	e.preventDefault();
+                e.stopPropagation();
+                e.preventDefault();
 
-            	this.createMouseEvent(e, 'mouseout');
+                this.createMouseEvent(e, 'mouseout');
             }, this);
 
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
@@ -404,8 +404,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
     },
     
     createMouseEvent: function(e, mouseEventType) {
-    	
-    	if(document.createEvent)  {
+        
+        if(document.createEvent)  {
             var evObj = document.createEvent('MouseEvents');
             evObj.initMouseEvent(mouseEventType, true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
                     , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
@@ -428,7 +428,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             evObj.relatedTarget = e.browserEvent.relatedTarget;
             e.getTarget('div').fireEvent('on' + mouseEventType ,evObj);
         }
-    	
+        
     }
 };
 

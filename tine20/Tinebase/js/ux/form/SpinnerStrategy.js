@@ -19,43 +19,43 @@
  * @extends     Ext.util.Observable
  */
 Ext.ux.form.Spinner.Strategy = function(config){
-	Ext.apply(this, config);
+    Ext.apply(this, config);
 };
 
 Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
-	defaultValue : 0,
-	minValue : undefined,
-	maxValue : undefined,
-	incrementValue : 1,
-	alternateIncrementValue : 5,
-	validationTask : new Ext.util.DelayedTask(),
-	
-	onSpinUp : function(field){
-		this.spin(field, false, false);
-	},
+    defaultValue : 0,
+    minValue : undefined,
+    maxValue : undefined,
+    incrementValue : 1,
+    alternateIncrementValue : 5,
+    validationTask : new Ext.util.DelayedTask(),
+    
+    onSpinUp : function(field){
+        this.spin(field, false, false);
+    },
 
-	onSpinDown : function(field){
-		this.spin(field, true, false);
-	},
+    onSpinDown : function(field){
+        this.spin(field, true, false);
+    },
 
-	onSpinUpAlternate : function(field){
-		this.spin(field, false, true);
-	},
+    onSpinUpAlternate : function(field){
+        this.spin(field, false, true);
+    },
 
-	onSpinDownAlternate : function(field){
-		this.spin(field, true, true);
-	},
+    onSpinDownAlternate : function(field){
+        this.spin(field, true, true);
+    },
 
-	spin : function(field, down, alternate){
-		this.validationTask.delay(500, function(){field.validate();});
-		//extend
-	},
+    spin : function(field, down, alternate){
+        this.validationTask.delay(500, function(){field.validate();});
+        //extend
+    },
 
-	fixBoundries : function(value){
-		return value;
-		//overwrite
-	}
-	
+    fixBoundries : function(value){
+        return value;
+        //overwrite
+    }
+    
 });
 
 /**
@@ -66,7 +66,7 @@ Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
  * @extends     Ext.ux.form.Spinner.Strategy
  */
 Ext.ux.form.Spinner.NumberStrategy = function(config){
-	Ext.ux.form.Spinner.NumberStrategy.superclass.constructor.call(this, config);
+    Ext.ux.form.Spinner.NumberStrategy.superclass.constructor.call(this, config);
 };
 
 Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
@@ -74,31 +74,31 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
     allowDecimals : true,
     decimalPrecision : 2,
     
-	spin : function(field, down, alternate){
-		Ext.ux.form.Spinner.NumberStrategy.superclass.spin.call(this, field, down, alternate);
+    spin : function(field, down, alternate){
+        Ext.ux.form.Spinner.NumberStrategy.superclass.spin.call(this, field, down, alternate);
 
-		var v = parseFloat(field.getValue());
-		var incr = (alternate == true) ? this.alternateIncrementValue : this.incrementValue;
+        var v = parseFloat(field.getValue());
+        var incr = (alternate == true) ? this.alternateIncrementValue : this.incrementValue;
 
-		(down == true) ? v -= incr : v += incr ;
-		v = (isNaN(v)) ? this.defaultValue : v;
-		v = this.fixBoundries(v);
-		field.setRawValue(v);
-	},
+        (down == true) ? v -= incr : v += incr ;
+        v = (isNaN(v)) ? this.defaultValue : v;
+        v = this.fixBoundries(v);
+        field.setRawValue(v);
+    },
 
-	fixBoundries : function(value){
-		var v = value;
+    fixBoundries : function(value){
+        var v = value;
 
-		if(this.minValue != undefined && v < this.minValue){
-			v = this.minValue;
-		}
-		if(this.maxValue != undefined && v > this.maxValue){
-			v = this.maxValue;
-		}
+        if(this.minValue != undefined && v < this.minValue){
+            v = this.minValue;
+        }
+        if(this.maxValue != undefined && v > this.maxValue){
+            v = this.maxValue;
+        }
 
-		return this.fixPrecision(v);
-	},
-	
+        return this.fixPrecision(v);
+    },
+    
     // private
     fixPrecision : function(value){
         var nan = isNaN(value);
@@ -118,52 +118,52 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
  * @extends     Ext.ux.form.Spinner.Strategy
  */
 Ext.ux.form.Spinner.DateStrategy = function(config){
-	Ext.ux.form.Spinner.DateStrategy.superclass.constructor.call(this, config);
+    Ext.ux.form.Spinner.DateStrategy.superclass.constructor.call(this, config);
 };
 
 Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
-	defaultValue : new Date(),
-	format : "Y-m-d",
-	incrementValue : 1,
-	incrementConstant : Date.DAY,
-	alternateIncrementValue : 1,
-	alternateIncrementConstant : Date.MONTH,
+    defaultValue : new Date(),
+    format : "Y-m-d",
+    incrementValue : 1,
+    incrementConstant : Date.DAY,
+    alternateIncrementValue : 1,
+    alternateIncrementConstant : Date.MONTH,
 
-	spin : function(field, down, alternate){
-		Ext.ux.form.Spinner.DateStrategy.superclass.spin.call(this, field, down, alternate);
+    spin : function(field, down, alternate){
+        Ext.ux.form.Spinner.DateStrategy.superclass.spin.call(this, field, down, alternate);
 
-		var v = field.getRawValue();
-		
-		v = Date.parseDate(v, this.format);
-		var dir = (down == true) ? -1 : 1 ;
-		var incr = (alternate == true) ? this.alternateIncrementValue : this.incrementValue;
-		var dtconst = (alternate == true) ? this.alternateIncrementConstant : this.incrementConstant;
+        var v = field.getRawValue();
+        
+        v = Date.parseDate(v, this.format);
+        var dir = (down == true) ? -1 : 1 ;
+        var incr = (alternate == true) ? this.alternateIncrementValue : this.incrementValue;
+        var dtconst = (alternate == true) ? this.alternateIncrementConstant : this.incrementConstant;
 
-		if(typeof this.defaultValue == 'string'){
-			this.defaultValue = Date.parseDate(this.defaultValue, this.format);
-		}
+        if(typeof this.defaultValue == 'string'){
+            this.defaultValue = Date.parseDate(this.defaultValue, this.format);
+        }
 
-		v = (v) ? v.add(dtconst, dir*incr) : this.defaultValue;
+        v = (v) ? v.add(dtconst, dir*incr) : this.defaultValue;
 
-		v = this.fixBoundries(v);
-		field.setRawValue(Ext.util.Format.date(v,this.format));
-	},
-	
-	//private
-	fixBoundries : function(date){
-		var dt = date;
-		var min = (typeof this.minValue == 'string') ? Date.parseDate(this.minValue, this.format) : this.minValue ;
-		var max = (typeof this.maxValue == 'string') ? Date.parseDate(this.maxValue, this.format) : this.maxValue ;
+        v = this.fixBoundries(v);
+        field.setRawValue(Ext.util.Format.date(v,this.format));
+    },
+    
+    //private
+    fixBoundries : function(date){
+        var dt = date;
+        var min = (typeof this.minValue == 'string') ? Date.parseDate(this.minValue, this.format) : this.minValue ;
+        var max = (typeof this.maxValue == 'string') ? Date.parseDate(this.maxValue, this.format) : this.maxValue ;
 
-		if(this.minValue != undefined && dt < min){
-			dt = min;
-		}
-		if(this.maxValue != undefined && dt > max){
-			dt = max;
-		}
+        if(this.minValue != undefined && dt < min){
+            dt = min;
+        }
+        if(this.maxValue != undefined && dt > max){
+            dt = max;
+        }
 
-		return dt;
-	}
+        return dt;
+    }
 
 });
 
@@ -176,13 +176,13 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
  * @extends     Ext.ux.form.Spinner.DateStrategy
  */
 Ext.ux.form.Spinner.TimeStrategy = function(config){
-	Ext.ux.form.Spinner.TimeStrategy.superclass.constructor.call(this, config);
+    Ext.ux.form.Spinner.TimeStrategy.superclass.constructor.call(this, config);
 };
 
 Ext.extend(Ext.ux.form.Spinner.TimeStrategy, Ext.ux.form.Spinner.DateStrategy, {
-	format : "H:i",
-	incrementValue : 1,
-	incrementConstant : Date.MINUTE,
-	alternateIncrementValue : 1,
-	alternateIncrementConstant : Date.HOUR
+    format : "H:i",
+    incrementValue : 1,
+    incrementConstant : Date.MINUTE,
+    alternateIncrementValue : 1,
+    alternateIncrementConstant : Date.HOUR
 });

@@ -24,7 +24,7 @@ class Setup_Core extends Tinebase_Core
      * constant for config registry index
      *
      */
-    const CHECKDB = 'checkDB';    
+    const CHECKDB = 'checkDB';
 
     /**
      * init setup framework
@@ -118,7 +118,7 @@ class Setup_Core extends Tinebase_Core
         } else {
             $config = new Zend_Config(array());
         }
-        self::set(self::CONFIG, $config);  
+        self::set(self::CONFIG, $config);
     }
     
     /**
@@ -155,7 +155,7 @@ class Setup_Core extends Tinebase_Core
      * @return bool
      */
     public static function configFileWritable()
-    {        
+    {
         if (self::configFileExists()) {
             $configFilePath = self::getConfigFilePath();
             return is_writable($configFilePath);
@@ -260,7 +260,7 @@ class Setup_Core extends Tinebase_Core
             'name'              => 'TINE20SETUPSESSID',
         ), 'tinesetup');
         
-    	if (isset(self::get(self::SESSION)->setupuser)) {
+        if (isset(self::get(self::SESSION)->setupuser)) {
             self::set(self::USER, self::get(self::SESSION)->setupuser);
         }
 

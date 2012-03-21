@@ -17,7 +17,7 @@
  * @subpackage  Controller
  */
 interface Tinebase_Controller_Record_Interface
-{    
+{
     /**
      * get by id
      *
@@ -33,7 +33,7 @@ interface Tinebase_Controller_Record_Interface
      * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids);   
+    public function getMultiple($_ids);
     
     /**
      * Gets all entries
@@ -43,7 +43,7 @@ interface Tinebase_Controller_Record_Interface
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Record_RecordSet
      */
-    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC'); 
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC');
     
     /*************** add / update / delete lead *****************/    
 

@@ -92,7 +92,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.doBlur.defer(250, this);
             },
             specialkey: function(f, e){
-                var key = e.getKey(); 
+                var key = e.getKey();
                 switch (key) {
                     case e.ENTER:
                         e.stopEvent();

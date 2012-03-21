@@ -20,6 +20,6 @@ class Tinebase_Exception_NotFound extends Tinebase_Exception
 {
     
     public function __construct($_message, $_code=404) {
-    	parent::__construct($_message, $_code);
+        parent::__construct($_message, $_code);
     }
 }

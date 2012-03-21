@@ -104,9 +104,9 @@ class Tinebase_AsyncJob
             'value'     => $name
         )));
         $pagination = new Tinebase_Model_Pagination(array(
-            'sort'		=> 'start_time',
-            'dir'		=> 'DESC',
-            'limit'		=> 1,
+            'sort'        => 'start_time',
+            'dir'        => 'DESC',
+            'limit'        => 1,
         ));
         $jobs = $this->_backend->search($filter, $pagination);
         $lastJob = $jobs->getFirstRecord();
@@ -155,7 +155,7 @@ class Tinebase_AsyncJob
                 . ' Creating new Job ' . $_name);
                 
         $date = new Tinebase_DateTime();
-        $date->addSecond($_timeout);            
+        $date->addSecond($_timeout);
         
         $job = new Tinebase_Model_AsyncJob(array(
             'name'              => $_name,

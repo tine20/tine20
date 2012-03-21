@@ -18,7 +18,7 @@
  * @subpackage  Filter 
  */
 class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_FilterGroup
-{    
+{
     /**
      * @var string application of this filter group
      */

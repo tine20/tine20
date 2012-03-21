@@ -58,7 +58,7 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
             header('WWW-Authenticate: Basic realm="CardDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
-            return;                            
+            return;
         }
         
         self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());

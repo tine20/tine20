@@ -134,7 +134,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     getFormItems: function () {
         
         var backendComboConfig = {
-        	xtype: 'combo',
+            xtype: 'combo',
             width: 300,
             listWidth: 300,
             mode: 'local',
@@ -177,103 +177,103 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             collapsed: true,
             items: [
                 this.imapBackendCombo, 
-	            {
-	                name: 'imap_host',
-	                fieldLabel: this.app.i18n._('Hostname'),
-	                xtype: 'textfield'
-	            }, /*{
-	                name: 'imap_user',
-	                fieldLabel: this.app.i18n._('Username'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'imap_password',
-	                fieldLabel: this.app.i18n._('Password'),
-	                xtype: 'textfield',
-	                inputType: 'password'
-	            }, */{
-	                name: 'imap_port',
-	                fieldLabel: this.app.i18n._('Port'),
-	                xtype: 'numberfield'
-	            }, 
-	            Ext.applyIf({
-	                fieldLabel: this.app.i18n._('Secure Connection'),
-	                name: 'imap_ssl',
-	                value: 'none',
-	                store: [['none', this.app.i18n._('None')], ['tls',  this.app.i18n._('TLS')], ['ssl',  this.app.i18n._('SSL')]]
-	            }, commonComboConfig), 
-	            Ext.applyIf({
-	            	name: 'imap_useSystemAccount',
-	                fieldLabel: this.app.i18n._('Use system account'),
-	                store: [[0, this.app.i18n._('No')], [1, this.app.i18n._('Yes')]],
-	                value: 0
-	            }, commonComboConfig), 
-	            {
-	                name: 'imap_domain',
-	                fieldLabel: this.app.i18n._('Append domain to login name'),
-	                xtype: 'textfield'
-	            }, {
-	                id: this.imapBackendIdPrefix + 'CardLayout',
-	                layout: 'card',
-	                activeItem: this.imapBackendIdPrefix + 'standard',
-	                border: false,
-	                width: '100%',
-	                defaults: {
-	                    border: false
-	                },
-	                items: [{
-	                    // nothing in here yet
-	                    id: this.imapBackendIdPrefix + 'standard',
-	                    layout: 'form',
-	                    items: []
-	                }, {
-	                    // dbmail config options
-	                    id: this.imapBackendIdPrefix + 'dbmail',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: this.getDbConfigFields('imap', 'dbmail')
-	                }, {
-	                    // nothing in here yet
-	                    id: this.imapBackendIdPrefix + 'ldap_imap',
-	                    layout: 'form',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: []
-	                }, {
-	                    // cyrus config options
-	                    id: this.imapBackendIdPrefix + 'cyrus',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: [{
-	                        name: 'imap_cyrus_admin',
-	                        fieldLabel: this.app.i18n._('Cyrus Admin')
-	                    }, {
-	                        name: 'imap_cyrus_password',
-	                        fieldLabel: this.app.i18n._('Cyrus Admin Password'),
-	                        inputType: 'password'
-	                    }]
-	                }, {
-	                    // dovecot config options
-	                    id: this.imapBackendIdPrefix + 'dovecot_imap',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: this.getDbConfigFields('imap', 'dovecot').concat(this.getDovecotExtraConfig('imap'))
-	                }]
-	            }
-	    	]
+                {
+                    name: 'imap_host',
+                    fieldLabel: this.app.i18n._('Hostname'),
+                    xtype: 'textfield'
+                }, /*{
+                    name: 'imap_user',
+                    fieldLabel: this.app.i18n._('Username'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'imap_password',
+                    fieldLabel: this.app.i18n._('Password'),
+                    xtype: 'textfield',
+                    inputType: 'password'
+                }, */{
+                    name: 'imap_port',
+                    fieldLabel: this.app.i18n._('Port'),
+                    xtype: 'numberfield'
+                }, 
+                Ext.applyIf({
+                    fieldLabel: this.app.i18n._('Secure Connection'),
+                    name: 'imap_ssl',
+                    value: 'none',
+                    store: [['none', this.app.i18n._('None')], ['tls',  this.app.i18n._('TLS')], ['ssl',  this.app.i18n._('SSL')]]
+                }, commonComboConfig), 
+                Ext.applyIf({
+                    name: 'imap_useSystemAccount',
+                    fieldLabel: this.app.i18n._('Use system account'),
+                    store: [[0, this.app.i18n._('No')], [1, this.app.i18n._('Yes')]],
+                    value: 0
+                }, commonComboConfig), 
+                {
+                    name: 'imap_domain',
+                    fieldLabel: this.app.i18n._('Append domain to login name'),
+                    xtype: 'textfield'
+                }, {
+                    id: this.imapBackendIdPrefix + 'CardLayout',
+                    layout: 'card',
+                    activeItem: this.imapBackendIdPrefix + 'standard',
+                    border: false,
+                    width: '100%',
+                    defaults: {
+                        border: false
+                    },
+                    items: [{
+                        // nothing in here yet
+                        id: this.imapBackendIdPrefix + 'standard',
+                        layout: 'form',
+                        items: []
+                    }, {
+                        // dbmail config options
+                        id: this.imapBackendIdPrefix + 'dbmail',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: this.getDbConfigFields('imap', 'dbmail')
+                    }, {
+                        // nothing in here yet
+                        id: this.imapBackendIdPrefix + 'ldap_imap',
+                        layout: 'form',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: []
+                    }, {
+                        // cyrus config options
+                        id: this.imapBackendIdPrefix + 'cyrus',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: [{
+                            name: 'imap_cyrus_admin',
+                            fieldLabel: this.app.i18n._('Cyrus Admin')
+                        }, {
+                            name: 'imap_cyrus_password',
+                            fieldLabel: this.app.i18n._('Cyrus Admin Password'),
+                            inputType: 'password'
+                        }]
+                    }, {
+                        // dovecot config options
+                        id: this.imapBackendIdPrefix + 'dovecot_imap',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: this.getDbConfigFields('imap', 'dovecot').concat(this.getDovecotExtraConfig('imap'))
+                    }]
+                }
+            ]
         }, {
             title: this.app.i18n._('Smtp'),
             id: 'setup-smtp-group',
@@ -281,105 +281,105 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             collapsed: true,
             items: [
                 this.smtpBackendCombo,
-	            {
-	                name: 'smtp_hostname',
-	                fieldLabel: this.app.i18n._('Hostname'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'smtp_port',
-	                fieldLabel: this.app.i18n._('Port'),
-	                xtype: 'numberfield'
-	            }, 
-	            Ext.applyIf({
-	                fieldLabel: this.app.i18n._('Secure Connection'),
-	                name: 'smtp_ssl',
-	                value: 'none',
-	                store: [['none', this.app.i18n._('None')], ['tls', this.app.i18n._('TLS')], ['ssl', this.app.i18n._('SSL')]]
-	            }, commonComboConfig), 
-	            Ext.applyIf({
-	                fieldLabel: this.app.i18n._('Authentication'),
-	                name: 'smtp_auth',
-	                value: 'login',
-	                store: [['none', this.app.i18n._('None')], ['login', this.app.i18n._('Login')], ['plain', this.app.i18n._('Plain')]]
-	            }, commonComboConfig), 
-	            {
-	                name: 'smtp_primarydomain',
-	                fieldLabel: this.app.i18n._('Primary Domain'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'smtp_secondarydomains',
-	                fieldLabel: this.app.i18n._('Secondary Domains (comma separated)'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'smtp_from',
-	                fieldLabel: this.app.i18n._('Notifications service address'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'smtp_username',
-	                fieldLabel: this.app.i18n._('Notification Username'),
-	                xtype: 'textfield'
-	            }, {
-	                name: 'smtp_password',
-	                fieldLabel: this.app.i18n._('Notification Password'),
-	                inputType: 'password',
-	                xtype: 'textfield'
+                {
+                    name: 'smtp_hostname',
+                    fieldLabel: this.app.i18n._('Hostname'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'smtp_port',
+                    fieldLabel: this.app.i18n._('Port'),
+                    xtype: 'numberfield'
+                }, 
+                Ext.applyIf({
+                    fieldLabel: this.app.i18n._('Secure Connection'),
+                    name: 'smtp_ssl',
+                    value: 'none',
+                    store: [['none', this.app.i18n._('None')], ['tls', this.app.i18n._('TLS')], ['ssl', this.app.i18n._('SSL')]]
+                }, commonComboConfig), 
+                Ext.applyIf({
+                    fieldLabel: this.app.i18n._('Authentication'),
+                    name: 'smtp_auth',
+                    value: 'login',
+                    store: [['none', this.app.i18n._('None')], ['login', this.app.i18n._('Login')], ['plain', this.app.i18n._('Plain')]]
+                }, commonComboConfig), 
+                {
+                    name: 'smtp_primarydomain',
+                    fieldLabel: this.app.i18n._('Primary Domain'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'smtp_secondarydomains',
+                    fieldLabel: this.app.i18n._('Secondary Domains (comma separated)'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'smtp_from',
+                    fieldLabel: this.app.i18n._('Notifications service address'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'smtp_username',
+                    fieldLabel: this.app.i18n._('Notification Username'),
+                    xtype: 'textfield'
+                }, {
+                    name: 'smtp_password',
+                    fieldLabel: this.app.i18n._('Notification Password'),
+                    inputType: 'password',
+                    xtype: 'textfield'
                 }, {
                     name: 'smtp_name',
                     fieldLabel: this.app.i18n._('Notifications local client (hostname or IP address)'),
                     xtype: 'textfield',
                     value: 'localhost'
-	            }, {
-	                id: this.smtpBackendIdPrefix + 'CardLayout',
-	                layout: 'card',
-	                activeItem: this.smtpBackendIdPrefix + 'standard',
-	                border: false,
-	                width: '100%',
-	                defaults: {
-	                    border: false
-	                },
-	                items: [{
-	                    // nothing in here yet
-	                    id: this.smtpBackendIdPrefix + 'standard',
-	                    layout: 'form',
-	                    items: []
-	                }, {
+                }, {
+                    id: this.smtpBackendIdPrefix + 'CardLayout',
+                    layout: 'card',
+                    activeItem: this.smtpBackendIdPrefix + 'standard',
+                    border: false,
+                    width: '100%',
+                    defaults: {
+                        border: false
+                    },
+                    items: [{
+                        // nothing in here yet
+                        id: this.smtpBackendIdPrefix + 'standard',
+                        layout: 'form',
+                        items: []
+                    }, {
                         // nothing in here yet
                         id: this.smtpBackendIdPrefix + 'ldap_smtp_mail',
                         layout: 'form',
                         items: []
                     },{
-	                    // postfix config options
-	                    id: this.smtpBackendIdPrefix + 'postfix',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: this.getDbConfigFields('smtp', 'postfix')
-	                }, {
-	                    // postfix config options
-	                    id: this.smtpBackendIdPrefix + 'ldap_smtp',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: []
-	                }, {
-	                    // postfix ldap qmail user schema config options
-	                    id: this.smtpBackendIdPrefix + 'ldap_smtp_qmail',
-	                    layout: 'form',
-	                    autoHeight: 'auto',
-	                    defaults: {
-	                        width: 300,
-	                        xtype: 'textfield'
-	                    },
-	                    items: []
-	                }]
-	            }
-	     	]
+                        // postfix config options
+                        id: this.smtpBackendIdPrefix + 'postfix',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: this.getDbConfigFields('smtp', 'postfix')
+                    }, {
+                        // postfix config options
+                        id: this.smtpBackendIdPrefix + 'ldap_smtp',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: []
+                    }, {
+                        // postfix ldap qmail user schema config options
+                        id: this.smtpBackendIdPrefix + 'ldap_smtp_qmail',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: []
+                    }]
+                }
+             ]
         }, {
             title: this.app.i18n._('SIEVE'),
             id: 'setup-sieve-group',
@@ -470,14 +470,14 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             listWidth: 300,
             value: 'PLAIN-MD5',
             store: [
-                ['PLAIN-MD5',  	this.app.i18n._('PLAIN-MD5')],
-                ['MD5-CRYPT',	this.app.i18n._('MD5-CRYPT')],
-                ['SHA',   		this.app.i18n._('SHA1')],
-                ['SHA256',   	this.app.i18n._('SHA256')],
-                ['SSHA256',  	this.app.i18n._('SSHA256')],
-                ['SHA512',   	this.app.i18n._('SHA512')],
-                ['SSHA512',   	this.app.i18n._('SSHA512')],
-                ['PLAIN',    	this.app.i18n._('PLAIN')]
+                ['PLAIN-MD5',      this.app.i18n._('PLAIN-MD5')],
+                ['MD5-CRYPT',    this.app.i18n._('MD5-CRYPT')],
+                ['SHA',           this.app.i18n._('SHA1')],
+                ['SHA256',       this.app.i18n._('SHA256')],
+                ['SSHA256',      this.app.i18n._('SSHA256')],
+                ['SHA512',       this.app.i18n._('SHA512')],
+                ['SSHA512',       this.app.i18n._('SSHA512')],
+                ['PLAIN',        this.app.i18n._('PLAIN')]
             ]
         }];
     }

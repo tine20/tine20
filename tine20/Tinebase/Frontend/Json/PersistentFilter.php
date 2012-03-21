@@ -50,7 +50,7 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
      */
     public function savePersistentFilter($recordData)
     {
-        return $this->_save($recordData, Tinebase_PersistentFilter::getInstance(), 'PersistentFilter');        
+        return $this->_save($recordData, Tinebase_PersistentFilter::getInstance(), 'PersistentFilter');
     }
     
     /**

@@ -131,7 +131,7 @@ class Zend_Mail_Protocol_Sieve
     {
         foreach ($this->_welcome as $value) {
             if ($value[0] == 'IMPLEMENTATION') {
-                $this->_implementation = $value[1]; 
+                $this->_implementation = $value[1];
             }
         }
     }
@@ -478,7 +478,7 @@ class Zend_Mail_Protocol_Sieve
      */
     public function noop($content)
     {
-        $lines = $this->requestAndResponse('NOOP', array($this->escapeString($content)));        
+        $lines = $this->requestAndResponse('NOOP', array($this->escapeString($content)));
     }
 
     /**

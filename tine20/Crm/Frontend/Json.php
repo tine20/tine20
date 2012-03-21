@@ -86,7 +86,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveLead($recordData)
     {
-        return $this->_save($recordData, $this->_controller, 'Lead');        
+        return $this->_save($recordData, $this->_controller, 'Lead');
     }
     
     /**
@@ -109,7 +109,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @todo    add preference for default container_id
      */
     public function getRegistryData()
-    {   
+    {
         $settings = $this->getSettings();
         $defaults = $settings['defaults'];
         

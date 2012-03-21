@@ -94,7 +94,7 @@ class Tinebase_Group
                 // manage samba sam?
                 if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
                     $options['plugins'][] = Tinebase_Group_Ldap::PLUGIN_SAMBA;
-                    $options[Tinebase_Group_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray(); 
+                    $options[Tinebase_Group_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray();
                 }
                 
                 $result = new Tinebase_Group_Ldap($options);
@@ -250,7 +250,7 @@ class Tinebase_Group
     {
         $defaultAdminGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)) 
             ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
-            : self::DEFAULT_ADMIN_GROUP; 
+            : self::DEFAULT_ADMIN_GROUP;
         $adminGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultAdminGroupName,
             'description'   => 'Group of administrative accounts'

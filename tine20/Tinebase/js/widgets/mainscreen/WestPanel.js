@@ -104,7 +104,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.hasContentTypeTreePanel = Ext.isArray(this.contentTypes);
         
         if (this.hasContainerTreePanel === null) {
-            this.hasContainerTreePanel = true;            
+            this.hasContainerTreePanel = true;
             if(this.contentTypes) {
                 Ext.each(this.contentTypes, function(ct) {
                     if ((ct.model == this.contentType) && (ct.singularContainerMode)) {
@@ -184,7 +184,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     },
 
     getContentType: function() {
-        return (this.contentType) ? this.contentType : '';  
+        return (this.contentType) ? this.contentType : '';
     },
     
     /**
@@ -219,7 +219,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      */
     getContainerTreePanel: function() {
         var panelName = this.app.getMainScreen().getActiveContentType() + 'TreePanel';
-        if(!this[panelName]) {            
+        if(!this[panelName]) {
             if(Tine[this.app.appName].hasOwnProperty(panelName)) this[panelName] = new Tine[this.app.appName][panelName]({app: this.app});
             else this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app});
             this[panelName].on('click', function (node, event) {
@@ -230,7 +230,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             });
         }
         
-        return this[panelName];     
+        return this[panelName];
 
     },
     

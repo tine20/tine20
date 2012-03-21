@@ -58,10 +58,10 @@ Tine.Crm.LeadState.Model.getDefaultData = function() {
  * @return {Ext.data.JsonStore}
  */
 Tine.Crm.LeadState.getStore = function() {
-	var store = Ext.StoreMgr.get('CrmLeadstateStore');
-	if (!store) {
-		// create store
-		store = new Ext.data.JsonStore({
+    var store = Ext.StoreMgr.get('CrmLeadstateStore');
+    if (!store) {
+        // create store
+        store = new Ext.data.JsonStore({
             fields: Tine.Crm.LeadState.Model,
             baseParams: {
                 method: 'Crm.getLeadstates',
@@ -80,8 +80,8 @@ Tine.Crm.LeadState.getStore = function() {
         }
         
         Ext.StoreMgr.add('CrmLeadstateStore', store);
-	}
-	return store;
+    }
+    return store;
 };
 
 Tine.Crm.LeadState.getClosedStatus = function() {
@@ -102,14 +102,14 @@ Tine.Crm.LeadState.getClosedStatus = function() {
  * @return  {String} leadstate
  */
 Tine.Crm.LeadState.Renderer = function(_leadstateId) {
-	leadstateStore = Tine.Crm.LeadState.getStore();		
-	record = leadstateStore.getById(_leadstateId);
-	
-	if (record) {
-	   return record.data.leadstate;
-	} else {
-		return 'undefined';
-	}
+    leadstateStore = Tine.Crm.LeadState.getStore();
+    record = leadstateStore.getById(_leadstateId);
+    
+    if (record) {
+       return record.data.leadstate;
+    } else {
+        return 'undefined';
+    }
 };
 
 /**
@@ -149,13 +149,13 @@ Tine.Crm.LeadState.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     getColumnModel: function() {
         return new Ext.grid.ColumnModel([
-        { 
+        {
             id:'leadstate_id', 
             header: 'id', 
             dataIndex: 'id', 
             width: 25, 
             hidden: true 
-        }, { 
+        }, {
             id:'leadstate', 
             header: 'entries', 
             dataIndex: 'leadstate', 
@@ -166,7 +166,7 @@ Tine.Crm.LeadState.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
                 emptyText: this.app.i18n._('Add a Leadstate...')
             }),
             editor: new Ext.form.TextField({allowBlank: false}) 
-        }, { 
+        }, {
             id:'probability', 
             header: 'probability', 
             dataIndex: 'probability', 

@@ -515,7 +515,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /***************************** other funcs *******************************/
     
-	/**
+    /**
      * Returns registry data of felamimail.
      * @see Tinebase_Application_Json_Abstract
      * 
@@ -557,6 +557,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result['defaults'] = $defaults;
         
-        return $result; 
+        return $result;
     }
 }

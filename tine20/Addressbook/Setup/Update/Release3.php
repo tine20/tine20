@@ -238,7 +238,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
                     </index>
                 </declaration>
             </table>
-		');
+        ');
         $this->_backend->createTable($table);
         
         $table = Setup_Backend_Schema_Table_Factory::factory('String', '
@@ -302,7 +302,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
                     </index>
                 </declaration>
             </table>
-		');
+        ');
         $this->_backend->createTable($table);
 
         Tinebase_Application::getInstance()->addApplicationTable(
@@ -324,7 +324,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
      * - populate list table with internal groups
      */
     public function update_7()
-    {        
+    {
         $select = $this->_db->select()
             ->from(
                 array('container' => SQL_TABLE_PREFIX . 'container'),
@@ -384,7 +384,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
             }
             // update list_id
             $data = array(
-            	'list_id'   => $listId
+                'list_id'   => $listId
             );
             $this->_db->update(SQL_TABLE_PREFIX . 'groups', $data, $this->_db->quoteInto("id = ?", $row['id']));
         }
@@ -459,7 +459,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
             </field>');
         $this->_backend->alterCol('addressbook_image', $declaration);
         $declaration = new Setup_Backend_Schema_Index_Xml('
-			<index>
+            <index>
                 <name>addressbook_image::contact_id-addressbook::id</name>
                 <field>
                     <name>contact_id</name>

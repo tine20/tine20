@@ -16,7 +16,7 @@
  * @subpackage  Model
  */
 class Sales_Model_Config extends Tinebase_Record_Abstract 
-{   
+{
     /**
      * ods export config
      * 

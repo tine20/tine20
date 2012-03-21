@@ -57,12 +57,12 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'id'            => 'testgrouplkfdshew7fdfwo8efw',
             'name'          => 'tine20phpunit updated',
             'description'   => 'updated group'
-        )); 
+        ));
         
         $this->objects['noIdGroup'] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit noid',
             'description'   => 'noid group'
-        )); 
+        ));
         
         // add accounts for group member tests
         $this->objects['account1'] = new Tinebase_Model_FullUser(array(
@@ -74,7 +74,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
+        ));
         
         $this->objects['account2'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 'testaccountdsjdsud8hjd11',
@@ -85,7 +85,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 2',
             'accountFirstName'      => 'PHPUnit 2',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
+        ));
 
         $this->objects['account3'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 'testaccountdsjdsud8hjd12',

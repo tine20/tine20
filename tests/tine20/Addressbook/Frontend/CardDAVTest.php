@@ -35,9 +35,9 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook CardDAV Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook CardDAV Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

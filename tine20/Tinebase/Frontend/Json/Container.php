@@ -30,7 +30,7 @@ class Tinebase_Frontend_Json_Container
      * @return array
      */
     public function getContainer($application, $containerType, $owner)
-    {       
+    {
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Grants::GRANT_READ);
@@ -203,7 +203,7 @@ class Tinebase_Frontend_Json_Container
                     break;
                 default:
                     throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
-                    break;    
+                    break;
             }
         }
         
@@ -239,7 +239,7 @@ class Tinebase_Frontend_Json_Container
      */
     public function moveRecordsToContainer($targetContainerId, $filterData, $applicationName, $model)
     {
-        $filterModel = $applicationName . '_Model_' . $model . 'Filter'; 
+        $filterModel = $applicationName . '_Model_' . $model . 'Filter';
         $filter = new $filterModel(array());
         $filter->setFromArrayInUsersTimezone($filterData);
         

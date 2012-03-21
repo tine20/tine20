@@ -32,7 +32,7 @@ class Tinebase_Model_Department extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tinebase';
     
-	/**
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter

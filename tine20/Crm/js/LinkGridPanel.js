@@ -18,7 +18,7 @@ Ext.ns('Tine.Crm.LinkGridPanel');
  */
 Tine.Crm.LinkGridPanel.initActions = function() {
     
-    var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')); 
+    var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
     if (! app) {
         return;
     }
@@ -59,7 +59,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         iconCls: 'action_remove',
         onlySingle: true,
         scope: this,
-        handler: function(_button, _event) {                       
+        handler: function(_button, _event) {
             var selectedRows = this.getSelectionModel().getSelections();
             for (var i = 0; i < selectedRows.length; ++i) {
                 this.store.remove(selectedRows[i]);
@@ -129,7 +129,7 @@ Tine.Crm.LinkGridPanel.initStore = function() {
         (function() {
             if (this.rendered) {
                 this.getView().focusRow(index);
-                this.getSelectionModel().selectRow(index); 
+                this.getSelectionModel().selectRow(index);
             }
         }).defer(300, this);
     }, this);

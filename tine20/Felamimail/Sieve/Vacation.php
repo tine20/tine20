@@ -17,7 +17,7 @@
  * @subpackage  Sieve
  */
 class Felamimail_Sieve_Vacation
-{    
+{
     /**
      * period in which addresses are kept and are not responded to
      * 
@@ -255,7 +255,7 @@ class Felamimail_Sieve_Vacation
     {
         if(is_array($_string)) {
             $string = array_map(array($this, '_quoteString'), $_string);
-            return '[' . implode(',', $string) . ']'; 
+            return '[' . implode(',', $string) . ']';
         } else {
             return '"' . str_replace('"', '\"', $_string) . '"';
         }

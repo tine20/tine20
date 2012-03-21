@@ -261,8 +261,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
                 'totalcount'            => count($importDefinitions),
             ),
-        );        
-        return $registryData;    
+        );
+        return $registryData;
     }
     
     /**

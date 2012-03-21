@@ -32,12 +32,12 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Voipmanager_Model_Snom_Phone';
     
-	/**
-	 * write phone ACL
-	 * 
+    /**
+     * write phone ACL
+     * 
      * @param Voipmanager_Model_Snom_PhoneRight $_acl
-	 * @return Voipmanager_Model_Snom_Phone the phone
-	 */
+     * @return Voipmanager_Model_Snom_Phone the phone
+     */
     public function createACL(Voipmanager_Model_Snom_PhoneRight $_acl)
     {
         if (!$_acl->getId()) {
@@ -52,14 +52,14 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         return $result;
     }
     
-	/**
-	 * delete phone ACLs
-	 * 
+    /**
+     * delete phone ACLs
+     * 
      * @param string $_phoneId
-	 * @return query result
-	 */
+     * @return query result
+     */
     public function deleteACLs($_phoneId)
-    {        
+    {
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('snom_phone_id') . ' = ?', $_phoneId);
         $result = $this->_db->delete($this->_tablePrefix . 'snom_phones_acl', $where);
         
@@ -82,14 +82,14 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('snom_phone_id') . ' = ?', $phoneId))
             ->where($this->_db->quoteIdentifier('read_right'). '= 1')
             ->where($this->_db->quoteIdentifier('write_right'). '= 1')
-            ->where($this->_db->quoteIdentifier('dial_right'). '= 1');            
+            ->where($this->_db->quoteIdentifier('dial_right'). '= 1');
 
         $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $result = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', $rows);
         
-        return $result;        
+        return $result;
     }    
     
     /**
@@ -120,13 +120,13 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         }        
     }
    
-	/**
-	 * get valid phone ids according to phones_acl, identified by account id
-	 * 
+    /**
+     * get valid phone ids according to phones_acl, identified by account id
+     * 
      * @param string| $_accountId
-	 * @return Voipmanager_Model_Snom_Phone the phone
-	 * @throws Voipmanager_Exception_InvalidArgument
-	 */    
+     * @return Voipmanager_Model_Snom_Phone the phone
+     * @throws Voipmanager_Exception_InvalidArgument
+     */    
     public function getValidPhoneIds($_accountId)
     {
         if(empty($_accountId)) {
@@ -135,28 +135,28 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         
         $select = $this->_db->select()    
             ->from($this->_tablePrefix . 'snom_phones_acl', array('snom_phone_id'))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId));            
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $_accountId));
 
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $select->query();
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);      
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        return $rows;  
+        return $rows;
     }
     
-	/**
-	 * get one myPhone identified by id
-	 * 
+    /**
+     * get one myPhone identified by id
+     * 
      * @param string|Voipmanager_Model_Snom_Phone $_id
      * @param string $_accountId
-	 * @return Voipmanager_Model_Snom_Phone the phone
-	 * @throws Voipmanager_Exception_AccessDenied
-	 */
+     * @return Voipmanager_Model_Snom_Phone the phone
+     * @throws Voipmanager_Exception_AccessDenied
+     */
     public function getMyPhone($_id, $_accountId)
-    {	
+    {
 
-        $_validPhoneIds = $this->getValidPhoneIds($_accountId);   
+        $_validPhoneIds = $this->getValidPhoneIds($_accountId);
         if(empty($_validPhoneIds)) {
             throw new Voipmanager_Exception_AccessDenied('not enough rights to display/edit phone');
         }         
@@ -177,9 +177,9 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         $result = new Voipmanager_Model_Snom_Phone($row);
         
         return $result;
-	}    
+    }    
     
-	     
+         
     /**
      * get one phone identified by id
      * 
@@ -188,7 +188,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
      * @throws Voipmanager_Exception_NotFound
      */
     public function getByMacAddress($_macAddress)
-    {   
+    {
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'snom_phones')
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('macaddress') . ' = ?', $_macAddress));
@@ -202,7 +202,7 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }     
-	
+    
     /**
      * update redirect for an existing phone
      *

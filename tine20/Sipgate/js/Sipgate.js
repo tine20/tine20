@@ -325,7 +325,7 @@ Tine.Sipgate.Main = {
                         header : this.translation._('Status'),
                         dataIndex : 'Status',
                         width : 20,
-                        renderer: function(el){ 
+                        renderer: function(el){
                             return '<div class="SipgateCallStateList ' + el + '"></div>';
                         } 
                         
@@ -357,7 +357,7 @@ Tine.Sipgate.Main = {
                         header : this.translation._('Call started'),
                         dataIndex : 'Timestamp',
                         renderer: function(tstamp) {
-                            var d = new Date(tstamp*1000);                            
+                            var d = new Date(tstamp*1000);
                             var n = d.format('D, d. M. Y H:m:s');
                             return n;
                         },
@@ -427,7 +427,7 @@ Tine.Sipgate.Main = {
                 if (record) {
                     //var contact = null;
                     Tine.log.debug(record);
-                    var contact = { data: record.data.RemoteRecord }; 
+                    var contact = { data: record.data.RemoteRecord };
                     var number = record.data.RemoteNumber;
                     if(number) {
                         Tine.Sipgate.dialPhoneNumber(number,contact);
@@ -476,7 +476,7 @@ Tine.Sipgate.loadSipgateStore = function(reload) {
                 });
         
 
-        if(store.getTotalCount() > 0) {    
+        if(store.getTotalCount() > 0) {
             Ext.StoreMgr.add('SipgateStore', store);
             Tine.Sipgate.updateSipgateTree(store);
         }

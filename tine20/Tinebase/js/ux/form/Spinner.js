@@ -29,85 +29,85 @@ Ext.ns("Ext.ux.form");
  * @extends     Ext.form.TriggerField
  */
 Ext.ux.form.Spinner = function(config){
-	Ext.ux.form.Spinner.superclass.constructor.call(this, config);
-	this.addEvents({
-		'spin' : true,
-		'spinup' : true,
-		'spindown' : true
-	});
+    Ext.ux.form.Spinner.superclass.constructor.call(this, config);
+    this.addEvents({
+        'spin' : true,
+        'spinup' : true,
+        'spindown' : true
+    });
 };
 
 Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
-	triggerClass : 'x-form-spinner-trigger',
-	splitterClass : 'x-form-spinner-splitter',
+    triggerClass : 'x-form-spinner-trigger',
+    splitterClass : 'x-form-spinner-splitter',
 
-	alternateKey : Ext.EventObject.shiftKey,
-	strategy : undefined,
+    alternateKey : Ext.EventObject.shiftKey,
+    strategy : undefined,
 
-	//private
-	onRender : function(ct, position){
-		Ext.ux.form.Spinner.superclass.onRender.call(this, ct, position);
+    //private
+    onRender : function(ct, position){
+        Ext.ux.form.Spinner.superclass.onRender.call(this, ct, position);
 
-		this.splitter = this.wrap.createChild({tag:'div', cls:this.splitterClass, style:'width:13px; height:2px;'});
-		this.splitter.show().setRight( (Ext.isIE) ? 1 : 2 );
-		this.splitter.show().setTop(8);
+        this.splitter = this.wrap.createChild({tag:'div', cls:this.splitterClass, style:'width:13px; height:2px;'});
+        this.splitter.show().setRight( (Ext.isIE) ? 1 : 2 );
+        this.splitter.show().setTop(8);
 
-		this.proxy = this.trigger.createProxy('', this.splitter, true);
-		this.proxy.addClass("x-form-spinner-proxy");
-		this.proxy.setStyle('left','0px');  
-		this.proxy.setSize(14, 1);
-		this.proxy.hide();
-		this.dd = new Ext.dd.DDProxy(this.splitter.dom.id, "SpinnerDrag", {dragElId: this.proxy.id});
+        this.proxy = this.trigger.createProxy('', this.splitter, true);
+        this.proxy.addClass("x-form-spinner-proxy");
+        this.proxy.setStyle('left','0px');  
+        this.proxy.setSize(14, 1);
+        this.proxy.hide();
+        this.dd = new Ext.dd.DDProxy(this.splitter.dom.id, "SpinnerDrag", {dragElId: this.proxy.id});
 
-		this.initSpinner();
-	},
+        this.initSpinner();
+    },
 
-	//private
-	initTrigger : function(){
-		this.trigger.addClassOnOver('x-form-trigger-over');
-		this.trigger.addClassOnClick('x-form-trigger-click');
-	},
+    //private
+    initTrigger : function(){
+        this.trigger.addClassOnOver('x-form-trigger-over');
+        this.trigger.addClassOnClick('x-form-trigger-click');
+    },
 
-	//private
-	initSpinner : function(){
-		this.keyNav = new Ext.KeyNav(this.el, {
-			"up" : function(e){
-				e.preventDefault();
-				this.onSpinUp();
-			},
+    //private
+    initSpinner : function(){
+        this.keyNav = new Ext.KeyNav(this.el, {
+            "up" : function(e){
+                e.preventDefault();
+                this.onSpinUp();
+            },
 
-			"down" : function(e){
-				e.preventDefault();
-				this.onSpinDown();
-			},
+            "down" : function(e){
+                e.preventDefault();
+                this.onSpinDown();
+            },
 
-			"pageUp" : function(e){
-				e.preventDefault();
-				this.onSpinUpAlternate();
-			},
+            "pageUp" : function(e){
+                e.preventDefault();
+                this.onSpinUpAlternate();
+            },
 
-			"pageDown" : function(e){
-				e.preventDefault();
-				this.onSpinDownAlternate();
-			},
+            "pageDown" : function(e){
+                e.preventDefault();
+                this.onSpinDownAlternate();
+            },
 
-			scope : this
-		});
+            scope : this
+        });
 
-		this.repeater = new Ext.util.ClickRepeater(this.trigger);
-		this.repeater.on("click", this.onTriggerClick, this, {preventDefault:true});
-		this.trigger.on("mouseover", this.onMouseOver, this, {preventDefault:true});
-		this.trigger.on("mouseout",  this.onMouseOut,  this, {preventDefault:true});
-		this.trigger.on("mousemove", this.onMouseMove, this, {preventDefault:true});
-		this.trigger.on("mousedown", this.onMouseDown, this, {preventDefault:true});
-		this.trigger.on("mouseup",   this.onMouseUp,   this, {preventDefault:true});
-		this.wrap.on("mousewheel",   this.handleMouseWheel, this);
+        this.repeater = new Ext.util.ClickRepeater(this.trigger);
+        this.repeater.on("click", this.onTriggerClick, this, {preventDefault:true});
+        this.trigger.on("mouseover", this.onMouseOver, this, {preventDefault:true});
+        this.trigger.on("mouseout",  this.onMouseOut,  this, {preventDefault:true});
+        this.trigger.on("mousemove", this.onMouseMove, this, {preventDefault:true});
+        this.trigger.on("mousedown", this.onMouseDown, this, {preventDefault:true});
+        this.trigger.on("mouseup",   this.onMouseUp,   this, {preventDefault:true});
+        this.wrap.on("mousewheel",   this.handleMouseWheel, this);
 
-		this.dd.setXConstraint(0, 0, 10);
-		this.dd.setYConstraint(1500, 1500, 10);
-		this.dd.endDrag = this.endDrag.createDelegate(this);
-		this.dd.startDrag = this.startDrag.createDelegate(this);
-		this.dd.onDrag = this.onDrag.createDelegate(this);
+        this.dd.setXConstraint(0, 0, 10);
+        this.dd.setYConstraint(1500, 1500, 10);
+        this.dd.endDrag = this.endDrag.createDelegate(this);
+        this.dd.startDrag = this.startDrag.createDelegate(this);
+        this.dd.onDrag = this.onDrag.createDelegate(this);
 
         /*
         jsakalos suggestion
@@ -116,191 +116,191 @@ Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
             switch(this.strategy.xtype) {
                 case 'number':
                     this.strategy = new Ext.ux.form.Spinner.NumberStrategy(this.strategy);
-	                break;
+                    break;
 
                 case 'date':
                     this.strategy = new Ext.ux.form.Spinner.DateStrategy(this.strategy);
-	                break;
+                    break;
 
                 case 'time':
                     this.strategy = new Ext.ux.form.Spinner.TimeStrategy(this.strategy);
-                	break;
+                    break;
 
                 default:
                     delete(this.strategy);
-                	break;
+                    break;
             }
             delete(this.strategy.xtype);
         }
 
-		if(this.strategy == undefined){
-			this.strategy = new Ext.ux.form.Spinner.NumberStrategy();
-		}
-	},
+        if(this.strategy == undefined){
+            this.strategy = new Ext.ux.form.Spinner.NumberStrategy();
+        }
+    },
 
-	//private
-	onMouseOver : function(){
-		if(this.disabled){
-			return;
-		}
-		var middle = this.getMiddle();
-		this.__tmphcls = (Ext.EventObject.getPageY() < middle) ? 'x-form-spinner-overup' : 'x-form-spinner-overdown';
-		this.trigger.addClass(this.__tmphcls);
-	},
+    //private
+    onMouseOver : function(){
+        if(this.disabled){
+            return;
+        }
+        var middle = this.getMiddle();
+        this.__tmphcls = (Ext.EventObject.getPageY() < middle) ? 'x-form-spinner-overup' : 'x-form-spinner-overdown';
+        this.trigger.addClass(this.__tmphcls);
+    },
 
-	//private
-	onMouseOut : function(){
-		this.trigger.removeClass(this.__tmphcls);
-	},
+    //private
+    onMouseOut : function(){
+        this.trigger.removeClass(this.__tmphcls);
+    },
 
-	//private
-	onMouseMove : function(){
-		if(this.disabled){
-			return;
-		}
-		var middle = this.getMiddle();
-		if( ((Ext.EventObject.getPageY() > middle) && this.__tmphcls == "x-form-spinner-overup") ||
-			((Ext.EventObject.getPageY() < middle) && this.__tmphcls == "x-form-spinner-overdown")){
-		}
-	},
+    //private
+    onMouseMove : function(){
+        if(this.disabled){
+            return;
+        }
+        var middle = this.getMiddle();
+        if( ((Ext.EventObject.getPageY() > middle) && this.__tmphcls == "x-form-spinner-overup") ||
+            ((Ext.EventObject.getPageY() < middle) && this.__tmphcls == "x-form-spinner-overdown")){
+        }
+    },
 
-	//private
-	onMouseDown : function(){
-		if(this.disabled){
-			return;
-		}
-		var middle = this.getMiddle();
-		this.__tmpccls = (Ext.EventObject.getPageY() < middle) ? 'x-form-spinner-clickup' : 'x-form-spinner-clickdown';
-		this.trigger.addClass(this.__tmpccls);
-	},
+    //private
+    onMouseDown : function(){
+        if(this.disabled){
+            return;
+        }
+        var middle = this.getMiddle();
+        this.__tmpccls = (Ext.EventObject.getPageY() < middle) ? 'x-form-spinner-clickup' : 'x-form-spinner-clickdown';
+        this.trigger.addClass(this.__tmpccls);
+    },
 
-	//private
-	onMouseUp : function(){
-		this.trigger.removeClass(this.__tmpccls);
-	},
+    //private
+    onMouseUp : function(){
+        this.trigger.removeClass(this.__tmpccls);
+    },
 
-	//private
-	onTriggerClick : function(){
-		if(this.disabled || this.getEl().dom.readOnly){
-			return;
-		}
-		var middle = this.getMiddle();
-		var ud = (Ext.EventObject.getPageY() < middle) ? 'Up' : 'Down';
-		this['onSpin'+ud]();
-	},
+    //private
+    onTriggerClick : function(){
+        if(this.disabled || this.getEl().dom.readOnly){
+            return;
+        }
+        var middle = this.getMiddle();
+        var ud = (Ext.EventObject.getPageY() < middle) ? 'Up' : 'Down';
+        this['onSpin'+ud]();
+    },
 
-	//private
-	getMiddle : function(){
-		var t = this.trigger.getTop();
-		var h = this.trigger.getHeight();
-		var middle = t + (h/2);
-		return middle;
-	},
-	
-	//private
-	//checks if control is allowed to spin
-	isSpinnable : function(){
-		if(this.disabled || this.getEl().dom.readOnly){
-			Ext.EventObject.preventDefault();	//prevent scrolling when disabled/readonly
-			return false;
-		}
-		return true;
-	},
+    //private
+    getMiddle : function(){
+        var t = this.trigger.getTop();
+        var h = this.trigger.getHeight();
+        var middle = t + (h/2);
+        return middle;
+    },
+    
+    //private
+    //checks if control is allowed to spin
+    isSpinnable : function(){
+        if(this.disabled || this.getEl().dom.readOnly){
+            Ext.EventObject.preventDefault();    //prevent scrolling when disabled/readonly
+            return false;
+        }
+        return true;
+    },
 
-	handleMouseWheel : function(e){
-		//disable scrolling when not focused
-		if(this.wrap.hasClass('x-trigger-wrap-focus') == false){
-			return;
-		}
+    handleMouseWheel : function(e){
+        //disable scrolling when not focused
+        if(this.wrap.hasClass('x-trigger-wrap-focus') == false){
+            return;
+        }
 
-		var delta = e.getWheelDelta();
-		if(delta > 0){
-			this.onSpinUp();
-			e.stopEvent();
-		} else if(delta < 0){
-			this.onSpinDown();
-			e.stopEvent();
-		}
-	},
+        var delta = e.getWheelDelta();
+        if(delta > 0){
+            this.onSpinUp();
+            e.stopEvent();
+        } else if(delta < 0){
+            this.onSpinDown();
+            e.stopEvent();
+        }
+    },
 
-	//private
-	startDrag : function(){
-		this.proxy.show();
-		this._previousY = Ext.fly(this.dd.getDragEl()).getTop();
-	},
+    //private
+    startDrag : function(){
+        this.proxy.show();
+        this._previousY = Ext.fly(this.dd.getDragEl()).getTop();
+    },
 
-	//private
-	endDrag : function(){
-		this.proxy.hide();
-	},
+    //private
+    endDrag : function(){
+        this.proxy.hide();
+    },
 
-	//private
-	onDrag : function(){
-		if(this.disabled){
-			return;
-		}
-		var y = Ext.fly(this.dd.getDragEl()).getTop();
-		var ud = '';
+    //private
+    onDrag : function(){
+        if(this.disabled){
+            return;
+        }
+        var y = Ext.fly(this.dd.getDragEl()).getTop();
+        var ud = '';
 
-		if(this._previousY > y){ud = 'Up';}         //up
-		if(this._previousY < y){ud = 'Down';}       //down
+        if(this._previousY > y){ud = 'Up';}         //up
+        if(this._previousY < y){ud = 'Down';}       //down
 
-		if(ud != ''){
-			this['onSpin'+ud]();
-		}
+        if(ud != ''){
+            this['onSpin'+ud]();
+        }
 
-		this._previousY = y;
-	},
+        this._previousY = y;
+    },
 
-	//private
-	onSpinUp : function(){
-		if(this.isSpinnable() == false) {
-			return;
-		}
-		if(Ext.EventObject.shiftKey == true){
-			this.onSpinUpAlternate();
-			return;
-		}else{
-			this.strategy.onSpinUp(this);
-		}
-		this.fireEvent("spin", this);
-		this.fireEvent("spinup", this);
-	},
+    //private
+    onSpinUp : function(){
+        if(this.isSpinnable() == false) {
+            return;
+        }
+        if(Ext.EventObject.shiftKey == true){
+            this.onSpinUpAlternate();
+            return;
+        }else{
+            this.strategy.onSpinUp(this);
+        }
+        this.fireEvent("spin", this);
+        this.fireEvent("spinup", this);
+    },
 
-	//private
-	onSpinDown : function(){
-		if(this.isSpinnable() == false) {
-			return;
-		}
-		if(Ext.EventObject.shiftKey == true){
-			this.onSpinDownAlternate();
-			return;
-		}else{
-			this.strategy.onSpinDown(this);
-		}
-		this.fireEvent("spin", this);
-		this.fireEvent("spindown", this);
-	},
+    //private
+    onSpinDown : function(){
+        if(this.isSpinnable() == false) {
+            return;
+        }
+        if(Ext.EventObject.shiftKey == true){
+            this.onSpinDownAlternate();
+            return;
+        }else{
+            this.strategy.onSpinDown(this);
+        }
+        this.fireEvent("spin", this);
+        this.fireEvent("spindown", this);
+    },
 
-	//private
-	onSpinUpAlternate : function(){
-		if(this.isSpinnable() == false) {
-			return;
-		}
-		this.strategy.onSpinUpAlternate(this);
-		this.fireEvent("spin", this);
-		this.fireEvent("spinup", this);
-	},
+    //private
+    onSpinUpAlternate : function(){
+        if(this.isSpinnable() == false) {
+            return;
+        }
+        this.strategy.onSpinUpAlternate(this);
+        this.fireEvent("spin", this);
+        this.fireEvent("spinup", this);
+    },
 
-	//private
-	onSpinDownAlternate : function(){
-		if(this.isSpinnable() == false) {
-			return;
-		}
-		this.strategy.onSpinDownAlternate(this);
-		this.fireEvent("spin", this);
-		this.fireEvent("spindown", this);
-	}
+    //private
+    onSpinDownAlternate : function(){
+        if(this.isSpinnable() == false) {
+            return;
+        }
+        this.strategy.onSpinDownAlternate(this);
+        this.fireEvent("spin", this);
+        this.fireEvent("spindown", this);
+    }
 
 });
 

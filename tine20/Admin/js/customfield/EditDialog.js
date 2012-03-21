@@ -106,7 +106,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Ext.each(this.definitionFields, function (name) {
             var field = this.getForm().findField(name);
             
-            if (! field.disabled && (name !== 'value_search' || (name === 'value_search' && field.getValue() == 1))) { 
+            if (! field.disabled && (name !== 'value_search' || (name === 'value_search' && field.getValue() == 1))) {
                 this.record.data.definition[name] = field.getValue();
             }
         }, this);
@@ -199,7 +199,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             appName     = Ext.isString(application) ? application : application.get('name'),
             app         = Tine.Tinebase.appMgr.get(appName),
             trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation,
-            appModels   = Tine[appName].Model; 
+            appModels   = Tine[appName].Model;
         
         if (appModels) {
             for (var model in appModels) {
@@ -228,7 +228,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @returns {Tine.widgets.grid.QuickaddGridPanel}
      */
-    initKeyFieldStore: function () {      
+    initKeyFieldStore: function () {
         Tine.log.info('Initialize keyField store config');
         
         var self = this,
@@ -269,7 +269,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     r.set('default', false);
                                     r.commit(true);
                                 }
-                            }, this);   
+                            }, this);
                         }                       
                     }
                 }
@@ -278,7 +278,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             getColumnModel: function () {
                 return new Ext.grid.ColumnModel([
                 defaultCheck,
-                { 
+                {
                     id: 'id', 
                     header: self.app.i18n._('ID'), 
                     dataIndex: 'id', 
@@ -287,7 +287,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     quickaddField: new Ext.form.TextField({
                         emptyText: self.app.i18n._('Add a New ID...')
                     })
-                }, { 
+                }, {
                     id: 'value', 
                     header: self.app.i18n._('Value'), 
                     dataIndex: 'value', 

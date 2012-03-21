@@ -81,7 +81,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
     /**
      * init actions
      */
-    initActions: function() {       
+    initActions: function() {
         this.action_update = new Ext.Action({
             text : _('OK'),
             minWidth : 70,
@@ -138,7 +138,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         this.window.close();
     },    
     
-    getFormItems: function() { 
+    getFormItems: function() {
         if(this.items) return this.items;
         var allrecs = this.response.totalcount + this.response.failcount;
         

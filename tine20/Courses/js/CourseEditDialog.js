@@ -75,7 +75,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.loadMask.show();
         var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey); 
+        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
     },
     
     /**
@@ -137,7 +137,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             activeTab: 0,
             border: false,
-            items:[{               
+            items:[{
                 title: this.app.i18n.ngettext('Course', 'Courses', 1),
                 autoScroll: true,
                 border: false,

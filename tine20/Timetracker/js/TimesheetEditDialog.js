@@ -90,9 +90,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     initComponent: function() {
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});  
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         this.tbarItems = [addNoteButton];
-        this.supr().initComponent.apply(this, arguments);    
+        this.supr().initComponent.apply(this, arguments);
     },
     
     /**
@@ -108,7 +108,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() {            
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -118,7 +118,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 ptype : 'ux.tabpanelkeyplugin'
             }],
             items:[
-                {                
+                {
                 title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),
                 autoScroll: true,
                 border: false,

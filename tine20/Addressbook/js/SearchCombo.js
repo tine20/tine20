@@ -80,7 +80,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                 this.selectedRecord = null;
             }
         }
-        return Tine.Addressbook.SearchCombo.superclass.processValue.call(this, value);        
+        return Tine.Addressbook.SearchCombo.superclass.processValue.call(this, value);
     },
 
     /**

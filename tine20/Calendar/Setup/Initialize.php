@@ -79,7 +79,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             'filters'           => array(
                 array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT)
             )
-        ))));        
+        ))));
     }
     
     /**

@@ -26,7 +26,7 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
      */
     const USE_RIGHT = 'use';
     
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

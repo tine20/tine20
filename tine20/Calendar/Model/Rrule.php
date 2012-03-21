@@ -583,7 +583,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtstart = clone ($computationStartDate);
             
             $originatorsDtstart = clone $recurEvent->dtstart;
-            $originatorsDtstart->setTimezone($_event->originator_tz);            
+            $originatorsDtstart->setTimezone($_event->originator_tz);
             
             $recurEvent->dtstart->add($originatorsOriginalDtstart->get('I') - $originatorsDtstart->get('I'), Tinebase_DateTime::MODIFIER_HOUR);
 
@@ -593,7 +593,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }            
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
-            $recurEvent->dtend = clone $recurEvent->dtstart;  
+            $recurEvent->dtend = clone $recurEvent->dtstart;
             $recurEvent->dtend->add($eventLength);
             
             $recurEvent->setRecurId();

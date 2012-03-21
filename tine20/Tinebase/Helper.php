@@ -36,7 +36,7 @@ function convertToBytes($_value)
     } else {
         if (preg_match("/M/", $_value)) {
             $value = substr($_value, 0, strpos($_value, 'M'));
-            $factor = 1024 * 1024;   
+            $factor = 1024 * 1024;
         } elseif (preg_match("/K/", $_value)) {
             $value = substr($_value, 0, strpos($_value, 'K'));
             $factor = 1024;
@@ -46,7 +46,7 @@ function convertToBytes($_value)
         } else {
             throw new Exception('Argument type not supported:' . gettype($_value));
         }
-        $bytes = intval($value) * $factor;  
+        $bytes = intval($value) * $factor;
     }
     
     return $bytes;
@@ -146,7 +146,7 @@ function removeDir($_dir)
  */
 function replaceSpecialChars($_input)
 {
-    $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź', 'Ä',  'Ü',  'Ö',  'É', 'È', 'Ê', 'Ó' ,'Ô', 'Á', 'Ź'); 
+    $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź', 'Ä',  'Ü',  'Ö',  'É', 'È', 'Ê', 'Ó' ,'Ô', 'Á', 'Ź');
     $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z', 'Ae', 'Ue', 'Oe', 'E', 'E', 'E', 'O', 'O', 'a', 'z');
                 
     $output = str_replace($search, $replace, $_input);

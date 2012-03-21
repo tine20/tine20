@@ -25,7 +25,7 @@ class Tinebase_Record_Event_Abstract extends Tinebase_Event_Abstract
      *
      * @var Tinebase_Model_PersistentObserver
      */
-	public $observable;
+    public $observable;
 
     
 }

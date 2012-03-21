@@ -85,14 +85,14 @@ Tine.SimpleFAQ.FaqStatus.getStore = function() {
  * @return  {String} faqstatus
  */
 Tine.SimpleFAQ.FaqStatus.Renderer = function(_faqstatusId) {
-	store = Tine.SimpleFAQ.FaqStatus.getStore();
-	record = store.getById(_faqstatusId);
+    store = Tine.SimpleFAQ.FaqStatus.getStore();
+    record = store.getById(_faqstatusId);
 
-	if (record) {
-	   return record.data.faqstatus;
-	} else {
-		return 'undefined';
-	}
+    if (record) {
+       return record.data.faqstatus;
+    } else {
+        return 'undefined';
+    }
 };
 
 /**

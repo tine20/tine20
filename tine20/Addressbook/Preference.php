@@ -32,7 +32,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
     /**
      * @var string application
      */
-    protected $_application = 'Addressbook';    
+    protected $_application = 'Addressbook';
         
     /**************************** public functions *********************************/
     

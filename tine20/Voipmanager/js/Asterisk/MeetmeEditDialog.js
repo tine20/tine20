@@ -29,7 +29,7 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             layout: 'form',
             border: false,
@@ -39,7 +39,7 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                     xtype: 'numberfield',
                     fieldLabel: this.app.i18n._('confno'),
                     name: 'confno',
-					id: 'confno',
+                    id: 'confno',
                     maxLength: 80,
                     anchor: '100%',
                     allowBlank: false
@@ -47,7 +47,7 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                     xtype: 'numberfield',
                     fieldLabel: this.app.i18n._('pin'),
                     name: 'pin',
-					id: 'pin',
+                    id: 'pin',
                     maxLength: 80,
                     anchor: '100%',
                     allowBlank: false
@@ -55,7 +55,7 @@ Tine.Voipmanager.AsteriskMeetmeEditDialog = Ext.extend(Tine.widgets.dialog.EditD
                     xtype: 'numberfield',
                     fieldLabel: this.app.i18n._('adminpin'),
                     name: 'adminpin',
-					id: 'adminpin',
+                    id: 'adminpin',
                     maxLength: 80,
                     anchor: '100%',
                     allowBlank: false

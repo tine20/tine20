@@ -36,7 +36,7 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

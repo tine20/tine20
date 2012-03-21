@@ -220,7 +220,7 @@ Ext.ux.Printer.ColumnTreeRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
           if (column.dataIndex == key) {
             row[key] = column.renderer ? column.renderer(value) : value;
           }
-        }, this);        
+        }, this);
       });
       
       //the property used in the first column is renamed to 'text' in node.attributes, so reassign it here
@@ -336,11 +336,11 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
   getColumns: function(grid) {
     var columns = [];
     
-  	Ext.each(grid.getColumnModel().config, function(col) {
-  	  if (col.hidden != true) columns.push(col);
-  	}, this);
-  	
-  	return columns;
+      Ext.each(grid.getColumnModel().config, function(col) {
+        if (col.hidden != true) columns.push(col);
+      }, this);
+      
+      return columns;
   },
   
   /**

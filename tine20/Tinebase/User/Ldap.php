@@ -861,7 +861,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements
-        foreach ($this->_requiredObjectClass as $className) {            
+        foreach ($this->_requiredObjectClass as $className) {
             if (! in_array($className, $ldapData['objectclass'])) {
                 // merge all required classes at once
                 $ldapData['objectclass'] = array_unique(array_merge($ldapData['objectclass'], $this->_requiredObjectClass));

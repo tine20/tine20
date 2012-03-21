@@ -43,9 +43,9 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -67,11 +67,11 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
 
         $this->_objects['software'] = new Voipmanager_Model_Snom_Software(array(
             'id' => 20003
-        ));       
+        ));
         
         $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
             'id' => 20004
-        ));       
+        ));
         
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
             'id' => 20002,
@@ -96,7 +96,7 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
         
         $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner']
-        )); 
+        ));
         
         $this->_objects['phone']->rights = $rights;
     }
@@ -119,13 +119,13 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
     {
         // create phone, location, template
         $snomLocationBackend         = new Voipmanager_Backend_Snom_Location();
-        $snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();     
-        $snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software(); 
+        $snomTemplateBackend         = new Voipmanager_Backend_Snom_Template();
+        $snomSoftwareBackend         = new Voipmanager_Backend_Snom_Software();
         
         $snomSoftwareBackend->create($this->_objects['software']);
         $snomLocationBackend->create($this->_objects['location']);
         $snomTemplateBackend->create($this->_objects['template']);
-        $this->_backend->create($this->_objects['phone']);        
+        $this->_backend->create($this->_objects['phone']);
         
         // add phone rights
         $this->_backend->setPhoneRights($this->_objects['phone']);

@@ -94,7 +94,7 @@ class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
         $this->_backend->alterCol('felamimail_folder', $declaration, 'cache_status');
         
         $this->setApplicationVersion('Felamimail', '2.4');
-        $this->setTableVersion('felamimail_account', '4');        
+        $this->setTableVersion('felamimail_account', '4');
     }
     
     /**

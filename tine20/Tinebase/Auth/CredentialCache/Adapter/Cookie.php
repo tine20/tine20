@@ -49,7 +49,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
             if (is_array($cacheId)) {
                 $result = new Tinebase_Model_CredentialCache($cacheId);
             } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / could not get CC from cookie.');                
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / could not get CC from cookie.');
             }
         }
         

@@ -8,7 +8,7 @@
 Ext.ns('Tine.Filemanager');
 
     
-Tine.Filemanager.GridContextMenu = {    
+Tine.Filemanager.GridContextMenu = {
     /**
      * create tree node
      */
@@ -55,7 +55,7 @@ Tine.Filemanager.GridContextMenu = {
                             var targetFilename = "/";
                             var sourceSplitArray = filename.split("/");
                             for (var i=1; i<sourceSplitArray.length-1; i++) {
-                                targetFilename += sourceSplitArray[i] + '/'; 
+                                targetFilename += sourceSplitArray[i] + '/';
                             }
                             
                             params.destinationFilenames = [targetFilename + _text];
@@ -79,7 +79,7 @@ Tine.Filemanager.GridContextMenu = {
                                         nodeName = nodeName.name;
                                     }
                                     
-                                    var treeNode = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().getNodeById(nodeData.id);                                 
+                                    var treeNode = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().getNodeById(nodeData.id);
                                     if(treeNode) {
                                         treeNode.setText(nodeName);
                                         treeNode.attributes.nodeRecord.beginEdit();
@@ -271,7 +271,7 @@ Tine.Filemanager.GridContextMenu = {
         action.show();
         
         var grid = this.scope.app.getMainScreen().getCenterPanel();
-        var selectedRows = grid.selectionModel.getSelections(); 
+        var selectedRows = grid.selectionModel.getSelections();
         
         if(selectedRows.length > 1) {
             action.setDisabled(true);
@@ -292,7 +292,7 @@ Tine.Filemanager.GridContextMenu = {
         var grid = this.scope;
         var gridStore = grid.store;
         gridStore.suspendEvents();
-        var selectedRows = grid.selectionModel.getSelections(); 
+        var selectedRows = grid.selectionModel.getSelections();
         for(var i=0; i < selectedRows.length; i++) {
             var fileRecord = selectedRows[i];
             if(fileRecord.fileRecord) {
@@ -302,7 +302,7 @@ Tine.Filemanager.GridContextMenu = {
             upload.setPaused(true);
         }
         gridStore.resumeEvents();
-        grid.actionUpdater.updateActions(gridStore);  
+        grid.actionUpdater.updateActions(gridStore);
         this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
     },
 
@@ -327,7 +327,7 @@ Tine.Filemanager.GridContextMenu = {
             upload.resumeUpload();
         }
         gridStore.resumeEvents();
-        grid.actionUpdater.updateActions(gridStore);  
+        grid.actionUpdater.updateActions(gridStore);
         this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
 
     },

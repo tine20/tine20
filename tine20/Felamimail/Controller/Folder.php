@@ -85,7 +85,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -658,7 +658,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         }
         
         if ($folder->has_children != $value) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set new has_children value for folder ' . $_globalname . ': ' . $value); 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set new has_children value for folder ' . $_globalname . ': ' . $value);
             $folder->has_children = $value;
             $folder = $this->update($folder);
         }

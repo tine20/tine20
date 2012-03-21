@@ -33,9 +33,9 @@ class Admin_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Admin_Acl_RightsTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Admin_Acl_RightsTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -45,7 +45,7 @@ class Admin_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        return;        
+        return;
     }
 
     /**

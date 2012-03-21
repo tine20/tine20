@@ -51,7 +51,7 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id' 			        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'macaddress'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'location_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
@@ -133,10 +133,10 @@ class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-    	if (isset($_data['redirect_time']) && $_data['redirect_time'] == '') {
-    		$_data['redirect_time'] = 0;
-    	}
+        if (isset($_data['redirect_time']) && $_data['redirect_time'] == '') {
+            $_data['redirect_time'] = 0;
+        }
         
-    	parent::setFromArray($_data);
+        parent::setFromArray($_data);
     }
 }

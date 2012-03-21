@@ -18,13 +18,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * Test class for Tinebase_Relations
  */
 class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_AbstractControllerTest
-{   
-	/**
+{
+    /**
      * @var array test Task 1 data
      */
     protected $_testTask1;
     
-	/**
+    /**
      * @var Tasks_Model_Task persistant (readout from db after persistant creation) test Task 1
      */
     protected $_persistantTestTask1;
@@ -166,7 +166,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
                     $this->assertEquals(Zend_Registry::get('currentAccount')->getId(), $utask->last_modified_by);
                     break;
                 case 'notes':
-                	break;
+                    break;
                 default:
                     $this->assertEquals($value, $utask->$field, "field $field not equal.");
             }
@@ -256,12 +256,12 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      */
     public function testConcurrencyFromCreatedTask()
     {
-    	$utask = $this->testUpdateTask();
-    	sleep(1);
-    	
-    	$ctask = clone $this->_persistantTestTask1;
-    	$ctask->description = 'testConcurrencyFromCreatedTask';
-    	
-    	$u2task = $this->_controller->update($ctask);
+        $utask = $this->testUpdateTask();
+        sleep(1);
+        
+        $ctask = clone $this->_persistantTestTask1;
+        $ctask->description = 'testConcurrencyFromCreatedTask';
+        
+        $u2task = $this->_controller->update($ctask);
     }
 }

@@ -61,7 +61,7 @@ class Tinebase_Frontend_Cli_Abstract
         }
         
         if (! $this->_checkAdminRight()) {
-            return FALSE; 
+            return FALSE;
         }
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -87,7 +87,7 @@ class Tinebase_Frontend_Cli_Abstract
     public function setContainerGrants(Zend_Console_Getopt $_opts)
     {
         if (! $this->_checkAdminRight()) {
-            return FALSE; 
+            return FALSE;
         }
         
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
@@ -204,12 +204,12 @@ class Tinebase_Frontend_Cli_Abstract
             $args['dryrun'] = 1;
         }
         
-        if (array_key_exists('definition', $args))  {       
+        if (array_key_exists('definition', $args))  {
             if (preg_match("/\.xml/", $args['definition'])) {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                     $args['definition'],
                     Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
-                ); 
+                );
             } else {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($args['definition']);
             }

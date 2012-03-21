@@ -58,7 +58,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function import($_opts)
     {
-        parent::_import($_opts);        
+        parent::_import($_opts);
     }
     
     /**
@@ -77,7 +77,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $csvExporter = new Addressbook_Export_Csv();
         
-        $csvExporter->generate($filter, TRUE);        
+        $csvExporter->generate($filter, TRUE);
     }
     
     public function sampledata($_opts/*$_file*/)

@@ -34,7 +34,7 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
     /**
      * @var string application
      */
-    protected $_application = 'Tasks';    
+    protected $_application = 'Tasks';
         
     /**************************** public functions *********************************/
     

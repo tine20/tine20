@@ -57,9 +57,9 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Group_SqlTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Group_SqlTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -76,7 +76,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit',
             'description'   => 'initial group'
-        )); 
+        ));
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit updated',
@@ -91,7 +91,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
+        ));
     }
 
     /**
@@ -102,7 +102,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -175,7 +175,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->_groupLDAP->removeGroupMember($group, $user);
         
-        $this->_userLDAP->deleteUser($user);        
+        $this->_userLDAP->deleteUser($user);
     }
     
     /**
@@ -201,7 +201,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, count($groupMembers));
         
-        $this->_userLDAP->deleteUser($user);        
+        $this->_userLDAP->deleteUser($user);
     }
     
     /**
@@ -227,7 +227,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->_groupLDAP->removeGroupMember($group, $user);
         
-        $this->_userLDAP->deleteUser($user);        
+        $this->_userLDAP->deleteUser($user);
     }
     
     /**
@@ -253,7 +253,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, count($groupMembers));
         
-        $this->_userLDAP->deleteUser($user);        
+        $this->_userLDAP->deleteUser($user);
     }
     
     /**
@@ -284,8 +284,8 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
 
         $group = $this->_groupLDAP->getGroupById($group->getId());
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Group_SqlTest::main') {
     Tinebase_Group_SqlTest::main();

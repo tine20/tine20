@@ -40,6 +40,6 @@ class Courses_Setup_Initialize extends Setup_Initialize
                             'value'        => '0'
                     )),
             )
-        ))); 
+        )));
     }
 }

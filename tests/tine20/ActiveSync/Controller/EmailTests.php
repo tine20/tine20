@@ -73,13 +73,13 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      * set up test environment
      */
     protected function setUp()
-    {   	
+    {
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         if (empty($imapConfig) || !array_key_exists('useSystemAccount', $imapConfig) || $imapConfig['useSystemAccount'] != true) {
             $this->markTestSkipped('IMAP backend not configured');
         }
-        $this->_testUser    = Tinebase_Core::getUser();        
-        $this->_domDocument = $this->_getOutputDOMDocument();        
+        $this->_testUser    = Tinebase_Core::getUser();
+        $this->_domDocument = $this->_getOutputDOMDocument();
         
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
@@ -109,18 +109,18 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendFileReference()
     {
-    	$controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
-    	
-    	$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
-    	
-    	$fileReference = $message->getId() . '-2';
-    	
-    	$properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $fileReference = $message->getId() . '-2';
+        
+        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
         $controller->appendFileReference($properties, $fileReference);
         $this->_domDocument->documentElement->appendChild($properties);
         
-    	#$this->_domDocument->formatOutput = true;
-    	#echo $this->_domDocument->saveXML();
+        #$this->_domDocument->formatOutput = true;
+        #echo $this->_domDocument->saveXML();
 
         $this->assertEquals('text/plain', @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'ContentType')->item(0)->nodeValue, $this->_domDocument->saveXML());
         $this->assertTrue(3000 < strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
@@ -132,12 +132,12 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     public function testInvalidBodyChars()
     {
         //invalid_body_chars.eml
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
-    	
-    	$message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
-    	
-    	$options = array();
-    	$properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        
+        $message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
+        
+        $options = array();
+        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
         $controller->appendXML($properties, $message->folder_id, $message->getId(), $options);
         $this->_domDocument->documentElement->appendChild($properties);
         
@@ -151,7 +151,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXML()
     {
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
@@ -221,7 +221,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected function _getOutputDOMDocument()
     {
-    	$dom = new DOMDocument();
+        $dom = new DOMDocument();
         $dom->formatOutput = false;
         $dom->encoding     = 'utf-8';
         $dom->loadXML($this->_testXMLOutput);

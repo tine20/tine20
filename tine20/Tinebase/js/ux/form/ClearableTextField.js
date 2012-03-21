@@ -46,7 +46,7 @@ Ext.ux.form.ClearableTextField = Ext.extend(Ext.form.TriggerField, {
         this.setValue('');
         
         if (value) {
-            this.fireEvent('change', this, '', value);    
+            this.fireEvent('change', this, '', value);
         }
         
         this.checkTrigger();

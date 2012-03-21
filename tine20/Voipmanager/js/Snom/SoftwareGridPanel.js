@@ -62,26 +62,26 @@ Tine.Voipmanager.SnomSoftwareGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
      * 
      */
     getColumns: function(){
-        return [{ 
-            	id: 'id', 
-            	header: this.app.i18n._('id'), 
-            	dataIndex: 'id', 
-            	width: 20, 
+        return [{
+                id: 'id', 
+                header: this.app.i18n._('id'), 
+                dataIndex: 'id', 
+                width: 20, 
                 sortable: true,
-            	hidden: true 
-           	},{ 
-           		id: 'name', 
-          		header: this.app.i18n._('name'), 
-          		dataIndex: 'name', 
-          		width: 150,
+                hidden: true 
+               },{
+                   id: 'name', 
+                  header: this.app.i18n._('name'), 
+                  dataIndex: 'name', 
+                  width: 150,
                 sortable: true
-          	},{ 
-          		id: 'description', 
-          		header: this.app.i18n._('Description'), 
-          		dataIndex: 'description', 
-          		width: 250,
+              },{
+                  id: 'description', 
+                  header: this.app.i18n._('Description'), 
+                  dataIndex: 'description', 
+                  width: 250,
                 sortable: true
-          	}];
+              }];
     },
     
     initDetailsPanel: function() { return false; },

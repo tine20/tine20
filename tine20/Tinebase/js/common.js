@@ -20,10 +20,10 @@ Tine.Tinebase.common = {
     /**
      * Open browsers native popup
      * 
-     * @param {string} 	windowName
-     * @param {string} 	url
-     * @param {int} 	width
-     * @param {int} 	height
+     * @param {string}     windowName
+     * @param {string}     url
+     * @param {int}     width
+     * @param {int}     height
      */
     openWindow: function (windowName, url, width, height) {
         // M$ IE has its internal location bar in the viewport
@@ -38,14 +38,14 @@ Tine.Tinebase.common = {
         
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
         
-        var	w, h, x, y, leftPos, topPos, popup;
+        var    w, h, x, y, leftPos, topPos, popup;
 
         if (document.all) {
             w = document.body.clientWidth;
             h = document.body.clientHeight;
             x = window.screenTop;
             y = window.screenLeft;
-        } else { 
+        } else {
             if (window.innerWidth) {
                 w = window.innerWidth;
                 h = window.innerHeight;
@@ -57,43 +57,43 @@ Tine.Tinebase.common = {
         topPos = ((h - height) / 2) + x;
         
 
-		try {
-			popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
-	        	',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-	        
-	        return popup;
-		}
-		catch(e) {
-			Tine.log.info('window.open Exception: ');
-			Tine.log.info(e);
-			
-			popup = false;
-			
-		}
-		
-		if (! popup) {
-			var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
-			",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
-		
-			var exception = {
-				openCode: openCode,
-				popup: null
-			};
-			
-			Tine.log.debug('openCode: ' + openCode);
-			popup = openCode;
-			
-//			if(Tine.Tinebase.MainScreen.fireEvent('windowopenexception', exception) !== false){
-//	            // show message 'your popupblocker ... please click here'
-//				// mhh how to make this syncron???
-//				
-//				// todo: review code in Ext.ux.PopupWindow...
-//				popup = window;
-//	        } else {
-//	        	popup = exception.popup;
-//	        }
-		}
-		
+        try {
+            popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
+                ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+            
+            return popup;
+        }
+        catch(e) {
+            Tine.log.info('window.open Exception: ');
+            Tine.log.info(e);
+            
+            popup = false;
+            
+        }
+        
+        if (! popup) {
+            var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+            ",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
+        
+            var exception = {
+                openCode: openCode,
+                popup: null
+            };
+            
+            Tine.log.debug('openCode: ' + openCode);
+            popup = openCode;
+            
+//            if(Tine.Tinebase.MainScreen.fireEvent('windowopenexception', exception) !== false){
+//                // show message 'your popupblocker ... please click here'
+//                // mhh how to make this syncron???
+//                
+//                // todo: review code in Ext.ux.PopupWindow...
+//                popup = window;
+//            } else {
+//                popup = exception.popup;
+//            }
+        }
+        
         return popup;
         
     },
@@ -101,7 +101,7 @@ Tine.Tinebase.common = {
     showDebugConsole: function () {
         if (! Ext.debug) {
             var head = document.getElementsByTagName("head")[0],
-            	scriptTag = document.createElement("script");
+                scriptTag = document.createElement("script");
             
             scriptTag.setAttribute("src", 'library/ExtJS/src/debug.js');
             scriptTag.setAttribute("type", "text/javascript");
@@ -127,8 +127,8 @@ Tine.Tinebase.common = {
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601) {
-    	var dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
-    	
+        var dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
+        
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
     },
 
@@ -140,8 +140,8 @@ Tine.Tinebase.common = {
      * @return {String} localised date
      */
     dateRenderer: function (date) {
-    	var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-    	
+        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+        
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
     },
     
@@ -153,8 +153,8 @@ Tine.Tinebase.common = {
      * @return {String} localised time
      */
     timeRenderer: function (date) {
-    	var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-    	
+        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+        
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', 'medium'));
     },
     
@@ -239,11 +239,11 @@ Tine.Tinebase.common = {
      */
     minutesRenderer: function (minutes, format, leadingZeros) {
         var s,
-        	i = minutes % 60,
-        	H = Math.floor(minutes / 60),
-        	Hs;
+            i = minutes % 60,
+            H = Math.floor(minutes / 60),
+            Hs;
         
-        if (leadingZeros && (Ext.isString(leadingZeros) || leadingZeros === true)) { 
+        if (leadingZeros && (Ext.isString(leadingZeros) || leadingZeros === true)) {
             if (leadingZeros === true || (leadingZeros.match(/i/) && String(i).length === 1)) {
                 i = '0' + String(i);
             }
@@ -258,7 +258,7 @@ Tine.Tinebase.common = {
             //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
             
             if (i === 0) {
-            	s = Hs;
+                s = Hs;
             } else {
                 s = H ? Hs + ', ' + s : s;
             }
@@ -279,8 +279,8 @@ Tine.Tinebase.common = {
     secondsRenderer: function (seconds) {
         
         var s = seconds % 60,
-        	m = Math.floor(seconds / 60),
-        	result = '';
+            m = Math.floor(seconds / 60),
+            result = '';
         
         var secondResult = String.format(Tine.Tinebase.translation.ngettext('{0} second', '{0} seconds', s), s);
         
@@ -315,7 +315,7 @@ Tine.Tinebase.common = {
      */
     accountRenderer: function (accountObject, metadata, record, rowIndex, colIndex, store) {
         if (! accountObject) {
-        	return '';
+            return '';
         }
         
         var type, iconCls, displayName;
@@ -336,7 +336,7 @@ Tine.Tinebase.common = {
         
         iconCls = type === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
         
-        return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName); 
+        return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName);
     },
     
     /**
@@ -347,7 +347,7 @@ Tine.Tinebase.common = {
     accountTypeRenderer: function (type) {
         var iconCls = (type) === 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon';
         
-        return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>'; 
+        return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>';
     },
     
     /**
@@ -356,7 +356,7 @@ Tine.Tinebase.common = {
      * @return String
      */
     cellEditorHintRenderer: function (value) {
-        return '<div style="position:relative">' + value + '<div class="tine-grid-cell-hint">&#160;</div></div>'; 
+        return '<div style="position:relative">' + value + '<div class="tine-grid-cell-hint">&#160;</div></div>';
     },
 
     /**
@@ -396,7 +396,7 @@ Tine.Tinebase.common = {
      * @return {Boolean}
      */
     isTrue: function (value) {
-    	return value === 1 || value === '1' || value === true || value === 'true';
+        return value === 1 || value === '1' || value === true || value === 'true';
     },
     
     /**
@@ -406,44 +406,44 @@ Tine.Tinebase.common = {
      * @return {Boolean}
      */
     isEmptyObject: function (obj) {
-    	for (var name in obj) {
-			if (obj.hasOwnProperty(name)) {
-				return false;
-			}
-		}
-		return true;
+        for (var name in obj) {
+            if (obj.hasOwnProperty(name)) {
+                return false;
+            }
+        }
+        return true;
     },
     
     /**
-	 * clone function
-	 * 
-	 * @param {Object/Array} o Object or array to clone
-	 * @return {Object/Array} Deep clone of an object or an array
-	 */
+     * clone function
+     * 
+     * @param {Object/Array} o Object or array to clone
+     * @return {Object/Array} Deep clone of an object or an array
+     */
     clone: function (o) {
-    	if (! o || 'object' !== typeof o) {
-	        return o;
-	    }
-	    
-	    if ('function' === typeof o.clone) {
-			return o.clone();
-	    }
-	    
-	    var c = '[object Array]' === Object.prototype.toString.call(o) ? [] : {},
-	    	p, v;
-	    	
-	    for (p in o) {
-	        if (o.hasOwnProperty(p)) {
-	            v = o[p];
-	            if (v && 'object' === typeof v) {
-	                c[p] = Tine.Tinebase.common.clone(v);
-	            }
-	            else {
-	                c[p] = v;
-	            }
-	        }
-	    }
-	    return c;
+        if (! o || 'object' !== typeof o) {
+            return o;
+        }
+        
+        if ('function' === typeof o.clone) {
+            return o.clone();
+        }
+        
+        var c = '[object Array]' === Object.prototype.toString.call(o) ? [] : {},
+            p, v;
+            
+        for (p in o) {
+            if (o.hasOwnProperty(p)) {
+                v = o[p];
+                if (v && 'object' === typeof v) {
+                    c[p] = Tine.Tinebase.common.clone(v);
+                }
+                else {
+                    c[p] = v;
+                }
+            }
+        }
+        return c;
     },
     
     /**

@@ -86,7 +86,7 @@ class Zend_Scheduler_Backend_File extends Zend_Scheduler_Backend_Abstract
                 $taskClass->addRequest($request['controller'], $request['action'], $request['params']);
             }
             
-            $tasks[] = $taskClass;            
+            $tasks[] = $taskClass;
         }
         
         if (!is_array($tasks)) {

@@ -136,7 +136,7 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
         }
         
         if (registeredActions.indexOf(this.newEventAction) < 0) {
-        	actionUpdater.addActions([this.newEventAction]);
+            actionUpdater.addActions([this.newEventAction]);
         }        
     }
 });

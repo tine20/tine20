@@ -59,7 +59,7 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
     protected function tearDown()
     {
         $this->_json->deleteLeads($this->_objects['lead']['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['lead']['relations'][0]['related_id']);        
+        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['lead']['relations'][0]['related_id']);
     }
     
 }

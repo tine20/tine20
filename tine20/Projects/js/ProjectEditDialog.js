@@ -49,41 +49,41 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-    	// add selections to record
+        // add selections to record
 
         Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);
         
         if(this.record) {
-    		if(this.selectedRecords.length > 0) {
-    			
-    		    var oldRelations = this.record.get('relations');
-    		    
-    		    var relations = oldRelations ? oldRelations : [];
+            if(this.selectedRecords.length > 0) {
+                
+                var oldRelations = this.record.get('relations');
+                
+                var relations = oldRelations ? oldRelations : [];
 
-    			Ext.each(this.selectedRecords, function(contact) {  				
-    				var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
-    				var rel = new Tine.Tinebase.Model.Relation({
-        				own_degree: 'sibling',
-        				own_id: null,
-        				own_model: 'Projects_Model_Project',
-        				related_backend: 'Sql',
-        				related_id: contact.id,
-        				related_model: 'Addressbook_Model_Contact',
-        				related_record: rec.data,
-        				type: this.attendeeRole ? this.attendeeRole : 'COWORKER'
-    				});
-    			
-    				relations.push(rel.data);	
-    			
-    			},this);
-    			
-    			this.record.set('relations',relations);
-    			this.selectedRecords = [];
-    		}
-    	}
+                Ext.each(this.selectedRecords, function(contact) {
+                    var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
+                    var rel = new Tine.Tinebase.Model.Relation({
+                        own_degree: 'sibling',
+                        own_id: null,
+                        own_model: 'Projects_Model_Project',
+                        related_backend: 'Sql',
+                        related_id: contact.id,
+                        related_model: 'Addressbook_Model_Contact',
+                        related_record: rec.data,
+                        type: this.attendeeRole ? this.attendeeRole : 'COWORKER'
+                    });
+                
+                    relations.push(rel.data);
+                
+                },this);
+                
+                this.record.set('relations',relations);
+                this.selectedRecords = [];
+            }
+        }
        
         
-    	if (this.rendered) {
+        if (this.rendered) {
             this.contactLinkPanel.onRecordLoad(this.record);
         }
     },
@@ -135,7 +135,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             activeTab: 0,
             border: false,
-            items:[{               
+            items:[{
                 title: this.app.i18n._('Project'),
                 autoScroll: true,
                 border: false,

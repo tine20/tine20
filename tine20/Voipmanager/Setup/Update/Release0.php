@@ -104,8 +104,8 @@ class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
             </declaration>
         </table>";
 
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
-        $this->_backend->createTable($table);        
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
 
         $this->setApplicationVersion('Voipmanager', '0.20');
     }       

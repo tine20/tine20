@@ -14,10 +14,10 @@ Ext.ns('Tine.Admin.Roles');
 
 Tine.Admin.Roles.Main = {
     
-	// references to crated toolbar and grid panel
+    // references to crated toolbar and grid panel
     rolesToolbar: null,
     gridPanel: null,
-	
+    
     actions: {
         addRole: null,
         editRole: null,
@@ -125,19 +125,19 @@ Tine.Admin.Roles.Main = {
     },
     
     displayRolesToolbar: function() {
-    	
-    	// if toolbar was allready created set active toolbar and return
-    	if (this.rolesToolbar)
-    	{
-    		Tine.Tinebase.MainScreen.setActiveToolbar(this.rolesToolbar, true);
-    		return;
-    	}
-    	
+        
+        // if toolbar was allready created set active toolbar and return
+        if (this.rolesToolbar)
+        {
+            Tine.Tinebase.MainScreen.setActiveToolbar(this.rolesToolbar, true);
+            return;
+        }
+        
         var RolesQuickSearchField = new Ext.ux.SearchField({
             id: 'RolesQuickSearchField',
             width:240,
             emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
-        }); 
+        });
         RolesQuickSearchField.on('change', function(){
             Ext.getCmp('AdminRolesGrid').getStore().load({
                 params: {
@@ -152,27 +152,27 @@ Tine.Admin.Roles.Main = {
             split: false,
             //height: 26,
             items: [{
-            	// create buttongroup to be consistent
-				xtype: 'buttongroup',
-				columns: 5, 
-				items: [
-					Ext.apply(new Ext.Button(this.actions.addRole), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					}), {xtype: 'tbspacer', width: 10},
-					Ext.apply(new Ext.Button(this.actions.editRole), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					}), {xtype: 'tbspacer', width: 10},
-					Ext.apply(new Ext.Button(this.actions.deleteRole), {
-						scale: 'medium',
-						rowspan: 2,
-						iconAlign: 'top'
-					}), {xtype: 'tbspacer', width: 10}
-				]
-			}, '->', 
+                // create buttongroup to be consistent
+                xtype: 'buttongroup',
+                columns: 5, 
+                items: [
+                    Ext.apply(new Ext.Button(this.actions.addRole), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }), {xtype: 'tbspacer', width: 10},
+                    Ext.apply(new Ext.Button(this.actions.editRole), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }), {xtype: 'tbspacer', width: 10},
+                    Ext.apply(new Ext.Button(this.actions.deleteRole), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }), {xtype: 'tbspacer', width: 10}
+                ]
+            }, '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 RolesQuickSearchField
@@ -183,18 +183,18 @@ Tine.Admin.Roles.Main = {
     },
 
     displayRolesGrid: function() {
-    	
-    	// if grid panel was allready created set active content panel and return
-    	if (this.gridPanel)
-    	{
-    		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
-    		return;
-    	}
-    	
+        
+        // if grid panel was allready created set active content panel and return
+        if (this.gridPanel)
+        {
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+            return;
+        }
+        
         if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
             this.actions.addRole.setDisabled(false);
-        }    	
-    	
+        }        
+        
         // the datastore
         var dataStore = new Ext.data.DirectStore({
             api: {
@@ -216,7 +216,7 @@ Tine.Admin.Roles.Main = {
             _options = _options || {};
             _options.params = _options.params || {};
             _options.params.query = Ext.getCmp('RolesQuickSearchField').getValue();
-        }, this);        
+        }, this);
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
@@ -225,7 +225,7 @@ Tine.Admin.Roles.Main = {
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying roles {0} - {1} of {2}'),
             emptyMsg: this.translation.gettext("No roles to display")
-        }); 
+        });
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel({
@@ -289,24 +289,24 @@ Tine.Admin.Roles.Main = {
             }
             
             if (! this.contextMenu) {
-	            this.contextMenu = new Ext.menu.Menu({
-	                id: 'ctxMenuRoles', 
-	                items: [
-	                    this.actions.editRole,
-	                    this.actions.deleteRole,
-	                    '-',
-	                    this.actions.addRole 
-	                ]
-	            });
+                this.contextMenu = new Ext.menu.Menu({
+                    id: 'ctxMenuRoles', 
+                    items: [
+                        this.actions.editRole,
+                        this.actions.deleteRole,
+                        '-',
+                        this.actions.addRole 
+                    ]
+                });
             }
             this.contextMenu.showAt(_eventObject.getXY());
         }, this);
         
         this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-        	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
+            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 var record = _gridPar.getStore().getAt(_rowIndexPar);
                 this.openEditWindow(record);
-        	}
+            }
         }, this);
 
         // add the grid to the layout
@@ -325,7 +325,7 @@ Tine.Admin.Roles.Main = {
     show: function() 
     {
         if (this.rolesToolbar === null || this.gridPanel === null) {
-        	this.initComponent();
+            this.initComponent();
         }
 
         this.displayRolesToolbar();

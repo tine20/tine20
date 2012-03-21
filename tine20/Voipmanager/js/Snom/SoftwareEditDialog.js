@@ -31,8 +31,8 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      * NOTE: when this method gets called, all initalisation is done.
      */
     getSoftwareVersion: function () {
-      	
-      	var softwareVersion = [];
+          
+          var softwareVersion = [];
         var phoneModels = Tine.Voipmanager.Data.loadPhoneModelData();
       
             phoneModels.each(function(rec) {
@@ -43,14 +43,14 @@ Tine.Voipmanager.SnomSoftwareEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     anchor:'100%',
                     maxLength: 128,                    
                     hideLabel: false
-                }));      
+                }));
             });
      
-     	return softwareVersion;
+         return softwareVersion;
      },
      
      
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             layout:'form',
             border:false,

@@ -51,15 +51,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         // manage samba sam?
         if(isset(Tinebase_Core::getConfig()->samba)) {
-            $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+            $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
         
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            $this->_manageImapEmailUser = TRUE; 
+            $this->_manageImapEmailUser = TRUE;
         }
         if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-            $this->_manageSmtpEmailUser = TRUE; 
+            $this->_manageSmtpEmailUser = TRUE;
         }
     }
     
@@ -70,7 +70,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
-    {   
+    {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
@@ -84,8 +84,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
                 : NULL,
-        );        
-        return $registryData;    
+        );
+        return $registryData;
     }
     
     /******************************* Access Log *******************************/
@@ -613,7 +613,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     'id'        => $accountId,
                     'type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                     'name'      => $account->accountDisplayName,
-                ); 
+                );
             }
                     
             $result['totalcount'] = count($result['results']);
@@ -712,7 +712,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveSambaMachine($recordData)
     {
         try {
-            $result = $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine', 'accountId'); 
+            $result = $this->_save($recordData, Admin_Controller_SambaMachine::getInstance(), 'SambaMachine', 'accountId');
         } catch (Admin_Exception $ae) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while saving samba machine: ' . $ae->getMessage());
             $result = array('success' => FALSE);
@@ -1004,7 +1004,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     "text"      => $description['text'],
                     "qtip"      => $description['description'],
                     "right"     => $right,
-                ); 
+                );
             }
 
             $result[] = $rightsForApplication;

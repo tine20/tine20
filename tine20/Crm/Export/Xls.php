@@ -35,7 +35,7 @@ class Crm_Export_Xls extends Tinebase_Export_Spreadsheet_Xls
      * 
      * @var boolean
      */
-    protected $_getRelations = TRUE;    
+    protected $_getRelations = TRUE;
     
     /**
      * constructor (adds more values with Crm_Export_Helper)

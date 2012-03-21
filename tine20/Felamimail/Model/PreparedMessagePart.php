@@ -26,7 +26,7 @@ class Felamimail_Model_PreparedMessagePart extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

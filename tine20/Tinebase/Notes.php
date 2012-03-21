@@ -91,7 +91,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $this->_noteTypesTable = new Tinebase_Db_Table(array(
             'name' => SQL_TABLE_PREFIX . 'note_types',
             'primary' => 'id'
-        ));        
+        ));
     }
     
     /************************** sql backend interface ************************/
@@ -168,7 +168,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         //$_filter->appendFilterSql($select);
         
         $result = $this->_db->fetchOne($select);
-        return $result;        
+        return $result;
     }
     
     /**
@@ -212,7 +212,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $result = $this->searchNotes($filter, $pagination);
             
-        return $result;          
+        return $result;
     }
     
     /**
@@ -258,7 +258,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function setNotesOfRecord($_record, $_backend = 'Sql', $_notesProperty = 'notes')
     {
         $model = get_class($_record);
-        $backend = ucfirst(strtolower($_backend));        
+        $backend = ucfirst(strtolower($_backend));
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
         
@@ -307,13 +307,13 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $this->deleteNotes($toDetach);
         
         // add new notes
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');         
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');
         foreach ($notesToSet as $note) {
             //if (in_array($note->getId(), $toAttach)) {
             if (!$note->getId()) {
                 $note->record_model = $model;
                 $note->record_backend = $backend;
-                $note->record_id = $_record->getId();                
+                $note->record_id = $_record->getId();
                 $this->addNote($note);
             }
         }
@@ -337,7 +337,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE));
 
-        $this->_notesTable->insert($data);        
+        $this->_notesTable->insert($data);
     }
 
     /**
@@ -490,7 +490,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 $types->addRecord(new Tinebase_Model_NoteType($type->toArray(), true));
             }
         }
-        return $types;         
+        return $types;
     }
 
     /**
@@ -501,14 +501,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @throws  Tinebase_Exception_NotFound
      */
     public function getNoteTypeByName($_name)
-    {        
+    {
         $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto('name = ?', $_name));
         
         if (!$row) {
             throw new Tinebase_Exception_NotFound('Note type not found.');
         }
         
-        return new Tinebase_Model_NoteType($row->toArray());        
+        return new Tinebase_Model_NoteType($row->toArray());
     }
     
     /**

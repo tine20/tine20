@@ -505,7 +505,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         if (recents > 0 ) {
             Tine.log.info('Show notification: ' + recents + ' new mails.');
             var title = this.i18n._('New mails'),
-                message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
+                message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name'));
             
             if (record.isCurrentSelection()) {
                 // need to defer the notification because the new messages are not shown yet 
@@ -602,15 +602,15 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 proxy: Tine.Felamimail.accountBackend,
                 reader: Tine.Felamimail.accountBackend.getReader(),
                 listeners: {
-                	scope: this,
-                	'add': function (store, records) {
-                		Tine.log.info('Account added: ' + records[0].get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
-                		this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
-                	},
-                	'remove': function (store, record) {
-                		Tine.log.info('Account removed: ' + record.get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
-                		this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
-                	}
+                    scope: this,
+                    'add': function (store, records) {
+                        Tine.log.info('Account added: ' + records[0].get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
+                        this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+                    },
+                    'remove': function (store, record) {
+                        Tine.log.info('Account removed: ' + record.get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
+                        this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+                    }
                 }
             });
         } 

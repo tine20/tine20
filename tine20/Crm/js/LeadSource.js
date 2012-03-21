@@ -118,13 +118,13 @@ Tine.Crm.LeadSource.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     getColumnModel: function() {
         return new Ext.grid.ColumnModel([
-        { 
+        {
             id:'leadsource_id', 
             header: "id", 
             dataIndex: 'id', 
             width: 25, 
             hidden: true 
-        }, { 
+        }, {
             id:'leadsource', 
             header: 'entries', 
             dataIndex: 'leadsource', 

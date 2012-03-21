@@ -47,10 +47,10 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // load grants store if editing record
         if (this.record && this.record.id) {
-			this.grantsStore.loadData({
-	            results:    this.record.get('account_grants'),
-	            totalcount: this.record.get('account_grants').length
-	        });
+            this.grantsStore.loadData({
+                results:    this.record.get('account_grants'),
+                totalcount: this.record.get('account_grants').length
+            });
         }
     },    
     
@@ -83,7 +83,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
        
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
-			flex: 1,
+            flex: 1,
             store: this.grantsStore,
             grantContainer: this.record.data,
             alwaysShowAdminGrant: true,
@@ -110,9 +110,9 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             layout: 'vbox',
             layoutConfig: {
-			    align: 'stretch',
-			    pack: 'start'
-			},
+                align: 'stretch',
+                pack: 'start'
+            },
             border: false,
             items: [{
                 xtype: 'columnform',
@@ -160,7 +160,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'color'
                 }]]
             }, 
-            	this.initGrantsGrid(), {
+                this.initGrantsGrid(), {
                     emptyText: this.app.i18n._('Note for Owner'),
                     disabled: this.record.get('type') == 'shared',
                     xtype: 'textarea',
@@ -168,7 +168,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     autoHeight: true,
                     name: 'note'
                 }
-           	]            
+               ]            
         };
     }
 });

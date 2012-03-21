@@ -16,7 +16,7 @@
  * @subpackage  Setup
  */
 class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
-{    
+{
     /**
      * update to 3.1
      * - add value_search option field to customfield_config
@@ -94,7 +94,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                     <name>type</name>
                 </field>
             </index>')
-        ); 
+        );
         $this->_backend->addForeignKey('importexport_definition', new Setup_Backend_Schema_Index_Xml('<index>
                 <name>importexport_definitions::app_id--applications::id</name>
                 <field>
@@ -250,7 +250,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             // do nothing
         }
         
-        $request = new Zend_Controller_Request_Simple(); 
+        $request = new Zend_Controller_Request_Simple();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
@@ -339,7 +339,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                     <name>record_backend</name>
                 </field>
             </index>
-        ')); 
+        '));
         $this->setApplicationVersion('Tinebase', '3.10');
     }
     
@@ -658,7 +658,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <length>255</length>
                 <notnull>true</notnull>
             </field>
-        ');        
+        ');
         $this->_backend->addCol('accounts', $declaration);
         
         $select = $this->_db->select()
@@ -673,7 +673,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         foreach ($result as $row) {
             // write contact data into accounts table
             $data = array(
-            	'first_name'   => $row['n_given'], 
+                'first_name'   => $row['n_given'], 
                 'last_name'    => $row['n_family'], 
                 'full_name'    => $row['n_fn'], 
                 'display_name' => $row['n_fileas'], 
@@ -698,7 +698,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>40</length>
             </field>
-        ');        
+        ');
         $this->_backend->addCol('accounts', $declaration);
         
         $select = $this->_db->select()
@@ -713,7 +713,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         foreach ($result as $row) {
             // write contact data into accounts table
             $data = array(
-            	'contact_id'   => $row['id'] 
+                'contact_id'   => $row['id'] 
             );
             $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $data, $this->_db->quoteInto("id = ?", $row['account_id']));
         }
@@ -737,7 +737,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <default>displayed</default>
                 <notnull>true</notnull>
             </field>
-        ');        
+        ');
         $this->_backend->addCol('groups', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -746,7 +746,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>64</length>
             </field>
-        ');        
+        ');
         $this->_backend->addCol('groups', $declaration);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -755,7 +755,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>40</length>
             </field>
-        ');        
+        ');
         $this->_backend->addCol('groups', $declaration);
         
         $this->setTableVersion('groups', '2', TRUE);
@@ -812,8 +812,8 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $declaration = new Setup_Backend_Schema_Field_Xml(
             '<field>
-            	<name>login_failures</name>
-            	<type>integer</type>
+                <name>login_failures</name>
+                <type>integer</type>
                 <default>0</default>
             </field>');
         $this->_backend->alterCol('accounts', $declaration);
@@ -1103,7 +1103,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         // add index and foreign key again
         $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('
-        	<index>
+            <index>
                 <name>parent_id-name</name>
                 <unique>true</unique>
                 <field>
@@ -1113,7 +1113,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                     <name>name</name>
                 </field>
             </index>')
-        ); 
+        );
         
         $this->_backend->dropIndex('tree_nodes', 'parent_id');
         

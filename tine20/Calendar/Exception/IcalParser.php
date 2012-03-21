@@ -16,9 +16,9 @@ class Calendar_Exception_IcalParser extends Exception
     /**
      * @var Exception
      */
-	protected $_parseError = NULL;
-	
-	/**
+    protected $_parseError = NULL;
+    
+    /**
      * construct
      * 
      * @param string $_message
@@ -34,19 +34,19 @@ class Calendar_Exception_IcalParser extends Exception
      * 
      * @param Exception $_e
      */
-	public function setParseError(Exception $_e)
-	{
-	   $this->_parseError = $_e;
-	}
-	
-	/**
-	 * get parse error
-	 * 
-	 * @return Exception
-	 */
-	public function getFreeBusyInfo()
-	{
-	    return $this->_parseError;
-	}
+    public function setParseError(Exception $_e)
+    {
+       $this->_parseError = $_e;
+    }
+    
+    /**
+     * get parse error
+     * 
+     * @return Exception
+     */
+    public function getFreeBusyInfo()
+    {
+        return $this->_parseError;
+    }
 
 }

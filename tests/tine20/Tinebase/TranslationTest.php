@@ -30,7 +30,7 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-    	//Some tests may have changed the User Locale => restore defaults
+        //Some tests may have changed the User Locale => restore defaults
         Tinebase_Core::setupUserLocale();
     }
     

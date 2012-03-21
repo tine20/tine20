@@ -46,6 +46,6 @@ class Sales_Model_ProductFilter extends Tinebase_Model_Filter_FilterGroup
         ),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
-    	'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
     );
 }

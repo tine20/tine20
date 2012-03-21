@@ -34,8 +34,8 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertTrue(file_exists($result));
         
         $file = implode('', file($result));
-        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description'); 
-        $this->assertEquals(1, preg_match("/description/", $file), 'no headline'); 
+        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description');
+        $this->assertEquals(1, preg_match("/description/", $file), 'no headline');
         
         // cleanup / delete file
         unlink($result);
@@ -86,7 +86,7 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertTrue(file_exists($result));
         
         $xmlBody = $odsExportClass->getDocument()->asXML();
-        $this->assertEquals(1, preg_match("/". $timeaccountData['description'] ."/", $xmlBody), 'no description'); 
+        $this->assertEquals(1, preg_match("/". $timeaccountData['description'] ."/", $xmlBody), 'no description');
         
         // cleanup / delete file
         unlink($result);
@@ -115,8 +115,8 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         
         $xmlBody = $odsExportClass->getDocument()->asXML();
         $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration');
-        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description'); 
-        $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline'); 
+        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description');
+        $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline');
         
         // cleanup / delete file
         unlink($result);

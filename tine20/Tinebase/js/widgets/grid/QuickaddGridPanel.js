@@ -78,7 +78,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     initGrid: function() {
         this.enableHdMenu = false;
         this.plugins = this.plugins || [];
-        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));        
+        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         
         this.sm = new Ext.grid.RowSelectionModel({multiSelect:true});
         this.sm.on('selectionchange', function(sm) {
@@ -186,7 +186,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     getFromStoreAsArray: function() {
         var result = [];
-        this.store.each(function(record) {                     
+        this.store.each(function(record) {
             result.push((this.dataField === null) ? record.data : record.get(this.dataField));
         }, this);
         //store.commitChanges();

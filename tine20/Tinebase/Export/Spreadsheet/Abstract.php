@@ -3,7 +3,7 @@
  * Tinebase Abstract spreadsheet export class
  *
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * Tinebase Abstract spreadsheet export class
  * 
  * @package     Tinebase
- * @subpackage	Export
+ * @subpackage    Export
  */
 abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
 {

@@ -21,5 +21,5 @@ interface Tinebase_Controller_Interface
     /**
      * Instance of Controller Object.
      */
-    public static function getInstance();       
+    public static function getInstance();
 }

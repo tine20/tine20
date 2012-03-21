@@ -40,9 +40,9 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase Cli Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -82,7 +82,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $this->_cli->clearTable($opts);
         $out = ob_get_clean();
         
-        $this->assertContains('Removing all access log entries before', $out);        
+        $this->assertContains('Removing all access log entries before', $out);
         $accessLogsAfter = Admin_Controller_AccessLog::getInstance()->search();
         $this->assertGreaterThan(count($accessLogsAfter), count($accessLogsBefore));
         $this->assertEquals(0, count($accessLogsAfter));

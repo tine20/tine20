@@ -3,7 +3,7 @@
  * Crm csv generation class
  *
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +15,7 @@
  * Crm csv generation class
  * 
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 class Crm_Export_Csv extends Tinebase_Export_Csv
@@ -51,7 +51,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      * 
      * @var boolean
      */
-    protected $_getRelations = TRUE;    
+    protected $_getRelations = TRUE;
     
     /**
      * fields to skip

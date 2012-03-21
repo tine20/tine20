@@ -26,11 +26,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * @var Admin_Controller_Group
      */
     private static $_instance = NULL;
-		
-	/**
-	 * @var Tinebase_SambaSAM_Ldap
-	 */
-	protected $_samBackend = NULL;
+        
+    /**
+     * @var Tinebase_SambaSAM_Ldap
+     */
+    protected $_samBackend = NULL;
 
     /**
      * the constructor
@@ -39,7 +39,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
     }
 
@@ -48,7 +48,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -240,7 +240,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $event->group = $group;
         Tinebase_Event::fireEvent($event);
         
-        return $group;            
+        return $group;
     }
     
     /**
@@ -316,7 +316,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * @return  void
      */
     public function delete($_groupIds)
-    {        
+    {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         // check default user group / can't delete this group

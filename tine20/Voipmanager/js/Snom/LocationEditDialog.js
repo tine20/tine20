@@ -29,7 +29,7 @@ Tine.Voipmanager.SnomLocationEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() { 
+    getFormItems: function() {
         return {
             layout: 'form',
             border: false,

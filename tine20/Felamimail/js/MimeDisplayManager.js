@@ -80,7 +80,7 @@ Tine.Felamimail.MimeDisplayManager = function() {
                     if (alternatives.hasOwnProperty(otherType)) {
                         throw new Ext.Error(alternatives[otherType] + ' is already registered as alternative for ' + otherType);
                     }
-                    alternatives[otherType] = mimeType; 
+                    alternatives[otherType] = mimeType;
                 }, this);
             }
         }

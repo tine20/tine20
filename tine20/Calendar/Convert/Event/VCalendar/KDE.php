@@ -38,7 +38,7 @@ class Calendar_Convert_Event_VCalendar_KDE extends Calendar_Convert_Event_VCalen
         'exdate',
         'rrule',
         'recurid',
-    	'is_all_day_event',
+        'is_all_day_event',
         #'rrule_until',
         'originator_tz'
     );

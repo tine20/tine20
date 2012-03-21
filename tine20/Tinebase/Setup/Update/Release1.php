@@ -133,7 +133,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         Tinebase_Application::getInstance()->addApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
@@ -196,7 +196,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         Tinebase_Application::getInstance()->addApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
@@ -218,7 +218,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
          */
         $this->_backend->dropForeignKey('accounts',      'accounts::primary_group_id--groups::id');
         $this->_backend->dropForeignKey('group_members', 'group_members::account_id--accounts::id');
-        $this->_backend->dropForeignKey('group_members', 'group_members::group_id--groups::id');        
+        $this->_backend->dropForeignKey('group_members', 'group_members::group_id--groups::id');
         /*
          * update column definition
          */
@@ -457,7 +457,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
      */
     public function update_6()
     {
-        $this->validateTableVersion('container', '1');        
+        $this->validateTableVersion('container', '1');
 
         $newFields = array(
             '<field>
@@ -547,7 +547,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         Tinebase_Application::getInstance()->addApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
@@ -627,7 +627,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             Tinebase_User::getInstance()->importUsers();
             
             // import group memberships from ldap
-            Tinebase_Group::getInstance()->importGroupMembers();            
+            Tinebase_Group::getInstance()->importGroupMembers();
         }
         $this->setApplicationVersion('Tinebase', '1.11');
     }
@@ -654,7 +654,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
             Tinebase_User::getInstance()->importUsers();
             
             // import group memberships from ldap
-            #Tinebase_Group::getInstance()->importGroupMembers();            
+            #Tinebase_Group::getInstance()->importGroupMembers();
         }
         
         $this->setApplicationVersion('Tinebase', '1.12');
@@ -684,7 +684,7 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
      */
     public function update_13()
     {
-        // $this->validateTableVersion('config_customfields', '1');        
+        // $this->validateTableVersion('config_customfields', '1');
 
         $newFields = array(
             '<field>

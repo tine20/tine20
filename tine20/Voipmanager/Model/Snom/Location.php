@@ -3,7 +3,7 @@
  * class to hold snom location data
  * 
  * @package     Voipmanager
- * @subpackage	Model
+ * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * class to hold snom location data
  * 
  * @package     Voipmanager
- * @subpackage	Model
+ * @subpackage    Model
  */
 class Voipmanager_Model_Snom_Location extends Tinebase_Record_Abstract
 {

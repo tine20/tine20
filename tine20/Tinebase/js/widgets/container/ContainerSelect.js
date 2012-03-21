@@ -401,7 +401,7 @@ Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionCombo
  * This widget shows a modal container selection dialog
  */
 Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
-	/**
+    /**
      * @cfg {Boolean} allowNodeSelect
      */
     allowNodeSelect: false,
@@ -416,9 +416,9 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      */
     containersName: 'containers',
     /**
-	 * @cfg {string}
-	 * title of dialog
-	 */
+     * @cfg {string}
+     * title of dialog
+     */
     title: null,
     /**
      * @cfg {Number}
@@ -464,12 +464,12 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         });
         
         // adjust window height
-		if (Ext.getBody().getHeight(true) * 0.7 < this.windowHeight) {
-			this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
-		}
+        if (Ext.getBody().getHeight(true) * 0.7 < this.windowHeight) {
+            this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
+        }
 
         this.tree = new Tine.widgets.container.TreePanel({
-        	allowMultiSelection: false,
+            allowMultiSelection: false,
             containerName: this.TriggerField.containerName,
             containersName: this.TriggerField.containersName,
             appName: this.TriggerField.appName,
@@ -479,7 +479,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         
         this.tree.on('click', this.onTreeNodeClick, this);
         this.tree.on('dblclick', this.onTreeNoceDblClick, this);
-		
+        
         this.win = Tine.WindowFactory.getWindow({
             title: this.title,
             closeAction: 'close',

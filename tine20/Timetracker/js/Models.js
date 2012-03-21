@@ -67,7 +67,7 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
     copyOmitFields: ['billed_in', 'is_cleared']
 });
 
-Tine.Timetracker.Model.Timesheet.getDefaultData = function() { 
+Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
     return {
         account_id: Tine.Tinebase.registry.get('currentAccount'),
         duration:   '00:30',
@@ -142,7 +142,7 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     }
 });
 
-Tine.Timetracker.Model.Timeaccount.getDefaultData = function() { 
+Tine.Timetracker.Model.Timeaccount.getDefaultData = function() {
     return {
         is_open: 1,
         is_billable: true

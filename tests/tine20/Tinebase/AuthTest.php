@@ -97,7 +97,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBackendConfiguration()
     {
-        Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);   
+        Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);
      
         $key = 'host';
         $testValue = 'phpunit-test-host';
@@ -119,7 +119,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteBackendConfiguration()
     {
-        Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);   
+        Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);
      
         $key = 'host';
         Tinebase_Auth::setBackendConfiguration('configured-host', $key);
@@ -171,7 +171,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
             'ssl'       => $imapConfig['ssl'],
             'domain'    => $imapConfig['domain'],
         );
-        Tinebase_Auth::setBackendType(Tinebase_Auth::IMAP);   
+        Tinebase_Auth::setBackendType(Tinebase_Auth::IMAP);
         Tinebase_Auth::setBackendConfiguration($authConfig);
         Tinebase_Auth::saveBackendConfiguration();
         Tinebase_Auth::getInstance()->setBackend();
@@ -182,7 +182,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         
         // valid authentication
         $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, $testConfig->password);
-        $this->assertTrue($authResult->isValid());        
+        $this->assertTrue($authResult->isValid());
         
         // invalid authentication
         $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, 'some pw');

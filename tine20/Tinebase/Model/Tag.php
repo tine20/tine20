@@ -26,7 +26,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
      */
     const TYPE_PERSONAL = 'personal';
     
-	/**
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 

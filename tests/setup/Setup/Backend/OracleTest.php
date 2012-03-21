@@ -27,7 +27,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
     {
         $prefix = 'phpunit';
         $dbProxy = $this->_getDbProxy($prefix);
-        $testString = 'This is NOT QUOTED but this is "QUOTED" and this is NOT QUOTED and "still NOT "QUOTED" but here yes it is QUOTED" but this is \"NOT QUOTED\" while this is \\\\"QUOTED\\\\".'; 
+        $testString = 'This is NOT QUOTED but this is "QUOTED" and this is NOT QUOTED and "still NOT "QUOTED" but here yes it is QUOTED" but this is \"NOT QUOTED\" while this is \\\\"QUOTED\\\\".';
         
         $this->assertFalse($dbProxy->proxy_isQuoted($testString, 12, '"'), 'Test position of "THIS1"');
         $this->assertTrue($dbProxy->proxy_isQuoted($testString, 32, '"'), 'Test position of "THIS2"');
@@ -93,7 +93,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <notnull>true</notnull>
                 </field>";
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
@@ -124,14 +124,14 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <length>11</length>
                     <unsigned>true</unsigned>
                     <notnull>true</notnull>
-                </field>";   
+                </field>";
         
-        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);       
+        $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->_backend->addCol($this->_table->name, $field);
         
         $newColumn = $this->_getLastField();
         $this->assertEquals('order', $newColumn->name);
-        $this->assertEquals('true', $newColumn->notnull);       
+        $this->assertEquals('true', $newColumn->notnull);
         $this->assertEquals('integer', $newColumn->type);
         $this->assertFalse(isset($newColumn->unsigned)); //unsigned option is currently not supported by oracle adapter
         $this->assertNotEquals('true', $newColumn->primary);

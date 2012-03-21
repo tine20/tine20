@@ -22,65 +22,65 @@ class Setup_Update_Abstract
      *
      * @var Setup_Backend_Mysql
      */
-	protected $_backend;
+    protected $_backend;
     
     /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
-	
-	/** 
-	* the constructor
-	*/
-	public function __construct($_backend)
-	{
-	    $this->_backend = $_backend;
-	    $this->_db = Tinebase_Core::getDb();
-	}
-	
-	/**
-	 * get version number of a given application 
-	 * version is stored in database table "applications"
-	 *
-	 * @param string application
-	 * @return string version number major.minor release 
-	 */
-	public function getApplicationVersion($_application)
-	{
-		$select = $this->_db->select()
-				->from( SQL_TABLE_PREFIX . 'applications')
-				->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
+    
+    /** 
+    * the constructor
+    */
+    public function __construct($_backend)
+    {
+        $this->_backend = $_backend;
+        $this->_db = Tinebase_Core::getDb();
+    }
+    
+    /**
+     * get version number of a given application 
+     * version is stored in database table "applications"
+     *
+     * @param string application
+     * @return string version number major.minor release 
+     */
+    public function getApplicationVersion($_application)
+    {
+        $select = $this->_db->select()
+                ->from( SQL_TABLE_PREFIX . 'applications')
+                ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
-		$stmt = $select->query();
-		$version = $stmt->fetchAll();
-		
-		return $version[0]['version'];
-	}
+        $stmt = $select->query();
+        $version = $stmt->fetchAll();
+        
+        return $version[0]['version'];
+    }
 
-	/**
-	 * set version number of a given application 
-	 * version is stored in database table "applications"
-	 *
-	 * @param string $_applicationName
-	 * @param string $_version new version number
-	 * @return Tinebase_Model_Application
-	 */	
-	public function setApplicationVersion($_applicationName, $_version)
-	{
-	    $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
-	    $application->version = $_version;
-	    
-	    return Tinebase_Application::getInstance()->updateApplication($application);
-	}
-	
-	/**
-	 * get version number of a given table
-	 * version is stored in database table "applications_tables"
-	 *
-	 * @param Tinebase_Application application
-	 * @return int version number 
-	 */
-	public function getTableVersion($_tableName)
+    /**
+     * set version number of a given application 
+     * version is stored in database table "applications"
+     *
+     * @param string $_applicationName
+     * @param string $_version new version number
+     * @return Tinebase_Model_Application
+     */    
+    public function setApplicationVersion($_applicationName, $_version)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        $application->version = $_version;
+        
+        return Tinebase_Application::getInstance()->updateApplication($application);
+    }
+    
+    /**
+     * get version number of a given table
+     * version is stored in database table "applications_tables"
+     *
+     * @param Tinebase_Application application
+     * @return int version number 
+     */
+    public function getTableVersion($_tableName)
     {
         $select = $this->_db->select()
                 ->from(SQL_TABLE_PREFIX . 'application_tables')
@@ -92,22 +92,22 @@ class Setup_Update_Abstract
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
-        $result = ( isset($rows[0]['version']) ) ? $rows[0]['version'] : 0; 
+        $result = ( isset($rows[0]['version']) ) ? $rows[0]['version'] : 0;
         
         return $result;
     }
-	
-	/**
-	 * set version number of a given table
-	 * version is stored in database table "applications_tables"
-	 *
-	 * @param string tableName
-	 * @param int|string $_version
-	 * @param boolean $_createIfNotExist
-	 * @param string $_application
-	 * @return void
-	 * @throws Setup_Exception_NotFound
-	 */	 
+    
+    /**
+     * set version number of a given table
+     * version is stored in database table "applications_tables"
+     *
+     * @param string tableName
+     * @param int|string $_version
+     * @param boolean $_createIfNotExist
+     * @param string $_application
+     * @return void
+     * @throws Setup_Exception_NotFound
+     */     
     public function setTableVersion($_tableName, $_version, $_createIfNotExist = TRUE, $_application = 'Tinebase')
     {
         if ($this->getTableVersion($_tableName) == 0) {
@@ -150,12 +150,12 @@ class Setup_Update_Abstract
     }
     
     /**
-	 * compares version numbers of given table and given number
-	 *
-	 * @param  string $_tableName
-	 * @param  int version number
-	 * @throws Setup_Exception
-	 */	 
+     * compares version numbers of given table and given number
+     *
+     * @param  string $_tableName
+     * @param  int version number
+     * @throws Setup_Exception
+     */     
     public function validateTableVersion($_tableName, $_version)
     {
         $currentVersion = $this->getTableVersion($_tableName);
@@ -191,7 +191,7 @@ class Setup_Update_Abstract
      */  
     public function renameTable($_oldTableName, $_newTableName)
     {
-        $this->_backend->renameTable($_oldTableName, $_newTableName);   
+        $this->_backend->renameTable($_oldTableName, $_newTableName);
         
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(

@@ -27,7 +27,7 @@ class Setup_Backend_Schema_TableTest extends Setup_Backend_AbstractTest
         $this->setExpectedException('Setup_Exception_InvalidSchema');
         $table->isValid(true); //Test if the parameter throwException works as expected
     }
-	
+    
     public function testSetName()
     {
         $name = 'phpunit-test';
@@ -37,18 +37,18 @@ class Setup_Backend_Schema_TableTest extends Setup_Backend_AbstractTest
         $this->_table->setName(SQL_TABLE_PREFIX . 'phpunit-test');
         $this->assertEquals('phpunit-test', $this->_table->name);
     }
-	
+    
     /**
      * @todo Implement testAddDeclarationField().
      */
     public function testAddDeclarationField() {
-    	//$this->_table->addField()
+        //$this->_table->addField()
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
         );
     }
-	
+    
     /**
      * @todo Implement testSetDeclarationField().
      */

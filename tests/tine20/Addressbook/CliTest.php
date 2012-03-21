@@ -33,9 +33,9 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Cli Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.

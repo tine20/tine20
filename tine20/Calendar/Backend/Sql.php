@@ -249,14 +249,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @return Zend_Db_Select
      */
     protected function _getSelectSimple($_cols = '*', $_getDeleted = FALSE)
-    {        
+    {
         $select = $this->_db->select();
 
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $_cols);
         
         if (!$_getDeleted && $this->_modlogActive) {
             // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
         }
         
         return $select;
@@ -269,13 +269,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @return int
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
-    {   
+    {
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);
 
         $result = $this->_db->fetchOne($select);
         
-        return $result;        
+        return $result;
     }    
     
     /**

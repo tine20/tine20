@@ -291,31 +291,31 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
-    	if ($_records->getRecordClassName() == 'Calendar_Model_Event') {
-	    	if (is_null($_filter)) {
-	    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
-	    	}
-	        
-	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
-	        
-	        Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
-	        Calendar_Convert_Event_Json::resolveOrganizer($_records);
-	        Calendar_Convert_Event_Json::resolveRrule($_records);
+        if ($_records->getRecordClassName() == 'Calendar_Model_Event') {
+            if (is_null($_filter)) {
+                throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
+            }
+            
+            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
+            
+            Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
+            Calendar_Convert_Event_Json::resolveOrganizer($_records);
+            Calendar_Convert_Event_Json::resolveRrule($_records);
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
             
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
             
             $_records->sortByPagination($_pagination);
             $eventsData = parent::_multipleRecordsToJson($_records);
-	        foreach ($eventsData as $eventData) {
-	            if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
-	                $eventData['notes'] = array();
-	                $eventData['tags'] = array();
-	            }
-	        }
-	        
-	        return $eventsData;
-    	}
+            foreach ($eventsData as $eventData) {
+                if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
+                    $eventData['notes'] = array();
+                    $eventData['tags'] = array();
+                }
+            }
+            
+            return $eventsData;
+        }
           
         return parent::_multipleRecordsToJson($_records);
     }

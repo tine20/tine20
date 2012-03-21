@@ -40,11 +40,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountEmailAddress'       => 'email',
         'accountHomeDirectory'      => 'home_dir',
         'accountLoginShell'         => 'login_shell',
-        'lastLoginFailure'			=> 'last_login_failure_at',
-        'loginFailures'				=> 'login_failures',
+        'lastLoginFailure'            => 'last_login_failure_at',
+        'loginFailures'                => 'login_failures',
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
-        'contactId'					=> 'contact_id'
+        'contactId'                    => 'contact_id'
     );
     
     /**
@@ -98,7 +98,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
      */
     public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
-    {        
+    {
         $select = $this->_getUserSelectObject()
             ->limit($_limit, $_start);
             
@@ -217,7 +217,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
-            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');           
+            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');
         }
         
         try {
@@ -282,8 +282,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
                     'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
                     'loginFailures'         => $this->rowNameMapping['loginFailures'],
-                	'contact_id',
-                	'openid',
+                    'contact_id',
+                    'openid',
                     'visibility'
                 )
             )
@@ -571,7 +571,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'login_shell'       => $_user->accountLoginShell,
             'openid'            => $_user->openid,
             'visibility'        => $_user->visibility,
-        	'contact_id'		=> $_user->contact_id,
+            'contact_id'        => $_user->contact_id,
             $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
             $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
             $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
@@ -670,7 +670,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'login_shell'       => $_user->accountLoginShell,
             'openid'            => $_user->openid,
             'visibility'        => $_user->visibility, 
-            'contact_id'		=> $_user->contact_id,
+            'contact_id'        => $_user->contact_id,
             $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
             $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
             $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
@@ -712,7 +712,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @return Tinebase_Model_FullUser  the delete user
      */
     public function deleteUserInSqlBackend($_userId)
-    {   
+    {
         if ($_userId instanceof Tinebase_Model_FullUser) {
             $user = $_userId;
         } else {
@@ -785,7 +785,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
-     * @param 	string|array $_id Ids
+     * @param     string|array $_id Ids
      * @param   string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */

@@ -35,9 +35,9 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Sogo Contact Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Sogo Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -137,6 +137,6 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
         $this->assertContains('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
         $this->assertContains('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
-        #$this->assertContains('BDAY:1975-01-16', $vcard, $vcard);        
+        #$this->assertContains('BDAY:1975-01-16', $vcard, $vcard);
     }
 }

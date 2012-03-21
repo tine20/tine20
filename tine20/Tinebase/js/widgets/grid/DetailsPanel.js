@@ -203,7 +203,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         } else if (count > 1) {
             this.layout.setActiveItem(this.getMultiRecordsPanel());
             this.record = sm.getSelected();
-        	this.showMulti(sm, this.getMultiRecordsPanel().body);
+            this.showMulti(sm, this.getMultiRecordsPanel().body);
         }
     },
     

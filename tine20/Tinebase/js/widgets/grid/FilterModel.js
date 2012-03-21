@@ -288,19 +288,19 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     filter.numberfield.hide();
                     filter.datePicker.hide();
                     filter.withinCombo.show();
-                    filter.formFields.value = filter.withinCombo;                
+                    filter.formFields.value = filter.withinCombo;
                     break;
                 case 'inweek':
                     filter.withinCombo.hide();
                     filter.datePicker.hide();
                     filter.numberfield.show();
-                    filter.formFields.value = filter.numberfield;                
+                    filter.formFields.value = filter.numberfield;
                     break;
                 default:
                     filter.withinCombo.hide();
                     filter.numberfield.hide();
                     filter.datePicker.show();
-                    filter.formFields.value = filter.datePicker;                
+                    filter.formFields.value = filter.datePicker;
             }
         }
     },

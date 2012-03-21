@@ -38,13 +38,13 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $_phoneData = $snomPhone->toArray();
             $_phoneSettingsData = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($_phoneData['id'])->toArray();
             
-            $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();            
+            $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();
             $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();
             
             $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
             foreach($_writableFields AS $wField)
-            {               
+            {
                 $_fieldRW = $wField.'_writable';
                 
                  if($_settingsData[$_fieldRW] == '0')
@@ -53,9 +53,9 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                      $_notWritable[$wField] = 'true';
                  } else {
                      if($_phoneSettingsData[$wField] === NULL) {
-                         $_phoneSettingsData[$wField] = $_settingsData[$wField];                    
+                         $_phoneSettingsData[$wField] = $_settingsData[$wField];
                      }
-                     $_notWritable[$wField] = '';    
+                     $_notWritable[$wField] = '';
                  }
             }
 
@@ -71,7 +71,7 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             //$phone = new Voipmanager_Model_Snom_Phone();
             //$lines = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_Line');
             $encodedWritable = '{}';
-            $encodedSnomPhone = '{}';            
+            $encodedSnomPhone = '{}';
             //$encodedSettings = '{}';
         }
        

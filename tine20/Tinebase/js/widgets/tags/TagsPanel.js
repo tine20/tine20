@@ -79,7 +79,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             }
         });
         
-        this.initSearchField();     
+        this.initSearchField();
         
         this.bottomBar = new Ext.Container({
             layout: 'column',
@@ -224,7 +224,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                         }, this, 30, tag.get('description'));
                                     }
                                 }),
-                                new Ext.Action({     
+                                new Ext.Action({
                                     text: _('Change Color'),
                                     iconCls: 'action_changecolor',
                                     scope: this,
@@ -287,8 +287,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                                 }
                                                 Ext.MessageBox.hide();
                                             },
-                                            failure: function ( result, request) { 
-                                                Ext.MessageBox.alert(_('Failed'), _('Could not delete Tag(s).')); 
+                                            failure: function ( result, request) {
+                                                Ext.MessageBox.alert(_('Failed'), _('Could not delete Tag(s).'));
                                             },
                                             scope: this 
                                         });
@@ -406,7 +406,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             this.el.unmask();
                         },
                         failure: function ( result, request) {
-                            Ext.MessageBox.alert(_('Failed'), _('Could not create tag.')); 
+                            Ext.MessageBox.alert(_('Failed'), _('Could not create tag.'));
                             this.el.unmask();
                         },
                         scope: this 
@@ -439,7 +439,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     this.el.unmask();
                 },
                 failure: function ( result, request) {
-                    Ext.MessageBox.alert(_('Failed'), _('Could not update tag.')); 
+                    Ext.MessageBox.alert(_('Failed'), _('Could not update tag.'));
                     this.el.unmask();
                 },
                 scope: this 

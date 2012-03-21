@@ -40,7 +40,7 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
     private function __construct() 
     {
         $this->_backend      = new Voipmanager_Backend_Snom_Line();
-        $this->_cache        = Zend_Registry::get('cache');        
+        $this->_cache        = Zend_Registry::get('cache');
     }
         
     /**
@@ -48,7 +48,7 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**
@@ -90,6 +90,6 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
             $this->_cache->save($result, 'snomPhoneLine_' . $id, array('snomPhoneLine'), 5);
         }
         
-        return $result;    
+        return $result;
     }            
 }

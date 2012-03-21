@@ -239,7 +239,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     window.location.reload();
                 }
             }
-        });        
+        });
     }
 });
 

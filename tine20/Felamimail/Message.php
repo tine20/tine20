@@ -57,7 +57,7 @@ class Felamimail_Message extends Zend_Mail_Message
             // we have a comma in the name -> do not split string!
             $addresses = array($_addressList);
         } else {
-        	// create stream to be used with fgetcsv
+            // create stream to be used with fgetcsv
             $stream = fopen("php://temp", 'r+');
             fputs($stream, $_addressList);
             rewind($stream);
@@ -338,7 +338,7 @@ class Felamimail_Message extends Zend_Mail_Message
                     
                     $message->$headerName = $receipients;
                     
-                    break;                    
+                    break;
             }
         }
         

@@ -396,7 +396,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         
         this.initToolbar();
         
-        this.supr().initComponent.apply(this, arguments);    
+        this.supr().initComponent.apply(this, arguments);
     },
     
     /**

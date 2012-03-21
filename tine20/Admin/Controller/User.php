@@ -20,15 +20,15 @@
  */
 class Admin_Controller_User extends Tinebase_Controller_Abstract
 {
-	/**
-	 * @var Tinebase_User_Abstract
-	 */
-	protected $_userBackend = NULL;
-	
-	/**
-	 * @var Tinebase_SambaSAM_Ldap
-	 */
-	protected $_samBackend = NULL;
+    /**
+     * @var Tinebase_User_Abstract
+     */
+    protected $_userBackend = NULL;
+    
+    /**
+     * @var Tinebase_SambaSAM_Ldap
+     */
+    protected $_samBackend = NULL;
 
     /**
      * the constructor
@@ -37,9 +37,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
-		
+        
         $this->_userBackend = Tinebase_User::getInstance();
     }
 
@@ -48,7 +48,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
 
     /**
@@ -114,7 +114,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @return  Tinebase_Model_FullUser
      */
     public function get($_userId)
-    {        
+    {
         $this->checkRight('VIEW_ACCOUNTS');
         
         $user = $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
@@ -168,9 +168,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * update user
      *
-     * @param  Tinebase_Model_FullUser 	$_user 		  	  the user
-     * @param  string 					$_password 		  the new password
-     * @param  string 					$_passwordRepeat  the new password again
+     * @param  Tinebase_Model_FullUser     $_user                 the user
+     * @param  string                     $_password           the new password
+     * @param  string                     $_passwordRepeat  the new password again
      * 
      * @return Tinebase_Model_FullUser
      */
@@ -219,9 +219,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * create user
      *
-     * @param  Tinebase_Model_FullUser  $_account 		  the account
-     * @param  string 					$_password 		  the new password
-     * @param  string 					$_passwordRepeat  the new password again
+     * @param  Tinebase_Model_FullUser  $_account           the account
+     * @param  string                     $_password           the new password
+     * @param  string                     $_passwordRepeat  the new password again
      * @return Tinebase_Model_FullUser
      */
     public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
@@ -255,7 +255,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         $event = new Admin_Event_AddAccount(array(
-        	'account' => $user
+            'account' => $user
         ));
         Tinebase_Event::fireEvent($event);
         
@@ -386,6 +386,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
-        $contactsBackend->delete($_contactId);        
+        $contactsBackend->delete($_contactId);
     }
 }

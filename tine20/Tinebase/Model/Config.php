@@ -16,7 +16,7 @@
  * @subpackage  Record
  */
 class Tinebase_Model_Config extends Tinebase_Record_Abstract 
-{   
+{
     const NOTSET = '###NOTSET###';
     
         /**

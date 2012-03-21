@@ -28,7 +28,7 @@ class Projects_Preference extends Tinebase_Preference_Abstract
     /**
      * @var string application
      */
-    protected $_application = 'Projects';    
+    protected $_application = 'Projects';
         
     /**************************** public functions *********************************/
     

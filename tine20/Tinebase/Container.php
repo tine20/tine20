@@ -24,7 +24,7 @@
  */
 class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 {
-	/**
+    /**
      * Table name without prefix
      *
      * @var string
@@ -44,7 +44,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-		
+        
     /**
      * the table object for the container_acl table
      *
@@ -280,9 +280,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $select->joinLeft(
                 /* table  */ array('owner' => SQL_TABLE_PREFIX . 'container_acl'),
                 /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')} AND ".
-                			 "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
-                			 "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
-                			 "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
+                             "{$this->_db->quoteIdentifier('container.type')} = {$this->_db->quote(Tinebase_Model_Container::TYPE_PERSONAL)} AND " .
+                             "{$this->_db->quoteIdentifier('owner.account_type')} = {$this->_db->quote('user')} AND " .
+                             "{$this->_db->quoteIdentifier('owner.account_grant')} = {$this->_db->quote(Tinebase_Model_Grants::GRANT_ADMIN)}",
                 /* select */ array('owner_id' => 'account_id')
             );
         }
@@ -969,7 +969,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
             }
-        	
+            
             $containerGrant = new $_grantModel($grantData, TRUE);
 
             $grants->addRecord($containerGrant);
@@ -1013,7 +1013,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             $stmt = $this->_db->query($select);
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-	        $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
+            $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
             
             $cache->save($grants, $cacheKey, array('container'));
         }
@@ -1041,7 +1041,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         if (empty($containers)) {
-        	return;
+            return;
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
@@ -1158,7 +1158,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $this->_clearCache();
             
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();            
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
         
@@ -1228,7 +1228,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * remove all container related entries from cache
      */
     protected function _clearCache() 
-    {        
+    {
         $cache = Tinebase_Core::getCache();
         if (!$cache || !$cache->getOption('caching')) {
             return;
@@ -1265,7 +1265,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $grants = array();
         foreach($_grantsArray as $key => $value) {
-            $grantValue = (is_array($value)) ? $value['account_grant'] : $value; 
+            $grantValue = (is_array($value)) ? $value['account_grant'] : $value;
             $grants[$grantValue] = TRUE;
         }
         $grantsFields = array(

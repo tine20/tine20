@@ -141,7 +141,7 @@ class Felamimail_Sieve_Rule_Condition
     {
         if(is_array($string)) {
             $string = array_map(array($this, '_quoteString'), $string);
-            return '[' . implode(',', $string) . ']'; 
+            return '[' . implode(',', $string) . ']';
         } else {
             return '"' . str_replace('"', '\"', $string) . '"';
         }

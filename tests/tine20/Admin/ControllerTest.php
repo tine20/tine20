@@ -47,7 +47,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
             'id'            => 'test-controller-group',
             'name'          => 'tine20phpunit',
             'description'   => 'initial test group'
-        )); 
+        ));
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'id'            => 'test-controller-group',
@@ -64,7 +64,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
+        ));
         
         $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit-updated',
@@ -74,7 +74,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0 Updated',
             'accountFirstName'      => 'PHPUnit Updated',
             'accountEmailAddress'   => 'phpunit@tine20.org'
-        ));         
+        ));
         
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                 $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
@@ -166,7 +166,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetGroups()
-    {        
+    {
         $groups = Admin_Controller_Group::getInstance()->search($this->objects['initialGroup']->name);
         
         $this->assertEquals(1, count($groups));
@@ -177,7 +177,7 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testGetGroup()
-    {                
+    {
         $groups = Admin_Controller_Group::getInstance()->search($this->objects['initialGroup']->name);
         
         $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());

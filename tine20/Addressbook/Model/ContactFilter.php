@@ -73,7 +73,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'n_suffix'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_unit'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'room'	               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'room'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'title'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_region'       => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -96,11 +96,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'tel_home'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_pager'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_work'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-		'tel_prefer'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tel_prefer'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'note'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'assistent'		       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'assistent'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'addressbook.id',
             'applicationName' => 'Addressbook',
@@ -114,7 +114,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
-        'showDisabled'		   => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
+        'showDisabled'           => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
             'requiredCols'  => array('account_id' => 'accounts.id')
         )),
     );

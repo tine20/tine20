@@ -242,7 +242,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     onApplyChanges: function(button, event, closeWindow) {
         
         if (! this.isValid()) {
-            Ext.MessageBox.alert(_('Errors'), _('You need to correct the red marked fields before config could be saved'));    
+            Ext.MessageBox.alert(_('Errors'), _('You need to correct the red marked fields before config could be saved'));
             return;
         }
         

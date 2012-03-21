@@ -39,7 +39,7 @@ class Courses_Controller extends Tinebase_Controller_Event
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**

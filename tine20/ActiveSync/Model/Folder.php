@@ -18,14 +18,14 @@
  * @package     ActiveSync
  */
 class ActiveSync_Model_Folder extends Tinebase_Record_Abstract implements Syncope_Model_IFolder
-{  
+{
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to
@@ -48,8 +48,8 @@ class ActiveSync_Model_Folder extends Tinebase_Record_Abstract implements Syncop
         'folderid'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'parentid'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'     => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    	'displayname'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    	'type'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'displayname'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'type'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'lastfiltertype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, /*'presence'=>'required',*/ 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
     
@@ -60,6 +60,6 @@ class ActiveSync_Model_Folder extends Tinebase_Record_Abstract implements Syncop
      */    
     protected $_datetimeFields = array(
         'creation_time'
-    );    
+    );
     
 }

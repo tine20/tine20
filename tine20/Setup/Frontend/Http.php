@@ -95,7 +95,7 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("Pragma: public");
             header("Cache-Control: max-age=0");
             header("Content-Disposition: attachment; filename=config.inc.php");
-            header("Content-Description: PHP File");  
+            header("Content-Description: PHP File");
             header("Content-type: text/plain");
             die($configData);
         }

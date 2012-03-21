@@ -24,7 +24,7 @@ class Voipmanager_Server_Asterisk
      * @return boolean
      */
     public function handle()
-    {        
+    {
         Tinebase_Core::initFramework();
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
         

@@ -41,9 +41,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -103,7 +103,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
         
         $this->objects['updatedContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -146,8 +146,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
-            	
+        ));
+                
         $this->objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
@@ -167,9 +167,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	    if (array_key_exists('contact', $this->objects)) {
-	        $this->_instance->delete($this->objects['contact']);
-	    }
+        if (array_key_exists('contact', $this->objects)) {
+            $this->_instance->delete($this->objects['contact']);
+        }
     }
     
     /**
@@ -243,7 +243,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'Addressbook', 
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
-        );        
+        );
         $container = $personalContainer[0];
         
         $filter = new Addressbook_Model_ContactFilter(array(

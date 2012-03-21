@@ -58,7 +58,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Date} dt
      * @return {String}
      */
-    datetimeRenderer: function(dt) {                                                                                                                        
+    datetimeRenderer: function(dt) {
         return String.format(this.app.i18n._("{0} {1} o'clock"), Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
     },
     
@@ -77,7 +77,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));
         }
            
-        if(this.record.isRecurBase() || this.record.isRecurInstance()) {  
+        if(this.record.isRecurBase() || this.record.isRecurInstance()) {
             recur = '<img class="cal-recurring" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event');
         } else if (this.record.isRecurException()) {
             recur = '<img class="cal-recurring exception" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event exception');
@@ -85,7 +85,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
 
         if(status || recur) {
             ret += '&nbsp;&nbsp;&nbsp;(&nbsp;';
-            if(status) ret += status; 
+            if(status) ret += status;
             if(status && recur) ret += '&nbsp;&nbsp;'
             if(recur) ret += recur;
             ret += '&nbsp;)';

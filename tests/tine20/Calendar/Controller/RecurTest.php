@@ -31,7 +31,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     
     public function setUp()
     {
-    	parent::setUp();
+        parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
     }
     

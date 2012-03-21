@@ -57,7 +57,7 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
             scope: this,
             render: this.onRender
         }
-    });    
+    });
     
     // register in contextmenu
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newLeadAction, 80);

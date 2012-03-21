@@ -18,7 +18,7 @@
  * @subpackage  Record
  */
 class Crm_Model_Config extends Tinebase_Record_Abstract 
-{   
+{
     /**
      * lead states config
      * 

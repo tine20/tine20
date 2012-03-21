@@ -53,7 +53,7 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
     /**
      * @private
      */
-	initComponent: function() {
+    initComponent: function() {
         this.store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.CustomfieldValue,
             baseParams: {

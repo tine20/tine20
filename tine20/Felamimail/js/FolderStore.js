@@ -202,7 +202,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
                 record.set('path', path);
                 record.endEdit();
             }
-        }, this);        
+        }, this);
     },
     
     /**

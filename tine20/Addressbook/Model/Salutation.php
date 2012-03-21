@@ -53,6 +53,6 @@ class Addressbook_Model_Salutation extends Tinebase_Config_KeyFieldRecord
         'value'                => array('allowEmpty' => false         ),
         'image'                => array('allowEmpty' => true          ),
         'system'               => array('allowEmpty' => true,  'Int'  ),
-    	'gender'               => array(array('InArray', array(self::GENDER_MALE, self::GENDER_FEMALE, self::GENDER_OTHER))),
+        'gender'               => array(array('InArray', array(self::GENDER_MALE, self::GENDER_FEMALE, self::GENDER_OTHER))),
     );
 }

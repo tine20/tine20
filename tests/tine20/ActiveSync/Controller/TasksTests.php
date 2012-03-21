@@ -104,7 +104,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $dom     = $this->_getOutputDOMDocument();
         $appData = $dom->getElementsByTagNameNS('uri:AirSync', 'ApplicationData')->item(0);
 
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $task = Tasks_TestCase::getTestRecord();
         $task->description = "Hello\r\nTask\nLars";
@@ -194,12 +194,12 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
      */
     public function _testGetServerEntries()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-    	
-    	$entries = $controller->getServerEntries('addressbook-root', null);
-    	
-    	$this->assertContains($this->objects['contact']->getId(), $entries);
-    	$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries('addressbook-root', null);
+        
+        $this->assertContains($this->objects['contact']->getId(), $entries);
+        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
     /**

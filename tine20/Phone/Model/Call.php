@@ -3,7 +3,7 @@
  * class to hold call data
  * 
  * @package     Phone
- * @subpackage	Model
+ * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,10 +13,10 @@
  * class to hold lead data
  * 
  * @package     Phone
- * @subpackage	Model
+ * @subpackage    Model
  */
 class Phone_Model_Call extends Tinebase_Record_Abstract
-{  
+{
     /**
      * Type of call
      */
@@ -33,7 +33,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

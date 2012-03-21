@@ -61,9 +61,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_backend = new Courses_Backend_Course();
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
     }    
     
@@ -105,7 +105,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         $courseName = strtolower($course->name);
         $loginName  = strtolower($i18n->_('teacher') . '-' . $course->name);
-        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         $account = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $loginName,
@@ -201,7 +201,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $tinebaseGroup = Tinebase_Group::getInstance();
         
         $courseName = strtolower($course->name);
-        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         foreach ($_members as $userId) {
             $user = $tinebaseUser->getFullUserById($userId);

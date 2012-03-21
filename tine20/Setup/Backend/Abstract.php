@@ -176,7 +176,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         break;
                         
                     default:
-                        throw new Setup_Exception('Unsupported special type ' . strtolower($field->value['special']));                    
+                        throw new Setup_Exception('Unsupported special type ' . strtolower($field->value['special']));
                     }
             } else {
                 $value = $field->value;
@@ -267,7 +267,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function dropTable($_tableName, $_applicationId = NULL)
     {
-    	if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
         
@@ -310,7 +310,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropCol($_tableName, $_colName)
     {
         $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' DROP COLUMN ' . $this->_db->quoteIdentifier($_colName);
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
     
     /**
@@ -334,7 +334,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropPrimaryKey($_tableName)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
 
     /**
@@ -347,7 +347,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
                     . $this->getForeignKeyDeclarations($_declaration, $_tableName);
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
     
     /**
@@ -380,7 +380,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropIndex($_tableName, $_indexName)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `"  . $_indexName. "`" ;
-        $this->execQueryVoid($statement);    
+        $this->execQueryVoid($statement);
     }
 
     /**
@@ -438,7 +438,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
             $fieldType = $typeMapping['defaultType'];
             if (isset($typeMapping['declarationMethod'])) {
                 $fieldBuffer = call_user_func(array($this, $typeMapping['declarationMethod']), $_field, $_tableName);
-                $_buffer = array_merge($_buffer, $fieldBuffer); 
+                $_buffer = array_merge($_buffer, $fieldBuffer);
             } else {
                 if ($_field->length !== NULL) {
                     if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {

@@ -397,7 +397,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
      */
     public function updateProperties($mutations) 
     {
-        return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations); 
+        return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations);
     }
     
     protected function _getApplication()

@@ -342,7 +342,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.contextMenu = new Ext.menu.Menu({
             items:  this.action_remove
-        });        
+        });
     },
     
     /**
@@ -376,7 +376,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 return true;
             },
             grid: this
-        });        
+        });
     },
     
     /**

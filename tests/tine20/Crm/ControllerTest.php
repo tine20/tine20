@@ -50,9 +50,9 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -89,7 +89,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => Tinebase_DateTime::now(),
-        )); 
+        ));
         
         $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
@@ -103,7 +103,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => NULL,
-        )); 
+        ));
 
         $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -155,7 +155,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        )); 
+        ));
 
         $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -190,7 +190,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
     }
     
     /**
@@ -215,7 +215,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $createdNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('created');
         foreach ($notes as $note) {
             if ($note->note_type_id === $createdNoteType->getId()) {
-                $translatedMessage = $translate->_('created') . ' ' . $translate->_('by') . ' '; 
+                $translatedMessage = $translate->_('created') . ' ' . $translate->_('by') . ' ';
                 $this->assertEquals($translatedMessage.Zend_Registry::get('currentAccount')->accountDisplayName, $note->note);
             } else {
                 $this->assertEquals($this->objects['note']->note, $note->note);
@@ -284,7 +284,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      */
     public function testLinkedTasks()
-    {        
+    {
         $task = Tasks_Controller_Task::getInstance()->create($this->_objects['task']);
         
         // link task
@@ -298,7 +298,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
-        )); 
+        ));
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
         // check linked tasks
@@ -358,13 +358,13 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         Crm_Controller_Lead::getInstance()->delete($GLOBALS['Addressbook_ControllerTest']['leadId']);
 
         // purge all relations
-        $backend = new Tinebase_Relation_Backend_Sql();        
+        $backend = new Tinebase_Relation_Backend_Sql();
         $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $GLOBALS['Addressbook_ControllerTest']['leadId']);
 
         // delete contact
         Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
     }
     
@@ -392,7 +392,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
                 'field' => 'container_id', 
                 'operator' => 'specialNode', 
                 'value' => $container
-            ); 
+            );
         
         $filter = new Crm_Model_LeadFilter($filterData);
         

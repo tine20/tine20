@@ -23,7 +23,7 @@ interface Tinebase_User_LdapPlugin_Interface
      * @param  Tinebase_Ldap  $_ldap    the ldap resource
      * @param  array          $options  options used in connecting, binding, etc.
      */
-    public function __construct(Tinebase_Ldap $_ldap, $_options = null); 
+    public function __construct(Tinebase_Ldap $_ldap, $_options = null);
     
     /**
      * inspect data used to create user
@@ -73,5 +73,5 @@ interface Tinebase_User_LdapPlugin_Interface
      * 
      * @param Tinebase_Model_User  $_user  the user object
      */
-    public function inspectGetUserByProperty(Tinebase_Model_User $_user);    
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user);
 }  

@@ -99,7 +99,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -109,7 +109,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {            
+        if (self::$_instance === NULL) {
             self::$_instance = new Felamimail_Controller_Message();
         }
         
@@ -155,7 +155,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message  $_id
-     * @param string 						   $_partId
+     * @param string                            $_partId
      * @param boolean                          $_setSeen
      * @return Felamimail_Model_Message
      */
@@ -267,7 +267,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $this->_processForeignMessagePart($application, $preparedPart);
                     $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
                         'id'             => $_message->getId() . '_' . $partId,
-                        'contentType'	 => $contentType,
+                        'contentType'     => $contentType,
                         'preparedData'   => $preparedPart,
                     )));
                 }
@@ -306,7 +306,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 $partData = new Calendar_Model_iMIP(array(
                     'id'             => $_message->getId() . '_' . $_partId,
-                	'ics'            => $decodedContent,
+                    'ics'            => $decodedContent,
                     'method'         => (isset($parameters['method'])) ? $parameters['method'] : NULL,
                     'originator'     => $_message->from_email,
                     'userAgent'      => $userAgent,
@@ -727,7 +727,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
         
         $config = HTMLPurifier_Config::createDefault();
-        $config->set('HTML.DefinitionID', 'purify message body contents'); 
+        $config->set('HTML.DefinitionID', 'purify message body contents');
         $config->set('HTML.DefinitionRev', 1);
         $config->set('Cache.SerializerPath', $path);
         

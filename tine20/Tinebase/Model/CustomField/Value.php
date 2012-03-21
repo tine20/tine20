@@ -16,7 +16,7 @@
  * @subpackage  Record
  */
 class Tinebase_Model_CustomField_Value extends Tinebase_Record_Abstract 
-{    
+{
     protected $_identifier = 'id';
     
     /**

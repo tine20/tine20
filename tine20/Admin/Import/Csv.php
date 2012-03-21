@@ -31,7 +31,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         'accountHomeDirectoryPrefix'    => '',
         'accountEmailDomain'            => '',
         'samba'                         => '',
-        'userNameSchema'			    => 1,
+        'userNameSchema'                => 1,
     );
     
     /**
@@ -119,7 +119,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding record: ' . print_r($record->toArray(), TRUE));
                 
             // try to create record with password
-            if ($record->isValid()) {   
+            if ($record->isValid()) {
                 if (!$this->_options['dryrun']) {
                     $record = $this->_controller->create($record, $password, $password);
                 } else {

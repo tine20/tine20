@@ -17,7 +17,7 @@ Tine.Admin.sambaMachine.show = function() {
             app: app
         });
     } else {
-    	setTimeout ("Ext.getCmp('gridAdminComputers').getStore().load({ params: { start:0, limit:50 } })", 100);
+        setTimeout ("Ext.getCmp('gridAdminComputers').getStore().load({ params: { start:0, limit:50 } })", 100);
     }
     
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.sambaMachine.gridPanel, true);
@@ -38,7 +38,7 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     defaultSortInfo: {field: 'accountLoginName', direction: 'ASC'},
     evalGrants: false,
     gridConfig: {
-    	id: 'gridAdminComputers',
+        id: 'gridAdminComputers',
         autoExpandColumn: 'accountDisplayName'
     },
     

@@ -76,7 +76,7 @@ Tine.Phone.getPanel = function(){
     });
     treePanel.setRootNode(treeRoot);
     
-    Tine.Phone.loadPhoneStore();           
+    Tine.Phone.loadPhoneStore();
         
     /******** tree panel handlers ***********/
 
@@ -91,7 +91,7 @@ Tine.Phone.getPanel = function(){
         }
     }, this);
         
-    treePanel.on('beforeexpand', function(panel) {        
+    treePanel.on('beforeexpand', function(panel) {
         // expand and select first phone or root ('Phones') node
         if (panel.getSelectionModel().getSelectedNode() === null) {
             var phonesStore = Tine.Phone.loadPhoneStore(),
@@ -122,7 +122,7 @@ Tine.Phone.getPanel = function(){
         var settingsButton = Ext.getCmp('phone-settings-button');
         if (settingsButton) {
             if(node && node.id != 'root') {
-                settingsButton.setDisabled(false);                     
+                settingsButton.setDisabled(false);
             } else {
                 settingsButton.setDisabled(true);
             }
@@ -143,7 +143,7 @@ Tine.Phone.updatePhoneTree = function(store){
     translation.textdomain('Phone');
 
     // get tree root
-    var treeRoot = Ext.getCmp('phone-tree').getRootNode();    
+    var treeRoot = Ext.getCmp('phone-tree').getRootNode();
 
     // remove all children first
     treeRoot.eachChild(function(child){
@@ -163,7 +163,7 @@ Tine.Phone.updatePhoneTree = function(store){
             leaf: true
         });
         treeRoot.appendChild(node);
-    });    
+    });
 };
 
 /**************************** dialer form / function *******************************/
@@ -198,9 +198,9 @@ Tine.Phone.dialPhoneNumber = function(number) {
             failure: function(result, request){
                 // show error message?
             }
-        });                
+        });
 
-    } else {    
+    } else {
 
         // open dialer box (with phone and lines selection)
         var dialerPanel = new Tine.Phone.DialerPanel({
@@ -251,7 +251,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
     initComponent: function(){
         
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Phone');    
+        this.translation.textdomain('Phone');
         
         // set stores
         this.phoneStore = Tine.Phone.loadPhoneStore();
@@ -274,7 +274,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                 id: 'phoneId',
                 name: 'phoneId',
                 triggerAction: 'all',
-                listeners: {                
+                listeners: {
                     scope: this,
                     
                     // reload lines combo on change
@@ -302,7 +302,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         /******************* action buttons ********************/
         
         // cancel action
-        this.cancelAction = new Ext.Action({   
+        this.cancelAction = new Ext.Action({
             text: this.translation._('Cancel'),
             iconCls: 'action_cancel',
             handler : function(){
@@ -315,7 +315,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
             scope: this,
             text: this.translation._('Dial'),
             iconCls: 'action_DialNumber',
-            handler : function(){   
+            handler : function(){
                 var form = this.getForm();
                 
                 if (form.isValid()) {
@@ -340,7 +340,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
                             });
                         },
                         scope: this
-                    });                
+                    });
                 }
             }
         });
@@ -352,9 +352,9 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         
         /************** other initialisation ****************/
         
-        this.initMyFields.defer(300, this);        
+        this.initMyFields.defer(300, this);
 
-        Tine.Phone.DialerPanel.superclass.initComponent.call(this);        
+        Tine.Phone.DialerPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -371,8 +371,8 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         }
 
         // get combos
-        var phoneCombo = this.getForm().findField('phoneId'); 
-        var lineCombo = this.getForm().findField('lineId'); 
+        var phoneCombo = this.getForm().findField('phoneId');
+        var lineCombo = this.getForm().findField('lineId');
         
         // select first combo values
         if(! phoneCombo.getState() && this.phoneStore.getAt(0)) {
@@ -423,7 +423,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         
         // disable lineCombo if only 1 line available
         if (form) {
-            var lineCombo = form.findField('lineId'); 
+            var lineCombo = form.findField('lineId');
             lineCombo.setDisabled((this.linesStore.getCount() <= 1));
             
             // set first line
@@ -474,7 +474,7 @@ Tine.Phone.Main = {
     initComponent: function()
     {
         this.translation = new Locale.Gettext();
-        this.translation.textdomain('Phone');    
+        this.translation.textdomain('Phone');
         
         this.actions.dialNumber = new Ext.Action({
             text: this.translation._('Dial number'),
@@ -563,7 +563,7 @@ Tine.Phone.Main = {
             id: 'callhistoryQuickSearchField',
             width:240,
             emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
-        }); 
+        });
         quickSearchField.on('change', function(){
             this.store.load({});
         }, this);
@@ -634,21 +634,21 @@ Tine.Phone.Main = {
             options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;
             options.params.dir   = store.getSortState() ? store.getSortState().direction : this.paging.dir;
             options.params.start = options.params.start ? options.params.start : this.paging.start;
-            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;            
+            options.params.limit = options.params.limit ? options.params.limit : this.paging.limit;
             options.params.paging = Ext.copyTo({}, options.params, 'sort,dir,start,limit');
                         
             // add quicksearch and phone_id filter
             var quicksearchField = Ext.getCmp('callhistoryQuickSearchField');
-            var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;            
+            var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode() || null;
             
-            var filter = [{ 
+            var filter = [{
                    field: 'query',
                    operator: 'contains',
                    value: quicksearchField.getValue()
             }];
             
             if (node !== null && node.id != 'root') {
-                filter.push({ 
+                filter.push({
                     field: 'phone_id',
                     operator: 'equals',
                     value: node.id
@@ -691,7 +691,7 @@ Tine.Phone.Main = {
             displayInfo: true,
             displayMsg: this.translation._('Displaying calls {0} - {1} of {2}'),
             emptyMsg: this.translation._("No calls to display")
-        }); 
+        });
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel({
@@ -776,7 +776,7 @@ Tine.Phone.Main = {
     },
 
     show: function(_node) 
-    {    
+    {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {

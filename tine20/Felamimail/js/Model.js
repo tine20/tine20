@@ -416,7 +416,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
  * 
  * @return {Object}
  */
-Tine.Felamimail.Model.Account.getDefaultData = function() { 
+Tine.Felamimail.Model.Account.getDefaultData = function() {
     var defaults = (Tine.Felamimail.registry.get('defaults')) 
         ? Tine.Felamimail.registry.get('defaults')
         : {};
@@ -623,7 +623,7 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
  * 
  * @return {Object}
  */
-Tine.Felamimail.Model.Vacation.getDefaultData = function() { 
+Tine.Felamimail.Model.Vacation.getDefaultData = function() {
     return {
         days: 7,
         mime: 'multipart/alternative'
@@ -688,7 +688,7 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
  * 
  * @return {Object}
  */
-Tine.Felamimail.Model.Rule.getDefaultData = function() { 
+Tine.Felamimail.Model.Rule.getDefaultData = function() {
     return {
         enabled: true,
         conditions: [{

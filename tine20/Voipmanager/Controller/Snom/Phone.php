@@ -47,7 +47,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**
@@ -75,7 +75,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $phone = $this->_backend->get($_id);
         $this->_resolveRightsAndLines($phone);
         
-        return $phone;    
+        return $phone;
     }
     
     /**
@@ -89,7 +89,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $phone = $this->_backend->getByMacAddress($_macAddress);
         $this->_resolveRightsAndLines($phone);
         
-        return $phone;    
+        return $phone;
     }
 
     /**
@@ -208,7 +208,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
                 //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneSettings->toArray(), true));
                 $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
             } else {
-                $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);            
+                $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
             }
         
         }

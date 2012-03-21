@@ -24,7 +24,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
      * @return boolean
      */
     public function handle()
-    {        
+    {
         try {
             $opts = new Zend_Console_Getopt(
             array(
@@ -53,7 +53,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
-        	echo "Invalid usage: {$e->getMessage()}\n\n";
+            echo "Invalid usage: {$e->getMessage()}\n\n";
             echo $e->getUsageMessage();
             exit;
         }
@@ -85,6 +85,6 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
         
         $setupServer = new Setup_Frontend_Cli();
         #$setupServer->authenticate($opts->username, $opts->password);
-        return $setupServer->handle($opts);        
+        return $setupServer->handle($opts);
     }
 }

@@ -70,7 +70,7 @@ class Crm_AbstractTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        ));        
+        ));
     }
 
     /**
@@ -87,7 +87,7 @@ class Crm_AbstractTest extends PHPUnit_Framework_TestCase
             'percent'              => 70,
             'due'                  => Tinebase_DateTime::now()->addMonth(1),
             'summary'              => 'phpunit: crm test task',        
-        ));        
+        ));
     }
     
     /**

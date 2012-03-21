@@ -288,7 +288,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ]
                 });
             }
-        }); 
+        });
         // disable remove of group if equal to current primary group
         this.pickerGridGroups.selModel.on('beforerowselect', function (sm, index, keep, record) {
             if (record.data.id === this.getCurrentPrimaryGroupId()) {
@@ -335,7 +335,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 //                    layout: 'column'
 //                });
             },
-            onAddRecordFromCombo: function (recordToAdd) {            
+            onAddRecordFromCombo: function (recordToAdd) {
                 // check if already in
                 if (! this.recordStore.getById(recordToAdd.id)) {
                     this.recordStore.add([recordToAdd]);
@@ -348,7 +348,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // remove listeners for this grid selection model
         this.pickerGridRoles.selModel.purgeListeners();
         
-        return this.pickerGridRoles; 
+        return this.pickerGridRoles;
     },
     
     /**
@@ -593,7 +593,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
-                cm: new Ext.grid.ColumnModel([{ 
+                cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Alias'), 
                     dataIndex: 'email', 
@@ -612,7 +612,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply(commonConfig, {
-                cm: new Ext.grid.ColumnModel([{ 
+                cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Forward'), 
                     dataIndex: 'email', 
@@ -729,7 +729,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             plain: true,
             activeTab: 0,
-            items: [{               
+            items: [{
                 title: this.app.i18n.gettext('Account'),
                 autoScroll: true,
                 border: false,
@@ -750,7 +750,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.5,
                         listeners: {
                             render: function (field) {
-                                field.focus(false, 250); 
+                                field.focus(false, 250);
                                 field.selectText();
                             }
                         }
@@ -881,7 +881,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             scope: this,
                             select: function (combo, record) {
                                 // disable container_id combo if hidden
-                                var addressbookContainerCombo = this.getForm().findField('container_id'); 
+                                var addressbookContainerCombo = this.getForm().findField('container_id');
                                 addressbookContainerCombo.setDisabled(record.data.field1 === 'hidden');
                                 if (addressbookContainerCombo.getValue() === '') {
                                     addressbookContainerCombo.setValue(null);

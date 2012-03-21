@@ -127,7 +127,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                 $server['prefix'] = self::DEFAULT_PREFIX;
             }
             
-			$this->_redis->connect($server['host'], $server['port'], $server['timeout']);
+            $this->_redis->connect($server['host'], $server['port'], $server['timeout']);
         }
         
         $this->_redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);

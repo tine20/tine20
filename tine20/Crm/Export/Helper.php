@@ -3,7 +3,7 @@
  * Crm 
  *
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * Crm Ods generation class
  * 
  * @package     Crm
- * @subpackage	Export
+ * @subpackage    Export
  * 
  */
 class Crm_Export_Helper
@@ -68,7 +68,7 @@ class Crm_Export_Helper
                 if (isset($source['leadsource'])) {
                     $value = $source['leadsource'];
                 } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadsource id not found:' . $_record->leadsource_id); 
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadsource id not found:' . $_record->leadsource_id);
                     $value = '';
                 }
                 break;
@@ -78,7 +78,7 @@ class Crm_Export_Helper
                 if (isset($type['leadtype'])) {
                     $value = $type['leadtype'];
                 } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadtype id not found:' . $_record->leadtype_id); 
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadtype id not found:' . $_record->leadtype_id);
                     $value = '';
                 }
                 break;
@@ -90,7 +90,7 @@ class Crm_Export_Helper
                         $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status);
                         if ($idx) {
                             $status = $_resolvedRecords['tasksStatus'][$idx];
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE)); 
+                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE));
                             if ($status->is_open) {
                                 $value++;
                             }

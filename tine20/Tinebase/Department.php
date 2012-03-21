@@ -61,9 +61,9 @@ class Tinebase_Department extends Tinebase_Controller_Record_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() 
-    {     
+    {
         $this->_backend = new Tinebase_Department_Sql();
-        $this->_currentAccount = Tinebase_Core::getUser();   
+        $this->_currentAccount = Tinebase_Core::getUser();
     }    
     
     /**

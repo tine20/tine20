@@ -166,7 +166,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
             return false;
         }
         
-        return true; 
+        return true;
     }
 
     /**

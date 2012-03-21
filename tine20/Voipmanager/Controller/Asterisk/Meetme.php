@@ -17,7 +17,7 @@
  * @subpackage  Controller
  */
 class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abstract
-{    
+{
     /**
      * holds the instance of the singleton
      *
@@ -41,7 +41,7 @@ class Voipmanager_Controller_Asterisk_Meetme extends Voipmanager_Controller_Abst
      *
      */
     private function __clone() 
-    {        
+    {
     }
             
     /**

@@ -110,14 +110,14 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         if ($this->created_by && $_resolveCreator) {
             //resolve creator; return default NonExistentUser-Object if creator cannot be resolved =>
             //@todo perhaps we should add a "getNonExistentUserIfNotExists" parameter to Tinebase_User::getUserById 
-        	try {
+            try {
                 $creator = Tinebase_User::getInstance()->getUserById($this->created_by);
             }
             catch (Tinebase_Exception_NotFound $e) {
                 $creator = Tinebase_User::getInstance()->getNonExistentUser();
             }
              
-            $result['created_by'] = $creator->accountDisplayName; 
+            $result['created_by'] = $creator->accountDisplayName;
         }
         
         return $result;

@@ -63,7 +63,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {      
+    {
     }
     
     /**

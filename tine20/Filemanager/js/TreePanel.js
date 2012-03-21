@@ -159,7 +159,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 this.tree.eventModel.disable();
                 this.proxy.update("");
                 data.node.ui.appendDDGhost(this.proxy.ghost.dom);
-                this.tree.fireEvent("startdrag", this.tree, data.node, e); 
+                this.tree.fireEvent("startdrag", this.tree, data.node, e);
             }
         };
         
@@ -422,7 +422,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             grid.action_upload.disable();
         }
         
-        grid.currentFolderNode = node; 
+        grid.currentFolderNode = node;
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
     
     },
@@ -619,7 +619,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onUploadComplete: function(upload, file) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
-            treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
+            treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
         
      // check if we are responsible for the upload
         if (upload.fmDirector != treePanel) return;
@@ -723,7 +723,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 treePanel.onUploadComplete(upload, fileRecord);
             }
             else if(change == 'uploadfinished') {
-                rowsToUpdate.get(0).set('size', upload.fileSize);    
+                rowsToUpdate.get(0).set('size', upload.fileSize);
                 rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));
             }
             rowsToUpdate.get(0).afterEdit();
@@ -762,7 +762,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 ).setIcon(Ext.MessageBox.ERROR);
             
             return;
-        };    
+        };
       
         var files = fileSelector.getFileList(),
             filePathsArray = [],

@@ -54,11 +54,11 @@ Tine.Crm.LeadType.Model.getDefaultData = function() {
  * @return  {Ext.data.JsonStore}
  */
 Tine.Crm.LeadType.getStore = function() {
-	
-	var store = Ext.StoreMgr.get('CrmLeadTypeStore');
-	if (!store) {
+    
+    var store = Ext.StoreMgr.get('CrmLeadTypeStore');
+    if (!store) {
 
-		store = new Ext.data.JsonStore({
+        store = new Ext.data.JsonStore({
             fields: Tine.Crm.LeadType.Model,
             baseParams: {
                 method: 'Crm.getLeadtypes',
@@ -72,12 +72,12 @@ Tine.Crm.LeadType.getStore = function() {
         });
         
         if ( Tine.Crm.registry.get('leadtypes') ) {
-        	store.loadData(Tine.Crm.registry.get('leadtypes'));
+            store.loadData(Tine.Crm.registry.get('leadtypes'));
         }
-        	
+            
         Ext.StoreMgr.add('CrmLeadTypeStore', store);
-	}
-	return store;
+    }
+    return store;
 };
 
 /**
@@ -116,13 +116,13 @@ Tine.Crm.LeadType.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     
     getColumnModel: function() {
         return new Ext.grid.ColumnModel([
-        { 
+        {
             id:'leadtype_id', 
             header: "id", 
             dataIndex: 'id', 
             width: 25, 
             hidden: true 
-        }, { 
+        }, {
             id:'leadtype', 
             header: 'entries', 
             dataIndex: 'leadtype', 

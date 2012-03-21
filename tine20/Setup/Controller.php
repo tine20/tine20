@@ -564,8 +564,8 @@ class Setup_Controller
             try {
                 $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
                 if (empty($applicationTable)) {
-					$result = TRUE;
-				}
+                    $result = TRUE;
+                }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
                 $result = TRUE;

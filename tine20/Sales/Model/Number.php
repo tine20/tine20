@@ -3,7 +3,7 @@
  * class to hold number data
  * 
  * @package     Sales
- * @subpackage	Model
+ * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,10 +15,10 @@
  * class to hold number data
  * 
  * @package     Sales
- * @subpackage	Model
+ * @subpackage    Model
  */
 class Sales_Model_Number extends Tinebase_Record_Abstract
-{  
+{
     /**
      * constant for contract type
      *
@@ -31,7 +31,7 @@ class Sales_Model_Number extends Tinebase_Record_Abstract
      * 
      * @var string
      */    
-    protected $_identifier = 'id';    
+    protected $_identifier = 'id';
     
     /**
      * application the record belongs to

@@ -37,9 +37,9 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_PdfTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_PdfTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -48,7 +48,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function setUp()
-    {        
+    {
        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Crm', 
@@ -74,7 +74,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => Tinebase_DateTime::now(),
-        )); 
+        ));
 
         $this->objects['leadWithLink'] = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit with contact',
@@ -88,7 +88,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'turnover'      => '200000',
             'probability'   => 50,
             'end_scheduled' => Tinebase_DateTime::now(),
-        )); 
+        ));
         
        $this->objects['linkedContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -129,7 +129,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'tel_home'              => '+49TELHOME',
             'tel_pager'             => '+49TELPAGER',
             'tel_work'              => '+49TELWORK',
-        ));             	
+        ));
 
         $this->objects['linkedTask'] = new Tasks_Model_Task(array(
             'summary'               => 'task test',
@@ -159,18 +159,18 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete the db entries
-        try { 
+        try {
             Crm_Controller_Lead::getInstance()->delete($this->objects['leadWithLink']);
         } catch ( Exception $e ) {
             // access denied ?
         }
         
-        try { 
+        try {
             Addressbook_Controller_Contact::getInstance()->delete($this->objects['linkedContact']);
         } catch ( Exception $e ) {
             // access denied ?
         }
-    	
+        
     }
     
     /**
@@ -179,13 +179,13 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadPdf()
     {
-		$pdf = new Crm_Export_Pdf();
-		$pdf->generate($this->objects['lead']);
-		$pdfOutput = $pdf->render();
-		
-		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput)); 
-		$this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput)); 
-		$this->assertEquals(1, preg_match("/PHPUnit/", $pdfOutput));
+        $pdf = new Crm_Export_Pdf();
+        $pdf->generate($this->objects['lead']);
+        $pdfOutput = $pdf->render();
+        
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput));
+        $this->assertEquals(1, preg_match("/Lead Description/", $pdfOutput));
+        $this->assertEquals(1, preg_match("/PHPUnit/", $pdfOutput));
     }
 
     /**
@@ -194,7 +194,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testLeadPdfLinkedContact()
     {
-    	// create lead + contact + link    
+        // create lead + contact + link    
         $lead = Crm_Controller_Lead::getInstance()->get($this->objects['leadWithLink']->getId());
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
@@ -208,18 +208,18 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         ));
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
-    	$pdf = new Crm_Export_Pdf();
+        $pdf = new Crm_Export_Pdf();
         $pdf->generate($lead);
         $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");
                 
-        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated");
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact data/fullname found");
 
         // purge all relations
-        $backend = new Tinebase_Relation_Backend_Sql();                
-        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());    
+        $backend = new Tinebase_Relation_Backend_Sql();
+        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());
     }
 
     /**
@@ -250,19 +250,19 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
                 
         //$pdf->save("test.pdf");
                 
-        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated"); 
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated");
         $this->assertEquals(1, preg_match("/".$task->summary."/", $pdfOutput), "no summary found");
                 
         // remove
         Tasks_Controller_Task::getInstance()->delete($task->getId());
         
         // purge all relations
-        $backend = new Tinebase_Relation_Backend_Sql();        
+        $backend = new Tinebase_Relation_Backend_Sql();
         $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());
     }
     
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Export_PdfTest::main') {
     Addressbook_ControllerTest::main();

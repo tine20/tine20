@@ -34,15 +34,15 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
      * @var string
      */
     protected $_tableName = 'scheduler';
-	
-	/**
+    
+    /**
      * DB ressource
      *
      * @var mixed $_db
      */
     protected $_dbAdapter = null;
 
-	/**
+    /**
      * Constructor
      * 
      * @param array $options Backend options
@@ -50,50 +50,50 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
     public function __construct(array $options = array())
     {
         if (is_array($options)) {
-			$this->setOptions($options);
-		}
-	}
-	
-	/**
+            $this->setOptions($options);
+        }
+    }
+    
+    /**
      * Initialize table name
      *
      * @return void
      */
-	public function setTableName($tableName)
-	{
-		$this->_tableName = $tableName;
-	}
-	
-	/**
+    public function setTableName($tableName)
+    {
+        $this->_tableName = $tableName;
+    }
+    
+    /**
      * get table name
      *
      * @return 
      */
-	public function getTableName()
-	{
-		return $this->_tableName;
-	}
-	
-	/**
+    public function getTableName()
+    {
+        return $this->_tableName;
+    }
+    
+    /**
      * Initialize DbAdapter name
      *
      * @return void
      */
-	public function setDbAdapter($dbAdapter)
-	{
-		$this->_dbAdapter = $dbAdapter;
-	}
-	
-	/**
+    public function setDbAdapter($dbAdapter)
+    {
+        $this->_dbAdapter = $dbAdapter;
+    }
+    
+    /**
      * get db adapter
      *
      * @return Zend_Db_Adapter_Abstract
      */
-	public function getDbAdapter()
-	{
-		return $this->_dbAdapter;
-	}
-	
+    public function getDbAdapter()
+    {
+        return $this->_dbAdapter;
+    }
+    
     /**
      * Sets the remaining tasks to perform.
      * 
@@ -125,7 +125,7 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
                     'hours'      =>    $task->getRule('hours')->getValue(),
                     'minutes'    =>    $task->getRule('minutes')->getValue(),
                     'requests'   =>    $requests
-                ); 
+                );
                 
                 $db->insert($this->getTableName(), array('name' => $name, 'data' => Zend_Json::encode($data)));
             }
@@ -146,15 +146,15 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
     {
         $select = $this->getDbAdapter()->select();
         
-		$select->from($this->getTableName());	   
+        $select->from($this->getTableName());
         $stmt = $this->getDbAdapter()->query($select);
-    	$result = $stmt->fetchAll();
-		
-    	if (empty($result)) {
-    	    return array();
-    	}
-    	    	
-    	$class = $this->getTaskClass();
+        $result = $stmt->fetchAll();
+        
+        if (empty($result)) {
+            return array();
+        }
+                
+        $class = $this->getTaskClass();
         
         foreach ($result as $item) {
             $data = Zend_Json::decode($item['data']);
@@ -162,15 +162,15 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
             foreach ($data['requests'] as $request) {
                 $taskClass->addRequest($request['controller'], $request['action'], $request['params']);
             }
-            $tasks[$item['name']] = $taskClass;            
+            $tasks[$item['name']] = $taskClass;
         }
         
         if (!is_array($tasks)) {
             return array();
         }
-		
-		return $tasks;
-	}
+        
+        return $tasks;
+    }
 
     /**
      * Clears all remaining tasks in the queue.

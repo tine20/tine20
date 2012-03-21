@@ -157,7 +157,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         $this->_config['domain'] = !empty($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : null;
         
         // add allowed domains
-        if (! empty($smtpConfig['primarydomain'])) { 
+        if (! empty($smtpConfig['primarydomain'])) {
             $this->_config['alloweddomains'] = array($smtpConfig['primarydomain']);
             if (! empty($smtpConfig['secondarydomains'])) {
                 // merge primary and secondary domains and split secondary domains + trim whitespaces
@@ -296,7 +296,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
      * @return Zend_Db_Select
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
+    {
         // _userTable.emailUserId=_destinationTable.emailUserId
         $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']);
         $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);

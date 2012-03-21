@@ -371,7 +371,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->_listOfRecords);    
+        return new ArrayIterator($this->_listOfRecords);
     }
 
     /**
@@ -694,7 +694,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function sortByPagination($_pagination)
     {
         if ($_pagination !== NULL && $_pagination->sort) {
-            $sortField = is_array($_pagination->sort) ? $_pagination->sort[0] : $_pagination->sort; 
+            $sortField = is_array($_pagination->sort) ? $_pagination->sort[0] : $_pagination->sort;
             $this->sort($sortField, ($_pagination->dir) ? $_pagination->dir : 'ASC');
         }
         

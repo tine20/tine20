@@ -77,7 +77,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         // TODO is edit grant required?
-        this.action_changecolor = new Ext.Action({     
+        this.action_changecolor = new Ext.Action({
             text: _('Set color'),
             iconCls: 'action_changecolor',
 //            requiredGrant: 'editGrant',
@@ -190,7 +190,7 @@ Tine.widgets.tree.ContextMenu = {
                 // TODO try to generalize this and move app specific stuff to app
                 
                 if (this.backendModel == 'Node') {
-                    params.application = this.scope.app.appName || this.scope.appName;                            
+                    params.application = this.scope.app.appName || this.scope.appName;
                     var filename = parentNode.attributes.nodeRecord.data.path + '/' + _text;
                     params.filename = filename;
                     params.type = 'folder';
@@ -268,7 +268,7 @@ Tine.widgets.tree.ContextMenu = {
                             newName: _text
                         };
                         
-                        params.application = this.scope.app.appName || this.scope.appName;                                
+                        params.application = this.scope.app.appName || this.scope.appName;
 
                         if (this.backendModel == 'Node') {
                             var filename = node.attributes.path;
@@ -277,7 +277,7 @@ Tine.widgets.tree.ContextMenu = {
                             var targetFilename = "/";
                             var sourceSplitArray = filename.split("/");
                             for (var i=1; i<sourceSplitArray.length-1; i++) {
-                                targetFilename += sourceSplitArray[i] + '/'; 
+                                targetFilename += sourceSplitArray[i] + '/';
                             }
                             
                             params.destinationFilenames = [targetFilename + _text];
@@ -286,7 +286,7 @@ Tine.widgets.tree.ContextMenu = {
                         
                         // TODO try to generalize this
                         if (this.backendModel == 'Container') {
-                        	params.containerId = node.attributes.container.id;
+                            params.containerId = node.attributes.container.id;
                         } else if (this.backendModel == 'Folder') {
                             var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                             params.oldGlobalName = folder.get('globalname');
@@ -297,11 +297,11 @@ Tine.widgets.tree.ContextMenu = {
                             params: params,
                             scope: this,
                             success: function(_result, _request){
-                        	
-                        		var nodeData = Ext.util.JSON.decode(_result.responseText);                        		
-                        		node.setText(_text);
+                            
+                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+                                node.setText(_text);
                                 
-                                this.scope.fireEvent('containerrename', nodeData, node, _text);                               
+                                this.scope.fireEvent('containerrename', nodeData, node, _text);
                                                               
                             },
                             failure: function(result, request) {
@@ -342,8 +342,8 @@ Tine.widgets.tree.ContextMenu = {
                     
                     if (this.backendModel == 'Node') {
                                            
-                        var filenames = [node.attributes.path];                                              
-                        params.application = this.scope.app.appName || this.scope.appName;    
+                        var filenames = [node.attributes.path];
+                        params.application = this.scope.app.appName || this.scope.appName;
                         params.filenames = filenames;
                         params.method = this.backend + ".deleteNodes";
                     
@@ -491,7 +491,7 @@ Tine.widgets.tree.ContextMenu = {
                 node.select();
                 // update grid
                 tree.filterPlugin.onFilterChange();
-            });                    
+            });
         }
     }
     

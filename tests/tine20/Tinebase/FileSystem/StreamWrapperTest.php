@@ -35,9 +35,9 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filesystem streamwrapper tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filesystem streamwrapper tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -163,7 +163,7 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     
     public function testRename()
     {
-        $testPath = $this->testMkdir();        
+        $testPath = $this->testMkdir();
         $this->testCreateFile();
         
         $testPath2 = $testPath . '/RENAMED';
@@ -177,8 +177,8 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(in_array('phpunit2.txt', $children));
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Filesystem_StreamWrapperTest::main') {
     Tinebase_Filesystem_StreamWrapperTest::main();

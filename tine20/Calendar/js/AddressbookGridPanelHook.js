@@ -98,7 +98,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
             cp = ms.getCenterPanel(),
             cont = this.getSelectionsAsArray(),
             myAccount = Tine.Tinebase.registry.get('currentAccount'),
-            attendee = []; 
+            attendee = [];
         
         attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
             user_type: 'user',
@@ -110,7 +110,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
             // skip adding contact of current user twice
             if (myAccount.accountId == contact.account_id) return true;
             if(contact.account_id) {
-            	var data = {user_id: contact}
+                var data = {user_id: contact}
             } else {    // allow edit in attendeeGridPanel if no account or account belongs to current User
                 var data = {user_id: contact, status_authkey: 1}
             }
@@ -128,7 +128,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
     onUpdateEvent: function() {
         var cont = this.getSelectionsAsArray();
         
-        var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});        
+        var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});
     },
     
     /**
@@ -158,7 +158,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
         }
         
         if (registeredActions.indexOf(this.newEventAction) < 0) {
-        	actionUpdater.addActions([this.newEventAction]);
+            actionUpdater.addActions([this.newEventAction]);
         }        
     }
 

@@ -52,7 +52,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     selectInitialNode: function() {
         var initialNode = (this.initialNodeId !== null) ? this.getNodeById(this.initialNodeId) : this.getRootNode();
-    	this.fireEvent('click', initialNode);
+        this.fireEvent('click', initialNode);
     },
     
     /**
@@ -61,8 +61,8 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initTreeNodes: function() {
-    	
-    	// general preferences are tree root
+        
+        // general preferences are tree root
         var treeRoot = new Ext.tree.TreeNode({
             text: _('General Preferences'),
             id: 'Tinebase',
@@ -79,7 +79,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 //        new Ext.tree.TreeSorter(this, {
 //            folderSort: true,
 //            dir: "asc"
-//        });        
+//        });
 
         // add "My Profile"
         if (Tine.Tinebase.common.hasRight('manage_own_profile', 'Tinebase')) {

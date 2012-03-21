@@ -34,7 +34,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
      */
     initComponent: function() {
         this.items = [this.getWizard()];
-		this.title = _('Registration Wizard');
+        this.title = _('Registration Wizard');
         Tine.Tinebase.UserRegistration.superclass.initComponent.call(this);
         
     },
@@ -62,8 +62,8 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             },
             
             success: function(result, request) {
-            	Ext.getCmp('accountLoginName').setValue(Ext.util.JSON.decode(result.responseText));
-            	this.registrationData.accountLoginName = Ext.util.JSON.decode(result.responseText);
+                Ext.getCmp('accountLoginName').setValue(Ext.util.JSON.decode(result.responseText));
+                this.registrationData.accountLoginName = Ext.util.JSON.decode(result.responseText);
                 //accountLoginName.setValue( Ext.util.JSON.decode(result.responseText));
                 // hack to detect user change
                 //accountLoginName.originalValue = accountLoginName.getValue();
@@ -93,8 +93,8 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
             allowBlank: true
         });
         accountFirstName.on('blur', function(textField){
-        	this.registrationData.accountFirstName = textField.getValue();
-        	this.getSuggestedUsername();
+            this.registrationData.accountFirstName = textField.getValue();
+            this.getSuggestedUsername();
         }, this);
         
         var accountLastName = new Ext.form.TextField({
@@ -119,7 +119,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
         }, this);
         accountLoginName.on('change', function(accountLoginName) {
             //console.log('hallo');
-        }, this);        
+        }, this);
 
         var accountEmailAddress = new Ext.form.TextField({
             fieldLabel: _('Emailaddress'),
@@ -189,39 +189,39 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                     fn: function(currentItem, nextItem, forward) {
                         switch(currentItem.id) {
                             case 'cardNames':
-                            	// check valid username
-                            	//console.log('checking username .... ' + this.accountLoginName );
-                            	//-- i'll set it to true for the moment (till the synchronous ajax function works)                            	
-								//var validUsername = false;
-                            	var validUsername = true;
-                            	
-/*								if ( this.registrationData.accountLoginName ) {
-					                Ext.Ajax.request({
-					                    url: 'index.php',
-					                    params: {
-					                        method: 'Tinebase_UserRegistration.checkUniqueUsername',
-					                        username: this.registrationData.accountLoginName
-					                    },
+                                // check valid username
+                                //console.log('checking username .... ' + this.accountLoginName );
+                                //-- i'll set it to true for the moment (till the synchronous ajax function works)                                
+                                //var validUsername = false;
+                                var validUsername = true;
+                                
+/*                                if ( this.registrationData.accountLoginName ) {
+                                    Ext.Ajax.request({
+                                        url: 'index.php',
+                                        params: {
+                                            method: 'Tinebase_UserRegistration.checkUniqueUsername',
+                                            username: this.registrationData.accountLoginName
+                                        },
 
-					                    success: function(result, request) {
-					                    	// get result
-					                    	if ( Ext.util.JSON.decode(result.responseText) == true ) {
-					                    		validUsername = true;
-					                    	}
-					                    },
+                                        success: function(result, request) {
+                                            // get result
+                                            if ( Ext.util.JSON.decode(result.responseText) == true ) {
+                                                validUsername = true;
+                                            }
+                                        },
 
-					                    scope: this
-					                });
-								}
+                                        scope: this
+                                    });
+                                }
 
-                				if ( !this.registrationData.accountLoginName || validUsername !== true) {
+                                if ( !this.registrationData.accountLoginName || validUsername !== true) {
                                     Ext.Msg.show({
-										title:'Login name',
-										msg: 'The login name you chose is not valid. Please choose a valid login name.',
-										buttons: Ext.Msg.OK,
-										//fn: processResult,
-										animEl: 'elId',
-										icon: Ext.MessageBox.INFO
+                                        title:'Login name',
+                                        msg: 'The login name you chose is not valid. Please choose a valid login name.',
+                                        buttons: Ext.Msg.OK,
+                                        //fn: processResult,
+                                        animEl: 'elId',
+                                        icon: Ext.MessageBox.INFO
                                     });
                                     return false;
                                 }*/
@@ -233,18 +233,18 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                 'activate': {
                     fn: function(currentItem) {
                         //Ext.MessageBox.alert('Wizard', 'Entering ' + currentItem.id);
-                    	
-                    	if ( currentItem.id === 'card-1') {
-                    		// check if all fields are filled in
-                    		if (  !this.registrationData.accountFirstName || 
-                    		      !this.registrationData.accountLastName ||
+                        
+                        if ( currentItem.id === 'card-1') {
+                            // check if all fields are filled in
+                            if (  !this.registrationData.accountFirstName || 
+                                  !this.registrationData.accountLastName ||
                                   !this.registrationData.accountEmailAddress ||
                                   !this.registrationData.accountLoginName ) {
                                 Ext.MessageBox.alert('Wizard', 'Please fill in all registration Fields.');
                                 this.wizard.setCurrentStep(this.wizard.getCurrentStep()-1);
                             }
                         }
-                    	
+                        
                     },
                     scope: this
                 },
@@ -272,7 +272,7 @@ Tine.Tinebase.UserRegistration = Ext.extend(Ext.Window, {
                             },
                             failure: function(result, request) {
                                 this.close();
-                            	var response = Ext.util.JSON.decode(result.responseText);
+                                var response = Ext.util.JSON.decode(result.responseText);
                                 Ext.MessageBox.alert('Failed', response.msg );
                             },
                             scope: this

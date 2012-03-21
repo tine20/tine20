@@ -163,7 +163,7 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
                   ]
              });
              Ext.getCmp('sipgate-number-field').bindStore(newStore);
-         }); 
+         });
          
         this.chooseField = new Ext.form.ComboBox({
             autoSelect: true,

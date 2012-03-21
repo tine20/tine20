@@ -63,7 +63,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      *
      * @var string
      */
-    protected $_application = 'Tinebase';    
+    protected $_application = 'Tinebase';
     
     /**
      * preference names that have no default option
@@ -147,7 +147,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         } else {
             // only admins can search for other users prefs
             $accountFilter = $_filter->getAccountFilter();
-            $accountFilterValue = $accountFilter->getValue(); 
+            $accountFilterValue = $accountFilter->getValue();
             if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                 if (!Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
                     return new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
@@ -481,7 +481,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // get default pref
         if (! in_array($_preference->name, $this->_skipDefaultOption)) {
-            $default = $this->_getDefaultPreference($_preference->name); 
+            $default = $this->_getDefaultPreference($_preference->name);
             
             // check if value is in options and use that label
             $valueLabel = $default->value;

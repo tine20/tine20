@@ -60,21 +60,21 @@ class Calendar_Setup_Update_Release0 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-    	$select = $this->_db->select()
-    	   ->distinct()
-    	   ->from(array('attendee' => SQL_TABLE_PREFIX . 'cal_attendee'), 'user_id')
-    	   ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), $this->_db->quoteIdentifier('attendee.user_id') . ' = ' . $this->_db->quoteIdentifier('contacts.account_id'), 'id')
-    	   ->where('user_type = "user"');
-    	
+        $select = $this->_db->select()
+           ->distinct()
+           ->from(array('attendee' => SQL_TABLE_PREFIX . 'cal_attendee'), 'user_id')
+           ->join(array('contacts' => SQL_TABLE_PREFIX . 'addressbook'), $this->_db->quoteIdentifier('attendee.user_id') . ' = ' . $this->_db->quoteIdentifier('contacts.account_id'), 'id')
+           ->where('user_type = "user"');
+        
         $currentAttendeeIds = $this->_db->fetchAssoc($select);
         
         foreach ($currentAttendeeIds as $attender) {
-        	$attenderAccountId = $attender['user_id'];
-        	$attenderContactId = $attender['id'];
-        	
-        	$this->_db->update(SQL_TABLE_PREFIX . 'cal_attendee', array('user_id' => $attenderContactId), $this->_db->quoteIdentifier('user_id') . ' = ' . $attenderAccountId);
+            $attenderAccountId = $attender['user_id'];
+            $attenderContactId = $attender['id'];
+            
+            $this->_db->update(SQL_TABLE_PREFIX . 'cal_attendee', array('user_id' => $attenderContactId), $this->_db->quoteIdentifier('user_id') . ' = ' . $attenderAccountId);
         }
-    	
+        
         $this->setApplicationVersion('Calendar', '0.3');
     }
     
@@ -182,7 +182,7 @@ class Calendar_Setup_Update_Release0 extends Setup_Update_Abstract
             </declaration>
         </table>';
         
-        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition); 
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
         $this->_backend->createTable($table);
         
         $calendarApp = Tinebase_Application::getInstance()->getApplicationByName('Calendar');

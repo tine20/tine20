@@ -40,7 +40,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -97,7 +97,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal addressbook"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-        	'owner_id'          => $_account,
+            'owner_id'          => $_account,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
         ));

@@ -24,8 +24,8 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      */
     protected $_config = array(
         'encryptionType'    => 'md5',
-        'emailGID'			=> null,
-        'domain'			=> null
+        'emailGID'            => null,
+        'domain'            => null
     );
     
     /**
@@ -47,7 +47,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      */
     protected $_requiredObjectClass = array(
         'dbmailUser'
-    );    
+    );
     
     protected $_backendType = Tinebase_Config::IMAP;
     

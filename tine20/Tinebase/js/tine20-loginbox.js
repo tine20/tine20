@@ -447,8 +447,8 @@ Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
         frame.id = transactionId;
         frame.name = requestData;
         frame.style.position = 'absolute';
-        frame.style.top = '-10000px'; 
-        frame.style.left = '-10000px'; 
+        frame.style.top = '-10000px';
+        frame.style.left = '-10000px';
         frame.style.visability = 'hidden';
         frame.src = this.proxyUrl + '?' + new Date().getTime();
         

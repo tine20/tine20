@@ -132,7 +132,7 @@ interface Setup_Backend_Interface
      * @param string $_tableName
      * @return boolean
      */
-    public function columnExists($_columnName, $_tableName);    
+    public function columnExists($_columnName, $_tableName);
 
     /**
      * /***checks a given database table version 

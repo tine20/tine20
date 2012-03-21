@@ -20,7 +20,7 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
 {
     protected $_applicationName = 'Calendar';
     
-    protected $_model = 'Event';    
+    protected $_model = 'Event';
     
     /**
      * (non-PHPdoc)

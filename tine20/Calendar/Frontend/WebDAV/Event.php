@@ -173,7 +173,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
             )));
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added organizer as attendee ");            
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added organizer as attendee ");
         }
         
         if (empty($_event->transp)) {
@@ -364,7 +364,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             }
         }
         
-        return '"' . sha1($this->getRecord()->getId() . $this->getLastModified()) . $attendeeHash . '"'; 
+        return '"' . sha1($this->getRecord()->getId() . $this->getLastModified()) . $attendeeHash . '"';
     }
     
     /**

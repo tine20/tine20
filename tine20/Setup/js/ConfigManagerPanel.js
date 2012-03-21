@@ -370,7 +370,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
     /**
      * @private
      */
-    initActions: function () {       
+    initActions: function () {
         this.action_downloadConfig = new Ext.Action({
             text: this.app.i18n._('Download config file'),
             iconCls: 'setup_action_download_config',

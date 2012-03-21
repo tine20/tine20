@@ -67,8 +67,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
     protected function setUp()
-    {   	
-        parent::setUp();	
+    {
+        parent::setUp();
         
         // replace email to make current user organizer and attendee
         $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
@@ -143,7 +143,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         Calendar_Controller_Event::getInstance()->createRecurException($recurSet[3]);
         
         // reread event from database again
-        $eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);        
+        $eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);
         #var_dump($eventDaily->toArray());
         
         $this->objects['eventDaily'] = $eventDaily;
@@ -244,7 +244,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $dom     = $this->_getOutputDOMDocument();
         $appData = $dom->getElementsByTagNameNS('uri:AirSync', 'ApplicationData')->item(0);
 
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS)); 
+        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
         
         $controller->appendXML($appData, null, $allDayEvent->getId(), array());
         
@@ -278,7 +278,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());     
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());
         
         $controller->appendXML($appData, null, $this->objects['eventDaily']->getId(), array());
         

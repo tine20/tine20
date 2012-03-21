@@ -81,7 +81,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -91,7 +91,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {            
+        if (self::$_instance === NULL) {
             self::$_instance = new Felamimail_Controller_Account();
         }
         
@@ -167,7 +167,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $this->_addSystemAccountConfigValues($record);
         }
         
-        return $record;    
+        return $record;
     }
     
     /**
@@ -225,7 +225,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         if (! $_record->user || ! $_record->password) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No username or password given for new account.');
-            return;    
+            return;
         }
         
         // add imap & smtp credentials
@@ -410,7 +410,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to add accounts!");
                 }
-                break;                
+                break;
             case 'update':
             case 'delete':
                 if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
@@ -859,7 +859,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if ($_username !== NULL) {
                 $message .= ' for username ' . $_username;
             } 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);    
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);
         }
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
@@ -918,7 +918,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_addUserValues($_account);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE));
     }
     
     /**

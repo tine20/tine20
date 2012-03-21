@@ -41,9 +41,9 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_Json_ContainerTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_Json_ContainerTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -71,7 +71,7 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -126,7 +126,7 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $container = Tinebase_Container::getInstance()->getContainerById($container['id']);    
+        $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
     
     /**
@@ -189,8 +189,8 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_ContainerTest::main') {
     Tinebase_Frontend_Json_ContainerTest::main();

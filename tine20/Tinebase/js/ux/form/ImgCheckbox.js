@@ -41,15 +41,15 @@ Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
     
     setValue:function(_value) {
 
-			if('string' == typeof _value) 
+            if('string' == typeof _value) 
             {
                 this.trueValue = _value === this.submitTrueValue;
-			} else 
+            } else 
             {
                 this.trueValue = !(!_value);
             }
 
-			this.newRender();
+            this.newRender();
 
         this.fireEvent('check', this, this.trueValue);
 
@@ -58,21 +58,21 @@ Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
 
     updateHiddenValue:function() {
         this.el.dom.value = (
-	  	  ((this.trueValue =='1')? this.submitTrueValue : this.submitFalseValue)
+            ((this.trueValue =='1')? this.submitTrueValue : this.submitFalseValue)
         );
     },
     
         
-	newRender: function() {
+    newRender: function() {
 
         if(this.rendered && this.cbEl) {
             this.updateHiddenValue();
             this.cbEl.removeClass([this.falseCls, this.trueCls]);
             this.cbEl.addClass(
-    			 ((this.trueValue == '1')? this.trueCls : this.falseCls)
-			);
+                 ((this.trueValue == '1')? this.trueCls : this.falseCls)
+            );
         }
-	 },
+     },
 
 
     onDisable:function() {
@@ -90,12 +90,12 @@ Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
             return;
         }
         if(!e.isNavKeyPress()) {
-				switch (this.trueValue) {
-				case '0':     this.setValue('1'); break;
-				case false:   this.setValue('1'); break;                
-				case '1':     this.setValue('0'); break;
-				case true:    this.setValue('0'); break;                
-				}
+                switch (this.trueValue) {
+                case '0':     this.setValue('1'); break;
+                case false:   this.setValue('1'); break;                
+                case '1':     this.setValue('0'); break;
+                case true:    this.setValue('0'); break;                
+                }
         }
     },
     

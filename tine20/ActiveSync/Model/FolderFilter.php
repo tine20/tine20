@@ -17,7 +17,7 @@
  * @package     ActiveSync
  */
 class ActiveSync_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
-{    
+{
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
@@ -40,5 +40,5 @@ class ActiveSync_Model_FolderFilter extends Tinebase_Model_Filter_FilterGroup
         'device_id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'class'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'folderid'             => array('filter' => 'Tinebase_Model_Filter_Id')
-    );    
+    );
 }

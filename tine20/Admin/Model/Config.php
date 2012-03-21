@@ -19,7 +19,7 @@
  * @todo        refactor to use new config implementation
  */
 class Admin_Model_Config extends Tinebase_Record_Abstract 
-{   
+{
     /**
      * default internal addressbook for new users/groups
      * 

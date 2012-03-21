@@ -73,7 +73,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
      * TODO    add more columns
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 resizable: true
@@ -121,7 +121,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
      * @private
      */
     getToolbarItems: function(){
-    	/*
+        /*
         this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
             text: this.app.i18n._('Show closed'),
             iconCls: 'action_showArchived',

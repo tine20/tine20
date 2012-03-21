@@ -63,7 +63,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      * @return array|string date value
      */
     protected function _getDateValues($_operator, $_value)
-    {        
+    {
         if ($_operator === 'within') {
             // get beginning / end date and add 00:00:00 / 23:59:59
             date_default_timezone_set(array_key_exists('timezone', $this->_options) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
@@ -79,7 +79,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
             $value[0] = $this->_convertStringToUTC($value[0]);
             $value[1] = $this->_convertStringToUTC($value[1]);
             
-        } else  {            
+        } else  {
             $value = ($_value instanceof DateTime) ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_value;
         }
         

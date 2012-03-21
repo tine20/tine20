@@ -259,7 +259,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         switch ($_name) {
             case 'n_given':
-                $resolved = $this->_resolveAutoValues(array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name')));                
+                $resolved = $this->_resolveAutoValues(array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name')));
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
@@ -308,7 +308,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if ($_throwExceptionOnInvalidData && (!$valid || !$parentValid)) {
             
             if(!$valid) {
-                $message = 'either "org_name" or "n_family" must be given!';    
+                $message = 'either "org_name" or "n_family" must be given!';
             }
             
             if($parentException) $message .= ', ' . $parentException->getMessage();
@@ -317,7 +317,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             throw $e;
         }
         
-        return $parentValid && $valid;        
+        return $parentValid && $valid;
     }    
 
     /**

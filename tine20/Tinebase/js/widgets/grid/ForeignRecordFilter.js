@@ -155,7 +155,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
             i18n;
         if (foreignApp) {
-            i18n = foreignApp.i18n;            
+            i18n = foreignApp.i18n;
         } else {
             i18n = new Locale.Gettext();
             i18n.textdomain('Tinebase');
@@ -421,7 +421,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
 //        var origSetValue = operator.setValue.createDelegate(operator);
 //        operator.setValue = function(value) {
-//            origSetValue(value == 'AND' ? 'definedBy' : value); 
+//            origSetValue(value == 'AND' ? 'definedBy' : value);
 //        }
         
         return operator;

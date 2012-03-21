@@ -17,7 +17,7 @@
  * @package  Voipmanager
  */
 class Voipmanager_Backend_Asterisk_Meetme extends Tinebase_Backend_Sql_Abstract
-{    
+{
     /**
      * Table name without prefix
      *

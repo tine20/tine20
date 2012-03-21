@@ -431,7 +431,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass:    this.recordClass,
             updateHandler:  this.loadGridData.createDelegate(this),
             app:            this.app
-        });        
+        });
 
         this.action_resolveDuplicates = new Ext.Action({
             requiredGrant: null,
@@ -523,7 +523,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (noLongerInFilter) {
             className += 'tine-grid-row-nolongerinfilter';
         }
-        return className;    
+        return className;
     },    
 
     /**
@@ -1076,7 +1076,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 iconCls: this.app.getIconCls(),
                 scope: this,
                 menu: this.addToRecordMenu
-            });            
+            });
 
             items.push(this.addToRecordAction);
 
@@ -1305,7 +1305,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * generic edit in new window handler
      */
     onEditInNewWindow: function(button, event) {
-        var record; 
+        var record;
         if (button.actionType == 'edit' || button.actionType == 'copy') {
             if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
                 // if edit action is disabled or not available, we also don't open a new window
@@ -1516,8 +1516,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 },
                 failure: function () {
                     this.refreshAfterDelete(recordIds);
-                    this.loadGridData();                    
-                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
+                    this.loadGridData();
+                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems));
                 }
             };
 

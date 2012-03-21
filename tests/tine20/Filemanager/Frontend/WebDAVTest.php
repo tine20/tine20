@@ -44,9 +44,9 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 webdav tree tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 webdav tree tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -286,8 +286,8 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/invalidContainer');
     }    
-}		
-	
+}        
+    
 
 if (PHPUnit_MAIN_METHOD == 'Filemanager_Frontend_WebDAVTest::main') {
     Filemanager_Frontend_WebDAVTest::main();

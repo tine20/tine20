@@ -257,8 +257,8 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     public function testExistingOffsetSet()
     {
         $count = count($this->object);
-        $this->object[0] = new Tinebase_Record_DummyRecord(array('id' => 3, 'string' => 'idFull3'), true); 
-        $this->object[2] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true); 
+        $this->object[0] = new Tinebase_Record_DummyRecord(array('id' => 3, 'string' => 'idFull3'), true);
+        $this->object[2] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true);
         
         $this->assertEquals($count, count($this->object), 'To many records in recordSet');
         $this->assertEquals(array(1, 2), $this->object->getIdLessIndexes(), 'wrong idLess indexes');
@@ -268,7 +268,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     public function testNewOffsetSet()
     {
         $count = count($this->object);
-        $this->object[] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true); 
+        $this->object[] = new Tinebase_Record_DummyRecord(array('string' => 'idLess3'), true);
         $this->assertEquals($count+1, count($this->object), 'To many records in recordSet');
     }
     
@@ -308,7 +308,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     public function testFilter()
     {
         // get subset with filter
-        $subset = $this->object->filter('string', 'idLess1');     
+        $subset = $this->object->filter('string', 'idLess1');
         
         $subsetArray = $subset->toArray();
         $record = array_pop($subsetArray);

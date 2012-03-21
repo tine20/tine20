@@ -74,7 +74,7 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
         return new Zend_Scheduler_Task($options);
     }
     
-	/**
+    /**
      * Sets the Task options.
      * 
      * @param array $options Options
@@ -213,7 +213,7 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
      */
     public function setHours($hours)
     {
-		return $this->_addRule('hours', $hours);
+        return $this->_addRule('hours', $hours);
     }
 
     /**
@@ -249,7 +249,7 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
             }
         }
         foreach ($this->_rules as $rule) {
-			if (!$rule->matches($this->_time)) {
+            if (!$rule->matches($this->_time)) {
                 return false;
             }
         }
@@ -270,10 +270,10 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
         $returnResponse = ($controller) ? $controller->returnResponse(true) : NULL;
         $responses      = array();
         foreach ($this->_requests as $request) {
-//			if ($request->getControllerName()) { // Use default router
+//            if ($request->getControllerName()) { // Use default router
 //                $controller->setRouter(new Zend_Controller_Router_Rewrite());
 //            }
-//			$request->setPathInfo($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+//            $request->setPathInfo($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
 //          $controller->setRouter($router);
             
             if ($returnResponse) {

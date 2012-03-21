@@ -53,10 +53,10 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
     public function importAddressbook( $_oldTableName = NULL, $_useOldId = TRUE )
     {
         // did nothing
-        //@set_time_limit (120);  
+        //@set_time_limit (120);
         $sharedContactsGroupId = -15;
         $sharedContactsContainerName = "Metaways Kontakte";
-        $setFileasFromName = TRUE; 
+        $setFileasFromName = TRUE;
         
         $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'addressbook';
         $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
@@ -86,8 +86,8 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                         'owner_id' => Tinebase_Core::getUser(),
                         'backend' => 'Sql',
                         'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
-                    ));             
-                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);  
+                    ));
+                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
                 }
 
             } else if ( $contact->contact_owner == $sharedContactsGroupId ) {
@@ -114,13 +114,13 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 echo "skipped.<br/>";
                 continue;
             }                   
-            $containerId = $container->getId();        
+            $containerId = $container->getId();
 
             /******************** set fileas ************************/
 
             if ( $setFileasFromName ) {
                 
-                $fileas = ""; 
+                $fileas = "";
                 if ( !empty($contact->n_family) ) {
                     if ( !empty($contact->n_given) ) {
                         $fileas = $contact->n_family . ", " . $contact->n_given;

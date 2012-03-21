@@ -76,7 +76,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     doc.close();
     
     this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow]);
-//    frame.contentWindow.focus(); 
+//    frame.contentWindow.focus();
 //    frame.contentWindow.print();
 //    
 //    // NOTE: remving frame crashes chrome

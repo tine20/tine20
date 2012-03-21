@@ -39,7 +39,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         'exdate',
         'rrule',
         'recurid',
-    	'is_all_day_event',
+        'is_all_day_event',
         #'rrule_until',
         'originator_tz'
     );

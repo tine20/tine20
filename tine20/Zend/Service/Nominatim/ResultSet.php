@@ -81,7 +81,7 @@ class Zend_Service_Nominatim_ResultSet implements SeekableIterator,Countable
     public function __construct(SimpleXMLElement $xml)
     {
         $this->_results = $xml;
-        $this->_total = count($xml->place);        
+        $this->_total = count($xml->place);
     }
 
     /**

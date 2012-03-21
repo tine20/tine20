@@ -81,7 +81,7 @@ class ActiveSync_Command_FolderSyncTests extends PHPUnit_Framework_TestCase
         Syncope_Registry::set('folderStateBackend',  $this->_folderBackend);
         Syncope_Registry::set('syncStateBackend',    $this->_syncStateBackend);
         Syncope_Registry::set('contentStateBackend', $this->_contentStateBackend);
-        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());  
+        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
 
         Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
