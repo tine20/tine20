@@ -442,13 +442,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
         
         $mail->addHeader('In-Reply-To', $originalHeaders['message-id']);
+        $references = '';
         if (isset($originalHeaders['references'])) {
-            $references = $originalHeaders['references'] . '\r\n' . $originalHeaders['message-id'];
+            $references = $originalHeaders['references'] . ' ';
         } else if (isset($originalHeaders['in-reply-to'])) {
-            $references = $originalHeaders['in-reply-to'] . '\r\n' . $originalHeaders['message-id'];
-        } else {
-            $references = $originalHeaders['message-id'];
+            $references = $originalHeaders['in-reply-to'] . ' ';
         }
+        $references .= $originalHeaders['message-id'];
         $mail->addHeader('References', $references);
     }
     
