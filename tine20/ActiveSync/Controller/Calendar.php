@@ -627,18 +627,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $event->dtend->subSecond(1);
         }
         
-        if(isset($xmlData->Reminder)) {
-            $alarm = clone $event->dtstart;
-            
-            $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(array(
-                'alarm_time'        => $alarm->subMinute((int)$xmlData->Reminder),
-                'minutes_before'    => (int)$xmlData->Reminder,
-                'model'             => 'Calendar_Model_Event'
-            )));
-        }
+        $this->_handleAlarms($xmlData, $event);
         
         // decode timezone data
-        if(isset($xmlData->Timezone)) {
+        if (isset($xmlData->Timezone)) {
             $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
                 Tinebase_Core::getLogger(),
                 Tinebase_Core::get(Tinebase_Core::CACHE)
@@ -658,11 +650,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " timezone data " . $event->originator_tz);
         }
         
-        if(! $event->attendee instanceof Tinebase_Record_RecordSet) {
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
             $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
         
-        if(isset($xmlData->Attendees)) {
+        if (isset($xmlData->Attendees)) {
             $newAttendees = array();
             
             foreach($xmlData->Attendees->Attendee as $attendee) {
@@ -700,7 +692,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         // new event, add current user as participant
-        if($event->getId() == null) {
+        if ($event->getId() == null) {
             $selfContactId = Tinebase_Core::getUser()->contact_id;
             $selfAttender = $event->attendee
                 ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
@@ -720,7 +712,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $this->_handleBusyStatus($xmlData, $event);
         
         // handle recurrence
-        if(isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
+        if (isset($xmlData->Recurrence) && isset($xmlData->Recurrence->Type)) {
             $rrule = new Calendar_Model_Rrule();
             
             switch((int)$xmlData->Recurrence->Type) {
@@ -807,7 +799,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $event->exdate = null;
         }
         
-        if(empty($event->organizer)) {
+        if (empty($event->organizer)) {
             $event->organizer = Tinebase_Core::getUser()->contact_id;
         }
         
@@ -817,6 +809,31 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
         
         return $event;
+    }
+    
+    /**
+     * handle alarms / Reminder
+     * 
+     * @param SimpleXMLElement $xmlData
+     * @param Calendar_Model_Event $event
+     */
+    protected function _handleAlarms($xmlData, $event)
+    {
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        if (isset($xmlData->Reminder)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . 'Add alarm: ' . (int)$xmlData->Reminder . ' minutes before.');
+            $alarm = clone $event->dtstart;
+            
+            $event->alarms->addRecord(new Tinebase_Model_Alarm(array(
+                'alarm_time'        => $alarm->subMinute((int)$xmlData->Reminder),
+                'minutes_before'    => (int)$xmlData->Reminder,
+                'model'             => 'Calendar_Model_Event'
+            )));
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Do not add or remove existing alarm.');
+        }
     }
     
     /**

@@ -496,7 +496,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
-    
     /**
      * return (outer) contentfilter array
      * 
