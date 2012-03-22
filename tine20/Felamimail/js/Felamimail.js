@@ -746,8 +746,11 @@ Tine.Felamimail.getSignature = function(id) {
  * @return {String}
  */
 Tine.Felamimail.getEmailStringFromContact = function(contact) {
+    Tine.log.debug('Tine.Felamimail.getEmailStringFromContact() - getting contact email');
+    Tine.log.debug(contact);
+    
     var result = contact.get('n_fileas') + ' <';
-    if (contact.get('email') != '') {
+    if (contact.get('email')) {
         result += contact.get('email');
     } else {
         result += contact.get('email_home');
