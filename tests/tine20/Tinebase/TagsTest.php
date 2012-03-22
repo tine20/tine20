@@ -204,6 +204,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         );
         $tag1 = $this->_instance->attachTagToMultipleRecords($filter, $tagData1);
         $tagIds[] = $tag1->getId();
+        sleep(1);
 
         $tagData2 = array(
             'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -213,16 +214,17 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         );
         $tag2 = $this->_instance->attachTagToMultipleRecords($filter, $tagData2);
         $tagIds[] = $tag2->getId();
-
+        sleep(1);
+        
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
 
         $this->_instance->getMultipleTagsOfRecords($contacts);
         foreach ($contacts as $contact) {
             $this->assertEquals(2, count($contact->tags), 'Tags not found in contact ' . $contact->n_fn);
         }
-
+        sleep(1);
+        
         // Try to remove the created Tags
-
         $this->_instance->detachTagsFromMultipleRecords($filter,$tagIds);
 
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
@@ -231,7 +233,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         foreach ($contacts as $contact) {
             $this->assertEquals(0, count($contact->tags), 'Tags should not be found not found in contact ' . $contact->n_fn);
         }
-
     }
 
     /**
