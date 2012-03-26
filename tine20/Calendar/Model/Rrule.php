@@ -598,6 +598,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $recurEvent->setRecurId();
             
+            if ($_from->compare($recurEvent->dtend) >= 0) {
+                continue;
+            }
+            
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 self::addRecurrence($recurEvent, $_recurSet);
             }

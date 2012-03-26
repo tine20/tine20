@@ -389,6 +389,31 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals('2012-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
     }
     
+    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    public function testAdoptAlarmDSTBoundaryWithSkipping()
+    {
+        $event = new Calendar_Model_Event(array(
+            'summary'      => 'Cleanup',
+            'dtstart'      => '2012-01-31 07:30:00',
+            'dtend'        => '2012-01-31 10:30:00',
+            'container_id' => $this->_testCalendar->getId(),
+            'uid'          => Calendar_Model_Event::generateUID(),
+            'rrule'        => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TU',
+            'originator_tz'=> 'Europe/Berlin',
+        ));
+        
+        $alarm = new Tinebase_Model_Alarm(array(
+            'model'        => 'Calendar_Model_Event',
+            'alarm_time'   => '2012-03-26 06:30:00',
+            'minutes_before' => 1440,
+            'options'      => '{"minutes_before":1440,"recurid":"a7c55ce09cea9aec4ac37d9d72789183b12cad7c-2012-03-27 06:30:00","custom":false}',
+        ));
+        
+        $this->_eventController->adoptAlarmTime($event, $alarm, 'instance');
+        
+        $this->assertEquals('2012-04-02 06:30:00', $alarm->alarm_time->toString());
+    }
+    
     public static function getMessages()
     {
         // make sure messages are sent if queue is activated
