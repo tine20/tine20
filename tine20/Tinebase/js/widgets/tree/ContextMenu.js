@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.tree');
@@ -32,7 +32,7 @@ Tine.widgets.tree.ContextMenu = {
         /****************** create ITEMS array ****************/
               
         this.action_add = new Ext.Action({
-            text: String.format(_('Add')),
+            text: String.format(_('Add {0}'), this.config.nodeName),
             iconCls: 'action_add',
             handler: this.addNode,
             requiredGrant: 'addGrant',
@@ -40,7 +40,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_rename = new Ext.Action({
-            text: String.format(_('Rename')),
+            text: String.format(_('Rename {0}'), this.config.nodeName),
             iconCls: 'action_rename',
             handler: this.renameNode,
             scope: this.config,
@@ -52,7 +52,7 @@ Tine.widgets.tree.ContextMenu = {
         var i18n = new Locale.Gettext();
         i18n.textdomain('Tinebase');
         this.action_delete = new Ext.Action({
-            text: String.format(_('Delete')),
+            text: String.format(_('Delete {0}'), this.config.nodeName),
             iconCls: 'action_delete',
             handler: this.deleteNode,
             scope: this.config,
@@ -61,7 +61,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_grants = new Ext.Action({
-            text: _('Manage permissions'),
+            text: String.format(_('Manage {0} Permissions'), this.config.nodeName),
             iconCls: 'action_managePermissions',
             handler: this.managePermissions,
             requiredGrant: 'editGrant',
@@ -69,7 +69,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_properties = new Ext.Action({
-            text: _('Properties'),
+            text: String.format(_('{0} Properties'), this.config.nodeName),
             iconCls: 'action_manageProperties',
             handler: this.manageProperties,
             requiredGrant: 'readGrant',
@@ -78,7 +78,7 @@ Tine.widgets.tree.ContextMenu = {
         
         // TODO is edit grant required?
         this.action_changecolor = new Ext.Action({
-            text: _('Set color'),
+            text: String.format(_('Set {0} color'), this.config.nodeName),
             iconCls: 'action_changecolor',
 //            requiredGrant: 'editGrant',
             allowMultiple: true,
@@ -88,16 +88,17 @@ Tine.widgets.tree.ContextMenu = {
                     select: this.changeNodeColor,
                     scope: this.config
                 }
-            })                                        
+            })
         });
         
         this.action_reload = new Ext.Action({
-            text: String.format(_('Reload')),
+            text: String.format(_('Reload {0}'), this.config.nodeName),
             iconCls: 'x-tbar-loading',
             handler: this.reloadNode,
             scope: this.config
         });
         
+        // TODO move the next 3 to Filemanager!
         this.action_resume = new Ext.Action({
             text: String.format(_('Resume upload'), config.nodeName),
             iconCls: 'action_resume',
@@ -252,7 +253,7 @@ Tine.widgets.tree.ContextMenu = {
                        
             var node = this.scope.ctxNode;
             Ext.MessageBox.show({
-                title: 'Rename ' + this.nodeName,
+                title: String.format(_('Rename {0}'), this.nodeName),
                 msg: String.format(_('Please enter the new name of the {0}:'), this.nodeName),
                 buttons: Ext.MessageBox.OKCANCEL,
                 value: node.text,
