@@ -125,7 +125,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
 
     var editVacationAction = {
-        text: this.app.i18n._('Set Vacation Message'),
+        text: this.app.i18n._('Edit Vacation Message'),
         iconCls: 'action_email_replyAll',
         scope: this,
         handler: function() {
@@ -141,7 +141,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     var editRulesAction = {
-        text: this.app.i18n._('Set Filter Rules'),
+        text: this.app.i18n._('Edit Filter Rules'),
         iconCls: 'action_email_forward',
         scope: this,
         handler: function() {
