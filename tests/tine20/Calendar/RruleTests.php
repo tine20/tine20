@@ -134,11 +134,12 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     public function testCalcWeekly()
     {
         // note: 1979-06-05 was a tuesday
+        // note: 1979 had no DST in Europe/Berlin
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'take a bath',
-            'dtstart'       => '1979-06-05 17:00:00',
-            'dtend'         => '1979-06-05 18:00:00',
+            'dtstart'       => '1979-06-05 18:00:00',
+            'dtend'         => '1979-06-05 19:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=SU',
             'originator_tz' => 'Europe/Berlin',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
