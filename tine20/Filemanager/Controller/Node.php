@@ -440,7 +440,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     }
     
     /**
-     * delete node in backend
+     * create node in backend
      * 
      * @param string $_statpath
      * @param type
