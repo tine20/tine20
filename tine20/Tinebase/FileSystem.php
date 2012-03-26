@@ -35,6 +35,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     protected $_basePath;
     
+    /**
+     * stat cache
+     * 
+     * @var array
+     */
     protected $_statCache = array();
     
     /**
@@ -653,6 +658,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             'object_id'     => $fileObject->getId(),
             'parent_id'     => $parentId
         ));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' ' . print_r($treeNode->toArray(), TRUE));
+        
         $treeNode = $this->_treeNodeBackend->create($treeNode);
         
         return $treeNode;

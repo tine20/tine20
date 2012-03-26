@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -408,6 +408,23 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         return $filepaths;
     }
 
+    /**
+    * testCreateFileNodeWithUmlautInFilename
+    * 
+    * @see 0006068: No umlauts at beginning of file names / https://forge.tine20.org/mantisbt/view.php?id=6068
+    */
+    public function testCreateFileNodeWithUmlautInFilename()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $testPath = $personalContainerNode['path'] . '/ütest.eml';
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+    
+        $this->assertEquals(1, count($result));
+        $this->assertEquals('ütest.eml', $result[0]['name']);
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
+    }
+    
     /**
      * testCreateFileNodeWithTempfile
      * 

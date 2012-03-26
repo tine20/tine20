@@ -255,10 +255,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
         
         $resultSet = $this->_rawDataToRecordSet($resultArray);
-        #$resultSet->addIndices(array($_property));
         
         return $resultSet;
-                
     }
     
     /**
