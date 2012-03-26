@@ -86,15 +86,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             'allowEmpty' => true,
             array('InArray', array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE))
         ),
-        'role'                 => array(
-            'allowEmpty' => true,
-            array('InArray', array(self::ROLE_OPTIONAL, self::ROLE_REQUIRED))
-        ),
+        'role'                 => array('allowEmpty' => true          ),
         'quantity'             => array('allowEmpty' => true, 'Int'   ),
-        'status'               => array(
-            'allowEmpty' => true,
-            array('InArray', array(self::STATUS_NEEDSACTION, self::STATUS_TENTATIVE, self::STATUS_ACCEPTED, self::STATUS_DECLINED))
-        ),
+        'status'               => array('allowEmpty' => true          ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
         'alarm_ack_time'       => array('allowEmpty' => true),
