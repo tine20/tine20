@@ -1,19 +1,21 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
- * @package     ActiveSync
+ * @package     Syncroton
+ * @subpackage  Command
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * class documentation
  *
- * @package     ActiveSync
+ * @package     Syncroton
+ * @subpackage  Command
  */
-class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml 
+class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml 
 {        
     protected $_defaultNameSpace    = 'uri:FolderHierarchy';
     protected $_documentElement     = 'FolderUpdate';
@@ -31,36 +33,6 @@ class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml
     protected $_serverId;
     
     /**
-     * the folderState sql backend
-     *
-     * @var ActiveSync_Backend_FolderState
-     */
-    protected $_folderStateBackend;
-    
-    /**
-     * instance of ActiveSync_Controller
-     *
-     * @var ActiveSync_Controller
-     */
-    protected $_controller;
-    
-    /**
-     * the constructor
-     *
-     * @param  mixed                    $_requestBody
-     * @param  ActiveSync_Model_Device  $_device
-     * @param  string                   $_policyKey
-     */
-    public function __construct($_requestBody, ActiveSync_Model_Device $_device = null, $_policyKey = null)
-    {
-        parent::__construct($_requestBody, $_device, $_policyKey);
-        
-        $this->_folderStateBackend   = new ActiveSync_Backend_FolderState();
-        $this->_controller           = ActiveSync_Controller::getInstance();
-
-    }
-    
-    /**
      * parse FolderUpdate request
      *
      */
@@ -73,7 +45,10 @@ class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml
         $this->_displayName = (string)$xml->DisplayName;
         $this->_serverId    = (string)$xml->ServerId;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");        
+        if ($this->_logger instanceof Zend_Log) 
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");
+
+        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
     }
     
     /**
@@ -85,17 +60,22 @@ class ActiveSync_Command_FolderUpdate extends ActiveSync_Command_Wbxml
     {
         $folderUpdate = $this->_outputDom->documentElement;
         
-        if($this->_syncKey > '0' && $this->_controller->validateSyncKey($this->_device, $this->_syncKey, 'FolderSync') === false) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
-            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', ActiveSync_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
+        if($this->_syncState == false) {
+            if ($this->_logger instanceof Zend_Log) 
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
+            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
         } else {
-            $newSyncKey = $this->_syncKey + 1;
+            $this->_syncState->counter++;
+            
+            #$dataController = Syncroton_Data_Factory::factory($this->_class, $this->_device, $this->_syncTimeStamp);
+            
+            #$folder = $dataController->createFolder($this->_parentId, $this->_displayName, $this->_type);
             
             // create xml output
-            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', ActiveSync_Command_FolderSync::STATUS_SUCCESS));
-            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $newSyncKey));
-
-            $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, 'FolderSync');
+            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',  Syncroton_Command_FolderSync::STATUS_SUCCESS));
+            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $this->_syncState->counter));
+            
+            $this->_syncStateBackend->update($this->_syncState);
         }
         
         return $this->_outputDom;

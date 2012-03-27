@@ -45,7 +45,7 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
     {
         $xml = simplexml_import_dom($this->_inputDom);
         
-        $syncKey            = (int)$xml->SyncKey;
+        $this->_syncKey     = (int)$xml->SyncKey;
         $this->_parentId    = (string)$xml->ParentId;
         $this->_displayName = (string)$xml->DisplayName;
         $this->_type        = (int)$xml->Type;
@@ -69,9 +69,13 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
             case Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED:
                 $this->_class = Syncroton_Data_Factory::CLASS_TASKS;
                 break;
+                
+            default:
+                throw new Syncroton_Exception_UnexpectedValue('invalid type defined');
+                break;
         }
         
-        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey);
+        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
     }
     
     /**

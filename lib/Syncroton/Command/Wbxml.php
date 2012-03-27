@@ -82,7 +82,13 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_Interface
      */
     protected $_policyKey;
     
+    /**
+     * @var Syncroton_Model_SyncState
+     */
+    protected $_syncState;
+    
     protected $_skipValidatePolicyKey = false;
+    
     /**
      * timestamp to use for all sync requests
      *

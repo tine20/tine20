@@ -22,6 +22,7 @@ class Syncroton_Command_AllTests
         $suite->addTestSuite('Syncroton_Command_FolderCreateTests');
         $suite->addTestSuite('Syncroton_Command_FolderDeleteTests');
         $suite->addTestSuite('Syncroton_Command_FolderSyncTests');
+        $suite->addTestSuite('Syncroton_Command_FolderUpdateTests');
         $suite->addTestSuite('Syncroton_Command_GetItemEstimateTests');
         $suite->addTestSuite('Syncroton_Command_ItemOperationsTests');
         $suite->addTestSuite('Syncroton_Command_MoveItemsTests');
