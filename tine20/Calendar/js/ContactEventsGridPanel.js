@@ -33,7 +33,8 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * grid specific
      * @private
-     */ 
+     */
+    stateful: false,
     defaultSortInfo: {field: 'dtstart', direction: 'ASC'},
     gridConfig: {
         autoExpandColumn: 'summary'
@@ -43,7 +44,6 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @cfg {Bool} hasDetailsPanel 
      */
     hasDetailsPanel: true,
-    
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
@@ -90,7 +90,7 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             defaultFilter: 'query',
             filters: [
                 {field: 'query', operator: 'contains', value: ''},
-                {field: 'attender', operator: 'in', value: [{user_type: 'user', user_id: this.record.data}]}
+                {field: 'attender', operator: 'in', value: [{user_type: 'user', user_id: this.record.id ? this.record.data : ''}]}
             ]
         });
     },
