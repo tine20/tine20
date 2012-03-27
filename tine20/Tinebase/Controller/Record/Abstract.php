@@ -486,7 +486,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Doing duplicate check.');
 
-        $duplicates = $this->search($duplicateFilter, new Tasks_Model_Pagination(array('limit' => 5)));
+        $duplicates = $this->search($duplicateFilter, new Tinebase_Model_Pagination(array('limit' => 5)));
 
         if (count($duplicates) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
