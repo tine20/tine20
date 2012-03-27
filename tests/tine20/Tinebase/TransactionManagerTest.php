@@ -117,8 +117,8 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     {
         $db = Zend_Registry::get('dbAdapter');
         
-        $transactionId = $this->_instance->startTransaction($db);
         $this->_createDbTestTable($db);
+        $transactionId = $this->_instance->startTransaction($db);
         $db->insert($this->_testTableName, array(
             'Column1' => $transactionId
         ));
@@ -133,8 +133,8 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     {
         $db = Zend_Registry::get('dbAdapter');
         
-        $transactionId = $this->_instance->startTransaction($db);
         $this->_createDbTestTable($db);
+        $transactionId = $this->_instance->startTransaction($db);
         $db->insert($this->_testTableName, array(
             'Column1' => $transactionId
         ));
