@@ -71,7 +71,7 @@
         
         $orderedUpdateFieldOfInterest = array(
             'dtstart', 'dtend', 'summary', 'location', 'description',
-            'organizer', 'transp', 'priority', 'status_id', 'class',
+            'transp', 'priority', 'status_id', 'class',
             'url', 'rrule', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
         );
         
@@ -82,35 +82,31 @@
             }
         }
         
+        // cehck for organizer update
+        if (Tinebase_Record_Abstract::convertId($_event['organizer'], 'Addressbook_Model_Contact') != 
+            Tinebase_Record_Abstract::convertId($_oldEvent['organizer'], 'Addressbook_Model_Contact')) {
+            
+            $updates['organizer'] = $_event->resolveOrganizer();
+        }
+        
         // check attendee updates
-        $attendeeMigration = $_oldEvent->attendee->getMigration($_event->attendee->getArrayOfIds());
-        foreach ($attendeeMigration['toUpdateIds'] as $key => $attenderId) {
-            $currAttender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-            $oldAttender  = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
-            if ($currAttender->status != $oldAttender->status) {
-                $attendeeMigration['toUpdateIds'][$key] = $currAttender;
-            } else {
-                unset($attendeeMigration['toUpdateIds'][$key]);
-            }
-        }
-        foreach ($attendeeMigration['toCreateIds'] as $key => $attenderId) {
-            $attender = $_event->attendee[$_event->attendee->getIndexById($attenderId)];
-            $attendeeMigration['toCreateIds'][$key] = $attender;
-        }
-        foreach ($attendeeMigration['toDeleteIds'] as $key => $attenderId) {
-            $attender = $_oldEvent->attendee[$_oldEvent->attendee->getIndexById($attenderId)];
-            $attendeeMigration['toDeleteIds'][$key] = $attender;
-        }
-        
-        $attendeeUpdates = array();
-        foreach(array('toCreateIds', 'toDeleteIds', 'toUpdateIds') as $action) {
-            if (! empty($attendeeMigration[$action])) {
-                $attendeeUpdates[substr($action, 0, -3)] = array_values($attendeeMigration[$action]);
+        $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
+        foreach ($attendeeMigration['toUpdate'] as $attendee) {
+            $oldAttendee = Calendar_Model_Attender::getAttendee($_oldEvent->attendee, $attendee);
+            if ($attendee->status == $oldAttendee->status) {
+                $attendeeMigration['toUpdate']->removeRecord($attendee);
             }
         }
         
-        if (! empty($attendeeUpdates)) {
-            $updates['attendee'] = $attendeeUpdates;
+        foreach($attendeeMigration as $action => $migration) {
+            Calendar_Model_Attender::resolveAttendee($migration, FALSE);
+            if (! count($migration)) {
+                unset($attendeeMigration[$action]);
+            }
+        }
+        
+        if (! empty($attendeeMigration)) {
+            $updates['attendee'] = $attendeeMigration;
         }
         
         return $updates;
@@ -270,7 +266,7 @@
                         case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
                             if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
                                 // single attendee status update
-                                $attender = $_updates['attendee']['toUpdate'][0];
+                                $attender = $_updates['attendee']['toUpdate']->getFirstRecord();
                                 
                                 switch ($attender->status) {
                                     case Calendar_Model_Attender::STATUS_ACCEPTED:
