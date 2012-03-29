@@ -149,6 +149,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
+            
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            $busyException->setEvent($_event);
+            
             throw $busyException;
         }
     }

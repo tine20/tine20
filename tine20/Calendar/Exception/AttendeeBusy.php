@@ -21,6 +21,12 @@ class Calendar_Exception_AttendeeBusy extends Exception
     protected $_fbInfo = NULL;
     
     /**
+     * conflict base event
+     * @var Calendar_Model_Event
+     */
+    protected $_event = NULL;
+    
+    /**
      * construct
      * 
      * @param string $_message
@@ -52,6 +58,26 @@ class Calendar_Exception_AttendeeBusy extends Exception
     }
     
     /**
+     * set conflict base event
+     *
+     * @param Calendar_Model_Event $_event
+     */
+    public function setEvent(Calendar_Model_Event $_event)
+    {
+        $this->_event = $_event;
+    }
+    
+    /**
+     * get conflict base event
+     *
+     * @return Calendar_Model_Event
+     */
+    public function getEvent()
+    {
+        return $this->_event instanceof Calendar_Model_Event ? $this->_event : new Calendar_Model_Event(array(), TRUE);
+    }
+    
+    /**
      * returns free busy info as array
      * 
      * @return array
@@ -60,7 +86,8 @@ class Calendar_Exception_AttendeeBusy extends Exception
     {
         $this->getFreeBusyInfo()->setTimezone(Tinebase_Core::get('userTimeZone'));
         return array(
-            'freebusyinfo' => $this->getFreeBusyInfo()->toArray()
+            'freebusyinfo' => $this->getFreeBusyInfo()->toArray(),
+            'event'        => $this->getEvent()->toArray(),
         );
     }
 }
