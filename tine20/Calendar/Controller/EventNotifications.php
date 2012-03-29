@@ -188,7 +188,7 @@
         
         // SEND REPLY/COUNTER to external organizer
         if ($_event->organizer && ! $_event->resolveOrganizer()->account_id && count($_event->attendee) == 1) {
-            $updates = array('attendee' => array('toUpdate' => array($_event->attendee->getFirstRecord())));
+            $updates = array('attendee' => array('toUpdate' => $_event->attendee));
             $organizer = new Calendar_Model_Attender(array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
                 'user_id'    => $_event->resolveOrganizer()
