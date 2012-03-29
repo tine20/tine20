@@ -409,19 +409,21 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
 
     /**
-    * testCreateFileNodeWithUmlautInFilename
+    * testCreateFileNodeWithUTF8Filenames
     * 
     * @see 0006068: No umlauts at beginning of file names / https://forge.tine20.org/mantisbt/view.php?id=6068
+    * @see 0006150: Problem loading files with russian file names / https://forge.tine20.org/mantisbt/view.php?id=6150
     */
-    public function testCreateFileNodeWithUmlautInFilename()
+    public function testCreateFileNodeWithUTF8Filenames()
     {
         $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
         
-        $testPath = $personalContainerNode['path'] . '/ütest.eml';
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+        $testPaths = array($personalContainerNode['path'] . '/ütest.eml', $personalContainerNode['path'] . '/Безимени.txt');
+        $result = $this->_json->createNodes($testPaths, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
     
-        $this->assertEquals(1, count($result));
+        $this->assertEquals(2, count($result));
         $this->assertEquals('ütest.eml', $result[0]['name']);
+        $this->assertEquals('Безимени.txt', $result[1]['name']);
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
     }
     
