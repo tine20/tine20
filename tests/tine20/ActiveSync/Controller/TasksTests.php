@@ -91,7 +91,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
      */
     public function testGetFoldersIPhone()
     {
-        // skip this test => iPhone support no tasks synchronisation
+        $this->markTestSkipped("IPhone support no tasks synchronisation");
     }
     
     /**
@@ -134,7 +134,8 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     /**
      * test convert from XML to Tine 2.0 model
      * 
-     * @see (test of priority) 0006016: Missing mapping of task severity int/string / http://forge.tine20.org/mantisbt/view.php?id=6016
+     * @see (test of priority) 0006016: Missing mapping of task severity int/string / https://forge.tine20.org/mantisbt/view.php?id=6016
+     * @see (test of organizer) 0006074: auto add current user as responsible for tasks / https://forge.tine20.org/mantisbt/view.php?id=6074
      */
     public function testConvertToTine20Model()
     {
@@ -148,6 +149,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->assertEquals(0,                     $task->percent);
         $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $task->description);
         $this->assertEquals(Tasks_Model_Priority::NORMAL, $task->priority);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $task->organizer);
     }
     
     /**
