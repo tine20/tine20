@@ -1291,6 +1291,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
                 
                 $doContainerAclChecks = $this->doContainerACLChecks(FALSE);
+                $sendNotifications = $this->sendNotifications(FALSE);
+                
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
                 
@@ -1307,6 +1309,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $eventInstance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
                 $eventInstance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 $this->doContainerACLChecks($doContainerAclChecks);
+                $this->sendNotifications($sendNotifications);
                 
                 foreach ($attendee as $attender) {
                     $attender->setId(NULL);
