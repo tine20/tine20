@@ -570,7 +570,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         } else {
             resolveStore.removeAll();
             this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
-            this.navigate(+1);
+            // defer navigation to complete this step before
+            this.navigate.defer(200, this, [+1]);
         }
         
         
