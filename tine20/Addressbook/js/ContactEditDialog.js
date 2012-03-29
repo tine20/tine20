@@ -384,14 +384,22 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * init component
      */
     initComponent: function () {
+        var relatedRecords = {};
+        if (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) {
+            relatedRecords.Crm_Model_Lead = {
+                recordClass: Tine.Crm.Model.Lead,
+                dlgOpener: Tine.Crm.LeadEditDialog.openWindow
+            };
+        }
+        if (Tine.Projects && Tine.Tinebase.common.hasRight('run', 'Projects')) {
+            relatedRecords.Projects_Model_Project = {
+                recordClass: Tine.Projects.Model.Project,
+                dlgOpener: Tine.Projects.ProjectEditDialog.openWindow
+            };
+        }
         
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
-                Crm_Model_Lead: {
-                    recordClass: Tine.Crm.Model.Lead,
-                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
-                }
-            } : {}
+            relatedRecords: relatedRecords
         });
         
         this.initToolbar();
