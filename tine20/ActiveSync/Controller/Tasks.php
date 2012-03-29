@@ -121,13 +121,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " task data " . print_r($data->toArray(), true));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " task data " . print_r($data->toArray(), TRUE));
         
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
         
         foreach ($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == '0') {
-                $nodeContent = null;
+                $nodeContent = NULL;
                 
                 switch($value) {
                     case 'completed':
@@ -155,7 +155,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 }
                 
                 // skip empty elements
-                if($nodeContent === null || $nodeContent == '') {
+                if($nodeContent === NULL || $nodeContent == '') {
                     continue;
                 }
                 
@@ -173,11 +173,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
 
         // body aka description
         if (!empty($data->description) && version_compare($this->_device->acsversion, '12.0', '>=')) {
-            $body = $_domParrent->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+            $body = $_domParrent->appendChild(new DOMElement('Body', NULL, 'uri:AirSyncBase'));
             
             $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
             
-            $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
+            $dataTag = $body->appendChild(new DOMElement('Data', NULL, 'uri:AirSyncBase'));
             $dataTag->appendChild(new DOMText(preg_replace("/(\r\n?|\n)/", "\r\n", $data->description)));
         }
         
@@ -190,7 +190,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }
         
         if (isset($data->tags) && count($data->tags) > 0) {
-            $categories = $_domParrent->appendChild(new DOMElement('Categories', null, 'uri:Tasks'));
+            $categories = $_domParrent->appendChild(new DOMElement('Categories', NULL, 'uri:Tasks'));
             foreach ($data->tags as $tag) {
                 $categories->appendChild(new DOMElement('Category', $tag, 'uri:Tasks'));
             }
@@ -199,18 +199,20 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     }
         
     /**
-     * convert contact from xml to Addressbook_Model_Contact
+     * convert contact from xml to Tasks_Model_Task
      *
-     * @todo handle images
      * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_Contact
+     * @param Tasks_Model_Task $_entry
+     * @return Tasks_Model_Task
      */
-    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(SimpleXMLElement $_data, $_entry = NULL)
     {
-        if($_entry instanceof Tasks_Model_Task) {
+        if ($_entry instanceof Tasks_Model_Task) {
             $task = $_entry;
         } else {
-            $task = new Tasks_Model_Task(null, true);
+            $task = new Tasks_Model_Task(array(
+                'organizer' => Tinebase_Core::getUser()->getId()
+            ), TRUE);
         }
         
         $xmlData = $_data->children('uri:Tasks');
@@ -230,7 +232,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     if (isset($xmlData->$fieldName)) {
                         $task->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                     } else {
-                        $task->$value = null;
+                        $task->$value = NULL;
                     }
                     break;
                 case 'priority':
@@ -244,7 +246,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     if(isset($xmlData->$fieldName)) {
                         $task->$value = (string)$xmlData->$fieldName;
                     } else {
-                        $task->$value = null;
+                        $task->$value = NULL;
                     }
                     break;
             }
@@ -261,7 +263,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // task should be valid now
         $task->isValid();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), TRUE));
         
         return $task;
     }
@@ -296,7 +298,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, TRUE));
         
         return $filterArray;
     }
@@ -326,7 +328,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     $filter->removeFilter('status');
                     $openStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->filter('is_open', 1);
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($openStatus->getId(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($openStatus->getId(), TRUE));
                     
                     $filter->addFilter(new Tinebase_Model_Filter_Text(
                         'status', 
