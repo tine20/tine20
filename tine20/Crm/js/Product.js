@@ -192,7 +192,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var selectedRows = this.getSelectionModel().getSelections();
                 for (var i = 0; i < selectedRows.length; ++i) {
                     this.store.remove(selectedRows[i]);
-                }           
+                }
             }
         });
         
@@ -234,7 +234,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                             }, record.id);
                             this.productsStore.insert(0, newRecord);
                         }
-                            
+                        
                         this.collapse();
                         this.clearValue();
                     }

@@ -4,7 +4,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         use Tine.widgets.grid.LinkGridPanel
  */
@@ -22,8 +22,6 @@ Ext.ns('Tine.Crm.Task');
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     /**
@@ -246,6 +244,12 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             responseText: task
         };
         task = Tine.Tasks.JsonBackend.recordReader(response);
+        
+        Tine.log.debug('Tine.Crm.Task.GridPanel::onUpdate - Task has been updated:');
+        Tine.log.debug(task);
+        
+        // remove task relations to prevent cyclic relation structure
+        task.data.relations = null;
         
         var myTask = this.store.getById(task.id);
         
