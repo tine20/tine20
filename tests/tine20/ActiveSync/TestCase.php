@@ -90,6 +90,11 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         
         $this->objects['tasks']   = array();
         $this->objects['events']   = array();
+        
+        Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
+        Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+        Syncope_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+        Syncope_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
     }
 
     /**
