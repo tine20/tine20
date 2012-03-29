@@ -1039,11 +1039,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             // resort fbInfo to combine all events of a attender
             var busyAttendee = [];
             var conflictEvents = {};
-            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee'));
-             
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(error.event.attendee);
+            
             Ext.each(error.freebusyinfo, function(fbinfo) {
                 attendeeStore.each(function(a) {
-                    if (a.get('user_type') == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
+                    var userType = a.get('user_type');
+                    userType = userType == 'groupmember' ? 'user' : userType;
+                    if (userType == fbinfo.user_type && a.getUserId() == fbinfo.user_id) {
                         if (busyAttendee.indexOf(a) < 0) {
                             busyAttendee.push(a);
                             conflictEvents[a.id] = [];
