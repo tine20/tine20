@@ -1294,16 +1294,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Increasing content seq of container ' . $containerId . ' ...');
-        
         $newContentSeq = NULL;
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
         
             $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
             $data = array(
-                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
+                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ',' . $quotedIdentifier . ' + 1, 1)')
             );
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
@@ -1311,6 +1308,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
             
             $newContentSeq = $this->getContentSequence($containerId);
+            if ($newContentSeq === NULL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Something strange happend: content seq of NULL has been detected for container ' . $containerId . ' . Setting it to 0.');
+                $newContentSeq = 0;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Increased content seq of container ' . $containerId . ' to ' . $newContentSeq);
+            }
             
             // create new entry in container_content table
             if ($action !== NULL && $recordId !== NULL) {
@@ -1322,7 +1327,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     'content_seq'  => $newContentSeq,
                 ));
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Creating ' . $action . ' content history record for record id ' . $recordId);
+                    . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
                 $this->_getContentBackend()->create($contentRecord);
             }
             
@@ -1371,7 +1376,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $containerIds = (! is_array($containerIds)) ? Tinebase_Model_Container::convertContainerIdToInt($containerIds) : $containerIds;
         
-        $select = $this->_getSelect(array('id', 'content_seq'));
+        $select = $this->_getSelect(array('id', 'content_seq'), TRUE);
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
@@ -1379,6 +1384,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $result[$key] = $value[0];
         }
         
-        return (is_array($containerIds)) ? $result : $result[$containerIds];
+        $result = (is_array($containerIds)) ? $result : ((isset($result[$containerIds])) ? $result[$containerIds] : NULL);
+        return $result;
     }
 }
