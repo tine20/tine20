@@ -172,6 +172,28 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($initialContentSeq, $updatedContainer->content_seq);
     }
+
+    /**
+    * try to set content seq that was NULL / test with deleted container
+    */
+    public function testSetNullContentSeq()
+    {
+        $container = $this->objects['initialContainer'];
+        $db = Tinebase_Core::getDb();
+        $db->update(SQL_TABLE_PREFIX . 'container', array(
+            'content_seq' => NULL,
+        ), "`id` = '{$container->getId()}'");
+        $seq = $this->_instance->getContentSequence($container->getId());
+        $this->assertEquals(NULL, $seq);
+        
+        $this->_instance->increaseContentSequence($container->getId());
+        $seq = $this->_instance->getContentSequence($container->getId());
+        $this->assertEquals(1, $seq);
+        
+        $this->_instance->deleteContainer($container);
+        $seq = $this->_instance->getContentSequence($container->getId());
+        $this->assertEquals(1, $seq);
+    }
     
     /**
      * try to add an existing container. should throw an exception
