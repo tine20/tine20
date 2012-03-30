@@ -861,6 +861,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE));
         
+        if (! $baseEventId) {
+            throw new Tinebase_Exception_NotFound('base event of a recurring series not found');
+        }
+        
         // make sure we have a 'fully featured' event
         return $this->get($baseEventId);
     }
@@ -1107,7 +1111,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             // deleted persistent recur instances must be added to exdate of the baseEvent
             if (! empty($event->recurid)) {
-                $this->createRecurException($event, true);
+                try {
+                    $this->createRecurException($event, true);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    // base event gone, do nothing
+                }
             }
         }
         
