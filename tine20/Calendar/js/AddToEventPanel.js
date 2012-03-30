@@ -93,7 +93,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Ext.FormPanel, {
         var map = new Ext.KeyMap(this.el, [ {
             key : [ 10, 13 ], // ctrl + return
             ctrl : true,
-            fn : this.onSend,
+            fn : this.onUpdate,
             scope : this
         } ]);
 
