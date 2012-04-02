@@ -74,7 +74,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_open'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),    
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
     // how long can users book timesheets for this timeaccount 
         'deadline'              => array(
             Zend_Filter_Input::ALLOW_EMPTY      => true, 
@@ -91,9 +91,10 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // relations (linked Timetracker_Model_Timeaccount records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
