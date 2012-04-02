@@ -56,6 +56,7 @@ Tine.Addressbook.ContactTreePanel = function(config) {
 };
 Ext.extend(Tine.Addressbook.ContactTreePanel , Tine.widgets.container.TreePanel);
 
+Tine.Addressbook.handleRequestException = Tine.Tinebase.ExceptionHandler.handleRequestException;
 
 Tine.Addressbook.ContactFilterPanel = function(config) {
     Ext.apply(this, config);

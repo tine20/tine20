@@ -217,6 +217,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
+        Tinebase_Container::getInstance()->checkSystemContainer($_ids);
+        
         $deletedRecords = parent::delete($_ids);
         
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
