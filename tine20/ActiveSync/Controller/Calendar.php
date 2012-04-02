@@ -692,24 +692,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         }
         
-        // new event, add current user as participant
-        if ($event->getId() == null) {
-            $selfContactId = Tinebase_Core::getUser()->contact_id;
-            $selfAttender = $event->attendee
-                ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-                ->filter('user_id', $selfContactId);
-                    
-            if (count($selfAttender) == 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added current user as attender for new event ");
-                $newAttender = new Calendar_Model_Attender(array(
-                    'user_id'   => $selfContactId,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
-                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-                ));
-                $event->attendee->addRecord($newAttender);
-            }
-        }
+        $this->_addCurrentUserAttender($event);
+        
         $this->_handleBusyStatus($xmlData, $event);
         
         // handle recurrence
@@ -770,7 +754,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 }
             } else {
                 $rrule->until = null;
-            }            
+            }
             
             $event->rrule = $rrule;
             
@@ -834,6 +818,27 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Do not add or remove existing alarm.');
+        }
+    }
+    
+    /**
+     * always add current user as participant
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _addCurrentUserAttender($event)
+    {
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        
+        if ($ownAttender === NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Add current user as attender.");
+            $newAttender = new Calendar_Model_Attender(array(
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ));
+            $event->attendee->addRecord($newAttender);
         }
     }
     
