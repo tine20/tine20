@@ -1514,10 +1514,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.refreshAfterDelete(recordIds);
                     this.onAfterDelete(recordIds);
                 },
-                failure: function () {
+                failure: function (exception) {
                     this.refreshAfterDelete(recordIds);
                     this.loadGridData();
-                    Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems));
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
             };
 

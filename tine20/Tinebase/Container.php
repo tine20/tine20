@@ -771,6 +771,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         
+        $this->checkSystemContainer($_containerId);
+        
         if($_ignoreAcl !== TRUE) {
 
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -801,11 +803,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         );
         
         //-- determine first matching personal container (or create new one)
-        // $personalContainer = 
+        // $personalContainer =
         
         //-- move all records to personal container
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
         );
         */
@@ -1386,5 +1388,25 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $result = (is_array($containerIds)) ? $result : ((isset($result[$containerIds])) ? $result[$containerIds] : NULL);
         return $result;
+    }
+    
+    /**
+     * checks if container to delete is a "system" container 
+     * @TODO: generalize when there are more "system" containers
+     * 
+     * @param array|integer|Tinebase_Model_Container $containerIds
+     * @throws Tinebase_Exception_Record_SystemContainer 
+     */
+    public function checkSystemContainer($containerIds) {
+        if(!is_array($containerIds)) $containerIds = array($containerIds);
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+
+        $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
+
+        if(in_array($defaultAddressbook['id'], $containerIds)) {
+            // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
+            // _('System Container')
+            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!', 'System Container');
+        }
     }
 }
