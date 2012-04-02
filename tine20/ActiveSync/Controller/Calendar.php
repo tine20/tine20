@@ -387,7 +387,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             
             // required field
-            $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
+            $interval = $rrule->interval ? $rrule->interval : 1;
+            $recurrence->appendChild(new DOMElement('Interval', $interval, 'uri:Calendar'));
             
             if($rrule->until instanceof DateTime) {
                 $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
