@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-29 13:14+0000\n"
-"Last-Translator: Etienne Quesselaire <Unknown>\n"
+"PO-Revision-Date: 2012-03-02 13:02+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -155,7 +155,7 @@ msgstr "Nom d'hôte"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
 msgstr "Port"
 
@@ -183,27 +183,27 @@ msgstr "Filtre de recherche"
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
 #: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:385
+#: js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
-#: js/EmailPanel.js:393
+#: js/EmailPanel.js:398
 msgid "Secure Connection"
 msgstr "Connexion sécurisée"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:303 js/EmailPanel.js:396
+#: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
 msgstr "Aucun"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "TLS"
 msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "SSL"
 msgstr "SSL"
 
@@ -486,75 +486,75 @@ msgstr "Mot de passe des notifications"
 msgid "Notifications local client (hostname or IP address)"
 msgstr ""
 
-#: js/EmailPanel.js:379
+#: js/EmailPanel.js:384
 msgid "SIEVE"
 msgstr "SIEVE"
 
-#: js/EmailPanel.js:420
+#: js/EmailPanel.js:425
 msgid "MySql Hostname"
 msgstr "Nom d'hôte MySql"
 
-#: js/EmailPanel.js:423
+#: js/EmailPanel.js:428
 msgid "MySql Database"
 msgstr "Base MySql"
 
-#: js/EmailPanel.js:426
+#: js/EmailPanel.js:431
 msgid "MySql User"
 msgstr "Utilisateur MySql"
 
-#: js/EmailPanel.js:429
+#: js/EmailPanel.js:434
 msgid "MySql Password"
 msgstr "Mot de passe MySql"
 
-#: js/EmailPanel.js:433
+#: js/EmailPanel.js:438
 msgid "MySql Port"
 msgstr "Port MySql"
 
-#: js/EmailPanel.js:449
+#: js/EmailPanel.js:454
 msgid "User or UID"
 msgstr "Utilisateur ou UID"
 
-#: js/EmailPanel.js:452
+#: js/EmailPanel.js:457
 msgid "Group or GID"
 msgstr "Groupe ou GID"
 
-#: js/EmailPanel.js:455
+#: js/EmailPanel.js:460
 msgid "Home Template"
 msgstr "Modèle des Home"
 
-#: js/EmailPanel.js:457
+#: js/EmailPanel.js:462
 msgid "Password Scheme"
 msgstr "Schéma des mots de passe"
 
-#: js/EmailPanel.js:468
+#: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
 msgstr "PLAIN-MD5"
 
-#: js/EmailPanel.js:469
+#: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
 msgstr "MD5-CRYPT"
 
-#: js/EmailPanel.js:470
+#: js/EmailPanel.js:475
 msgid "SHA1"
 msgstr "SHA1"
 
-#: js/EmailPanel.js:471
+#: js/EmailPanel.js:476
 msgid "SHA256"
 msgstr "SHA256"
 
-#: js/EmailPanel.js:472
+#: js/EmailPanel.js:477
 msgid "SSHA256"
 msgstr "SSHA256"
 
-#: js/EmailPanel.js:473
+#: js/EmailPanel.js:478
 msgid "SHA512"
 msgstr "SHA512"
 
-#: js/EmailPanel.js:474
+#: js/EmailPanel.js:479
 msgid "SSHA512"
 msgstr "SSHA512"
 
-#: js/EmailPanel.js:475
+#: js/EmailPanel.js:480
 msgid "PLAIN"
 msgstr "PLAIN"
 

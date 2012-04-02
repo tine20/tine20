@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:34+0000\n"
+"PO-Revision-Date: 2012-03-02 13:12+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -66,154 +66,154 @@ msgstr "Corpo"
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
-#: js/AccountEditDialog.js:84
+#: js/AccountEditDialog.js:85
 msgid "Signature"
 msgstr "Firma"
 
-#: js/AccountEditDialog.js:111 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:350
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Account"
 msgstr[1] "Account"
 
-#: js/AccountEditDialog.js:118
+#: js/AccountEditDialog.js:119
 msgid "Account Name"
 msgstr "Nome Account"
 
-#: js/AccountEditDialog.js:122
+#: js/AccountEditDialog.js:123
 msgid "User Email"
 msgstr "Utente Email"
 
-#: js/AccountEditDialog.js:127
+#: js/AccountEditDialog.js:128
 msgid "User Name (From)"
 msgstr "Nome utente (Da)"
 
-#: js/AccountEditDialog.js:130
+#: js/AccountEditDialog.js:131
 msgid "Organization"
 msgstr "Organizzazione"
 
-#: js/AccountEditDialog.js:134
+#: js/AccountEditDialog.js:135
 msgid "Signature position"
 msgstr ""
 
-#: js/AccountEditDialog.js:145
+#: js/AccountEditDialog.js:146
 msgid "Above the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:146
+#: js/AccountEditDialog.js:147
 msgid "Below the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:151
+#: js/AccountEditDialog.js:152
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:158 js/AccountEditDialog.js:201
-#: js/AccountEditDialog.js:256
+#: js/AccountEditDialog.js:159 js/AccountEditDialog.js:202
+#: js/AccountEditDialog.js:257
 msgid "Host"
 msgstr "Host"
 
-#: js/AccountEditDialog.js:162
+#: js/AccountEditDialog.js:163
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Porta (Default: 143 / SSL:993)"
 
-#: js/AccountEditDialog.js:168 js/AccountEditDialog.js:210
-#: js/AccountEditDialog.js:265
+#: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
+#: js/AccountEditDialog.js:266
 msgid "Secure Connection"
 msgstr "Connessione Sicura"
 
-#: js/AccountEditDialog.js:179 js/AccountEditDialog.js:220
-#: js/AccountEditDialog.js:235 js/AccountEditDialog.js:275
+#: js/AccountEditDialog.js:180 js/AccountEditDialog.js:221
+#: js/AccountEditDialog.js:236 js/AccountEditDialog.js:276
 #: js/ContactGrid.js:110
 msgid "None"
 msgstr "Nessuno"
 
-#: js/AccountEditDialog.js:180 js/AccountEditDialog.js:221
-#: js/AccountEditDialog.js:276
+#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
+#: js/AccountEditDialog.js:277
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
+#: js/AccountEditDialog.js:182 js/AccountEditDialog.js:223
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AccountEditDialog.js:184
+#: js/AccountEditDialog.js:185
 msgid "Username"
 msgstr "Nome utente"
 
-#: js/AccountEditDialog.js:188
+#: js/AccountEditDialog.js:189
 msgid "Password"
 msgstr "Password"
 
-#: js/AccountEditDialog.js:194
+#: js/AccountEditDialog.js:195
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/AccountEditDialog.js:204
+#: js/AccountEditDialog.js:205
 msgid "Port (Default: 25)"
 msgstr "Porta (Default: 25)"
 
-#: js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:226
 msgid "Authentication"
 msgstr "Autenticazione"
 
-#: js/AccountEditDialog.js:236
+#: js/AccountEditDialog.js:237
 msgid "Login"
 msgstr "Login"
 
-#: js/AccountEditDialog.js:237
+#: js/AccountEditDialog.js:238
 msgid "Plain"
 msgstr "Plain"
 
-#: js/AccountEditDialog.js:240
+#: js/AccountEditDialog.js:241
 msgid "Username (optional)"
 msgstr "Nome utente (opzionale)"
 
-#: js/AccountEditDialog.js:243
+#: js/AccountEditDialog.js:244
 msgid "Password (optional)"
 msgstr "Password (opzionale)"
 
-#: js/AccountEditDialog.js:249
+#: js/AccountEditDialog.js:250
 msgid "Sieve"
 msgstr ""
 
-#: js/AccountEditDialog.js:260
+#: js/AccountEditDialog.js:261
 msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/AccountEditDialog.js:280
+#: js/AccountEditDialog.js:281
 msgid "Other Settings"
 msgstr "Altre impostazioni"
 
-#: js/AccountEditDialog.js:287
+#: js/AccountEditDialog.js:288
 msgid "Sent Folder Name"
 msgstr "Nome Cartella Inviata"
 
-#: js/AccountEditDialog.js:293
+#: js/AccountEditDialog.js:294
 msgid "Trash Folder Name"
 msgstr "Nome Cartella Cestino"
 
-#: js/AccountEditDialog.js:299
+#: js/AccountEditDialog.js:300
 msgid "Drafts Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:305
+#: js/AccountEditDialog.js:306
 msgid "Templates Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:311
+#: js/AccountEditDialog.js:312
 msgid "Display Format"
 msgstr "Formato Visualizzazione"
 
-#: js/AccountEditDialog.js:322
+#: js/AccountEditDialog.js:323
 msgid "HTML"
 msgstr "HTML"
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:324
 msgid "Plain Text"
 msgstr "Testo Non formattato"
 
-#: js/AccountEditDialog.js:324
+#: js/AccountEditDialog.js:325
 msgid "Depending on content type (experimental)"
 msgstr ""
 
@@ -273,55 +273,55 @@ msgstr "Credenziali IMAP per {0}"
 msgid "Credentials"
 msgstr "Credenziali"
 
-#: js/Felamimail.js:784 js/Felamimail.js:817
+#: js/Felamimail.js:787 js/Felamimail.js:820
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:785
+#: js/Felamimail.js:788
 msgid "No connection to IMAP server."
 msgstr "Nessuna connessione al server IMAP."
 
-#: js/Felamimail.js:801
+#: js/Felamimail.js:804
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:802
+#: js/Felamimail.js:805
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:818
+#: js/Felamimail.js:821
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:847
+#: js/Felamimail.js:850
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:848
+#: js/Felamimail.js:851
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:856
+#: js/Felamimail.js:859
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:857
+#: js/Felamimail.js:860
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:865
+#: js/Felamimail.js:868
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:866
+#: js/Felamimail.js:869
 msgid "Could not save script on Sieve server."
 msgstr ""
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
-#: js/TreeContextMenu.js:103 js/TreeContextMenu.js:106
+#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -567,7 +567,7 @@ msgstr ""
 msgid "No recipients set."
 msgstr ""
 
-#: js/Model.js:49 js/TreeContextMenu.js:24
+#: js/Model.js:49
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Messaggio"
@@ -821,63 +821,55 @@ msgstr ""
 msgid "Only send all X days to the same sender"
 msgstr ""
 
-#: js/TreeContextMenu.js:24
-msgid "Update {0} Cache"
-msgstr "Aggiorna la Cache {0}"
-
-#: js/TreeContextMenu.js:45
-msgid "Reload {0}"
-msgstr "Ricarica {0}"
-
-#: js/TreeContextMenu.js:59
+#: js/TreeContextMenu.js:23
 msgid "Empty Folder"
 msgstr "Cartella vuota"
 
-#: js/TreeContextMenu.js:95
+#: js/TreeContextMenu.js:59
 msgid "Add Folder"
 msgstr "Aggiungi Cartella"
 
-#: js/TreeContextMenu.js:100
+#: js/TreeContextMenu.js:64
 msgid "New {0}"
 msgstr "Nuova {0}"
 
-#: js/TreeContextMenu.js:100
+#: js/TreeContextMenu.js:64
 msgid "Please enter the name of the new {0}:"
 msgstr "Per favore inserisci il nome del nuovo {0}:"
 
-#: js/TreeContextMenu.js:103
+#: js/TreeContextMenu.js:67
 msgid "No {0} added"
 msgstr "Nessun {0} aggiunto"
 
-#: js/TreeContextMenu.js:103
+#: js/TreeContextMenu.js:67
 msgid "You have to supply a {0} name!"
 msgstr "Devi inserire un nome per {0}!"
 
-#: js/TreeContextMenu.js:106
+#: js/TreeContextMenu.js:70
 msgid "Please wait"
 msgstr "Per favore attendi"
 
-#: js/TreeContextMenu.js:106
+#: js/TreeContextMenu.js:70
 msgid "Creating {0}..."
 msgstr "Creazione di {0} in corso..."
 
-#: js/TreeContextMenu.js:136
+#: js/TreeContextMenu.js:100
 msgid "Edit Account"
 msgstr "Modifica Account"
 
-#: js/TreeContextMenu.js:164
-msgid "Set Vacation Message"
+#: js/TreeContextMenu.js:128
+msgid "Edit Vacation Message"
 msgstr ""
 
-#: js/TreeContextMenu.js:180
-msgid "Set Filter Rules"
+#: js/TreeContextMenu.js:144
+msgid "Edit Filter Rules"
 msgstr ""
 
-#: js/TreeContextMenu.js:194
+#: js/TreeContextMenu.js:158
 msgid "Mark Folder as read"
 msgstr ""
 
-#: js/TreeContextMenu.js:231
+#: js/TreeContextMenu.js:195
 msgid "Update Folder List"
 msgstr ""
 
@@ -1065,3 +1057,9 @@ msgstr "Usa Account di Sistema"
 msgid "Use user credentials and predefined settings for email account."
 msgstr ""
 "Usa le credenziali utente e le impostazioni predefinite per l'account email"
+
+#~ msgid "Update {0} Cache"
+#~ msgstr "Aggiorna la Cache {0}"
+
+#~ msgid "Reload {0}"
+#~ msgstr "Ricarica {0}"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 19:35+0000\n"
+"PO-Revision-Date: 2012-03-02 16:09+0000\n"
 "Last-Translator: ph_il <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-Language: German\n"
@@ -248,14 +248,14 @@ msgstr "Vorname"
 msgid "Middle Name"
 msgstr "Zweitname"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nachname"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
@@ -362,7 +362,7 @@ msgstr "Ort"
 msgid "Country"
 msgstr "Land"
 
-#: js/ContactEditDialog.js:342 js/Model.js:68
+#: js/ContactEditDialog.js:342 js/Model.js:68 js/Model.js:146
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -370,27 +370,27 @@ msgstr "Beschreibung"
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an"
 
-#: js/ContactEditDialog.js:408
+#: js/ContactEditDialog.js:416
 msgid "Export as pdf"
 msgstr "Als Pdf exportieren"
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
 msgid "Parse address"
 msgstr "Adresse einlesen"
 
-#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
+#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
 msgid "Either {0} or {1} must be given"
 msgstr "Entweder {0} oder {1} muss angegeben werden"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Paste address"
 msgstr "Adresse einfügen"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Please paste an address that should be parsed:"
 msgstr "Bitte fügen Sie eine Adresse ein, die eingelesen werden soll."
 
-#: js/ContactEditDialog.js:527
+#: js/ContactEditDialog.js:535
 msgid "End token mode"
 msgstr "Beende Merkmalsmodus"
 
@@ -452,7 +452,7 @@ msgstr "E-Mail (privat)"
 msgid "URL (private)"
 msgstr "Webseite (privat)"
 
-#: js/ContactGrid.js:139 js/Model.js:146
+#: js/ContactGrid.js:139
 msgid "Note"
 msgstr "Notizen"
 
@@ -464,11 +464,7 @@ msgstr "Zeitzone"
 msgid "Geo"
 msgstr "Geografischer Ort"
 
-#: js/ContactGrid.js:152
-msgid "Export Contact"
-msgstr "Kontakt exportieren"
-
-#: js/ContactGrid.js:153 js/ContactGrid.js:154
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] "{0} exportieren"
@@ -793,3 +789,6 @@ msgid "Link"
 msgid_plural "Links [%d]"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen [%d]"
+
+#~ msgid "Export Contact"
+#~ msgstr "Kontakt exportieren"

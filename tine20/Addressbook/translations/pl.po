@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:37+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-03-04 13:38+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-03-05 05:10+0000\n"
+"X-Generator: Launchpad (build 14900)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -193,11 +193,11 @@ msgstr "Import kontaktów z CSV książki adresowej Mac"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:14
 msgid "CSV Outlook 2007 German"
-msgstr ""
+msgstr "CSV Outlook 2007 po niemiecku"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
-msgstr "Import kontaktów CSW z książki adresowej Outlook"
+msgstr "Import CSV kontaktów z książki adresowej Outlook"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
@@ -255,14 +255,14 @@ msgstr "Imię"
 msgid "Middle Name"
 msgstr "Drugie imię"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
@@ -371,7 +371,7 @@ msgstr "Miasto"
 msgid "Country"
 msgstr "Kraj"
 
-#: js/ContactEditDialog.js:342 js/Model.js:68
+#: js/ContactEditDialog.js:342 js/Model.js:68 js/Model.js:146
 msgid "Description"
 msgstr "Opis"
 
@@ -379,34 +379,34 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/ContactEditDialog.js:408
+#: js/ContactEditDialog.js:416
 msgid "Export as pdf"
 msgstr "Eksportuj jako PDF"
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
 msgid "Parse address"
 msgstr "Wczytaj adres"
 
-#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
+#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Paste address"
-msgstr "Wklej adres"
+msgstr "Dodaj adres"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Please paste an address that should be parsed:"
 msgstr "Proszę wpisać adres przeznaczony do wczytania."
 
-#: js/ContactEditDialog.js:527
+#: js/ContactEditDialog.js:535
 msgid "End token mode"
 msgstr "Zakończ tryb znakowy"
 
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] "kontakt"
+msgstr[0] "Kontakt"
 msgstr[1] "kontakty"
 msgstr[2] "kontakty"
 
@@ -462,7 +462,7 @@ msgstr "E-mail (prywatny)"
 msgid "URL (private)"
 msgstr "URL (prywatny)"
 
-#: js/ContactGrid.js:139 js/Model.js:146
+#: js/ContactGrid.js:139
 msgid "Note"
 msgstr "Notatka"
 
@@ -474,16 +474,12 @@ msgstr "Strefa czasowa"
 msgid "Geo"
 msgstr "Położenie geograficzne"
 
-#: js/ContactGrid.js:152
-msgid "Export Contact"
-msgstr "Eksportuj kontakt"
-
-#: js/ContactGrid.js:153 js/ContactGrid.js:154
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Eksport {0}"
+msgstr[1] "Eksport {0}"
+msgstr[2] "Eksport {0}"
 
 # I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
 # Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
@@ -724,3 +720,6 @@ msgstr "Wywołaj kontakt"
 
 msgid "Compose email"
 msgstr "Nowa wiadomość"
+
+#~ msgid "Export Contact"
+#~ msgstr "Eksportuj kontakt"

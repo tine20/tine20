@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:31+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-03-03 11:59+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-04 05:21+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -70,108 +70,108 @@ msgstr "Proszę wpisać nową nazwę dla {0}:"
 msgid "Not renamed {0}"
 msgstr "Nazwa {0} nie została zmieniona"
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:483
+#: js/GridContextMenu.js:41 js/GridPanel.js:484
 msgid "You have to supply a {0} name!"
 msgstr "Musisz wprowadzić nazwę {0}!"
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:527
+#: js/GridContextMenu.js:145 js/GridPanel.js:528
 msgid "Do you really want to delete the following files?"
 msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
-#: js/GridPanel.js:131
+#: js/GridPanel.js:132
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:139
 msgid "Size"
 msgstr "Rozmiar"
 
-#: js/GridPanel.js:145 js/Model.js:522
+#: js/GridPanel.js:146 js/Model.js:522
 msgid "Contenttype"
-msgstr "Typ zawartości"
+msgstr "Typ"
 
-#: js/GridPanel.js:153
+#: js/GridPanel.js:154
 msgid "Folder"
 msgstr "Katalog"
 
-#: js/GridPanel.js:162
+#: js/GridPanel.js:163
 msgid "Revision"
 msgstr "Rewizja"
 
-#: js/GridPanel.js:177 js/Model.js:523
+#: js/GridPanel.js:178 js/Model.js:523
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/GridPanel.js:185
+#: js/GridPanel.js:186
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/GridPanel.js:192
+#: js/GridPanel.js:193
 msgid "Last Modified Time"
 msgstr "Data ostatniej modyfikacji"
 
-#: js/GridPanel.js:199
+#: js/GridPanel.js:200
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/GridPanel.js:233
+#: js/GridPanel.js:234
 msgid "Show closed"
 msgstr "Pokaż zamknięte"
 
-#: js/GridPanel.js:257
+#: js/GridPanel.js:258
 msgid "The max. Upload Filesize is {0} MB"
-msgstr ""
+msgstr "Maksymalny rozmiar przesyłanego pliku: {0} MB"
 
-#: js/GridPanel.js:295
+#: js/GridPanel.js:296
 msgid "Upload"
 msgstr "Przesyłanie"
 
-#: js/GridPanel.js:321
+#: js/GridPanel.js:322
 msgid "Create Folder"
 msgstr "Utwórz katalog"
 
-#: js/GridPanel.js:332
+#: js/GridPanel.js:333
 msgid "Folder Up"
 msgstr "Katalog nadrzędny"
 
-#: js/GridPanel.js:343
+#: js/GridPanel.js:344
 msgid "Save locally"
 msgstr "Zapisz lokalnie"
 
-#: js/GridPanel.js:353 js/GridPanel.js:354 js/GridPanel.js:356
+#: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
 msgid "Delete"
 msgstr "Usuń"
 
-#: js/GridPanel.js:366 js/GridPanel.js:367 js/GridPanel.js:369
+#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
 msgid "Rename"
 msgstr "Zmień nazwę"
 
-#: js/GridPanel.js:377
+#: js/GridPanel.js:378
 msgid "Pause upload"
 msgstr "Zatrzymaj przesyłanie"
 
-#: js/GridPanel.js:384
+#: js/GridPanel.js:385
 msgid "Resume upload"
 msgstr "Kontynuuj przesyłanie"
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "New Folder"
-msgstr ""
+msgstr "Nowy katalog"
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "Please enter the name of the new folder:"
-msgstr ""
+msgstr "Proszę wpisać nazwę nowego katalogu:"
 
-#: js/GridPanel.js:483
+#: js/GridPanel.js:484
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
-#: js/GridPanel.js:624 js/GridPanel.js:777 js/TreePanel.js:650
+#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
-#: js/GridPanel.js:625 js/TreePanel.js:651
+#: js/GridPanel.js:639 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -180,21 +180,23 @@ msgstr ""
 "Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
 "pliku: "
 
-#: js/GridPanel.js:778 js/TreePanel.js:761
+#: js/GridPanel.js:792 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
 #: js/Model.js:34
 msgid "file"
 msgid_plural "files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "plik"
+msgstr[1] "pliki"
+msgstr[2] "pliki"
 
 #: js/Model.js:38
 msgid "folder"
 msgid_plural "folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "katalog"
+msgstr[1] "katalogi"
+msgstr[2] "katalogi"
 
 #: js/Model.js:265 js/Model.js:281
 msgid "Copying data .. {0}"

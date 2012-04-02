@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 17:42+0100\n"
-"PO-Revision-Date: 2012-02-28 18:31+0000\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-03-02 12:57+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
@@ -244,14 +244,14 @@ msgstr "Имя"
 msgid "Middle Name"
 msgstr "Второе имя"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
@@ -358,7 +358,7 @@ msgstr "Город"
 msgid "Country"
 msgstr "Страна"
 
-#: js/ContactEditDialog.js:342 js/Model.js:68
+#: js/ContactEditDialog.js:342 js/Model.js:68 js/Model.js:146
 msgid "Description"
 msgstr "Описание"
 
@@ -366,27 +366,27 @@ msgstr "Описание"
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/ContactEditDialog.js:408
+#: js/ContactEditDialog.js:416
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
+#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:527
+#: js/ContactEditDialog.js:535
 msgid "End token mode"
 msgstr ""
 
@@ -449,7 +449,7 @@ msgstr "Электронная почта (личная)"
 msgid "URL (private)"
 msgstr "Личный веб-сайт"
 
-#: js/ContactGrid.js:139 js/Model.js:146
+#: js/ContactGrid.js:139
 msgid "Note"
 msgstr "Заметка"
 
@@ -461,16 +461,11 @@ msgstr "Часовой пояс"
 msgid "Geo"
 msgstr "Координаты"
 
-#: js/ContactGrid.js:152
-msgid "Export Contact"
-msgstr ""
-
-#: js/ContactGrid.js:153 js/ContactGrid.js:154
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"

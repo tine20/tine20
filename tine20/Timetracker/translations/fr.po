@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-28 18:56+0000\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-03-02 13:09+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -56,7 +56,7 @@ msgid_plural "timesheets lists"
 msgstr[0] "liste feuilles de temps"
 msgstr[1] "listes feuilles de temps"
 
-#: js/Models.js:84 js/Models.js:155
+#: js/Models.js:84 js/Models.js:156
 msgid "Quick search"
 msgstr "Recherche rapide"
 
@@ -68,7 +68,7 @@ msgstr "Compte"
 msgid "Date"
 msgstr "Date"
 
-#: js/Models.js:87 js/Models.js:158 js/TimeaccountEditDialog.js:92
+#: js/Models.js:87 js/Models.js:159 js/TimeaccountEditDialog.js:92
 #: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:170
 #: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
 msgid "Description"
@@ -84,43 +84,43 @@ msgstr "Facturable"
 msgid "Cleared"
 msgstr "Acquitté"
 
-#: js/Models.js:131 js/TimeaccountEditDialog.js:66
+#: js/Models.js:132 js/TimeaccountEditDialog.js:66
 #: js/TimesheetEditDialog.js:139 js/TimesheetGridPanel.js:100
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Compte de temps"
 msgstr[1] "Comptes de temps"
 
-#: js/Models.js:135
+#: js/Models.js:136
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "liste de comptes de temps"
 msgstr[1] "listes de comptes de temps"
 
-#: js/Models.js:139 js/TimeaccountEditDialog.js:115
+#: js/Models.js:140 js/TimeaccountEditDialog.js:115
 msgid "closed"
 msgstr "fermé"
 
-#: js/Models.js:156 js/TimeaccountEditDialog.js:82
+#: js/Models.js:157 js/TimeaccountEditDialog.js:82
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Numéro"
 
-#: js/Models.js:157 js/TimeaccountEditDialog.js:87
+#: js/Models.js:158 js/TimeaccountEditDialog.js:87
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Titre"
 
-#: js/Models.js:159
+#: js/Models.js:160
 msgid "Created By"
 msgstr "Auteur"
 
-#: js/Models.js:160 js/TimeaccountEditDialog.js:109
+#: js/Models.js:161 js/TimeaccountEditDialog.js:109
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "État"
 
-#: js/Models.js:161 js/TimeaccountEditDialog.js:136
+#: js/Models.js:162 js/TimeaccountEditDialog.js:136
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr "Date limite de réservation"

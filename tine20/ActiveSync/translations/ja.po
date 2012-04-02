@@ -59,27 +59,27 @@ msgstr[1] ""
 msgid "Devices"
 msgstr ""
 
-#: Preference.php:74
+#: Preference.php:79
 msgid "Default Addressbook"
 msgstr ""
 
-#: Preference.php:75
+#: Preference.php:80
 msgid "The default addressbook to create new contacts in."
 msgstr ""
 
-#: Preference.php:78
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr ""
 
-#: Preference.php:79
+#: Preference.php:84
 msgid "The default calendar to create new events in."
 msgstr ""
 
-#: Preference.php:82
+#: Preference.php:87
 msgid "Default Task List"
 msgstr ""
 
-#: Preference.php:83
+#: Preference.php:88
 msgid "The default task list to create new tasks in."
 msgstr ""
 

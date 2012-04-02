@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:49+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-03-04 13:46+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-03-05 05:10+0000\n"
+"X-Generator: Launchpad (build 14900)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -51,8 +51,8 @@ msgstr "Nieprawidłowy czas"
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Karta czasu pracy"
-msgstr[1] "karty czasu pracy"
-msgstr[2] "karty czasu pracy"
+msgstr[1] "Karty czasu pracy"
+msgstr[2] "Karty czasu pracy"
 
 #: js/Models.js:49
 msgid "timesheets list"
@@ -61,7 +61,7 @@ msgstr[0] "Lista kart czasu pracy"
 msgstr[1] "listy kart czasu pracy"
 msgstr[2] "listy kart czasu pracy"
 
-#: js/Models.js:84 js/Models.js:155
+#: js/Models.js:84 js/Models.js:156
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
@@ -73,7 +73,7 @@ msgstr "Konto"
 msgid "Date"
 msgstr "Data"
 
-#: js/Models.js:87 js/Models.js:158 js/TimeaccountEditDialog.js:92
+#: js/Models.js:87 js/Models.js:159 js/TimeaccountEditDialog.js:92
 #: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:170
 #: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
 msgid "Description"
@@ -89,45 +89,45 @@ msgstr "Do przeliczenia"
 msgid "Cleared"
 msgstr "Przeliczone"
 
-#: js/Models.js:131 js/TimeaccountEditDialog.js:66
+#: js/Models.js:132 js/TimeaccountEditDialog.js:66
 #: js/TimesheetEditDialog.js:139 js/TimesheetGridPanel.js:100
 msgid "Time Account"
 msgid_plural "Time Accounts"
-msgstr[0] "konto godzin"
+msgstr[0] "Konto godzin"
 msgstr[1] "konta godzin"
 msgstr[2] "konta godzin"
 
-#: js/Models.js:135
+#: js/Models.js:136
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Lista kont godzin"
 msgstr[1] "listy kont godzin"
 msgstr[2] "listy kont godzin"
 
-#: js/Models.js:139 js/TimeaccountEditDialog.js:115
+#: js/Models.js:140 js/TimeaccountEditDialog.js:115
 msgid "closed"
 msgstr "zakończone"
 
-#: js/Models.js:156 js/TimeaccountEditDialog.js:82
+#: js/Models.js:157 js/TimeaccountEditDialog.js:82
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Numer"
 
-#: js/Models.js:157 js/TimeaccountEditDialog.js:87
+#: js/Models.js:158 js/TimeaccountEditDialog.js:87
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/Models.js:159
+#: js/Models.js:160
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/Models.js:160 js/TimeaccountEditDialog.js:109
+#: js/Models.js:161 js/TimeaccountEditDialog.js:109
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Status"
 
-#: js/Models.js:161 js/TimeaccountEditDialog.js:136
+#: js/Models.js:162 js/TimeaccountEditDialog.js:136
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr "Ostateczny termin rezerwacji"

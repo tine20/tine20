@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: TAIWAN\n"
 "X-Poedit-Language: Chinese\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Select Project"
 msgstr ""
 
-#: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:115
+#: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:112
 msgid "Role"
 msgstr ""
 
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Adding {0} Participants to project"
 msgstr ""
 
-#: js/Model.js:33 js/ProjectEditDialog.js:139 js/ProjectEditDialog.js:152
+#: js/Model.js:33 js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
@@ -95,19 +95,19 @@ msgstr ""
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:73 js/ProjectEditDialog.js:164 js/ProjectGridPanel.js:95
+#: js/Model.js:73 js/ProjectEditDialog.js:161 js/ProjectGridPanel.js:95
 msgid "Title"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:169 js/ProjectGridPanel.js:88
+#: js/Model.js:74 js/ProjectEditDialog.js:166 js/ProjectGridPanel.js:88
 msgid "Number"
 msgstr ""
 
-#: js/Model.js:75 js/ProjectEditDialog.js:205
+#: js/Model.js:75 js/ProjectEditDialog.js:202
 msgid "Description"
 msgstr ""
 
-#: js/Model.js:77 js/ProjectEditDialog.js:175 js/ProjectGridPanel.js:101
+#: js/Model.js:77 js/ProjectEditDialog.js:172 js/ProjectGridPanel.js:101
 msgid "Status"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:114
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:111
 msgid "Attendee"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Attendee Role"
 msgstr ""
 
-#: js/ProjectEditDialog.js:219
+#: js/ProjectEditDialog.js:216
 msgid "Enter description"
 msgstr ""
 
