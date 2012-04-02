@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Calendar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:34+0000\n"
+"PO-Revision-Date: 2012-03-02 13:04+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
@@ -77,43 +77,43 @@ msgstr ""
 "résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy "
 "szinkronizáláskor."
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:244
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Riasztás \"%1$s\" eseményhez ekkor: %2$s"
 
-#: Controller/EventNotifications.php:254
+#: Controller/EventNotifications.php:247
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "\"%1$s\" esemény meghívó ekkor:"
 
-#: Controller/EventNotifications.php:258
+#: Controller/EventNotifications.php:251
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "\"%1$s\" esemény %2$s-kor törölve lett"
 
-#: Controller/EventNotifications.php:264
+#: Controller/EventNotifications.php:257
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "\"%1$s\" esemény %2$s-kor át lett ütemezve"
 
-#: Controller/EventNotifications.php:269
+#: Controller/EventNotifications.php:262
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "\"%1$s\" esemény %2$s-kor frissítve lett"
 
-#: Controller/EventNotifications.php:280
+#: Controller/EventNotifications.php:273
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s elfogadta ezt az eseményt:\"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:284
+#: Controller/EventNotifications.php:277
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s elutasította ezt az eseményt:\"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:288
+#: Controller/EventNotifications.php:281
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Bizonytalan válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:292
+#: Controller/EventNotifications.php:285
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Nincs válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:296
+#: Controller/EventNotifications.php:289
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Résztvevők megváltoztak ezen az eseményen:\"%1$s\" ekkor:%2$s"
 
@@ -160,7 +160,7 @@ msgid "Manage Resources"
 msgstr "Források kezelése"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:271 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:358
 msgid "Attendee"
 msgstr "Résztvevők"
 
@@ -247,7 +247,7 @@ msgstr "Események"
 msgid "Summary"
 msgstr "Összegzés"
 
-#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:234
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:244
 #: js/EventEditDialog.js:104 js/GridView.js:113 Preference.php:79
 msgid "Start Time"
 msgstr "Kezdési idő"
@@ -276,28 +276,28 @@ msgstr ""
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} óra"
 
-#: js/EventDetailsPanel.js:79 js/EventUI.js:236
+#: js/EventDetailsPanel.js:81 js/EventUI.js:236
 msgid "recurring event"
 msgstr "ismétlődő esemény"
 
-#: js/EventDetailsPanel.js:81 js/EventUI.js:241
+#: js/EventDetailsPanel.js:83 js/EventUI.js:241
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:119
+#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:119 js/GridView.js:119
 msgid "End Time"
 msgstr "Befejezési idő"
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:239
+#: js/EventDetailsPanel.js:254 Model/Event.php:239
 msgid "Blocking"
 msgstr "Blokkolva"
 
-#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
+#: js/EventDetailsPanel.js:259 js/EventEditDialog.js:98 js/GridView.js:144
 #: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr "Hely"
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr "Szervező"
 
@@ -533,23 +533,23 @@ msgstr "Nem lehet nyomtatni"
 msgid "Sorry, your current view does not support printing."
 msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
 
-#: js/MainScreenCenterPanel.js:1089
+#: js/MainScreenCenterPanel.js:1091
 msgid "Scheduling Conflict"
 msgstr "Ütemezési hiba"
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1093
 msgid "The following attendee are busy at the requested time:"
 msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
 
-#: js/MainScreenCenterPanel.js:1095
+#: js/MainScreenCenterPanel.js:1097
 msgid "Ignore Conflict"
 msgstr "Hiba figyelmen kívűl hagyása"
 
-#: js/MainScreenCenterPanel.js:1096
+#: js/MainScreenCenterPanel.js:1098
 msgid "Edit Event"
 msgstr "Esemény szerkesztése"
 
-#: js/MainScreenCenterPanel.js:1097
+#: js/MainScreenCenterPanel.js:1099
 msgid "Cancel this action"
 msgstr "Esemény megszakítása"
 
@@ -661,56 +661,56 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:238
+#: js/RrulePanel.js:314 Model/Event.php:238
 msgid "End"
 msgstr "Befejezés"
 
-#: js/RrulePanel.js:371
+#: js/RrulePanel.js:373
 msgid "Until has to be after event start"
 msgstr "Az esemény indulása utánig"
 
-#: js/RrulePanel.js:402
+#: js/RrulePanel.js:404
 msgid "Every {0}. Day"
 msgstr "Minden {0}. napon"
 
-#: js/RrulePanel.js:435
+#: js/RrulePanel.js:437
 msgid "Every {0}. Week at"
 msgstr "Minden {0}. héten ekkor:"
 
-#: js/RrulePanel.js:505
+#: js/RrulePanel.js:507
 msgid "Every {0}. Month"
 msgstr "Minden {0}. hónapban"
 
-#: js/RrulePanel.js:511 js/RrulePanel.js:560 js/RrulePanel.js:692
-#: js/RrulePanel.js:742
+#: js/RrulePanel.js:513 js/RrulePanel.js:562 js/RrulePanel.js:694
+#: js/RrulePanel.js:744
 msgid "at the"
 msgstr "ekkor:"
 
-#: js/RrulePanel.js:530 js/RrulePanel.js:711
+#: js/RrulePanel.js:532 js/RrulePanel.js:713
 msgid "first"
 msgstr "első"
 
-#: js/RrulePanel.js:531 js/RrulePanel.js:712
+#: js/RrulePanel.js:533 js/RrulePanel.js:714
 msgid "second"
 msgstr "második"
 
-#: js/RrulePanel.js:532 js/RrulePanel.js:713
+#: js/RrulePanel.js:534 js/RrulePanel.js:715
 msgid "third"
 msgstr "harmadik"
 
-#: js/RrulePanel.js:533 js/RrulePanel.js:714
+#: js/RrulePanel.js:535 js/RrulePanel.js:716
 msgid "fourth"
 msgstr "negyedik"
 
-#: js/RrulePanel.js:534 js/RrulePanel.js:715
+#: js/RrulePanel.js:536 js/RrulePanel.js:717
 msgid "last"
 msgstr "utolsó"
 
-#: js/RrulePanel.js:685
+#: js/RrulePanel.js:687
 msgid "Every {0}. Year"
 msgstr "Minden {0}. évben"
 
-#: js/RrulePanel.js:783 js/RrulePanel.js:791
+#: js/RrulePanel.js:785 js/RrulePanel.js:793
 msgid "of"
 msgstr "hónap"
 
@@ -730,11 +730,11 @@ msgstr ""
 msgid "Mini Calendar"
 msgstr "Mini naptár"
 
-#: Model/Attender.php:176
+#: Model/Attender.php:170
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: Model/Attender.php:406
+#: Model/Attender.php:427
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""

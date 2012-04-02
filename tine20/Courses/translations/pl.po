@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
+"PO-Revision-Date: 2012-03-02 18:44+0000\n"
 "Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -137,11 +137,11 @@ msgstr[2] "rodzaje kursu"
 #: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:30
 msgid "All courses"
-msgstr ""
+msgstr "Wszystkie kursy"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+msgstr "Domyślne ulubione wczytywane przy uruchamianiu klas"
 
 #: Setup/setup.xml:4
 msgid "Courses"

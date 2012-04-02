@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:32+0000\n"
+"PO-Revision-Date: 2012-03-02 13:07+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Norwegian Bokmål\n"
@@ -276,11 +276,11 @@ msgstr "instillinger"
 msgid "Search:"
 msgstr "Søk:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:834
+#: js/Applications.js:226 js/user/EditDialog.js:836
 msgid "disabled"
 msgstr "deaktivert"
 
-#: js/Applications.js:229 js/user/EditDialog.js:834
+#: js/Applications.js:229 js/user/EditDialog.js:835
 msgid "enabled"
 msgstr "aktivert"
 
@@ -515,19 +515,19 @@ msgstr "Gruppe Navn"
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:842
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
 msgid "Display in addressbook"
 msgstr "Vis i adressebok"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
 msgid "Hide from addressbook"
 msgstr "Skjul fra adressebok"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:862
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -770,8 +770,8 @@ msgstr "Hjemme Stasjon"
 msgid "Logon Time"
 msgstr "Logg in Tid"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:891
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
+#: js/user/EditDialog.js:926
 msgid "never logged in"
 msgstr "aldri logget på"
 
@@ -795,8 +795,8 @@ msgstr "Profil Sti"
 msgid "Password Last Set"
 msgstr "Passord Sist Satt"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:839
-#: js/user/EditDialog.js:899
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
+#: js/user/EditDialog.js:930
 msgid "never"
 msgstr "aldri"
 
@@ -845,7 +845,7 @@ msgstr ""
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
 msgid "Information"
 msgstr "Informasjon"
 
@@ -913,51 +913,61 @@ msgstr "Epost adresse"
 msgid "OpenID"
 msgstr "ÅpenID"
 
-#: js/user/EditDialog.js:834
+#: js/user/EditDialog.js:837
 msgid "expired"
 msgstr "Utgått"
 
-#: js/user/EditDialog.js:834
+#: js/user/EditDialog.js:838
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:837 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:845
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:846
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Utgår"
 
-#: js/user/EditDialog.js:889 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Siste logg inn kl"
 
-#: js/user/EditDialog.js:891 js/user/EditDialog.js:895
+#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
 msgid "don't know"
 msgstr "vet ikke"
 
-#: js/user/EditDialog.js:893 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Siste logg inn fra"
 
-#: js/user/EditDialog.js:897
+#: js/user/EditDialog.js:928
 msgid "Password set"
 msgstr "Passord satt"
 
-#: js/user/EditDialog.js:904
+#: js/user/EditDialog.js:935
 msgid "User groups"
 msgstr ""
 
-#: js/user/EditDialog.js:910
+#: js/user/EditDialog.js:941
 msgid "User roles"
 msgstr ""
 
-#: js/user/EditDialog.js:916
+#: js/user/EditDialog.js:947
 msgid "Fileserver"
 msgstr "Fil server"
 
-#: js/user/EditDialog.js:922
+#: js/user/EditDialog.js:953
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:931
+#: js/user/EditDialog.js:962
 msgid "SMTP"
 msgstr "SMTP"
 

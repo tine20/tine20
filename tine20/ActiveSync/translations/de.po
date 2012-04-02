@@ -58,27 +58,27 @@ msgstr[1] "Geräte"
 msgid "Devices"
 msgstr "Geräte"
 
-#: Preference.php:74
+#: Preference.php:79
 msgid "Default Addressbook"
 msgstr "Standard-Adressbuch"
 
-#: Preference.php:75
+#: Preference.php:80
 msgid "The default addressbook to create new contacts in."
 msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
 
-#: Preference.php:78
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr "Standard-Kalender"
 
-#: Preference.php:79
+#: Preference.php:84
 msgid "The default calendar to create new events in."
 msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
 
-#: Preference.php:82
+#: Preference.php:87
 msgid "Default Task List"
 msgstr "Standard-Aufgabenliste"
 
-#: Preference.php:83
+#: Preference.php:88
 msgid "The default task list to create new tasks in."
 msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 

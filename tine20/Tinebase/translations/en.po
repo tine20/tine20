@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:52+0000\n"
+"PO-Revision-Date: 2012-03-02 13:08+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:54+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: GB\n"
+"Language: \n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -1291,48 +1291,48 @@ msgstr "OK"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:113
 msgid "Merging Records..."
-msgstr ""
+msgstr "Merging Records..."
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "Remove Duplicate Failed"
-msgstr ""
+msgstr "Remove Duplicate Failed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:150
 msgid "The merge succeeded, but the duplicate {0} could not be removed"
-msgstr ""
+msgstr "The merge succeeded, but the duplicate {0} could not be removed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "Merge Failed"
-msgstr ""
+msgstr "Merge Failed"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "The merge failed. Both {0} haven't been touched."
-msgstr ""
+msgstr "The merge failed. Both {0} haven't been touched."
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:188
 msgid "Merge {0}, prefer First"
-msgstr ""
+msgstr "Merge {0}, prefer First"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:189
 msgid "Merge {0}, prefer Second"
-msgstr ""
+msgstr "Merge {0}, prefer Second"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:196
 #: js/widgets/grid/GridPanel.js:438
 msgid "Merge {0}"
-msgstr ""
+msgstr "Merge {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:199
 msgid "First {0}"
-msgstr ""
+msgstr "First {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:200
 msgid "Second {0}"
-msgstr ""
+msgstr "Second {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:201
 msgid "Final {0}"
-msgstr ""
+msgstr "Final {0}"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
@@ -1605,7 +1605,8 @@ msgstr "From the identified duplicates {0} will be discarded."
 
 #: js/widgets/dialog/ImportDialog.js:751
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
-msgstr "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr ""
+"All records will be tagged with: \"{0}\" so you can find them easily."
 
 #: js/widgets/dialog/ImportDialog.js:763
 msgid "{0} records have failures and will be discarded."
@@ -1667,7 +1668,8 @@ msgstr ""
 "{0} {1} have invalid data after updating. These {1} have not been changed."
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
 "{0} {1} has invalid data after updating. This {1} has not been changed."
 
@@ -1689,8 +1691,10 @@ msgstr "Loading ..."
 
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/form/ConfigPanel.js:134
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "You need to correct the red marked fields before config could be saved"
+msgid ""
+"You need to correct the red marked fields before config could be saved"
+msgstr ""
+"You need to correct the red marked fields before config could be saved"
 
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Saving of preferences failed."
@@ -2578,11 +2582,11 @@ msgstr "Please wait or contact your administrator"
 
 #~ msgid ""
 #~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
+#~ "support to forground the window for you, so you need to use your operating "
+#~ "systems window switching features. Please send complaints to your browser "
+#~ "vendor!"
 #~ msgstr ""
 #~ "The window you want to work with is backgrounded. Your browser does't "
-#~ "support to forground the window for you, so you need to use your "
-#~ "operating systems window switching features. Please send complaints to "
-#~ "your browser vendor!"
+#~ "support to forground the window for you, so you need to use your operating "
+#~ "systems window switching features. Please send complaints to your browser "
+#~ "vendor!"

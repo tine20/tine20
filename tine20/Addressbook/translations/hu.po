@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-29 13:15+0000\n"
-"Last-Translator: Faragó Tamás <Unknown>\n"
+"PO-Revision-Date: 2012-03-02 13:12+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
@@ -250,14 +250,14 @@ msgstr "Kereszt név"
 msgid "Middle Name"
 msgstr "Középső név"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Vezeték név"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
@@ -364,7 +364,7 @@ msgstr "Város"
 msgid "Country"
 msgstr "Ország"
 
-#: js/ContactEditDialog.js:342 js/Model.js:68
+#: js/ContactEditDialog.js:342 js/Model.js:68 js/Model.js:146
 msgid "Description"
 msgstr "Leírás"
 
@@ -372,27 +372,27 @@ msgstr "Leírás"
 msgid "Enter description"
 msgstr "Leírás megadása"
 
-#: js/ContactEditDialog.js:408
+#: js/ContactEditDialog.js:416
 msgid "Export as pdf"
 msgstr "Exportálás pdf-be"
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
 msgid "Parse address"
 msgstr "Cím felbontása"
 
-#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
+#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
 msgid "Either {0} or {1} must be given"
 msgstr "Vagy {0} vagy {1} megadása kötelező"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Paste address"
 msgstr "Cím beillesztése"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Please paste an address that should be parsed:"
 msgstr "Kérlek illessz be egy címet ami felbontásra kerül:"
 
-#: js/ContactEditDialog.js:527
+#: js/ContactEditDialog.js:535
 msgid "End token mode"
 msgstr "Token mód vége"
 
@@ -454,7 +454,7 @@ msgstr "Email (privát)"
 msgid "URL (private)"
 msgstr "URL (privát)"
 
-#: js/ContactGrid.js:139 js/Model.js:146
+#: js/ContactGrid.js:139
 msgid "Note"
 msgstr "Leírás"
 
@@ -466,11 +466,7 @@ msgstr "Időzóna"
 msgid "Geo"
 msgstr "Geo"
 
-#: js/ContactGrid.js:152
-msgid "Export Contact"
-msgstr "Kapcsolat exportálása"
-
-#: js/ContactGrid.js:153 js/ContactGrid.js:154
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
@@ -725,3 +721,6 @@ msgstr "Mobil privát"
 
 msgid "Last Modified Time"
 msgstr "Utolsó módosítás ideje"
+
+#~ msgid "Export Contact"
+#~ msgstr "Kapcsolat exportálása"

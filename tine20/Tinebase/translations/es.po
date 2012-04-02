@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:43+0000\n"
+"PO-Revision-Date: 2012-03-02 12:53+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:54+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Spanish\n"
@@ -206,6 +206,16 @@ msgstr ""
 msgid "%s's personal container"
 msgstr ""
 
+#: Container.php:1407
+msgid ""
+"You are not allowed to delete this Container. Please define another "
+"container as the default addressbook for internal contacts!"
+msgstr ""
+
+#: Container.php:1408
+msgid "System Container"
+msgstr ""
+
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
 msgstr "Etiquetas"
@@ -222,19 +232,19 @@ msgstr "Actividades"
 msgid "Data"
 msgstr ""
 
-#: Frontend/Http.php:374 js/ExceptionHandler.js:136
+#: Frontend/Http.php:378 js/ExceptionHandler.js:146
 msgid "Authorisation Required"
 msgstr "Autorización Necesaria"
 
-#: Frontend/Http.php:375
+#: Frontend/Http.php:379
 msgid "Your session is not valid. You need to login again."
 msgstr "Su sesión no es válida. Necesita volver a ingresar."
 
-#: Frontend/Http.php:400 js/ExceptionDialog.js:55
+#: Frontend/Http.php:404 js/ExceptionDialog.js:55
 msgid "Abnormal End"
 msgstr "Terminación Anormal"
 
-#: Frontend/Http.php:401 js/ExceptionDialog.js:106
+#: Frontend/Http.php:405 js/ExceptionDialog.js:106
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ocurrió un error, el programa terminó de forma anormal."
 
@@ -427,23 +437,23 @@ msgstr "Su reporte ha sido enviado. Gracias por su contribución"
 msgid "Please restart your browser now!"
 msgstr "Por favor reinicie su navegador ahora"
 
-#: js/ExceptionHandler.js:137
+#: js/ExceptionHandler.js:147
 msgid "Your session timed out. You need to login again."
 msgstr "Su sesión ha expirado. Necesita ingresar otra vez"
 
-#: js/ExceptionHandler.js:154
+#: js/ExceptionHandler.js:162
 msgid "Insufficient Rights"
 msgstr "Atribuciones Insuficientes"
 
-#: js/ExceptionHandler.js:155
+#: js/ExceptionHandler.js:163
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Lo sentimos, no tiene permitido realizar esta acción"
 
-#: js/ExceptionHandler.js:164
+#: js/ExceptionHandler.js:171
 msgid "Not Found"
 msgstr "No Encontrado"
 
-#: js/ExceptionHandler.js:165
+#: js/ExceptionHandler.js:172
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
@@ -453,11 +463,11 @@ msgstr ""
 "pudieron encontrar. En la mayoría de los casos esto significa que alguien ya "
 "borró esta información. Por favor actualice la vista actual."
 
-#: js/ExceptionHandler.js:174
+#: js/ExceptionHandler.js:180
 msgid "Concurrent Updates"
 msgstr "Actualizaciones Concurrentes"
 
-#: js/ExceptionHandler.js:175
+#: js/ExceptionHandler.js:181
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
@@ -465,26 +475,26 @@ msgstr ""
 "Alguien guardó este registro mientras usted editaba los datos. Necesitará "
 "volver a cagar los datos y realizar los cambios otra vez."
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:189
 msgid "Service Unavailable"
 msgstr ""
 
-#: js/ExceptionHandler.js:186
+#: js/ExceptionHandler.js:190
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again "
 "or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:196
 msgid "Server Message:"
 msgstr ""
 
-#: js/ExceptionHandler.js:196
+#: js/ExceptionHandler.js:198
 msgid "Invalid Data"
 msgstr ""
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:199
 msgid "Your input data is not valid. Please provide valid data."
 msgstr ""
 
@@ -504,31 +514,31 @@ msgstr ""
 "Lo sentimos, su petición sobrepasó el tiempo de espera. Por favor reinicie "
 "su navegador, intente otra vez o contacte a su administrador."
 
-#: js/ExceptionHandler.js:227
+#: js/ExceptionHandler.js:225
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:228
+#: js/ExceptionHandler.js:226
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:237
+#: js/ExceptionHandler.js:233
 msgid "Out of Resources"
 msgstr ""
 
-#: js/ExceptionHandler.js:238
+#: js/ExceptionHandler.js:234
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:247
+#: js/ExceptionHandler.js:250
 msgid "No Role Memberships"
 msgstr ""
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:251
 msgid ""
 "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
@@ -623,11 +633,11 @@ msgid "Logging you in..."
 msgstr "Accediendo..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:385
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
-#: js/widgets/tree/ContextMenu.js:182
+#: js/widgets/tree/ContextMenu.js:183
 msgid "Please wait"
 msgstr "Por favor espere"
 
@@ -649,7 +659,7 @@ msgstr "¡Su contraseña o nombre de usuarios son incorrectos!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -657,7 +667,7 @@ msgstr "Errores"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:351
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
 msgid "Please fix the errors noted."
 msgstr "Por favor arregle los errores señalados."
 
@@ -710,10 +720,10 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:363
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:380
 #: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/persistentfilter/PickerPanel.js:312
-#: js/widgets/tree/ContextMenu.js:336
+#: js/widgets/tree/ContextMenu.js:337
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -766,7 +776,7 @@ msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:401 js/widgets/account/PickerGridPanel.js:262
+#: js/Models.js:401 js/widgets/account/PickerGridPanel.js:265
 #: js/widgets/container/PropertiesDialog.js:104
 #: js/widgets/grid/LinkGridPanel.js:103
 msgid "Name"
@@ -815,7 +825,7 @@ msgid "Your password has been changed."
 msgstr "Su contraseña ha sido cambiada."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/dialog/ImportDialog.js:650
+#: js/widgets/dialog/ImportDialog.js:651
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 msgid "Failure"
 msgstr "Falló"
@@ -836,7 +846,7 @@ msgstr ""
 msgid "Remove Formatting"
 msgstr ""
 
-#: js/tineInit.js:589
+#: js/tineInit.js:590
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
@@ -968,27 +978,27 @@ msgstr ""
 msgid "enter searchfilter"
 msgstr "escribir filtro de búsqueda"
 
-#: js/widgets/account/PickerGridPanel.js:155
+#: js/widgets/account/PickerGridPanel.js:156
 msgid "Search User"
 msgstr "Buscar Usuario"
 
-#: js/widgets/account/PickerGridPanel.js:161
+#: js/widgets/account/PickerGridPanel.js:162
 msgid "Search Group"
 msgstr "Buscar Grupo"
 
-#: js/widgets/account/PickerGridPanel.js:167
+#: js/widgets/account/PickerGridPanel.js:168
 msgid "Add Anyone"
 msgstr "Agregar a Cualquiera"
 
-#: js/widgets/account/PickerGridPanel.js:176
+#: js/widgets/account/PickerGridPanel.js:211
 msgid "Anyone"
 msgstr "Cualquiera"
 
-#: js/widgets/account/PickerGridPanel.js:224
+#: js/widgets/account/PickerGridPanel.js:227
 msgid "Search for users ..."
 msgstr "Buscar por usuarios..."
 
-#: js/widgets/account/PickerGridPanel.js:246
+#: js/widgets/account/PickerGridPanel.js:249
 msgid "Search for groups ..."
 msgstr "Buscar por grupos..."
 
@@ -997,7 +1007,7 @@ msgid "Add a Note..."
 msgstr "Agregar una Nota..."
 
 #: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
-#: js/widgets/container/GrantsGrid.js:45 js/widgets/tree/ContextMenu.js:35
+#: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Agregar"
 
@@ -1121,7 +1131,7 @@ msgstr ""
 msgid "The grant to edit records in this container"
 msgstr ""
 
-#: js/widgets/container/GrantsGrid.js:49 js/widgets/tree/ContextMenu.js:55
+#: js/widgets/container/GrantsGrid.js:49
 msgid "Delete"
 msgstr "Borrar"
 
@@ -1166,7 +1176,6 @@ msgid "The grant to access records marked as private in this container"
 msgstr ""
 
 #: js/widgets/container/PropertiesDialog.js:87
-#: js/widgets/tree/ContextMenu.js:72
 msgid "Properties"
 msgstr ""
 
@@ -1201,11 +1210,11 @@ msgstr ""
 msgid "Select a country..."
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:137
+#: js/widgets/customfields/EditDialogPlugin.js:148
 msgid "General"
 msgstr "General"
 
-#: js/widgets/customfields/EditDialogPlugin.js:148
+#: js/widgets/customfields/EditDialogPlugin.js:160
 msgid "Custom Fields"
 msgstr "Campos Personalizados"
 
@@ -1283,20 +1292,12 @@ msgstr ""
 msgid "Merging Records..."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:150
-msgid "Remove Duplicate Failed"
-msgstr ""
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:150
-msgid "The merge succeeded, but the duplicate {0} could not be removed"
-msgstr ""
-
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
 msgid "Merge Failed"
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:152
-msgid "The merge failed. Both {0} haven't been touched."
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
 msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:188
@@ -1397,13 +1398,12 @@ msgstr "¿Realmente desea eliminar esto {0}?"
 msgid "Deleting {0}"
 msgstr "Eliminando {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
-#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:409
-#: js/widgets/tags/TagsPanel.js:442
+#: js/widgets/dialog/EditDialog.js:580 js/widgets/tags/TagsPanel.js:291
+#: js/widgets/tags/TagsPanel.js:409 js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Fallido"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/grid/GridPanel.js:1520
+#: js/widgets/dialog/EditDialog.js:580
 msgid "Could not delete {0}."
 msgstr "No se pudo eliminar {0}."
 
@@ -1540,58 +1540,58 @@ msgstr ""
 msgid "Processing Conflict Data"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:572 js/widgets/dialog/ImportDialog.js:591
+#: js/widgets/dialog/ImportDialog.js:572 js/widgets/dialog/ImportDialog.js:592
 msgid "No conflict to resolve"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:590
+#: js/widgets/dialog/ImportDialog.js:591
 msgid "(This is record {0} in you import file)"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:615
+#: js/widgets/dialog/ImportDialog.js:616
 msgid "No Detail Informations"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:620
+#: js/widgets/dialog/ImportDialog.js:621
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:649
+#: js/widgets/dialog/ImportDialog.js:650
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:665
+#: js/widgets/dialog/ImportDialog.js:666
 msgid "Importing {0}"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:727
+#: js/widgets/dialog/ImportDialog.js:728
 msgid "In total we found {0} records in your import file."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:730
+#: js/widgets/dialog/ImportDialog.js:731
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:737
+#: js/widgets/dialog/ImportDialog.js:738
 msgid "{0} of them where identified as duplicates."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:740
+#: js/widgets/dialog/ImportDialog.js:741
 msgid ""
 "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:744
+#: js/widgets/dialog/ImportDialog.js:745
 msgid "From the identified duplicates {0} will be discarded."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:751
+#: js/widgets/dialog/ImportDialog.js:761
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:763
+#: js/widgets/dialog/ImportDialog.js:772
 msgid "{0} records have failures and will be discarded."
 msgstr ""
 
@@ -1599,34 +1599,34 @@ msgstr ""
 msgid "Links"
 msgstr "Links"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:114
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:118
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:187
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:198
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:188
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:254
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:203
-msgid "Undo delete value from all selected records"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:237
+msgid "Undo change for all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:277
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:287
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:278
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:288
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:364
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:381
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:385
 msgid "Applying changes"
 msgstr ""
 
@@ -1730,7 +1730,7 @@ msgstr ""
 msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-#: js/widgets/form/RecordPickerComboBox.js:76
+#: js/widgets/form/RecordPickerComboBox.js:78
 #: js/widgets/form/RecordPickerManager.js:48 js/widgets/tags/TagsPanel.js:477
 msgid "Searching..."
 msgstr "Buscando..."
@@ -1745,11 +1745,11 @@ msgstr ""
 msgid "Remove file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:110
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:111
 msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:102
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:103
 msgid "Resume upload"
 msgstr ""
 
@@ -2004,7 +2004,7 @@ msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:400
+#: js/widgets/grid/GridPanel.js:400 js/widgets/tree/ContextMenu.js:35
 msgid "Add {0}"
 msgstr "Agregar {0}"
 
@@ -2013,7 +2013,7 @@ msgid "Print Page"
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
-#: js/widgets/grid/GridPanel.js:472
+#: js/widgets/grid/GridPanel.js:472 js/widgets/tree/ContextMenu.js:55
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Borrar {0}"
@@ -2372,55 +2372,59 @@ msgstr "Zona Horaria"
 msgid "setting new timezone..."
 msgstr "Estableciendo una nueva zona horaria..."
 
-#: js/widgets/tree/ContextMenu.js:43
-msgid "Rename"
-msgstr ""
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:256
+msgid "Rename {0}"
+msgstr "Renombrar {0}"
 
 #: js/widgets/tree/ContextMenu.js:64
-msgid "Manage permissions"
-msgstr "Manejar permisos"
+msgid "Manage {0} Permissions"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:72
+msgid "{0} Properties"
+msgstr ""
 
 #: js/widgets/tree/ContextMenu.js:81
-msgid "Set color"
+msgid "Set {0} color"
 msgstr ""
 
 #: js/widgets/tree/ContextMenu.js:95
-msgid "Reload"
-msgstr ""
+msgid "Reload {0}"
+msgstr "Recargar {0}"
 
-#: js/widgets/tree/ContextMenu.js:118
+#: js/widgets/tree/ContextMenu.js:119
 msgid "Download"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:176
+#: js/widgets/tree/ContextMenu.js:177
 msgid "New {0}"
 msgstr "Nuevo {0}"
 
-#: js/widgets/tree/ContextMenu.js:176
+#: js/widgets/tree/ContextMenu.js:177
 msgid "Please enter the name of the new {0}:"
 msgstr "Por favor ingrese el nombre del nuevo {0}:"
 
-#: js/widgets/tree/ContextMenu.js:179
+#: js/widgets/tree/ContextMenu.js:180
 msgid "No {0} added"
 msgstr "No {0} agregado"
 
-#: js/widgets/tree/ContextMenu.js:179 js/widgets/tree/ContextMenu.js:262
+#: js/widgets/tree/ContextMenu.js:180 js/widgets/tree/ContextMenu.js:263
 msgid "You have to supply a {0} name!"
 msgstr "¡Ud. debe ingresar {0} nombre!"
 
-#: js/widgets/tree/ContextMenu.js:182
+#: js/widgets/tree/ContextMenu.js:183
 msgid "Creating {0}..."
 msgstr "Creando {0}..."
 
-#: js/widgets/tree/ContextMenu.js:256
+#: js/widgets/tree/ContextMenu.js:257
 msgid "Please enter the new name of the {0}:"
 msgstr "Por favor ingrese el nuevo nombre de {0}:"
 
-#: js/widgets/tree/ContextMenu.js:262
+#: js/widgets/tree/ContextMenu.js:263
 msgid "Not renamed {0}"
 msgstr "No ha sido renombrado {0}"
 
-#: js/widgets/tree/ContextMenu.js:336
+#: js/widgets/tree/ContextMenu.js:337
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "¿Realmente desea agregar el {0} \"{1}\"?"
 
@@ -2567,12 +2571,6 @@ msgstr "Actualizando {0} \"{1}\""
 msgid "Deleting {0} \"{1}\""
 msgstr "Eliminando {0} \"{1}\""
 
-msgid "Rename {0}"
-msgstr "Renombrar {0}"
-
-msgid "Reload {0}"
-msgstr "Recargar {0}"
-
 msgid "There are no custom fields yet"
 msgstr "Aún no hay campos personalizados"
 
@@ -2689,3 +2687,6 @@ msgstr "Por favor Seleccione un Grupo"
 
 msgid "Select all visible ({0} records)"
 msgstr "Elegir todos los registros visibles ({0} registros)"
+
+#~ msgid "Manage permissions"
+#~ msgstr "Manejar permisos"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:34+0000\n"
+"PO-Revision-Date: 2012-03-02 13:04+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
@@ -279,11 +279,11 @@ msgstr "beállítások"
 msgid "Search:"
 msgstr "Keresés:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:834
+#: js/Applications.js:226 js/user/EditDialog.js:836
 msgid "disabled"
 msgstr "felfüggesztve"
 
-#: js/Applications.js:229 js/user/EditDialog.js:834
+#: js/Applications.js:229 js/user/EditDialog.js:835
 msgid "enabled"
 msgstr "engedélyezve"
 
@@ -518,19 +518,19 @@ msgstr "Csoport neve"
 msgid "Description"
 msgstr "Leírás"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:842
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
 msgid "Visibility"
 msgstr "Láthatóság"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
 msgid "Display in addressbook"
 msgstr "Megjelenítés a címjegyzékben"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:848
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
 msgid "Hide from addressbook"
 msgstr "Elrejtés a címjegyzékben"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:862
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
 msgid "Saved in Addressbook"
 msgstr "Címjegyzékben mentve"
 
@@ -773,8 +773,8 @@ msgstr "Home meghajtó"
 msgid "Logon Time"
 msgstr "Bejelentkezés ideje"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:891
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
+#: js/user/EditDialog.js:926
 msgid "never logged in"
 msgstr "sosem jelentkezett be"
 
@@ -798,8 +798,8 @@ msgstr "Profil útvonal"
 msgid "Password Last Set"
 msgstr "Utolsónak megadott jelszó"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:839
-#: js/user/EditDialog.js:899
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
+#: js/user/EditDialog.js:930
 msgid "never"
 msgstr "soha"
 
@@ -848,7 +848,7 @@ msgstr "Sieve Kvóta (MB)"
 msgid "Current Sieve size"
 msgstr "Mostani Sieve mérete"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
 msgid "Information"
 msgstr "Információ"
 
@@ -916,51 +916,61 @@ msgstr "Email cím"
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/EditDialog.js:834
+#: js/user/EditDialog.js:837
 msgid "expired"
 msgstr "lejárt"
 
-#: js/user/EditDialog.js:834
+#: js/user/EditDialog.js:838
 msgid "blocked"
 msgstr "blokkolt"
 
-#: js/user/EditDialog.js:837 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:845
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:846
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Lejár"
 
-#: js/user/EditDialog.js:889 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Utolsó bejelentkezés"
 
-#: js/user/EditDialog.js:891 js/user/EditDialog.js:895
+#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
 msgid "don't know"
 msgstr "nem tudom"
 
-#: js/user/EditDialog.js:893 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Utolsó bejelentkezés helye"
 
-#: js/user/EditDialog.js:897
+#: js/user/EditDialog.js:928
 msgid "Password set"
 msgstr "Beállított jelszó"
 
-#: js/user/EditDialog.js:904
+#: js/user/EditDialog.js:935
 msgid "User groups"
 msgstr "Felhasználói csoportok"
 
-#: js/user/EditDialog.js:910
+#: js/user/EditDialog.js:941
 msgid "User roles"
 msgstr "Felhasználó szerepek"
 
-#: js/user/EditDialog.js:916
+#: js/user/EditDialog.js:947
 msgid "Fileserver"
 msgstr "Fileserver"
 
-#: js/user/EditDialog.js:922
+#: js/user/EditDialog.js:953
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:931
+#: js/user/EditDialog.js:962
 msgid "SMTP"
 msgstr "SMTP"
 
