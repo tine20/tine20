@@ -340,11 +340,14 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     
     /**
      * test xml generation for IPhone
+     * 
+     * @see (attender check) 0006086: if new attender is added own attender is deleted / https://forge.tine20.org/mantisbt/view.php?id=6086
      */
     public function testConvertToTine20Model()
     {
         $event = $this->_createEvent($this->_testXMLInput);
         $this->assertEquals('2010-11-23 12:45:00', $event->alarms[0]->alarm_time->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertTrue(Calendar_Model_Attender::getOwnAttender($event->attendee) instanceof Calendar_Model_Attender);
     }
     
     /**
