@@ -243,9 +243,10 @@ function generatePOTFiles($_verbose)
         }
         $appPath = "$translationPath/../";
         
+        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
+        
         `cd "$appPath" 
-        touch translations/template.pot 
-        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | xgettext --force-po --omit-header -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
+        find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.xml" | xgettext --force-po --omit-header -j -o translations/template.pot -L Python --from-code=utf-8 -k=_ -f - 2> /dev/null`;
         
     }
 }
