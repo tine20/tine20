@@ -926,7 +926,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $filter = parent::_getContentFilter($_filterType);
         
         // no persistent filter set -> add default filter
-        if (! $filter ->getId()) {
+        if ($filter->isEmpty()) {
             $defaultFilter = $filter->createFilter('container_id', 'equals', array(
                 'path' => '/personal/' . Tinebase_Core::getUser()->getId()
             ));
