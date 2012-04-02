@@ -1,19 +1,20 @@
+# 
+# Translators:
+#   <mail@corneliusweiss.de>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Felamimail\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-27 08:46+0000\n"
-"Last-Translator: Lars Kneschke <Unknown>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 14:39+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-28 05:49+0000\n"
-"X-Generator: Launchpad (build 15027)\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -287,17 +288,13 @@ msgstr "IMAP Zugangsdatenfehler"
 
 #: js/Felamimail.js:805
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
-"Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren "
-"Administrator."
+msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
 
 #: js/Felamimail.js:821
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
-msgstr ""
-"Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  "
-"Bitte aktualisieren Sie die Ordnerliste."
+msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
 
 #: js/Felamimail.js:850
 msgid "SMTP Error"
@@ -503,16 +500,13 @@ msgstr "E-Mailnotiz anlegen"
 
 #: js/MessageEditDialog.js:174
 msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
-msgstr ""
-"Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
+"Activate this toggle button to save the email text as a note attached to the"
+" recipient(s) contact(s)."
+msgstr "Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
 
 #: js/MessageEditDialog.js:192
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr ""
-"Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste "
-"hinzuzufügen."
+msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
 
 #: js/MessageEditDialog.js:304
 msgid "On {0}, {1} wrote"
@@ -866,11 +860,11 @@ msgstr "Konto bearbeiten"
 
 #: js/TreeContextMenu.js:128
 msgid "Edit Vacation Message"
-msgstr ""
+msgstr "Abwesenheitsnotiz bearbeiten"
 
 #: js/TreeContextMenu.js:144
 msgid "Edit Filter Rules"
-msgstr ""
+msgstr "Filter Regeln bearbeiten"
 
 #: js/TreeContextMenu.js:158
 msgid "Mark Folder as read"
@@ -943,9 +937,7 @@ msgstr "E-Mail-Notiz erzeugen"
 
 #: Preference.php:119
 msgid "Save Note default Value."
-msgstr ""
-"Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht "
-"erzeugt."
+msgstr "Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht erzeugt."
 
 #: Preference.php:122
 msgid "Confirm Delete"
@@ -982,180 +974,3 @@ msgstr "Alle Entwürfe"
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
-
-msgid "Fetching messages... ({0}% done)"
-msgstr "Nachrichten abholen... ({0}% erledigt)"
-
-msgid "Quota unknown"
-msgstr "Quota unbekannt"
-
-msgid "Re:"
-msgstr "Re:"
-
-msgid ""
-"One of your folders was deleted from an other client, please reload you "
-"browser"
-msgstr ""
-"Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren "
-"Sie Ihren Browser."
-
-msgid "{0} left"
-msgstr "{0} übrig"
-
-msgid "Current usage: {0} of {1}"
-msgstr "Speicherverbrauch: {0} von {1}"
-
-msgid "wrote"
-msgstr "hat geschrieben"
-
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1}."
-
-msgid "Write"
-msgstr "Verfassen"
-
-msgid "Download"
-msgstr "Download"
-
-msgid "All INBOXES of my email accounts"
-msgstr "Alle Posteingänge meiner Emailkonten"
-
-msgid "All INBOXES"
-msgstr "Alle Posteingänge"
-
-msgid "Folder Selection"
-msgstr "Ordnerauswahl"
-
-msgid "Contacts"
-msgstr "Kontakte"
-
-msgid "Recipients (drag and drop contacts here to add)"
-msgstr "Empfänger (Kontakte hier herüberziehen um sie hinzuzufügen)"
-
-msgid "Invalid drop target"
-msgstr "Ungültiger Ordner"
-
-msgid "Could not move message(s)."
-msgstr "Konnte Nachricht(en) nicht verschieben."
-
-msgid "Marked"
-msgstr "Markiert"
-
-msgid "Contains marked messages"
-msgstr "Enthält markierte Nachrichten"
-
-msgid "Unread"
-msgstr "Ungelesen"
-
-msgid "Contains unread messages"
-msgstr "Enthält ungelesene Nachrichten"
-
-msgid "Add Attachment(s)"
-msgstr "Anhänge hinzufügen"
-
-msgid "Show Intelligent Folders"
-msgstr "Zeige Intelligente Ordner"
-
-msgid "No"
-msgstr "Nein"
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "Depending on content type"
-msgstr "Abhängig vom Content-Type"
-
-msgid "Toggle Flag"
-msgstr "Markieren"
-
-msgid "Recipients"
-msgstr "Empfänger"
-
-msgid "Save contact note"
-msgstr "Emailnotiz bei Kontakt speichern"
-
-msgid "Reload Folder List"
-msgstr "Ordnerliste neu laden"
-
-msgid "Error"
-msgstr "Fehler"
-
-msgid "No Account configured"
-msgstr "Kein Konto eingerichtet"
-
-msgid "Re: "
-msgstr "Aw: "
-
-msgid "Original Message"
-msgstr "Originalnachricht"
-
-msgid "Fwd: "
-msgstr "Fwd:"
-
-msgid "Some error occured while trying to update the messages."
-msgstr "Ein Fehler trat beim aktualisieren der Nachrichten auf."
-
-msgid "Sort Folders"
-msgstr "Ordner sortieren"
-
-msgid "Totalcount"
-msgstr "Anzahl"
-
-msgid "Cache"
-msgstr "Zwischenspeicher"
-
-msgid "Supports \"has_children\""
-msgstr "Unterstützt \"has_children\""
-
-msgid "You got {0} new mail(s) in Folder "
-msgstr "Sie haben {0} neue Email(s) im Ordner "
-
-msgid "Create and edit email accounts"
-msgstr "Erstellen und Bearbeiten von Emailkonten"
-
-msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
-
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-"Konnte Anhang nicht hochladen. Die Datei könnte zu groß gewesen sein. Bitte "
-"kontaktieren Sie Ihren Administrator. Maximale Dateigröße für Uploads: "
-
-msgid "Add Attachment"
-msgstr "Anhang hinzufügen"
-
-msgid "Remove Attachment"
-msgstr "Anhang entfernen"
-
-msgid "User Email Account"
-msgstr "Benutzer Email Konto"
-
-msgid "Use user credentials for IMAP email account."
-msgstr ""
-"Verwende (Tine 2.0) Benutzer-Zugangsdaten um den Benutzer am Email Konto zu "
-"authentifizieren."
-
-msgid "Sort Folders (experimental)"
-msgstr "Ordner sortieren (experimentell)"
-
-msgid "Update Cache"
-msgstr "Cache aktualisieren"
-
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator."
-msgstr "Konnte Datei nicht hochladen. Eventuell war sie zu groß."
-
-#~ msgid "Update {0} Cache"
-#~ msgstr "{0} Cache aktualisieren"
-
-#~ msgid "Reload {0}"
-#~ msgstr "Aktualisiere {0}"
-
-#~ msgid "Set Vacation Message"
-#~ msgstr "Abwesenheitsnotiz setzen"
-
-#~ msgid "Set Filter Rules"
-#~ msgstr "Filterregeln definieren"

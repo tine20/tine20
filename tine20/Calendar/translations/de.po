@@ -1,19 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Calendar\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-14 09:12+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:50+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-15 05:17+0000\n"
-"X-Generator: Launchpad (build 14933)\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:96
@@ -48,9 +48,7 @@ msgstr "Fester Kalender"
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
-msgstr ""
-"Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein "
-"Schulferien-Kalender."
+msgstr "Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein Schulferien-Kalender."
 
 #: Config.php:55
 msgid "Attendee Status Available"
@@ -60,10 +58,7 @@ msgstr "Verfügbare Teilnehmerstatus"
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
-msgstr ""
-"Verfügbare Teilnehmerstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
-"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
-"werden könnten."
+msgstr "Verfügbare Teilnehmerstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
@@ -73,10 +68,7 @@ msgstr "Verfügbare Teilnehmerrollen"
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
-msgstr ""
-"Verfügbare Teilnehmerrollen. Bitte beachten Sie, dass zusätzliche Werte beim "
-"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
-"werden könnten."
+msgstr "Verfügbare Teilnehmerrollen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
 #: Controller/EventNotifications.php:244
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -133,8 +125,7 @@ msgstr "OK"
 
 #: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
-msgstr ""
-"Bitte einen Termin auswählen, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte einen Termin auswählen, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToEventPanel.js:206 js/AttendeeGridPanel.js:102
 msgid "Role"
@@ -403,9 +394,7 @@ msgstr "Sie haben bereits auf diese Einladung geantwortet."
 
 #: js/iMIPDetailsPanel.js:230
 msgid "You received an event invitation. Set your response to:"
-msgstr ""
-"Sie haben eine Einladung zu einem Termin erhalten. Setzen Sie Ihre Antwort "
-"auf:"
+msgstr "Sie haben eine Einladung zu einem Termin erhalten. Setzen Sie Ihre Antwort auf:"
 
 #: js/iMIPDetailsPanel.js:238
 msgid "An invited attendee responded to the invitation."
@@ -499,9 +488,7 @@ msgstr "Bitte ändern Sie Ihre Auswahl."
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
-msgstr ""
-"Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht "
-"werden!"
+msgstr "Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht werden!"
 
 #: js/MainScreenCenterPanel.js:756
 msgid "Delete Event"
@@ -651,9 +638,7 @@ msgstr "Jährlich"
 
 #: js/RrulePanel.js:171
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
-"Ausnahmen von Wiederholungsterminen können keine eigenen Wiederholungen "
-"haben."
+msgstr "Ausnahmen von Wiederholungsterminen können keine eigenen Wiederholungen haben."
 
 #: js/RrulePanel.js:233
 msgid "at"
@@ -787,9 +772,7 @@ msgstr "Alle meine Termine"
 
 #: Preference.php:80
 msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
-"Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten "
-"beginnen sollen"
+msgstr "Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten beginnen sollen"
 
 #: Preference.php:83
 msgid "Default Calendar"
@@ -814,13 +797,9 @@ msgstr "Empfangen von Benachrichtigungs-Emails"
 #: Preference.php:92
 msgid ""
 "The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte "
-"beachten Sie, dass Organisatoren eines Termins über alle Änderungen "
-"einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange "
-"diese Option nicht auf \"Niemals\" gestellt ist."
+"organizers will get notifications for all updates including attendee answers"
+" unless this preference is set to \"Never\""
+msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte beachten Sie, dass Organisatoren eines Termins über alle Änderungen einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange diese Option nicht auf \"Niemals\" gestellt ist."
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -828,8 +807,7 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:96
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:149
 msgid "Never"
@@ -942,79 +920,3 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "Termin Details"
-
-msgid "forever"
-msgstr "unbegrenzt"
-
-msgid "Forever"
-msgstr "Unbegrenzt"
-
-msgid "Until"
-msgstr "Bis"
-
-msgid "Unknown calendar"
-msgstr "Unbekannter Kalender"
-
-msgid "unknown)"
-msgstr "unbekannt)"
-
-msgid "Confirm Update of Series"
-msgstr "Bestätigung der Terminreihe"
-
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr "Möchten Sie wirklich alle Termine dieser Reihe aktualisieren?"
-
-msgid "Confirm Deletion of Series"
-msgstr "Löschen einer Terminreihe"
-
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr "Möchten Sie wirklich alle Termine dieser Reihe löschen?"
-
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "Der Termin \"%1$s\" am %s wurde abgesagt"
-
-msgid "Resources {0}"
-msgstr "Ressourcen {0}"
-
-msgid "Show declined events"
-msgstr "Abgelehnte Termine anzeigen"
-
-msgid "Publish Free/Busy Information"
-msgstr "Frei/Belegt-Informationen veröffentlichen"
-
-msgid "Allow all users to view your free/busy information"
-msgstr "Erlaubt allen Benutzern das Einsehen ihrer Frei/Belegt-Informationen"
-
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Möchten Sie die ganze Reihe oder nur diesen Termin aktualisieren?"
-
-msgid "Failed not update recurring event series"
-msgstr "Aktualisierung der Terminreihe ist fehlgeschlagen."
-
-msgid "Failed not update event"
-msgstr "Aktualisierung des Termins ist fehlgeschlagen"
-
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Möchten Sie die komplette Reihe, nur diesen und alle zukünftigen Termine, "
-"oder nur diesen Termin löschen?"
-
-msgid "Every"
-msgstr "Jede(n)"
-
-msgid ". Day"
-msgstr ". Tag"
-
-msgid ". Week at"
-msgstr ". Woche am"
-
-msgid ". Month"
-msgstr ". Monat"
-
-msgid ". Year"
-msgstr ". Jahr"
-
-msgid "Ignore Scheduling Conflict?"
-msgstr "Überschneidung Ignoieren?"

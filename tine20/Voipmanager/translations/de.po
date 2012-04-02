@@ -1,20 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 Voipmanager\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:52+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 14:09+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:54+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/Asterisk/ContextEditDialog.js:40 js/Asterisk/ContextGridPanel.js:74
@@ -933,55 +932,3 @@ msgstr "Telefone"
 #: js/Voipmanager.js:123
 msgid "Templates"
 msgstr "Vorlagen"
-
-msgid "Owner"
-msgid_plural "Owners"
-msgstr[0] "Besitzer"
-msgstr[1] "Besitzer"
-
-msgid "owners list"
-msgid_plural "owners lists"
-msgstr[0] "owners list"
-msgstr[1] "owners lists"
-
-msgid "redirection"
-msgstr "Umleitung"
-
-msgid "redirect_event"
-msgstr "Ereignis"
-
-msgid "all"
-msgstr "alle"
-
-msgid "busy"
-msgstr "besetzt"
-
-msgid "time"
-msgstr "Zeit"
-
-msgid "redirect_number"
-msgstr "Ziel"
-
-msgid "redirect_time"
-msgstr "Zeitüberschreitung (Sek)"
-
-msgid "lineactive"
-msgstr "Line aktiv"
-
-msgid "sipCombo"
-msgstr "SIP Combo"
-
-msgid "Sip Peer"
-msgstr "Sip Peer"
-
-msgid "Rights"
-msgstr "Rechte"
-
-#~ msgid "Failed"
-#~ msgstr "Fehlgeschlagen"
-
-#~ msgid "Could not save {0}."
-#~ msgstr "Konnte {0} nicht speichern."
-
-#~ msgid "Duplicate MAC address detected"
-#~ msgstr "Doppelte MAC-Adresse festgestellt"
