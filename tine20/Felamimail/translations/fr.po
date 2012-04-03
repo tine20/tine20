@@ -3,34 +3,34 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:01+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-04-02 13:39+0000\n"
+"Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-03 05:37+0000\n"
+"X-Generator: Launchpad (build 15052)\n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
-msgstr "Gérer les comptes email."
+msgstr "Gérer les comptes courrier"
 
 #: Acl/Rights.php:107
 msgid "Edit and delete email accounts"
-msgstr "Modifier ou supprimer les comptes de courriels"
+msgstr "Modifier ou supprimer les comptes courrier"
 
 #: Acl/Rights.php:110
 msgid "Add email accounts"
-msgstr "Ajouter des comptes de courriels"
+msgstr "Ajouter des comptes courrier"
 
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
-msgstr "Créer de nouveaux comptes de courriels"
+msgstr "Créer de nouveaux comptes courrier"
 
 #: Controller/Message/Flags.php:24 js/GridPanel.js:577
 msgid "Answered"
@@ -56,7 +56,7 @@ msgstr "Marqué"
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
-msgstr "sujet"
+msgstr "Sujet"
 
 #: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
 msgid "Body"
@@ -219,7 +219,7 @@ msgstr "Dépendant du type de contenu (expérimental)"
 
 #: js/AddressbookGridPanelHook.js:33
 msgid "Compose email"
-msgstr ""
+msgstr "Ecrire un courrier"
 
 #: js/ContactGrid.js:254
 msgid "Add as \"To\""
@@ -243,7 +243,7 @@ msgstr ""
 
 #: js/Felamimail.js:33
 msgid "New Mail"
-msgstr ""
+msgstr "Nouveau courrier"
 
 #: js/Felamimail.js:85
 msgid "Email"
@@ -255,15 +255,15 @@ msgstr "Message d'absence actuel"
 
 #: js/Felamimail.js:121
 msgid "Email account \"{0}\" has an active vacation message."
-msgstr "L'alerte absence est activée sur le compte courriel \"{0}\"."
+msgstr "L'alerte absence est activée pour le compte \"{0}\"."
 
 #: js/Felamimail.js:507
 msgid "New mails"
-msgstr "Nouveaux messages"
+msgstr "Nouveaux courriers"
 
 #: js/Felamimail.js:508
 msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr ""
+msgstr "Vous avez reçu {0} nouveau(x) courrier(s) dans le dossier {1} ({2})."
 
 #: js/Felamimail.js:629
 msgid "IMAP Credentials for {0}"
@@ -283,17 +283,21 @@ msgstr "Pas de connexion au serveur IMAP."
 
 #: js/Felamimail.js:804
 msgid "IMAP Credentials Error"
-msgstr ""
+msgstr "Erreur d'identifiants IMAP"
 
 #: js/Felamimail.js:805
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
+"Vos identifiants courriers sont erronés. Veillez contacter votre "
+"administrateur."
 
 #: js/Felamimail.js:821
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr ""
+"Un des dossiers de ce compte a été supprimé ou renommé par un autre client "
+"de messagerie. Veuillez mettre à jour la liste des dossiers."
 
 #: js/Felamimail.js:850
 msgid "SMTP Error"
@@ -333,7 +337,7 @@ msgstr "Annuler"
 
 #: js/FolderSelectPanel.js:84
 msgid "Ok"
-msgstr ""
+msgstr "Accepter"
 
 #: js/FolderSelectPanel.js:175
 msgid "Folders of account {0}"
@@ -365,7 +369,7 @@ msgstr "Afficher/Masquer l'entête de message"
 
 #: js/GridDetailsPanel.js:330 js/GridPanel.js:468 js/MessageEditDialog.js:761
 msgid "Attachments"
-msgstr "Pièces jointes"
+msgstr "Fichier"
 
 #: js/GridPanel.js:110
 msgid "No Messages found or the cache is empty."
@@ -373,11 +377,11 @@ msgstr "Aucun message trouvé, ou le cache est vide."
 
 #: js/GridPanel.js:144
 msgid "Quota usage"
-msgstr ""
+msgstr "Utilisation de votre quota"
 
 #: js/GridPanel.js:241
 msgid "Compose"
-msgstr ""
+msgstr "Nouveau"
 
 #: js/GridPanel.js:250 js/MessageDisplayDialog.js:47
 msgid "Reply"
@@ -393,11 +397,11 @@ msgstr "Transférer"
 
 #: js/GridPanel.js:276
 msgid "Toggle highlighting"
-msgstr "(Dés)Activer l'importance"
+msgstr "Assurer un suivi"
 
 #: js/GridPanel.js:285
 msgid "Mark read/unread"
-msgstr "Marquer comme lu / non-lu"
+msgstr "Marquer comme lu ou non lu"
 
 #: js/GridPanel.js:295 js/GridPanel.js:296 js/GridPanel.js:298
 #: js/MessageDisplayDialog.js:40
@@ -406,7 +410,7 @@ msgstr "Effacer"
 
 #: js/GridPanel.js:306
 msgid "Add Account"
-msgstr "ajouter un compte"
+msgstr "Ajouter un compte courrier"
 
 #: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
 #: js/MessageDisplayDialog.js:78
@@ -415,7 +419,7 @@ msgstr "Aperçu avant impression"
 
 #: js/GridPanel.js:322 js/MessageDisplayDialog.js:72
 msgid "Print Message"
-msgstr "Imprimer le message"
+msgstr "Imprimer le courrier"
 
 #: js/GridPanel.js:461
 msgid "Id"
@@ -427,7 +431,7 @@ msgstr "Marqueurs"
 
 #: js/GridPanel.js:488 js/Model.js:142 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
-msgstr "De (courriel)"
+msgstr "De (adresse)"
 
 #: js/GridPanel.js:494 js/Model.js:143
 msgid "From (Name)"
@@ -475,7 +479,7 @@ msgstr ""
 
 #: js/MessageDisplayDialog.js:65
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: js/MessageEditDialog.js:133
 msgid "Send"
@@ -495,15 +499,15 @@ msgstr "Garder le modèle"
 
 #: js/MessageEditDialog.js:166
 msgid "Save Email Note"
-msgstr "Sauvegarder une note courriel"
+msgstr "Sauver la note"
 
 #: js/MessageEditDialog.js:174
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the "
 "recipient(s) contact(s)."
 msgstr ""
-"Cocher cette case pour sauvegarder le texte du courriel en tant que note "
-"attachée aux destinataire(s)."
+"Cocher cette case pour sauver le courrier en tant que note attachée au(x) "
+"destinataire(s)."
 
 #: js/MessageEditDialog.js:192
 msgid "Click to search for and add recipients from the Addressbook."
@@ -513,7 +517,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:304
 msgid "On {0}, {1} wrote"
-msgstr ""
+msgstr "Le {0}, {1} a écrit"
 
 #: js/MessageEditDialog.js:324
 msgid "Original message"
@@ -521,7 +525,7 @@ msgstr "message original"
 
 #: js/MessageEditDialog.js:556
 msgid "Fwd:"
-msgstr "Trans :"
+msgstr "TR:"
 
 #: js/MessageEditDialog.js:559
 msgid "{0} Message"
@@ -592,8 +596,8 @@ msgstr "Bcc"
 #: js/Model.js:354
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
-msgstr[0] "Compte courriel"
-msgstr[1] "Compte courriels"
+msgstr[0] "Comptes courrier"
+msgstr[1] "Comptes courrier"
 
 #: js/Model.js:490
 msgid "INBOX"
@@ -687,11 +691,11 @@ msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:70
 msgid "From (Email and Name)"
-msgstr ""
+msgstr "De (courrier et nom)"
 
 #: js/sieve/RuleConditionsPanel.js:71
 msgid "To (Email)"
-msgstr ""
+msgstr "À (courrier)"
 
 #: js/sieve/RuleConditionsPanel.js:74
 msgid "Header contains"
@@ -723,23 +727,23 @@ msgstr "Effectuer cette action :"
 
 #: js/sieve/RuleEditDialog.js:364
 msgid "Move mail to folder"
-msgstr "Déplacer le courriel dans le dossier"
+msgstr "Déplacer ce courrier dans le dossier"
 
 #: js/sieve/RuleEditDialog.js:365
 msgid "Redirect mail to address"
-msgstr "Rediriger le courriel vers l'adresse"
+msgstr "Faire suivre le courrier à l'adresse"
 
 #: js/sieve/RuleEditDialog.js:366
 msgid "Reject mail with this text"
-msgstr "Rejeter le courriel avec ce message"
+msgstr "Refuser le courrier avec ce message"
 
 #: js/sieve/RuleEditDialog.js:367
 msgid "Discard mail"
-msgstr "Refuser le courriel"
+msgstr "Refuser le courrier"
 
 #: js/sieve/RuleEditDialog.js:368
 msgid "Keep mail"
-msgstr "Garder le courriel"
+msgstr "Garder le courrier"
 
 #: js/sieve/RulesDialog.js:51
 msgid "Sieve Filter Rules"
@@ -799,7 +803,7 @@ msgstr "Message d'absence pour {0}"
 
 #: js/sieve/VacationEditDialog.js:94
 msgid "Incoming mails will be answered with this text:"
-msgstr "La réponse aux courriels reçus sera :"
+msgstr "Les courriers reçus seront retournés avec le message suivant :"
 
 #: js/sieve/VacationEditDialog.js:114
 msgid "General"
@@ -827,7 +831,7 @@ msgstr "Attendre X jours avant de renvoyer l'alerte à un même contact."
 
 #: js/TreeContextMenu.js:23
 msgid "Empty Folder"
-msgstr "Dossier vide"
+msgstr "Vider la corbeille"
 
 #: js/TreeContextMenu.js:59
 msgid "Add Folder"
@@ -891,22 +895,22 @@ msgstr "Nom sur le serveur :"
 
 #: js/TreePanel.js:712
 msgid "Last update:"
-msgstr ""
+msgstr "Mise à jour :"
 
 #: js/TreePanel.js:732
 #, python-format
 msgid "Fetching messages... ({0}%% done)"
-msgstr ""
+msgstr "Récupération des messages ({0}%% effectué)"
 
 #: js/TreePanel.js:748
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} message non lu"
+msgstr[1] "{0} messages non lus"
 
 #: Preference.php:59
 msgid "All inboxes"
-msgstr ""
+msgstr "Boîtes aux lettres"
 
 #: Preference.php:106
 msgid "Default Email Account"
@@ -933,7 +937,8 @@ msgstr "Utiliser dans le carnet d'adresses"
 
 #: Preference.php:115
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Écrire des courriels dans Felamimail à partir du carnet d'adresses"
+msgstr ""
+"Utiliser Felamimail pour composer des courriers depuis le carnet d'adresses"
 
 #: Preference.php:118
 msgid "Use for NOTES"
@@ -949,36 +954,35 @@ msgstr "Confirmer la suppression"
 
 #: Preference.php:123
 msgid "Show confirmation dialog when deleting mails."
-msgstr ""
-"Afficher la fenêtre de confirmation lors de la suppression des courriels."
+msgstr "Confirmer la suppression des courriers"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
-msgstr ""
+msgstr "Toutes les boîtes de mes comptes courrier"
 
 #: Setup/Initialize.php:51
 msgid "All unread mail"
-msgstr ""
+msgstr "Messages non-lus"
 
 #: Setup/Initialize.php:52
 msgid "All unread mail of my email accounts"
-msgstr ""
+msgstr "Tous les messages non lus de mes comptes courrier"
 
 #: Setup/Initialize.php:59
 msgid "All highlighted mail"
-msgstr ""
+msgstr "Courriers suivis"
 
 #: Setup/Initialize.php:60
 msgid "All highlighted mail of my email accounts"
-msgstr ""
+msgstr "Tous les courriers suivis de mes comptes courrier"
 
 #: Setup/Initialize.php:67
 msgid "All drafts"
-msgstr ""
+msgstr "Brouillons"
 
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
-msgstr ""
+msgstr "Tous les courriers marqués comme brouillon"
 
 msgid "Fetching messages... ({0}% done)"
 msgstr "Récupération de {0}% des messages..."
