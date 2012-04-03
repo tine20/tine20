@@ -1,0 +1,94 @@
+[main]
+host = https://www.transifex.net
+type = PO
+
+[tine20.Tinebase]
+file_filter = Tinebase/translations/<lang>.po
+source_file = Tinebase/translations/template.pot
+source_lang = en
+
+[tine20.Calendar]
+file_filter = Calendar/translations/<lang>.po
+source_file = Calendar/translations/template.pot
+source_lang = en
+
+[tine20.ActiveSync]
+file_filter = ActiveSync/translations/<lang>.po
+source_file = ActiveSync/translations/template.pot
+source_lang = en
+
+[tine20.Addressbook]
+file_filter = Addressbook/translations/<lang>.po
+source_file = Addressbook/translations/template.pot
+source_lang = en
+
+[tine20.Admin]
+file_filter = Admin/translations/<lang>.po
+source_file = Admin/translations/template.pot
+source_lang = en
+
+[tine20.Courses]
+file_filter = Courses/translations/<lang>.po
+source_file = Courses/translations/template.pot
+source_lang = en
+
+[tine20.Crm]
+file_filter = Crm/translations/<lang>.po
+source_file = Crm/translations/template.pot
+source_lang = en
+
+[tine20.Felamimail]
+file_filter = Felamimail/translations/<lang>.po
+source_file = Felamimail/translations/template.pot
+source_lang = en
+
+[tine20.Filemanager]
+file_filter = Filemanager/translations/<lang>.po
+source_file = Filemanager/translations/template.pot
+source_lang = en
+
+[tine20.Phone]
+file_filter = Phone/translations/<lang>.po
+source_file = Phone/translations/template.pot
+source_lang = en
+
+[tine20.Projects]
+file_filter = Projects/translations/<lang>.po
+source_file = Projects/translations/template.pot
+source_lang = en
+
+[tine20.Sales]
+file_filter = Sales/translations/<lang>.po
+source_file = Sales/translations/template.pot
+source_lang = en
+
+[tine20.Setup]
+file_filter = Setup/translations/<lang>.po
+source_file = Setup/translations/template.pot
+source_lang = en
+
+[tine20.SimpleFAQ]
+file_filter = SimpleFAQ/translations/<lang>.po
+source_file = SimpleFAQ/translations/template.pot
+source_lang = en
+
+[tine20.Sipgate]
+file_filter = Sipgate/translations/<lang>.po
+source_file = Sipgate/translations/template.pot
+source_lang = en
+
+[tine20.Tasks]
+file_filter = Tasks/translations/<lang>.po
+source_file = Tasks/translations/template.pot
+source_lang = en
+
+[tine20.Timetracker]
+file_filter = Timetracker/translations/<lang>.po
+source_file = Timetracker/translations/template.pot
+source_lang = en
+
+[tine20.Voipmanager]
+file_filter = Voipmanager/translations/<lang>.po
+source_file = Voipmanager/translations/template.pot
+source_lang = en
+
