@@ -330,6 +330,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         var fieldDefinitions = this.recordClass.getFieldDefinitions(),
             cfDefinitions = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.recordClass, true);
 
+        var recordsToAdd = [];
         Ext.each(fieldDefinitions.concat(cfDefinitions), function(field) {
             if (field.isMetaField || field.omitDuplicateResolving) return;
 
@@ -357,9 +358,11 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
                 record.set('finalValue', finalRecord.get(fieldName));
             }
 
-            this.addSorted(record);
+            recordsToAdd.push(record);
         }, this);
 
+        this.insert(0, recordsToAdd);
+        
         if (! finalRecord) {
             this.applyStrategy(this.resolveStrategy);
         }

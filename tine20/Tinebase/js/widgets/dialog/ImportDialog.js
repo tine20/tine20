@@ -443,7 +443,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 store: this.exceptionStore,
                 doLoad: this.loadConflict.createDelegate(this),
                 onLoad: Ext.emptyFn,
-                listeners: {afterrender: function(t){t.refresh.hide()}},
+                listeners: {afterrender: function(t){t.refresh.hide();}},
                 items: [this.conflictIndexText = new Ext.Toolbar.TextItem({}), '->', {
                     text: _('Conflict is resolved'),
                     xtype: 'splitbutton',
@@ -491,7 +491,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 return nextIsAllowed;
                 
             }).createDelegate(this)
-        }
+        };
     },
     
     /**
@@ -514,6 +514,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         this.manageButtons();
         
         this.loadConflict(this.exceptionStore.getCount() > index ? index : index-1);
+        
+        if (Ext.isFunction(arguments[0])) {
+            return arguments[0].call(this);
+        }
     },
     
     /**
@@ -521,19 +525,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      */
     onResolveAllConflict: function() {
         
-        // give DOM the time to show loadMask
-        if (this.conflictMask.hidden) {
+        // @TODO: disable grid to spedup things?
+        if (this.exceptionStore.getCount() > 0) {
             this.conflictMask.show();
             this.conflictMask.hidden = false;
             
-            return this.onResolveAllConflict.defer(200, this, arguments);
-        }
-        
-        while(this.exceptionStore.getCount() > 0) {
-            this.conflictMask.show();
-            this.conflictMask.hidden = false;
-            
-            this.onResolveConflict();
+            return this.onResolveConflict.defer(20, this, [this.onResolveAllConflict]);
+        } else {
+            this.conflictMask.hide();
+            this.conflictMask.hidden = true;
         }
     },
     
