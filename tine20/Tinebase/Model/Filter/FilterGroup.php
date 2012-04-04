@@ -237,7 +237,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
         $filterData = $_filterData;
-        
+                
         $filterData['value'] = $_filterData['value']['filters'];
         $filterData['options'] = array(
             'isGeneric'         => TRUE
@@ -246,7 +246,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         switch ($_filterData['value']['linkType']) {
             case 'relation':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
+                $model = new $this->_modelName();
                 $filterData['options']['related_model'] = $modelName;
+                $filterData['options']['idProperty'] = $model->getIdProperty();
                 $filter = new Tinebase_Model_Filter_Relation($filterData);
                 break;
 
