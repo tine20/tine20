@@ -334,6 +334,8 @@ Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
     mode: 'local',
     triggerAction: 'all',
     lazyInit: false,
+    forceSelection: true,
+    allowBlank: false,
     
     //private
     initComponent: function() {
