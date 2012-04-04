@@ -35,7 +35,8 @@ Tine.widgets.customfields.Field = {
                         Ext.apply(fieldDef, {
                             xtype: 'widget-keyfieldcombo',
                             app: options.app ? options.app : app,
-                            keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
+                            keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name'),
+                            sortBy: 'id'
                         });
                         break;
                        case 'record':
