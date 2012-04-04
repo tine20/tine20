@@ -158,8 +158,12 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     protected function _setFromJson(array &$_data)
     {
         if (isset($_data['relations'])) {
-            // add new relations
             foreach ((array)$_data['relations'] as $key => $relation) {
+                if ((! isset($relation['type']) || empty($relation['type'])) && isset($relation['related_record']) && isset($relation['related_record']['n_fileas'])) {
+                    // relation type might be missing for contact relations
+                    $relation['type'] = 'CUSTOMER';
+                }
+                
                 if (! isset($relation['id'])) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Setting new relation of type ' . $relation['type']);
