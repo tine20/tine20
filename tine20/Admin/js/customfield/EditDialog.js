@@ -456,6 +456,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     showStoreWindow: function () {
         this.storeWindow = Tine.WindowFactory.getWindow({
+            modal: true, // this needs to be modal atm, popup does not work due to issues with this in tineInit.js
             width: 500,
             height: 320,
             border: false,
@@ -685,7 +686,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Admin.CustomfieldEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 450,
+        width: 500,
         height: 450,
         name: Tine.Admin.CustomfieldEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.CustomfieldEditDialog',
