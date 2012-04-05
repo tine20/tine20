@@ -169,6 +169,23 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+    * testSearchContactsWithBadPaging
+    * 
+    * @see 0006214: LIMIT argument offset=-50 is not valid
+    */
+    public function testSearchContactsWithBadPaging()
+    {
+        $paging = $this->objects['paging'];
+        $paging['start'] = -50;
+        $filter = array(
+            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
+        );
+    
+        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+    }
+    
+    /**
      * try to get contacts by missing container
      *
      */

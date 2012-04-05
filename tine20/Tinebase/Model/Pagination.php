@@ -29,7 +29,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                   => array('allowEmpty'    => true,  
+        'id'                   => array('allowEmpty'    => true,
                                         'Int'                           ),
         'start'                => array('allowEmpty'    => true,
                                         'Int',
@@ -65,12 +65,12 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     public function appendLimit($_select)
     {
-        if (!empty($this->limit)) {
-            $_select->limit($this->limit, $this->start);
+        if (! empty($this->limit)) {
+            $start = ($this->start >= 0) ? $this->start : 0;
+            $_select->limit($this->limit, $start);
         }
     }
     
-
     /**
      * Appends sort statement to a given select object
      * 
