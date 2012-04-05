@@ -5,10 +5,10 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
- * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage
+ * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage, use standard record controller/backend functions
  * @todo        move (or replace from) functions to backend
  * @todo        switch containers to hash ids
  */
@@ -44,7 +44,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-        
+    
     /**
      * the table object for the container_acl table
      *
@@ -64,7 +64,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      */
     private function __clone() {}
-
+    
     /**
      * holds the instance of the singleton
      *
@@ -104,7 +104,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return $this->_contentBackend;
     }
-
+    
     /**
      * creates a new container
      *
@@ -183,7 +183,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                         Tinebase_Model_Grants::GRANT_READ    => true,
                         Tinebase_Model_Grants::GRANT_EXPORT  => true,
                         Tinebase_Model_Grants::GRANT_SYNC    => true,
-                    )            
+                    )
                 ), TRUE);
             } else {
                 // add all grants to creator only
@@ -212,7 +212,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * add grants to container
      *
      * @todo    check that grant is not already given to container/type/accout combi
-     * @param   int $_containerId
+     * @param   int|Tinebase_Model_Container $_containerId
      * @param   int $_accountId
      * @param   array $_grants list of grants to add
      * @return  boolean
@@ -222,9 +222,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-
         if($_ignoreAcl !== TRUE and !$this->hasGrant(Tinebase_Core::getUser(), $_containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
+            throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
         }
         
         switch($_accountType) {
@@ -261,10 +260,29 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        $this->_clearCache();
+        $this->_setRecordMetaDataAndUpdate($containerId, 'update');
         
         return true;
     }
+    
+    /**
+     * set modified timestamp for container
+     * 
+     * @param int|Tinebase_Model_Container $container
+     * @param string                       $action    one of {create|update|delete}
+     * @return Tinebase_Model_Container
+     */
+    protected function _setRecordMetaDataAndUpdate($container, $action)
+    {
+        if (! $container instanceof Tinebase_Model_Container) {
+            $container = $this->getContainerById($container);
+        }
+        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action);
+        $this->_clearCache($container);
+        
+        return $this->update($container);
+    }
+    
     /**
     * get the basic select object to fetch records from the database
     *
@@ -292,7 +310,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     
     /**
      * return all container, which the user has the requested right for
-     * - cache the results because this function is called very often
      *
      * used to get a list of all containers accesssible by the current user
      * 
@@ -313,53 +330,41 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
         $grant         = $ignoreACL ? '*' : $grant;
         
-        $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . implode('', (array)$grant) . $onlyIds);
-        $result = $cache->load($cacheId);
+        $select = $this->_getSelect($onlyIds ? 'id' : '*')
+            ->join(array(
+                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array()
+            )
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
+            ->group('container.id')
+            ->order('container.name');
         
-        if ($result === FALSE) {
-            $select = $this->_getSelect($onlyIds ? 'id' : '*')
-                ->join(array(
-                    /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
-                    /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                    /* select */ array()
-                )                
-            
-                ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
-                
-                ->group('container.id')
-                ->order('container.name');
-            
-            $this->addGrantsSql($select, $accountId, $grant);
-    
-            $stmt = $this->_db->query($select);
-            $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            
-            if ($onlyIds) {
-                $result = array();
-                foreach ($rows as $row) {
-                    $result[] = $row['id'];
-                }
-            } else {
-                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows, TRUE);
+        $this->addGrantsSql($select, $accountId, $grant);
+
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        if ($onlyIds) {
+            $result = array();
+            foreach ($rows as $row) {
+                $result[] = $row['id'];
             }
-            
-            // any account should have at least one personal folder
-            if(empty($result)) {
-                $personalContainer = $this->getDefaultContainer($applicationName, $accountId);
-                if ($personalContainer instanceof Tinebase_Model_Container) {
-                    $result = ($onlyIds) ? 
-                        array($personalContainer->getId()) : 
-                        new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers, TRUE);
-                }
-            }
-            
-            // save result and tag it with 'container'
-            $cache->save($result, $cacheId, array('container'));
+        } else {
+            $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows, TRUE);
         }
-            
-        return $result;
         
+        // any account should have at least one personal folder
+        if (empty($result)) {
+            $personalContainer = $this->getDefaultContainer($applicationName, $accountId);
+            if ($personalContainer instanceof Tinebase_Model_Container) {
+                $result = ($onlyIds) ? 
+                    array($personalContainer->getId()) : 
+                    new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers, TRUE);
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -389,7 +394,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         return $result;
-        
     }
     
     /**
@@ -784,11 +788,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        //$this->delete($containerId);
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($container, 'delete', $container);
-        $this->update($container);
-        
-        $this->_clearCache();
+        $this->_setRecordMetaDataAndUpdate($container, 'delete');
         
         /*
         // move all contained objects to next available personal container and try again to delete container
@@ -827,46 +827,35 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * set container name, if the user has the required right
      *
-     * @param   int $_containerId
+     * @param   int|Tinebase_Model_Container $_containerId
      * @param   string $_containerName the new name
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function setContainerName($_containerId, $_containerName)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-
-
-        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
+        
+        if (!$this->hasGrant(Tinebase_Core::getUser(), $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to rename container denied.');
         }
         
-        $where = array(
-            $this->_db->quoteInto('id = ?', $containerId)
-        );
+        $container->name = $_containerName;
         
-        $data = array(
-            'name' => $_containerName
-        );
-        
-        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
-
-        $this->_clearCache();
-        
-        return $this->getContainerById($_containerId);
+        return $this->_setRecordMetaDataAndUpdate($container, 'update');
     }
     
     /**
      * set container color, if the user has the required right
      *
-     * @param   int $_containerId
+     * @param   int|Tinebase_Model_Container $_containerId
      * @param   string $_color the new color
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function setContainerColor($_containerId, $_color)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
 
         if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to set color of container denied.');
@@ -876,19 +865,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             throw new Tinebase_Exception_UnexpectedValue('color is not valid');
         }
         
-        $where = array(
-            $this->_db->quoteInto('id = ?', $containerId)
-        );
+        $container->color = $_color;
         
-        $data = array(
-            'color' => $_color
-        );
-        
-        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
-
-        $this->_clearCache();
-        
-        return $this->getContainerById($_containerId);
+        return $this->_setRecordMetaDataAndUpdate($container, 'update');
     }
     
     /**
@@ -909,9 +888,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getTraceAsString());
             return FALSE;
         }
+        $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
 
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . implode('', (array)$_grant));
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->last_modified_time . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {
@@ -946,6 +926,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string                       $_grantModel
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
+     * 
+     * @todo add caching?
      */
     public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE, $_grantModel = 'Tinebase_Model_Grants') 
     {
@@ -997,8 +979,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
-        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId);
+        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->last_modified_time);
         $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
         if($grants === FALSE) {
@@ -1033,9 +1016,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id', $_grantModel = 'Tinebase_Model_Grants')
     {
-        // get container ids
         $containers = array();
-        
         foreach ($_records as $record) {
             if (isset($record[$_containerProperty]) && !isset($containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
                 $containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = array();
@@ -1128,8 +1109,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_grants->toArray(), TRUE));
         
-        $container = $this->getContainerById($containerId);
-       
         try {
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -1137,7 +1116,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $where = $this->_getContainerAclTable()->getAdapter()->quoteInto('container_id = ?', $containerId);
             $this->_getContainerAclTable()->delete($where);
             
-            foreach($_grants as $recordGrants) {
+            foreach ($_grants as $recordGrants) {
                 $data = array(
                     'id'            => $recordGrants->getId(),
                     'container_id'  => $containerId,
@@ -1157,7 +1136,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
-            $this->_clearCache();
+            $this->_setRecordMetaDataAndUpdate($containerId, 'update');
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -1228,17 +1207,25 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     
     /**
      * remove all container related entries from cache
+     * 
+     * @param int|Tinebase_Model_Container $containerId
      */
-    protected function _clearCache() 
+    protected function _clearCache($containerId) 
     {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
         $cache = Tinebase_Core::getCache();
-        if (!$cache || !$cache->getOption('caching')) {
-            return;
-        }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing all container entries from cache.');
-
-        $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Removing all cache entries for container id ' . $containerId);
+        
+        $idsToDelete = array(
+            'getContainerById' . $containerId . 'd0',
+            'getContainerById' . $containerId . 'd1',
+        );
+        
+        foreach ($idsToDelete as $id) {
+            $cache->remove($id);
+        }
     }
 
     /**
@@ -1398,12 +1385,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @throws Tinebase_Exception_Record_SystemContainer 
      */
     public function checkSystemContainer($containerIds) {
-        if(!is_array($containerIds)) $containerIds = array($containerIds);
+        if (!is_array($containerIds)) $containerIds = array($containerIds);
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
 
         $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
 
-        if(in_array($defaultAddressbook['id'], $containerIds)) {
+        if (in_array($defaultAddressbook['id'], $containerIds)) {
             // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
             // _('System Container')
             throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!', 'System Container');

@@ -71,7 +71,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
                 Tinebase_Model_Grants::GRANT_EDIT      => true,
                 Tinebase_Model_Grants::GRANT_DELETE    => true,
                 Tinebase_Model_Grants::GRANT_ADMIN     => true
-            )            
+            )
         ));
     }
 
@@ -488,6 +488,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $filter = array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact->getId())));
         $containerJson = new Tinebase_Frontend_Json_Container();
         $result = $containerJson->moveRecordsToContainer($initialContainer->getId(), $filter, 'Addressbook', 'Contact');
+        $this->assertGreaterThan(0, count($result['results']), 'no contacts moved');
         $this->assertEquals($contact->getId(), $result['results'][0]);
         
         $movedContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
