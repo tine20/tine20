@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-29 13:11+0000\n"
+"PO-Revision-Date: 2012-04-02 13:41+0000\n"
 "Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,8 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-03 05:37+0000\n"
+"X-Generator: Launchpad (build 15052)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -27,15 +27,15 @@ msgstr ""
 
 #: Controller/Node.php:164
 msgid "My folders"
-msgstr ""
+msgstr "Mes dossiers"
 
 #: Controller/Node.php:171
 msgid "Shared folders"
-msgstr ""
+msgstr "Dossiers partagés"
 
 #: Controller/Node.php:178
 msgid "Other users folders"
-msgstr ""
+msgstr "Autres dossiers d'utilisateurs"
 
 #: Controller.php:95
 #, python-format
@@ -44,11 +44,11 @@ msgstr ""
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
-msgstr ""
+msgstr "Gestionnaire de fichiers"
 
 #: js/Filemanager.js:67
 msgid "Files already exists"
-msgstr ""
+msgstr "Le fichier existe déjà"
 
 #: js/Filemanager.js:67
 msgid "Do you want to replace the following file(s)?"
@@ -64,114 +64,114 @@ msgstr ""
 
 #: js/GridContextMenu.js:35
 msgid "Please enter the new name of the {0}:"
-msgstr ""
+msgstr "Veuillez saisir le nouveau nom de {0} :"
 
 #: js/GridContextMenu.js:41
 msgid "Not renamed {0}"
-msgstr ""
+msgstr "{0} non renommé"
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:483
+#: js/GridContextMenu.js:41 js/GridPanel.js:484
 msgid "You have to supply a {0} name!"
-msgstr ""
+msgstr "Vous devez indiquer un nom de {0} !"
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:527
+#: js/GridContextMenu.js:145 js/GridPanel.js:528
 msgid "Do you really want to delete the following files?"
-msgstr ""
+msgstr "Voulez vous vraiment supprimer les fichiers suivants ?"
 
-#: js/GridPanel.js:131
+#: js/GridPanel.js:132
 msgid "Name"
 msgstr "Nom"
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:139
 msgid "Size"
 msgstr "Taille"
 
-#: js/GridPanel.js:145 js/Model.js:522
+#: js/GridPanel.js:146 js/Model.js:522
 msgid "Contenttype"
 msgstr "Type"
 
-#: js/GridPanel.js:153
+#: js/GridPanel.js:154
 msgid "Folder"
 msgstr "Dossier"
 
-#: js/GridPanel.js:162
+#: js/GridPanel.js:163
 msgid "Revision"
 msgstr "Révision"
 
-#: js/GridPanel.js:177 js/Model.js:523
+#: js/GridPanel.js:178 js/Model.js:523
 msgid "Creation Time"
 msgstr "Date et heure de création"
 
-#: js/GridPanel.js:185
+#: js/GridPanel.js:186
 msgid "Created By"
 msgstr "Créé par"
 
-#: js/GridPanel.js:192
+#: js/GridPanel.js:193
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/GridPanel.js:199
+#: js/GridPanel.js:200
 msgid "Last Modified By"
 msgstr ""
 
-#: js/GridPanel.js:233
+#: js/GridPanel.js:234
 msgid "Show closed"
 msgstr ""
 
-#: js/GridPanel.js:257
+#: js/GridPanel.js:258
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
-#: js/GridPanel.js:295
+#: js/GridPanel.js:296
 msgid "Upload"
 msgstr "Télécharger"
 
-#: js/GridPanel.js:321
+#: js/GridPanel.js:322
 msgid "Create Folder"
-msgstr ""
+msgstr "Créer un dossier"
 
-#: js/GridPanel.js:332
+#: js/GridPanel.js:333
 msgid "Folder Up"
 msgstr "Dossier parent"
 
-#: js/GridPanel.js:343
+#: js/GridPanel.js:344
 msgid "Save locally"
 msgstr "Sauvegarder sur le disque"
 
-#: js/GridPanel.js:353 js/GridPanel.js:354 js/GridPanel.js:356
+#: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
 msgid "Delete"
 msgstr "Supprimer"
 
-#: js/GridPanel.js:366 js/GridPanel.js:367 js/GridPanel.js:369
+#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
 msgid "Rename"
 msgstr "Renommer"
 
-#: js/GridPanel.js:377
+#: js/GridPanel.js:378
 msgid "Pause upload"
 msgstr "Mettre le téléchargement en pause"
 
-#: js/GridPanel.js:384
+#: js/GridPanel.js:385
 msgid "Resume upload"
 msgstr "Reprendre le téléchargement"
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "New Folder"
-msgstr ""
+msgstr "Nouveau dossier"
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/GridPanel.js:483
+#: js/GridPanel.js:484
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:624 js/GridPanel.js:777 js/TreePanel.js:650
+#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr "Échec du téléchargement"
 
-#: js/GridPanel.js:625 js/TreePanel.js:651
+#: js/GridPanel.js:639 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
@@ -179,42 +179,42 @@ msgstr ""
 "Le fichier est trop volumineux. Veuillez vérifier sa taille (   maximum) ou "
 "avertir votre administrateur. "
 
-#: js/GridPanel.js:778 js/TreePanel.js:761
+#: js/GridPanel.js:792 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/Model.js:34
 msgid "file"
 msgid_plural "files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "fichier"
+msgstr[1] "fichiers"
 
 #: js/Model.js:38
 msgid "folder"
 msgid_plural "folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dossier"
+msgstr[1] "dossiers"
 
 #: js/Model.js:265 js/Model.js:281
 msgid "Copying data .. {0}"
-msgstr ""
+msgstr "Copie des données {0}"
 
 #: js/Model.js:268 js/Model.js:283
 msgid "Moving data .. {0}"
-msgstr ""
+msgstr "Déplacement des données {0}"
 
 #: js/Model.js:287
 msgid "Please wait"
-msgstr ""
+msgstr "Veuillez patienter"
 
 #: js/Model.js:520
 msgid "Quick search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/Model.js:521
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr ""
+msgstr "chemin"

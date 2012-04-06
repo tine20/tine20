@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Japanese\n"
@@ -71,43 +71,43 @@ msgid ""
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:244
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:254
+#: Controller/EventNotifications.php:247
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:258
+#: Controller/EventNotifications.php:251
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:264
+#: Controller/EventNotifications.php:257
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr ""
 
-#: Controller/EventNotifications.php:269
+#: Controller/EventNotifications.php:262
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
-#: Controller/EventNotifications.php:280
+#: Controller/EventNotifications.php:273
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:284
+#: Controller/EventNotifications.php:277
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:288
+#: Controller/EventNotifications.php:281
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:292
+#: Controller/EventNotifications.php:285
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:296
+#: Controller/EventNotifications.php:289
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgid "Manage Resources"
 msgstr ""
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:271 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:358
 msgid "Attendee"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:234
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:244
 #: js/EventEditDialog.js:104 js/GridView.js:113 Preference.php:79
 msgid "Start Time"
 msgstr ""
@@ -270,28 +270,28 @@ msgstr ""
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:79 js/EventUI.js:236
+#: js/EventDetailsPanel.js:81 js/EventUI.js:236
 msgid "recurring event"
 msgstr ""
 
-#: js/EventDetailsPanel.js:81 js/EventUI.js:241
+#: js/EventDetailsPanel.js:83 js/EventUI.js:241
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:239 js/EventEditDialog.js:119 js/GridView.js:119
+#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:119 js/GridView.js:119
 msgid "End Time"
 msgstr ""
 
-#: js/EventDetailsPanel.js:244 Model/Event.php:239
+#: js/EventDetailsPanel.js:254 Model/Event.php:239
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:249 js/EventEditDialog.js:98 js/GridView.js:144
+#: js/EventDetailsPanel.js:259 js/EventEditDialog.js:98 js/GridView.js:144
 #: js/Model.js:202 js/ResourcesGridPanel.js:52 Model/Event.php:242
 msgid "Location"
 msgstr ""
 
-#: js/EventDetailsPanel.js:253 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
 msgid "Organizer"
 msgstr ""
 
@@ -525,23 +525,23 @@ msgstr ""
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1089
+#: js/MainScreenCenterPanel.js:1091
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1091
+#: js/MainScreenCenterPanel.js:1093
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1095
+#: js/MainScreenCenterPanel.js:1097
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1096
+#: js/MainScreenCenterPanel.js:1098
 msgid "Edit Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1097
+#: js/MainScreenCenterPanel.js:1099
 msgid "Cancel this action"
 msgstr ""
 
@@ -653,56 +653,56 @@ msgstr ""
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:312 Model/Event.php:238
+#: js/RrulePanel.js:314 Model/Event.php:238
 msgid "End"
 msgstr ""
 
-#: js/RrulePanel.js:371
+#: js/RrulePanel.js:373
 msgid "Until has to be after event start"
 msgstr ""
 
-#: js/RrulePanel.js:402
+#: js/RrulePanel.js:404
 msgid "Every {0}. Day"
 msgstr ""
 
-#: js/RrulePanel.js:435
+#: js/RrulePanel.js:437
 msgid "Every {0}. Week at"
 msgstr ""
 
-#: js/RrulePanel.js:505
+#: js/RrulePanel.js:507
 msgid "Every {0}. Month"
 msgstr ""
 
-#: js/RrulePanel.js:511 js/RrulePanel.js:560 js/RrulePanel.js:692
-#: js/RrulePanel.js:742
+#: js/RrulePanel.js:513 js/RrulePanel.js:562 js/RrulePanel.js:694
+#: js/RrulePanel.js:744
 msgid "at the"
 msgstr ""
 
-#: js/RrulePanel.js:530 js/RrulePanel.js:711
+#: js/RrulePanel.js:532 js/RrulePanel.js:713
 msgid "first"
 msgstr ""
 
-#: js/RrulePanel.js:531 js/RrulePanel.js:712
+#: js/RrulePanel.js:533 js/RrulePanel.js:714
 msgid "second"
 msgstr ""
 
-#: js/RrulePanel.js:532 js/RrulePanel.js:713
+#: js/RrulePanel.js:534 js/RrulePanel.js:715
 msgid "third"
 msgstr ""
 
-#: js/RrulePanel.js:533 js/RrulePanel.js:714
+#: js/RrulePanel.js:535 js/RrulePanel.js:716
 msgid "fourth"
 msgstr ""
 
-#: js/RrulePanel.js:534 js/RrulePanel.js:715
+#: js/RrulePanel.js:536 js/RrulePanel.js:717
 msgid "last"
 msgstr ""
 
-#: js/RrulePanel.js:685
+#: js/RrulePanel.js:687
 msgid "Every {0}. Year"
 msgstr ""
 
-#: js/RrulePanel.js:783 js/RrulePanel.js:791
+#: js/RrulePanel.js:785 js/RrulePanel.js:793
 msgid "of"
 msgstr ""
 
@@ -722,11 +722,11 @@ msgstr ""
 msgid "Mini Calendar"
 msgstr ""
 
-#: Model/Attender.php:176
+#: Model/Attender.php:170
 msgid "unknown"
 msgstr ""
 
-#: Model/Attender.php:406
+#: Model/Attender.php:427
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""

@@ -1,3 +1,18 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Tasks\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
 msgstr ""
@@ -217,19 +232,19 @@ msgstr ""
 msgid "In process"
 msgstr ""
 
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:154
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:158
 msgid "low"
 msgstr ""
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:155
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:159
 msgid "normal"
 msgstr ""
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:156
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:160
 msgid "high"
 msgstr ""
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:157
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:161
 msgid "urgent"
 msgstr ""
 

@@ -154,7 +154,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
 msgstr ""
 
@@ -182,27 +182,27 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
 #: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:385
+#: js/EmailPanel.js:390
 msgid "Hostname"
 msgstr ""
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
-#: js/EmailPanel.js:393
+#: js/EmailPanel.js:398
 msgid "Secure Connection"
 msgstr ""
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:303 js/EmailPanel.js:396
+#: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
 msgstr ""
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "TLS"
 msgstr ""
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "SSL"
 msgstr ""
 
@@ -484,75 +484,75 @@ msgstr ""
 msgid "Notifications local client (hostname or IP address)"
 msgstr ""
 
-#: js/EmailPanel.js:379
+#: js/EmailPanel.js:384
 msgid "SIEVE"
 msgstr ""
 
-#: js/EmailPanel.js:420
+#: js/EmailPanel.js:425
 msgid "MySql Hostname"
 msgstr ""
 
-#: js/EmailPanel.js:423
+#: js/EmailPanel.js:428
 msgid "MySql Database"
 msgstr ""
 
-#: js/EmailPanel.js:426
+#: js/EmailPanel.js:431
 msgid "MySql User"
 msgstr ""
 
-#: js/EmailPanel.js:429
+#: js/EmailPanel.js:434
 msgid "MySql Password"
 msgstr ""
 
-#: js/EmailPanel.js:433
+#: js/EmailPanel.js:438
 msgid "MySql Port"
 msgstr ""
 
-#: js/EmailPanel.js:449
+#: js/EmailPanel.js:454
 msgid "User or UID"
 msgstr ""
 
-#: js/EmailPanel.js:452
+#: js/EmailPanel.js:457
 msgid "Group or GID"
 msgstr ""
 
-#: js/EmailPanel.js:455
+#: js/EmailPanel.js:460
 msgid "Home Template"
 msgstr ""
 
-#: js/EmailPanel.js:457
+#: js/EmailPanel.js:462
 msgid "Password Scheme"
 msgstr ""
 
-#: js/EmailPanel.js:468
+#: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
 msgstr ""
 
-#: js/EmailPanel.js:469
+#: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
 msgstr ""
 
-#: js/EmailPanel.js:470
+#: js/EmailPanel.js:475
 msgid "SHA1"
 msgstr ""
 
-#: js/EmailPanel.js:471
+#: js/EmailPanel.js:476
 msgid "SHA256"
 msgstr ""
 
-#: js/EmailPanel.js:472
+#: js/EmailPanel.js:477
 msgid "SSHA256"
 msgstr ""
 
-#: js/EmailPanel.js:473
+#: js/EmailPanel.js:478
 msgid "SHA512"
 msgstr ""
 
-#: js/EmailPanel.js:474
+#: js/EmailPanel.js:479
 msgid "SSHA512"
 msgstr ""
 
-#: js/EmailPanel.js:475
+#: js/EmailPanel.js:480
 msgid "PLAIN"
 msgstr ""
 

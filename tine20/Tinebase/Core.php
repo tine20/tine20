@@ -934,27 +934,30 @@ class Tinebase_Core
             
             $locale = Tinebase_Translation::getLocale($localeString);
     
-            // save in session and registry
+            // save in session
             if ($session !== NULL) {
                 $session->userLocale = $locale;
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " user locale: " . (string)$locale);
-        
+        // save in registry
         self::set('locale', $locale);
+        
+        $localeString = (string)$locale;
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Setting user locale: " . $localeString);
         
         // save locale as preference
         if (is_object(Tinebase_Core::getUser()) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
-            self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
+            self::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
         }
         
         // set correct ctype locale, to make sure that the filesystem functions like basename() are working correctly with utf8 chars
         $ctypeLocale = setlocale(LC_CTYPE, 0);
         if (! preg_match('/utf-?8/i', $ctypeLocale)) {
-            $newCTypeLocale = (string)$locale . '.UTF8';
+            // use en_US as fallback locale if region string is missing
+            $newCTypeLocale = ((strpos($localeString, '_') !== FALSE) ? $localeString : 'en_US') . '.UTF8';
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Setting CTYPE locale from "' . $ctypeLocale . '" to "' . $newCTypeLocale . '".');
+                . ' Setting CTYPE locale from "' . $ctypeLocale . '" to "' . $newCTypeLocale . '".');
             setlocale(LC_CTYPE, $newCTypeLocale);
         }
     }

@@ -384,7 +384,6 @@ Tine.widgets.tree.ContextMenu = {
                         },
                         failure: function(result, request) {
                             var nodeData = Ext.util.JSON.decode(result.responseText);
-                            
                             var appContext = Tine[this.scope.app.appName];
                             if(appContext && appContext.handleRequestException) {
                                 appContext.handleRequestException(nodeData.data);

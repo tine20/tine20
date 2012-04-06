@@ -173,9 +173,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
             $wantedFolders = null;
             
             // check if contentfilter has a container limitation
-            // @TODO discuss if we query distinct containers of contentfilters?
             $filter = $this->_getContentFilter(0);
-            $containerFilter = $filter->getFilter('container_id');
+            $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
             if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
                 $wantedFolders = array_flip($containerFilter->getContainerIds());
             }

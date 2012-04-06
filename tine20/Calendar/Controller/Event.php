@@ -149,6 +149,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
+            
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            $busyException->setEvent($_event);
+            
             throw $busyException;
         }
     }
@@ -857,6 +861,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE));
         
+        if (! $baseEventId) {
+            throw new Tinebase_Exception_NotFound('base event of a recurring series not found');
+        }
+        
         // make sure we have a 'fully featured' event
         return $this->get($baseEventId);
     }
@@ -1103,7 +1111,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             // deleted persistent recur instances must be added to exdate of the baseEvent
             if (! empty($event->recurid)) {
-                $this->createRecurException($event, true);
+                try {
+                    $this->createRecurException($event, true);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    // base event gone, do nothing
+                }
             }
         }
         
@@ -1291,6 +1303,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
                 
                 $doContainerAclChecks = $this->doContainerACLChecks(FALSE);
+                $sendNotifications = $this->sendNotifications(FALSE);
+                
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
                 
@@ -1307,6 +1321,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $eventInstance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
                 $eventInstance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 $this->doContainerACLChecks($doContainerAclChecks);
+                $this->sendNotifications($sendNotifications);
                 
                 foreach ($attendee as $attender) {
                     $attender->setId(NULL);

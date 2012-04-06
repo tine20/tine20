@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:32+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-03-03 12:39+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-04 05:21+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
@@ -48,7 +48,7 @@ msgstr "Utwórz albo uaktualnij ulubione, wspólne zapytania"
 msgid "State"
 msgstr "Kraj"
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:149 js/Contact.js:252
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
 msgid "Role"
 msgstr "Funkcja"
 
@@ -56,7 +56,7 @@ msgstr "Funkcja"
 msgid "Source"
 msgstr "Źródło"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:444
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Początek"
@@ -65,17 +65,17 @@ msgstr "Początek"
 msgid "Scheduled end"
 msgstr "Planowane zakończenie"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:275
 msgid "End"
 msgstr "Koniec"
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:144
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:145
 #: js/Model.js:107
 msgid "Turnover"
 msgstr "Obroty"
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:262 js/Model.js:106
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:144
+#: js/LeadEditDialog.js:268 js/Model.js:106
 msgid "Probability"
 msgstr "Prawdopodobieństwo"
 
@@ -111,14 +111,14 @@ msgstr "Zapytanie %s zostało utworzone"
 msgid "%s's personal leads"
 msgstr "%s zapytania osobiste"
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:348 js/Contact.js:388
-#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
+#: Controller.php:153 js/Contact.js:161 js/Contact.js:354 js/Contact.js:394
+#: js/GridPanel.js:142 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr "Klient"
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:349 js/Contact.js:392
-#: js/GridPanel.js:140 js/LeadGridDetailsPanel.js:45
+#: Controller.php:154 js/Contact.js:181 js/Contact.js:355 js/Contact.js:398
+#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr "Wspólnik"
@@ -171,17 +171,17 @@ msgstr "Strona WWW"
 msgid "Lead Data"
 msgstr "Dane dot. zapytania"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:143
+#: js/LeadEditDialog.js:386 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Status zapytania"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:405
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Typ zapytania"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:412
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Źródło zapytania"
@@ -198,19 +198,19 @@ msgstr "Kontakty"
 msgid "Address"
 msgstr "Adres"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:291 js/Task.js:83
 msgid "Tasks"
 msgstr "Zadania"
 
-#: Export/Pdf.php:252 js/Task.js:178
+#: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
 msgstr "Termin"
 
-#: Export/Pdf.php:259 js/Task.js:191
+#: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:302 js/Product.js:85
 msgid "Products"
 msgstr "Produkty"
 
@@ -246,22 +246,22 @@ msgstr "Proszę wybrać zapytanie, do którego należy dodać kontakty"
 msgid "Please select the attenders' role"
 msgstr "Proszę wybrać rolę uczestnika"
 
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
-msgstr[0] "zapytanie"
+msgstr[0] "Zapytanie"
 msgstr[1] "zapytania"
 msgstr[2] "zapytania"
 
-#: js/AddToLeadPanel.js:145
+#: js/AddToLeadPanel.js:154
 msgid "Select Lead"
 msgstr "Wybierz zapytanie"
 
-#: js/AddToLeadPanel.js:150
+#: js/AddToLeadPanel.js:159
 msgid "Select Role"
 msgstr "Wybierz rolę"
 
-#: js/AddToLeadPanel.js:164
+#: js/AddToLeadPanel.js:173
 msgid "Adding {0} Contacts to lead"
 msgstr "Dodaj {0} kontaktów do zapytania"
 
@@ -286,7 +286,7 @@ msgstr "Ustawienia domyślne"
 msgid "Change type to Customer"
 msgstr "Zmień typ na wartość: Klient"
 
-#: js/Contact.js:171 js/Contact.js:347 js/Contact.js:384
+#: js/Contact.js:171 js/Contact.js:353 js/Contact.js:390 js/GridPanel.js:140
 msgid "Responsible"
 msgstr "Osoba odpowiedzialna"
 
@@ -338,61 +338,61 @@ msgstr "Znaczniki"
 msgid "Lead name"
 msgstr "Nazwa zapytania"
 
-#: js/GridPanel.js:145
+#: js/GridPanel.js:146
 msgid "Probable Turnover"
 msgstr "Prawdopodobny zwrot"
 
-#: js/GridPanel.js:175
+#: js/GridPanel.js:188
 msgid "Export Lead"
 msgstr "Eksportuj zapytanie"
 
-#: js/GridPanel.js:184
+#: js/GridPanel.js:197
 msgid "Export as PDF"
 msgstr "Eksportuj jako PDF"
 
-#: js/GridPanel.js:191
+#: js/GridPanel.js:204
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
 
-#: js/GridPanel.js:198
+#: js/GridPanel.js:211
 msgid "Export as ODS"
 msgstr "Eksportuj jako ODS"
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:218
 msgid "Export as XLS"
 msgstr "Exportuj jako XLS"
 
-#: js/LeadEditDialog.js:286
+#: js/LeadEditDialog.js:292
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 "Brak uprawnień do uruchomienia aplikacji Zadania albo jest ona nieaktywna"
 
-#: js/LeadEditDialog.js:297
+#: js/LeadEditDialog.js:303
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieaktywna"
 
-#: js/LeadEditDialog.js:338
+#: js/LeadEditDialog.js:344
 msgid "Enter short name"
 msgstr "wpisz skróconą nazwę"
 
-#: js/LeadEditDialog.js:422
+#: js/LeadEditDialog.js:428
 msgid "Expected turnover"
 msgstr "Oczekiwany obrót"
 
-#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:450 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Szacowane zakończenie"
 
-#: js/LeadEditDialog.js:476 js/Product.js:139
+#: js/LeadEditDialog.js:482 js/Product.js:139
 msgid "Description"
 msgstr "Opis"
 
-#: js/LeadEditDialog.js:490
+#: js/LeadEditDialog.js:496
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
@@ -420,7 +420,7 @@ msgstr "E-mail"
 msgid "Web"
 msgstr "WWW"
 
-#: js/LeadGridDetailsPanel.js:440 js/Task.js:220
+#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
 msgid "Status"
 msgstr "Status"
 
@@ -542,19 +542,19 @@ msgstr "Ilość"
 msgid "Search for Products to add ..."
 msgstr "Znajdź produkty do dodania ..."
 
-#: js/Task.js:111
+#: js/Task.js:109
 msgid "No Tasks to display"
 msgstr "Brak zadań"
 
-#: js/Task.js:170
+#: js/Task.js:168
 msgid "Summary"
 msgstr "Streszczenie"
 
-#: js/Task.js:174
+#: js/Task.js:172
 msgid "Add a task..."
 msgstr "Dodaj zadanie…"
 
-#: js/Task.js:207
+#: js/Task.js:205
 msgid "Percent"
 msgstr "W procentach"
 

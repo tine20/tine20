@@ -57,7 +57,7 @@ msgid_plural "timesheets lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:84 js/Models.js:155
+#: js/Models.js:84 js/Models.js:156
 msgid "Quick search"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: js/Models.js:87 js/Models.js:158 js/TimeaccountEditDialog.js:92
+#: js/Models.js:87 js/Models.js:159 js/TimeaccountEditDialog.js:92
 #: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:170
 #: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
 msgid "Description"
@@ -85,43 +85,43 @@ msgstr ""
 msgid "Cleared"
 msgstr ""
 
-#: js/Models.js:131 js/TimeaccountEditDialog.js:66
+#: js/Models.js:132 js/TimeaccountEditDialog.js:66
 #: js/TimesheetEditDialog.js:139 js/TimesheetGridPanel.js:100
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:135
+#: js/Models.js:136
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:139 js/TimeaccountEditDialog.js:115
+#: js/Models.js:140 js/TimeaccountEditDialog.js:115
 msgid "closed"
 msgstr ""
 
-#: js/Models.js:156 js/TimeaccountEditDialog.js:82
+#: js/Models.js:157 js/TimeaccountEditDialog.js:82
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr ""
 
-#: js/Models.js:157 js/TimeaccountEditDialog.js:87
+#: js/Models.js:158 js/TimeaccountEditDialog.js:87
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr ""
 
-#: js/Models.js:159
+#: js/Models.js:160
 msgid "Created By"
 msgstr ""
 
-#: js/Models.js:160 js/TimeaccountEditDialog.js:109
+#: js/Models.js:161 js/TimeaccountEditDialog.js:109
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr ""
 
-#: js/Models.js:161 js/TimeaccountEditDialog.js:136
+#: js/Models.js:162 js/TimeaccountEditDialog.js:136
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr ""

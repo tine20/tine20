@@ -33,6 +33,13 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     showIcon: true,
     
+    /**
+     * sort by a field
+     * 
+     * @cfg {String} sortBy
+     */
+    sortBy: null,
+    
     /* begin config */
     blurOnSelect  : true,
     expandOnFocus : true,
@@ -53,6 +60,9 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
         
         this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app, this.keyFieldName);
+        if (this.sortBy) {
+            this.store.sort(this.sortBy);
+        }
         
         this.showIcon = this.showIcon && this.store.find('icon', /^.+$/) > -1;
         

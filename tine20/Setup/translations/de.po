@@ -1,19 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Setup\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:44+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 14:07+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/ApplicationGridPanel.js:63
@@ -83,11 +83,9 @@ msgstr "Lösche alle existierenden Benutzer und Gruppen"
 #: js/AuthenticationPanel.js:127
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und "
-"Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
+msgstr "Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -155,7 +153,7 @@ msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:389
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
 msgstr "Port"
 
@@ -183,27 +181,27 @@ msgstr "Suchfilter"
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
 #: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:385
+#: js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Hostname"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
-#: js/EmailPanel.js:393
+#: js/EmailPanel.js:398
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:303 js/EmailPanel.js:396
+#: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
 msgstr "Keine"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "TLS"
 msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
-#: js/EmailPanel.js:396
+#: js/EmailPanel.js:401
 msgid "SSL"
 msgstr "SSL"
 
@@ -485,75 +483,75 @@ msgstr "Benachrichtigungs-Passwort"
 msgid "Notifications local client (hostname or IP address)"
 msgstr "Lokaler Hostname (oder IP-Adresse) für den Notifikationsdienst"
 
-#: js/EmailPanel.js:379
+#: js/EmailPanel.js:384
 msgid "SIEVE"
 msgstr "SIEVE"
 
-#: js/EmailPanel.js:420
+#: js/EmailPanel.js:425
 msgid "MySql Hostname"
 msgstr "MySql Hostname"
 
-#: js/EmailPanel.js:423
+#: js/EmailPanel.js:428
 msgid "MySql Database"
 msgstr "MySql Datenbank"
 
-#: js/EmailPanel.js:426
+#: js/EmailPanel.js:431
 msgid "MySql User"
 msgstr "MySql Benutzer"
 
-#: js/EmailPanel.js:429
+#: js/EmailPanel.js:434
 msgid "MySql Password"
 msgstr "MySql Passwort"
 
-#: js/EmailPanel.js:433
+#: js/EmailPanel.js:438
 msgid "MySql Port"
 msgstr "MySql Port"
 
-#: js/EmailPanel.js:449
+#: js/EmailPanel.js:454
 msgid "User or UID"
 msgstr "Benutzer oder UID"
 
-#: js/EmailPanel.js:452
+#: js/EmailPanel.js:457
 msgid "Group or GID"
 msgstr "Gruppe oder GID"
 
-#: js/EmailPanel.js:455
+#: js/EmailPanel.js:460
 msgid "Home Template"
 msgstr "Home Template"
 
-#: js/EmailPanel.js:457
+#: js/EmailPanel.js:462
 msgid "Password Scheme"
 msgstr "Passwortschema"
 
-#: js/EmailPanel.js:468
+#: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
 msgstr "PLAIN-MD5"
 
-#: js/EmailPanel.js:469
+#: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
 msgstr "MD5-CRYPT"
 
-#: js/EmailPanel.js:470
+#: js/EmailPanel.js:475
 msgid "SHA1"
 msgstr "SHA1"
 
-#: js/EmailPanel.js:471
+#: js/EmailPanel.js:476
 msgid "SHA256"
 msgstr "SHA256"
 
-#: js/EmailPanel.js:472
+#: js/EmailPanel.js:477
 msgid "SSHA256"
 msgstr "SSHA256"
 
-#: js/EmailPanel.js:473
+#: js/EmailPanel.js:478
 msgid "SHA512"
 msgstr "SHA512"
 
-#: js/EmailPanel.js:474
+#: js/EmailPanel.js:479
 msgid "SSHA512"
 msgstr "SSHA512"
 
-#: js/EmailPanel.js:475
+#: js/EmailPanel.js:480
 msgid "PLAIN"
 msgstr "PLAIN"
 
@@ -636,32 +634,3 @@ msgstr "Datenschutzvereinbarung"
 #: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
 msgstr "Bedingungen und Konditionen akzeptieren"
-
-msgid "Informations"
-msgstr "Informationen"
-
-msgid "Session files"
-msgstr "Sitzungs-Dateien"
-
-msgid "Session Files Path"
-msgstr "Pfad für Sitzungs-Dateien"
-
-msgid "Domain"
-msgstr "Domain"
-
-msgid "Use as default account"
-msgstr "Benutze den Standard Zugang"
-
-msgid "Default account name"
-msgstr "Name des Standard Zuganges"
-
-msgid "Redirect Url (after Logout, redirect to login screen if empty)"
-msgstr ""
-"Weiterleitungs URL (Nach dem Logout. Standardverhalten ist der Login-"
-"Bildschrim)"
-
-msgid "Shit"
-msgstr "Scheiße"
-
-msgid "Where are the backup tapes"
-msgstr "Wo sind nur die Backup Bänder"

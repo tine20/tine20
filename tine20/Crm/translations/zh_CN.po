@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:32+0000\n"
+"PO-Revision-Date: 2012-03-02 13:07+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: NOT SPECIFIED / ANY\n"
 "X-Poedit-Language: Chinese\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "State"
 msgstr "情形"
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:149 js/Contact.js:252
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
 msgid "Role"
 msgstr ""
 
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Source"
 msgstr "源"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:444
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "开始"
@@ -62,17 +62,17 @@ msgstr "开始"
 msgid "Scheduled end"
 msgstr "预订结束"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:275
 msgid "End"
 msgstr "结束"
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:144
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:145
 #: js/Model.js:107
 msgid "Turnover"
 msgstr "周转"
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:262 js/Model.js:106
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:144
+#: js/LeadEditDialog.js:268 js/Model.js:106
 msgid "Probability"
 msgstr "可能性"
 
@@ -108,14 +108,14 @@ msgstr ""
 msgid "%s's personal leads"
 msgstr "%s 的个人线索"
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:348 js/Contact.js:388
-#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
+#: Controller.php:153 js/Contact.js:161 js/Contact.js:354 js/Contact.js:394
+#: js/GridPanel.js:142 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr "客户"
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:349 js/Contact.js:392
-#: js/GridPanel.js:140 js/LeadGridDetailsPanel.js:45
+#: Controller.php:154 js/Contact.js:181 js/Contact.js:355 js/Contact.js:398
+#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr "伙伴"
@@ -168,17 +168,17 @@ msgstr ""
 msgid "Lead Data"
 msgstr "线索数据"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:143
+#: js/LeadEditDialog.js:386 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "线索状态"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:405
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "线索类型"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:412
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "线索源"
@@ -195,19 +195,19 @@ msgstr "联系人"
 msgid "Address"
 msgstr "地址"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:291 js/Task.js:83
 msgid "Tasks"
 msgstr "任务"
 
-#: Export/Pdf.php:252 js/Task.js:178
+#: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
 msgstr "过期日期"
 
-#: Export/Pdf.php:259 js/Task.js:191
+#: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
 msgstr "优先"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:302 js/Product.js:85
 msgid "Products"
 msgstr "产品"
 
@@ -243,21 +243,21 @@ msgstr ""
 msgid "Please select the attenders' role"
 msgstr ""
 
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/AddToLeadPanel.js:145
+#: js/AddToLeadPanel.js:154
 msgid "Select Lead"
 msgstr ""
 
-#: js/AddToLeadPanel.js:150
+#: js/AddToLeadPanel.js:159
 msgid "Select Role"
 msgstr ""
 
-#: js/AddToLeadPanel.js:164
+#: js/AddToLeadPanel.js:173
 msgid "Adding {0} Contacts to lead"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "Change type to Customer"
 msgstr "修改客户类型"
 
-#: js/Contact.js:171 js/Contact.js:347 js/Contact.js:384
+#: js/Contact.js:171 js/Contact.js:353 js/Contact.js:390 js/GridPanel.js:140
 msgid "Responsible"
 msgstr "责任"
 
@@ -334,59 +334,59 @@ msgstr ""
 msgid "Lead name"
 msgstr "线索名"
 
-#: js/GridPanel.js:145
+#: js/GridPanel.js:146
 msgid "Probable Turnover"
 msgstr ""
 
-#: js/GridPanel.js:175
+#: js/GridPanel.js:188
 msgid "Export Lead"
 msgstr ""
 
-#: js/GridPanel.js:184
+#: js/GridPanel.js:197
 msgid "Export as PDF"
 msgstr "输出PDF文件"
 
-#: js/GridPanel.js:191
+#: js/GridPanel.js:204
 msgid "Export as CSV"
 msgstr ""
 
-#: js/GridPanel.js:198
+#: js/GridPanel.js:211
 msgid "Export as ODS"
 msgstr ""
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:218
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadEditDialog.js:286
+#: js/LeadEditDialog.js:292
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:297
+#: js/LeadEditDialog.js:303
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:338
+#: js/LeadEditDialog.js:344
 msgid "Enter short name"
 msgstr "输入短名"
 
-#: js/LeadEditDialog.js:422
+#: js/LeadEditDialog.js:428
 msgid "Expected turnover"
 msgstr "期望的周转"
 
-#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:450 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "估计结束"
 
-#: js/LeadEditDialog.js:476 js/Product.js:139
+#: js/LeadEditDialog.js:482 js/Product.js:139
 msgid "Description"
 msgstr "描述"
 
-#: js/LeadEditDialog.js:490
+#: js/LeadEditDialog.js:496
 msgid "Enter description"
 msgstr "输入描述"
 
@@ -414,7 +414,7 @@ msgstr ""
 msgid "Web"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:440 js/Task.js:220
+#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
 msgid "Status"
 msgstr "状态"
 
@@ -530,19 +530,19 @@ msgstr ""
 msgid "Search for Products to add ..."
 msgstr ""
 
-#: js/Task.js:111
+#: js/Task.js:109
 msgid "No Tasks to display"
 msgstr "没有任务要显示"
 
-#: js/Task.js:170
+#: js/Task.js:168
 msgid "Summary"
 msgstr "摘要"
 
-#: js/Task.js:174
+#: js/Task.js:172
 msgid "Add a task..."
 msgstr "添加任务..."
 
-#: js/Task.js:207
+#: js/Task.js:205
 msgid "Percent"
 msgstr "百分比"
 

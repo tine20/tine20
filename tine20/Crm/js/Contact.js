@@ -3,8 +3,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         use Tine.widgets.grid.LinkGridPanel
  */
@@ -280,13 +280,19 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * update event handler for related contacts
      * 
-     * TODO use generic function
+     * TODO use generic function?
      */
     onUpdate: function(contact) {
         var response = {
             responseText: contact
         };
         contact = Tine.Addressbook.contactBackend.recordReader(response);
+        
+        Tine.log.debug('Tine.Crm.Contact.GridPanel::onUpdate - Contact has been updated:');
+        Tine.log.debug(contact);
+        
+        // remove contact relations to prevent cyclic relation structure
+        contact.data.relations = null;
         
         var myContact = this.store.getById(contact.id);
         if (myContact) {
@@ -298,7 +304,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         } else {
             contact.data.relation_type = 'customer';
             this.store.add(contact);
-        }        
+        }
     }
 });
 
@@ -328,6 +334,8 @@ Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
     mode: 'local',
     triggerAction: 'all',
     lazyInit: false,
+    forceSelection: true,
+    allowBlank: false,
     
     //private
     initComponent: function() {

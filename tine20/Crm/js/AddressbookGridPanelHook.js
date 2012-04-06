@@ -118,15 +118,33 @@ Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
         leadData.relations = [].concat(leadData.relations);
         Ext.each(contacts, function(contact) {
             leadData.relations.push({
-                type: 'customer',
-                related_record: contact.data
+                type: 'CUSTOMER',
+                related_record: contact.data,
+                own_backend: "Sql",
+                own_degree: "sibling",
+                own_model: "Crm_Model_Lead",
+                related_backend: "sql",
+                related_id: contact.data.id, 
+                related_model: "Addressbook_Model_Contact"
             });
         }, this);
         
         
-        Tine.Crm.LeadEditDialog.openWindow({
+        var window = Tine.Crm.LeadEditDialog.openWindow({
             record: new Tine.Crm.Model.Lead(leadData, 0)
         });
+        
+        window.on('close', function() {
+          var app = Tine.Tinebase.appMgr.get('Crm');
+             if(app) {
+                 var ms = app.getMainScreen();
+                 if(ms) {
+                     cp = ms.getCenterPanel();
+                     if(cp) cp.store.reload();
+                 }
+             }          
+        });
+        
     },
     
     onAddLead: function(btn) {

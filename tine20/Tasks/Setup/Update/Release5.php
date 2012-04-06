@@ -130,6 +130,11 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
     {
         $tasksAppId = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId();
 
+        // need to replace all NULL values first
+        $this->_db->update(SQL_TABLE_PREFIX . 'tasks', array(
+            'priority' => 1,
+        ), "`priority` IS NULL");
+        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>priority</name>
@@ -150,7 +155,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         $tasksPriorityConfig = array(
             'name'    => Tasks_Config::TASK_PRIORITY,
             'records' => array(
-                array('id' => 'LOW',     'value' => 'low',        'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
+                array('id' => 'LOW',    'value' => 'low',      'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
                 array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/oxygen/16x16/actions/go-next.png', 'system' => true), //_('normal')
                 array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/oxygen/16x16/actions/go-up.png',   'system' => true), //_('high')
                 array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/oxygen/16x16/emblems/emblem-important.png', 'system' => true), //_('urgent')

@@ -80,7 +80,7 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Ext.FormPanel, {
         new Ext.KeyMap(this.el, [ {
             key : [ 10, 13 ], // ctrl + return
             ctrl : true,
-            fn : this.onSend,
+            fn : this.onUpdate,
             scope : this
         } ]);
 
@@ -111,8 +111,17 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Ext.FormPanel, {
     onUpdate: function() {
         if(this.isValid()) {
             var p = new Tine.Crm.Model.Lead({id: this.searchBox.getValue()});
-            var window = Tine.Crm.LeadEditDialog.openWindow({record: p, additionalContacts: Ext.encode(this.attendee), additionalContactsRole: this.chooseRoleBox.getValue()});
+            var window = Tine.Crm.LeadEditDialog.openWindow({record: p, additionalContacts: Ext.encode(this.attendee), additionalContactsRole: this.chooseRoleBox.getValue().toUpperCase()});
+            
             window.on('close', function() {
+                var app = Tine.Tinebase.appMgr.get('Crm');
+                if(app) {
+                    var ms = app.getMainScreen();
+                    if(ms) {
+                        cp = ms.getCenterPanel();
+                        if(cp) cp.store.reload();
+                    }
+                }
                 this.onCancel();
             },this);
         }

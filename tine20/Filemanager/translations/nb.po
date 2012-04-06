@@ -70,114 +70,114 @@ msgstr ""
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:483
+#: js/GridContextMenu.js:41 js/GridPanel.js:484
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:527
+#: js/GridContextMenu.js:145 js/GridPanel.js:528
 msgid "Do you really want to delete the following files?"
 msgstr ""
 
-#: js/GridPanel.js:131
+#: js/GridPanel.js:132
 msgid "Name"
 msgstr ""
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:139
 msgid "Size"
 msgstr ""
 
-#: js/GridPanel.js:145 js/Model.js:522
+#: js/GridPanel.js:146 js/Model.js:522
 msgid "Contenttype"
 msgstr ""
 
-#: js/GridPanel.js:153
+#: js/GridPanel.js:154
 msgid "Folder"
 msgstr ""
 
-#: js/GridPanel.js:162
+#: js/GridPanel.js:163
 msgid "Revision"
 msgstr ""
 
-#: js/GridPanel.js:177 js/Model.js:523
+#: js/GridPanel.js:178 js/Model.js:523
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:185
+#: js/GridPanel.js:186
 msgid "Created By"
 msgstr ""
 
-#: js/GridPanel.js:192
+#: js/GridPanel.js:193
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/GridPanel.js:199
+#: js/GridPanel.js:200
 msgid "Last Modified By"
 msgstr ""
 
-#: js/GridPanel.js:233
+#: js/GridPanel.js:234
 msgid "Show closed"
 msgstr ""
 
-#: js/GridPanel.js:257
+#: js/GridPanel.js:258
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
-#: js/GridPanel.js:295
+#: js/GridPanel.js:296
 msgid "Upload"
 msgstr ""
 
-#: js/GridPanel.js:321
+#: js/GridPanel.js:322
 msgid "Create Folder"
 msgstr ""
 
-#: js/GridPanel.js:332
+#: js/GridPanel.js:333
 msgid "Folder Up"
 msgstr ""
 
-#: js/GridPanel.js:343
+#: js/GridPanel.js:344
 msgid "Save locally"
 msgstr ""
 
-#: js/GridPanel.js:353 js/GridPanel.js:354 js/GridPanel.js:356
+#: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
 msgid "Delete"
 msgstr ""
 
-#: js/GridPanel.js:366 js/GridPanel.js:367 js/GridPanel.js:369
+#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
 msgid "Rename"
 msgstr ""
 
-#: js/GridPanel.js:377
+#: js/GridPanel.js:378
 msgid "Pause upload"
 msgstr ""
 
-#: js/GridPanel.js:384
+#: js/GridPanel.js:385
 msgid "Resume upload"
 msgstr ""
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "New Folder"
 msgstr ""
 
-#: js/GridPanel.js:478
+#: js/GridPanel.js:479
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/GridPanel.js:483
+#: js/GridPanel.js:484
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:624 js/GridPanel.js:777 js/TreePanel.js:650
+#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr ""
 
-#: js/GridPanel.js:625 js/TreePanel.js:651
+#: js/GridPanel.js:639 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:778 js/TreePanel.js:761
+#: js/GridPanel.js:792 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 

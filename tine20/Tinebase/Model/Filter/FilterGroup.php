@@ -237,7 +237,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
         $filterData = $_filterData;
-        
+                
         $filterData['value'] = $_filterData['value']['filters'];
         $filterData['options'] = array(
             'isGeneric'         => TRUE
@@ -246,7 +246,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         switch ($_filterData['value']['linkType']) {
             case 'relation':
                 $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
+                $model = new $this->_modelName();
                 $filterData['options']['related_model'] = $modelName;
+                $filterData['options']['idProperty'] = $model->getIdProperty();
                 $filter = new Tinebase_Model_Filter_Relation($filterData);
                 break;
 
@@ -565,11 +567,13 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @param string $_field
      * @param boolean $_getAll
+     * @param boolean $_recursive
+     * 
      * @return Tinebase_Model_Filter_Abstract|array
      */
-    public function getFilter($_field, $_getAll = FALSE)
+    public function getFilter($_field, $_getAll = FALSE, $_recursive = FALSE)
     {
-        return $this->_findFilter($_field, $_getAll);
+        return $this->_findFilter($_field, $_getAll, $_recursive);
     }
     
     /**
@@ -745,14 +749,26 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @param string $_field
      * @param boolean $_getAll
+     * @param boolean $_recursive
+     * 
      * @return Tinebase_Model_Filter_Abstract|array
      */
-    protected function _findFilter($_field, $_getAll = FALSE)
+    protected function _findFilter($_field, $_getAll = FALSE, $_recursive= FALSE)
     {
         $result = ($_getAll) ? array() : NULL;
         
         foreach ($this->_filterObjects as $object) {
-            if ($object instanceof Tinebase_Model_Filter_Abstract) {
+            if ($_recursive && $object instanceof Tinebase_Model_Filter_FilterGroup) {
+                $filter = $object->getFilter($_field, $_getAll, $_recursive);
+                
+                if ($filter) {
+                    if ($_getAll) {
+                        $filter = array_merge($result, $filter);
+                    } else {
+                        return $filter;
+                    }
+                }
+            } else if ($object instanceof Tinebase_Model_Filter_Abstract) {
                 if ($object->getField() == $_field) {
                     if ($_getAll) {
                         $result[] = $object;

@@ -96,6 +96,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 });
                 if(add) {
                     relations.push({
+                        own_backend: "Sql",
+                        own_degree: "sibling",
+                        own_id: this.record.get('id'),
+                        own_model: "Crm_Model_Lead",
+                        related_backend: "sql",
+                        related_id: contact.id, 
+                        related_model: "Addressbook_Model_Contact",                 
                         type: this.additionalContactsRole,
                         related_record: contact
                     });
@@ -122,7 +129,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.productsGrid.store.loadData(relations.products, true);
             }
         }
-        
         Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);
     },
     

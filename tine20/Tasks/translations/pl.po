@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 18:38+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-03-03 12:27+0000\n"
+"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Launchpad-Export-Date: 2012-03-04 05:21+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-Language: Polish\n"
@@ -163,7 +163,7 @@ msgstr "Nowe zadanie"
 #: js/Tasks.js:107
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "zadanie"
+msgstr[0] "Zadanie"
 msgstr[1] "zadania"
 msgstr[2] "zadania"
 
@@ -246,19 +246,19 @@ msgstr "Anulowane"
 msgid "In process"
 msgstr "W opracowaniu"
 
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:154
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:158
 msgid "low"
 msgstr "niski"
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:155
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:159
 msgid "normal"
 msgstr "normalny"
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:156
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:160
 msgid "high"
 msgstr "wysoki"
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:157
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:161
 msgid "urgent"
 msgstr "pilny"
 

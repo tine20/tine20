@@ -155,9 +155,14 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         $addressbookAppId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
         
         // get all current salutation datas and drop old salutation table
-        $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "addressbook_salutations`");
-        $salutationDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        $this->_backend->dropTable('addressbook_salutations', $addressbookAppId);
+        try {
+            $stmt = $this->_db->query("SELECT * FROM `" . SQL_TABLE_PREFIX . "addressbook_salutations`");
+            $salutationDatas = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            $this->_backend->dropTable('addressbook_salutations', $addressbookAppId);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already dropped
+            $salutationDatas = array();
+        }
         
         // update addressbook table
         $salutationMap = array(); // oldId => newId

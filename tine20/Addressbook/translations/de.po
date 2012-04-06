@@ -1,20 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Addressbook\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-28 19:35+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 14:07+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:98
@@ -39,12 +38,9 @@ msgstr "Kontaktfelder für den Dublettencheck"
 
 #: Config.php:47
 msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
-"Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls "
-"ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird "
-"eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
+"These fields are checked when a new contact is created. If a record with the"
+" same data in the fields is found, a duplicate exception is thrown."
+msgstr "Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
 
 #: Config.php:59
 msgid "Contact salutations available"
@@ -54,10 +50,7 @@ msgstr "Verfügbare Kontaktanreden"
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
-"Mögliche Kontaktanreden. Bitte beachten Sie, dass zusätzliche Werte beim "
-"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
-"werden könnten."
+msgstr "Mögliche Kontaktanreden. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -205,9 +198,7 @@ msgstr "Importliste (###CURRENTDATE###)"
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
-"Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
-"###USERFULLNAME###"
+msgstr "Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -248,14 +239,14 @@ msgstr "Vorname"
 msgid "Middle Name"
 msgstr "Zweitname"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nachname"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:440
-#: js/ContactEditDialog.js:458 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
+#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:191
 msgid "Company"
@@ -362,7 +353,7 @@ msgstr "Ort"
 msgid "Country"
 msgstr "Land"
 
-#: js/ContactEditDialog.js:342 js/Model.js:68
+#: js/ContactEditDialog.js:342 js/Model.js:68 js/Model.js:146
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -370,27 +361,27 @@ msgstr "Beschreibung"
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an"
 
-#: js/ContactEditDialog.js:408
+#: js/ContactEditDialog.js:416
 msgid "Export as pdf"
 msgstr "Als Pdf exportieren"
 
-#: js/ContactEditDialog.js:416 js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
 msgid "Parse address"
 msgstr "Adresse einlesen"
 
-#: js/ContactEditDialog.js:440 js/ContactEditDialog.js:458
+#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
 msgid "Either {0} or {1} must be given"
 msgstr "Entweder {0} oder {1} muss angegeben werden"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Paste address"
 msgstr "Adresse einfügen"
 
-#: js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:501
 msgid "Please paste an address that should be parsed:"
 msgstr "Bitte fügen Sie eine Adresse ein, die eingelesen werden soll."
 
-#: js/ContactEditDialog.js:527
+#: js/ContactEditDialog.js:535
 msgid "End token mode"
 msgstr "Beende Merkmalsmodus"
 
@@ -452,7 +443,7 @@ msgstr "E-Mail (privat)"
 msgid "URL (private)"
 msgstr "Webseite (privat)"
 
-#: js/ContactGrid.js:139 js/Model.js:146
+#: js/ContactGrid.js:139
 msgid "Note"
 msgstr "Notizen"
 
@@ -464,11 +455,7 @@ msgstr "Zeitzone"
 msgid "Geo"
 msgstr "Geografischer Ort"
 
-#: js/ContactGrid.js:152
-msgid "Export Contact"
-msgstr "Kontakt exportieren"
-
-#: js/ContactGrid.js:153 js/ContactGrid.js:154
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] "{0} exportieren"
@@ -699,97 +686,3 @@ msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
 #: Setup/setup.xml:648
 msgid "Internal Contacts"
 msgstr "Interne Kontakte"
-
-msgid "Searching..."
-msgstr "Suche..."
-
-msgid "Call contact"
-msgstr "Kontakt anrufen"
-
-msgid "Compose email"
-msgstr "Email verfassen"
-
-msgid "Work"
-msgstr "Geschäftlich"
-
-msgid "Home"
-msgstr "Private"
-
-msgid "Cell"
-msgstr "Mobil"
-
-msgid "Cell private"
-msgstr "Mobil (privat)"
-
-msgid "Created By"
-msgstr "Erstellt von"
-
-msgid "Last Modified Time"
-msgstr "Letzter Änderungszeitpunkt"
-
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "Adressbuch"
-msgstr[1] "Adressbücher"
-
-msgid "addressbooks"
-msgstr "Adressbücher"
-
-msgid "contacts"
-msgstr "Kontakte"
-
-msgid "export as pdf"
-msgstr "Als Pdf exportieren"
-
-msgid "Loading Contact..."
-msgstr "Kontakt laden..."
-
-msgid "Please Wait"
-msgstr "Bitte warten"
-
-msgid "Add new contact"
-msgstr "Kontakt hinzufügen"
-
-msgid "Edit Contact \"{0}\""
-msgstr "Kontakt \"{0}\" bearbeiten"
-
-msgid "Please wait a moment..."
-msgstr "Bitte warten Sie einen Moment..."
-
-msgid "Saving Contact"
-msgstr "Kontakt wird gespeichert"
-
-msgid "Failed"
-msgstr "Fehler"
-
-msgid "Could not save contact."
-msgstr "Der Kontakt konnte nicht gespeichert werden."
-
-msgid "Either "
-msgstr "Entweder"
-
-msgid "Start date is not valid"
-msgstr "Ungültiges Startdatum"
-
-msgid "Errors"
-msgstr "Fehler"
-
-msgid "Please fix the errors noted."
-msgstr "Bitte korrigieren Sie die angegebenen Fehler."
-
-msgid "Deleting contact..."
-msgstr "Kontakt wird gelöscht..."
-
-msgid "Some error occured while trying to delete the contact."
-msgstr "Beim Löschen des Kontaktes ist ein Fehler ist aufgetreten."
-
-msgid "Custom Fields"
-msgstr "Zusatzfelder"
-
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Verknüpfung"
-msgstr[1] "Verknüpfungen [%d]"

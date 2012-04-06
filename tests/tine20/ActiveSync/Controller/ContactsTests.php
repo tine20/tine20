@@ -32,7 +32,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     
     protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
+<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:WebPage>fb://some.dumb.fb.url</Contacts:WebPage><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
 </Contacts:Body></ApplicationData></Add></Commands></Collection></Collections></Sync>';
     
     protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
@@ -56,7 +56,6 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Contacts Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-    
     
     protected function setUp()
     {
@@ -422,21 +421,39 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     /**
      * test search contacts
      * 
+     * @todo implement
      */
-    #public function testSearch()
-    #{
-    #    $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
+    public function testSearch()
+    {
+        $this->markTestIncomplete('Needs to be implemented.');
+        
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
 
         // search for non existing contact
-    #    $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
-    #    $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+        $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
+        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
         
-     #   $this->assertEquals(count($existing), 0);
+        $this->assertEquals(count($existing), 0);
         
         // search for existing contact
-    #    $xml = new SimpleXMLElement($this->_exampleXMLExisting);
-    #    $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
-     #   
-    #    $this->assertGreaterThanOrEqual(1, count($existing));
-    #}
+        $xml = new SimpleXMLElement($this->_exampleXMLExisting);
+        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
+        
+        $this->assertGreaterThanOrEqual(1, count($existing));
+    }
+    
+    /**
+     * testConvertToTine20Model
+     * 
+     * @see 0006144: Filter out fb:// url's in AS contact backend / https://forge.tine20.org/mantisbt/view.php?id=6144
+     */
+    public function testConvertToTine20Model()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceWebOS'], new Tinebase_DateTime(null, null, 'de_DE'));
+        $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
+        $contact = $controller->toTineModel($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+        
+        $this->assertEquals('asdfasdfaasd , asdf ', $contact->n_fileas);
+        $this->assertEquals(NULL, $contact->url, 'facebook url should be removed');
+    }
 }

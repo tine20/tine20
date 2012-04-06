@@ -294,6 +294,27 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
+     * testRelationWithoutType
+     * 
+     * @see 0006206: relation type field can be empty
+     */
+    public function testRelationWithoutType()
+    {
+        $contact    = $this->_getContact();
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
+        $lead       = $this->_getLead();
+        
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => '', 'related_record' => $savedContact->toArray()),
+        );
+        $savedLead = $this->_instance->saveLead($leadData);
+        
+        $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
+        $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
+    }
+    
+    /**
      * get contact
      * 
      * @return Addressbook_Model_Contact

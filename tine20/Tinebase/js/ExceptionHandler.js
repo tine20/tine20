@@ -235,6 +235,15 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }));
                 break;
                 
+            // generic error with message generated on the server
+                
+            case 600:
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: _(exception.title), 
+                    msg: _(exception.message)
+                }));
+                break;
+                
             // user in no role
             case 610:
             Ext.MessageBox.show(Ext.apply(defaults, {

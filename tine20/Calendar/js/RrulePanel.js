@@ -284,6 +284,8 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             requiredGrant : 'editGrant',
             style         : 'text-align:right;',
             //fieldLabel    : this.intervalBeforeString,
+            minValue      : 1,
+            allowBlank    : false,
             value         : 1,
             width         : 40
         });
@@ -377,7 +379,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     },
     
     setRule: function(rrule) {
-        this.interval.setValue(rrule.interval);
+        this.interval.setValue(rrule.interval || 1);
         var date = Date.parseDate(rrule.until, Date.patterns.ISO8601Long);
         this.until.value = date;
         

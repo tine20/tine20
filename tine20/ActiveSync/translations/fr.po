@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-29 13:13+0000\n"
+"PO-Revision-Date: 2012-04-02 13:35+0000\n"
 "Last-Translator: Etienne Quesselaire <Unknown>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -11,23 +11,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-04-03 05:37+0000\n"
+"X-Generator: Launchpad (build 15052)\n"
 "X-Poedit-Country: \n"
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/Application.js:30
 msgid "Active Sync"
-msgstr ""
+msgstr "Synchronisation mobile"
 
 #: js/Application.js:46
 msgid "Select a Device"
-msgstr ""
+msgstr "Choisir un apparaeil"
 
 #: js/Application.js:60
 msgid "No ActiveSync Device registered"
-msgstr ""
+msgstr "Aucun appareil ActiveSync enregistré"
 
 #: js/Application.js:68
 msgid "Set as {0} Filter"
@@ -35,7 +35,7 @@ msgstr ""
 
 #: js/Application.js:93
 msgid "Resetted Sync Filter"
-msgstr ""
+msgstr "Filtre de synchronisation réinitialisé"
 
 #: js/Application.js:94 js/Application.js:106
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
@@ -43,11 +43,11 @@ msgstr ""
 
 #: js/Application.js:97
 msgid "resetted"
-msgstr ""
+msgstr "réinitialisé"
 
 #: js/Application.js:105
 msgid "Set Sync Filter"
-msgstr ""
+msgstr "Définir le filtre de synchronisation"
 
 #: js/Model.js:45
 msgid "Device"
@@ -59,29 +59,29 @@ msgstr[1] "Appareils"
 msgid "Devices"
 msgstr "Appareils"
 
-#: Preference.php:74
+#: Preference.php:79
 msgid "Default Addressbook"
 msgstr "Carnet d'adresses par défaut"
 
-#: Preference.php:75
+#: Preference.php:80
 msgid "The default addressbook to create new contacts in."
-msgstr ""
+msgstr "Carnet d'adresse où seront créés les nouveaux contacts"
 
-#: Preference.php:78
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr "Agenda par défaut"
 
-#: Preference.php:79
+#: Preference.php:84
 msgid "The default calendar to create new events in."
-msgstr ""
+msgstr "Calendrier où seront créés les nouveaux évènements"
 
-#: Preference.php:82
+#: Preference.php:87
 msgid "Default Task List"
 msgstr "Liste des tâches par défaut"
 
-#: Preference.php:83
+#: Preference.php:88
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "Liste où seront créées les nouvelles tâches"
 
 #: Setup/setup.xml:527
 msgid "Default Policy"
@@ -89,4 +89,4 @@ msgstr "Règle par défaut"
 
 #: Setup/setup.xml:532
 msgid "Default Policy installed during setup"
-msgstr ""
+msgstr "Stratégie par défaut mise en place lors de l'installation"

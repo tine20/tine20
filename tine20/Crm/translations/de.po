@@ -1,20 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Crm\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-30 11:06+0100\n"
-"PO-Revision-Date: 2012-02-28 18:35+0000\n"
-"Last-Translator: ph_il <p.schuele@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-02 14:07+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-Language: German\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -45,7 +44,7 @@ msgstr "Gemeinsame Lead Favoriten erstellen oder bearbeiten"
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:149 js/Contact.js:252
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
 msgid "Role"
 msgstr "Rolle"
 
@@ -53,7 +52,7 @@ msgstr "Rolle"
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:438
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:444
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Start"
@@ -62,17 +61,17 @@ msgstr "Start"
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:269
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:275
 msgid "End"
 msgstr "Ende"
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:144
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:145
 #: js/Model.js:107
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:143
-#: js/LeadEditDialog.js:262 js/Model.js:106
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:144
+#: js/LeadEditDialog.js:268 js/Model.js:106
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
@@ -108,14 +107,14 @@ msgstr "Lead %s wurde angelegt"
 msgid "%s's personal leads"
 msgstr "%ss persönliche Leads"
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:348 js/Contact.js:388
-#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
+#: Controller.php:153 js/Contact.js:161 js/Contact.js:354 js/Contact.js:394
+#: js/GridPanel.js:142 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr "Kunde"
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:349 js/Contact.js:392
-#: js/GridPanel.js:140 js/LeadGridDetailsPanel.js:45
+#: Controller.php:154 js/Contact.js:181 js/Contact.js:355 js/Contact.js:398
+#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr "Partner"
@@ -168,17 +167,17 @@ msgstr "Webseite"
 msgid "Lead Data"
 msgstr "Lead-Daten"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:142
-#: js/LeadEditDialog.js:380 js/LeadStateFilterModel.js:32
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:143
+#: js/LeadEditDialog.js:386 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Status"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:399
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:405
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Typ"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:406
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:412
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Quelle"
@@ -195,19 +194,19 @@ msgstr "Kontakte"
 msgid "Address"
 msgstr "Anschrift"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:285 js/Task.js:85
+#: Export/Pdf.php:232 js/LeadEditDialog.js:291 js/Task.js:83
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: Export/Pdf.php:252 js/Task.js:178
+#: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: Export/Pdf.php:259 js/Task.js:191
+#: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
 msgstr "Priorität"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:296 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:302 js/Product.js:85
 msgid "Products"
 msgstr "Produkte"
 
@@ -237,28 +236,27 @@ msgstr "Ok"
 
 #: js/AddToLeadPanel.js:99
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-"Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
 msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 
-#: js/AddToLeadPanel.js:144 js/LeadEditDialog.js:311 js/Model.js:48
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Lead"
 msgstr[1] "Lead"
 
-#: js/AddToLeadPanel.js:145
+#: js/AddToLeadPanel.js:154
 msgid "Select Lead"
 msgstr "Lead auswählen"
 
-#: js/AddToLeadPanel.js:150
+#: js/AddToLeadPanel.js:159
 msgid "Select Role"
 msgstr "Rolle auswählen"
 
-#: js/AddToLeadPanel.js:164
+#: js/AddToLeadPanel.js:173
 msgid "Adding {0} Contacts to lead"
 msgstr "Füge {0} Kontakte zum Lead hinzu"
 
@@ -283,7 +281,7 @@ msgstr "Standardeinstellungen"
 msgid "Change type to Customer"
 msgstr "Kontakttyp auf Kunde setzen"
 
-#: js/Contact.js:171 js/Contact.js:347 js/Contact.js:384
+#: js/Contact.js:171 js/Contact.js:353 js/Contact.js:390 js/GridPanel.js:140
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
@@ -335,63 +333,59 @@ msgstr "Tags"
 msgid "Lead name"
 msgstr "Lead-Name"
 
-#: js/GridPanel.js:145
+#: js/GridPanel.js:146
 msgid "Probable Turnover"
 msgstr "Voraussichtlicher Umsatz"
 
-#: js/GridPanel.js:175
+#: js/GridPanel.js:188
 msgid "Export Lead"
 msgstr "Lead exportieren"
 
-#: js/GridPanel.js:184
+#: js/GridPanel.js:197
 msgid "Export as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/GridPanel.js:191
+#: js/GridPanel.js:204
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
-#: js/GridPanel.js:198
+#: js/GridPanel.js:211
 msgid "Export as ODS"
 msgstr "Als ODS exportieren"
 
-#: js/GridPanel.js:205
+#: js/GridPanel.js:218
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
-#: js/LeadEditDialog.js:286
+#: js/LeadEditDialog.js:292
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen "
-"oder sie ist deaktiviert."
+msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
 
-#: js/LeadEditDialog.js:297
+#: js/LeadEditDialog.js:303
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder "
-"sie ist deaktiviert."
+msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
 
-#: js/LeadEditDialog.js:338
+#: js/LeadEditDialog.js:344
 msgid "Enter short name"
 msgstr "Kurzname eingeben"
 
-#: js/LeadEditDialog.js:422
+#: js/LeadEditDialog.js:428
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
-#: js/LeadEditDialog.js:444 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:450 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Geplantes Ende"
 
-#: js/LeadEditDialog.js:476 js/Product.js:139
+#: js/LeadEditDialog.js:482 js/Product.js:139
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/LeadEditDialog.js:490
+#: js/LeadEditDialog.js:496
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
@@ -419,7 +413,7 @@ msgstr "Email"
 msgid "Web"
 msgstr "Webseite"
 
-#: js/LeadGridDetailsPanel.js:440 js/Task.js:220
+#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
 msgid "Status"
 msgstr "Status"
 
@@ -535,19 +529,19 @@ msgstr "Anzahl"
 msgid "Search for Products to add ..."
 msgstr "Produkte zum Hinzufügen suchen..."
 
-#: js/Task.js:111
+#: js/Task.js:109
 msgid "No Tasks to display"
 msgstr "Keine Aufgaben vorhanden"
 
-#: js/Task.js:170
+#: js/Task.js:168
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: js/Task.js:174
+#: js/Task.js:172
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/Task.js:207
+#: js/Task.js:205
 msgid "Percent"
 msgstr "Prozent"
 
@@ -569,8 +563,7 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:80
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:83
 msgid "Default Favorite"
@@ -603,63 +596,3 @@ msgstr "Alle Leads, für die ich verantwortlich bin"
 #: Setup/Initialize.php:86
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
-
-msgid "Lead %s has been creaded"
-msgstr "Lead %s wurde erstellt "
-
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
-
-msgid "Add task"
-msgstr "Aufgabe hinzufügen"
-
-msgid "Add task for selected lead"
-msgstr "Aufgabe zum Lead hinzufügen"
-
-msgid "Task"
-msgstr "Aufgabe"
-
-msgid "History"
-msgstr "Historie"
-
-msgid "Lead Name"
-msgstr "Lead Name"
-
-msgid "Date Start"
-msgstr "Startdatum"
-
-msgid "Date End"
-msgstr "Enddatum"
-
-msgid "Date End Scheduled"
-msgstr "geplantes Ende"
-
-msgid "Created By"
-msgstr "Erstellt von"
-
-msgid "Last modified By"
-msgstr "Zuletzt bearbeitet von"
-
-msgid "Lead states"
-msgstr "Lead-Status"
-
-msgid "Lead sources"
-msgstr "Lead-Quellen"
-
-msgid "Lead types"
-msgstr "Lead-Typen"
-
-msgid "Remove Option"
-msgstr "Option entfernen"
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Select lead"
-msgstr "Lead auswählen"
-
-msgid "Open tasks"
-msgstr "Aufgaben öffnen"
-
-msgid "Tasks status"
-msgstr "Aufgabenstatus"

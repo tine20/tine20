@@ -300,7 +300,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     break;
                     
                 case 'adr_one_street':
-                    if(strtolower($this->_device->devicetype) == 'palm') {
+                    if (strtolower($this->_device->devicetype) == 'palm') {
                         // palm pre sends the whole address in the <Contacts:BusinessStreet> tag
                         unset($contact->adr_one_street);
                     } else {
@@ -323,9 +323,15 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $contact->$value = (string)$xmlData->$fieldName;
                     }
                     break;
+                case 'url':
+                    // remove facebook urls
+                    if (! preg_match('/^fb:\/\//', (string)$xmlData->$fieldName)) {
+                        $contact->$value = (string)$xmlData->$fieldName;
+                    }
+                    break;
                     
                 default:
-                    if(isset($xmlData->$fieldName)) {
+                    if (isset($xmlData->$fieldName)) {
                         $contact->$value = (string)$xmlData->$fieldName;
                     } else {
                         $contact->$value = null;

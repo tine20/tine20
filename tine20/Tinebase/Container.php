@@ -771,6 +771,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
         
+        $this->checkSystemContainer($_containerId);
+        
         if($_ignoreAcl !== TRUE) {
 
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -801,11 +803,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         );
         
         //-- determine first matching personal container (or create new one)
-        // $personalContainer = 
+        // $personalContainer =
         
         //-- move all records to personal container
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
         );
         */
@@ -1294,16 +1296,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Increasing content seq of container ' . $containerId . ' ...');
-        
         $newContentSeq = NULL;
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
         
             $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
             $data = array(
-                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= 1 ,' . $quotedIdentifier . ' + 1, 1)')
+                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ',' . $quotedIdentifier . ' + 1, 1)')
             );
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)
@@ -1311,6 +1310,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
             
             $newContentSeq = $this->getContentSequence($containerId);
+            if ($newContentSeq === NULL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Something strange happend: content seq of NULL has been detected for container ' . $containerId . ' . Setting it to 0.');
+                $newContentSeq = 0;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Increased content seq of container ' . $containerId . ' to ' . $newContentSeq);
+            }
             
             // create new entry in container_content table
             if ($action !== NULL && $recordId !== NULL) {
@@ -1322,7 +1329,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     'content_seq'  => $newContentSeq,
                 ));
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Creating ' . $action . ' content history record for record id ' . $recordId);
+                    . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
                 $this->_getContentBackend()->create($contentRecord);
             }
             
@@ -1371,7 +1378,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $containerIds = (! is_array($containerIds)) ? Tinebase_Model_Container::convertContainerIdToInt($containerIds) : $containerIds;
         
-        $select = $this->_getSelect(array('id', 'content_seq'));
+        $select = $this->_getSelect(array('id', 'content_seq'), TRUE);
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query($select);
         $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
@@ -1379,6 +1386,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $result[$key] = $value[0];
         }
         
-        return (is_array($containerIds)) ? $result : $result[$containerIds];
+        $result = (is_array($containerIds)) ? $result : ((isset($result[$containerIds])) ? $result[$containerIds] : NULL);
+        return $result;
+    }
+    
+    /**
+     * checks if container to delete is a "system" container 
+     * @TODO: generalize when there are more "system" containers
+     * 
+     * @param array|integer|Tinebase_Model_Container $containerIds
+     * @throws Tinebase_Exception_Record_SystemContainer 
+     */
+    public function checkSystemContainer($containerIds) {
+        if(!is_array($containerIds)) $containerIds = array($containerIds);
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+
+        $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
+
+        if(in_array($defaultAddressbook['id'], $containerIds)) {
+            // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
+            // _('System Container')
+            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!', 'System Container');
+        }
     }
 }

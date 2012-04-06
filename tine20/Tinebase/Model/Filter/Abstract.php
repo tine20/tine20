@@ -228,12 +228,30 @@ abstract class Tinebase_Model_Filter_Abstract
     
     /**
      * set implicit
+     * @deprecated use isImplicit()
      *
      * @param boolean $_isImplicit
      */
     public function setIsImplicit($_isImplicit)
     {
         $this->_isImplicit = ($_isImplicit === TRUE);
+    }
+    
+    /**
+     * set implicit
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function isImplicit()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        $currValue = $this->_isImplicit;
+        if ($value !== NULL) {
+            $this->_isImplicit = $value;
+        }
+        
+        return $currValue;
     }
     
     /**
