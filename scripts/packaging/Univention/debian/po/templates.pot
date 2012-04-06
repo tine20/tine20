@@ -1,0 +1,53 @@
+# translations for Tine 2.0 debian package
+# Copyright (C) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+# This file is distributed under the same license as the tine20 package.
+# Lars Kneschke <l.kneschke@metaways.de>, 2011.
+#
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: packages@tine20.org\n"
+"POT-Creation-Date: 2011-07-14 19:05+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
+"Language-Team: EN <translators@tine20.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: select
+#. Description
+#: ../tine20-tinebase.templates:1002
+msgid "Web server to reconfigure automatically:"
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../tine20-tinebase.templates:1002
+msgid ""
+"If you do not select a web server to reconfigure automatically, Tine 2.0 "
+"will not be usable until you reconfigure your webserver to enable Tine 2.0."
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../tine20-tinebase.templates:6001
+msgid "Tine 2.0 setup username"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../tine20-tinebase.templates:6001
+msgid "Username used to login into Tine 2.0 setup"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../tine20-tinebase.templates:7001
+msgid "Tine 2.0 setup password"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../tine20-tinebase.templates:7001
+msgid "Password used to login into Tine 2.0 setup"
+msgstr ""
