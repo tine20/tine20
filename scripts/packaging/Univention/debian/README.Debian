@@ -1,0 +1,16 @@
+Tine 2.0 for Debian
+-----------------------------
+
+By default Tine 2.0 is available at http://yourserver/tine20/.
+
+If you like to make Tine 2.0 available at a separate vhost please comment out these lines in /etc/tine20/apache.conf
+
+From:
+Alias /tine20 /usr/share/tine20
+Alias /Microsoft-Server-ActiveSync /usr/share/tine20/Microsoft-Server-ActiveSync
+
+To:
+#Alias /tine20 /usr/share/tine20
+#Alias /Microsoft-Server-ActiveSync /usr/share/tine20/Microsoft-Server-ActiveSync
+s
+ -- Lars Kneschke <l.kneschke@metaways.de>  Sat, 01 May 2010 16:40:48 +0200

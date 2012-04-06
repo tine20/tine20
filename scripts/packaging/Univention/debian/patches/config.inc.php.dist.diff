@@ -1,0 +1,48 @@
+--- a/config.inc.php.dist
++++ b/config.inc.php.dist
+@@ -7,32 +7,29 @@
+ // minimal configuration
+ return array(
+     'database' => array(
+-        'host'          => 'ENTER DATABASE HOSTNAME',
+-        'dbname'	    => 'ENTER DATABASE NAME',
+-        'username'      => 'ENTER DATABASE USERNAME',
+-        'password'      => 'ENTER DATABASE PASSWORD',
++        'host'          => '_DBC_DBSERVER_',
++        'dbname'	    => '_DBC_DBNAME_',
++        'username'      => '_DBC_DBUSER_',
++        'password'      => '_DBC_DBPASS_',
+         'adapter'       => 'pdo_mysql',
+         'tableprefix'   => 'tine20_',
+     ),
+     'setupuser' => array(
+-        'username'      => 'SETUP USERNAME',
+-        'password'      => 'SETUP PASSWORD' 
++        'username'      => '_SETUPUSERNAME_',
++        'password'      => '_SETUPPASSWORD_' 
+     ),
+-    
+-    /* // optional cache (recommended)
+     'caching' => array (
+         'active' => true,
+-        'path' => 'PATH TO CACHE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
++        'path' => '/var/lib/tine20/cache',
+         'lifetime' => 3600,
+     ),
+-    */
+-    
+-    /* // optional logger
+     'logger' => array (
+         'active' => true,
+-        'filename' => 'LOG FILE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
+-        'priority' => '7',
++        'filename' => '/var/log/tine20/tine20.log',
++        'priority' => '3',
+     ),
+-    */
++    'tmpdir'     => '/var/lib/tine20/tmp',
++    'sessiondir' => '/var/lib/tine20/sessions',
++    'filesdir'   => '/var/lib/tine20/files',
++    'mapPanel'   => 1
+ );
+-
