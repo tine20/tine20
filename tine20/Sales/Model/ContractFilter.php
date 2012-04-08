@@ -36,6 +36,7 @@ class Sales_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Sales_Model_Contract')),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('description', 'number', 'title'))),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Sales')),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
