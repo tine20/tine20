@@ -1,20 +1,20 @@
+# 
+# Translators:
+# Tamás Faragó <>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
-"Last-Translator: Faragó Tamás <Unknown>\n"
-"Language-Team: gump <admin@kemenyfem.hu>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-03 17:30+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
+"Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: HUNGARY\n"
-"X-Poedit-Language: Hungarian\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/ApplicationGridPanel.js:63
@@ -84,12 +84,9 @@ msgstr "Minden meglévő csoport és felhasználó törlése"
 #: js/AuthenticationPanel.js:127
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
-msgstr ""
-"SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói "
-"fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az "
-"azonsítók tárolási hátterét LDAP-ra?"
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
+msgstr "SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az azonsítók tárolási hátterét LDAP-ra?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
@@ -291,7 +288,7 @@ msgstr "Engedélyezett a felhasználónak a jelszócsere?"
 
 #: js/AuthenticationPanel.js:558
 msgid "Readonly access"
-msgstr ""
+msgstr "Csak olvasható elérés"
 
 #: js/AuthenticationPanel.js:568
 msgid "Redirect Settings"
@@ -485,7 +482,7 @@ msgstr "Értesítés jelszava"
 
 #: js/EmailPanel.js:328
 msgid "Notifications local client (hostname or IP address)"
-msgstr ""
+msgstr "Helyi kliens értesítések (hosztnév vagy IP cím)"
 
 #: js/EmailPanel.js:384
 msgid "SIEVE"
@@ -567,9 +564,7 @@ msgstr "Környezeti ellenörzés végrehajtása..."
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
-msgstr ""
-"{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon "
-"vagy a {1} amiben kerestél."
+msgstr "{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon vagy a {1} amiben kerestél."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"

@@ -1,20 +1,20 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Felamimail\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:05+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 21:16+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -328,14 +328,15 @@ msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/FolderSelectPanel.js:75
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: js/FolderSelectPanel.js:84
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/FolderSelectPanel.js:175
 msgid "Folders of account {0}"
@@ -359,7 +360,7 @@ msgstr "Добавить контакт в адресную книгу"
 
 #: js/GridDetailsPanel.js:237
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: js/GridDetailsPanel.js:239 js/GridDetailsPanel.js:464
 msgid "Show or hide header information"
@@ -501,8 +502,8 @@ msgstr ""
 
 #: js/MessageEditDialog.js:174
 msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+"Activate this toggle button to save the email text as a note attached to the"
+" recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -593,6 +594,7 @@ msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:490
 msgid "INBOX"
@@ -626,24 +628,28 @@ msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:678
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:804
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:807
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/RecipientGrid.js:204
 msgid "Click here to set To/CC/BCC."
@@ -903,6 +909,7 @@ msgid "{0} unread message"
 msgid_plural "{0} unread messages"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Preference.php:59
 msgid "All inboxes"
@@ -914,9 +921,7 @@ msgstr "Учетная запись электронной почты по ум�
 
 #: Preference.php:107
 msgid "The default email account to use when sending mails."
-msgstr ""
-"Учетная запись электронной почты используемая по умолчанию при отправке "
-"почты."
+msgstr "Учетная запись электронной почты используемая по умолчанию при отправке почты."
 
 #: Preference.php:110
 msgid "Email Update Interval"
@@ -979,102 +984,3 @@ msgstr ""
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr ""
-
-msgid "wrote"
-msgstr "писал"
-
-msgid "Write"
-msgstr "Написать"
-
-msgid "Marked"
-msgstr "Помечено"
-
-msgid "Contains marked messages"
-msgstr "Содержит помеченные сообщения"
-
-msgid "Unread"
-msgstr "Непрочитанное"
-
-msgid "Contains unread messages"
-msgstr "Содержит непрочитанные сообщения"
-
-msgid "Show Intelligent Folders"
-msgstr "Показать интеллектуальные папки"
-
-msgid "No"
-msgstr "Нет"
-
-msgid "Yes"
-msgstr "Да"
-
-msgid "Toggle Flag"
-msgstr "Переключить флаг"
-
-msgid "Recipients"
-msgstr "Получатели"
-
-msgid "Error"
-msgstr "Ошибка"
-
-msgid "No Account configured"
-msgstr "Нет настроенных учетных записей"
-
-msgid "Re: "
-msgstr "Re: "
-
-msgid "Original Message"
-msgstr "Исходное сообщение"
-
-msgid "Fwd: "
-msgstr "Fwd: "
-
-msgid "Some error occured while trying to update the messages."
-msgstr "Произошла ошибка при попытке обновить сообщения."
-
-msgid "Totalcount"
-msgstr "Общий счёт"
-
-msgid "Cache"
-msgstr "Кэш"
-
-msgid "Supports \"has_children\""
-msgstr "Поддерживает \"has_children\""
-
-msgid "Upload Failed"
-msgstr "Сбой загрузки"
-
-msgid "Add Attachment"
-msgstr "Добавить вложение"
-
-msgid "Remove Attachment"
-msgstr "Удалить вложение"
-
-msgid "User Email Account"
-msgstr "Учетная запись электронной почты пользователя"
-
-msgid "Use user credentials for IMAP email account."
-msgstr ""
-"Использовать учётные данные пользователя для учётной записи IMAP электронной "
-"почты."
-
-msgid "Update Cache"
-msgstr "Обновить кэш"
-
-msgid ""
-"Could not upload attachment. Filesize could be too big. Please notify your "
-"Administrator."
-msgstr ""
-"Не удалось загрузить вложение. Размер файла может быть слишком большим. "
-"Пожалуйста, сообщите вашему администратору."
-
-msgid "Port"
-msgstr "Порт"
-
-msgid "Failed to connect"
-msgstr "Сбой подключения"
-
-msgid "Could not connect to account."
-msgstr "Не возможно подключиться к  учетной записи."
-
-msgid "Felamimail"
-msgstr "Felamimail"

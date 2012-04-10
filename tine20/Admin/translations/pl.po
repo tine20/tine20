@@ -1,21 +1,20 @@
+# 
+# Translators:
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Admin\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 18:42+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-03 17:40+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"Language-Team: Polish (http://www.transifex.net/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: POLAND\n"
-"X-Poedit-Language: Polish\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
@@ -31,10 +30,9 @@ msgid "manage accounts"
 msgstr "edytowanie kont użytkowników"
 
 #: Acl/Rights.php:190
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, dodaj "
-"użytkowników do grup"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "dodaj i edytuj użytkowników oraz grupy, zmień hasła użytkowników, dodaj użytkowników do grup"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -50,10 +48,9 @@ msgstr "edytuj role"
 
 #: Acl/Rights.php:198
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"dodaj nowych użytkowników do roli, dodaj i edytuj role, przypisz rolom "
-"uprawnienia do aplikacji"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "dodaj nowych użytkowników do roli, dodaj i edytuj role, przypisz rolom uprawnienia do aplikacji"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -77,8 +74,7 @@ msgstr "zarządzaj kontenerami"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
-"dodaj, usuń oraz edytuj kontenery i zarządzaj uprawnieniami do kontenerów"
+msgstr "dodaj, usuń oraz edytuj kontenery i zarządzaj uprawnieniami do kontenerów"
 
 #: Acl/Rights.php:213
 msgid "view access log"
@@ -88,14 +84,10 @@ msgstr "wyświetlanie dziennika logowania"
 msgid "view access log list"
 msgstr "wyświetlanie wpisów z dziennika logowania"
 
-# We don't really need the word "użytkowników" here.
-# Das Wort "użytkowników" braucht man hier nicht undebingt.
 #: Acl/Rights.php:217
 msgid "view accounts"
 msgstr "wyświetlanie kont użytkowników"
 
-# We don't really need the word "użytkowników" here.
-# Das Wort "użytkowników" wird hier nicht unbedingt benoetigt.
 #: Acl/Rights.php:218
 msgid "view accounts list and details"
 msgstr "wyświetlanie listy kont użytkowników i szczegółów"
@@ -496,9 +488,7 @@ msgstr "Potwierdź"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new cusomfields?"
-msgstr ""
-"Czy uruchomić ponownie aplikację w celu zaakceptowania nowych pól "
-"użytkownika?"
+msgstr "Czy uruchomić ponownie aplikację w celu zaakceptowania nowych pól użytkownika?"
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
@@ -508,8 +498,6 @@ msgstr "Proszę czekać"
 msgid "Updating Memberships"
 msgstr "Aktualizacja uczestnictwa"
 
-# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
-# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:107
 #: js/RoleEditDialog.js:135 js/Roles.js:69 js/TagEditDialog.js:83
 msgid "Failed"
@@ -942,13 +930,13 @@ msgstr "zablokowany"
 
 #: js/user/EditDialog.js:845
 msgid "Invalid Status"
-msgstr ""
+msgstr "Status Nieprawidłowe"
 
 #: js/user/EditDialog.js:846
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr ""
+msgstr "Status Zablokowany obowiązuje, jeśli użytkownik zbyt wiele razy próbuje się zalogować nieprawidłowym hasłem. Nie ma tutaj możliwości ustawiania statusu."
 
 #: js/user/EditDialog.js:868 js/user/GridPanel.js:186
 msgid "Expires"
@@ -1051,151 +1039,3 @@ msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
-
-msgid "Quota (MB)"
-msgstr "Kwota (MB)"
-
-msgid "Current Mail Size"
-msgstr "Rozmiar wiadomości"
-
-msgid "Sieve Quota"
-msgstr "Kwota ograniczenia"
-
-msgid "Sieve Size"
-msgstr "Rozmiar ograniczenia"
-
-msgid "Change settings for application {0}"
-msgstr "Zmień ustawienia aplikacji {0}"
-
-msgid "Defaults"
-msgstr "Ustawienia domyślne"
-
-msgid "Aliases"
-msgstr "Aliasy"
-
-msgid "Forwards"
-msgstr "Przesłane dalej"
-
-msgid "User memberships"
-msgstr "Przynależność użytkownika"
-
-msgid "AccessLog"
-msgid_plural "AccessLogs"
-msgstr[0] "Logi połączeń"
-msgstr[1] "logi połączeń"
-msgstr[2] "logi połączeń"
-
-msgid "Transfering {0}..."
-msgstr "Transfer {0}..."
-
-msgid "Loading Tag..."
-msgstr "Ładowanie znacznika …"
-
-msgid "Please Wait"
-msgstr "Proszę czekać"
-
-msgid "Loading Role..."
-msgstr "Ładowanie funkcji…"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Czy na pewno chcesz usunąć wybrane wpisy z dziennika logowania?"
-
-msgid "delete entry"
-msgstr "Usuń wpis"
-
-msgid "select all"
-msgstr "zaznacz wszystko"
-
-msgid "Display from:"
-msgstr "Wyświetl od:"
-
-msgid "to:"
-msgstr "do:"
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Wyświetl wpisy z dziennika logowania {0} - {1} z {2}"
-
-msgid "No access log entries to display"
-msgstr "Brak wpisów w dzienniku logowania"
-
-msgid "Account ID"
-msgstr "ID użytkownika"
-
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Czy na pewno chcesz usunąć zaznaczone konto(a)?"
-
-msgid "Deleting account(s)..."
-msgstr "Usuwanie kont(a)..."
-
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "Podczas próby usunięcia kont(a) wystąpił błąd."
-
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Wyświetlane konta {0} - {1} z {2}"
-
-msgid "No accounts to display"
-msgstr "Brak kont użytkowników"
-
-msgid "add account"
-msgstr "Dodaj konto"
-
-msgid "edit account"
-msgstr "Edytuj konto"
-
-msgid "delete account"
-msgstr "Usuń konto"
-
-msgid "Deleting group..."
-msgstr "Usuwanie grupy…"
-
-msgid "Email UID"
-msgstr "E-mail UID"
-
-msgid "Email GID"
-msgstr "E-mail GID"
-
-msgid "Email Username"
-msgstr "E-mail Użytkownik"
-
-#, fuzzy
-msgid "Current Sieve Size"
-msgstr "Obecny rozmiar Sieve"
-
-msgid "enter searchfilter"
-msgstr "wpisz szukaną frazę"
-
-msgid "remove account"
-msgstr "Usuń konto"
-
-msgid "Role members"
-msgstr "Przypisani do funkcji"
-
-msgid "Deleting tag..."
-msgstr "Usuwanie znacznika..."
-
-msgid "name"
-msgstr "nazwa"
-
-msgid "status"
-msgstr "status"
-
-msgid "Deleting account..."
-msgstr "Usuwanie konta …"
-
-msgid "Some error occurred while trying to delete the account."
-msgstr "Podczas próby usunięcia konta wystąpił błąd."
-
-msgid "Saving User Account"
-msgstr "Zapisywanie konta użytkownika"
-
-msgid "Could not save user account."
-msgstr "Zapisanie konta użytkownika było niemożliwe."
-
-msgid "Add New User Account"
-msgstr "Utwórz nowego użytkownika"
-
-msgid "Edit User Account \"{0}\""
-msgstr "Edytuj konto użytkownika \"{0}\""
-
-msgid "Forward"
-msgstr "Prześlij dalej"

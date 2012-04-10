@@ -1,20 +1,20 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Calendar\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:08+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 12:52+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:96
@@ -118,11 +118,11 @@ msgstr "личный календарь %s"
 
 #: js/AddToEventPanel.js:61
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: js/AddToEventPanel.js:69
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AddToEventPanel.js:121
 msgid "Please choose the Event to add the contacts to"
@@ -134,7 +134,7 @@ msgstr "Роль"
 
 #: js/AddToEventPanel.js:207
 msgid "Select Role"
-msgstr ""
+msgstr "Выберите роль"
 
 #: js/AddToEventPanel.js:216 js/AttendeeGridPanel.js:186
 #: js/ContactEventsGridPanel.js:125 js/GridView.js:149 Model/Event.php:245
@@ -176,21 +176,22 @@ msgstr "Тип"
 
 #: js/AttendeeGridPanel.js:168
 msgid "User"
-msgstr ""
+msgstr "Пользователь"
 
 #: js/AttendeeGridPanel.js:169
 msgid "Group"
-msgstr ""
+msgstr "Группа"
 
 #: js/AttendeeGridPanel.js:170 js/Model.js:513
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/AttendeeGridPanel.js:171
 msgid "Member of group"
-msgstr ""
+msgstr "Член группы"
 
 #: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
 #: js/ResourcesGridPanel.js:41
@@ -216,7 +217,7 @@ msgstr ""
 
 #: js/CalDAVContainerPropertiesHookField.js:35
 msgid "CalDAV URL"
-msgstr ""
+msgstr "CalDAV URL"
 
 #: js/Calendar.js:29 js/DaysView.js:88 js/MonthView.js:81
 msgid "New Event"
@@ -340,7 +341,7 @@ msgstr ""
 
 #: js/GridView.js:106
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: js/GridView.js:131
 msgid "blocking"
@@ -802,8 +803,8 @@ msgstr ""
 #: Preference.php:92
 msgid ""
 "The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
+"organizers will get notifications for all updates including attendee answers"
+" unless this preference is set to \"Never\""
 msgstr ""
 
 #: Preference.php:95
@@ -925,77 +926,3 @@ msgstr ""
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr ""
-
-msgid "forever"
-msgstr "всегда"
-
-msgid "Forever"
-msgstr "Всегда"
-
-msgid "Until"
-msgstr "До"
-
-msgid "Confirm Update of Series"
-msgstr "Подтвердите обновление серии"
-
-msgid "Confirm Deletion of Series"
-msgstr "Подтвердите удаление серии"
-
-msgid "Publish Free/Busy Information"
-msgstr "Публиковать информацию Свободен/Занят"
-
-msgid "Allow all users to view your free/busy information"
-msgstr "Разрешить всем пользователям видеть вашу информацию Свободен/Занят"
-
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Вы хотите обновить всю серию или только это событие"
-
-msgid "Failed not update recurring event series"
-msgstr "Не удалось обновить серию повторяющихся событий"
-
-msgid "Failed not update event"
-msgstr "Не удалось обновить событие"
-
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Вы хотите удалить всю серию, это и все будущие события этой серии, или "
-"только это событие"
-
-msgid "Every"
-msgstr "Каждые"
-
-msgid ". Day"
-msgstr ". День"
-
-msgid ". Week at"
-msgstr ". Неделя на"
-
-msgid ". Month"
-msgstr ". Месяц"
-
-msgid ". Year"
-msgstr ". Год"
-
-msgid "Event description:<br/>"
-msgstr "Описание события:<br/>"
-
-msgid "Do you realy want to update all events of this recuring event series?"
-msgstr ""
-"Вы действительно хотите обновить все события в этой серии повторяющихся "
-"событий?"
-
-msgid ""
-"Your selection contains recuring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Ваше выделение содержит повторяющиеся события. Они должны удалятся отдельно!"
-
-msgid "Do you realy want to delete all events of this recuring event series?"
-msgstr ""
-"Вы действительно хотите удалить все события в этой серии повторяющихся "
-"событий?"
-
-msgid "No recuring rule defined"
-msgstr "Правила повторения не заданы"

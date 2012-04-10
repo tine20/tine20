@@ -1,20 +1,20 @@
+# 
+# Translators:
+# Tamás Faragó <>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Admin\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:04+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: gump <admin@kemenyfem.hu>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-03 17:28+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
+"Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: HUNGARY\n"
-"X-Poedit-Language: Hungarian\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
@@ -30,10 +30,9 @@ msgid "manage accounts"
 msgstr "fiókok kezelése"
 
 #: Acl/Rights.php:190
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, "
-"felhasználó jelszó megváltoztatása"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, felhasználó jelszó megváltoztatása"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -49,10 +48,9 @@ msgstr "szerepek kezelése"
 
 #: Acl/Rights.php:198
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, "
-"alkalmazás hozzáférések szerepekhez adása"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, alkalmazás hozzáférések szerepekhez adása"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -76,8 +74,7 @@ msgstr "konténerek kezelése"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
-"konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
+msgstr "konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
 
 #: Acl/Rights.php:213
 msgid "view access log"
@@ -926,13 +923,13 @@ msgstr "blokkolt"
 
 #: js/user/EditDialog.js:845
 msgid "Invalid Status"
-msgstr ""
+msgstr "Érvénytelen állapot"
 
 #: js/user/EditDialog.js:846
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr ""
+msgstr "A blokkolt állapot csak akkor él, ha egy felhasználó túl gyakran próbált meg rossz jelszóval bejelentkezni. Itt nem lehetséges ezt az állapotot beállítani."
 
 #: js/user/EditDialog.js:868 js/user/GridPanel.js:186
 msgid "Expires"
@@ -1020,7 +1017,7 @@ msgstr "Kérjük adja meg az új jelszavat:"
 
 #: js/user/Users.js:72
 msgid "Users"
-msgstr ""
+msgstr "Felhasználók"
 
 #: js/user/Users.js:118
 msgid "Samba User"
@@ -1033,60 +1030,3 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Email User"
 msgstr[1] "Email Users"
-
-msgid "Quota (MB)"
-msgstr "Kvóta (MB)"
-
-msgid "Current Mail Size"
-msgstr "Jelenlegi levél méret"
-
-msgid "Sieve Quota"
-msgstr "Sieve Kvóta"
-
-msgid "Sieve Size"
-msgstr "Sieve Méret"
-
-msgid "Aliases"
-msgstr "Aliaszok"
-
-msgid "Forwards"
-msgstr "Továbbítások"
-
-msgid "User memberships"
-msgstr "Fiók tagságok"
-
-msgid "Transfering {0}..."
-msgstr "Átadás alatt: {0}..."
-
-msgid "Loading Tag..."
-msgstr "Címke betöltése..."
-
-msgid "Please Wait"
-msgstr "Kérlek várj"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Biztos törölni akarja a kiválaszott hozzáférési napló bejegyzéseket?"
-
-msgid "delete entry"
-msgstr "bejegyzés törlése"
-
-msgid "select all"
-msgstr "mind kijelölése"
-
-msgid "Display from:"
-msgstr "Megjelenítés innen:"
-
-msgid "to:"
-msgstr "eddig:"
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Hozzáférési napló bejegyzések megjelenítése {0} - {1} / {2}"
-
-msgid "No access log entries to display"
-msgstr "Nincs megjeleníthető bejegyzés"
-
-msgid "Account ID"
-msgstr "Fiók ID"
-
-msgid "Loading Role..."
-msgstr "Szerep betöltése..."

@@ -1,20 +1,20 @@
+# 
+# Translators:
+# Tamás Faragó <>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Crm\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:02+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: gump <admin@kemenyfem.hu>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-03 17:55+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
+"Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: HUNGARY\n"
-"X-Poedit-Language: Hungarian\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -229,19 +229,19 @@ msgstr "sürgős"
 
 #: js/AddToLeadPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Mégsem"
 
 #: js/AddToLeadPanel.js:64
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/AddToLeadPanel.js:99
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
+msgstr "Kérlek válaszd ki az ügyletet a kapcsolatok hozzáadásához"
 
 #: js/AddToLeadPanel.js:104
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Kérlek válaszd ki a résztvevők szerepét"
 
 #: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
 msgid "Lead"
@@ -251,15 +251,15 @@ msgstr[1] "Ügyletek"
 
 #: js/AddToLeadPanel.js:154
 msgid "Select Lead"
-msgstr ""
+msgstr "Ügylet kiválasztása"
 
 #: js/AddToLeadPanel.js:159
 msgid "Select Role"
-msgstr ""
+msgstr "Szerep kiválasztása"
 
 #: js/AddToLeadPanel.js:173
 msgid "Adding {0} Contacts to lead"
-msgstr ""
+msgstr "{0} kapcsolat hozzáadása az ügylethez"
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
 #: js/LeadGridDetailsPanel.js:227
@@ -597,15 +597,3 @@ msgstr "Minden ügylet amiért én vagyok a felelős"
 #: Setup/Initialize.php:86
 msgid "Leads with overdue tasks"
 msgstr "Ügyletek lejárt feladatokkal"
-
-msgid "Lead %s has been creaded"
-msgstr "Ügylet %s elkészült"
-
-msgid "Last Modified Time"
-msgstr "Utolsó módosítás ideje"
-
-msgid "Add task"
-msgstr "Feladat hozzáadása"
-
-msgid "Add task for selected lead"
-msgstr "Feladat hozzáadása a kiválasztott ügylethez"

@@ -1,20 +1,20 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:57+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 11:51+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Config.php:38
@@ -45,11 +45,11 @@ msgstr ""
 
 #: js/AddToProjectPanel.js:56
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: js/AddToProjectPanel.js:64
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AddToProjectPanel.js:99
 msgid "Please choose the Project to add the contacts to"
@@ -61,15 +61,15 @@ msgstr ""
 
 #: js/AddToProjectPanel.js:123
 msgid "Select Project"
-msgstr ""
+msgstr "Выберите проект"
 
 #: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:112
 msgid "Role"
-msgstr ""
+msgstr "Роль"
 
 #: js/AddToProjectPanel.js:148
 msgid "Select Role"
-msgstr ""
+msgstr "Выберите роль"
 
 #: js/AddToProjectPanel.js:168
 msgid "Adding {0} Participants to project"
@@ -78,22 +78,24 @@ msgstr ""
 #: js/Model.js:33 js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
 msgid "Project"
 msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Проект"
+msgstr[1] "Проекты"
+msgstr[2] "Проекты"
 
 #: js/Model.js:37
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Список проектов"
+msgstr[1] "Списки проектов"
+msgstr[2] "Списки проектов"
 
 #: js/Model.js:40
 msgid "Project lists"
-msgstr ""
+msgstr "Списки проектов"
 
 #: js/Model.js:72
 msgid "Quick search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/Model.js:73 js/ProjectEditDialog.js:161 js/ProjectGridPanel.js:95
 msgid "Title"
@@ -113,7 +115,7 @@ msgstr "Статус"
 
 #: js/Model.js:86
 msgid "Last modified"
-msgstr ""
+msgstr "Последнее изменение"
 
 #: js/Model.js:87
 msgid "Last modifier"
@@ -121,7 +123,7 @@ msgstr ""
 
 #: js/Model.js:88
 msgid "Creation Time"
-msgstr ""
+msgstr "Время создания"
 
 #: js/Model.js:89
 msgid "Creator"
@@ -137,19 +139,19 @@ msgstr ""
 
 #: js/ProjectEditDialog.js:216
 msgid "Enter description"
-msgstr ""
+msgstr "Введите описание"
 
 #: js/ProjectGridPanel.js:85
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
-msgstr ""
+msgstr "Проекты"
 
 #: Preference.php:24
 msgid "All my projects"
-msgstr ""
+msgstr "Все мои проекты"
 
 #: Preference.php:60
 msgid "Default Favorite"
@@ -165,11 +167,11 @@ msgstr ""
 
 #: Setup/Initialize.php:35
 msgid "Completed"
-msgstr ""
+msgstr "Завершен"
 
 #: Setup/Initialize.php:36
 msgid "Cancelled"
-msgstr ""
+msgstr "Отменён"
 
 #: Setup/Initialize.php:37
 msgid "In process"
@@ -185,7 +187,7 @@ msgstr ""
 
 #: Setup/Initialize.php:79
 msgid "All my open projects"
-msgstr ""
+msgstr "Все мои открытые проекты"
 
 #: Setup/Initialize.php:99
 msgid "My projects that I'm responsible for"
@@ -197,60 +199,8 @@ msgstr ""
 
 #: Setup/Initialize.php:120
 msgid "My waiting projects"
-msgstr ""
+msgstr "Мои ожидающие проекты"
 
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr ""
-
-msgid "Budget"
-msgstr "Бюджет"
-
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-#, fuzzy
-msgid "ExampleRecord"
-msgstr "ЗаписьПример"
-
-msgid "ExampleApplication"
-msgstr "ПриложениеПример"
-
-msgid "ExampleRecords"
-msgstr "ЗаписиПримеры"
-
-msgid "All ExampleRecords"
-msgstr "Все ЗаписиПримеры"
-
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "список записей"
-msgstr[1] "списка записей"
-msgstr[2] "списков записей"
-
-msgid "Unit"
-msgstr "Единица"
-
-msgid "Unit Price"
-msgstr "Цена за единицу"
-
-msgid "Timesheets are billable"
-msgstr "Табели оплачиваемы"
-
-msgid "closed"
-msgstr "закрыт"
-
-msgid "open"
-msgstr "открыт"
-
-msgid "Billed"
-msgstr "Оплачен"
-
-msgid "not yet billed"
-msgstr "ещё не оплачен"
-
-msgid "to bill"
-msgstr "к оплате"
-
-msgid "billed"
-msgstr "оплачен"

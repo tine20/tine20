@@ -1,20 +1,20 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Setup\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:08+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 21:15+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/ApplicationGridPanel.js:63
@@ -79,13 +79,13 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Удалить всех существующих пользователей и группы"
 
 #: js/AuthenticationPanel.js:127
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
-"and Roles. Do you really want to switch the accounts storage backend to "
-"LDAP ?"
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr ""
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
@@ -107,7 +107,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:255
 msgid "Password confirmation"
-msgstr ""
+msgstr "Подтверждение пароля"
 
 #: js/AuthenticationPanel.js:263
 msgid "Authentication provider"
@@ -123,7 +123,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
 #: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
@@ -131,7 +131,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
 #: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
@@ -150,13 +150,13 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
 msgid "Host"
-msgstr ""
+msgstr "Хост"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
 msgid "Login name"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
+msgstr "Фильтр поиска"
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
 #: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
@@ -189,22 +189,22 @@ msgstr "Имя узла"
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
 #: js/EmailPanel.js:398
 msgid "Secure Connection"
-msgstr ""
+msgstr "Безопасное подключение"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
 msgid "Append domain to login name"
@@ -224,7 +224,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:457
 msgid "User can change password"
-msgstr ""
+msgstr "Пользователь должен сменить пароль"
 
 #: js/AuthenticationPanel.js:489
 msgid "User DN"
@@ -240,11 +240,11 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:502
 msgid "Groups DN"
-msgstr ""
+msgstr "DN групп"
 
 #: js/AuthenticationPanel.js:505
 msgid "Group Filter"
-msgstr ""
+msgstr "Фильтр группы"
 
 #: js/AuthenticationPanel.js:509
 msgid "Group Search Scope"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:521
 msgid "Use Rfc 2307 bis"
-msgstr ""
+msgstr "Использовать Rfc 2307 bis"
 
 #: js/AuthenticationPanel.js:527
 msgid "Min User Id"
@@ -284,7 +284,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:552
 msgid "Allow user to change her password?"
-msgstr ""
+msgstr "Разрешить пользователю изменять пароль?"
 
 #: js/AuthenticationPanel.js:558
 msgid "Readonly access"
@@ -316,17 +316,17 @@ msgstr "Сохранить конфигурацию"
 
 #: js/AuthenticationPanel.js:627
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Пароли не совпадают"
 
 #: js/AuthenticationPanel.js:637 js/AuthenticationPanel.js:644
 #: js/AuthenticationPanel.js:648 js/AuthenticationPanel.js:660
 #: js/AuthenticationPanel.js:671
 msgid "Should not be empty"
-msgstr ""
+msgstr "Не должен быть пустым"
 
 #: js/ConfigManagerPanel.js:135
 msgid "File"
-msgstr ""
+msgstr "Файл"
 
 #: js/ConfigManagerPanel.js:145
 msgid "Adapter"
@@ -378,15 +378,15 @@ msgstr "Время жизни (секунд)"
 
 #: js/ConfigManagerPanel.js:250
 msgid "Temporary files"
-msgstr ""
+msgstr "Временные файлы"
 
 #: js/ConfigManagerPanel.js:258
 msgid "Temporary Files Path"
-msgstr ""
+msgstr "Путь к временным файлам"
 
 #: js/ConfigManagerPanel.js:262
 msgid "Session"
-msgstr ""
+msgstr "Сессия"
 
 #: js/ConfigManagerPanel.js:322
 msgid "Filestore directory"
@@ -430,7 +430,7 @@ msgstr ""
 
 #: js/EmailPanel.js:174
 msgid "Imap"
-msgstr ""
+msgstr "Imap"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -446,7 +446,7 @@ msgstr ""
 
 #: js/EmailPanel.js:278
 msgid "Smtp"
-msgstr ""
+msgstr "Smtp"
 
 #: js/EmailPanel.js:300
 msgid "Authentication"
@@ -494,27 +494,27 @@ msgstr ""
 
 #: js/EmailPanel.js:428
 msgid "MySql Database"
-msgstr ""
+msgstr "База данных MySql"
 
 #: js/EmailPanel.js:431
 msgid "MySql User"
-msgstr ""
+msgstr "Пользователь MySql"
 
 #: js/EmailPanel.js:434
 msgid "MySql Password"
-msgstr ""
+msgstr "Пароль MySql"
 
 #: js/EmailPanel.js:438
 msgid "MySql Port"
-msgstr ""
+msgstr "Порт MySql"
 
 #: js/EmailPanel.js:454
 msgid "User or UID"
-msgstr ""
+msgstr "Пользователь или UID"
 
 #: js/EmailPanel.js:457
 msgid "Group or GID"
-msgstr ""
+msgstr "Группа или GID"
 
 #: js/EmailPanel.js:460
 msgid "Home Template"
@@ -522,39 +522,39 @@ msgstr ""
 
 #: js/EmailPanel.js:462
 msgid "Password Scheme"
-msgstr ""
+msgstr "Схема пароля"
 
 #: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
-msgstr ""
+msgstr "PLAIN-MD5"
 
 #: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
-msgstr ""
+msgstr "MD5-CRYPT"
 
 #: js/EmailPanel.js:475
 msgid "SHA1"
-msgstr ""
+msgstr "SHA1"
 
 #: js/EmailPanel.js:476
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: js/EmailPanel.js:477
 msgid "SSHA256"
-msgstr ""
+msgstr "SSHA256"
 
 #: js/EmailPanel.js:478
 msgid "SHA512"
-msgstr ""
+msgstr "SHA512"
 
 #: js/EmailPanel.js:479
 msgid "SSHA512"
-msgstr ""
+msgstr "SSHA512"
 
 #: js/EmailPanel.js:480
 msgid "PLAIN"
-msgstr ""
+msgstr "PLAIN"
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
@@ -564,9 +564,7 @@ msgstr "Проведение проверок окружения..."
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
-msgstr ""
-"{0} не найдены. Пожалуйста, попробуйте изменить фильтр, параметры просмотра "
-"или {1} в котором вы ищете."
+msgstr "{0} не найдены. Пожалуйста, попробуйте изменить фильтр, параметры просмотра или {1} в котором вы ищете."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
@@ -638,36 +636,3 @@ msgstr ""
 #: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
 msgstr ""
-
-msgid "Informations"
-msgstr "Информация"
-
-#, fuzzy
-msgid "Shit"
-msgstr "Сдвиг"
-
-msgid "Where are the backup tapes"
-msgstr "Где находятся резервные ленты"
-
-msgid "Invalid configuration"
-msgstr "Неверная конфигурация"
-
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-"Вам нужно исправить поля отмеченные красным до того, как конфигурация может "
-"быть сохранена"
-
-msgid "Transfering Configuration..."
-msgstr "Передача конфигурации..."
-
-msgid "Version"
-msgstr "Версия"
-
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Показываю действия {0} - {1} of {2}"
-
-msgid "No {0} to display"
-msgstr "Не {0} для показа"
-
-msgid "Check config"
-msgstr "Проверить конфигурацию"
