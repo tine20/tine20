@@ -1,29 +1,29 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Erp\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:03+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 20:54+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:103
 msgid "manage products"
-msgstr ""
+msgstr "управление продуктами"
 
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
-msgstr ""
+msgstr "добавление, изменение и удаление продуктов"
 
 #: js/ContractEditDialog.js:95 js/ContractGridPanel.js:82
 msgid "Title"
@@ -49,26 +49,28 @@ msgstr "Статус"
 #: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Продукт"
+msgstr[1] "Продукты"
+msgstr[2] "Продукты"
 
 #: js/Models.js:44
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "список записей"
+msgstr[1] "списка записей"
+msgstr[2] "списков записей"
 
 #: js/Models.js:78 js/Models.js:140
 msgid "Quick search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/Models.js:79
 msgid "Product name"
-msgstr ""
+msgstr "Название продукта"
 
 #: js/Models.js:81 js/Models.js:142
 msgid "Creator"
-msgstr ""
+msgstr "Создатель"
 
 #: js/Models.js:113
 msgid "Contract"
@@ -80,60 +82,46 @@ msgstr[2] "Договоров"
 #: js/Models.js:117
 msgid "All Contracts"
 msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Все контракты"
+msgstr[1] "списка контрактов"
+msgstr[2] "списков контрактов"
 
 #: js/Models.js:141
 msgid "Contract name"
-msgstr ""
+msgstr "Название контракта"
 
 #: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
 msgid "Name"
-msgstr ""
+msgstr "Название"
 
 #: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
 msgid "Price"
-msgstr ""
+msgstr "Цена"
 
 #: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
 msgid "Manufacturer"
-msgstr ""
+msgstr "Производитель"
 
 #: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: js/ProductGridPanel.js:119
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:62
 msgid "My Products"
-msgstr ""
+msgstr "Мои продукты"
 
 #: Setup/Initialize.php:35 Setup/Update/Release5.php:63
 msgid "Products created by myself"
-msgstr ""
+msgstr "Созданные мной продукты"
 
 #: Setup/Initialize.php:55 Setup/Update/Release5.php:83
 msgid "My Contracts"
-msgstr ""
+msgstr "Мои контракты"
 
 #: Setup/Initialize.php:56 Setup/Update/Release5.php:84
 msgid "Contracts created by myself"
-msgstr ""
-
-msgid "Shared Contracts"
-msgstr "Общие договоры"
-
-msgid "Summary"
-msgstr "Краткое изложение"
-
-msgid "Contracts"
-msgstr "Договоры"
-
-#~ msgid "contracts list"
-#~ msgid_plural "contracts lists"
-#~ msgstr[0] "список договоров"
-#~ msgstr[1] "списка договоров"
-#~ msgstr[2] "списков договоров"
+msgstr "Созданные мной контракты"
