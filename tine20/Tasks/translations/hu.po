@@ -1,20 +1,20 @@
+# 
+# Translators:
+# Tamás Faragó <>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tasks\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:51+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: gump <admin@kemenyfem.hu>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-03 18:08+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
+"Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: HUNGARY\n"
-"X-Poedit-Language: Hungarian\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:89
@@ -35,26 +35,23 @@ msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
 
 #: Config.php:38
 msgid "Tasks status available"
-msgstr ""
+msgstr "Feladat állapot elérhető"
 
 #: Config.php:40
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
-"Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő "
-"állapot hatással lehet másik Feladat rendszerre exportáláskor vagy "
-"szinkronizáláskor."
+msgstr "Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő állapot hatással lehet másik Feladat rendszerre exportáláskor vagy szinkronizáláskor."
 
 #: Config.php:48
 msgid "Task priorities available"
-msgstr ""
+msgstr "Feladat sürgősség elérhető"
 
 #: Config.php:50
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Lehetséges feladat sürgősség. Kérlek jegyezd meg, hogy a további sürgősségek hatással lehetnek más Feladat rendszerekre exportálás vagy szinkronizálás esetén."
 
 #: Controller/Task.php:165
 msgid "Notification for Task "
@@ -241,19 +238,19 @@ msgstr "Folyamatban"
 
 #: Setup/Initialize.php:50 Setup/Update/Release5.php:158
 msgid "low"
-msgstr ""
+msgstr "alacsony"
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:159
 msgid "normal"
-msgstr ""
+msgstr "normál"
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:160
 msgid "high"
-msgstr ""
+msgstr "magas"
 
 #: Setup/Initialize.php:53 Setup/Update/Release5.php:161
 msgid "urgent"
-msgstr ""
+msgstr "sürgős"
 
 #: Setup/Initialize.php:81 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
@@ -286,24 +283,3 @@ msgstr "Minden feladat amit utoljára én módosítottam"
 #: Setup/Initialize.php:126
 msgid "Tasks without responsible"
 msgstr "Feladatok felelős nélkül"
-
-msgid "Tasks Status Available"
-msgstr "Feladat állapot elérhető"
-
-msgid "NEEDS-ACTION"
-msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
-
-msgid "COMPLETED"
-msgstr "ELKÉSZÜLT"
-
-msgid "IN-PROCESS"
-msgstr "FELDOLGOZÁS ALATT"
-
-msgid "CANCELLED"
-msgstr "TÖRÖLVE"
-
-msgid "Failed"
-msgstr "Sikertelen"
-
-msgid "Could not save task."
-msgstr "Feladat nem menthető."
