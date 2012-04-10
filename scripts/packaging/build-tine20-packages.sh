@@ -26,6 +26,7 @@ function checkout()
     echo "checkout files from git url $1 to $TEMPDIR/tine20 ... "
     rm -rf $TEMPDIR/tine20
     rm -rf $TEMPDIR/debian
+    rm -rf $TEMPDIR/Univention
     
     rm -rf $TEMPDIR/tine20.git
     mkdir $TEMPDIR/tine20.git
@@ -65,6 +66,7 @@ function checkout()
 
     mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
     mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
+    mv $TEMPDIR/tine20.git/scripts/packaging/Univention $TEMPDIR/Univention
     rm -Rf $TEMPDIR/tine20.git
     
     echo "done"
@@ -313,6 +315,26 @@ function prepareDebianPackaging()
     echo "done"
 }
 
+function prepareUniventionPackaging()
+{
+    PACKAGEDIR="$BASEDIR/packages/univention/$RELEASE"
+    rm -rf $PACKAGEDIR
+    
+    # Replace all matches of - with .
+    DEBIANVERSION=${RELEASE//-/.}
+    DEBIANVERSION=${DEBIANVERSION//\~*/}
+
+    mkdir -p "$PACKAGEDIR/tine20-$DEBIANVERSION"
+    
+    echo -n "preparing univention packaging directory in $PACKAGEDIR/tine20-$DEBIANVERSION ... "
+    
+    (cd $PACKAGEDIR/tine20-$DEBIANVERSION; tar xf ../../../tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2)
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig.tar.bz2
+    cp -r $BASEDIR/temp/Univention/* $PACKAGEDIR/tine20-$DEBIANVERSION
+
+    echo "done"
+}
+
 getOptions $*
                  
 createDirectories
@@ -325,3 +347,4 @@ createSpecialArchives
 packageTranslations
 buildChecksum
 prepareDebianPackaging
+prepareUniventionPackaging
