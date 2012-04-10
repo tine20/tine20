@@ -1,21 +1,20 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Admin\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:56+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 10:09+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
@@ -31,10 +30,9 @@ msgid "manage accounts"
 msgstr "управлять учётными записями"
 
 #: Acl/Rights.php:190
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"добавить и изменить пользователей и группы, добавить пользователей в группы, "
-"изменить пароли пользователей"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "добавить и изменить пользователей и группы, добавить пользователей в группы, изменить пароли пользователей"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -50,10 +48,9 @@ msgstr "управлять ролями"
 
 #: Acl/Rights.php:198
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"добавить и изменить роли, добавить новых участников к ролям, добавить права "
-"приложений к ролям"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "добавить и изменить роли, добавить новых участников к ролям, добавить права приложений к ролям"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -140,6 +137,7 @@ msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
@@ -259,6 +257,7 @@ msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -315,18 +314,19 @@ msgstr "Версия"
 #: js/container/Container.js:46 js/container/GridPanel.js:103
 msgid "Container"
 msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Контейнер"
+msgstr[1] "Контейнеры"
+msgstr[2] "Контейнеры"
 
 #: js/container/EditDialog.js:144 js/container/GridPanel.js:73
 #: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
 #: js/customfield/GridPanel.js:73
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: js/container/EditDialog.js:145
 msgid "personal"
-msgstr ""
+msgstr "личный"
 
 #: js/container/EditDialog.js:145
 msgid "shared"
@@ -355,6 +355,7 @@ msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
 #: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
@@ -367,31 +368,31 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:244
 msgid "Default"
-msgstr ""
+msgstr "По умолчанию"
 
 #: js/customfield/EditDialog.js:288
 msgid "Add a New ID..."
-msgstr ""
+msgstr "Добавить новый ID..."
 
 #: js/customfield/EditDialog.js:292
 msgid "Value"
-msgstr ""
+msgstr "Значение"
 
 #: js/customfield/EditDialog.js:297
 msgid "Add a New Value..."
-msgstr ""
+msgstr "Добавить новое значение"
 
 #: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 #: js/customfield/EditDialog.js:307
 msgid "ID already exists"
-msgstr ""
+msgstr "ID уже существует"
 
 #: js/customfield/EditDialog.js:313
 msgid "Value already exists"
-msgstr ""
+msgstr "Значение уже существует"
 
 #: js/customfield/EditDialog.js:407
 msgid "Record Class"
@@ -403,11 +404,11 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:464
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: js/customfield/EditDialog.js:503
 msgid "Configure store"
@@ -415,7 +416,7 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
 msgid "Model"
-msgstr ""
+msgstr "Модель"
 
 #: js/customfield/EditDialog.js:560
 msgid "Custom field definition"
@@ -423,15 +424,15 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:571
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #: js/customfield/EditDialog.js:572
 msgid "Number"
-msgstr ""
+msgstr "Номер"
 
 #: js/customfield/EditDialog.js:573
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: js/customfield/EditDialog.js:574
 msgid "DateTime"
@@ -439,7 +440,7 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:575
 msgid "Time"
-msgstr ""
+msgstr "Время"
 
 #: js/customfield/EditDialog.js:576
 msgid "Boolean"
@@ -455,15 +456,15 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:579
 msgid "Record"
-msgstr ""
+msgstr "Запись"
 
 #: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
 msgid "Label"
-msgstr ""
+msgstr "Метка"
 
 #: js/customfield/EditDialog.js:607
 msgid "Length"
-msgstr ""
+msgstr "Длина"
 
 #: js/customfield/EditDialog.js:615
 msgid "Custom field additional properties"
@@ -474,6 +475,7 @@ msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/customfield/EditDialog.js:648
 msgid "Customfield already exists. Please choose another name."
@@ -836,7 +838,7 @@ msgstr ""
 
 #: js/user/EditDialog.js:486 js/user/EditDialog.js:524
 msgid "no quota set"
-msgstr ""
+msgstr "квота не задана"
 
 #: js/user/EditDialog.js:496
 msgid "Current Mailbox size"
@@ -880,7 +882,7 @@ msgstr ""
 
 #: js/user/EditDialog.js:655
 msgid "Password confirmation"
-msgstr ""
+msgstr "Подтверждение пароля"
 
 #: js/user/EditDialog.js:672
 msgid "Repeat password"
@@ -888,7 +890,7 @@ msgstr ""
 
 #: js/user/EditDialog.js:698
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/user/EditDialog.js:733
 msgid "Account"
@@ -916,7 +918,7 @@ msgstr "Адрес электронной почты"
 
 #: js/user/EditDialog.js:805 js/user/GridPanel.js:182
 msgid "OpenID"
-msgstr ""
+msgstr "OpenID"
 
 #: js/user/EditDialog.js:837
 msgid "expired"
@@ -958,11 +960,11 @@ msgstr "Пароль установлен"
 
 #: js/user/EditDialog.js:935
 msgid "User groups"
-msgstr ""
+msgstr "Группы пользователей"
 
 #: js/user/EditDialog.js:941
 msgid "User roles"
-msgstr ""
+msgstr "Роли пользователей"
 
 #: js/user/EditDialog.js:947
 msgid "Fileserver"
@@ -970,11 +972,11 @@ msgstr "Файловый сервер"
 
 #: js/user/EditDialog.js:953
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: js/user/EditDialog.js:962
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: js/user/GridPanel.js:56
 msgid "enable account"
@@ -1022,7 +1024,7 @@ msgstr "Пожалуйста, введите новый пароль:"
 
 #: js/user/Users.js:72
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
 #: js/user/Users.js:118
 msgid "Samba User"
@@ -1036,113 +1038,4 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Loading Tag..."
-msgstr "Загрузка тэга..."
-
-msgid "Please Wait"
-msgstr "Пожалуйста, подождите"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Вы действительно хотите удалить выбранные элементы лога доступа?"
-
-msgid "delete entry"
-msgstr "удалить элемент"
-
-msgid "select all"
-msgstr "выбрать все"
-
-msgid "Display from:"
-msgstr "Показаны с:"
-
-msgid "to:"
-msgstr "до:"
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Показаны элементы лога доступа {0} - {1} из {2}"
-
-msgid "No access log entries to display"
-msgstr "Нет записей лога доступа"
-
-msgid "Account ID"
-msgstr "ID учётной записи"
-
-msgid "Loading Role..."
-msgstr "Загрузка роли..."
-
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Вы действительно хотите удалить выбранную учётную запись(и)?"
-
-msgid "Deleting account(s)..."
-msgstr "Удаление учётной записи(ей)..."
-
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "При удалении учётной записи (ей) произошла ошибка."
-
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Показаны учётные записи {0} - {1} из {2}"
-
-msgid "No accounts to display"
-msgstr "Нет учётных записей"
-
-msgid "add account"
-msgstr "добавить учётную запись"
-
-msgid "edit account"
-msgstr "изменить учётную запись"
-
-msgid "delete account"
-msgstr "удалить учётную запись"
-
-msgid "Deleting group..."
-msgstr "Удаление группы..."
-
-#, fuzzy
-msgid "Email UID"
-msgstr "Электронная почта"
-
-#, fuzzy
-msgid "Email GID"
-msgstr "Электронная почта"
-
-#, fuzzy
-msgid "Email Username"
-msgstr "Пользователь Samba"
-
-msgid "enter searchfilter"
-msgstr "Введите поисковый фильтр"
-
-msgid "remove account"
-msgstr "удалить учётную запись"
-
-msgid "Role members"
-msgstr "Участники роли"
-
-msgid "Deleting tag..."
-msgstr "Удаление тэга..."
-
-msgid "name"
-msgstr "Имя"
-
-msgid "status"
-msgstr "Статус"
-
-msgid "Deleting account..."
-msgstr "Счет удаляется..."
-
-#, fuzzy
-msgid "Some error occurred while trying to delete the account."
-msgstr "При удаление счета произошла  ошибка."
-
-msgid "Saving User Account"
-msgstr "Счет пользователя выл сохранен"
-
-msgid "Could not save user account."
-msgstr "Счет пользователя не мог бить сохранен."
-
-msgid "Add New User Account"
-msgstr "Добавить новый счет пользователя"
-
-#, fuzzy
-msgid "Edit User Account \"{0}\""
-msgstr "Обработать счёт пользователя \"{0}\""
+msgstr[2] ""

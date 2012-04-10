@@ -1,75 +1,74 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Filemanager\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-09 12:48+0000\n"
+"Last-Translator: parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: \n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
-msgstr ""
+msgstr "управление общими папками"
 
 #: Acl/Rights.php:98
 msgid "Create new shared folders"
-msgstr ""
+msgstr "Создание новых  общих папок"
 
 #: Controller/Node.php:164
 msgid "My folders"
-msgstr ""
+msgstr "Мои папки"
 
 #: Controller/Node.php:171
 msgid "Shared folders"
-msgstr ""
+msgstr "Общие папки"
 
 #: Controller/Node.php:178
 msgid "Other users folders"
-msgstr ""
+msgstr "Папки других пользователей"
 
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
-msgstr ""
+msgstr "Личные файлы %s"
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
-msgstr ""
+msgstr "Менеджер файлов"
 
 #: js/Filemanager.js:67
 msgid "Files already exists"
-msgstr ""
+msgstr "Файлы уже существуют"
 
 #: js/Filemanager.js:67
 msgid "Do you want to replace the following file(s)?"
-msgstr ""
+msgstr "Вы хотите заменить следующий(е) файл(ы)?"
 
 #: js/Filemanager.js:100
 msgid "Failure on create folder"
-msgstr ""
+msgstr "Сбой при создании папки"
 
 #: js/Filemanager.js:101
 msgid "Item with this name already exists!"
-msgstr ""
+msgstr "Элемент с таким именем уже существует!"
 
 #: js/GridContextMenu.js:35
 msgid "Please enter the new name of the {0}:"
-msgstr ""
+msgstr "Введите новое имя для {0}:"
 
 #: js/GridContextMenu.js:41
 msgid "Not renamed {0}"
-msgstr ""
+msgstr "Не переименовано {0}"
 
 #: js/GridContextMenu.js:41 js/GridPanel.js:484
 msgid "You have to supply a {0} name!"
@@ -77,39 +76,39 @@ msgstr ""
 
 #: js/GridContextMenu.js:145 js/GridPanel.js:528
 msgid "Do you really want to delete the following files?"
-msgstr ""
+msgstr "Вы действительно хотите удалить следующие файлы?"
 
 #: js/GridPanel.js:132
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: js/GridPanel.js:139
 msgid "Size"
-msgstr ""
+msgstr "Размер"
 
 #: js/GridPanel.js:146 js/Model.js:522
 msgid "Contenttype"
-msgstr ""
+msgstr "Тип содержимого"
 
 #: js/GridPanel.js:154
 msgid "Folder"
-msgstr ""
+msgstr "Папка"
 
 #: js/GridPanel.js:163
 msgid "Revision"
-msgstr ""
+msgstr "Ревизия"
 
 #: js/GridPanel.js:178 js/Model.js:523
 msgid "Creation Time"
-msgstr ""
+msgstr "Время создания"
 
 #: js/GridPanel.js:186
 msgid "Created By"
-msgstr ""
+msgstr "Создана"
 
 #: js/GridPanel.js:193
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Время последнего изменения"
 
 #: js/GridPanel.js:200
 msgid "Last Modified By"
@@ -117,7 +116,7 @@ msgstr ""
 
 #: js/GridPanel.js:234
 msgid "Show closed"
-msgstr ""
+msgstr "Показать закрытые"
 
 #: js/GridPanel.js:258
 msgid "The max. Upload Filesize is {0} MB"
@@ -129,7 +128,7 @@ msgstr ""
 
 #: js/GridPanel.js:322
 msgid "Create Folder"
-msgstr ""
+msgstr "Создать папку"
 
 #: js/GridPanel.js:333
 msgid "Folder Up"
@@ -137,31 +136,31 @@ msgstr ""
 
 #: js/GridPanel.js:344
 msgid "Save locally"
-msgstr ""
+msgstr "Сохранить локально"
 
 #: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
 msgid "Rename"
-msgstr ""
+msgstr "Переименовать"
 
 #: js/GridPanel.js:378
 msgid "Pause upload"
-msgstr ""
+msgstr "Приостановить загрузку"
 
 #: js/GridPanel.js:385
 msgid "Resume upload"
-msgstr ""
+msgstr "Продолжить загрузку"
 
 #: js/GridPanel.js:479
 msgid "New Folder"
-msgstr ""
+msgstr "Новая папка"
 
 #: js/GridPanel.js:479
 msgid "Please enter the name of the new folder:"
-msgstr ""
+msgstr "Введите имя новой папки:"
 
 #: js/GridPanel.js:484
 msgid "No {0} added"
@@ -170,7 +169,7 @@ msgstr ""
 #: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
 #: js/TreePanel.js:760
 msgid "Upload Failed"
-msgstr ""
+msgstr "Сбой загрузки"
 
 #: js/GridPanel.js:639 js/TreePanel.js:651
 msgid ""
@@ -185,35 +184,37 @@ msgstr ""
 #: js/Model.js:34
 msgid "file"
 msgid_plural "files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "файл"
+msgstr[1] "файла"
+msgstr[2] "файлов"
 
 #: js/Model.js:38
 msgid "folder"
 msgid_plural "folders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "папка"
+msgstr[1] "папки"
+msgstr[2] "папок"
 
 #: js/Model.js:265 js/Model.js:281
 msgid "Copying data .. {0}"
-msgstr ""
+msgstr "Копирование данных... {0}"
 
 #: js/Model.js:268 js/Model.js:283
 msgid "Moving data .. {0}"
-msgstr ""
+msgstr "Перемещение данных... {0}"
 
 #: js/Model.js:287
 msgid "Please wait"
-msgstr ""
+msgstr "Пожалуйста, подождите"
 
 #: js/Model.js:520
 msgid "Quick search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/Model.js:521
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr ""
+msgstr "путь"
