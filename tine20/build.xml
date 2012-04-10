@@ -38,6 +38,7 @@
             <fileset dir=".">
                 <type type="dir" />
                 <include name="*/*" />
+                <exclude name=".tx/*" />
                 <exclude name="build/*" />
                 <exclude name="images/*" />
                 <exclude name="styles/*" />
