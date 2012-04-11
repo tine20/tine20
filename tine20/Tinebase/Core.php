@@ -635,8 +635,8 @@ class Tinebase_Core
     public static function setupStreamWrapper()
     {
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " filesdir config value not set. tine20:// streamwrapper not registered.");
-            
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . " Filesdir config value not set. tine20:// streamwrapper not registered, virtual filesystem not available.");
             return;
         }
         
