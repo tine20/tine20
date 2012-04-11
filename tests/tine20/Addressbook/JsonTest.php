@@ -627,6 +627,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test import
+     * 
+     * @see 0006226: Data truncated for column 'adr_two_lon'
      */
     public function testImport()
     {
@@ -649,13 +651,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
         // import again with clientRecords
         $klaus['adr_one_locality'] = 'Hamburg';
+        // check that empty filter works correctly, db only accepts NULL for empty value here
+        $klaus['adr_two_lon'] = '';
         $clientRecords = array(array(
             'recordData'        => $klaus,
             'resolveStrategy'   => 'mergeMine',
             'index'             => 0,
         ));
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
-        $this->assertEquals(1, $result['totalcount'], 'Should merge Klaus');
+        $this->assertEquals(1, $result['totalcount'], 'Should merge Klaus: ' . print_r($result, TRUE));
         $this->assertEquals(1, $result['duplicatecount'], 'Fritz is no duplicate.');
         $this->assertEquals('Hamburg', $result['results'][0]['adr_one_locality'], 'locality should change');
     }
