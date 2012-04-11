@@ -61,7 +61,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 unset($fieldConfig['empty']);
                 $fieldConfig['identifier'] = $_field->empty;
                 $result = $this->_getCellValue(new Zend_Config($fieldConfig), $_record, $_cellType);
-            }            
+            }
             // don't add value for formula or undefined fields
             return $result;
         }
