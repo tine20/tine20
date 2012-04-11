@@ -8,7 +8,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -402,6 +402,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param  string  $_serverId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
+     * @throws Syncope_Exception_NotFound
      */
     public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
     {
@@ -418,7 +419,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 Felamimail_Controller_Message_Flags::getInstance()->clearFlags($_serverId, Zend_Mail_Storage::FLAG_SEEN);
             }
             
-            $message = $this->_contentController->get($_serverId);
+            try {
+                $message = $this->_contentController->get($_serverId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $tenf);
+                throw new Syncope_Exception_NotFound($tenf->getMessage());
+            }
             $message->timestamp = $this->_syncTimeStamp;
             $this->_contentController->update($message);
         }
