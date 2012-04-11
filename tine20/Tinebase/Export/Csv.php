@@ -172,7 +172,6 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . count($_records) . ' records ...');
         
         $this->_resolveRecords($_records);
-        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
     
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records->toArray(), TRUE));
         

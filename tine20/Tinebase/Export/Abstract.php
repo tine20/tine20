@@ -209,7 +209,7 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
-     * resolve records
+     * resolve records and prepare for export (set user timezone, ...)
      *
      * @param Tinebase_Record_RecordSet $_records
      */
@@ -245,6 +245,8 @@ abstract class Tinebase_Export_Abstract
         if (in_array('container_id', $types)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
+        
+        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
     }
 
     /**
