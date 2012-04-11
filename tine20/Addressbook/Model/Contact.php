@@ -192,7 +192,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // set geofields to NULL if empty
-        $geoFields = array('adr_one_lon', 'adr_one_lat', 'adr_one_lon', 'adr_one_lat');
+        $geoFields = array('adr_one_lon', 'adr_one_lat', 'adr_two_lon', 'adr_two_lat');
         foreach ($geoFields as $geoField) {
             $this->_filters[$geoField]        = new Zend_Filter_Empty(NULL);
         }
