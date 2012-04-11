@@ -596,7 +596,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             } catch (Tinebase_Exception $te) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Default container not found (' . $te->getMessage() . ')');
                 // default may be gone -> remove default adb pref
-                Tinebase_Core::getPreference($this->_applicationName)->deleteUserPref($defaultContainerPreferenceName);
+                $appPref = Tinebase_Core::getPreference($this->_applicationName);
+                if ($appPref) {
+                    $appPref->deleteUserPref($defaultContainerPreferenceName);
+                }
             }
         }
         
