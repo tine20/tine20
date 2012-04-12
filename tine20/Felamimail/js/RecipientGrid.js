@@ -182,7 +182,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     // need to update record because we relay blur event and it might not be updated otherwise
                     if (this.activeEditor) {
                         var value = combo.getValue();
-                        if (this.activeEditor.record.get('address') != value) {
+                        if (value !== null && this.activeEditor.record.get('address') != value) {
                             this.activeEditor.record.set('address', value);
                         }
                     }
