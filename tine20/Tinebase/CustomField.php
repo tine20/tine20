@@ -143,7 +143,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * - results are cached in class cache $_cfByApplicationCache
      * - results are cached if caching is active (with cache tag 'customfields')
      *
-     * @param string|Tinebase_Model_Application $_applicationId
+     * @param string|Tinebase_Model_Application $_applicationId application object, id or name
      * @param string                            $_modelName
      * @param string                            $_requiredGrant (read grant by default)
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
