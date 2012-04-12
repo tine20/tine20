@@ -49,10 +49,8 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         
-        var i18n = new Locale.Gettext();
-        i18n.textdomain('Tinebase');
         this.action_delete = new Ext.Action({
-            text: String.format(_('Delete {0}'), this.config.nodeName),
+            text: String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.config.nodeName),
             iconCls: 'action_delete',
             handler: this.deleteNode,
             scope: this.config,
