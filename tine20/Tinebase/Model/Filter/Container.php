@@ -291,7 +291,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 return array($adminConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK]);
             default:           throw new Tinebase_Exception_UnexpectedValue('specialNode ' . $_node . ' not supported.');
         }
-                
+        
         return $ids;
     }
     

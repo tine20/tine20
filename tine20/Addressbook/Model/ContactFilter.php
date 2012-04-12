@@ -13,6 +13,8 @@
  * 
  * @package     Addressbook
  * @subpackage  Filter
+ * 
+ * @todo add bday filter
  */
 class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
 {
@@ -73,7 +75,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'n_suffix'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'org_unit'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'room'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'room'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'title'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_region'       => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -100,12 +102,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'note'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'pubkey'               => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'assistent'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'assistent'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'addressbook.id',
             'applicationName' => 'Addressbook',
         )),
-        //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
@@ -114,8 +115,10 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
-        'showDisabled'           => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
+        'showDisabled'         => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
             'requiredCols'  => array('account_id' => 'accounts.id')
         )),
+        
+        //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
     );
 }

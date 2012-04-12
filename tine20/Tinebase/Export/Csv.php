@@ -34,6 +34,13 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_specialFields = array();
     
     /**
+     * custom field names for this model
+     * 
+     * @var array
+     */
+    protected $_customFieldNames = array();
+    
+    /**
      * fields to skip
      * 
      * @var array
@@ -115,6 +122,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
         $filename = $this->_getFilename();
         $this->_filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
         
+        $this->_customFieldNames = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
         $fields = $this->_getFields();
         self::fputcsv($this->_filehandle, $fields);
         
@@ -139,9 +147,15 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
             
             $fields = array();
             foreach ($record->getFields() as $key) {
-                $fields[] = $key;
-                if (in_array($key, array_keys($this->_specialFields))) {
-                    $fields[] = $this->_specialFields[$key];
+                if ($key === 'customfields') {
+                    foreach ($this->_customFieldNames as $cfName) {
+                        $fields[] = $cfName;
+                    }
+                } else {
+                    $fields[] = $key;
+                    if (in_array($key, array_keys($this->_specialFields))) {
+                        $fields[] = $this->_specialFields[$key];
+                    }
                 }
             }
             
@@ -189,6 +203,8 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
                     $csvArray[] = $this->_addNotes($record);
                 } else if ($fieldName == 'container_id') {
                     $csvArray[] = $this->_getContainer($record, 'id');
+                } else if (in_array($fieldName, $this->_customFieldNames)) {
+                    $csvArray[] = $record->customfields[$fieldName];
                 } else {
                     $csvArray[] = $record->{$fieldName};
                 }
