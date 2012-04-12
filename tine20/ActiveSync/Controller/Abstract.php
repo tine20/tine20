@@ -8,7 +8,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -318,7 +318,13 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update CollectionId: $_folderId Id: $_serverId");
         
-        $oldEntry = $this->_contentController->get($_serverId);
+        try {
+            $oldEntry = $this->_contentController->get($_serverId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' ' . $tenf);
+            throw new Syncope_Exception_NotFound($tenf->getMessage());
+        }
         
         $entry = $this->toTineModel($_entry, $oldEntry);
         $entry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
