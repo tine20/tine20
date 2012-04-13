@@ -456,7 +456,7 @@ html, body {
 .tb-about-img {
     margin-top: 10px;
 }
-.tb-about-version{
+.tb-about-version {
     margin-top: 50px;
     font-weight: bold;
 }
@@ -465,6 +465,15 @@ html, body {
 }
 .tb-about-copyright {
     margin-top: 50px;
+}
+
+.tb-about-credits-license {
+    margin-top: 10px;
+}
+
+.tb-about-whatsnew p {
+    background: transparent url(../../images/oxygen/16x16/actions/dialog-information.png) left top no-repeat;
+    padding: 2px 0 2px 20px;
 }
 
 /* -------- tags renderer ------------------------------------------------------------*/

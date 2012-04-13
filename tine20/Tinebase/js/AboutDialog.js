@@ -18,11 +18,10 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
     closeAction: 'close',
     modal: true,
     width: 400,
-    height: 350,
+    height: 360,
     minWidth: 400,
-    minHeight: 350,
+    minHeight: 360,
     layout: 'fit',
-//    plain: true,
     title: null,
 
     initAboutTpl: function() {
@@ -33,6 +32,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
                 '<div class="tb-about-version">Version: {codeName}</div>',
                 '<div class="tb-about-build">({packageString})</div>',
                 '<div class="tb-about-copyright">Copyright: 2007-{[new Date().getFullYear()]}&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>',
+                '<div class="tb-about-credits-license"><p><a href="javascript:\'void()\'" class="license" /><a href="javascript:\'void()\'" class="credits" /></p></div>',
             '</div>'
         );
     },
@@ -64,6 +64,27 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             }]
         };
         
+        // create links
+        this.on('afterrender', function() {
+            var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.license');
+            el.insertHtml('beforeBegin', _('Released under different '));
+            el.insertHtml('beforeEnd', _('Open Source Licenses'));
+            el.on('click', function(){
+                var ls = new Tine.Tinebase.LicenseScreen();
+                ls.show();
+            });
+            
+            var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.credits');
+            el.insertHtml('beforeBegin', _(' with the help of our '));
+            el.insertHtml('beforeEnd', _('Contributors'));
+            el.on('click', function() {
+                var cs = new Tine.Tinebase.CreditsScreen();
+                cs.show();
+            });
+            
+            
+        }, this);
+
         Tine.Tinebase.AboutDialog.superclass.initComponent.call(this);
     }
 });

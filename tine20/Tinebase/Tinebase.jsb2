@@ -622,6 +622,14 @@
           "path": "js/widgets/"
         },
         {
+          "text": "LicenseScreen.js",
+          "path": "js/"
+        },
+        {
+          "text": "CreditsScreen.js",
+          "path": "js/"
+        },
+        {
           "text": "CountryCombo.js",
           "path": "js/widgets/"
         },
