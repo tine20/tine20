@@ -91,7 +91,9 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      * @var array one of these grants must be met
      */
     protected $_requiredGrants = array(
-        Timetracker_Model_TimeaccountGrants::BOOK_OWN
+        Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+        // NOTE: this is needed to make the search for other users timesheets work
+        Timetracker_Model_TimeaccountGrants::VIEW_ALL,
     );
     
     /**
@@ -162,12 +164,13 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             // get all timeaccounts user has required grants for
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
                 if ($grant != Timetracker_Model_TimeaccountGrants::BOOK_OWN) {
                     $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
                 }
             }
             $this->_validTimeaccounts = array_unique($result);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' valid timeaccounts' . print_r($this->_validTimeaccounts, TRUE) . ' for required grants: ' . print_r($this->_requiredGrants, TRUE));
             $this->_isResolved = TRUE;
         }
         
@@ -182,7 +185,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             $where .= ' OR (' . $db->quoteInto($field . ' IN (?)', $bookOwnTS)
                 . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';
         }
-                
+        
         $_select->where($where);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

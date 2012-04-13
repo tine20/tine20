@@ -103,7 +103,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
                 Timetracker_Model_TimeaccountGrants::BOOK_ALL           => TRUE,
                 Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE    => TRUE,
                 Tinebase_Model_Grants::GRANT_EXPORT                     => TRUE,
-                Tinebase_Model_Grants::GRANT_ADMIN                      => TRUE,
+                Tinebase_Model_Grants::GRANT_ADMIN                      => FALSE,
             )
         );
     }

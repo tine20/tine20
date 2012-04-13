@@ -113,11 +113,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testAddTimeaccountWithGrants()
     {
-        $timeaccount = $this->_getTimeaccount();
-        $timeaccountData = $timeaccount->toArray();
         $grants = $this->_getGrants();
-        $timeaccountData['grants'] = $this->_getGrants();
-        $timeaccountData = $this->_json->saveTimeaccount($timeaccountData);
+        $timeaccountData = $this->_saveTimeaccountWithGrants($grants);
 
         // checks
         $this->assertGreaterThan(0, count($timeaccountData['grants']));
@@ -129,6 +126,19 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // check if it got deleted
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
+    }
+    
+    /**
+     * save TA with grants
+     * 
+     * @return array
+     */
+    protected function _saveTimeaccountWithGrants($grants = NULL)
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $timeaccount->toArray();
+        $timeaccountData['grants'] = ($grants !== NULL) ? $grants : $this->_getGrants();
+        return $this->_json->saveTimeaccount($timeaccountData);
     }
 
     /**
@@ -675,18 +685,30 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
 
-        $filterData = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":'
-             . '[{"field":"start_date","operator":"within","value":"weekThis","id":"ext-record-1"},'
-             . '{"field":"account_id","operator":"equals","value":"' . Tinebase_Core::getUser()->getId() . '","id":"ext-record-2"}]'
-             . ',"id":"ext-comp-1076","label":"Stundenzettel"}]}]'
-        );
+        $filterData = $this->_getTSFilterDataByUser(Tinebase_Core::getUser()->getId());
         $search = $this->_json->searchTimesheets($filterData, array());
         $this->assertEquals(1, $search['totalcount']);
     }
     
     /**
+     * get ts filter array by user
+     * 
+     * @param string $userId
+     * @return array
+     */
+    protected function _getTSFilterDataByUser($userId)
+    {
+        return $filterData = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":'
+            . '[{"field":"start_date","operator":"within","value":"weekThis","id":"ext-record-1"},'
+            . '{"field":"account_id","operator":"equals","value":"' . $userId . '","id":"ext-record-2"}]'
+            . ',"id":"ext-comp-1076","label":"Stundenzettel"}]}]'
+        );
+    }
+    
+    /**
     * try to search timesheets with or filter + acl filtering (should find only 1 ts)
-    * @see http://forge.tine20.org/mantisbt/view.php?id=5684
+    * 
+    * @see 0005684: fix timesheet acl filtering
     */
     public function testSearchTimesheetsWithOrAndAclFilter()
     {
@@ -699,10 +721,37 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Timetracker_ControllerTest::removeManageAllRight();
         $this->testSearchTimesheetsWithOrFilter();
     }
+
+    /**
+    * try to search timesheets of another user with account filter + acl filtering (should find 1 ts)
+    * 
+    * @see 0006244: user filter does not work
+    */
+    public function testSearchTimesheetsOfAnotherUser()
+    {
+        $taData = $this->_saveTimeaccountWithGrants();
+        $scleverId = Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->getId();
+        
+        // add ts for sclever
+        $timesheet = $this->_getTimesheet(array(
+            'account_id'     => $scleverId,
+            'timeaccount_id' => $taData['id'],
+        ));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+    
+        Timetracker_ControllerTest::removeManageAllRight();
+        
+        $filterData = $this->_getTSFilterDataByUser($scleverId);
+        $search = $this->_json->searchTimesheets($filterData, array());
+        
+        $this->assertEquals(1, $search['totalcount']);
+        $this->assertEquals($scleverId, $search['results'][0]['account_id']['accountId']);
+    }
     
     /**
      * testUpdateMultipleTimesheets
-     * @see http://forge.tine20.org/mantisbt/view.php?id=5878
+     * 
+     * @see 0005878: multi update timeout and strange behaviour (server)
      */
     public function testUpdateMultipleTimesheets()
     {
