@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-10 07:05+0000\n"
+"PO-Revision-Date: 2012-04-15 21:59+0000\n"
 "Last-Translator: parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr ""
+msgstr "управление списками общих задач"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "Создать новый список общих задач"
 
 #: Acl/Rights.php:93
 msgid "manage shared tasks favorites"
@@ -55,7 +55,7 @@ msgstr ""
 
 #: Controller/Task.php:165
 msgid "Notification for Task "
-msgstr ""
+msgstr "Напоминание для задачи "
 
 #: Controller.php:96
 #, python-format
@@ -101,9 +101,9 @@ msgstr "Процент"
 #: js/Tasks.js:211 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Состояние"
+msgstr[1] "Состояния"
+msgstr[2] "Состояния"
 
 #: js/GridPanel.js:181 js/Tasks.js:163
 msgid "Creation Time"
@@ -132,7 +132,7 @@ msgstr "Дата завершения"
 
 #: js/TaskEditDialog.js:199 Model/Task.php:188
 msgid "Organizer"
-msgstr ""
+msgstr "Органайзер"
 
 #: js/TaskEditDialog.js:200
 msgid "Add Responsible ..."
@@ -152,7 +152,7 @@ msgstr "Процентное отношение"
 
 #: js/Tasks.js:24
 msgid "New Task"
-msgstr ""
+msgstr "Новая задача"
 
 #: js/Tasks.js:107
 msgid "Task"
@@ -210,7 +210,7 @@ msgstr "Электронная почта"
 
 #: Preference.php:25
 msgid "All my tasks"
-msgstr ""
+msgstr "Все мои задачи"
 
 #: Preference.php:67
 msgid "Default Favorite"
@@ -222,7 +222,7 @@ msgstr ""
 
 #: Preference.php:71
 msgid "Default Task List"
-msgstr ""
+msgstr "Список задач по умолчанию"
 
 #: Preference.php:72
 msgid "The default task list to create new tasks in."
@@ -242,31 +242,31 @@ msgstr ""
 
 #: Setup/Initialize.php:50 Setup/Update/Release5.php:158
 msgid "low"
-msgstr ""
+msgstr "низкий"
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:159
 msgid "normal"
-msgstr ""
+msgstr "нормальный"
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:160
 msgid "high"
-msgstr ""
+msgstr "высокий"
 
 #: Setup/Initialize.php:53 Setup/Update/Release5.php:161
 msgid "urgent"
-msgstr ""
+msgstr "неотложный"
 
 #: Setup/Initialize.php:81 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
-msgstr ""
+msgstr "Все задачи моих списков задач"
 
 #: Setup/Initialize.php:90
 msgid "My open tasks"
-msgstr ""
+msgstr "Мои открытые задачи"
 
 #: Setup/Initialize.php:99
 msgid "My open tasks this week"
-msgstr ""
+msgstr "Мои открытые задачи на этой неделе"
 
 #: Setup/Initialize.php:108
 msgid "All tasks for me"
