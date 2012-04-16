@@ -31,12 +31,13 @@
  * NOTE: Timespans are allways defined, with the beginning point excluded and
  * the end point included. Mathematical: (_from, _until]
  * 
- * @todo Add registry for logbook starttime and methods to throw away logbook 
- * entries. Throw exceptions when times are requested which are not in the 
- * log anymore!
- * 
  * @package Tinebase
  * @subpackage Timemachine
+ * 
+ * @todo Add registry for logbook starttime and methods to throw away logbook 
+ *       entries. Throw exceptions when times are requested which are not in the 
+ *       log anymore!
+ * @todo refactor this to use generic sql backend + remove Tinebase_Db_Table usage
  */
 class Tinebase_Timemachine_ModificationLog
 {
@@ -83,6 +84,13 @@ class Tinebase_Timemachine_ModificationLog
     );
     
     /**
+     * the sql backend
+     * 
+     * @var Tinebase_Backend_Sql
+     */
+    protected $_backend;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Timemachine_ModificationLog
@@ -113,6 +121,11 @@ class Tinebase_Timemachine_ModificationLog
         
         $this->_table = new Tinebase_Db_Table(array('name' => $this->_tablename));
         $this->_table->setRowClass('Tinebase_Model_ModificationLog');
+        
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_ModificationLog',
+            'tableName' => 'timemachine_modlog',
+        ));
     }
     
     /**
@@ -156,7 +169,7 @@ class Tinebase_Timemachine_ModificationLog
        
        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $resultArray);
        return $modifications;
-    } // end of member function getModifications
+    }
 
     /**
      * Computes effective difference from a set of modifications
@@ -199,7 +212,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         return new Tinebase_Model_ModificationLog($RawLogEntry[0], true);
         
-    } // end of member function getModification
+    }
     
     /**
      * Saves a logbook record
@@ -225,7 +238,7 @@ class Tinebase_Timemachine_ModificationLog
             );
         }
         return $id;
-    } // end of member function setModification
+    }
     
     /**
      * merges changes made to local storage on concurrent updates into the new record 
@@ -254,7 +267,7 @@ class Tinebase_Timemachine_ModificationLog
             }
         }
         
-        if($_curRecord->last_modified_time instanceof DateTime && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
+        if ($_curRecord->last_modified_time instanceof DateTime && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
@@ -457,6 +470,80 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         return $modifications;
+    }
+    
+    /**
+     * undo modlog records defined by filter
+     * 
+     * @param Tinebase_Model_ModificationLogFilter $filter
+     * @param boolean $overwrite should changes made after the detected change be overwritten?
+     * @param boolean $dryrun
+     * @return integer count of reverted changes
+     * 
+     * @todo use iterator?
+     * @todo return updated records/exceptions?
+     * @todo create result model / should be used in Tinebase_Controller_Record_Abstract::updateMultiple, too
+     * @todo use transaction with rollback for dryrun?
+     * @todo allow to undo tags/customfields/...
+     */
+    public function undo(Tinebase_Model_ModificationLogFilter $filter, $overwrite = FALSE, $dryrun = FALSE)
+    {
+        $notUndoableFields = array('tags', 'customfields', 'relations');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' Filter: ' . print_r($filter->toArray(), TRUE));
+        
+        $modlogRecords = $this->_backend->search($filter, new Tinebase_Model_Pagination(array(
+            'sort' => array('record_type', 'modification_time')
+        )));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Found ' . count($modlogRecords) . ' modlog records matching the filter.');
+        
+        $updateCount = 0;
+        $failCount = 0;
+        $undoneModlogs = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        $currentRecordType = NULL;
+        
+        foreach ($modlogRecords as $modlog) {
+            if ($currentRecordType !== $modlog->record_type || ! isset($controller)) {
+                $currentRecordType = $modlog->record_type;
+                $controller = Tinebase_Core::getApplicationInstance($modlog->record_type);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                ' Modlog: ' . print_r($modlog->toArray(), TRUE));
+            
+            try {
+                $record = $controller->get($modlog->record_id);
+                
+                if (! in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->{$modlog->modified_attribute} === $modlog->new_value)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Reverting change id ' . $modlog->getId());
+                    
+                    $record->{$modlog->modified_attribute} = $modlog->old_value;
+                    if (! $dryrun) {
+                        $controller->update($record);
+                    }
+                    $updateCount++;
+                    $undoneModlogs->addRecord($modlog);
+                }
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                $failCount++;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Reverted ' . $updateCount . ' modlog changes.');
+        
+        return array(
+            'totalcount'     => $updateCount,
+            'failcount'      => $failCount,
+            'undoneModlogs'  => $undoneModlogs,
+//             'exceptions' => NULL,
+//             'results'    => NULL,
+        );
     }
     
     /**

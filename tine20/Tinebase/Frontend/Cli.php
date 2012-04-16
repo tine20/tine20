@@ -503,4 +503,41 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo $message . "\n";
         return $result;
     }
+    
+    /**
+     * undo changes to records defined by certain criteria (user, date, fields, ...)
+     * 
+     * @param Zend_Console_Getopt $opts
+     */
+    public function undo(Zend_Console_Getopt $opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $data = $this->_parseArgs($opts, array('record_type', 'modification_time', 'modification_account'));
+        
+        // build filter from params
+        $filterData = array();
+        foreach ($data as $key => $value) {
+            $operator = ($key === 'modification_time') ? 'within' : 'equals';
+            $filterData[] = array('field' => $key, 'operator' => $operator, 'value' => $value);
+        }
+        $filter = new Tinebase_Model_ModificationLogFilter($filterData);
+        
+        $dryrun = $opts->d;
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, FALSE, $dryrun);
+        
+        if (! $dryrun) {
+            echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
+        } else {
+            echo "Dry run\n";
+            echo 'Would revert ' . $result['totalcount'] . " change(s):\n";
+            foreach ($result['undoneModlogs'] as $modlog) {
+                echo 'id ' . $modlog->record_id . ' [' . $modlog->modified_attribute . ']: ' . $modlog->new_value . ' -> ' . $modlog->old_value . "\n";
+            }
+        }
+        echo 'Failcount: ' . $result['failcount'] . "\n";
+        return 0;
+    }
 }
