@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Timemachine_ModificationLogTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -63,6 +59,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $now = new Tinebase_DateTime();
         $this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
         $this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
@@ -151,8 +149,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function tearDown()
     {
-        $this->purgeLogs($this->_recordIds);
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
+
     /**
      * tests that the returned mod logs equal the initial ones we defined 
      * in this test setup.
@@ -196,6 +195,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         }
     }
     
+    /**
+     * get modifications test
+     */
     public function testGetModifications()
     {
         $testBase = array(
@@ -245,9 +247,44 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     }
     
     /**
+     * test modlog undo
+     * 
+     * @see 0006252: allow to undo history items (modlog)
+     */
+    public function testUndo()
+    {
+        // create a record
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family' => 'tester',
+            'tel_cell' => '+491234',
+        )));
+        // change something using the record controller
+        $contact->tel_cell = NULL;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        
+        // needs sleeping because of modlog/concurrency restrictions
+        sleep(1);
+        
+        $filter = new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
+            array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
+            array('field' => 'modification_time',   'operator' => 'within', 'value' => 'today'),
+        ));
+        $result = $this->_modLogClass->undo($filter);
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals('+491234', $result['undoneModlogs']->getFirstRecord()->old_value);
+        
+        // check record after undo
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact);
+        $this->assertEquals('+491234', $contact->tel_cell);
+    }
+    
+    /**
      * purges mod log entries of given recordIds
      *
      * @param mixed [string|array|Tinebase_Record_RecordSet] $_recordIds
+     * 
+     * @todo should be removed when other tests do not need this anymore
      */
     public static function purgeLogs($_recordIds)
     {
@@ -257,6 +294,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
              $table->delete($table->getAdapter()->quoteInto('record_id = ?', $recordId));
         }
     }
+    
     /**
      * Workaround as the php clone operator does not return cloned 
      * objects right hand sided
@@ -268,9 +306,4 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     {
         return clone $_object;
     }
-}
-
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Timemachine_ModificationLogTest::main') {
-    Tinebase_Timemachine_ModificationLogTest::main();
 }

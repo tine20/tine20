@@ -180,11 +180,20 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     );
                     
                     break;
-                /******* error *********/
+                /******* try to create datetime from value string *********/
                 default:
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' value unknown: ' . $_value);
-                    $value = '';
-            }        
+                    try {
+                        $date = new Tinebase_DateTime($_value);
+                        $value = array(
+                            $date->toString($this->_dateFormat),
+                            $date->toString($this->_dateFormat),
+                        );
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Bad value: ' . $_value);
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                        $value = '';
+                    }
+            }
         } elseif ($_operator === 'inweek') {
             $date = new Tinebase_DateTime();
             
