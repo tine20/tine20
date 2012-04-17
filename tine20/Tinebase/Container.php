@@ -860,7 +860,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
 
-        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+        if (! $this->hasGrant(Tinebase_Core::getUser(), $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to set color of container denied.');
         }
         

@@ -607,4 +607,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * testSetContainerColor
+     * 
+     * @see 0006274: Can no longer change calendar's color
+     */
+    public function testSetContainerColor()
+    {
+        $result = $this->_instance->setContainerColor($this->objects['initialContainer'], '#99CC00');
+        $this->assertEquals('#99CC00', $result->color);
+    }
 }
