@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Filemanager
+ * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -10,11 +10,11 @@
  */
 
 /**
- * class to handle webdav requests for filemanager
+ * class to handle webdav requests for Tinebase
  * 
- * @package     Filemanager
+ * @package     Tinebase
  */
-abstract class Filemanager_Frontend_WebDAV_Node implements Sabre_DAV_INode
+abstract class Tinebase_Frontend_WebDAV_Node implements Sabre_DAV_INode
 {
     protected $_path;
     
