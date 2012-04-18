@@ -96,8 +96,8 @@ class Voipmanager_Backend_Snom_Xml
         // disable redundant keys
         $locationSettings['redundant_fkeys']    = 'off';
         
-        $locationSettings['setting_server']     = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
-        $locationSettings['firmware_status']    = Voipmanager_Frontend_Snom_Abstract::getBaseUrl() . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
+        $locationSettings['setting_server']     = $this->_baseURL . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
+        $locationSettings['firmware_status']    = $this->_baseURL . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
         
         foreach($locationSettings as $key => $value) {
             $child = $_xml->addChild($key, $value);
@@ -120,10 +120,17 @@ class Voipmanager_Backend_Snom_Xml
         $locationSettings = array();
                                 
         $locationSettings['setting_server']          = $this->_baseURL . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
+        $locationSettings['settings_refresh_timer']  = 600;
         $locationSettings['firmware_status']         = $this->_baseURL . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
         
         // add directory button
         $locationSettings['dkey_directory']          = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
+        $locationSettings['dkey_menu']               = 'url ' . $this->_baseURL . '?method=Phone.menu&amp;mac=$mac&amp;activeLine=$active_line';
+        $locationSettings['dkey_fkey3']              = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
+        $locationSettings['dkey_fkey4']              = 'url ' . Voipmanager_Frontend_Snom_Abstract::getBaseUrl($_phone) . '?method=Phone.getCallForward&amp;activeLine=$active_line&amp;mac=$mac';
+        $locationSettings['gui_fkey1']               = 'none';
+        $locationSettings['gui_fkey4']               = 'F_ADR_BOOK';
+        $locationSettings['gui_fkey4']               = 'F_REDIRECT';
         
         // not used anymore
         $locationSettings['action_redirection_on_url']  = '';
@@ -149,21 +156,24 @@ class Voipmanager_Backend_Snom_Xml
         $phoneSettings['http_client_pass']['value'] = $_phone->http_client_pass;
         $phoneSettings['http_client_pass']['perms'] = 'RO';
         
-        $phoneSettings['redirect_time']['value'] = 99;
+        // not used anymore
+        $phoneSettings['redirect_allways']['value'] = 'off';
+        $phoneSettings['redirect_allways']['perms'] = 'RO';
+        $phoneSettings['redirect_number']['value'] = '';
+        $phoneSettings['redirect_number']['perms'] = 'RO';
+        $phoneSettings['redirect_on_busy']['value'] = 'off';
+        $phoneSettings['redirect_on_busy']['perms'] = 'RO';
+        $phoneSettings['redirect_time_number']['value'] = '';
+        $phoneSettings['redirect_time_number']['perms'] = 'RO';
+        $phoneSettings['redirect_on_timeout']['value'] = 'off';
+        $phoneSettings['redirect_on_timeout']['perms'] = 'RO';
+        $phoneSettings['redirect_time']['value'] = '';
         $phoneSettings['redirect_time']['perms'] = 'RO';
         
-        $phoneSettings['redirect_time_on_code']['value'] = '*23';
-        $phoneSettings['redirect_time_on_code']['perms'] = 'RO';
-        $phoneSettings['redirect_time_off_code']['value'] = '#23';
-        $phoneSettings['redirect_time_off_code']['perms'] = 'RO';
-        $phoneSettings['redirect_always_on_code']['value'] = '*21';
-        $phoneSettings['redirect_always_on_code']['perms'] = 'RO';
-        $phoneSettings['redirect_always_off_code']['value'] = '#21';
-        $phoneSettings['redirect_always_off_code']['perms'] = 'RO';
-        $phoneSettings['redirect_busy_on_code']['value'] = '*22';
-        $phoneSettings['redirect_busy_on_code']['perms'] = 'RO';
-        $phoneSettings['redirect_busy_off_code']['value'] = '#22';
-        $phoneSettings['redirect_busy_off_code']['perms'] = 'RO';
+        // disable redirection menu => we have our own menu
+        $phoneSettings['disable_redirection_menu']['value'] = 'on';
+        $phoneSettings['disable_redirection_menu']['perms'] = 'RO';
+        
         $phoneSettings['dnd_on_code']['value'] = '*24';
         $phoneSettings['dnd_on_code']['perms'] = 'RO';
         $phoneSettings['dnd_off_code']['value'] = '#24';
@@ -348,7 +358,8 @@ class Voipmanager_Backend_Snom_Xml
         $dialPlan = $xml->addChild('dialplan');
         $this->_appendDialPlan($_phone, $dialPlan);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $xml->asXML());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $xml->asXML());
         
         return $xml->asXML();
     }

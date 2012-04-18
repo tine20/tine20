@@ -55,13 +55,16 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      *
      * @return string the complete URI http://hostname/path/index.php
      */
-    protected function _getBaseUrl()
+    protected function _getBaseUrl($phone = null)
     {
         if (! isset($_SERVER['HTTP_HOST']) && ! isset($_SERVER["SERVER_NAME"]) || ! isset($_SERVER['SERVER_PORT'])) {
             throw new Voipmanager_Exception_UnexpectedValue('could not detect server name or port');
         }
         
         $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        if ($phone instanceof Voipmanager_Model_Snom_Phone) {
+            $protocol .= $phone->http_client_user . ':' . $phone->http_client_pass . '@';
+        }
         $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
         
@@ -75,9 +78,12 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      *
      * @return string the complete URI http://hostname/path/index.php
      */
-    public static function getBaseUrl()
+    public static function getBaseUrl($phone = null)
     {
         $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        if ($phone instanceof Voipmanager_Model_Snom_Phone) {
+            $protocol .= $phone->http_client_user . ':' . $phone->http_client_pass . '@';
+        }
         $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
         
