@@ -533,6 +533,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
+        // NOTE: falls back to "old" solution for old browsers automatically
         Tinycon.setBubble(this.unreadcountInDefaultInbox);
     },
     
