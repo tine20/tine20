@@ -18,6 +18,20 @@
 class Felamimail_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Directory
 {
     /**
+    * webdav file class
+    *
+    * @var string
+    */
+    protected $_fileClass = 'Felamimail_Frontend_WebDAV_File';
+    
+    /**
+     * webdav directory class
+     *
+     * @var string
+     */
+    protected $_directoryClass = 'Felamimail_Frontend_WebDAV_Directory';
+    
+    /**
     * Creates a new subdirectory
     *
     * @param string $name

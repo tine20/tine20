@@ -210,7 +210,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
-            Tinebase_FileSystem::getInstance()->unlink($path);
+            $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+            $webdavRoot->delete($path);
         }
     }
 
@@ -740,7 +741,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test move
-     * 
      */
     public function testMoveMessage()
     {
@@ -1000,15 +1000,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _addVacationTemplateFile()
     {
-        $templateContainerId = Felamimail_Config::getInstance()->get(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID);
-        $templateContainer = Tinebase_Container::getInstance()->getContainerById($templateContainerId);
-        $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer) . '/vacation_template_test.txt';
-        $this->_pathsToDelete[] = $path;
-        $file = Tinebase_FileSystem::getInstance()->fopen($path, 'w');
-        $tempData = fopen(dirname(__FILE__) . '/files/vacation_template.txt', 'r');
-        stream_copy_to_stream($tempData, $file);
-        fclose($tempData);
-        Tinebase_FileSystem::getInstance()->fclose($file);
+        $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+        $path = '/webdav/Felamimail/shared/Vacation Templates';
+        $node = $webdavRoot->getNodeForPath($path);
+        $node->createFile('vacation_template_test.txt', fopen(dirname(__FILE__) . '/files/vacation_template.txt', 'r'));
+        $this->_pathsToDelete[] = $path . 'vacation_template_test.txt';
     }
     
     /**

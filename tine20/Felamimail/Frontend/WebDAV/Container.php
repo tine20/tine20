@@ -21,6 +21,20 @@ class Felamimail_Frontend_WebDAV_Container extends Tinebase_Frontend_WebDAV_Cont
     protected $_applicationName = 'Felamimail';
     
     /**
+    * webdav file class
+    *
+    * @var string
+    */
+    protected $_fileClass = 'Felamimail_Frontend_WebDAV_File';
+    
+    /**
+     * webdav directory class
+     *
+     * @var string
+     */
+    protected $_directoryClass = 'Felamimail_Frontend_WebDAV_Directory';
+    
+    /**
     * Creates a new subdirectory
     *
     * @param string $name
