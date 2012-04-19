@@ -71,4 +71,25 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             )
         ))));
     }
+    
+    /**
+     * init application folders
+     */
+    protected function _initializeFolders()
+    {
+        self::createVacationTemplatesFolder();
+    }
+    
+    /**
+     * create vacation templates folder
+     */
+    public static function createVacationTemplatesFolder()
+    {
+        $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
+            'Felamimail', 
+            'Vacation Templates', 
+            Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID
+        );
+        Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+    }
 }

@@ -155,7 +155,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (!empty($_container->owner_id)) {
             $accountId = $_container->owner_id instanceof Tinebase_Model_User ? $_container->owner_id->getId() : $_container->owner_id;
         } else {
-            $accountId = Tinebase_Core::getUser()->getId();
+            $accountId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : NULL;
         }
         
         if($_grants === NULL || count($_grants) == 0) {
@@ -171,12 +171,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );
             
-            if($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
+            if ($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
     
                 // add all grants to creator and
                 // add read grants to any other user
                 $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-                    $creatorGrants,            
+                    $creatorGrants,
                     array(
                         'account_id'      => '0',
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
@@ -1382,12 +1382,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     
     /**
      * checks if container to delete is a "system" container 
-     * @TODO: generalize when there are more "system" containers
      * 
      * @param array|integer|Tinebase_Model_Container $containerIds
-     * @throws Tinebase_Exception_Record_SystemContainer 
+     * @throws Tinebase_Exception_Record_SystemContainer
+     * 
+     * @TODO: generalize when there are more "system" containers
+     * @todo move Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK to adb config
      */
-    public function checkSystemContainer($containerIds) {
+    public function checkSystemContainer($containerIds)
+    {
         if (!is_array($containerIds)) $containerIds = array($containerIds);
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
 
@@ -1398,5 +1401,71 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             // _('System Container')
             throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!', 'System Container');
         }
+    }
+    
+    /**
+     * create a new system container
+     * - by default user group gets READ grant
+     * - by default admin group gets all grants
+     * 
+     * @param Tinebase_Model_Application|string $application app record, app id or app name
+     * @param string $name
+     * @param string $idConfig save id in config if given
+     * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @return Tinebase_Model_Container
+     */
+    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL)
+    {
+        $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
+        
+        $newContainer = new Tinebase_Model_Container(array(
+            'name'              => $name,
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'Sql',
+            'application_id'    => $application->getId(),
+        ));
+        $groupsBackend = Tinebase_Group::getInstance();
+        $grants = ($grants) ? $grants : new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'      => $groupsBackend->getDefaultGroup()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_EXPORT  => true,
+                Tinebase_Model_Grants::GRANT_SYNC    => true,
+            ),
+            array(
+                'account_id'      => $groupsBackend->getDefaultAdminGroup()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_ADD     => true,
+                Tinebase_Model_Grants::GRANT_EDIT    => true,
+                Tinebase_Model_Grants::GRANT_DELETE  => true,
+                Tinebase_Model_Grants::GRANT_ADMIN   => true,
+                Tinebase_Model_Grants::GRANT_EXPORT  => true,
+                Tinebase_Model_Grants::GRANT_SYNC    => true,
+            ),
+        ), TRUE);
+        
+        $newContainer = Tinebase_Container::getInstance()->addContainer($newContainer, $grants, TRUE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Created new system container ' . $name . ' for application ' . $application->name);
+        
+        if ($configId !== NULL) {
+            $configClass = $application->name . '_Config';
+            if (@class_exists($configClass)) {
+                $config = call_user_func(array($configClass, 'getInstance'));
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting system container config "' . $configId . '" = ' . $newContainer->getId());
+                
+                $config->set($configId, $newContainer->getId());
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not find preferences class ' . $configClass);
+            }
+        }
+        
+        return $newContainer;
     }
 }

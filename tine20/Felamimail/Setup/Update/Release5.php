@@ -240,4 +240,14 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '5.6');
     }
+
+    /**
+    * update to 5.7
+    * - createVacationTemplatesFolder
+    */
+    public function update_6()
+    {
+        Felamimail_Setup_Initialize::createVacationTemplatesFolder();
+        $this->setApplicationVersion('Felamimail', '5.7');
+    }
 }

@@ -88,6 +88,8 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
      * get (create if it does not exist) container for shared contracts
      * 
      * @return Tinebase_Model_Container|NULL
+     * 
+     * @todo use Tinebase_Container::createSystemContainer()
      */
     public static function getSharedContractsContainer()
     {
