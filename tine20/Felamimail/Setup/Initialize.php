@@ -90,6 +90,11 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             'Vacation Templates', 
             Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID
         );
-        Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+        try {
+            Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create vacation template folder: ' . $teb);
+        }
     }
 }
