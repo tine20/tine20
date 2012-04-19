@@ -102,6 +102,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var Felamimail_Model_Folder
      */
     protected $_folder = NULL;
+    
+    /**
+     * paths in the vfs to delete
+     * 
+     * @var array
+     */
+    protected $_pathsToDelete = array();
 
     /**
      * Runs the test methods of this class.
@@ -189,7 +196,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 // do not delete script if active
-            }            
+            }
             Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
             
             if ($this->_oldSieveData !== NULL) {
@@ -199,6 +206,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if ($this->_oldActiveSieveScriptName !== NULL) {
             Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
             Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+        }
+        
+        // vfs cleanup
+        foreach ($this->_pathsToDelete as $path) {
+            Tinebase_FileSystem::getInstance()->unlink($path);
         }
     }
 
@@ -969,6 +981,46 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // this should work
         $ruleData[0]['enabled'] = 0;
         $this->_sieveTestHelper($ruleData);
+    }
+    
+    /**
+     * testGetVacationTemplates
+     */
+    public function testGetVacationTemplates()
+    {
+        $this->_addVacationTemplateFile();
+        $result = $this->_json->getVacationMessageTemplates();
+        
+        $this->assertTrue($result['totalcount'] > 0, 'no templates found');
+        $this->assertEquals('vacation_template_test.txt', $result['results'][0]['name'], 'wrong template: ' . print_r($result['results'], TRUE));
+    }
+    
+    /**
+     * add vacation template file to vfs
+     */
+    protected function _addVacationTemplateFile()
+    {
+        $templateContainerId = Felamimail_Config::getInstance()->get(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID);
+        $templateContainer = Tinebase_Container::getInstance()->getContainerById($templateContainerId);
+        $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer) . '/vacation_template_test.txt';
+        $this->_pathsToDelete[] = $path;
+        $file = Tinebase_FileSystem::getInstance()->fopen($path, 'w');
+        $tempData = fopen(dirname(__FILE__) . '/files/vacation_template.txt', 'r');
+        stream_copy_to_stream($tempData, $file);
+        fclose($tempData);
+        Tinebase_FileSystem::getInstance()->fclose($file);
+    }
+    
+    /**
+     * testGetVacationMessage
+     * 
+     * @todo implement
+     */
+    public function testGetVacationMessage()
+    {
+        // add new template file
+        // set contact / date
+        // get vacation message with substitutions
     }
     
     /**

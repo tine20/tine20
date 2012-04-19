@@ -16,4 +16,17 @@
  */
 class Filemanager_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Directory
 {
+    /**
+    * webdav file class
+    *
+    * @var string
+    */
+    protected $_fileClass = 'Filemanager_Frontend_WebDAV_File';
+    
+    /**
+     * webdav directory class
+     *
+     * @var string
+     */
+    protected $_directoryClass = 'Filemanager_Frontend_WebDAV_Directory';
 }

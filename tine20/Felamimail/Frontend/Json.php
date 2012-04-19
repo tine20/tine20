@@ -513,6 +513,31 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_multipleRecordsToJson($records);
     }
 
+    /**
+     * get available vacation message templates
+     * 
+     * @return array
+     * 
+     * @todo perhaps we should use the node controller for the search and move it to tinebase
+     */
+    public function getVacationMessageTemplates()
+    {
+        $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
+        $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer);
+        $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
+        ));
+        
+        $templates = Tinebase_FileSystem::getInstance()->searchNodes($filter);
+        $result = $this->_multipleRecordsToJson($templates, $filter);
+        
+        return array(
+            'totalcount' => count($result),
+            'results'    => $result,
+        );
+    }
+    
     /***************************** other funcs *******************************/
     
     /**

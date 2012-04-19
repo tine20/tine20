@@ -26,6 +26,20 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_model = 'File';
     
     protected $_suffix = null;
+    
+    /**
+     * webdav file class
+     * 
+     * @var string
+     */
+    protected $_fileClass = 'Tinebase_Frontend_WebDAV_File';
+
+    /**
+     * webdav directory class
+     * 
+     * @var string
+     */
+    protected $_directoryClass = 'Tinebase_Frontend_WebDAV_Directory';
 
     /**
      * contructor
@@ -142,9 +156,9 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return new Tinebase_Frontend_WebDAV_Directory($this->_path . '/' . $name);
+            return new $this->_directoryClass($this->_path . '/' . $name);
         } else {
-            return new Tinebase_Frontend_WebDAV_File($this->_path . '/' . $name);
+            return new $this->_fileClass($this->_path . '/' . $name);
         }
     }
     

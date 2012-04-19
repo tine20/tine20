@@ -32,7 +32,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
     /**
      * Tree
      *
-     * @var Tinebase_WebDav_Tree
+     * @var Sabre_DAV_ObjectTree
      */
     protected $_webdavTree;
     
@@ -72,6 +72,9 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
+    /**
+     * testgetNodeForPath
+     */
     public function testgetNodeForPath()
     {
         $node = $this->_webdavTree->getNodeForPath(null);
@@ -188,7 +191,9 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return Filemanager_Frontend_WebDAV_Directory
+     * testgetNodeForPath_webdav_filemanager_shared_unittestdirectory
+     * 
+     * @return Filemanager_Frontend_WebDAV_Container
      */
     public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory()
     {
@@ -198,7 +203,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
         
-        $this->assertTrue($node instanceof  Filemanager_Frontend_WebDAV_Container, 'wrong node class');
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_Container, 'wrong node class');
         $this->assertEquals('unittestdirectory', $node->getName());
         
         $children = $node->getChildren();
@@ -219,7 +224,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
         
-        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_File, 'wrong node class');
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_File, 'wrong node class: ' . get_class($node));
         $this->assertTrue(is_resource($node->get()));
         $this->assertEquals('tine_logo.png', $node->getName());
         $this->assertEquals(7246, $node->getSize());

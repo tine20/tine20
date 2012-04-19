@@ -110,8 +110,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * Search for records matching given arguments
      *
-     * @param string                              $_filter json encoded
-     * @param string                              $_paging json encoded
+     * @param string|array                        $_filter json encoded / array
+     * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
      * @param bool                                $_getRelations

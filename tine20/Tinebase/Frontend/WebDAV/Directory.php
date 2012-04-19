@@ -17,6 +17,20 @@
 class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node implements Sabre_DAV_ICollection
 {
     /**
+    * webdav file class
+    *
+    * @var string
+    */
+    protected $_fileClass = 'Tinebase_Frontend_WebDAV_File';
+    
+    /**
+     * webdav directory class
+     *
+     * @var string
+     */
+    protected $_directoryClass = 'Tinebase_Frontend_WebDAV_Directory';
+    
+    /**
      * return list of children
      * @return array list of children
      */
@@ -56,9 +70,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return new Tinebase_Frontend_WebDAV_Directory($this->_path . '/' . $name);
+            return new $this->_directoryClass($this->_path . '/' . $name);
         } else {
-            return new Tinebase_Frontend_WebDAV_File($this->_path . '/' . $name);
+            return new $this->_fileClass($this->_path . '/' . $name);
         }
     }
     

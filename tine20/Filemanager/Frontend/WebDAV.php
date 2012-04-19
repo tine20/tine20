@@ -18,5 +18,10 @@
  */
 class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 {
+    /**
+    * application name
+    *
+    * @var string
+    */
     protected $_applicationName = 'Filemanager';
 }
