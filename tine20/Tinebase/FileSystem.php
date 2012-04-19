@@ -133,11 +133,23 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function createContainerNode(Tinebase_Model_Container $_container)
     {
-        $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
-        $path = '/' . $application->getId() . '/' . $_container->type . '/' . $_container->getId();
+        $path = $this->getContainerPath($_container);
         if (!$this->fileExists($path)) {
             $this->mkdir($path);
         }
+    }
+
+    /**
+     * get container path
+     * 
+     * @param Tinebase_Model_Container $container
+     * @return string
+     */
+    public function getContainerPath(Tinebase_Model_Container $container)
+    {
+        $path = $this->getApplicationBasePath($container->application_id, $container->type) . '/' . $container->getId();
+        
+        return $path;
     }
     
     /**
@@ -227,7 +239,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 
                 $this->clearStatCache($options['tine20']['path']);
                 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Writing to file : ' . $options['tine20']['path'] . ' successful.');
+                
                 break;
+                
+            default:
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got mode : ' . $options['tine20']['mode'] . ' - nothing to do.');
         }
         
         fclose($_handle);
@@ -633,7 +650,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         return $treeNode;
     }
-
+    
     /**
      * create new file node
      * 
