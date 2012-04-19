@@ -73,6 +73,8 @@ Ext.namespace('Tine.Felamimail.sieve');
         var title = String.format(this.app.i18n._('Vacation Message for {0}'), this.account.get('name'));
         this.window.setTitle(title);
         
+        this.reasonEditor.setDisabled(! this.record.get('enabled'));
+        
         this.loadMask.hide();
     },
         
@@ -133,13 +135,15 @@ Ext.namespace('Tine.Felamimail.sieve');
     
     /**
      * init reason editor
+     * 
+     * TODO set readonly if user has no right to set custom vacation message
      */
     initReasonEditor: function() {
         this.reasonEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
             name: 'reason',
             allowBlank: true,
-            disabled: (this.record.get('enabled') == false),
+            disabled: true,
             height: 220,
             getDocMarkup: function() {
                 var markup = '<html><body></body></html>';
@@ -196,9 +200,6 @@ Ext.namespace('Tine.Felamimail.sieve');
      * 
      * @param Object templates
      * @return Array
-     * 
-     * TODO add "use custom message" combo / radio button
-     * TODO request after template combo change: set vacation message (with substitutions)
      */
     getTemplateItems: function(templates) {
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::getTemplateItems()');
@@ -220,6 +221,7 @@ Ext.namespace('Tine.Felamimail.sieve');
             new Tine.Addressbook.SearchCombo({
                 fieldLabel: this.app.i18n._('Representative'),
                 blurOnSelect: true,
+                name: 'contact_id',
                 selectOnFocus: true,
                 forceSelection: false
             })
@@ -228,12 +230,14 @@ Ext.namespace('Tine.Felamimail.sieve');
             xtype: 'combo',
             mode: 'local',
             listeners: {
-                scope: this
-                // TODO select/change listener for loading message
+                scope: this,
+                select: this.onTemplateComboSelect
             },
             displayField: 'name',
+            name: 'template_id',
             valueField: 'id',
             triggerAction: 'all',
+            emptyText: this.app.i18n._('Choose Template ...'),
             editable: false,
             store: new Ext.data.JsonStore({
                 id: 'timezone',
@@ -244,7 +248,43 @@ Ext.namespace('Tine.Felamimail.sieve');
             })
         }]
         ];
+        
         return items;
+    },
+    
+    /**
+     * template combo select event handler
+     * 
+     * @param {} combo
+     * @param {} record
+     * @param {} index
+     */
+    onTemplateComboSelect: function(combo, record, index) {
+        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onTemplateComboSelect()');
+        Tine.log.debug(record);
+        
+        if (record.data && record.get('type') === 'file') {
+            this.loadMask.show();
+            this.onRecordUpdate();
+            Tine.Felamimail.getVacationMessage(this.record.data, this.onGetVacationMessage.createDelegate(this));
+        } else {
+            // TODO do something?
+        }
+    },
+    
+    /**
+     * onGetVacationMessage
+     * 
+     * @param {} response
+     */
+    onGetVacationMessage: function(response) {
+        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onGetMessage()');
+        Tine.log.debug(response);
+        this.loadMask.hide();
+        
+        if (response.message) {
+            this.reasonEditor.setValue(response.message);
+        }
     },
     
     /**

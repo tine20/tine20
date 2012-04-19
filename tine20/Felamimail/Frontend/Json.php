@@ -544,6 +544,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
     
+    /**
+     * get vacation message defined by template / do substitutions for dates and representative 
+     * 
+     * @param array $vacationData
+     * @return array
+     * 
+     * @todo implement
+     */
+    public function getVacationMessage($vacationData)
+    {
+        return array(
+            'message' => 'LALALA'
+        );
+    }
+    
     /***************************** other funcs *******************************/
     
     /**
