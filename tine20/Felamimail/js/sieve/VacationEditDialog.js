@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -18,11 +18,9 @@ Ext.namespace('Tine.Felamimail.sieve');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing sieve filters (vacation and rules).</p>
  * <p>
- * TODO         add signature from account?
  * </p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * 
  * @param       {Object} config
@@ -53,7 +51,6 @@ Ext.namespace('Tine.Felamimail.sieve');
      * @private
      */
     updateToolbars: function() {
-
     },
     
     /**
@@ -90,20 +87,9 @@ Ext.namespace('Tine.Felamimail.sieve');
      */
     getFormItems: function() {
         
-        this.reasonEditor = new Ext.form.HtmlEditor({
-            fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
-            name: 'reason',
-            allowBlank: true,
-            disabled: (this.record.get('enabled') == false),
-            height: 220,
-            getDocMarkup: function() {
-                var markup = '<html><body></body></html>';
-                return markup;
-            },
-            plugins: [
-                new Ext.ux.form.HtmlEditor.RemoveFormat()
-            ]
-        });
+        this.initReasonEditor();
+        
+        var generalItems = this.getGeneralItems();
         
         return {
             xtype: 'tabpanel',
@@ -121,61 +107,7 @@ Ext.namespace('Tine.Felamimail.sieve');
                     labelSeparator: '',
                     columnWidth: 1
                 },
-                items: [[
-                // TODO make the radiogroup work
-//                    {
-//                    xtype: 'radiogroup',
-//                    hideLabel: true,
-//                    columns: 1,
-//                    name: 'enabledGroup',
-//                    items: [
-//                        {
-//                            boxLabel: this.app.i18n._('I am available (vacation message disabled)'),
-//                            inputValue: 1,
-//                            //value: 1
-//                            name: 'enabled'
-//                            //checked: this.record.get('enabled') /*, name: 'enabled', inputValue: true */ /* , checked: this.record.get('enabled')*/
-//                        },
-//                        {
-//                            boxLabel: this.app.i18n._('I am not available (vacation message enabled)'),
-//                            inputValue: 0,
-//                            //value: 0
-//                            name: 'enabled'
-//                            //checked: !! this.record.get('enabled') /*, name: 'enabled', inputValue: false*/
-//                        }
-//                    ],
-//                    listeners: {
-//                        scope: this,
-//                        change: function(group, radio) {
-//                            //this.record.set('enabled', radio.inputValue);
-//                            this.reasonEditor.setDisabled(! radio.inputValue);
-//                        }
-//                    }
-//                },
-                    {
-                        fieldLabel: this.app.i18n._('Status'),
-                        name: 'enabled',
-                        typeAhead     : false,
-                        triggerAction : 'all',
-                        lazyRender    : true,
-                        editable      : false,
-                        mode          : 'local',
-                        forceSelection: true,
-                        value: 0,
-                        xtype: 'combo',
-                        store: [
-                            [0, this.app.i18n._('I am available (vacation message disabled)')], 
-                            [1, this.app.i18n._('I am not available (vacation message enabled)')]
-                        ],
-                        listeners: {
-                            scope: this,
-                            select: function (combo, record) {
-                                this.reasonEditor.setDisabled(! record.data.field1);
-                            }
-                        }
-                    },
-                    this.reasonEditor
-                ]]
+                items: generalItems
             }, {
                 title: this.app.i18n._('Advanced'),
                 autoScroll: true,
@@ -200,6 +132,122 @@ Ext.namespace('Tine.Felamimail.sieve');
     },
     
     /**
+     * init reason editor
+     */
+    initReasonEditor: function() {
+        this.reasonEditor = new Ext.form.HtmlEditor({
+            fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
+            name: 'reason',
+            allowBlank: true,
+            disabled: (this.record.get('enabled') == false),
+            height: 220,
+            getDocMarkup: function() {
+                var markup = '<html><body></body></html>';
+                return markup;
+            },
+            plugins: [
+                new Ext.ux.form.HtmlEditor.RemoveFormat()
+            ]
+        });
+    },
+    
+    /**
+     * get items for general tab
+     * 
+     * @return Array
+     */
+    getGeneralItems: function() {
+        var items = [[{
+            fieldLabel: this.app.i18n._('Status'),
+            name: 'enabled',
+            typeAhead     : false,
+            triggerAction : 'all',
+            lazyRender    : true,
+            editable      : false,
+            mode          : 'local',
+            forceSelection: true,
+            value: 0,
+            xtype: 'combo',
+            store: [
+                [0, this.app.i18n._('I am available (vacation message disabled)')], 
+                [1, this.app.i18n._('I am not available (vacation message enabled)')]
+            ],
+            listeners: {
+                scope: this,
+                select: function (combo, record) {
+                    this.reasonEditor.setDisabled(! record.data.field1);
+                }
+            }
+        }]];
+        
+        // add vacation template items if needed
+        var templates = this.app.getRegistry().get('vacationTemplates');
+        if (templates.totalcount > 0) {
+            items = items.concat(this.getTemplateItems(templates));
+        }
+        
+        items.push([this.reasonEditor]);
+        
+        return items;
+    },
+    
+    /**
+     * get items for vacation templates
+     * 
+     * @param Object templates
+     * @return Array
+     * 
+     * TODO add "use custom message" combo / radio button
+     * TODO request after template combo change: set vacation message (with substitutions)
+     */
+    getTemplateItems: function(templates) {
+        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::getTemplateItems()');
+        Tine.log.debug(templates);
+        
+        var items = [[{
+            columnWidth: 0.5,
+            anchor: '90%',
+            fieldLabel: this.app.i18n._('Start Date'),
+            name: 'start_date',
+            xtype: 'datefield'
+        }, {
+            columnWidth: 0.5,
+            anchor: '90%',
+            fieldLabel: this.app.i18n._('End Date'),
+            name: 'end_date',
+            xtype: 'datefield'
+        }], [
+            new Tine.Addressbook.SearchCombo({
+                fieldLabel: this.app.i18n._('Representative'),
+                blurOnSelect: true,
+                selectOnFocus: true,
+                forceSelection: false
+            })
+        ], [{
+            fieldLabel: this.app.i18n._('Message Template'),
+            xtype: 'combo',
+            mode: 'local',
+            listeners: {
+                scope: this
+                // TODO select/change listener for loading message
+            },
+            displayField: 'name',
+            valueField: 'id',
+            triggerAction: 'all',
+            editable: false,
+            store: new Ext.data.JsonStore({
+                id: 'timezone',
+                root: 'results',
+                totalProperty: 'totalcount',
+                fields: Tine.Filemanager.Model.Node, // TODO move to Tinebase?
+                data: templates
+            })
+        }]
+        ];
+        return items;
+    },
+    
+    /**
      * generic request exception handler
      * 
      * @param {Object} exception
@@ -207,7 +255,7 @@ Ext.namespace('Tine.Felamimail.sieve');
     onRequestFailed: function(exception) {
         Tine.Felamimail.handleRequestException(exception);
         this.loadMask.hide();
-    }    
+    }
 });
 
 /**

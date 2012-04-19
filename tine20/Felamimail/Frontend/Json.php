@@ -588,6 +588,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $result['defaults'] = $defaults;
         
+        $result['vacationTemplates'] = $this->getVacationMessageTemplates();
+        
         return $result;
     }
 }
