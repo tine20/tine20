@@ -18,7 +18,7 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.Model');
  * Lead Record Definition
  */ 
 Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
-        {name: 'id',            type: 'int'},
+        {name: 'id',            type: 'string'},
         {name: 'lead_name',     type: 'string'},
         {name: 'leadstate_id',  type: 'int'},
         {name: 'leadtype_id',   type: 'int'},
