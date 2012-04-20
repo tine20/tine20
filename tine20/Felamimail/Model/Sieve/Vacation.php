@@ -55,6 +55,22 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'mime'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // not persistent, only used for message template
+        'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contact_ids'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    );
+    
+    /**
+    * name of fields containing datetime or an array of datetime
+    * information
+    *
+    * @var array list of datetime fields
+    */
+    protected $_datetimeFields = array(
+        'start_date',
+        'end_date',
     );
     
     /**

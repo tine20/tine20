@@ -549,13 +549,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param array $vacationData
      * @return array
-     * 
-     * @todo implement
      */
     public function getVacationMessage($vacationData)
     {
+        $record = new Felamimail_Model_Sieve_Vacation(array(), TRUE);
+        $record->setFromJsonInUsersTimezone($vacationData);
+        
+        $message = Felamimail_Controller_Sieve::getInstance()->getVacationMessage($record);
+        
         return array(
-            'message' => 'LALALA'
+            'message' => $message
         );
     }
     

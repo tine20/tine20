@@ -211,6 +211,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+            //echo "delete $path";
             $webdavRoot->delete($path);
         }
     }
@@ -985,6 +986,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testGetVacationTemplates
+     * 
+     * @return array
      */
     public function testGetVacationTemplates()
     {
@@ -992,7 +995,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->getVacationMessageTemplates();
         
         $this->assertTrue($result['totalcount'] > 0, 'no templates found');
-        $this->assertEquals('vacation_template_test.txt', $result['results'][0]['name'], 'wrong template: ' . print_r($result['results'], TRUE));
+        $found = FALSE;
+        foreach ($result['results'] as $template) {
+            if ($template['name'] === 'vacation_template_test.txt') {
+                $found = TRUE;
+                break;
+            }
+        }
+        
+        $this->assertTrue($found, 'wrong templates: ' . print_r($result['results'], TRUE));
+        
+        return $template;
     }
     
     /**
@@ -1003,20 +1016,32 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
+        $this->_pathsToDelete[] = $path . '/vacation_template_test.txt';
         $node->createFile('vacation_template_test.txt', fopen(dirname(__FILE__) . '/files/vacation_template.txt', 'r'));
-        $this->_pathsToDelete[] = $path . 'vacation_template_test.txt';
     }
     
     /**
      * testGetVacationMessage
-     * 
-     * @todo implement
      */
     public function testGetVacationMessage()
     {
-        // add new template file
-        // set contact / date
-        // get vacation message with substitutions
+        $template = $this->testGetVacationTemplates();
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date'   => '2012-04-20',
+            'contact_ids' => array(
+                Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->contact_id,
+                Tinebase_User::getInstance()->getFullUserByLoginName('pwulf')->contact_id,
+            ),
+            'template_id' => $template['id'],
+        ));
+        
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie
+ Paul Wulf (pwulf@tine20.org) oder Susan Clever (sclever@tine20.org).
+
+I am on vacation until Apr 20, 2012. Please contact Paul Wulf
+(pwulf@tine20.org) or Susan Clever (sclever@tine20.org) instead.
+", $result['message']);
     }
     
     /**

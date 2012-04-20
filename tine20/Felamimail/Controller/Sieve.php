@@ -493,4 +493,96 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         return $script;
     }
+    
+    /**
+    * get vacation message defined by template / do substitutions for dates and representative
+    *
+    * @param Felamimail_Model_Sieve_Vacation $vacation
+    * @return string
+    */
+    public function getVacationMessage(Felamimail_Model_Sieve_Vacation $vacation)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($vacation->toArray(), TRUE));
+
+        $message = $this->_getMessageFromTemplateFile($vacation->template_id);
+        $message = $this->_doMessageSubstitutions($vacation, $message);
+        
+        return $message;
+    }
+    
+    /**
+     * get vacation message from template file
+     * 
+     * @param string $templateId
+     * @return string
+     * 
+     * @todo generalize and move to Tinebase_FileSystem / Node controller
+     */
+    protected function _getMessageFromTemplateFile($templateId)
+    {
+        $template = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $templateId)
+        )))->getFirstRecord();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($template->toArray(), TRUE));
+        
+        $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
+        $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer) . '/' . $template->name;
+        
+        $templateHandle = Tinebase_FileSystem::getInstance()->fopen($path, 'r');
+        $message = stream_get_contents($templateHandle);
+        Tinebase_FileSystem::getInstance()->fclose($templateHandle);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+        
+        return $message;
+    }
+    
+    /**
+     * do substitutions in vacation message
+     * 
+     * @param Felamimail_Model_Sieve_Vacation $vacation
+     * @param string $message
+     * @return string
+     * 
+     * @todo get locale from placeholder (i.e. endDate-_LOCALESTRING_)
+     * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
+     * @todo sort $representatives?
+     */
+    protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
+    {
+        $timezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
+        
+        $search = array(
+            '[[startDate-en_US]]',
+            '[[endDate-en_US]]',
+            '[[startDate-de_DE]]',
+            '[[endDate-de_DE]]',
+            '[[representation-n_fn-1]]',
+            '[[representation-n_fn-2]]',
+            '[[representation-email-1]]',
+            '[[representation-email-2]]',
+            '[[representation-tel_work-1]]',
+            '[[representation-tel_work-2]]',
+        );
+        $replace = array(
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('en_US'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('en_US'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('de_DE'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('de_DE'), 'date'),
+            ($representatives[0]) ? $representatives[0]->n_fn : 'unknown person',
+            ($representatives[1]) ? $representatives[1]->n_fn : 'unknown person',
+            ($representatives[0]) ? $representatives[0]->email : 'unknown email',
+            ($representatives[1]) ? $representatives[1]->email : 'unknown email',
+            ($representatives[0]) ? $representatives[0]->tel_work : 'unknown phone',
+            ($representatives[1]) ? $representatives[1]->tel_work : 'unknown phone',
+        );
+        
+        $result = str_replace($search, $replace, $message);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $result);
+        
+        return $result;
+    }
 }
