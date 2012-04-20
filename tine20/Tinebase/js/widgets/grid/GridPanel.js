@@ -1371,6 +1371,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record = record.copy();
         }
 
+        Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
+        Tine.log.debug(record);
+        
         if (record && Ext.isFunction(record.copy)) {
             var idx = this.getStore().indexOfId(record.id);
             if (idx >=0) {
