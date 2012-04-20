@@ -556,9 +556,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $record->setFromJsonInUsersTimezone($vacationData);
         
         $message = Felamimail_Controller_Sieve::getInstance()->getVacationMessage($record);
+        $htmlMessage = Felamimail_Message::convertFromTextToHTML($message);
         
         return array(
-            'message' => $message
+            'message' => $htmlMessage
         );
     }
     

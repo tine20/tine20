@@ -1036,12 +1036,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'template_id' => $template['id'],
         ));
         
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie
- Paul Wulf (pwulf@tine20.org) oder Susan Clever (sclever@tine20.org).
-
-I am on vacation until Apr 20, 2012. Please contact Paul Wulf
-(pwulf@tine20.org) or Susan Clever (sclever@tine20.org) instead.
-", $result['message']);
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (sclever@tine20.org).<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (sclever@tine20.org) instead.<br />", $result['message']);
     }
     
     /**

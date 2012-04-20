@@ -67,6 +67,9 @@ Ext.namespace('Tine.Felamimail.sieve');
         
         // mime type is always multipart/alternative
         this.record.set('mime', 'multipart/alternative');
+        if (this.account && this.account.get('signature')) {
+            this.record.set('signature', this.account.get('signature'));
+        }
 
         this.getForm().loadRecord(this.record);
         
@@ -74,6 +77,11 @@ Ext.namespace('Tine.Felamimail.sieve');
         this.window.setTitle(title);
         
         this.reasonEditor.setDisabled(! this.record.get('enabled'));
+        
+        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onRecordLoad() -> record:');
+        Tine.log.debug(this.record);
+        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onRecordLoad() -> account:');
+        Tine.log.debug(this.account);
         
         this.loadMask.hide();
     },
@@ -200,6 +208,8 @@ Ext.namespace('Tine.Felamimail.sieve');
      * 
      * @param Object templates
      * @return Array
+     * 
+     * TODO use grid panel for representatives?
      */
     getTemplateItems: function(templates) {
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::getTemplateItems()');
@@ -207,21 +217,32 @@ Ext.namespace('Tine.Felamimail.sieve');
         
         var items = [[{
             columnWidth: 0.5,
-            anchor: '90%',
             fieldLabel: this.app.i18n._('Start Date'),
+            emptyText: this.app.i18n._('Set vacation start date ...'),
             name: 'start_date',
             xtype: 'datefield'
         }, {
             columnWidth: 0.5,
-            anchor: '90%',
             fieldLabel: this.app.i18n._('End Date'),
+            emptyText: this.app.i18n._('Set vacation end date ...'),
             name: 'end_date',
             xtype: 'datefield'
         }], [
             new Tine.Addressbook.SearchCombo({
-                fieldLabel: this.app.i18n._('Representative'),
+                columnWidth: 0.5,
+                fieldLabel: this.app.i18n._('Representative #1'),
+                emptyText: this.app.i18n._('Choose first Representative ...'),
                 blurOnSelect: true,
-                name: 'contact_id',
+                name: 'contact_id1',
+                selectOnFocus: true,
+                forceSelection: false
+            }),
+            new Tine.Addressbook.SearchCombo({
+                columnWidth: 0.5,
+                fieldLabel: this.app.i18n._('Representative #2'),
+                emptyText: this.app.i18n._('Choose second Representative ...'),
+                blurOnSelect: true,
+                name: 'contact_id2',
                 selectOnFocus: true,
                 forceSelection: false
             })
@@ -295,6 +316,21 @@ Ext.namespace('Tine.Felamimail.sieve');
     onRequestFailed: function(exception) {
         Tine.Felamimail.handleRequestException(exception);
         this.loadMask.hide();
+    },
+    
+    /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function() {
+        Tine.Felamimail.sieve.VacationEditDialog.superclass.onRecordUpdate.call(this);
+        
+        var contactIds = [];
+        Ext.each(['contact_id1', 'contact_id2'], function(field) {
+            if (this.getForm().findField(field) && this.getForm().findField(field).getValue() !== '') {
+                contactIds.push(this.getForm().findField(field).getValue());
+            }
+        }, this);
+        this.record.set('contact_ids', contactIds);
     }
 });
 

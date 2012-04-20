@@ -548,6 +548,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @todo get locale from placeholder (i.e. endDate-_LOCALESTRING_)
      * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
      * @todo sort $representatives?
+     * @todo use html templates?
      */
     protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
     {
@@ -565,6 +566,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             '[[representation-email-2]]',
             '[[representation-tel_work-1]]',
             '[[representation-tel_work-2]]',
+            '[[signature]]',
         );
         $replace = array(
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('en_US'), 'date'),
@@ -577,6 +579,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             ($representatives[1]) ? $representatives[1]->email : 'unknown email',
             ($representatives[0]) ? $representatives[0]->tel_work : 'unknown phone',
             ($representatives[1]) ? $representatives[1]->tel_work : 'unknown phone',
+            ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($vacation->signature) : '',
         );
         
         $result = str_replace($search, $replace, $message);

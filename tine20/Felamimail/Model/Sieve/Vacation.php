@@ -60,6 +60,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contact_ids'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
