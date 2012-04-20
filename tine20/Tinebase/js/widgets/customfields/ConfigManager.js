@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
@@ -14,7 +14,7 @@ Tine.widgets.customfields.ConfigManager = function() {
     var getStore = function(app) {
         app = Tine.Tinebase.appMgr.get(app);
         if (! stores[app.appName]) {
-            var allCfs = app.getRegistry().get('customfields');
+            var allCfs = (Ext.isFunction(app.getRegistry)) ? app.getRegistry().get('customfields') : null;
             stores[app.appName] = new Ext.data.JsonStore({
                 fields: Tine.Tinebase.Model.Customfield,
                 data: allCfs ? allCfs : []
