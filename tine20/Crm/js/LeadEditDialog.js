@@ -102,7 +102,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         own_model: "Crm_Model_Lead",
                         related_backend: "sql",
                         related_id: contact.id, 
-                        related_model: "Addressbook_Model_Contact",                 
+                        related_model: "Addressbook_Model_Contact",
                         type: this.additionalContactsRole,
                         related_record: contact
                     });
@@ -117,7 +117,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             && this.contactGrid.store.getCount() == 0 
             && (! this.tasksGrid.store || this.tasksGrid.store.getCount() == 0) 
             && (! this.productsGrid.store || this.productsGrid.store.getCount() == 0)) {
-                    
+            
             var relations = this.splitRelations();
             
             this.contactGrid.store.loadData(relations.contacts, true);
@@ -141,6 +141,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Crm.LeadEditDialog.superclass.onRecordUpdate.call(this);
         this.getAdditionalData();
+        
+        Tine.log.debug('Tine.Crm.LeadEditDialog::onRecordUpdate() -> record:');
+        Tine.log.debug(this.record);
     },
     
     /**
@@ -167,9 +170,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // do not do recursion!
         delete record.data.relation;
-        //delete record.data.relation_type;
         
-        // save record data        
+        // save record data
         relation.related_record = record.data;
         
         // add remark values
@@ -184,31 +186,27 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             relation.remark.quantity = record.data.remark_quantity;
         }
         
+        Tine.log.debug('Tine.Crm.LeadEditDialog::getRelationData() -> relation:');
+        Tine.log.debug(relation);
+        
         return relation;
     },
 
     /**
      * getAdditionalData
      * collects additional data (start/end dates, linked contacts, ...)
-     * 
      */
     getAdditionalData: function() {
-        
-        // collect data of relations
-        var relations = [];
-        this.contactGrid.store.each(function(record) {
-            relations.push(this.getRelationData(record));
+        var relations = [],
+            grids = [this.contactGrid, this.tasksGrid, this.productsGrid];
+            
+        Ext.each(grids, function(grid) {
+            if (grid.store) {
+                grid.store.each(function(record) {
+                    relations.push(this.getRelationData(record.copy()));
+                }, this);
+            }
         }, this);
-        if (this.tasksGrid.store) {
-            this.tasksGrid.store.each(function(record) {
-                relations.push(this.getRelationData(record));
-            }, this);
-        }
-        if (this.productsGrid.store) {
-            this.productsGrid.store.each(function(record) {
-                relations.push(this.getRelationData(record));
-            }, this);
-        }
         
         this.record.data.relations = relations;
     },
@@ -443,7 +441,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         new Ext.form.DateField({
                                             fieldLabel: this.app.i18n._('Start'), 
                                             allowBlank: false,
-                                            id: 'start',             
+                                            id: 'start',
                                             anchor: '95%'
                                         }),
                                         new Ext.ux.form.ClearableDateField({
