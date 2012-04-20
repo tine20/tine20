@@ -23,6 +23,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const VACATION_TEMPLATES_CONTAINER_ID = 'vacationTemplatesContainerId';
     
     /**
+     * user can set custom vacation message
+     * 
+     * @var string
+     */
+    const VACATION_CUSTOM_MESSAGE_ALLOWED = 'vacationMessageCustomAllowed';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -31,10 +38,21 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         //_('Vacation Templates Container ID')
             'label'                 => 'Vacation Templates Container ID',
             'description'           => 'Vacation Templates Container ID',
-            'type'                  => 'string',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::VACATION_CUSTOM_MESSAGE_ALLOWED => array(
+        //_('Custom Vacation Message')
+            'label'                 => 'Custom Vacation Message',
+        // _('User is allowed to set custom vacation message for system account')
+            'description'           => 'User is allowed to set custom vacation message for system account',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 1,
         ),
     );
     

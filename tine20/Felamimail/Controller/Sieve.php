@@ -549,6 +549,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
      * @todo sort $representatives?
      * @todo use html templates?
+     * @todo use ZF templates / phplib tpl files?
      */
     protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
     {
@@ -573,12 +574,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('en_US'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('de_DE'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('de_DE'), 'date'),
-            ($representatives[0]) ? $representatives[0]->n_fn : 'unknown person',
-            ($representatives[1]) ? $representatives[1]->n_fn : 'unknown person',
-            ($representatives[0]) ? $representatives[0]->email : 'unknown email',
-            ($representatives[1]) ? $representatives[1]->email : 'unknown email',
-            ($representatives[0]) ? $representatives[0]->tel_work : 'unknown phone',
-            ($representatives[1]) ? $representatives[1]->tel_work : 'unknown phone',
+            (isset($representatives[0])) ? $representatives[0]->n_fn : 'unknown person',
+            (isset($representatives[1])) ? $representatives[1]->n_fn : 'unknown person',
+            (isset($representatives[0])) ? $representatives[0]->email : 'unknown email',
+            (isset($representatives[1])) ? $representatives[1]->email : 'unknown email',
+            (isset($representatives[0])) ? $representatives[0]->tel_work : 'unknown phone',
+            (isset($representatives[1])) ? $representatives[1]->tel_work : 'unknown phone',
             ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($vacation->signature) : '',
         );
         

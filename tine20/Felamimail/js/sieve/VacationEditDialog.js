@@ -44,6 +44,7 @@ Ext.namespace('Tine.Felamimail.sieve');
     loadRecord: true,
     tbarItems: [],
     evalGrants: false,
+    readonlyReason: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -80,8 +81,6 @@ Ext.namespace('Tine.Felamimail.sieve');
         
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onRecordLoad() -> record:');
         Tine.log.debug(this.record);
-        Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::onRecordLoad() -> account:');
-        Tine.log.debug(this.account);
         
         this.loadMask.hide();
     },
@@ -143,16 +142,18 @@ Ext.namespace('Tine.Felamimail.sieve');
     
     /**
      * init reason editor
-     * 
-     * TODO set readonly if user has no right to set custom vacation message
      */
     initReasonEditor: function() {
+        var reg = this.app.getRegistry(),
+            readonly = reg.get('config').vacationMessageCustomAllowed && reg.get('config').vacationMessageCustomAllowed.value === 0;
+        
         this.reasonEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
             name: 'reason',
             allowBlank: true,
             disabled: true,
             height: 220,
+            readOnly: readonly,
             getDocMarkup: function() {
                 var markup = '<html><body></body></html>';
                 return markup;
@@ -209,7 +210,7 @@ Ext.namespace('Tine.Felamimail.sieve');
      * @param Object templates
      * @return Array
      * 
-     * TODO use grid panel for representatives?
+     * TODO use grid panel for x representatives?
      */
     getTemplateItems: function(templates) {
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::getTemplateItems()');
@@ -264,7 +265,7 @@ Ext.namespace('Tine.Felamimail.sieve');
                 id: 'timezone',
                 root: 'results',
                 totalProperty: 'totalcount',
-                fields: Tine.Filemanager.Model.Node, // TODO move to Tinebase?
+                fields: ['id', 'name', 'type'], // TODO use Tine.Filemanager.Model.Node or generic File model?
                 data: templates
             })
         }]
