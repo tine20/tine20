@@ -129,7 +129,8 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {String}
      */
     getTitle: function() {
-        return this.titleProperty ? this.get(this.titleProperty) : '';
+        var s = this.titleProperty ? this.titleProperty.split('.') : [null];
+        return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
     },
     
     /**
