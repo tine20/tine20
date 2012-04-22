@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tasks_JsonTest::main();
-}
-
 /**
  * Test class for Tasks_JsonTest
  */
@@ -153,6 +149,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         // try to save task without due (alarm should be removed)
         unset($task->due);
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        $this->assertTrue(isset($persistentTaskData['alarms']));
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
     

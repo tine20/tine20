@@ -458,6 +458,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if (! $_attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
+        $_attendee->addIndices(array('user_type'));
         
         $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         
@@ -541,9 +542,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public static function getAttendee($_attendeeSet, $_attendee)
     {
         $attendeeSet  = $_attendeeSet instanceof Tinebase_Record_RecordSet ? clone $_attendeeSet : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        $attendeeSet->addIndices(array('user_type', 'user_id'));
         
         // transform id to string
-        foreach($attendeeSet as $attendee) {
+        foreach ($attendeeSet as $attendee) {
             $attendee->user_id  = $attendee->user_id instanceof Tinebase_Record_Abstract ? $attendee->user_id->getId() : $attendee->user_id;
         }
         
