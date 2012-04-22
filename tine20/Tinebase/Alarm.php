@@ -152,7 +152,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * get all alarms of given record(s)
+     * get all alarms of given record(s) / adds record_id index to result set
      * 
      * @param  string $_model model to get alarms for
      * @param  string|array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_recordId record id(s) to get alarms for
