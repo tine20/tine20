@@ -369,7 +369,6 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
         $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
         $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
-        $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M',  $vevent, $vevent);
         $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
         $this->assertContains('TZOFFSETTO:+0200',  $vevent, $vevent);
         $this->assertContains('TZNAME:CEST',  $vevent, $vevent);
