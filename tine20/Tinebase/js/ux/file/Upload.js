@@ -767,6 +767,6 @@ Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
     for (var i=0,j; i<suffix.length; i++) {
         if (value < Math.pow(1024, i)) break;
     }
-  
-  return Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), 2) + ' ' + suffix[i];
+    
+    return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), 2)) + ' ' + suffix[i];
 };
