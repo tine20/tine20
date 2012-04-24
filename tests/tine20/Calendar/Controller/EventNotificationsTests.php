@@ -358,6 +358,45 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
     }
     
+    /**
+     * if an event with an alarm gets an exception instance, also the alarm gets an exception instance
+     * @see #6328
+     */
+    public function testRecuringAlarmException()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+                new Tinebase_Model_Alarm(array(
+                        'minutes_before' => 30
+                ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $exceptionEvent = $this->_eventController->get($persistentEvent->getId());
+        $exceptionEvent->summary = 'first occurance exception';
+        $exceptionEvent = $this->_eventController->createRecurException($exceptionEvent);
+        
+        // assert one alarm only
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $this->_assertMail('pwulf', $assertString);
+        
+        $loadedEvent = $this->_eventController->get($persistentEvent->getId());
+        
+        $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime is not adjusted');
+    }
+    
     // test alarm inspection from 24.03.2012 -> 25.03.2012
     public function testAdoptAlarmDSTBoundary()
     {

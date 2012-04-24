@@ -1654,7 +1654,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * NOTE: the given alarm is raw and has not passed _inspectAlarmGet
      *  
-     * @todo make this working with recuring events
      * @todo throw exception on error
      */
     public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
@@ -1683,6 +1682,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $event->dtend = clone $event->dtstart;
                 $event->dtend->add($diff);
+            }
+            
+            // don't send alarm if instance is an exception
+            if (in_array($event->dtstart, $event->exdate)) {
+                return;
             }
         }
         $this->doContainerACLChecks($doContainerACLChecks);
