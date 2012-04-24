@@ -323,17 +323,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
-        // add alarms only to vcalendar if current user attends to this event
-        if ($event->alarms) {
-            $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        // add alarms only if current user attends to this event
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        if ($ownAttendee && $event->alarms) {
             
-            if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
+            
+            if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
                 $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
                 $xMozLastAck->setDateTime($ownAttendee->alarm_ack_time, Sabre_VObject_Element_DateTime::UTC);
                 $vevent->add($xMozLastAck);
             }
             
-            if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
+            if ($ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
                 $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
                 $xMozSnoozeTime->setDateTime($ownAttendee->alarm_snooze_time, Sabre_VObject_Element_DateTime::UTC);
                 $vevent->add($xMozSnoozeTime);
