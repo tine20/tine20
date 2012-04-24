@@ -39,6 +39,11 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
                 
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
+                    
+                    // @TODO remove this code when fm is cleaned up conceptually
+                    //       currentFolderNode -> currentFolder
+                    this.treePanel.updateActions(this.treePanel.getSelectionModel(), this.treePanel.getSelectionModel().getSelectedNode());
+                    Tine.Tinebase.appMgr.get('Filemanager').getMainScreen().getCenterPanel().currentFolderNode = this.treePanel.getSelectionModel().getSelectedNode();
                 }
             }.createDelegate(this), true);
         }, this);
