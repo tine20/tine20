@@ -268,6 +268,12 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             }
         }
         
+        // use name as ids to make pathfilter work
+        if (attr.path && attr.created_by) {
+            var keys = attr.path.split('/');
+            attr.id = keys.pop();
+        }
+        
         if(attr.name && typeof attr.name == 'object') {
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
@@ -386,16 +392,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         }
     },
     
-    
     /**
-     * TODO: action handler should do this
-     *  
-     * called when tree selection changes
+     * updates grid actions
+     * @todo move to grid / actionUpdater
      * 
      * @param {} sm     SelectionModel
      * @param {Ext.tree.TreeNode} node
      */
-    onSelectionChange: function(sm, node) {
+    updateActions: function(sm, node) {
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.action_deleteRecord.disable();
@@ -421,6 +425,17 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         else {
             grid.action_upload.disable();
         }
+    },
+    
+    /**
+     * called when tree selection changes
+     * 
+     * @param {} sm     SelectionModel
+     * @param {Ext.tree.TreeNode} node
+     */
+    onSelectionChange: function(sm, node) {
+        this.updateActions(sm, node);
+        var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.currentFolderNode = node;
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
@@ -445,6 +460,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 return returnPath;
             }
             
+            //NOTE: node might not yet be loaded
+            // /personal/name/id/id/id <=> /personal/name/name/name
             containerPath = valueItem.path;
         }
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
