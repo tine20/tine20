@@ -449,7 +449,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check if message is in sent folder
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
-        //print_r($message);
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
         $this->assertTrue(isset($message['to'][0]));
         $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
@@ -476,7 +475,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
-     *
+     * 
+     * @see 0006300: add unique message-id header to new messages (for message-id check)
      */
     public function testGetMessage()
     {
@@ -486,6 +486,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_json->getMessage($message['id']);
         
         // check
+        $this->assertTrue(isset($message['headers']) && $message['headers']['message-id']);
+        $this->assertContains('@' . $this->_mailDomain, $message['headers']['message-id']);
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
         
         // delete message on imap server and check if correct exception is thrown when trying to get it

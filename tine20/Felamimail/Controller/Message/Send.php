@@ -410,6 +410,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $_mail->addHeader('Organization', $_account->organization);
         }
         
+        // set message-id
+        $domainPart = substr($_account->email, strpos($_account->email, '@'));
+        $uid = Tinebase_Record_Abstract::generateUID();
+        $_mail->setMessageId('<' . $uid . $domainPart . '>');
+        
         if ($_message !== NULL) {
             if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
                 $this->_addReplyHeaders($_mail, $_message);

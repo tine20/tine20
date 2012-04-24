@@ -24,6 +24,7 @@
  * @property  string    delimiter
  * @property  string    type
  * @property  string    signature_position
+ * @property  string    email
  * @package   Felamimail
  * @subpackage    Model
  */
