@@ -19,6 +19,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_0()
     {
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
         try {
             $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId)->value;
             $sharedContracts = Tinebase_Container::getInstance()->get($sharedContractsId ? $sharedContractsId : 1);
@@ -26,7 +27,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
             // try to fetch default shared container
             $filter = new Tinebase_Model_ContainerFilter(array(
                 array('field' => 'application_id', 'operator' => 'equals',
-                    'value' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId()),
+                    'value' => $appId),
                 array('field' => 'name', 'operator' => 'equals', 'value' => 'Shared Contracts'),
                 array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED),
             ));
