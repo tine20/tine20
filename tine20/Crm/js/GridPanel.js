@@ -63,6 +63,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Crm.leadBackend;
         
         this.gridConfig.cm = this.getColumnModel();
+        
+        this.defaultFilters = [ {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()} ];
         this.filterToolbar = this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
@@ -103,23 +105,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         ];
         
         return items;
-    },
-    
-    /**
-     * initialises filter toolbar
-     * 
-     * @return Tine.widgets.grid.FilterToolbar
-     * @private
-     */
-    getFilterToolbar: function() {
-        return new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Crm.Model.Lead.getFilterModel(),
-            defaultFilter: 'query',
-            filters: [ {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()}],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
     
     /**
