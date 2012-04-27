@@ -25,7 +25,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'location' },
     { name: 'organizer' },
     { name: 'priority' },
-    { name: 'status_id' },
+    { name: 'status' },
     { name: 'summary' },
     { name: 'url' },
     { name: 'uid' },
