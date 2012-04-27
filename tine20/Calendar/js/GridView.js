@@ -135,6 +135,14 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                     return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
                 }
             }, {
+                id: 'status',
+                header: this.app.i18n._("tentative"),
+                width: 50,
+                dataIndex: 'status',
+                renderer: function(transp) {
+                    return Tine.Tinebase.common.booleanRenderer(transp == 'TENTATIVE');
+                }
+            }, {
                 id: 'summary',
                 header: this.app.i18n._("Summary"),
                 width: 200,
@@ -143,7 +151,25 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 id: 'location',
                 header: this.app.i18n._("Location"),
                 width: 200,
+                hidden: true,
                 dataIndex: 'location'
+            }, {
+                id: 'organizer',
+                header: this.app.i18n._("Organizer"),
+                width: 200,
+                hidden: true,
+                dataIndex: 'organizer',
+                renderer: Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName
+            }, {
+                id: 'description',
+                header: this.app.i18n._("Description"),
+                width: 200,
+                hidden: true,
+                dataIndex: 'description',
+                renderer: function(description, metaData, record) {
+                    metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
+                    return Ext.util.Format.htmlEncode(description);
+                }
             }/*, {
                 id: 'attendee_status',
                 header: this.app.i18n._("Status"),
@@ -203,7 +229,8 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             },
             print: function() {
                 Ext.ux.Printer.print(this.grid);
-            }
+            },
+            getRowClass: this.getViewRowClass
         }));
     },
     
@@ -221,5 +248,16 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
         if (attender) {
             return Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', attender.get('status'));
         }
+    },
+    
+    /**
+     * Return CSS class to apply to rows depending upon due status
+     * 
+     * @param {Tine.Tasks.Task} record
+     * @param {Integer} index
+     * @return {String}
+     */
+    getViewRowClass: function(record, index) {
+        return 'cal-status-' + record.get('status');
     }
 });
