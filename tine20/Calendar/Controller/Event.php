@@ -1685,7 +1685,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             // don't send alarm if instance is an exception
-            if (in_array($event->dtstart, $event->exdate)) {
+            if ($event->exdate && in_array($event->dtstart, $event->exdate)) {
                 return;
             }
         }
