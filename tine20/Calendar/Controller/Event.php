@@ -1665,7 +1665,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $event = $this->get($_alarm->record_id);
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array($_alarm));
         $this->_inspectAlarmGet($event);
-                
+        
+        $this->doContainerACLChecks($doContainerACLChecks);
+        
         if ($event->rrule) {
             $recurid = $_alarm->getOption('recurid');
             
@@ -1689,7 +1691,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 return;
             }
         }
-        $this->doContainerACLChecks($doContainerACLChecks);
         
         $this->doSendNotifications($event, $this->_currentAccount, 'alarm');
     }
