@@ -268,6 +268,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $exceptions->addIndices(array('is_deleted'));
         $_event->exdate = $exceptions->getOriginalDtStart();
         
         $currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -394,6 +395,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     {
         $events = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_record));
         if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
+            $_record->exdate->addIndices(array('is_deleted'));
             $events->merge($_record->exdate->filter('is_deleted', 0));
         }
         
