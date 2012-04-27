@@ -72,9 +72,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vcalendar->add($vevent);
         
         if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
+            $_record->exdate->addIndices(array('is_deleted'));
             $eventExceptions = $_record->exdate->filter('is_deleted', false);
             
-            foreach($eventExceptions as $eventException) {
+            foreach ($eventExceptions as $eventException) {
                 // set timefields
                 // @todo move to MS event facade
                 $eventException->creation_time = $_record->creation_time;
@@ -306,6 +307,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 $vevent->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule)));
             }
             if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+                $event->exdate->addIndices(array('is_deleted'));
                 $deletedEvents = $event->exdate->filter('is_deleted', true);
                 
                 foreach($deletedEvents as $deletedEvent) {
@@ -430,7 +432,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vcalendar = self::getVcal($_blob);
         
         // contains the VCALENDAR any VEVENTS
-        if (!isset($vcalendar->VEVENT)) {
+        if (! isset($vcalendar->VEVENT)) {
             throw new Tinebase_Exception_UnexpectedValue('no vevents found');
         }
         
@@ -443,6 +445,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // keep current exdate's (only the not deleted ones)
         if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            $event->exdate->addIndices(array('is_deleted'));
             $oldExdates = $event->exdate->filter('is_deleted', false);
         } else {
             $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
@@ -467,7 +470,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // parse the event exceptions
-        foreach($vcalendar->VEVENT as $vevent) {
+        foreach ($vcalendar->VEVENT as $vevent) {
             if(isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
@@ -488,7 +491,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 
                 $this->_convertVevent($vevent, $recurException);
                     
-                if(! $event->exdate instanceof Tinebase_Record_RecordSet) {
+                if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 }
                 $event->exdate->addRecord($recurException);
