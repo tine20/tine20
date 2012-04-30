@@ -23,10 +23,19 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         this.triggerConfig = {
             tag:'span', cls:'x-form-twin-triggers', style:'padding-right:2px',  // padding needed to prevent IE from clipping 2nd trigger button
             cn:[
-                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"},            
-                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger"}                            
+                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"},
+                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger"}
             ]
         };
+        
+        this.on('afterrender', function() {
+            this.initialWidth = this.wrap.getWidth();
+        }, this);
+        
+        this.on('resize', function() {
+            this.initialWidth = this.wrap.getWidth() + 2;
+        }, this);
+        
     },
 
     getTrigger : function(index){
@@ -39,14 +48,12 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         var triggerField = this;
         ts.each(function(t, all, index){
             t.hide = function(){
-                var w = triggerField.wrap.getWidth();
                 this.dom.style.display = 'none';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
+                triggerField.el.setWidth(triggerField.initialWidth - 21);
             };
             t.show = function(){
-                var w = triggerField.wrap.getWidth();
                 this.dom.style.display = '';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
+                triggerField.el.setWidth(triggerField.initialWidth - 38);
             };
             var triggerIndex = 'Trigger'+(index+1);
 

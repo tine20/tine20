@@ -172,7 +172,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.bbar = new Ext.Toolbar({
                 items: [
                     this.actionRemove
-                ]
+                ].concat(this.contextMenuItems)
             });
         }
 

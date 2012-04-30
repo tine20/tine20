@@ -44,7 +44,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
     appName: 'Crm',
     modelName: 'Lead',
     idProperty: 'id',
-    titleProperty: 'title',
+    titleProperty: 'lead_name',
     // ngettext('Lead', 'Leads', n);
     recordName: 'Lead',
     recordsName: 'Leads',
@@ -111,7 +111,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
             {label: app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
             {filtertype: 'crm.contact'},
-            {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Task, ownField: 'task'}
+            {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'task'}
         ];
         
     if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {

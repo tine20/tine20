@@ -214,6 +214,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getContainersName = function() {
         return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 50);
     };
+    f.getAppName = function() {
+        return Tine.Tinebase.appMgr.get(p.appName).i18n._(p.appName);
+    };
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };

@@ -907,7 +907,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
     background-image:url(images/tine20/window/icon-error.gif);
 }
 
-/* Witges */
+/* Widgets */
 
 .app-panel-header-over {
 	background:#EBF3FD url(images/tine20/grid/grid3-hrow-over.gif) repeat-x scroll left bottom;
@@ -924,10 +924,6 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .preview-panel-declaration {
 	color:#A0A0A0;
 }	
-
-.preview-panel-timesheet-right {
-	border:3px solid #E5E6FE;
-}
 
 .bordercorner_gray_1 {
 	background-color: transparent;

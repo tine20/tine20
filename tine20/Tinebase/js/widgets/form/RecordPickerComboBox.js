@@ -238,7 +238,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         if(this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
-        Ext.form.ComboBox.superclass.setValue.call(this, text);
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
         this.value = value;
         return this;
     }

@@ -57,6 +57,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     showContainerSelector: true,
 
+    hideRelationsPanel: true,
+    
     /**
      * executed after record got updated from proxy
      * 

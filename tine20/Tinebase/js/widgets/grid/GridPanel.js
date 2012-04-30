@@ -1033,7 +1033,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items.push(this.action_resolveDuplicates);
             }
             
-            if (! this.action_tagsMassAttach.hidden) {
+            if (this.action_tagsMassAttach && ! this.action_tagsMassAttach.hidden) {
                 items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }
 
@@ -1319,7 +1319,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 record = new this.recordClass(this.recordClass.getDefaultData(), 0);
             }
         }
-
+        
         var totalcount = this.selectionModel.getCount(),
             useMultiple = ((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
             selectedRecords = [];
