@@ -402,8 +402,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         $filters = array();
         $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
         foreach ($userApplications as $application) {
-            $config = $this->{$application->name};
-            if ($config instanceof Tinebase_Config_Abstract) {
+            $configClassName = $application->name . '_Config';
+            if (@class_exists($configClassName)) {
+                $config = call_user_func(array($configClassName, 'getInstance'));
                 $clientProperties[$application->name] = new Tinebase_Config_Struct(array());
                 $properties = $config->getProperties();
                 foreach( (array) $properties as $name => $definition) {
@@ -414,16 +415,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             // add definition here till we have a better palce
                             'definition'    => new Tinebase_Config_Struct($definition),
                         ));
-//                        $clientProperties[$application->name][$name] = $definition;
                     }
                 }
-                
-//                if (isset($clientProperties[$application->name])) {
-//                    $filters[] = array('condition' => 'AND', 'filters' => array(
-//                        array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
-//                        array('field' => 'name',           'operator' => 'in',     'value' => array_keys((array) $clientProperties[$application->name])),
-//                    ));
-//                }
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $application->name . ' has no config.');
             }
         }
         
@@ -484,7 +479,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         // check config.inc.php and get value from there
         $configFileData = $this->_getConfigFileData();
         if ($_fromFile && array_key_exists($_name, $configFileData)) {
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Overwriting config setting "' . $_name . '" with value from config.inc.php.');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Overwriting config setting "' . $_name . '" with value from config.inc.php.');
             $result->value = $configFileData[$_name];
         } 
         
