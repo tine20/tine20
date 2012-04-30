@@ -19,6 +19,13 @@
 class Tinebase_Server_Http implements Tinebase_Server_Interface
 {
     /**
+     * the request method
+     * 
+     * @var string
+     */
+    protected $_method = NULL;
+    
+    /**
      * handler for HTTP api requests
      * @todo session expire handling
      * 
@@ -28,7 +35,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
     {
         try {
             Tinebase_Core::initFramework();
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Rawdata: ' . print_r($_REQUEST, true));
             
             $server = new Tinebase_Http_Server();
@@ -58,6 +65,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 $_REQUEST['method'] = 'Tinebase.login';
             }
 
+            $this->_method = $_REQUEST['method'];
             $server->handle($_REQUEST);
         } catch (Exception $exception) {
             if (! is_object(Tinebase_Core::getLogger())) {
@@ -83,11 +91,12 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                     // check if setup is required
                     $setupController = Setup_Controller::getInstance();
                     if ($setupController->setupRequired()) {
-                        $server->handle(array('method' => 'Tinebase.setupRequired'));
+                        $this->_method = 'Tinebase.setupRequired';
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
-                        $server->handle(array('method' => 'Tinebase.exception'));
+                        $this->_method = 'Tinebase.exception';
                     }
+                    $server->handle(array('method' => $this->_method));
                 } catch (Exception $e) {
                     error_log($exception);
                     header('HTTP/1.0 503 Service Unavailable');
@@ -95,5 +104,19 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 }
             }
         }
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string|NULL
+    */
+    public function getRequestMethod()
+    {
+        if ($this->_method && isset($_REQUEST['method'])) {
+            $this->_method = $_REQUEST['method'];
+        }
+        
+        return $this->_method;
     }
 }

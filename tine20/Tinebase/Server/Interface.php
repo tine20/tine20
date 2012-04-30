@@ -24,4 +24,11 @@ interface Tinebase_Server_Interface
      * @return boolean
      */
     public function handle();
+    
+    /**
+     * returns request method
+     * 
+     * @return string|NULL
+     */
+    public function getRequestMethod();
 }

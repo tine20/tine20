@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -23,6 +23,10 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
     */
     protected static $_server;
     
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
+     */
     public function handle()
     {
         try {
@@ -98,5 +102,15 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
     public static function getRequest()
     {
         return self::$_server ? self::$_server->httpRequest : new Sabre_HTTP_Request();
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string
+    */
+    public function getRequestMethod()
+    {
+        return self::getRequest()->getMethod();
     }
 }

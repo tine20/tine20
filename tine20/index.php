@@ -72,4 +72,8 @@ if(function_exists('realpath_cache_size')) {
     $realPathCacheSize = 'unknown';
 }
 
-Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds  MEMORY: ' . $memory/1024/1024 . ' MBytes  REALPATHCACHESIZE: ' . $realPathCacheSize);
+if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') ' .
+        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . $time . ' seconds / MEMORY: ' .
+        $memory/1024/1024 . ' MBytes / REALPATHCACHESIZE: ' . $realPathCacheSize);
+}

@@ -19,6 +19,13 @@
 class Tinebase_Server_Json implements Tinebase_Server_Interface
 {
     /**
+     * handled request methods
+     * 
+     * @var array
+     */
+    protected $_methods = array();
+    
+    /**
      * handle request
      * 
      * @return void
@@ -92,7 +99,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
     protected function _handle($server, $request)
     {
         try {
-            $method  = $request->getMethod();
+            $method = $request->getMethod();
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
             
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
@@ -102,10 +109,12 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
             $server->setClass('Tinebase_Frontend_Json_UserRegistration', 'Tinebase_UserRegistration');
             
-            if(empty($method)) {
+            if (empty($method)) {
                 // SMD request
                 return self::getServiceMap();
             }
+            
+            $this->_methods[] = $method;
             
             // register additional Json apis only available for authorised users
             if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -317,5 +326,15 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                 throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             }
         }
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string|NULL
+    */
+    public function getRequestMethod()
+    {
+        return (! empty($this->_methods)) ? implode('|', $this->_methods) : NULL;
     }
 }

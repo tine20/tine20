@@ -20,13 +20,20 @@
 class ActiveSync_Server_Http implements Tinebase_Server_Interface
 {
     /**
+     * the request
+     * 
+    * @var Zend_Controller_Request_Http
+    */
+    protected $_request = NULL;
+    
+    /**
      * handler for ActiveSync requests
      * 
      * @return boolean
      */
     public function handle()
     {
-        $request = new Zend_Controller_Request_Http();
+        $this->_request = new Zend_Controller_Request_Http();
         
         try {
             Tinebase_Core::initFramework();
@@ -93,14 +100,24 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         }
         
         $this->_initializeRegistry();
-                
-        $syncFrontend = new Syncope_Server(Tinebase_Core::getUser()->accountId);
+        
+        $syncFrontend = new Syncope_Server(Tinebase_Core::getUser()->accountId, $this->_request);
         
         $syncFrontend->handle();
         
-        Tinebase_Controller::getInstance()->logout($request->getClientIp());
+        Tinebase_Controller::getInstance()->logout($this->_request->getClientIp());
     }
-        
+    
+    /**
+    * returns request method
+    *
+    * @return string|NULL
+    */
+    public function getRequestMethod()
+    {
+        return ($this->_request) ? $this->_request->getMethod() : NULL;
+    }
+    
     /**
      * authenticate user
      *
@@ -122,6 +139,9 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress, 'TineActiveSync');
     }
     
+    /**
+     * init registry
+     */
     protected function _initializeRegistry()
     {
         Syncope_Registry::setDatabase(Tinebase_Core::getDb());

@@ -30,81 +30,73 @@ class Tinebase_Core
 
     /**
      * constant for config registry index
-     *
      */
     const CONFIG = 'configFile';
 
     /**
      * constant for locale registry index
-     *
      */
     const LOCALE = 'locale';
 
     /**
      * constant for logger registry index
-     *
      */
     const LOGGER = 'logger';
 
     /**
      * constant for cache registry index
-     *
      */
     const CACHE = 'cache';
 
     /**
      * constant for session namespace (tinebase) registry index
-     *
      */
     const SESSION = 'session';
 
     /**
      * constant for current account/user
-     *
      */
     const USER = 'currentAccount';
 
     /**
      * const for current users credentialcache
-     *
      */
     const USERCREDENTIALCACHE = 'usercredentialcache';
 
     /**
      * constant for database adapter
-     *
      */
     const DB = 'dbAdapter';
 
     /**
      * constant for database adapter
-     *
      */
     const USERTIMEZONE = 'userTimeZone';
 
     /**
      * constant for preferences registry
-     *
      */
     const PREFERENCES = 'preferences';
     
     /**
      * constant for preferences registry
-     *
      */
     const SCHEDULER = 'scheduler';
     
     /**
      * constant temp dir registry
-     *
      */
     const TMPDIR = 'tmpdir';
     
     /**
      * constant temp dir registry
-     *
      */
     const FILESDIR = 'filesdir';
+    
+    /**
+     * constant for request method registry
+     */
+    const METHOD = 'method';
     
     /**************** other consts *************************/
 
@@ -147,7 +139,6 @@ class Tinebase_Core
 
     /**
      * dispatch request
-     *
      */
     public static function dispatchRequest()
     {
@@ -172,28 +163,25 @@ class Tinebase_Core
             (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
         ) {
             $server = new Tinebase_Server_Json();
-
+            
         /**************************** SNOM API *****************************/
         } elseif(
             isset($_SERVER['HTTP_USER_AGENT']) &&
             preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
         ) {
             $server = new Voipmanager_Server_Snom();
-
-
+            
         /**************************** ASTERISK API *****************************/
         } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
             $server = new Voipmanager_Server_Asterisk();
-
-
+            
         /**************************** ActiveSync API ****************************
          * RewriteRule ^/Microsoft-Server-ActiveSync /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          */
         } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
                  (isset($_GET['frontend']) && $_GET['frontend'] == 'activesync')) {
             $server = new ActiveSync_Server_Http();
-
-
+            
         /**************************** WebDAV / CardDAV / CalDAV API **********************************
          * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
          * RewriteRule ^/$            /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
@@ -205,16 +193,14 @@ class Tinebase_Core
          */
         } elseif(isset($_GET['frontend']) && $_GET['frontend'] == 'webdav') {
             $server = new Tinebase_Server_WebDAV();
-
             
         /**************************** CLI API *****************************/
         } elseif (php_sapi_name() == 'cli') {
             $server = new Tinebase_Server_Cli();
-
-
+            
         /**************************** HTTP API ****************************/
         } else {
-
+            
             /**************************** OpenID ****************************
              * RewriteRule ^/users/(.*)                      /index.php?frontend=openid&username=$1 [L,QSA]
              */
@@ -225,14 +211,18 @@ class Tinebase_Core
                 $_REQUEST['method'] = 'Tinebase.userInfoPage';
             }
             
-            if(!isset($_REQUEST['method']) && (isset($_REQUEST['openid_action']) || isset($_REQUEST['openid_assoc_handle'])) ) {
+            if (!isset($_REQUEST['method']) && (isset($_REQUEST['openid_action']) || isset($_REQUEST['openid_assoc_handle'])) ) {
                 $_REQUEST['method'] = 'Tinebase.openId';
             }
-
+            
             $server = new Tinebase_Server_Http();
         }
-
+        
         $server->handle();
+        
+        $method = get_class($server) . '::' . $server->getRequestMethod();
+        self::set(self::METHOD, $method);
+        
         self::getDbProfiling();
     }
 

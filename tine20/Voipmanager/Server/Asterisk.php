@@ -16,7 +16,7 @@
  * @package     Voipmanager
  * @subpackage  Server
  */
-class Voipmanager_Server_Asterisk
+class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
 {
     /**
      * handler for command line scripts
@@ -35,31 +35,41 @@ class Voipmanager_Server_Asterisk
             $server->setClass('Voipmanager_Frontend_Asterisk_CallForward', 'Voipmanager_CallForward');
             $server->setClass('Voipmanager_Frontend_Asterisk_MeetMe',      'Voipmanager_MeetMe');
             
-            list($class, $method) = explode('.', $_REQUEST['method']);
-            
-            // ugly hack to parse requests from res_config_curl
-            if($method == 'handleResConfig') {
-                // set method to a usefull value
-                $pos = strpos($_REQUEST['action'], '?');
-                if($pos !== false) {
-                    $action = substr($_REQUEST['action'], 0, $pos);
-                    list($key, $value) = explode('=', substr($_REQUEST['action'], $pos+1));
-                    $_REQUEST[$key] = $value;
-                } else {
-                    $action = $_REQUEST['action'];
-                }
-                #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . $action);
-                
-                $method = ucfirst(substr($action, 1));
-                $_REQUEST['method'] = $class . '.handle' . $method;
-            }
+            $_REQUEST['method'] = $this->getRequestMethod();
 
-            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' action: ' . print_r($_REQUEST, true));
             $server->handle($_REQUEST);
 
             Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' auth failed ');
         }
+    }
+    
+    /**
+    * returns request method
+     *
+    * @return string
+    */
+    public function getRequestMethod()
+    {
+        list($class, $method) = explode('.', $_REQUEST['method']);
+        // ugly hack to parse requests from res_config_curl
+        if ($method == 'handleResConfig') {
+            // set method to a usefull value
+            $pos = strpos($_REQUEST['action'], '?');
+            if($pos !== false) {
+                $action = substr($_REQUEST['action'], 0, $pos);
+                list($key, $value) = explode('=', substr($_REQUEST['action'], $pos+1));
+                $_REQUEST[$key] = $value;
+            } else {
+                $action = $_REQUEST['action'];
+            }
+            $method = ucfirst(substr($action, 1));
+            $result = $class . '.handle' . $method;
+        } else {
+            $result = $_REQUEST['method'];
+        }
+        
+        return $result;
     }
 }

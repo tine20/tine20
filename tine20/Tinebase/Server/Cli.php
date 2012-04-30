@@ -62,17 +62,17 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
      */
     public function handle()
     {
-        $opts = Tinebase_Core::get('opts');
+        $method = $this->getRequestMethod();
         
-        if (! in_array($opts->method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
+        if (! in_array($method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
             $this->_initFramework();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
+                .' Is cli request. method: ' . $method);
         }
         
         $tinebaseServer = new Tinebase_Frontend_Cli();
         
-        if (! in_array($opts->method, array(
+        if (! in_array($method, array(
             'Tinebase.triggerAsyncEvents',
             'Tinebase.processQueue',
             'Tinebase.monitoringCheckDB',
@@ -80,6 +80,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
             'Tinebase.monitoringCheckCron',
             'Tinebase.monitoringLoginNumber',
         ))) {
+            $opts = Tinebase_Core::get('opts');
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);
@@ -87,6 +88,17 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         //@todo remove cli session path
         
         return $result;
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string|NULL
+    */
+    public function getRequestMethod()
+    {
+        $opts = Tinebase_Core::get('opts');
+        return (isset($opts->method)) ? $opts->method : NULL;
     }
     
     /**

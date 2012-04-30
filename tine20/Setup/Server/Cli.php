@@ -81,10 +81,21 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
         
         Setup_Core::initFramework();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . $this->getRequestMethod());
         
         $setupServer = new Setup_Frontend_Cli();
         #$setupServer->authenticate($opts->username, $opts->password);
         return $setupServer->handle($opts);
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string|NULL
+    */
+    public function getRequestMethod()
+    {
+        $opts = Tinebase_Core::get('opts');
+        return (isset($opts->mode)) ? $opts->mode : NULL;
     }
 }

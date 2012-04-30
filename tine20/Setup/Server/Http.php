@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -27,7 +27,7 @@ class Setup_Server_Http implements Tinebase_Server_Interface
     public function handle()
     {
         Setup_Core::initFramework();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . $this->getRequestMethod());
 
         $server = new Tinebase_Http_Server();
         $server->setClass('Setup_Frontend_Http', 'Setup');
@@ -35,7 +35,17 @@ class Setup_Server_Http implements Tinebase_Server_Interface
         if (empty($_REQUEST['method'])) {
             $_REQUEST['method'] = 'Setup.mainScreen';
         }
-            
+        
         $server->handle($_REQUEST);
+    }
+    
+    /**
+    * returns request method
+    *
+    * @return string
+    */
+    public function getRequestMethod()
+    {
+        return (isset($_REQUEST['method'])) ? $_REQUEST['method'] : NULL;
     }
 }
