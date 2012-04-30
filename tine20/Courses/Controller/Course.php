@@ -5,8 +5,8 @@
  * @package     Courses
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -64,8 +64,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_backend = new Courses_Backend_Course();
         $this->_currentAccount = Tinebase_Core::getUser();
-        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
-    }    
+        $this->_config = Courses_Config::getInstance();
+    }
     
     /**
      * holds the instance of the singleton

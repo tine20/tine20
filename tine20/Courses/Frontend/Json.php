@@ -53,13 +53,15 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * set config
+     * set config / only needed for tests atm
      * 
      * @param array $_config
+     * 
+     * @todo remove Zend_Config here and do the config replacement in the test!
      */
     public function setConfig($_config = array())
     {
-        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config($_config);
+        $this->_config = (! empty($_config)) ? new Zend_Config($_config) : Courses_Config::getInstance();
     }
     
     /************************************** protected helper functions **********************/
@@ -301,8 +303,6 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $tempFileId
      * @param string $groupId
      * @param string $courseName
-     * 
-     * @todo write test!!
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {

@@ -4,18 +4,14 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_ConfigTest::main();
-}
 
 /**
  * Test class for Tinebase_Config
@@ -67,14 +63,12 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test instance retirval
+     * test instance retrival
      * 
      */
     public function testConfigInstance()
     {
         $this->assertTrue($this->_instance === Tinebase_Core::getConfig(), 'Tinebase_Core::getConfig() is wrong instance');
-        $this->assertTrue($this->_instance === Tinebase_Core::getConfig()->tinebase, 'Tinebase_Core::getConfig()->tinebase is wrong instance');
-        $this->assertTrue($this->_instance === Tinebase_Core::getConfig()->Tinebase, 'Tinebase_Core::getConfig()->Tinebase is wrong instance');
     }
     
     /**
@@ -148,7 +142,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $clientConfig = $this->_instance->getClientRegistryConfig();
         $this->assertTrue($clientConfig instanceof Tinebase_Config_Struct, 'clientconfig is not a struct');
         $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
-        $this->assertEquals($this->_instance->calendar->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
+        $this->assertEquals(Calendar_Config::getInstance()->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
         
         $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
     }

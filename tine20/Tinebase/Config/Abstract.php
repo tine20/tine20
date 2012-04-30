@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -99,27 +99,24 @@ abstract class Tinebase_Config_Abstract
      * @param  string $name
      * @param  mixed  $default
      * @return mixed
+     * 
+     * @todo fetch all configs for app at first access + store in class cache
+     * @todo check/profile if Zend_Cache is needed
      */
-    public function get($_name, $_default = null)
+    public function get($name, $default = NULL)
     {
-        // return app /spechial config classes
-        $configClassName = ucfirst($_name) . '_Config';
-        if (@class_exists($configClassName)) {
-            return call_user_func(array($configClassName, 'getInstance'));
-        }      
-        
         // NOTE: we check config file data here to prevent db lookup when db is not yet setup
-        $configFileSection = $this->_getConfigFileSection($_name);
+        $configFileSection = $this->_getConfigFileSection($name);
         if ($configFileSection) {
-            return $this->_rawToConfig($configFileSection[$_name], $_name);
+            return $this->_rawToConfig($configFileSection[$name], $name);
         }
         
-        if (Tinebase_Core::getDb() && $configRecord = $this->_loadConfig($_name, $this->_appName)) {
+        if (Tinebase_Core::getDb() && $configRecord = $this->_loadConfig($name, $this->_appName)) {
             $configData = json_decode($configRecord->value, TRUE);
             // @todo JSON encode all config data via update script!
-            return $this->_rawToConfig($configData ? $configData : $configRecord->value, $_name);
+            return $this->_rawToConfig($configData ? $configData : $configRecord->value, $name);
         } else {
-            return $_default;
+            return $default;
         }
     }
     
