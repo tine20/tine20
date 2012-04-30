@@ -1,0 +1,19 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     HumanResources
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+ 
+.HumanResourcesEmployee, .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
+}
+.x-btn-medium .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
+}
+.x-btn-large .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
+}

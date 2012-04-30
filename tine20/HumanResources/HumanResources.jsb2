@@ -1,0 +1,44 @@
+{
+  "projectName": "Tine 2.0 - Human Resources",
+  "deployDir": "HumanResources",
+  "licenseText": "Tine 2.0 - HumanResources \nCopyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)http://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Human Resources FAT Client",
+      "file": "js/HumanResources-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "HumanResources.js",
+          "path": "js/"
+        },
+        {
+          "text": "EmployeeGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "EmployeeEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Human Resources FAT Client",
+      "file": "css/HumanResources-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "HumanResources.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
