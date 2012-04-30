@@ -525,7 +525,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         $configRecord = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(),
             "name"              => $_name,
-            "value"             => $value,              
+            "value"             => $value,
         ));
         
         return $this->_saveConfig($configRecord);
