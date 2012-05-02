@@ -383,6 +383,12 @@
     white-space: normal;
 }
 
+.cal-daysviewpanel-event-tags {
+    position: absolute;
+    right: 1px;
+    bottom: 4px;
+}
+
 .cal-daysviewpanel-event-active {
     border-width: 2px;
 }

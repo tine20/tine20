@@ -383,6 +383,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             var eventEl = view.templates.event.append(view.getDateColumnEl(currColNum), {
                 id: domId,
                 summary: height >= 24 ? this.event.get('summary') : '',
+                tagsHtml: height >= 24 ? Tine.Tinebase.common.tagsRenderer(this.event.get('tags')) : '',
                 startTime: (height >= 24 && top <= scrollerHeight-24) ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
                 extraCls: extraCls,
                 color: this.colorSet.color,
