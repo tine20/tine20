@@ -17,20 +17,13 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
  */
-
-
-/**
- * Zend_Json_Client
- */
-require_once 'Zend/Json/Client.php';
 
 /**
  * @category   Zend
  * @package    Zend_Service
  * @author     Lars Kneschke <l.kneschke@metaways.de>
- * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Tine20 extends Zend_Json_Client
@@ -53,6 +46,11 @@ class Zend_Service_Tine20 extends Zend_Json_Client
     protected $_account;
     
     /**
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+    
+    /**
      * constructor for Zend_Service_Tine20
      * @param string           $url         the url of the Tine 2.0 installation
      * @param Zend_Http_Client $httpClient
@@ -72,6 +70,11 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         
         parent::__construct($url, $httpClient);
     }    
+
+    public function setCache(Zend_Cache_Core $_cache)
+    {
+        $this->_cache = $_cache;
+    }
 
     /**
      * login to Tine 2.0 installation 
@@ -98,7 +101,17 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         $this->_account = $response['account'];
         $this->getHttpClient()->setHeaders('X-Tine20-JsonKey', $this->_jsonKey);
         
-        $this->getIntrospector()->fetchSMD();
+        if($this->_cache instanceof Zend_Cache_Core) {
+            if($this->_cache->test('tine20PrivateSMD')) {
+                $smd = $this->_cache->load('tine20PrivateSMD');
+                $this->getIntrospector()->setSMD($smd);
+            } else {
+                $smd = $this->getIntrospector()->fetchSMD();
+                $this->_cache->save($smd, 'tine20PrivateSMD');
+            }
+        } else {
+            $this->getIntrospector()->fetchSMD();
+        }
         
         $this->setSkipSystemLookup(false);
         

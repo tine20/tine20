@@ -18,7 +18,6 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @copyright  Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
  */
 
 /**
@@ -67,6 +66,11 @@ class Zend_Json_Client_ServerIntrospection
         return $signature;
     }
 
+    public function setSMD(Zend_Json_Client_SMD $_smd)
+    {
+        $this->_smd = $_smd;
+    }
+
     /**
      * Call system.listMethods()
      *
@@ -81,5 +85,7 @@ class Zend_Json_Client_ServerIntrospection
         
         $this->_smd = new Zend_Json_Client_SMD();
         $this->_client->doRequest($request, $this->_smd);
+        
+        return $this->_smd;        
     }
 }
