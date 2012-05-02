@@ -88,7 +88,7 @@ abstract class Tinebase_Config_Abstract
      * 
      * @var array
      */
-    protected $_cachedApplicationConfig = array();
+    protected $_cachedApplicationConfig = NULL;
     
     /**
      * get properties definitions 
@@ -107,45 +107,22 @@ abstract class Tinebase_Config_Abstract
      * @param  string $name
      * @param  mixed  $default
      * @return mixed
-     * 
-     * @todo check/profile if Zend_Cache is needed
      */
     public function get($name, $default = NULL)
     {
-        $this->_loadAllAppConfigsInCache();
-        
         // NOTE: we check config file data here to prevent db lookup when db is not yet setup
         $configFileSection = $this->_getConfigFileSection($name);
         if ($configFileSection) {
             return $this->_rawToConfig($configFileSection[$name], $name);
         }
         
-        if (Tinebase_Core::getDb() && $configRecord = $this->_loadConfig($name)) {
-            $configData = json_decode($configRecord->value, TRUE);
+        if (Tinebase_Core::getDb() && $config = $this->_loadConfig($name)) {
+            $decodedConfigData = json_decode($config->value, TRUE);
             // @todo JSON encode all config data via update script!
-            return $this->_rawToConfig($configData ? $configData : $configRecord->value, $name);
-        } else {
-            return $default;
-        }
-    }
-    
-    /**
-     * fill class cache with all config records for this app
-     */
-    protected function _loadAllAppConfigsInCache()
-    {
-        if (! Tinebase_Core::isRegistered(Tinebase_Core::DB) || ! empty($this->_cachedApplicationConfig) || empty($this->_appName)) {
-            return;
+            return $this->_rawToConfig($decodedConfigData ? $decodedConfigData : $config->value, $name);
         }
         
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-        $filter = new Tinebase_Model_ConfigFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-        ));
-        $allConfigs = $this->_getBackend()->search($filter);
-        foreach ($allConfigs as $config) {
-            $this->_cachedApplicationConfig[$config->name] = $config;
-        }
+        return $default;
     }
     
     /**
@@ -177,7 +154,7 @@ abstract class Tinebase_Config_Abstract
         $config = $this->_loadConfig($_name);
         if ($config) {
             $this->_getBackend()->delete($config->getId());
-            $this->_clearCache($_name);
+            $this->_clearCache();
         }
     }
     
@@ -186,12 +163,13 @@ abstract class Tinebase_Config_Abstract
      *
      * @param  string   $_applicationId
      * @return integer  number of deleted configs
+     * 
+     * @todo remove param as this should be known?
      */
     public function deleteConfigByApplicationId($_applicationId)
     {
         $count = $this->_getBackend()->deleteByProperty($_applicationId, 'application_id');
-        
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
+        $this->_clearCache();
         
         return $count;
     }
@@ -273,49 +251,43 @@ abstract class Tinebase_Config_Abstract
      * load a config record from database
      * 
      * @param  string                   $_name
-     * @param  mixed                    $_application
-     * @return Tinebase_Model_Config
+     * @return Tinebase_Model_Config|NULL
      */
-    protected function _loadConfig($_name, $_application = NULL)
+    protected function _loadConfig($name)
     {
-        if ($_application === NULL && isset($this->_cachedApplicationConfig[$_name])) {
-            return $this->_cachedApplicationConfig[$_name];
+        if ($this->_cachedApplicationConfig === NULL) {
+            $this->_loadAllAppConfigsInCache();
         }
-        
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application ? $_application : $this->_appName);
-        
-        $cache = Tinebase_Core::getCache();
-        $cacheId = $this->_getCacheIndex($_name, $applicationId);
-        
-        if ($cache && $cache->test($cacheId)) {
-            $result = $cache->load($cacheId);
-            if (is_object($result)) {
-                return $result;
-            }
-        }
-        
-        $filter = new Tinebase_Model_ConfigFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            array('field' => 'name',           'operator' => 'equals', 'value' => $_name        ),
-        ));
-        
-        $result = $this->_getBackend()->search($filter)->getFirstRecord();
-        
-        if ($cache) $cache->save($result, $cacheId, array('config'));
+        $result = (isset($this->_cachedApplicationConfig[$name])) ? $this->_cachedApplicationConfig[$name] :  NULL;
         
         return $result;
     }
-    
+
     /**
-     * get cache index
-     * 
-     * @param string $name
-     * @param string $applicationId
-     * @return string
-     */
-    protected function _getCacheIndex($name, $applicationId)
+    * fill class cache with all config records for this app
+    */
+    protected function _loadAllAppConfigsInCache()
     {
-        return '_loadConfig_' . sha1($applicationId . $name);
+        if (empty($this->_appName)) {
+            if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
+            $this->_cachedApplicationConfig = array();
+        }
+        
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
+        
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
+    
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+        ));
+        $allConfigs = $this->_getBackend()->search($filter);
+        
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');
+        if (Setup_Core::isLogLevel(Zend_Log::TRACE)) Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allConfigs->toArray(), TRUE));
+        
+        foreach ($allConfigs as $config) {
+            $this->_cachedApplicationConfig[$config->name] = $config;
+        }
     }
     
     /**
@@ -323,12 +295,15 @@ abstract class Tinebase_Config_Abstract
      * 
      * @param   Tinebase_Model_Config $_config record to save
      * @return  Tinebase_Model_Config
+     * 
+     * @todo only allow to save records for this app ($this->_appName)
      */
     protected function _saveConfig(Tinebase_Model_Config $_config)
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
         
-        $config = $this->_loadConfig($_config->name, $_config->application_id);
+        $config = $this->_loadConfig($_config->name);
+        
         if ($config) {
             $config->value = $_config->value;
             $result = $this->_getBackend()->update($config);
@@ -336,28 +311,18 @@ abstract class Tinebase_Config_Abstract
             $result = $this->_getBackend()->create($_config);
         }
         
-        $this->_clearCache($_config->name, $_config->application_id);
+        $this->_clearCache();
         
         return $result;
     }
     
     /**
      * clear the cache
-     * 
-     * @param  string                   $name
-     * @param  mixed                    $application
      */
-    protected function _clearCache($name, $application = NULL)
+    protected function _clearCache()
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing cache for config ' . $name);
-        
-        if (isset($this->_cachedApplicationConfig[$name])) {
-            unset($this->_cachedApplicationConfig[$name]);
-        }
-        
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($application ? $application : $this->_appName);
-        $cacheId = $this->_getCacheIndex($name, $applicationId);
-        Tinebase_Core::getCache()->remove($cacheId);
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing config cache');
+        $this->_cachedApplicationConfig = NULL;
     }
     
     /**
