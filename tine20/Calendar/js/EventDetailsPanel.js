@@ -45,10 +45,28 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     containerRenderer: function(container) {
         if(this.record) {   // no record after delete
-            var displayContainer = this.record.getDisplayContainer();
-            return Tine.Tinebase.common.containerRenderer(displayContainer);
+            var originContainer = this.record.get('container_id'),
+                displayContainer = this.record.getDisplayContainer(),
+                containerHtml = '',
+                tip = '';
+            
+            // show origin (if available)
+            if (! Ext.isPrimitive(originContainer)) {
+                containerHtml = Tine.Tinebase.common.containerRenderer(originContainer);
+            } else {
+                containerHtml = Tine.Tinebase.common.containerRenderer(displayContainer);
+            }
+            
+            tip += Ext.isPrimitive(originContainer) ? 
+                    this.app.i18n._("This event is originally stored in a calendar you don't have access to.") :
+                    String.format(this.app.i18n._("This event is originally stored in {0}"), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(originContainer)));
+            tip += displayContainer && ! Tine.Tinebase.container.pathIsMyPersonalContainer(originContainer.path) ? 
+                    String.format(this.app.i18n._("This event is additionally displayed in your personal calendar {0}"), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(displayContainer))) :
+                        '';
+            return containerHtml.replace("<div ", "<div ext:qtip='" + tip + "' ");
+            
         } else {
-            return null;
+            return '';
         }
     },
     
