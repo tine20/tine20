@@ -15,6 +15,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Config
+ * 
+ * @todo remove all deprecated stuff
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
@@ -394,6 +396,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * get config for client registry
      * 
      * @return Tinebase_Config_Struct
+     * 
+     * @todo add getConfigForApp() static function that does the call_user_func(array($configClassName, 'getInstance'));
      */
     public function getClientRegistryConfig()
     {
@@ -467,7 +471,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
             
         
-        $result = $this->_loadConfig($_name, $applicationId);
+        $result = $this->_loadConfigOld($_name, $applicationId);
         if (! $result) {
             $result = new Tinebase_Model_Config(array(
                 'application_id'    => $applicationId,
@@ -485,6 +489,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         
         return $result;
     }
+    
+    /**
+    * load a config record from database
+    *
+    * @param  string                   $_name
+    * @param  mixed                    $_application
+    * @return Tinebase_Model_Config
+    * @deprecated
+    */
+    protected function _loadConfigOld($_name, $_application = null)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application ? $_application : $this->_appName);
+    
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+            array('field' => 'name',           'operator' => 'equals', 'value' => $_name        ),
+        ));
+    
+        $result = $this->_getBackend()->search($filter)->getFirstRecord();
+    
+        return $result;
+    }    
 
     /**
      * returns one config value identified by config name and application name as array (it was json encoded in db)
@@ -528,7 +554,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             "value"             => $value,
         ));
         
-        return $this->_saveConfig($configRecord);
+        return $this->_saveConfigOld($configRecord);
+    }
+    
+    /**
+    * store a config record in database
+    *
+    * @param   Tinebase_Model_Config $_config record to save
+    * @return  Tinebase_Model_Config
+    * @deprecated
+    */
+    protected function _saveConfigOld(Tinebase_Model_Config $_config)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
+    
+        $config = $this->_loadConfigOld($_config->name, $_config->application_id);
+        if ($config) {
+            $config->value = $_config->value;
+            $result = $this->_getBackend()->update($config);
+        } else {
+            $result = $this->_getBackend()->create($_config);
+        }
+    
+        return $result;
     }
 
     /**
@@ -541,8 +589,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public function deleteConfig(Tinebase_Model_Config $_config)
     {
         $this->_getBackend()->delete($_config->getId());
-        
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
     }
     
     /**
