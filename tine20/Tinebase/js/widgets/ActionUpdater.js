@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
  Ext.ns('Tine', 'Tine.widgets');
@@ -137,11 +137,11 @@
             action.setDisabled(! (grantCondition && nCondition));
         }
 
-        if(nCondition) {
-            if(action.initialConfig.requiredMultipleRight) {
-                if(records && records.length > 1) {
+        if (nCondition) {
+            if (action.initialConfig.requiredMultipleRight) {
+                if (records && records.length > 1) {
                     var right = action.initialConfig.requiredMultipleRight.split('_');
-                    if(right.length == 2) {
+                    if (right.length == 2) {
                         action.setDisabled(!Tine.Tinebase.common.hasRight(right[0], action.initialConfig.scope.app.name, right[1]));
                     } else {
                         Tine.log.debug('multiple edit right was not properly applied');
@@ -151,10 +151,10 @@
     
             if(action.initialConfig.requiredMultipleGrant) {
                 var hasRight = true;
-                if(Ext.isArray(records)) {
+                if (Ext.isArray(records)) {
                     Ext.each(records, function(record) {
-                        if(record.get('container_id')) {
-                            hasRight = (hasRight && (record.get('container_id').account_grants[action.initialConfig.requiredMultipleGrant]));
+                        if (record.get('container_id')) {
+                            hasRight = (hasRight && record.get('container_id').account_grants && record.get('container_id').account_grants[action.initialConfig.requiredMultipleGrant]);
                         } else {
                             return false;
                         }
