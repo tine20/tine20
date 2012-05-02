@@ -219,13 +219,61 @@ class Tinebase_Core
         }
         
         $server->handle();
-        
         $method = get_class($server) . '::' . $server->getRequestMethod();
         self::set(self::METHOD, $method);
-        
+
+        self::finishProfiling();
         self::getDbProfiling();
     }
+    
+    /**
+     * enable profiling
+     * - supports xhprof
+     */
+    public static function enableProfiling()
+    {
+        if (! self::getConfig() || ! self::getConfig()->profiler) {
+            return;
+        }
 
+        if (self::getConfig()->profiler->xhprof) {
+            xhprof_enable(XHPROF_FLAGS_MEMORY);
+        } 
+    }
+
+    /**
+     * finish profiling / save profiling data to a file
+     * - supports xhprof
+     */
+    public static function finishProfiling()
+    {
+    if (! self::getConfig() || ! self::getConfig()->profiler) {
+            return;
+        }
+        
+        $config = self::getConfig()->profiler;
+        $method = self::get(self::METHOD);
+    
+        if ($config->xhprof) {
+            $xhprof_data = xhprof_disable();
+            
+            if ($config->method) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Filtering xhprof profiling method: ' . $config->method);
+                if (! preg_match($config->method, $method)) {
+                    return;
+                }
+            }
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saving xhprof profiling run for method ' . $method);
+            
+            $XHPROF_ROOT = '/usr/share/php5-xhprof';
+            include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+            include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+            $xhprof_runs = new XHProfRuns_Default();
+            $run_id = $xhprof_runs->save_run($xhprof_data, "tine");
+        }
+    }
+    
     /******************************* APPLICATION ************************************/
 
     /**
@@ -317,6 +365,8 @@ class Tinebase_Core
         Tinebase_Core::setupUserTimezone();
         
         Tinebase_Core::setupUserLocale();
+        
+        Tinebase_Core::enableProfiling();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
