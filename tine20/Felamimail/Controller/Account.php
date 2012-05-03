@@ -878,7 +878,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
             ($_username !== NULL) ? $_username : $userCredentialCache->username,
             ($_password !== NULL) ? $_password : $userCredentialCache->password,
-            $userCredentialCache->password
+            $userCredentialCache->password,
+            TRUE // save in DB
         );
         
         return $accountCredentials->getId();
