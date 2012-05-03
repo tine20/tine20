@@ -2,7 +2,7 @@
 <application>
     <name>Courses</name>
     <!-- gettext('Courses') -->   
-    <version>5.1</version>
+    <version>5.2</version>
     <order>50</order>
     <status>disabled</status>
     <depends>
@@ -12,7 +12,7 @@
     <tables>
         <table>
             <name>courses</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -38,8 +38,8 @@
                 </field>
                 <field>
                     <name>internet</name>
-                    <type>boolean</type>
-                    <default>false</default>
+                    <type>text</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>fileserver</name>
