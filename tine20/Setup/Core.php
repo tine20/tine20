@@ -38,17 +38,15 @@ class Setup_Core extends Tinebase_Core
         // Server Timezone must be setup before logger, as logger has timehandling!
         Setup_Core::setupServerTimezone();
 
-        Setup_Core::setupLogger();
-
         //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
         Setup_Core::setupDatabaseConnection();
-
+        
         Setup_Core::setupStreamWrapper();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings 
         Setup_Core::setupCache();
-
+        
         Setup_Core::setupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
