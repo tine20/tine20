@@ -88,7 +88,7 @@ Tine.Tinebase.container = {
      */
     pathIsMyPersonalContainer: function(path) {
         var regExp = new RegExp('^' + Tine.Tinebase.container.getMyNodePath() + '\/([0-9a-z_\-]+)$');
-        var matches = path.match(regExp);
+        var matches = String(path).match(regExp);
         
         return !!matches;
     },
@@ -141,7 +141,7 @@ Tine.Tinebase.container = {
      * @return {String}
      */
     path2type: function(path) {
-        var pathParts = Ext.isArray(path) ? path : path.split('/');
+        var pathParts = Ext.isArray(path) ? path : String(path).split('/');
         
         return pathParts[1];
     }
