@@ -58,12 +58,12 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             }
             
             tip += Ext.isPrimitive(originContainer) ? 
-                    this.app.i18n._("This event is originally stored in a calendar you don't have access to.") :
-                    String.format(this.app.i18n._("This event is originally stored in {0}"), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(originContainer)));
+                    Ext.util.Format.htmlEncode(this.app.i18n._("This event is originally stored in a calendar you don't have access to.")) :
+                    String.format(Ext.util.Format.htmlEncode(this.app.i18n._("This event is originally stored in {0}")), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(originContainer)));
             tip += displayContainer && ! Tine.Tinebase.container.pathIsMyPersonalContainer(originContainer.path) ? 
-                    String.format(this.app.i18n._("This event is additionally displayed in your personal calendar {0}"), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(displayContainer))) :
+                    String.format(Ext.util.Format.htmlEncode(this.app.i18n._("This event is additionally displayed in your personal calendar {0}")), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(displayContainer))) :
                         '';
-            return containerHtml.replace("<div ", "<div ext:qtip='" + tip + "' ");
+            return containerHtml.replace('<div ', '<div ext:qtip="' + tip + '" ');
             
         } else {
             return '';
