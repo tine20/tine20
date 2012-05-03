@@ -131,7 +131,12 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         }
         
         try {
-            $recordArray = $controller->get($value)->toArray();
+            if (method_exists($controller, 'get')) {
+                $recordArray = $controller->get($value)->toArray();
+            } else {
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
+                return $value;
+            }
         } catch (Exception $e) {
             $recordArray = $value;
         }
