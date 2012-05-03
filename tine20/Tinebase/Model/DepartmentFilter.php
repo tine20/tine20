@@ -39,7 +39,7 @@ class Tinebase_Model_DepartmentFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'                => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'                => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tinebase_Model_Department')),
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'       => array('filter' => 'Tinebase_Model_Filter_Text'),
     );

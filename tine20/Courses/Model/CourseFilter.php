@@ -37,7 +37,12 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
             'idProperty' => 'courses.id',
             'applicationName' => 'Courses',
         )),
-        'type'           => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_DepartmentFilter', 'controller' => 'Tinebase_Department')),
+        'type'           => array('filter' => 'Tinebase_Model_Filter_ForeignId',
+            'options' => array(
+                'filtergroup'       => 'Tinebase_Model_DepartmentFilter', 
+                'controller'        => 'Tinebase_Department', 
+            )
+        ),
         //'group_id'       => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_GroupFilter', 'controller' => 'Tinebase_Group')),
     );
 }
