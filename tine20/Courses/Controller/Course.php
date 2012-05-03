@@ -35,6 +35,20 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     protected $_modelName = 'Courses_Model_Course';
     
     /**
+    * the groups controller
+    *
+    * @var Admin_Controller_Group
+    */
+    protected $_groupController = NULL;
+    
+    /**
+    * the groups controller
+    *
+    * @var Admin_Controller_User
+    */
+    protected $_userController = NULL;
+    
+    /**
      * config of courses
      *
      * @var Zend_Config
@@ -61,10 +75,13 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Courses_Backend_Course();
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_config = Courses_Config::getInstance();
+        $this->_groupController = Admin_Controller_Group::getInstance();
+        $this->_userController = Admin_Controller_User::getInstance();
     }
     
     /**
@@ -91,14 +108,109 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     /****************************** overwritten functions ************************/    
     
     /**
-     * add one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
+     * save course with corresponding group
+     * 
+     * @param Courses_Model_Course $course
+     * @param Tinebase_Model_Group $group
+     * @return Courses_Model_Course
+     * 
+     * @todo this should be moved to normal create/update (inspection) functions
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function saveCourseAndGroup(Courses_Model_Course $course, Tinebase_Model_Group $group)
     {
-        $course = parent::create($_record);
+        $i18n = Tinebase_Translation::getTranslation('Courses');
+        $groupNamePrefix = $i18n->_('Course');
+        
+        $groupNamePrefix = is_array($groupNamePrefix) ? $groupNamePrefix[0] : $groupNamePrefix;
+        $group->name = $groupNamePrefix . '-' . $course->name;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Saving course ' . $course->name . ' with group ' . $group->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
+        
+        if (empty($group->id)) {
+            $savedGroup         = $this->_groupController->create($group);
+            $course->group_id   = $savedGroup->getId();
+            $savedRecord        = $this->create($course);
+        } else {
+            $savedRecord      = $this->update($course);
+            $currentMembers   = $this->_groupController->getGroupMembers($course->group_id);
+            $newCourseMembers = array_diff((array)$group->members, $currentMembers);
+            $this->addCourseMembers($course, $newCourseMembers);
+        
+            $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
+            // delete members which got removed from course
+            $this->_userController->delete($deletedAccounts);
+        }
+        
+        $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($course->group_id);
+        // add/remove members to/from internet/fileserver group
+        if (! empty($groupMembers)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($groupMembers) . ' group members');
+            $this->_manageAccessGroups($groupMembers, $savedRecord->internet);
+            // $this->_manageAccessGroups($group->members, $savedRecord->fileserver, 'fileserver');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No group members found.');
+        }
+        
+        return $savedRecord;
+    }
+    
+    /**
+    * add or remove members from internet/fileserver groups
+    *
+    * @param array $_members array of member ids
+    * @param boolean $_access yes/no
+    * @param string $_type
+    * 
+    * @todo should be moved to inspectAfter*
+    * @todo allow fileserver group management, too
+    */
+    protected function _manageAccessGroups(array $_members, $_access, $_type = 'internet')
+    {
+        $configField = $_type . '_group';
+        $secondConfigField = $configField;
+        if ($_access === 'FILTERED') {
+            $configField .= '_filtered';
+        } else {
+            $secondConfigField .= '_filtered';
+        }
+    
+        if (! isset($this->_config->{$configField})) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No config found for ' . $configField);
+            return;
+        }
+    
+        $groupId = $this->_config->{$configField};
+        $secondGroupId = ($_type === 'internet' && isset($this->_config->{$secondConfigField})) ? $this->_config->{$secondConfigField} : NULL;
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting $_type to $_access for " . print_r($_members, true));
+    
+        // add or remove members to or from internet/fileserver groups
+        foreach ($_members as $memberId) {
+            if ($_access === 'ON' || $_access === 'FILTERED') {
+                $this->_groupController->addGroupMember($groupId, $memberId);
+                if ($secondGroupId) {
+                    $this->_groupController->removeGroupMember($secondGroupId, $memberId);
+                }
+            } else if ($_access === 'OFF') {
+                $this->_groupController->removeGroupMember($groupId, $memberId);
+                if ($secondGroupId) {
+                    $this->_groupController->removeGroupMember($secondGroupId, $memberId);
+                }
+            }
+        }
+    }
+    
+    /**
+    * inspect creation of one record (after create)
+    *
+    * @param   Tinebase_Record_Interface $_createdRecord
+    * @param   Tinebase_Record_Interface $_record
+    * @return  void
+    */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $course = $_createdRecord;
         
         // add teacher account
         $i18n = Tinebase_Translation::getTranslation('Courses');
@@ -127,30 +239,28 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'logonScript' => $courseName . $this->_config->samba->logonscript_postfix_teacher,
                 'profilePath' => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $courseName . '\\' . $loginName
             ));
-            
+        
             $account->sambaSAM = $samUser;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created teacher account for course ' 
-            . $course->name . ': ' . print_r($account->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created teacher account for course '
+        . $course->name . ': ' . print_r($account->toArray(), true));
         
         #$event = new Courses_Event_BeforeAddTeacher($account, $course);
         #Tinebase_Event::fireEvent($event);
         
         $password = $this->_config->get('teacher_password', $account->accountLoginName);
-        $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
+            $account = $this->_userController->create($account, $password, $password);
         
         // add to teacher group if available
         if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
-            Admin_Controller_Group::getInstance()->addGroupMember($this->_config->teacher_group, $account->getId());
+            $this->_groupController->addGroupMember($this->_config->teacher_group, $account->getId());
         }
         
         // add to students group if available
         if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-            Admin_Controller_Group::getInstance()->addGroupMember($this->_config->students_group, $account->getId());
+            $this->_groupController->addGroupMember($this->_config->students_group, $account->getId());
         }
-        
-        return $course;
     }
     
     /**
@@ -166,21 +276,18 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     {
         $courses = $this->getMultiple($_ids);
         
-        $groupController = Admin_Controller_Group::getInstance();
-        $userController = Admin_Controller_User::getInstance();
-        
         $groupsToDelete = array();
         $usersToDelete = array();
         
         foreach ($courses as $course) {
             $groupsToDelete[] = $course->group_id;
-            $usersToDelete = array_merge($usersToDelete, $groupController->getGroupMembers($course->group_id));
+            $usersToDelete = array_merge($usersToDelete, $this->_groupController->getGroupMembers($course->group_id));
         }
         
         Courses_Controller::getInstance()->suspendEvents();
         
-        $userController->delete(array_unique($usersToDelete));
-        $groupController->delete(array_unique($groupsToDelete));
+        $this->_userController->delete(array_unique($usersToDelete));
+        $this->_groupController->delete(array_unique($groupsToDelete));
         
         Courses_Controller::getInstance()->resumeEvents();
         
@@ -204,6 +311,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         foreach ($_members as $userId) {
+            $userId = (is_array($userId)) ? $userId['id'] : $userId;
             $user = $tinebaseUser->getFullUserById($userId);
             
             $tinebaseGroup->removeGroupMember($user->accountPrimaryGroup, $user);
@@ -229,7 +337,5 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 $tinebaseGroup->addGroupMember($this->_config->students_group, $user);
             }
         }
-            
-        
     }
 }

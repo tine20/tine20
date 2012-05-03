@@ -58,6 +58,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_json = new Courses_Frontend_Json();
         
         // create department
@@ -74,17 +76,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (! empty($this->_coursesToDelete)) {
-            $this->_json->deleteCourses($this->_coursesToDelete);
-        }
-        
-        // delete department
-         Tinebase_Department::getInstance()->delete($this->_department);
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
      * try to add a Course
-     *
      */
     public function testAddCourse()
     {
@@ -108,7 +104,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get a Course
-     *
      */
     public function testGetCourse()
     {
@@ -126,7 +121,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to update a Course
-     *
      */
     public function testUpdateCourse()
     {
@@ -151,7 +145,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get a Course
-     *
      */
     public function testSearchCourses()
     {
@@ -214,6 +207,49 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', NULL, TRUE);
         $this->assertEquals(5, count($result['members']));
+    }
+    
+    /**
+     * test internet access on/off/filtered
+     * 
+     * @todo remove some code duplication
+     */
+    public function testInternetAccess()
+    {
+        $internetGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'internetOn'
+        )));
+        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_ON, $internetGroup->getId());
+        $internetFilteredGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'internetFiltered'
+        )));
+        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, $internetFilteredGroup->getId());
+        
+        // create new course with internet access
+        $course = $this->_getCourseData();
+        $course['internet'] = 'ON';
+        $courseData = $this->_json->saveCourse($course);
+        $userId = $courseData['members'][0]['id'];
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
+        $this->assertTrue(in_array($internetGroup->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
+        sleep(1); // modlog issue
+        
+        // filtered internet access
+        $courseData['internet'] = 'FILTERED';
+        $courseData['type'] = $courseData['type']['value'];
+        $courseData = $this->_json->saveCourse($courseData);
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
+        $this->assertTrue(in_array($internetFilteredGroup->getId(), $groupMemberships), 'not member of the filtered internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertFalse(in_array($internetGroup->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
+        sleep(1); // modlog issue
+        
+        // remove internet access
+        $courseData['internet'] = 'OFF';
+        $courseData['type'] = $courseData['type']['value'];
+        $courseData = $this->_json->saveCourse($courseData);
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
+        $this->assertFalse(in_array($internetGroup->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertFalse(in_array($internetFilteredGroup->getId(), $groupMemberships), 'member of the filtered internet group ' . print_r($groupMemberships, TRUE));
     }
     
     /************ protected helper funcs *************/

@@ -359,6 +359,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
+     * alias for addGroup
+     * 
+     * @param Tinebase_Model_Group $group
+     * @return Tinebase_Model_Group
+     */
+    public function create(Tinebase_Model_Group $group)
+    {
+        return $this->addGroup($group);
+    }
+    
+    /**
      * create a new group in sql backend
      *
      * @param   Tinebase_Model_Group  $_group
@@ -398,7 +409,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
-     * create a new group
+     * update a group
      *
      * @param  Tinebase_Model_Group  $_group
      * 
