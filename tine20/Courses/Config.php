@@ -25,6 +25,20 @@ class Courses_Config extends Tinebase_Config_Abstract
     const INTERNET_ACCESS = 'internetAccess';
     
     /**
+    * internet access group id
+    *
+    * @var string
+    */
+    const INTERNET_ACCESS_GROUP_ON = 'internet_group';
+    
+    /**
+    * internet access filtered group id
+    *
+    * @var string
+    */
+    const INTERNET_ACCESS_GROUP_FILTERED = 'internet_group_filtered';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -36,6 +50,22 @@ class Courses_Config extends Tinebase_Config_Abstract
             'description'           => 'Internet access options.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tinebase_Config_KeyFieldRecord'),
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::INTERNET_ACCESS_GROUP_ON => array(
+        //_('Internet Access Group (ON)')
+            'label'                 => 'Internet Access Group (ON)',
+        //_('Internet Access Group (ON)')
+            'description'           => 'Internet Access Group (ON)',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::INTERNET_ACCESS_GROUP_FILTERED => array(
+        //_('Internet Access Group (FILTERED)')
+            'label'                 => 'Internet Access Group (FILTERED)',
+        //_('Internet Access Group (FILTERED)')
+            'description'           => 'Internet Access Group (FILTERED)',
+            'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
         ),
     );
