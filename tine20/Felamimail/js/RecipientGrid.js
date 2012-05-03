@@ -103,7 +103,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     enableDrop: true,
     ddGroup: 'recipientDDGroup',
-
+    
     /**
      * @private
      */
@@ -122,7 +122,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             
         this.on('beforeedit', this.onBeforeEdit, this);
         this.on('afteredit', this.onAfterEdit, this);
-        this.on('validateedit', this.onValidateEdit, this);
     },
     
     /**
@@ -352,6 +351,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     afterRender: function() {
         Tine.Felamimail.RecipientGrid.superclass.afterRender.call(this);
         
+        // kill x-scrollers
+        this.el.child('div[class=x-grid3-scroller]').setStyle('overflow-x', 'hidden');
+        
         if (this.autoStartEditing && this.store.getCount() == 1) {
             this.startEditing.defer(200, this, [0, 1]);
         }
@@ -495,6 +497,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onAfterEdit: function(o) {
         if (o.field == 'address') {
+            Ext.fly(this.getView().getCell(o.row, o.column)).removeClass('x-grid3-td-address-editing');
             if (o.value != '' && (o.originalValue == '' || this.store.findExact('address', '') === -1)) {
                 // use selected type to create new row with empty address and start editing
                 this.addRowAndDoLayout(o.record);
@@ -526,18 +529,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} o
      */
     onBeforeEdit: function(o) {
+        this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
         Ext.fly(this.getView().getCell(o.row, o.column)).addClass('x-grid3-td-address-editing');
     },
     
-    /**
-     * on validate edit
-     * 
-     * @param {} o
-     */
-    onValidateEdit: function(o) {
-        Ext.fly(this.getView().getCell(o.row, o.column)).removeClass('x-grid3-td-address-editing');
-    },
-     
+    
     /**
      * add recipients to grid store
      * 
