@@ -37,6 +37,6 @@ class Syncroton_Wbxml_DecoderTests extends PHPUnit_Framework_TestCase
         $decoder = new Syncroton_Wbxml_Decoder(fopen(__DIR__ . '/files/simple.wbxml', 'r+'));
         $requestBody = $decoder->decode();
         
-        $this->assertInstanceOf('DomDocument', $requestBody);
+        $this->assertTrue($requestBody instanceof DomDocument);
     }
 }
