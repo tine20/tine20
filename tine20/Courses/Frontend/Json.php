@@ -375,6 +375,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string  $type
      * @param  boolean $access
      * @return array
+     * 
+     * @todo move this to controller
+     * @deprecated this is now done by changing the fields in the edit dialog
      */
     public function updateAccess($ids, $type, $access)
     {

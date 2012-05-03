@@ -18,10 +18,26 @@
 class Courses_Config extends Tinebase_Config_Abstract
 {
     /**
+    * fields for internet access
+    *
+    * @var string
+    */
+    const INTERNET_ACCESS = 'internetAccess';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::INTERNET_ACCESS => array(
+        //_('Internet Access')
+            'label'                 => 'Internet Access',
+        //_('Internet access options.')
+            'description'           => 'Internet access options.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Tinebase_Config_KeyFieldRecord'),
+            'clientRegistryInclude' => TRUE,
+        ),
     );
     
     /**
