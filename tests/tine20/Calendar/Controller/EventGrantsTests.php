@@ -314,6 +314,45 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
     }
     
+    /**
+     * jmcblack organises with rwright
+     *  => testuser shuld see freebusy of rwright
+     *  
+     *  @see #6388: freebusy info missing if user has only access to display calendar
+     */
+    public function testFreeBusyViaAttendee()
+    {
+        // whipe grants from jmcblack
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jmcblack'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['jmcblack']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ))), TRUE);
+        
+        $persistentEvent = $this->_createEventInPersonasCalendar('jmcblack', 'jmcblack', 'rwright');
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('condition' => 'OR', 'filters' => array(
+                array('condition' => 'AND', 'filters' =>
+                    array(
+                        array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId()),
+                        array('field' => 'attender', 'operator' => 'in', 'value' => array(array(
+                            'user_type' => 'user',
+                            'user_id'   => $this->_personas['rwright']->contact_id,
+                        ))),
+                    )
+                )
+            ))
+        )), NULL, FALSE, FALSE);
+        
+        $this->assertEquals(1, count($events), 'failed to search fb event');
+    }
 //    /**
 //     * search for an attender we have no cal grants for
 //     * 

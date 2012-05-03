@@ -761,7 +761,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 
                 if ($filter) {
                     if ($_getAll) {
-                        $filter = array_merge($result, $filter);
+                        $result = array_merge($result, $filter);
                     } else {
                         return $filter;
                     }

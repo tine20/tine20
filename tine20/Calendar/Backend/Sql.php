@@ -200,21 +200,25 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $_pagination->appendPaginationSql($select);
         
         // append grants filters : only take limited set of attendee into account for grants computation
-        $attenderFilter = $_filter->getFilter('attender');
+        $attenderFilter = $_filter->getFilter('attender', TRUE, TRUE);
         if (! $attenderFilter) {
             // if a container filter is set, take owners of personal containers (solve secretary scenario)
-            $containerFilter = $_filter->getFilter('container_id');
-            if ($containerFilter && $containerFilter instanceof Calendar_Model_CalendarFilter) {
-                $attenderFilter = $containerFilter->getRelatedAttendeeFilter();
+            $containerFilters = $_filter->getFilter('container_id', TRUE, TRUE);
+            if ($containerFilters) {
+                foreach ($containerFilters as $containerFilter) {
+                     if ($containerFilter instanceof Calendar_Model_CalendarFilter) {
+                         $attenderFilter[] = $containerFilter->getRelatedAttendeeFilter();
+                     }
+                }
             } else {
-                $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'equals', array(
+                $attenderFilter = array(new Calendar_Model_AttenderFilter('attender', 'equals', array(
                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                    'user_id'   =>  Tinebase_Core::getUser()->contact_id
-                ));
+                )));
             }
             
         }
-        $this->_appendEffectiveGrantCalculationSql($select, $attenderFilter);
+        $this->_appendEffectiveGrantCalculationSql($select, is_array($attenderFilter) ? $attenderFilter[0] : $attenderFilter);
         if ($grantsFilter) {
             $grantsFilter->appendFilterSql($select, $this);
         }
@@ -328,7 +332,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      *
      * @param Zend_Db_Select $_select
      */
-    protected function _appendEffectiveGrantCalculationSql($_select, $_attenderFilter = NULL)
+    protected function _appendEffectiveGrantCalculationSql($_select, $_attendeeFilters = NULL)
     {
         // groupmemberships of current user, needed to compute phys and inherited grants
         $_select->joinLeft(
@@ -340,9 +344,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // NOTE: 2010-04 the behaviour changed. Now, only the attendee the client filters for are 
         //       taken into account for grants calculation 
         $attendeeWhere = FALSE;
-        if ($_attenderFilter instanceof Calendar_Model_AttenderFilter) {
+        if (is_array($_attendeeFilters) && !empty($_attendeeFilters)) {
             $attendeeSelect = $this->_db->select();
-            $_attenderFilter->appendFilterSql($attendeeSelect, $this);
+            foreach ((array) $_attendeeFilters as $attendeeFilter) {
+                if ($attendeeFilter instanceof Calendar_Model_AttenderFilter) {
+                    $attendeeFilter->appendFilterSql($attendeeSelect, $this);
+                }
+            }
+            
             $whereArray = $attendeeSelect->getPart(Zend_Db_Select::SQL_WHERE);
             if (! empty($whereArray)) {
                 $attendeeWhere = ' AND ' . array_value(0, $whereArray);
