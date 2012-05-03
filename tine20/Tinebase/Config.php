@@ -414,15 +414,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 foreach( (array) $properties as $name => $definition) {
                     if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
                         // might not be too bad as we have a cache
-                        $clientProperties[$application->name][$name] = new Tinebase_Config_Struct(array(
+                        $configRegistryItem = new Tinebase_Config_Struct(array(
                             'value'         => $config->{$name},
                             // add definition here till we have a better palce
                             'definition'    => new Tinebase_Config_Struct($definition),
                         ));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                            . ' ' . print_r($configRegistryItem->toArray(), TRUE));
+                        $clientProperties[$application->name][$name] = $configRegistryItem;
                     }
                 }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Got ' . count($clientProperties[$application->name]) . ' config items for ' . $application->name . '.');
             } else {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $application->name . ' has no config.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Application ' . $application->name . ' has no config.');
             }
         }
         
