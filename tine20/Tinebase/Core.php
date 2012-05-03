@@ -42,6 +42,12 @@ class Tinebase_Core
      * constant for logger registry index
      */
     const LOGGER = 'logger';
+    
+    /**
+     * constant for loglevel registry index
+     *
+     */
+    const LOGLEVEL = 'loglevel';
 
     /**
      * constant for cache registry index
@@ -332,15 +338,8 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
-        Tinebase_Core::setupConfig();
-        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
-        
-        Tinebase_Core::setupLogger();
-        
-        // Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX" 
-        Tinebase_Core::setupDatabaseConnection();
         
         Tinebase_Core::setupTempDir();
         
@@ -357,8 +356,6 @@ class Tinebase_Core
         // @todo add fallback locale to config file
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
-        
-//        Tinebase_Core::setupMailer();
         
         Tinebase_Core::setupUserCredentialCache();
         
@@ -1128,6 +1125,9 @@ class Tinebase_Core
      */
     public static function getConfig()
     {
+        if (! self::get(self::CONFIG)) {
+            self::setupConfig();
+        }
         return self::get(self::CONFIG);
     }
 
@@ -1138,9 +1138,15 @@ class Tinebase_Core
      */
     public static function getLogLevel()
     {
-        $config = self::getConfig();
+        if (! self::get(self::LOGLEVEL)) {
+            $config = self::getConfig();
         
-        return isset($config->logger) && $config->logger->priority ? (int)$config->logger->priority : Zend_Log::EMERG;
+            $logLevel = isset($config->logger) && $config->logger->priority ? (int)$config->logger->priority : Zend_Log::EMERG;
+            
+            self::set(self::LOGLEVEL, $logLevel);
+        }
+        
+        return self::get(self::LOGLEVEL);
     }
     
     /**
@@ -1161,6 +1167,10 @@ class Tinebase_Core
      */
     public static function getLogger()
     {
+        if (! self::get(self::LOGGER) instanceof Zend_Log) {
+            Tinebase_Core::setupLogger();
+        }
+        
         return self::get(self::LOGGER);
     }
 
@@ -1246,6 +1256,10 @@ class Tinebase_Core
      */
     public static function getDb()
     {
+        if (! self::get(self::DB) instanceof Zend_Db_Adapter_Abstract) {
+            Tinebase_Core::setupDatabaseConnection();
+        }
+        
         return self::get(self::DB);
     }
 
