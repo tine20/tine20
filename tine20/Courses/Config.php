@@ -39,6 +39,20 @@ class Courses_Config extends Tinebase_Config_Abstract
     const INTERNET_ACCESS_GROUP_FILTERED = 'internet_group_filtered';
     
     /**
+    * students group id
+    *
+    * @var string
+    */
+    const STUDENTS_GROUP = 'students_group';
+    
+    /**
+    * students import definition
+    *
+    * @var string
+    */
+    const STUDENTS_IMPORT_DEFINITION = 'students_import_definition';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -65,6 +79,22 @@ class Courses_Config extends Tinebase_Config_Abstract
             'label'                 => 'Internet Access Group (FILTERED)',
         //_('Internet Access Group (FILTERED)')
             'description'           => 'Internet Access Group (FILTERED)',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::STUDENTS_GROUP => array(
+        //_('Students Group')
+            'label'                 => 'Students Group',
+        //_('Students Group')
+            'description'           => 'Students Group',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::STUDENTS_IMPORT_DEFINITION => array(
+        //_('Students Import Definition')
+            'label'                 => 'Students Import Definition',
+        //_('Students Import Definition')
+            'description'           => 'Students Import Definition',
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
         ),

@@ -26,13 +26,6 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
 
     /**
-     * config of courses
-     *
-     * @var Zend_Config
-     */
-    protected $_config = NULL;
-    
-    /**
      * the constructor
      *
      */
@@ -40,20 +33,6 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_applicationName = 'Courses';
         $this->_controller = Courses_Controller_Course::getInstance();
-        
-        $this->setConfig();
-    }
-    
-    /**
-     * set config / only needed for tests atm
-     * 
-     * @param array $_config
-     * 
-     * @todo remove Zend_Config here and do the config replacement in the test!
-     */
-    public function setConfig($_config = array())
-    {
-        $this->_config = (! empty($_config)) ? new Zend_Config($_config) : Courses_Config::getInstance();
     }
     
     /************************************** protected helper functions **********************/
@@ -238,46 +217,34 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
-        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+        $this->_controller->importMembers($tempFileId, $groupId, $courseId);
         
-        $course = $this->_controller->get($courseId);
-        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
-        
-        // get definition and start import with admin user import csv plugin
-        $definitionName = $this->_config->get('import_definition', 'admin_user_import_csv');
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using import definition: ' . $definitionName);
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
-        $importer = Admin_Import_Csv::createFromDefinition($definition, array(
-            //'accountLoginNamePrefix'    => $course->name . '-',
-            'group_id'                      => $groupId,
-            'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
-            'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
-            'password'                      => strtolower($course->name),
-            'course'                        => $course,
-            'samba'                         => (isset($this->_config->samba)) ? array(
-                'homePath'      => $this->_config->samba->basehomepath,
-                'homeDrive'     => $this->_config->samba->homedrive,
-                'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
-                'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
-                'pwdCanChange'  => new Tinebase_DateTime('@1'),
-                'pwdMustChange' => new Tinebase_DateTime('@1')
-            ) : array(),
-        ));
-        $importer->importFile($tempFile->path);
-        
-        // return members to update members grid and add to student group
-        $members = $this->_getCourseMembers($groupId);
-        
-        // add to student group if available
-        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-            $groupController = Admin_Controller_Group::getInstance();
-            foreach ($members as $member) {
-                $groupController->addGroupMember($this->_config->students_group, $member['id']);
-            }
-        }
-        
+        // return members to update members grid
         return array(
-            'results'   => $members,
+            'results'   => $this->_getCourseMembers($groupId),
+            'status'    => 'success'
+        );
+    }
+    
+    /**
+     * add new member to course
+     * 
+     * @param array $userData
+     * @param array $courseData
+     * @return array
+     */
+    public function addNewMember($userData, $courseData)
+    {
+        $course = new Courses_Model_Course(array(), TRUE);
+        $course->setFromJsonInUsersTimezone($courseData);
+        
+        $user = new Tinebase_Model_FullUser($userData, TRUE);
+        
+        $this->_controller->createNewMember($course, $user);
+
+        // return members to update members grid
+        return array(
+            'results'   => $this->_getCourseMembers($course->group_id),
             'status'    => 'success'
         );
     }
