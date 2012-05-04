@@ -58,6 +58,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "AddToRecordPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },

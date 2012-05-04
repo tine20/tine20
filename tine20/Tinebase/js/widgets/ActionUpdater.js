@@ -153,7 +153,7 @@
                 var hasRight = true;
                 if(Ext.isArray(records)) {
                     Ext.each(records, function(record) {
-                        if(record.get('container_id')) {
+                        if(record.get('container_id') && record.get('container_id').account_grants) {
                             hasRight = (hasRight && (record.get('container_id').account_grants[action.initialConfig.requiredMultipleGrant]));
                         } else {
                             return false;
@@ -213,7 +213,7 @@
                 records[i].get(this.grantsProperty) : records[i].data;
             
             for (var grant in grants) {
-                if (grants.hasOwnProperty(grant)) {
+                if (grants.hasOwnProperty(grant) && recordGrants && recordGrants.hasOwnProperty(grant)) {
                     grants[grant] = grants[grant] & recordGrants[grant];
                 }
             }

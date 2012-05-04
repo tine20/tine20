@@ -106,10 +106,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     disableOnEditMultiple: null,
     
+    /**
+     * selected records for multiple edit
+     * @type {String} (json-encoded Array)
+     */
     selectedRecords: null,
-    selectionFilter: null,
-        
     
+    /**
+     * selection filter for multiple edit
+     * @type {String} (json-encoded Array)
+     */
+    selectionFilter: null,
+    /**
+     * records to add when called from another app
+     * @type String (json-encoded Array)
+     */
+    addRelations: null,
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -181,8 +193,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug('initComponent: modelName: ', this.modelName);
         Tine.log.debug('initComponent: app: ', this.app);
         
-        this.selectedRecords = Ext.decode(this.selectedRecords);
-        this.selectionFilter = Ext.decode(this.selectionFilter);
+        this.addRelations = this.addRelations ? Ext.decode(this.addRelations) : null;
+        this.selectedRecords = this.selectedRecords ? Ext.decode(this.selectedRecords) : null;
+        this.selectionFilter = this.selectionFilter ? Ext.decode(this.selectionFilter) : null;
         
         // init some translations
         if (this.app.i18n && this.recordClass !== null) {
@@ -379,6 +392,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             return;
         }
         
+        if(this.addRelations) {
+            this.addRelationsOnLoad();
+        }
+        
         Tine.log.debug('loading of the following record completed:');
         Tine.log.debug(this.record);
         
@@ -396,7 +413,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.fireEvent('load', this) !== false) {
             this.getForm().loadRecord(this.record);
             this.getForm().clearInvalid();
-            this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            if(Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
+                this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            }
             
             this.loadMask.hide();
         }
@@ -410,6 +429,25 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // merge changes from form into record
         form.updateRecord(this.record);
+    },
+    
+    /**
+     * called from onRecordLoad to add new records
+     */
+    addRelationsOnLoad: function() {
+        Ext.each(this.addRelations, function(relation) {
+            var add = true;
+            Ext.each(this.record.get('relations'), function(existingRelation){
+                if((relation.related_record.id == existingRelation.related_record.id) && 
+                   (relation.related_model == existingRelation.related_model)) {
+                    add = false;
+                    return false;
+                }
+            });
+            if(add) {
+                this.record.data.relations.push(relation);
+            }
+        }, this);
     },
     
     /**
