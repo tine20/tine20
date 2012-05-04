@@ -116,12 +116,14 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             $server->setAutoHandleExceptions(false);
             //$server->setUseNamedParams(true);
                     
-            foreach ($classes as $class => $namespace) {
-                try {
-                    $server->setClass($class, $namespace);
-                } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e);
+            if (is_array($classes)) {
+                foreach ($classes as $class => $namespace) {
+                    try {
+                        $server->setClass($class, $namespace);
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e);
+                    }
                 }
             }
         
