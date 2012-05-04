@@ -98,8 +98,8 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     {
         parent::setFromArray($_data);
         
-        // sanitize members
-        if (isset($this->members) && is_array($this->members)) {
+        // sanitize members (could be an array of user arrays -> expecting to contain only ids)
+        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && is_array($this->members[0])) {
             $memberIds = array();
             foreach ($this->members as $member) {
                 $memberIds[] = $member['id'];
