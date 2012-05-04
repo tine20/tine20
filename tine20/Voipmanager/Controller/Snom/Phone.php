@@ -5,8 +5,8 @@
  * @package     Voipmanager
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -98,6 +98,8 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * @param Voipmanager_Model_Snom_Phone $_phone
      * @return  Voipmanager_Model_Snom_Phone
      * @throws Voipmanager_Exception_Validation
+     * 
+     * @todo do not overwrite create() -> use inspectBefore/After functions
      */
     public function create(Tinebase_Record_Interface $_phone)
     {
@@ -117,33 +119,42 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $_phone->http_client_pass = Tinebase_Record_Abstract::generateUID(20);
         $_phone->http_client_info_sent = 0;
         
-        $phone = $this->_backend->create($_phone);
-        
-        // force the right phone_id
-        $_phoneSettings = $_phone->settings;
-        $_phoneSettings->setId($phone->getId());
-        
-        // set all settings which are equal to the default settings to NULL
-        $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
-        $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
-        
-        foreach($_phoneSettings AS $key => $value) {
-            if($key == 'phone_id') {
-                continue;
+        try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+            $phone = $this->_backend->create($_phone);
+            
+            // force the right phone_id
+            $_phoneSettings = $_phone->settings;
+            $_phoneSettings->setId($phone->getId());
+            
+            // set all settings which are equal to the default settings to NULL
+            $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
+            $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
+            
+            foreach($_phoneSettings AS $key => $value) {
+                if($key == 'phone_id') {
+                    continue;
+                }
+                if($_phoneSettings->$key == $settingDefaults->$key) {
+                    $_phoneSettings->$key = NULL;
+                }
             }
-            if($_phoneSettings->$key == $settingDefaults->$key) {
-                $_phoneSettings->$key = NULL;
-            }    
+            
+            $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
+            
+            $this->_createLines($phone, $_phone->lines);
+          
+            // save phone rights
+            if (isset($phone->rights)) {
+                $this->_backend->setPhoneRights($phone);
+            }
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            $this->_handleRecordCreateOrUpdateException($e);
         }
-        
-        $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
-        
-        $this->_createLines($phone, $_phone->lines);
-      
-        // save phone rights
-        if (isset($phone->rights)) {
-            $this->_backend->setPhoneRights($phone);
-        }        
         
         return $this->get($phone->getId());
     }
@@ -165,11 +176,11 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * @param Voipmanager_Model_Snom_PhoneSettings|optional $_phoneSettings
      * @return Voipmanager_Model_Snom_Phone
      * @throws Voipmanager_Exception_Validation
+     * 
+     * @todo do not overwrite update() -> use inspectBefore/After functions
      */
     public function update(Tinebase_Record_Interface $_phone)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phone->toArray(), true));
-        
         // check first if mac address is already used
         if ($_phone->has('macaddress')) {
             try {
@@ -182,47 +193,53 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             }
         }
         
-        $phone = $this->_backend->update($_phone);
+        try {
+            $db = $this->_backend->getAdapter();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            
+            $phone = $this->_backend->update($_phone);
+            $_phoneSettings = $_phone->settings;
+            
+            if ($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
+                // force the right phone_id
+                $_phoneSettings->setId($phone->getId());
         
-        $_phoneSettings = $_phone->settings;
+                // set all settings which are equal to the default settings to NULL
+                $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
+                $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
         
-        if ($_phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
-        
-            // force the right phone_id
-            $_phoneSettings->setId($phone->getId());
-    
-            // set all settings which are equal to the default settings to NULL
-            $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
-            $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
-    
-            foreach ($_phoneSettings->toArray() as $key => $value) {
-                if ($key == 'phone_id') {
-                    continue;
+                foreach ($_phoneSettings->toArray() as $key => $value) {
+                    if ($key == 'phone_id') {
+                        continue;
+                    }
+                    if ($settingDefaults->$key == $value) {
+                        $_phoneSettings->$key = NULL;
+                    }
                 }
-                if($settingDefaults->$key == $value) {
-                    $_phoneSettings->$key = NULL;
-                }    
+                
+                if (Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
+                    $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
+                } else {
+                    $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
+                }
             }
             
-            if (Voipmanager_Controller_Snom_PhoneSettings::getInstance()->get($phone->getId())) {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_phoneSettings->toArray(), true));
-                $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->update($_phoneSettings);
-            } else {
-                $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
+            Voipmanager_Controller_Snom_Line::getInstance()->deletePhoneLines($phone->getId());
+            $this->_createLines($phone, $_phone->lines);
+            
+            // save phone rights
+            if (isset($_phone->rights)) {
+                $this->_backend->setPhoneRights($_phone);
             }
-        
-        }
-        
-        Voipmanager_Controller_Snom_Line::getInstance()->deletePhoneLines($phone->getId());
-        $this->_createLines($phone, $_phone->lines);
-        
-        // save phone rights
-        if (isset($_phone->rights)) {
-            $this->_backend->setPhoneRights($_phone);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            $this->_handleRecordCreateOrUpdateException($e);
         }
         
         return $this->get($phone->getId());
-    }    
+    }
     
     /**
      * send http client info to a set of phones.
