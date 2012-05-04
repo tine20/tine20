@@ -306,7 +306,12 @@ abstract class Tinebase_Config_Abstract
         
         if ($config) {
             $config->value = $_config->value;
-            $result = $this->_getBackend()->update($config);
+            try {
+                $result = $this->_getBackend()->update($config);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // config might be deleted but cache has not been cleaned
+                $result = $this->_getBackend()->create($_config);
+            }
         } else {
             $result = $this->_getBackend()->create($_config);
         }
