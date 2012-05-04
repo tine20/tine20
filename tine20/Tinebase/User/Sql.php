@@ -644,9 +644,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
-        if(!$_user->isValid()) {
-            throw(new Exception('invalid user object'));
-        }
+        $_user->isValid(TRUE);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         

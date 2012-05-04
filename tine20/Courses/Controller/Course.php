@@ -295,10 +295,12 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * add exitings accounts to course
+     * add existings accounts to course
      * 
      * @param  string  $_courseId
      * @param  array   $_members
+     * 
+     * @todo use $user->applyOptionsAndGeneratePassword($this->_getNewUserConfig($course));
      */
     public function addCourseMembers($_courseId, array $_members = array())
     {
@@ -330,12 +332,106 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
             
             $tinebaseUser->updateUser($user);
-            
             $tinebaseGroup->addGroupMember($user->accountPrimaryGroup, $user);
+            $this->_addToStudentGroup(array($user->getId()));
+        }
+    }
+    
+    /**
+     * add user ids to student group (if configured)
+     * 
+     * @param array $userIds
+     */
+    protected function _addToStudentGroup($userIds)
+    {
+        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
             
-            if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-                $tinebaseGroup->addGroupMember($this->_config->students_group, $user);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Adding ' . print_r($userIds, TRUE) . ' to students group (id ' . $this->_config->students_group . ')');
+            
+            foreach ($userIds as $id) {
+                $this->_groupController->addGroupMember($this->_config->students_group, $id);
             }
         }
+    }
+    
+    /**
+    * import course members
+    *
+    * @param string $tempFileId
+    * @param string $groupId
+    * @param string $courseName
+    * @return array
+    */
+    public function importMembers($tempFileId, $groupId, $courseId)
+    {
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+    
+        // get definition and start import with admin user import csv plugin
+        $definitionName = $this->_config->get(Courses_Config::STUDENTS_IMPORT_DEFINITION, 'admin_user_import_csv');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using import definition: ' . $definitionName);
+        
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
+        
+        $course = $this->get($courseId);
+        $importer = Admin_Import_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
+        $result = $importer->importFile($tempFile->path);
+        
+        // @todo is this needed here?
+        $this->_addToStudentGroup($this->_groupController->getGroupMembers($course->group_id));
+        
+        return $result;
+    }
+    
+    /**
+     * returns config for new users
+     * 
+     * @param Courses_Model_Course $course
+     * @return array
+     */
+    protected function _getNewUserConfig(Courses_Model_Course $course)
+    {
+        $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
+        
+        return array(
+            //'accountLoginNamePrefix'    => $course->name . '-',
+            'group_id'                      => $course->group_id,
+            'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
+            'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
+            'password'                      => strtolower($course->name),
+            'course'                        => $course,
+            'samba'                         => (isset($this->_config->samba)) ? array(
+                'homePath'      => $this->_config->samba->basehomepath,
+                'homeDrive'     => $this->_config->samba->homedrive,
+                'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
+                'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
+                'pwdCanChange'  => new Tinebase_DateTime('@1'),
+                'pwdMustChange' => new Tinebase_DateTime('@1')
+            ) : array(),
+        );
+    }
+    
+    /**
+     * add new member to course
+     * 
+     * @param Courses_Model_Course $course
+     * @param Tinebase_Model_FullUser $user
+     * @return Tinebase_Model_FullUser
+     */
+    public function createNewMember(Courses_Model_Course $course, Tinebase_Model_FullUser $user)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Creating new member for ' . $course->name);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($course->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($user->toArray(), TRUE));
+        
+        $password = $user->applyOptionsAndGeneratePassword($this->_getNewUserConfig($course));
+        $newMember = $this->_userController->create($user, $password, $password);
+        
+        return $newMember;
     }
 }

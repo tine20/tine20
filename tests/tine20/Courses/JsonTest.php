@@ -25,11 +25,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     protected $_json = array();
     
     /**
-     * courses to delete in tearDown
+     * config groups
      * 
      * @var array
      */
-    protected $_coursesToDelete = array();
+    protected $_configGroups = array();
     
     /**
      * test department
@@ -62,10 +62,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_json = new Courses_Frontend_Json();
         
-        // create department
         $this->_department = Tinebase_Department::getInstance()->create(new Tinebase_Model_Department(array(
             'name'  => Tinebase_Record_Abstract::generateUID()
         )));
+        
+        foreach (array(Courses_Config::INTERNET_ACCESS_GROUP_ON, Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, Courses_Config::STUDENTS_GROUP) as $configgroup) {
+            $this->_configGroups[$configgroup] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+                'name'   => $configgroup
+            )));
+            Courses_Config::getInstance()->set($configgroup, $this->_configGroups[$configgroup]->getId());
+        }
     }
 
     /**
@@ -206,7 +212,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportMembersIntoCourse3()
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', NULL, TRUE);
-        $this->assertEquals(5, count($result['members']));
+        $this->assertEquals(5, count($result['members']), 'import failed');
+        $this->assertEquals(5, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
     }
     
     /**
@@ -216,22 +223,13 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testInternetAccess()
     {
-        $internetGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'internetOn'
-        )));
-        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_ON, $internetGroup->getId());
-        $internetFilteredGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'internetFiltered'
-        )));
-        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, $internetFilteredGroup->getId());
-        
         // create new course with internet access
         $course = $this->_getCourseData();
         $course['internet'] = 'ON';
         $courseData = $this->_json->saveCourse($course);
         $userId = $courseData['members'][0]['id'];
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
-        $this->assertTrue(in_array($internetGroup->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
         sleep(1); // modlog issue
         
         // filtered internet access
@@ -239,8 +237,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData['type'] = $courseData['type']['value'];
         $courseData = $this->_json->saveCourse($courseData);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
-        $this->assertTrue(in_array($internetFilteredGroup->getId(), $groupMemberships), 'not member of the filtered internet group ' . print_r($groupMemberships, TRUE));
-        $this->assertFalse(in_array($internetGroup->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_FILTERED]->getId(), $groupMemberships), 'not member of the filtered internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertFalse(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
         sleep(1); // modlog issue
         
         // remove internet access
@@ -248,8 +246,25 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $courseData['type'] = $courseData['type']['value'];
         $courseData = $this->_json->saveCourse($courseData);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
-        $this->assertFalse(in_array($internetGroup->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
-        $this->assertFalse(in_array($internetFilteredGroup->getId(), $groupMemberships), 'member of the filtered internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertFalse(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
+        $this->assertFalse(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_FILTERED]->getId(), $groupMemberships), 'member of the filtered internet group ' . print_r($groupMemberships, TRUE));
+    }
+    
+    /**
+     * testAddNewMember
+     */
+    public function testAddNewMember()
+    {
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $courseData['type'] = $courseData['type']['value'];
+        
+        $result = $this->_json->addNewMember(array(
+            'accountFirstName' => 'jams',
+            'accountLastName'  => 'hot',
+        ), $courseData);
+        
+        $this->assertEquals(2, count($result['results']));
     }
     
     /************ protected helper funcs *************/
@@ -318,7 +333,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         if ($_useJsonImportFn) {
             $tempFileBackend = new Tinebase_TempFile();
             $tempFile = $tempFileBackend->createTempFile($_filename);
-            $this->_json->setConfig(array('import_definition' => 'course_user_import_csv'));
+            Courses_Config::getInstance()->set(Courses_Config::STUDENTS_IMPORT_DEFINITION, 'course_user_import_csv');
             $result = $this->_json->importMembers($tempFile->getId(), $courseData['group_id'], $courseData['id']);
             
             $this->assertGreaterThan(0, $result['results']);
