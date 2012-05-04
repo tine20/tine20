@@ -21,6 +21,13 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_applicationName = 'Courses';
     
     /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'Courses_Model_CourseFilter';
+    
+    /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'Courses_Model_Course';
@@ -43,6 +50,7 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
                 'controller'        => 'Tinebase_Department', 
             )
         ),
+        'internet'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'group_id'       => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_GroupFilter', 'controller' => 'Tinebase_Group')),
     );
 }

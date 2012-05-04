@@ -31,34 +31,12 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Courses.coursesBackend;
         
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * initialises filter toolbar
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {filtertype: 'foreignrecord', 
-                    app: this.app,
-                    foreignRecordClass: Tine.Tinebase.Model.Department,
-                    ownField: 'type',
-                    operators: ['equals']
-                }
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
     
     /**
