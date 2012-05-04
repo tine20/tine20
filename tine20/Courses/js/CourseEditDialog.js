@@ -11,7 +11,6 @@
 Ext.namespace('Tine.Courses');
 
 Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
     /**
      * @private
      */
@@ -22,6 +21,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     evalGrants: false,
     
+    /**
+     * initComponent
+     */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Courses');
         
@@ -42,7 +44,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
     },
     
-    // todo: wrap this into a uploadAction widget
+    /**
+     * onFileSelect
+     * 
+     * @param {} fileSelector
+     * 
+     * TODO wrap this into a uploadAction widget
+     */
     onFileSelect: function(fileSelector) {
         
         var files = fileSelector.getFileList();
@@ -95,6 +103,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     updateToolbars: function() {
     },
     
+    /**
+     * onRecordLoad
+     */
     onRecordLoad: function() {
         var members = this.record.get('members') || [];
         if (members.length > 0) {
@@ -106,9 +117,12 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_import.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
         
-           Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);
+        Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);
     },
     
+    /**
+     * onRecordUpdate
+     */
     onRecordUpdate: function() {
         Tine.Courses.CourseEditDialog.superclass.onRecordUpdate.call(this);
         
@@ -128,6 +142,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        var internetAccessDeactivated = (! Tine.Courses.registry.get('config').internet_group || 
+            Tine.Courses.registry.get('config').internet_group.value === null);
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -177,15 +194,16 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         preventScrollbars:false,
                         xtype: 'textarea',
                         height: 60
-                    }
-                    // TODO make these configurable (http://forge.tine20.org/mantisbt/view.php?id=5884)
-//                    , {
-//                        hideLabel: true,
-//                        boxLabel: this.app.i18n._('Internet Access'),
-//                        name: 'internet',
-//                        xtype: 'checkbox',
-//                        columnWidth: 0.5
-//                    }, {
+                    }, new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        fieldLabel: this.app.i18n._('Internet Access'),
+                        app: 'Courses',
+                        keyFieldName: 'internetAccess',
+                        value: 'OFF',
+                        name: 'internet',
+                        hideLabel: internetAccessDeactivated,
+                        hidden: internetAccessDeactivated
+                    })
+//                    {
 //                        hideLabel: true,
 //                        boxLabel: this.app.i18n._('Fileserver Access'),
 //                        name: 'fileserver',
@@ -232,7 +250,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * get the members grid panel
-     * @return {}
+     * 
+     * @return {GridPanel} membersGrid
      */
     getMembersGrid: function() {
         if (! this.membersGrid) {
@@ -271,10 +290,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             this.loadMask.hide();
                         }
                     });
-                    /*
-                    Ext.MessageBox.prompt(this.app.i18n._('Set new password'), this.app.i18n._('Please enter the new password:'), function(_button, _text) {
-                    });
-                    */
                 },
                 iconCls: 'action_password'
             });
