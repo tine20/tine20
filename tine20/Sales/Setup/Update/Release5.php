@@ -94,4 +94,34 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '5.2');
     }
+    
+    /**
+     * update from 5.2 -> 5.3
+     * - default contracts & products
+     * 
+     * @return void
+     */
+    public function update_2() {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>cleared_in</name>
+                <type>text</type>
+                <length>256</length>
+                <notnull>false</notnull>
+            </field>'
+        );
+        $this->_backend->addCol('sales_contracts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>cleared</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>'
+        );
+        $this->_backend->addCol('sales_contracts', $declaration);
+        
+        $this->setTableVersion('sales_contracts', 2);
+        $this->setApplicationVersion('Sales', '5.3');
+    }
 }

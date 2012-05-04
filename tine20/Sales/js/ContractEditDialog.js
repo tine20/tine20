@@ -43,6 +43,16 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Sales.Model.Contract,
     recordProxy: Tine.Sales.contractBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    /**
+     * if true, number will be readOnly and will be generated automatically
+     * @type {Boolean} autoGenerateNumber
+     */
+    autoGenerateNumber: null,
+    
+    initComponent: function() {
+        this.autoGenerateNumber = (Tine.Sales.registry.get('numberGeneration') == 'auto') ? true : false;
+        Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
+    },
     
     /**
      * reqests all data needed in this dialog
@@ -69,6 +79,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
+            layoutOnTabChange: true,
             border: false,
             plain:true,
             activeTab: 0,
@@ -91,17 +102,76 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: .333
                     },
                     items: [[{
-                        columnWidth: 1,
+                        columnWidth: .1,
+                        fieldLabel: this.app.i18n._('Number'),
+                        name: 'number',
+                        readOnly: this.autoGenerateNumber,
+                        allowBlank: this.autoGenerateNumber
+                    },{
+                        columnWidth: .9,
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
                         allowBlank: false
                     }], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        xtype: 'textarea',
-                        height: 200
+                            columnWidth: .333,
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Contact Customer'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: this.app,
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'CUSTOMER',
+                            relationDegree: 'parent',
+                            modelUnique: true
+                        }, {
+                            columnWidth: .333,
+                            editDialog: this,
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Contact Responsible'),
+                            allowBlank: true,
+                            app: this.app,
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'RESPONSIBLE',
+                            relationDegree: 'parent',
+                            modelUnique: true
+                        }, {
+                            name: 'customer',
+                            fieldLabel: this.app.i18n._('Company')
+                        }],[
+                    {
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'status',
+                            xtype: 'combo',
+                            mode: 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            value: 'open',
+                            store: [['closed', this.app.i18n._('closed')], ['open', this.app.i18n._('open')]]
+                        }, {
+                            fieldLabel: this.app.i18n._('Cleared'),
+                            name: 'cleared',
+                            xtype: 'combo',
+                            mode: 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            value: 'not yet billed',
+                            store: [
+                                ['not yet billed', this.app.i18n._('not yet cleared')], 
+                                ['to bill', this.app.i18n._('to clear')],
+                                ['billed', this.app.i18n._('cleared')]
+                            ]
+                        }, {
+                            fieldLabel: this.app.i18n._('Cleared in'),
+                            name: 'cleared_in',
+                            xtype: 'textfield'
+                        }
+                    ], [{
+                            columnWidth: 1,
+                            fieldLabel: this.app.i18n._('Description'),
+                            emptyText: this.app.i18n._('Enter description...'),
+                            name: 'description',
+                            xtype: 'textarea',
+                            height: 200
                     }]] 
                 }, {
                     // activities and tags

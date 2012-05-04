@@ -33,7 +33,27 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var Sales_Controller_Product
      */
     protected $_productController = NULL;
-
+    
+    /**
+     * special config for relatable models
+     * @var array
+     */
+    protected $_relatableModelsConfig = array(
+        array('ownModel' => 'Contract', 'relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            array('type' => 'PARTNER', 'degree' => 'sibling', 'text' => 'Partner', 'max' => '0:0'),  // _('Partner')
+            )
+        ),
+        array('ownModel' => 'Contract', 'relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
+            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:0'),
+            )
+        ),
+        array('ownModel' => 'Contract', 'relatedApp' => 'Sales', 'relatedModel' => 'Product', 'config' => array(
+            array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
+            )
+        ),
+    );
     /**
      * the constructor
      *
@@ -61,11 +81,30 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $sharedContainer = Sales_Controller_Contract::getSharedContractsContainer();
         $sharedContainer->resolveGrantsAndPath();
 
+        $generateNumber = Tinebase_Config::getInstance()->getConfig('autogenerate_number', Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(), 'auto')->__get('value');
+        
         return array(
-            'defaultContainer' => $sharedContainer->toArray()
+            'defaultContainer' => $sharedContainer->toArray(),
+            'numberGeneration' => $generateNumber
         );
     }
-
+    
+    /**
+     * Sets the config for Sales
+     * @param array $config
+     */
+    public function setConfig($config) {
+        return Sales_Controller::getInstance()->setConfig($config);
+    }
+    
+    /**
+     * Get Config for Sales
+     * @return array
+     */
+    public function getConfig() {
+        return Sales_Controller::getInstance()->getConfig();
+    }
+    
     /*************************** contracts functions *****************************/
 
     /**

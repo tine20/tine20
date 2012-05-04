@@ -38,6 +38,9 @@ class Sales_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('description', 'number', 'title'))),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Sales')),
-        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
+        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'cleared'              => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'cleared_in'           => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }
