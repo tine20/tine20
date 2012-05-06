@@ -36,8 +36,17 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             handler: this.onFileSelect
         });
         
+        this.action_addNewMember = new Ext.Action({
+            iconCls: 'action_add',
+            disabled: true,
+            text: this.app.i18n._('Add new member'),
+            scope: this,
+            handler: this.onAddNewMember
+        });
+        
         this.tbarItems = [
             this.action_import,
+            this.action_addNewMember,
             {xtype: 'widget-activitiesaddbutton'}
             
         ];
@@ -87,10 +96,37 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * onAddNewMember
+     * 
+     *  // TODO change loadmask text?
+     */
+    onAddNewMember: function(fileSelector) {
+        var courseData = this.record.data,
+            userData = {accountFirstName: null, accountLastName: null};
+            
+        Ext.Msg.prompt(this.app.i18n._('First Name'), this.app.i18n._('Please enter the first name:'), function(btn, text){
+            if (btn == 'ok') {
+                userData.accountFirstName = text;
+                Ext.Msg.prompt(this.app.i18n._('Last Name'), this.app.i18n._('Please enter the last name:'), function(btn, text){
+                    if (btn == 'ok') {
+                        userData.accountLastName = text;
+                        
+                        this.loadMask.show();
+                        Tine.Courses.addNewMember(userData, courseData, this.onMembersImport.createDelegate(this));
+                    }
+                }, this);
+            }
+        }, this);
+    },
+    
+    /**
      * update members grid
      */
     onMembersImport: function(response) {
-        var members = Ext.util.JSON.decode(response.responseText);
+        Tine.log.debug('Tine.Courses.CourseEditDialog::onMembersImport');
+        Tine.log.debug(response);
+        
+        var members = (response.responseText) ? Ext.util.JSON.decode(response.responseText) : response;
         if (members.results.length > 0) {
             this.membersStore.loadData({results: members.results});
         }
@@ -115,6 +151,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // only activate import and ok buttons if editing existing course / user has the appropriate right
         var disabled = !this.record.get('id') || !Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts');
         this.action_import.setDisabled(disabled);
+        this.action_addNewMember.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
         
         Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);

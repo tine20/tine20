@@ -232,12 +232,16 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $userData
      * @param array $courseData
      * @return array
+     * 
+     * @todo generalize type (value) sanitizing
      */
     public function addNewMember($userData, $courseData)
     {
         $course = new Courses_Model_Course(array(), TRUE);
+        if (isset($courseData['type']['value'])) {
+            $courseData['type'] = $courseData['type']['value'];
+        }
         $course->setFromJsonInUsersTimezone($courseData);
-        
         $user = new Tinebase_Model_FullUser($userData, TRUE);
         
         $this->_controller->createNewMember($course, $user);
