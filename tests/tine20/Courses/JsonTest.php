@@ -274,7 +274,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
-        $courseData['type'] = $courseData['type']['value'];
         
         $result = $this->_json->addNewMember(array(
             'accountFirstName' => 'jams',
