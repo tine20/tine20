@@ -32,8 +32,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     recordClass: Tine.HumanResources.Model.Employee,
     recordProxy: Tine.HumanResources.recordBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: true,
-    showContainerSelector: true,
+    evalGrants: false,
+    showContainerSelector: false,
+    
+    /**
+     * show private Information (autoset due to rights)
+     * @type 
+     */
+    showPrivateInformation: null,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -42,54 +48,32 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     updateToolbars: function() {
 
     },
-    
     /**
-     * executed after record got updated from proxy
-     * 
-     * @private
+     * inits the component
      */
-    onRecordLoad: function() {
-        // add selections to record
-
-        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (this.record && this.selectedRecords && this.selectedRecords.length > 0) {
-            var oldRelations = this.record.get('relations');
-            
-            var relations = oldRelations ? oldRelations : [];
-
-            Ext.each(this.selectedRecords, function(contact) {
-                var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
-                var rel = new Tine.Tinebase.Model.Relation({
-                    own_degree: 'sibling',
-                    own_id: null,
-                    own_model: 'HumanResources_Model_Employee',
-                    related_backend: 'Sql',
-                    related_id: contact.id,
-                    related_model: 'Addressbook_Model_Contact',
-                    related_record: rec.data,
-                    type: this.attendeeRole ? this.attendeeRole : 'COWORKER'
-                });
-            
-                relations.push(rel.data);
-            
-            },this);
-            
-            this.record.set('relations',relations);
-            this.selectedRecords = [];
-        }
+    initComponent: function() {
+        this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
+        Tine.HumanResources.EmployeeEditDialog.superclass.initComponent.call(this);
     },
     
-    /**
-     * executed when record gets updated from form
-     * - add attachments to record here
-     * 
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
-        this.record.set('relations', this.contactLinkPanel.getData());
-    },
+//    /**
+//     * executed after record got updated from proxy
+//     * 
+//     * @private
+//     */
+//    onRecordLoad: function() {
+//        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
+//    },
+//    
+//    /**
+//     * executed when record gets updated from form
+//     * - add attachments to record here
+//     * 
+//     * @private
+//     */
+//    onRecordUpdate: function() {
+//        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
+//    },
     
     /**
      * returns dialog
@@ -100,23 +84,12 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-//        this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
-//            app: this.app,
-//            searchRecordClass: Tine.Addressbook.Model.Contact,
-//            title: this.app.i18n._('Attendee'),
-//            typeColumnHeader: this.app.i18n._('Role'),
-//            searchComboClass: Tine.Addressbook.SearchCombo,
-//            searchComboConfig: {
-//                relationDefaults: {
-//                    type: this.app.getRegistry().get('config')['projectAttendeeRole'].definition['default'],
-//                    own_model: 'HumanResources_Model_Employee',
-//                    related_model: 'Addressbook_Model_Contact',
-//                    own_degree: 'sibling',
-//                    related_backend: 'Sql'
-//                }
-//            },
-//            relationTypesKeyfieldName: 'projectAttendeeRole'
-//        });
+        var formFieldDefaults = {
+            xtype:'textfield',
+            anchor: '100%',
+            labelSeparator: '',
+            columnWidth: .333
+        };
         
         return {
             xtype: 'tabpanel',
@@ -145,25 +118,173 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'top',
-                            formDefaults: {
-                                xtype:'textfield',
-                                anchor: '100%',
-                                labelSeparator: '',
-                                columnWidth: .333
-                            },
+                            formDefaults: formFieldDefaults,
                             items: [[{
-                                    columnWidth: 1,
-                                    fieldLabel: this.app.i18n._('Title'),
-                                    name: 'title',
-                                    allowBlank: false
-                                }], [{
-                                    columnWidth: .5,
                                     fieldLabel: this.app.i18n._('Number'),
-                                    name: 'number'
+                                    name: 'number',
+                                    allowBlank: false,
+                                    columnWidth: .125
+                                }, 
+                                    Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                        blurOnSelect: true,
+                                        name: 'contact_id',
+                                        fieldLabel: this.app.i18n._('Contact'),
+                                        columnWidth: .380,
+                                        ref: '../../../../../../../contactPicker',
+                                        allowBlank: true,
+                                        listeners: {
+                                            scope: this,
+                                            blur: function() { 
+                                                if(this.contactPicker.selectedRecord) {
+                                                    this.contactButton.enable();
+                                                } else {
+                                                    this.contactButton.disable();
+                                                }
+                                            }
+                                        }
+                                    }), {
+                                   columnWidth: .045,
+                                   xtype:'button',
+                                   ref: '../../../../../../../contactButton',
+                                   iconCls: 'applyContactData',
+                                   tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Apply contact data on form')),
+                                   disabled: true,
+                                   fieldLabel: '&nbsp;',
+                                   listeners: {
+                                        scope: this,
+                                        click: function() {
+                                            var sr = this.contactPicker.selectedRecord;
+                                            if(sr) {
+                                                this.form.findField('n_fn').setValue(sr.get('n_fn'));
+                                                if(this.showPrivateInformation) {
+                                                    this.form.findField('bank_account_holder').setValue(sr.get('n_fn'));
+                                                    Ext.each(['countryname', 'locality', 'postalcode', 'region', 'street', 'street2'], function(f){
+                                                        this.form.findField(f).setValue(sr.get('adr_one_'+f));
+                                                    }, this);
+                                                    
+                                                    Ext.each(['email', 'tel_home', 'tel_cell', 'bday'], function(f){
+                                                        this.form.findField(f).setValue(sr.get(f));
+                                                    }, this);
+                                                    
+                                                }
+                                            }
+                                        }
+                                   }
+                                }, {
+                                    columnWidth: .450,
+                                    allowBlank: false,
+                                    fieldLabel: this.app.i18n._('Full Name'),
+                                    name: 'n_fn'
                                 }]
                             ]
                         }]
-                    }]
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Personal Information'),
+                        disabled: ! this.showPrivateInformation,
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                            items: [
+                                [{
+                                    xtype: 'widget-countrycombo',
+                                    name: 'countryname',
+                                    fieldLabel: this.app.i18n._('Country')
+                                }, {
+                                    name: 'locality',
+                                    fieldLabel: this.app.i18n._('Locality')
+                                }, {
+                                    name: 'postalcode',
+                                    fieldLabel: this.app.i18n._('Postalcode')
+                                }], [{
+                                    name: 'region',
+                                    fieldLabel: this.app.i18n._('Region')
+                                }, {
+                                    name: 'street',
+                                    fieldLabel: this.app.i18n._('Street')
+                                }, {
+                                    name: 'street2',
+                                    fieldLabel: this.app.i18n._('Street2')
+                                }], [{
+                                    name: 'email',
+                                    fieldLabel: this.app.i18n._('E-Mail')
+                                }, {
+                                    name: 'tel_home',
+                                    fieldLabel: this.app.i18n._('Telephone Number')
+                                }, {
+                                    name: 'tel_cell',
+                                    fieldLabel: this.app.i18n._('Cell Phone Number')
+                                }], [{
+                                    xtype: 'extuxclearabledatefield',
+                                    name: 'bday',
+                                    fieldLabel: this.app.i18n._('Birthday')
+                                }
+                            ]]
+                        }]
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Employment Relationship Information'),
+                        disabled: ! this.showPrivateInformation,
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {allowBlank: false, disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                            items: [
+                                [{
+                                    name: 'cost_centre',
+                                    fieldLabel: this.app.i18n._('Cost Centre')
+                                }, {
+                                    name: 'working_hours',
+                                    fieldLabel: this.app.i18n._('Working Hours per Week')
+                                }, {
+                                    name: 'vacation_days',
+                                    fieldLabel: this.app.i18n._('Vacation Days')
+                                }, {
+                                    xtype: 'extuxclearabledatefield',
+                                    name: 'employment_begin',
+                                    fieldLabel: this.app.i18n._('Employment begin')
+                                }, {
+                                    xtype: 'extuxclearabledatefield',
+                                    name: 'employment_end',
+                                    allowBlank: true,
+                                    fieldLabel: this.app.i18n._('Employment end')
+                                }
+                            ]]
+                        }]
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Banking Information'),
+                        disabled: ! this.showPrivateInformation,
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                            items: [
+                                [{
+                                    name: 'bank_account_holder',
+                                    fieldLabel: this.app.i18n._('Account Holder')
+                                }, {
+                                    name: 'bank_account_number',
+                                    fieldLabel: this.app.i18n._('Account Number')
+                                }, {
+                                    name: 'bank_name',
+                                    fieldLabel: this.app.i18n._('Bank Name')
+                                }], [{
+                                    name: 'bank_code_number',
+                                    fieldLabel: this.app.i18n._('Code Number')
+                                }
+                            ]]
+                        }]
+                    }
+                    
+                    ]
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -228,7 +349,7 @@ Tine.HumanResources.EmployeeEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 570,
         name: Tine.HumanResources.EmployeeEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.HumanResources.EmployeeEditDialog',
         contentPanelConstructorConfig: config

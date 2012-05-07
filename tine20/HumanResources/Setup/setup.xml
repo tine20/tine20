@@ -15,11 +15,6 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
-                <!--field>
-                    <name>container_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field-->
                 <field>
                     <name>contact_id</name>
                     <type>text</type>
@@ -87,15 +82,15 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>n_family</name>
+                    <name>n_fn</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>n_given</name>
-                    <type>text</type>
-                    <length>64</length>
+                    <name>number</name>
+                    <type>integer</type>
+                    <length>3</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -195,23 +190,6 @@
                         <name>id</name>
                     </field>
                 </index>
-                <!--index>
-                    <name>container_id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>humanresources_employee::container_id--container::id</name>
-                    <field>
-                        <name>container_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index-->
             </declaration>
         </table>
     </tables>

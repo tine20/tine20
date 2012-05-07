@@ -11,7 +11,31 @@ Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 
 // Employee model fields
 Tine.HumanResources.Model.EmployeeArray = [
-    {name: 'id',            type: 'string'},
+    {name: 'id', type: 'string'},
+    {name: 'contact_id', type: 'string'},
+    {name: 'countryname', type: 'string'},
+    {name: 'locality', type: 'string'},
+    {name: 'postalcode', type: 'string'},
+    {name: 'region', type: 'string'},
+    {name: 'street', type: 'string'},
+    {name: 'street2', type: 'string'},
+    {name: 'email', type: 'string'},
+    {name: 'tel_home', type: 'string'},
+    {name: 'tel_cell', type: 'string'},
+    {name: 'title', type: 'string'},
+    {name: 'n_family', type: 'string'},
+    {name: 'n_given', type: 'string'},
+    {name: 'n_fn', type: 'string'},
+    {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'bank_account_holder', type: 'string'},
+    {name: 'bank_account_number', type: 'string'},
+    {name: 'bank_name', type: 'string'},
+    {name: 'bank_code_number', type: 'string'},
+    {name: 'cost_centre', type: 'string'},
+    {name: 'working_hours', type: 'int'},
+    {name: 'employment_begin', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'employment_end', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'vacation_days', type: 'int'},
     // tine 2.0 tags and notes
     {name: 'tags'},
     {name: 'notes'},
@@ -77,64 +101,3 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
 };
 
 
-// Contract model fields
-Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
-    // contract only fields
-    { name: 'id' },
-    { name: 'number' },
-    { name: 'title' },
-    { name: 'description' },
-    { name: 'status' },
-    // tine 2.0 notes field
-    { name: 'notes'},
-    // linked contacts/accounts
-    { name: 'customers'},
-    { name: 'accounts'}
-]);
-
-/**
- * @namespace Tine.HumanResources.Model
- * @class Tine.HumanResources.Model.Contract
- * @extends Tine.Tinebase.data.Record
- * 
- * Contract Record Definition
- */ 
-Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ContractArray, {
-    appName: 'HumanResources',
-    modelName: 'Contract',
-    idProperty: 'id',
-    titleProperty: 'title',
-    // ngettext('Contract', 'Contracts', n);
-    recordName: 'Contract',
-    recordsName: 'Contracts',
-    containerProperty: 'container_id',
-    // ngettext('All Contracts', 'contracts lists', n);
-    containerName: 'All Contracts',
-    containersName: 'contracts lists'
-});
-
-/**
- * @namespace Tine.HumanResources.Model
- * 
- * get default data for a new Contract
- *  
- * @return {Object} default data
- * @static
- */
-Tine.HumanResources.Model.Contract.getDefaultData = function() {
-    return {
-        container_id: Tine.HumanResources.registry.get('defaultContainer')
-    };
-};
-
-Tine.HumanResources.Model.Contract.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('HumanResources');
-    
-    return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
-        {label: app.i18n._('Contract name'),   field: 'name' },
-        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'},
-        {filtertype: 'tinebase.tag', app: app}
-        
-    ];
-};

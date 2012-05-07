@@ -17,3 +17,9 @@
 .x-btn-large .HumanResourcesIconCls {
     background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
 }
+
+.applyContactData {
+        height:14px!important;
+        width: 14px!important;
+        background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
+}
