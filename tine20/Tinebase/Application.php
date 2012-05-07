@@ -267,20 +267,21 @@ class Tinebase_Application
     }
     
     /**
-     * return if application is installed
+     * return if application is installed (and enabled)
      *
-     * @param  string  $_applicationName  the application name
+     * @param  string  $applicationName  the application name
+     * @param  booelan $checkEnabled (FALSE by default)
      * 
-     * @return bool
+     * @return boolean
      */
-    public function isInstalled($_applicationName)
+    public function isInstalled($applicationName, $checkEnabled = FALSE)
     {
         try {
-            $this->getApplicationByName($_applicationName);
+            $app = $this->getApplicationByName($applicationName);
             
-            return true;
+            return ($checkEnabled) ? ($app->status === self::ENABLED) : TRUE;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            return false;
+            return FALSE;
         }
     }
     
@@ -488,7 +489,6 @@ class Tinebase_Application
         
         return $result;
     }
-    
     
     /**
      * delete containers, configs and other data of an application

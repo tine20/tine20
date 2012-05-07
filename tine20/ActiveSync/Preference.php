@@ -55,10 +55,10 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTADDRESSBOOK,
         );
         
-        if (Setup_Controller::getInstance()->isInstalled('Calendar')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Calendar', TRUE)) {
             $allPrefs[] = self::DEFAULTCALENDAR;
         }
-        if (Setup_Controller::getInstance()->isInstalled('Tasks')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Tasks', TRUE)) {
             $allPrefs[] = self::DEFAULTTASKLIST;
         }
         

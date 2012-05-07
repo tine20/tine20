@@ -70,7 +70,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
         $db = Tinebase_Core::getDb();
         
         if (! is_array($this->_foreignIds)) {
-            $this->_foreignIds = $this->_controller->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
+            $this->_foreignIds = $this->_getController()->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
         }
         
         $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_foreignIds) ? array('') : $this->_foreignIds);

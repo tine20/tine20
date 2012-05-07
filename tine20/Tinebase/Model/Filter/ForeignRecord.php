@@ -61,7 +61,6 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         
         // @todo move this to another place?
         $this->_setFilterGroup();
-        $this->_controller = $this->_getController();
     }
     
     /**
