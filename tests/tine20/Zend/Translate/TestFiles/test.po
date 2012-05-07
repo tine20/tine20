@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=n !=1;\n"
+"Project-Id-Version: Test\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: Test\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Test.php:89
+msgid "Das ist nur ein Test"
+msgstr "This is just a test"
+
+msgid "Noch ein Test"
+msgstr "Another test"
+
+#: Test.php:120
+msgid "Hund"
+msgid_plural "Hunde"
+msgstr[0] "Dog"
+msgstr[1] "Dogs"
+
+#: Test.php:160
+msgid "Hunde"
+msgstr "Bunnys"
+
+#: Test.php:170
+msgid "Ein Sonderfall "
+msgstr "A Special case "
+

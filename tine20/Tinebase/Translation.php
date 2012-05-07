@@ -261,12 +261,22 @@ class Tinebase_Translation
         
         // create new translation
         $path = $basePath . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
+        $options = array(
+                'scan' => Zend_Translate::LOCALE_FILENAME,
+                'disableNotices' => TRUE,
+                );
+        //Switch between Po and Mo adapter depending on the mode
+        switch(TINE20_BUILDTYPE) {
+            case 'DEVELOPMENT':
+                $translate = new Zend_Translate('gettextPo', $path, null, $options);
+                break;
+            case 'DEBUG':
+            case 'RELEASE':
+                $translate = new Zend_Translate('gettext', $path, null, $options);
+                break;
+        }
         
-        $translate = new Zend_Translate('gettext', $path, null, array(
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'disableNotices' => TRUE,
-        ));
-
+        
         try {
             $translate->setLocale($locale);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . $_applicationName . '/' . (string)$locale);
