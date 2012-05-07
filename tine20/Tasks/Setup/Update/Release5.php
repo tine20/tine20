@@ -19,7 +19,11 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         $tasksAppId = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId();
         
         // remove status_id keys
-        $this->_backend->dropForeignKey('tasks', 'tasks::status_id--tasks_status::id');
+        try {
+            $this->_backend->dropForeignKey('tasks', 'tasks::status_id--tasks_status::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // do nothing (fk not found)
+        }
         $this->_backend->dropIndex('tasks', 'status_id');
         
         // need to replace all NULL values first
