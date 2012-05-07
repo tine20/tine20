@@ -55,8 +55,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'tel_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_cell'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_given'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'number'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_fn'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bday'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bank_account_holder' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'bank_account_number' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -95,4 +95,38 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'employment_begin',
         'employment_end'
     );
+    
+    protected $_privateFields = array(
+        'countryname',
+        'locality',
+        'postalcode',
+        'region',
+        'street',
+        'street2',
+        'email',
+        'tel_home',
+        'tel_cell',
+        'bday',
+        'bank_account_holder',
+        'bank_account_number',
+        'bank_name',
+        'bank_code_number',
+        'cost_centre',
+        'working_hours',
+        'employment_begin',
+        'employment_end',
+        'vacation_days'
+    );
+    
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
+        $this->_doPrivateCleanup();
+        parent::__construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
+    }
+    
+    protected function _doPrivateCleanup()
+    {
+        if (! Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+            $this->_properties = array_intersect_key($this->_properties, array_flip($this->_privateFields));
+        }
+    }
 }

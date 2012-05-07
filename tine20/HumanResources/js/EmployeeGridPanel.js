@@ -19,7 +19,7 @@ Ext.ns('Tine.HumanResources');
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>    
  * 
  * @param       {Object} config
  * @constructor

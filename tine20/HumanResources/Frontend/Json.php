@@ -51,7 +51,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $paging
      * @return array
      */
-    public function searchHumanResources($filter, $paging)
+    public function searchEmployees($filter, $paging)
     {
         return $this->_search($filter, $paging, $this->_controller, 'HumanResources_Model_EmployeeFilter', TRUE);
     }     
