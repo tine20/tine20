@@ -554,6 +554,41 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+    * try to get role rights for app
+    * 
+    * @see 0006374: if app has no own rights, tinebase rights are shown
+    */
+    public function testGetRoleRightsForActiveSyncAndTinebase()
+    {
+        $allRights = $this->_json->getAllRoleRights();
+        
+        $appRightsFound = NULL;
+        $tinebaseRights = NULL;
+        foreach ($allRights as $appRights) {
+            if ($appRights['text'] === 'ActiveSync' || $appRights['text'] === 'Tinebase') {
+                $appRightsFound[$appRights['text']] = array();
+                foreach($appRights['children'] as $right) {
+                    $appRightsFound[$appRights['text']][] = $right['right'];
+                }
+            }
+        }
+        
+        $this->assertTrue(! empty($appRightsFound));
+        
+        $expectedTinebaseRights = array(
+            'report_bugs',
+            'check_version',
+            'manage_own_profile',
+            'manage_own_state'
+        );
+        
+        $tinebaseRightsFound = array_intersect($appRightsFound['ActiveSync'], $expectedTinebaseRights);
+        $this->assertEquals(0, count($tinebaseRightsFound), 'found Tinebase_Rights: ' . print_r($tinebaseRightsFound, TRUE));
+        $tinebaseRightsFound = array_intersect($appRightsFound['Tinebase'], $expectedTinebaseRights);
+        $this->assertEquals(4, count($tinebaseRightsFound), 'did not find Tinebase_Rights: ' . print_r($appRightsFound['Tinebase'], TRUE));
+    }
+    
+    /**
      * try to save tag and update without rights
      */
     public function testSaveTagAndUpdateWithoutRights()
