@@ -159,7 +159,7 @@ Tine.Phone.updatePhoneTree = function(store){
             id: record.id,
             record: record,
             text: label,
-            qtip: record.data.description,
+            qtip: Tine.Tinebase.common.doubleEncode(record.data.description),
             leaf: true
         });
         treeRoot.appendChild(node);
@@ -539,11 +539,11 @@ Tine.Phone.Main = {
              
             switch(_data) {
                 case 'in':
-                    return "<img src='images/call-incoming.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Incoming call') + "'/>";
+                    return '<img src="images/call-incoming.png" width="12" height="12" alt="contact" ext:qtip="' + Ext.util.Format.htmlEncode(translation._('Incoming call')) + '"/>';
                     break;
                     
                 case 'out':
-                    return "<img src='images/call-outgoing.png' width='12' height='12' alt='contact' ext:qtip='" + translation._('Outgoing call') + "'/>";
+                    return '<img src="images/call-outgoing.png" width="12" height="12" alt="contact" ext:qtip="' + Ext.util.Format.htmlEncode(translation._('Outgoing call')) + '"/>';
                     break;
             }
         },

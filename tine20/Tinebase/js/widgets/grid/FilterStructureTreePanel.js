@@ -32,9 +32,9 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.title = [
             '<span ext:qtip="',
-            _('Show records that match to one of the following filters'),
+            Ext.util.Format.htmlEncode(_('Show records that match to one of the following filters')),
             '">',
-            _('or alternatively'),
+            Ext.util.Format.htmlEncode(_('or alternatively')),
             '</span>'
         ].join('');
         

@@ -1456,24 +1456,29 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {color}; z-index: {zIndex};">{startTime}</div>' +
                     '<div class="cal-daysviewpanel-event-header-icons">' +
                         '<tpl for="statusIcons">' +
-                            '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-{[parent.textColor == \'#FFFFFF\' ? \'white\' : \'black\']}" ext:qtip="{text}" />',
+                            '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-{[parent.textColor == \'#FFFFFF\' ? \'white\' : \'black\']}" ext:qtip="{[this.encode(values.text)]}" />',
                         '</tpl>' +
                     '</div>' +
                 '</div>' +
-                '<div class="cal-daysviewpanel-event-body">{[Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(values.summary))]}</div>' +
-            '</div>'
+                '<div class="cal-daysviewpanel-event-body">{[Ext.util.Format.nl2br(this.encode(values.summary))]}</div>' +
+            '</div>',
+            {
+                encode: function(v) { return Tine.Tinebase.common.doubleEncode(v); }
+            }
         );
         
         ts.wholeDayEvent = new Ext.XTemplate(
             '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
                 '<div class="cal-daysviewpanel-wholedayevent-body">{[Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(values.summary))]}</div>' +
-//                '<div class="cal-daysviewpanel-wholedayevent-icons">' +
                 '<div class="cal-daysviewpanel-event-header-icons" style="background-color: {bgColor};" >' +
                     '<tpl for="statusIcons">' +
-                        '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-black" ext:qtip="{text}" />',
+                        '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-black" ext:qtip="{[this.encode(values.text)]}" />',
                     '</tpl>' +
                 '</div>' +
-            '</div>'
+            '</div>',
+            {
+                encode: function(v) { return Tine.Tinebase.common.doubleEncode(v); }
+            }
         );
         
         for(var k in ts){

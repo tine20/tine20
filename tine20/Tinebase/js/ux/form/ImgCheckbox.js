@@ -119,7 +119,7 @@ Ext.ux.form.ImgCheckbox = Ext.extend(Ext.form.Checkbox, {
         }
 
         if(this.tooltip) {
-            this.cbEl.set({qtip:this.tooltip});
+            this.cbEl.set({qtip: Tine.Tinebase.common.doubleEncode(this.tooltip)});
         }
 
         this.wrap.on({click:{scope:this, fn:this.onClick, delegate:'a'}});

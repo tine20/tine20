@@ -574,17 +574,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
             
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: _('Answered')});
+            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(_('Answered'))});
         }   
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: _('Forwarded')});
+            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(_('Forwarded'))});
         }   
 //        if (record.hasFlag('\\Recent')) {
 //            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
 //        }   
         
         Ext.each(icons, function(icon) {
-            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + icon.qtip + '">';
+            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(icon.qtip) + '">';
         }, this);
         
         return result;

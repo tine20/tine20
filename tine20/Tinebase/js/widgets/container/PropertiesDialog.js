@@ -58,8 +58,11 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
         
         this.myGrantsTemplate = new Ext.XTemplate(
             '<tpl for=".">',
-                '<span class="tine-wordbox" ext:qtip="{description}">{title}</span>',
-            '</tpl>'
+                '<span class="tine-wordbox" ext:qtip="','{[this.encode(values.description)]}','">','{[this.encode(values.title)]}','</span>',
+            '</tpl>',
+            {
+                encode: function(description) { return Tine.Tinebase.common.doubleEncode(description); }
+            }
         ).compile();
         
         Tine.widgets.container.PropertiesDialog.superclass.initComponent.call(this);

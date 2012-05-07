@@ -146,7 +146,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 '</div>',
             '</tpl>' ,{
                 encode: function(value) {
-                    return Ext.util.Format.htmlEncode(value);
+                    return Tine.Tinebase.common.doubleEncode(value);
                 }
             }
         );
@@ -461,7 +461,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 '{[this.encode(values.name)]} <tpl if="type == \'personal\' "><i>(' + _('personal') + ')</i></tpl>',
             '</div></tpl>',{
                 encode: function(value) {
-                    return Ext.util.Format.htmlEncode(value);
+                    return Tine.Tinebase.common.doubleEncode(value);
                 }
             }
         );
