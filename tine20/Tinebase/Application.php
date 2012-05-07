@@ -373,9 +373,12 @@ class Tinebase_Application
         $appAclClassName = $application->name . '_Acl_Rights';
         if (! @class_exists($appAclClassName)) {
             $appAclClassName = 'Tinebase_Acl_Rights';
+            $function = 'getTranslatedBasicRightDescriptions';
+        } else {
+            $function = 'getTranslatedRightDescriptions';
         }
         
-        $descriptions = call_user_func(array($appAclClassName, 'getTranslatedRightDescriptions'));
+        $descriptions = call_user_func(array($appAclClassName, $function));
         return $descriptions;
     }
     
