@@ -38,13 +38,7 @@ Tine.SimpleFAQ.FaqGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, 
         var result = '';
         if (tags) {
             for (var i = 0; i < tags.length; i += 1) {
-                var qtipText = tags[i].name;
-                //Show Tags description
-                //if (tags[i].description) {
-                //    qtipText += ' | ' + tags[i].description;
-                //}
-                result += '<div style="float:left; margin:3px; font: 11px arial,tahoma,helvetica,sans-serif;"><div class="tb-grid-tags" style="background-color:' + tags[i].color + ';">&#160;</div> '+ qtipText +'</div>';
-                
+                result += '<div style="float:left; margin:3px; font: 11px arial,tahoma,helvetica,sans-serif;"><div class="tb-grid-tags" style="background-color:' + tags[i].color + ';">&#160;</div> '+ Ext.util.Format.htmlEncode(tags[i].name) +'</div>';
             }
         }
         return result;

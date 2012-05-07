@@ -289,7 +289,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         switch(record.get('type')) {
             case 'user':
-                return "<img src='images/oxygen/16x16/actions/user-female.png' width='12' height='12' alt='contact' ext:qtip='" + this.app.i18n._("Internal Contact") + "'/>";
+                return '<img src="images/oxygen/16x16/actions/user-female.png" width="12" height="12" alt="contact" ext:qtip="' + Ext.util.Format.htmlEncode(this.app.i18n._("Internal Contact")) + '"/>';
             default:
                 return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
         }

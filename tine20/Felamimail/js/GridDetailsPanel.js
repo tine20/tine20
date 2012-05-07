@@ -276,7 +276,7 @@ Ext.ns('Tine.Felamimail');
                 }
                 
                 id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
-                result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
+                result += ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 return result;
             },
             
@@ -306,7 +306,7 @@ Ext.ns('Tine.Felamimail');
             },
             
             showHeaders: function(qtip) {
-                var result = ' <span ext:qtip="' + qtip + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
+                var result = ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
                 return result;
             },
             
@@ -461,7 +461,7 @@ Ext.ns('Tine.Felamimail');
                     target.id = targetId + ':' + 'hide';
                     
                 } else {
-                    html = ' <span ext:qtip="' + this.i18n._('Show or hide header information') + '" id="' 
+                    html = ' <span ext:qtip="' + Ext.util.Format.htmlEncode(this.i18n._('Show or hide header information')) + '" id="' 
                         + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>'
                 }
                 

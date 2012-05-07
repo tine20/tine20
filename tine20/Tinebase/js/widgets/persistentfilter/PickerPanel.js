@@ -569,7 +569,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
                     Ext.apply(attr, {
                         isPersistentFilter : isPersistentFilter,
                         text : Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.name)),
-                        qtip : Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) + ' ' + addText : addText),
+                        qtip : Tine.Tinebase.common.doubleEncode(attr.description ? this.app.i18n._hidden(attr.description) + ' ' + addText : addText),
                         selected : attr.id === this.selectedFilterId,
                         id : attr.id,
 

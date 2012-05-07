@@ -187,7 +187,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 this.multiButton = new Ext.Element(document.createElement('img'));
                 this.multiButton.set({
                     'src': Ext.BLANK_IMAGE_URL,
-                    'ext:qtip': _('Delete value from all selected records'),
+                    'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records')),
                     'class': 'tinebase-editmultipledialog-clearer',
                     'style': 'left:' + left
                     });
@@ -236,7 +236,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         // Set button
                         this.multiButton.addClass('undo');
                         this.multiButton.removeClass('hidden');
-                        this.multiButton.set({'ext:qtip': _('Undo change for all selected records')});
+                        this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Undo change for all selected records'))});
                         
                     } else {    // If set back
                         // Set arrow
@@ -253,7 +253,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         // Set button
                         this.multiButton.removeClass('undo');
                         this.multiButton.addClass('hidden');
-                        this.multiButton.set({'ext:qtip': _('Delete value from all selected records')});
+                        this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records'))});
                     }
                 });
                 this.un('focus');

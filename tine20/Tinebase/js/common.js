@@ -170,9 +170,9 @@ Tine.Tinebase.common = {
         var result = '';
         if (tags) {
             for (var i = 0; i < tags.length; i += 1) {
-                var qtipText = tags[i].name;
+                var qtipText = Tine.Tinebase.common.doubleEncode(tags[i].name);
                 if (tags[i].description) {
-                    qtipText += ' | ' + tags[i].description;
+                    qtipText += ' | ' + Tine.Tinebase.common.doubleEncode(tags[i].description);
                 }
                 if(tags[i].occurrence) {
                     qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
@@ -199,8 +199,10 @@ Tine.Tinebase.common = {
                 '<div class="x-tree-node-leaf x-unselectable file">',
                     '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
                     '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
-                    '<span>{name}</span>',
-                '</div>'
+                    '<span> ', '{[this.encode(name)]}','</span>',
+                '</div>',{
+                    encode : function(v) { return Ext.util.Format.htmlEncode(v); }
+                }
             ).compile();
         }
         
@@ -533,5 +535,13 @@ Tine.Tinebase.common = {
             return min;
         }
         return min + parseInt(Math.random() * (max - min + 1), 10);
+    },
+    /**
+     * HTML-encodes a string twice
+     * @param {String} value
+     * @return {String}
+     */
+    doubleEncode: function(value) {
+        return Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(value));
     }
 };

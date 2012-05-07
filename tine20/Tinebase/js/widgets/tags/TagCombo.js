@@ -159,7 +159,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             {
                 encode: function(value) {
                      if (value) {
-                        return Ext.util.Format.htmlEncode(value);
+                        return Tine.Tinebase.common.doubleEncode(value);
                     } else {
                         return '';
                     }
