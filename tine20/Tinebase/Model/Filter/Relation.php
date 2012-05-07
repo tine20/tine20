@@ -104,7 +104,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         if (! is_array($this->_foreignIds)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign filter values: ' 
                 . print_r($this->_filterGroup->toArray(), TRUE));
-            $this->_foreignIds = $this->_controller->search($this->_filterGroup, NULL, FALSE, TRUE);
+            $this->_foreignIds = $this->_getController()->search($this->_filterGroup, NULL, FALSE, TRUE);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign ids: ' 

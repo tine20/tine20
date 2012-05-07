@@ -642,8 +642,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $appPrefs = Tinebase_Core::getPreference($application->name);
                     if ($appPrefs !== NULL) {
                         $allPrefs = $appPrefs->getAllApplicationPreferences();
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                            . ' ' . print_r($allPrefs, TRUE));
+                        
                         foreach ($allPrefs as $pref) {
-                            $registryData[$application->name]['preferences'][$pref] = $appPrefs->{$pref};
+                            try {
+                                $registryData[$application->name]['preferences'][$pref] = $appPrefs->{$pref};
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get ' . $pref . '  preference: ' . $e);
+                            }
                         }
                     }
                 }
