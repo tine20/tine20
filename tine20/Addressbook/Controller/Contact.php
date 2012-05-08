@@ -37,6 +37,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
+        $this->_updateMultipleValidateEachRecord = TRUE;
         $this->_duplicateCheckFields = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS, array(
             array('n_given', 'n_family', 'org_name'),
             array('email'),

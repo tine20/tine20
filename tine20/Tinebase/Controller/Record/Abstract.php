@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -116,6 +116,14 @@ abstract class Tinebase_Controller_Record_Abstract
      * @var array
      */
     protected $_updateMultipleResult = array();
+
+    /**
+     * should each record be validated in updateMultiple 
+     * - FALSE: only the first record is validated with the incoming data
+     *
+     * @var boolean
+     */
+    protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
      * returns controller for records of given model
@@ -616,13 +624,14 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectAfterUpdate($updatedRecord, $_record);
             $this->_setRelatedData($updatedRecord, $_record);
 
+            // @todo try to remove this get()
             $updatedRecordWithRelatedData = $this->get($_record->getId());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
             
             $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
             $this->_setNotes($updatedRecordWithRelatedData, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
-                        
+            
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
             }
@@ -854,19 +863,22 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
+        $bypassFilters = FALSE;
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
             $data = array_merge($oldRecordArray, $_data);
 
             try {
-                $record = new $this->_modelName($data);
+                $record = new $this->_modelName($data, $bypassFilters);
                 $updatedRecord = $this->update($record, FALSE);
                 
                 $this->_updateMultipleResult['results']->addRecord($updatedRecord);
                 $this->_updateMultipleResult['totalcount'] ++;
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
-                
+                if ($this->_updateMultipleValidateEachRecord === FALSE) {
+                    throw $e;
+                }
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,
@@ -875,6 +887,10 @@ abstract class Tinebase_Controller_Record_Abstract
                     'message'    => $e->getMessage()
                 )));
                 $this->_updateMultipleResult['failcount'] ++;
+            }
+            if ($this->_updateMultipleValidateEachRecord === FALSE) {
+                // only validate the first record
+                $bypassFilters = TRUE;
             }
         }
     }
