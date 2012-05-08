@@ -525,6 +525,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // delete if delete grant is present
                 if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
                     // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
+                    $record->status = Calendar_Model_Event::STATUS_CANCELED;
                     $this->_touch($record);
                     parent::delete($record);
                 }  

@@ -166,6 +166,27 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         return $event;
     }
     
+   /**
+    * test converting vcard with status
+    */
+    public function testConvertToTine20ModelWithStatus()
+    {
+        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $vcalendar = str_replace('LOCATION:Hamburg', 'STATUS:CONFIRMED', $vcalendar);
+        $event = $converter->toTine20Model($vcalendar);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CONFIRMED, $event->status);
+        
+        $vcalendar = str_replace('STATUS:CONFIRMED', 'STATUS:TENTATIVE', $vcalendar);
+        $event = $converter->toTine20Model($vcalendar);
+        $this->assertEquals(Calendar_Model_Event::STATUS_TENTATIVE, $event->status);
+        
+        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
+        $event = $converter->toTine20Model($vcalendar);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $event->status);
+    }
+    
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event
      * @return Calendar_Model_Event
@@ -507,6 +528,25 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         $this->assertContains('TRIGGER;VALUE=DATE-TIME:20111004T071000Z',        $vevent, $vevent);
+    }
+    
+    public function testConvertFromTine20ModelWithStatus()
+    {
+        $event = $this->testConvertToTine20Model();
+        $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
+        $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
+        $event->organizer          = Tinebase_Core::getUser()->contact_id;
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
+        $vevent = $converter->fromTine20Model($event)->serialize();
+        #var_dump($vevent);
+        $this->assertContains('STATUS:CONFIRMED',        $vevent, $vevent);
+        
+        $event->is_deleted = 1;
+        $vevent = $converter->fromTine20Model($event)->serialize();
+        #var_dump($vevent);
+        $this->assertContains('STATUS:CANCELED',        $vevent, $vevent);
     }
     
     public function testConvertToTine20ModelWithCustomAlarm()
