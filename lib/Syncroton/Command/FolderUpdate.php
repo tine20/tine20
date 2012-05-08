@@ -49,6 +49,19 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");
 
         $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
+        
+        try {
+            $this->_folder = $this->_folderBackend->getFolder($this->_device, $this->_serverId);
+            
+            $dataController = Syncroton_Data_Factory::factory($this->_folder->class, $this->_device, $this->_syncTimeStamp);
+            
+            $dataController->deleteFolder($this->_folder);
+            $this->_folderBackend->delete($this->_folder);
+            
+        } catch (Syncroton_Exception_NotFound $senf) {
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $senf->getMessage());
+        }
     }
     
     /**
@@ -66,10 +79,6 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
             $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
         } else {
             $this->_syncState->counter++;
-            
-            #$dataController = Syncroton_Data_Factory::factory($this->_class, $this->_device, $this->_syncTimeStamp);
-            
-            #$folder = $dataController->createFolder($this->_parentId, $this->_displayName, $this->_type);
             
             // create xml output
             $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',  Syncroton_Command_FolderSync::STATUS_SUCCESS));
