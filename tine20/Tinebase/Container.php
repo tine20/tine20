@@ -1395,8 +1395,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         if (in_array($defaultAddressbook['id'], $containerIds)) {
             // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
-            // _('System Container')
-            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!', 'System Container');
+            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!');
         }
     }
 }
