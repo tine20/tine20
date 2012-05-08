@@ -288,6 +288,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 userOnly: true
             })]
         });
+        
+        // auto location
+        this.attendeeGridPanel.on('afteredit', function(o) {
+            if (o.field == 'user_id'
+                && o.record.get('user_type') == 'resource'
+                && o.record.get('user_id').is_location
+                && !this.getForm().findField('location').getValue()
+            ) {
+                this.getForm().findField('location').setValue(
+                    this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
+                );
+            }
+        }, this);
+        
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
         
         this.rrulePanel = new Tine.Calendar.RrulePanel({});
