@@ -16,46 +16,22 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_Record_SystemContainer extends Tinebase_Exception
+class Tinebase_Exception_Record_SystemContainer extends Tinebase_Exception_SystemGeneric
 {
     /**
-     * title for the exception dialog
-     * @var string
+     * @var string _('System Container')
      */
-    protected $_title;
-
-    /**
+    protected $_title = 'System Container';
+    
+   /**
     * the constructor
-    *
+    * _('This is a system container which could not be deleted!')
+    * 
     * @param string $_message
-    * @param string $_title
-    * @param int $_code (default: 600 System Container)
+    * @param int    $_code 
     */
-    public function __construct($_message, $_title, $_code = 600)
+    public function __construct($_message = 'This is a system container which could not be deleted!', $_code=600)
     {
-        $this->_title = $_title;
         parent::__construct($_message, $_code);
-    }
-
-    /**
-     * get the title
-     * @return string
-     */
-    public function getTitle() {
-        return $this->_title;
-    }
-
-    /**
-     * returns existing nodes info as array
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return array(
-                'code'          => $this->getCode(),
-                'message'       => $this->getMessage(),
-                'title'         => $this->getTitle()
-                );
     }
 }
