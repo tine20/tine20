@@ -151,10 +151,14 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
         }
         rewind($fp);
         */
-        $ajam = new Ajam_Connection($url);
-        $ajam->login($username, $password);
-        #$ajam->upload($url . '/tine20config', 'sip.conf', stream_get_contents($fp));
-        $ajam->command('sip reload');
-        $ajam->logout();
+        try {
+            $ajam = new Ajam_Connection($url);
+            $ajam->login($username, $password);
+            #$ajam->upload($url . '/tine20config', 'sip.conf', stream_get_contents($fp));
+            $ajam->command('sip reload');
+            $ajam->logout();
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_Backend($e->getMessage());
+        }
     }
 }
