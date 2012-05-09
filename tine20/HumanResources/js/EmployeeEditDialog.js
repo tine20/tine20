@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
@@ -16,7 +16,7 @@ Ext.ns('Tine.HumanResources');
  * <p></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  * @param       {Object} config
  * @constructor
@@ -90,6 +90,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             labelSeparator: '',
             columnWidth: .333
         };
+        
+        this.elayerGridPanel = new Tine.HumanResources.ElayerGridPanel();
         
         return {
             xtype: 'tabpanel',
@@ -221,29 +223,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     xtype: 'extuxclearabledatefield',
                                     name: 'bday',
                                     fieldLabel: this.app.i18n._('Birthday')
-                                }
-                            ]]
-                        }]
-                    }, {
-                        xtype: 'fieldset',
-                        layout: 'hfit',
-                        autoHeight: true,
-                        title: this.app.i18n._('Employment Relationship Information'),
-                        disabled: ! this.showPrivateInformation,
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {allowBlank: false, disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
-                            items: [
-                                [{
-                                    name: 'cost_centre',
-                                    fieldLabel: this.app.i18n._('Cost Centre')
-                                }, {
-                                    name: 'working_hours',
-                                    fieldLabel: this.app.i18n._('Working Hours per Week')
-                                }, {
-                                    name: 'vacation_days',
-                                    fieldLabel: this.app.i18n._('Vacation Days')
                                 }, {
                                     xtype: 'extuxclearabledatefield',
                                     name: 'employment_begin',
@@ -256,7 +235,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }
                             ]]
                         }]
-                    }, {
+                    }, //this.elayerGridPanel,
+                        {
                         xtype: 'fieldset',
                         layout: 'hfit',
                         autoHeight: true,
