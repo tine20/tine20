@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `syncope_device` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncope_folder` (
+CREATE TABLE IF NOT EXISTS `syncroton_folder` (
   `id` varchar(40) NOT NULL,
   `device_id` varchar(40) NOT NULL,
   `class` varchar(64) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `syncope_folder` (
   CONSTRAINT `folderstates::device_id--devices::id` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE CASCADE 
 );
 
-CREATE TABLE `syncope_synckey` (
+CREATE TABLE `syncroton_synckey` (
   `id` varchar(40) NOT NULL,
   `device_id` varchar(40) NOT NULL DEFAULT '',
   `type` varchar(64) NOT NULL DEFAULT '',
@@ -37,7 +37,7 @@ CREATE TABLE `syncope_synckey` (
   `lastsync` datetime DEFAULT NULL,
   `pendingdata` longblob,
   PRIMARY KEY (`device_id`,`type`,`counter`),
-  CONSTRAINT `syncope_synckey::device_id--syncope_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncope_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `syncroton_synckey::device_id--syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `syncope_content` (                                                                                                                                           
