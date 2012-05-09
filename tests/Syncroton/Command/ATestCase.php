@@ -64,20 +64,11 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         
         $logger = new Zend_Log($writer);
         
-        $this->_deviceBackend       = new Syncroton_Backend_Device(Syncroton_Registry::getDatabase());
-        $this->_folderBackend       = new Syncroton_Backend_Folder(Syncroton_Registry::getDatabase());
-        $this->_syncStateBackend    = new Syncroton_Backend_SyncState(Syncroton_Registry::getDatabase());
-        $this->_contentStateBackend = new Syncroton_Backend_Content(Syncroton_Registry::getDatabase());
-        
-        $this->_device = $this->_deviceBackend->create(
+        $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice()
         );
         
-        Syncroton_Registry::set('deviceBackend',       $this->_deviceBackend);
-        Syncroton_Registry::set('folderStateBackend',  $this->_folderBackend);
-        Syncroton_Registry::set('syncStateBackend',    $this->_syncStateBackend);
-        Syncroton_Registry::set('contentStateBackend', $this->_contentStateBackend);
-        Syncroton_Registry::set('loggerBackend',       $logger);
+        Syncroton_Registry::set('loggerBackend', $logger);
         
         Syncroton_Registry::setContactsDataClass('Syncroton_Data_Contacts');
         Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');

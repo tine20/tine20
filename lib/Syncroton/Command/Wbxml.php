@@ -132,10 +132,10 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_Interface
         $this->_policyKey = $_policyKey;
         $this->_device    = $_device;
         
-        $this->_deviceBackend       = Syncroton_Registry::get('deviceBackend');
-        $this->_folderBackend       = Syncroton_Registry::get('folderStateBackend');
-        $this->_syncStateBackend    = Syncroton_Registry::get('syncStateBackend');
-        $this->_contentStateBackend = Syncroton_Registry::get('contentStateBackend');
+        $this->_deviceBackend       = Syncroton_Registry::getDeviceBackend();
+        $this->_folderBackend       = Syncroton_Registry::getFolderBackend();
+        $this->_syncStateBackend    = Syncroton_Registry::getSyncStateBackend();
+        $this->_contentStateBackend = Syncroton_Registry::getContentStateBackend();
         if (Syncroton_Registry::isRegistered('loggerBackend')) {
             $this->_logger          = Syncroton_Registry::get('loggerBackend');
         }

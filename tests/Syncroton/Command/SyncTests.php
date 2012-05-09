@@ -528,10 +528,10 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $sync->handle();
         $count = count(Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']["addressbookFolderId"]);
-        $folder = $this->_folderBackend->getFolder($this->_device, 'addressbookFolderId');
-        $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
+        $folder = Syncroton_Registry::getFolderBackend()->getFolder($this->_device, 'addressbookFolderId');
+        $syncState = Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device, $folder);
         $syncState->counter++;
-        $syncState = $this->_syncStateBackend->create($syncState);
+        $syncState = Syncroton_Registry::getSyncStateBackend()->create($syncState);
         
         try {
             $syncDoc = $sync->getResponse();

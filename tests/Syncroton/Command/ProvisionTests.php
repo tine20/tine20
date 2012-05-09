@@ -106,7 +106,7 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
         );
         
         $this->_device->remotewipe = Syncroton_Command_Provision::REMOTEWIPE_REQUESTED;
-        $this->_device = $this->_deviceBackend->update($this->_device);
+        $this->_device = Syncroton_Registry::getDeviceBackend()->update($this->_device);
         
         $provision = new Syncroton_Command_Provision($doc, $this->_device, $this->_device->policykey);
         
@@ -146,7 +146,7 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
         $responseDoc = $provision->getResponse();
         #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
-        $this->_device = $this->_deviceBackend->update($this->_device);
+        $this->_device = Syncroton_Registry::getDeviceBackend()->update($this->_device);
         $this->assertEquals(Syncroton_Command_Provision::REMOTEWIPE_CONFIRMED, $this->_device->remotewipe);
         
         $xpath = new DomXPath($responseDoc);

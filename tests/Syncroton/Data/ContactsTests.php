@@ -50,7 +50,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetFoldersIPhone()
     {
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         
@@ -77,7 +77,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         $testNode = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_WEBOS)
         );
         
@@ -104,7 +104,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testAddContact()
     {
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_ANDROID)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
@@ -145,7 +145,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $appData        = $add->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
@@ -173,7 +173,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetServerEntries()
     {
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
@@ -188,7 +188,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetChanged()
     {
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
@@ -203,7 +203,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
     
     public function testDeleteEntry()
     {
-        $device = $this->_deviceBackend->create(
+        $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));

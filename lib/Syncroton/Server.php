@@ -46,7 +46,7 @@ class Syncroton_Server
         $this->_request = $request !== null ? $request : new Zend_Controller_Request_Http();
         $this->_body    = $body    !== null ? $body    : fopen('php://input', 'r');
         
-        $this->_deviceBackend = Syncroton_Registry::get('deviceBackend');
+        $this->_deviceBackend = Syncroton_Registry::getDeviceBackend();
         
     }
         

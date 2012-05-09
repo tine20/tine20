@@ -138,12 +138,12 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
     public function testFolderSyncAfterInvalidSyncKey()
     {
         $this->testGetFoldersSyncKey0();
-        $clientFolders1 = $this->_folderBackend->getFolderState($this->_device, 'Contacts');
+        $clientFolders1 = Syncroton_Registry::getFolderBackend()->getFolderState($this->_device, 'Contacts');
         
         $this->testGetFoldersInvalidSyncKey();
         
         $this->testGetFoldersSyncKey0();
-        $clientFolders2 = $this->_folderBackend->getFolderState($this->_device, 'Contacts');
+        $clientFolders2 = Syncroton_Registry::getFolderBackend()->getFolderState($this->_device, 'Contacts');
         
         $this->assertEquals($clientFolders1["addressbookFolderId"], $clientFolders2["addressbookFolderId"]);
     }

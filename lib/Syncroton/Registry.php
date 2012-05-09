@@ -37,6 +37,11 @@ class Syncroton_Registry extends ArrayObject
     const DATABASE            = 'database';
     const TRANSACTIONMANAGER  = 'transactionmanager';
     
+    const CONTENTSTATEBACKEND = 'contentstatebackend';
+    const DEVICEBACKEND       = 'devicebackend';
+    const FOLDERBACKEND       = 'folderbackend';
+    const SYNCSTATEBACKEND    = 'syncstatebackend';
+    
     /**
      * Class name of the singleton registry object.
      * @var string
@@ -174,6 +179,74 @@ class Syncroton_Registry extends ArrayObject
         }
 
         return $instance->offsetGet($index);
+    }
+    
+    /**
+     * returns content state backend
+     * 
+     * creates Syncroton_Backend_Content on the fly if not before via
+     * Syncroton_Registry::set(self::CONTENTSTATEBACKEND, $backend);
+     * 
+     * @return Syncroton_Backend_IContent
+     */
+    public static function getContentStateBackend()
+    {
+        if (!self::isRegistered(self::CONTENTSTATEBACKEND)) {
+            self::set(self::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(self::getDatabase()));
+        }
+        
+        return self::get(self::CONTENTSTATEBACKEND);
+    }
+
+    /**
+     * returns device backend
+     * 
+     * creates Syncroton_Backend_Device on the fly if not before via
+     * Syncroton_Registry::set(self::DEVICEBACKEND, $backend);
+     * 
+     * @return Syncroton_Backend_IDevice
+     */
+    public static function getDeviceBackend()
+    {
+        if (!self::isRegistered(self::DEVICEBACKEND)) {
+            self::set(self::DEVICEBACKEND, new Syncroton_Backend_Device(self::getDatabase()));
+        }
+        
+        return self::get(self::DEVICEBACKEND);
+    }
+
+    /**
+     * returns folder backend
+     * 
+     * creates Syncroton_Backend_Folder on the fly if not before via
+     * Syncroton_Registry::set(self::FOLDERBACKEND, $backend);
+     * 
+     * @return Syncroton_Backend_IFolder
+     */
+    public static function getFolderBackend()
+    {
+        if (!self::isRegistered(self::FOLDERBACKEND)) {
+            self::set(self::FOLDERBACKEND, new Syncroton_Backend_Folder(self::getDatabase()));
+        }
+        
+        return self::get(self::FOLDERBACKEND);
+    }
+
+    /**
+     * returns syncstate backend
+     * 
+     * creates Syncroton_Backend_SyncState on the fly if not before via
+     * Syncroton_Registry::set(self::SYNCSTATEBACKEND, $backend);
+     * 
+     * @return Syncroton_Backend_ISyncState
+     */
+    public static function getSyncStateBackend()
+    {
+        if (!self::isRegistered(self::SYNCSTATEBACKEND)) {
+            self::set(self::SYNCSTATEBACKEND, new Syncroton_Backend_SyncState(self::getDatabase()));
+        }
+        
+        return self::get(self::SYNCSTATEBACKEND);
     }
 
     /**
