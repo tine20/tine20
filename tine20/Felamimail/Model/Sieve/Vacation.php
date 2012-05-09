@@ -53,6 +53,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'days'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 7),
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'date_enabled'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'mime'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // not persistent, only used for message template
@@ -98,8 +99,18 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             ->setSubject($this->subject)
             ->setFrom($this->from)
             ->setMime($this->mime)
-            ->setReason($this->reason);
-            
+            ->setReason($this->reason)
+            ->setDateEnabled($this->date_enabled);
+        
+        $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        if ($this->start_date instanceof Tinebase_DateTime) {
+            $fsv->setStartdate($this->start_date->format('Y-m-d'));
+        }
+        if ($this->end_date instanceof Tinebase_DateTime) {
+            $fsv->setEnddate($this->end_date->format('Y-m-d'));
+        }
+        $this->setTimezone('UTC');
+        
         if (is_array($this->addresses)) {
             foreach ($this->addresses as $address) {
                 $fsv->addAddress($address);

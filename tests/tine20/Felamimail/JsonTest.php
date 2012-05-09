@@ -834,16 +834,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetVacation()
     {
-        $vacationData = array(
-            'id'                    => $this->_account->getId(),
-            'subject'               => 'unittest vacation subject',
-            'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
-            'days'                  => 7,
-            'enabled'               => TRUE,
-            'reason'                => 'unittest vacation message<br /><br />signature',
-            'mime'                  => '',
-        );
-        
+        $vacationData = $this->_getVacationData();
         $this->_sieveTestHelper($vacationData);
         
         // check if script was activated
@@ -867,19 +858,30 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test mime vacation sieve script
+     * get vacation data
+     * 
+     * @return array
      */
-    public function testMimeVacation()
+    protected function _getVacationData()
     {
-        $vacationData = array(
+        return array(
             'id'                    => $this->_account->getId(),
             'subject'               => 'unittest vacation subject',
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>",
+            'reason'                => 'unittest vacation message<br /><br />signature',
             'mime'                  => NULL,
         );
+    }
+    
+    /**
+     * test mime vacation sieve script
+     */
+    public function testMimeVacation()
+    {
+        $vacationData = $this->_getVacationData();
+        $vacationData['reason'] = "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>";
         
         $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (! in_array('mime', $_sieveBackend->capability())) {
@@ -1040,6 +1042,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+    * testSetVacationWithStartAndEndDate
+    *
+    * @see 0006266: automatic deactivation of vacation message
+    */
+    public function testSetVacationWithStartAndEndDate()
+    {
+        $vacationData = $this->_getVacationData();
+        $vacationData['start_date'] = '2012-04-18';
+        $vacationData['end_date'] = '2012-04-20';
+        $result = $this->_sieveTestHelper($vacationData);
+        
+        $this->assertContains($vacationData['start_date'], $result['start_date']);
+        $this->assertContains($vacationData['end_date'], $result['end_date']);
+    }
+    
+    /**
      * get folder filter
      *
      * @return array
@@ -1191,6 +1209,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * sieve test helper
      * 
      * @param array $_sieveData
+     * @return array
      */
     protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
@@ -1227,5 +1246,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
             $this->assertEquals($_sieveData, $resultSet);
         }
+        
+        return $resultSet;
     }
 }

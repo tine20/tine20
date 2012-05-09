@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>5.7</version>
+    <version>5.8</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -459,7 +459,7 @@
                 <field>
                     <name>timestamp</name>
                     <type>datetime</type>
-                </field>                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -709,7 +709,7 @@
         </table>
         <table>
             <name>felamimail_sieve_vacation</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -749,6 +749,14 @@
                 <field>
                     <name>addresses</name>
                     <type>text</type>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>end_date</name>
+                    <type>datetime</type>
                 </field>
                 <field>
                     <name>enabled</name>

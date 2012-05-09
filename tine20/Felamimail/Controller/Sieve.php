@@ -284,6 +284,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             // cyrus does not support :from
             unset($_vacation->from);
         }
+        
+        if (in_array('date', $capabilities['SIEVE']) && in_array('relational', $capabilities['SIEVE'])) {
+            $_vacation->date_enabled = TRUE;
+        }
     }
     
     /**

@@ -250,4 +250,27 @@ class Felamimail_Setup_Update_Release5 extends Setup_Update_Abstract
         Felamimail_Setup_Initialize::createVacationTemplatesFolder();
         $this->setApplicationVersion('Felamimail', '5.7');
     }
+
+    /**
+    * update to 5.8
+    * - add start + end date to vacation
+    */
+    public function update_7()
+    {
+        foreach (array('start_date', 'end_date') as $fieldName) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>' . $fieldName . '</name>
+                    <type>datetime</type>
+                </field>');
+            try {
+                $this->_backend->addCol('felamimail_sieve_vacation', $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // already done
+            }
+        }
+        
+        $this->setTableVersion('felamimail_sieve_vacation', 2);
+        $this->setApplicationVersion('Felamimail', '5.8');
+    }
 }
