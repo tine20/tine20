@@ -997,7 +997,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['totalcount'] > 0, 'no templates found');
         $found = FALSE;
         foreach ($result['results'] as $template) {
-            if ($template['name'] === 'vacation_template_test.txt') {
+            if ($template['name'] === 'vacation_template_test.tpl') {
                 $found = TRUE;
                 break;
             }
@@ -1016,8 +1016,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
-        $this->_pathsToDelete[] = $path . '/vacation_template_test.txt';
-        $node->createFile('vacation_template_test.txt', fopen(dirname(__FILE__) . '/files/vacation_template.txt', 'r'));
+        $this->_pathsToDelete[] = $path . '/vacation_template_test.tpl';
+        $node->createFile('vacation_template_test.tpl', fopen(dirname(__FILE__) . '/files/vacation_template.tpl', 'r'));
     }
     
     /**
@@ -1030,8 +1030,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'start_date' => '2012-04-18',
             'end_date'   => '2012-04-20',
             'contact_ids' => array(
-                Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->contact_id,
                 Tinebase_User::getInstance()->getFullUserByLoginName('pwulf')->contact_id,
+                Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->contact_id,
             ),
             'template_id' => $template['id'],
         ));

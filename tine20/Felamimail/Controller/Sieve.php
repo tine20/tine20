@@ -547,7 +547,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @todo get locale from placeholder (i.e. endDate-_LOCALESTRING_)
      * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
-     * @todo sort $representatives?
      * @todo use html templates?
      * @todo use ZF templates / phplib tpl files?
      */
@@ -555,31 +554,38 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $timezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
-        
+        if ($vacation->contact_ids && count($representatives) > 0) {
+            // sort representatives
+            $representativesArray = array();
+            foreach ($vacation->contact_ids as $id) {
+                $representativesArray[] = $representatives->getById($id);
+            }
+        }
+
         $search = array(
-            '[[startDate-en_US]]',
-            '[[endDate-en_US]]',
-            '[[startDate-de_DE]]',
-            '[[endDate-de_DE]]',
-            '[[representation-n_fn-1]]',
-            '[[representation-n_fn-2]]',
-            '[[representation-email-1]]',
-            '[[representation-email-2]]',
-            '[[representation-tel_work-1]]',
-            '[[representation-tel_work-2]]',
-            '[[signature]]',
+            '{startDate-en_US}',
+            '{endDate-en_US}',
+            '{startDate-de_DE}',
+            '{endDate-de_DE}',
+            '{representation-n_fn-1}',
+            '{representation-n_fn-2}',
+            '{representation-email-1}',
+            '{representation-email-2}',
+            '{representation-tel_work-1}',
+            '{representation-tel_work-2}',
+            '{signature}',
         );
         $replace = array(
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('en_US'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('en_US'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('de_DE'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('de_DE'), 'date'),
-            (isset($representatives[0])) ? $representatives[0]->n_fn : 'unknown person',
-            (isset($representatives[1])) ? $representatives[1]->n_fn : 'unknown person',
-            (isset($representatives[0])) ? $representatives[0]->email : 'unknown email',
-            (isset($representatives[1])) ? $representatives[1]->email : 'unknown email',
-            (isset($representatives[0])) ? $representatives[0]->tel_work : 'unknown phone',
-            (isset($representatives[1])) ? $representatives[1]->tel_work : 'unknown phone',
+            (isset($representativesArray[0])) ? $representativesArray[0]->n_fn : 'unknown person',
+            (isset($representativesArray[1])) ? $representativesArray[1]->n_fn : 'unknown person',
+            (isset($representativesArray[0])) ? $representativesArray[0]->email : 'unknown email',
+            (isset($representativesArray[1])) ? $representativesArray[1]->email : 'unknown email',
+            (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : 'unknown phone',
+            (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : 'unknown phone',
             ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($vacation->signature) : '',
         );
         
