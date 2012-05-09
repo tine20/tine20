@@ -44,7 +44,7 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
                         string = '';
                         
                     if (whatParts.indexOf('icon') > -1 && icon) {
-                        string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + i18nValue + '" />';
+                        string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + Ext.util.Format.htmlEncode(i18nValue) + '" />';
                     }
                         
                     if (whatParts.indexOf('text') > -1 && i18nValue) {

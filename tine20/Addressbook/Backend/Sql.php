@@ -44,7 +44,14 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_getDisabledContacts = FALSE;
-
+    
+   /**
+    * default column(s) for count
+    *
+    * @var string
+    */
+    protected $_defaultCountCol = 'id';
+    
     /**
      * foreign tables (key => tablename)
      *

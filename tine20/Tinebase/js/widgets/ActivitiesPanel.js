@@ -98,7 +98,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 '</div>',
             '</tpl>' , {
                 encode: function (value, ellipsis) {
-                    var result = Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value));
+                    var result = Ext.util.Format.nl2br(Tine.Tinebase.common.doubleEncode(value));
                     return (ellipsis) ? Ext.util.Format.ellipsis(result, 300) : result;
                 },
                 render: function (value, type) {
@@ -730,7 +730,7 @@ Tine.widgets.activities.getTypeIcon = function (id) {
     var typesStore = Tine.widgets.activities.getTypesStore();
     var typeRecord = typesStore.getById(id);
     if (typeRecord) {
-        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + typeRecord.data.description + '"/>';
+        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(typeRecord.data.description) + '"/>';
     } else {
         return '';
     }

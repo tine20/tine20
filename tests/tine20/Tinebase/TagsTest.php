@@ -178,6 +178,9 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+    * detach tags from records
+    */
     public function testDetachTagsFromMultipleRecords()
     {
         $personas = Zend_Registry::get('personas');
@@ -191,6 +194,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             $contact->tags = array();
             $this->_instance->setTagsOfRecord($contact);
         }
+        sleep(1);
 
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $personasContactIds)
@@ -222,7 +226,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         foreach ($contacts as $contact) {
             $this->assertEquals(2, count($contact->tags), 'Tags not found in contact ' . $contact->n_fn);
         }
-        sleep(1);
         
         // Try to remove the created Tags
         $this->_instance->detachTagsFromMultipleRecords($filter,$tagIds);

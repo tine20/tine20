@@ -1,6 +1,7 @@
 <?php
 /**
  * Tine 2.0
+ *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
@@ -12,14 +13,14 @@
  * employee filter Class
  * @package     HumanResources
  */
-class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGroup
+class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'HumanResources_Model_EmployeeFilter';
+    protected $_className = 'HumanResources_Model_FreeTimeFilter';
     
     /**
      * @var string application of this filter group
@@ -29,7 +30,7 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'HumanResources_Model_Employee';
+    protected $_modelName = 'HumanResources_Model_FreeTime';
     
     /**
      * @var array filter model fieldName => definition

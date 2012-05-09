@@ -176,8 +176,8 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 Ext.QuickTips.register({
                     target: field,
                     dismissDelay: 30000,
-                    title: field.fieldLabel,
-                    text: field.description,
+                    title: Tine.Tinebase.common.doubleEncode(field.fieldLabel),
+                    text: Tine.Tinebase.common.doubleEncode(field.description),
                     width: 200
                 });
             }

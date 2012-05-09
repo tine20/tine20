@@ -401,7 +401,7 @@ Tine.Crm.Contact.typeRenderer = function(type)
             break;
     }
     
-    var icon = '<img class="x-menu-item-icon contactIcon ' + iconClass + '" src="library/ExtJS/resources/images/default/s.gif" ext:qtip="' + qTip + '"/>';
+    var icon = '<img class="x-menu-item-icon contactIcon ' + iconClass + '" src="library/ExtJS/resources/images/default/s.gif" ext:qtip="' + Ext.util.Format.htmlEncode(qTip) + '"/>';
     
     return icon;
 };

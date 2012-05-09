@@ -1,49 +1,56 @@
 <?php
 /**
  * Tine 2.0
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> c123555345af35996b050a02208fef55f90f1286
  * @package     HumanResources
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> c123555345af35996b050a02208fef55f90f1286
  */
 
 /**
  * class to hold Employee data
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> c123555345af35996b050a02208fef55f90f1286
  * @package     HumanResources
  * @subpackage  Model
  */
 class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the filed which
      * represents the identifier
-     * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
      * application the record belongs to
-     *
      * @var string
      */
     protected $_application = 'HumanResources';
 
     /**
      * list of zend validator
-     * 
      * this validators get used when validating user generated content with Zend_Input_Filter
-     *
      * @var array
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 //        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    
         'contact_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'countryname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'locality'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -78,15 +85,14 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // relations (linked HumanResources_Model_Employee records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
      * name of fields containing datetime or an array of datetime information
-     *
      * @var array list of datetime fields
-     */    
+     */
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',

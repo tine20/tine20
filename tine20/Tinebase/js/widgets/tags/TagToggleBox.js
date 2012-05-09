@@ -121,7 +121,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
             {
                 encode: function(value) {
                      if (value) {
-                        return Ext.util.Format.htmlEncode(value);
+                        return Tine.Tinebase.common.doubleEncode(value);
                     } else {
                         return '';
                     }
