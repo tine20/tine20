@@ -714,14 +714,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();
-            foreach ($result as &$prefArray) {
+            foreach ($result as $key => $prefArray) {
                 if (isset($translations[$prefArray['name']])) {
-                    $prefArray = array_merge($prefArray, $translations[$prefArray['name']]);
+                    $result[$key] = array_merge($prefArray, $translations[$prefArray['name']]);
                 } else {
-                    $prefArray = array_merge($prefArray, array('label' => $prefArray['name']));
+                    $result[$key] = array_merge($prefArray, array('label' => $prefArray['name']));
                 }
             }
-
+            
+            // sort prefs by definition
+            $allPrefs = (array) $backend->getAllApplicationPreferences();
+            usort($result, function($a, $b) use ($allPrefs) {
+                $a = (int) array_search($a['name'], $allPrefs);
+                $b = (int) array_search($b['name'], $allPrefs);
+                
+                if ($a == $b) {
+                    return 0;
+                }
+                return ($a < $b) ? -1 : 1;
+            });
+            
         } else {
             $result = array();
         }
