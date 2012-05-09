@@ -83,6 +83,10 @@ class Syncroton_Registry extends ArrayObject
      */
     public static function getTransactionManager()
     {
+        if (!self::isRegistered(self::TRANSACTIONMANAGER)) {
+            self::set(self::TRANSACTIONMANAGER, Syncroton_TransactionManager::getInstance());
+        }
+        
         return self::get(self::TRANSACTIONMANAGER);
     } 
     

@@ -54,7 +54,6 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Syncroton_Registry::setDatabase(getTestDatabase());
-        Syncroton_Registry::setTransactionManager(Syncroton_TransactionManager::getInstance());
         
         Syncroton_Registry::getTransactionManager()->startTransaction(Syncroton_Registry::getDatabase());
         
