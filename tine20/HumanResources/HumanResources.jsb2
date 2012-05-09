@@ -24,6 +24,10 @@
           "path": "js/"
         },
         {
+          "text": "EmployeeEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "ElayerGridPanel.js",
           "path": "js/"
         }

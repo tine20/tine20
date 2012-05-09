@@ -91,7 +91,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             columnWidth: .333
         };
         
-        this.elayerGridPanel = new Tine.HumanResources.ElayerGridPanel();
+        this.elayerGridPanel = new Tine.HumanResources.ElayerGridPanel({
+            record: this.record,
+            app: this.app,
+            editDialog: this
+        });
         
         return {
             xtype: 'tabpanel',
@@ -235,7 +239,16 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }
                             ]]
                         }]
-                    }, //this.elayerGridPanel,
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Contract Information'),
+                        disabled: ! this.showPrivateInformation,
+                        items: [
+                            this.elayerGridPanel
+                            ]
+                    },
                         {
                         xtype: 'fieldset',
                         layout: 'hfit',

@@ -31,8 +31,7 @@ Tine.HumanResources.Model.EmployeeArray = [
     {name: 'bank_account_number', type: 'string'},
     {name: 'bank_name', type: 'string'},
     {name: 'bank_code_number', type: 'string'},
-    {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'},
+
     {name: 'employment_begin', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'employment_end', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'vacation_days', type: 'int'},
@@ -97,6 +96,68 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         {label: app.i18n._('Employee name'),   field: 'name' },
         {filtertype: 'tinebase.tag', app: app},
         {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
+    ];
+};
+
+// ELayer
+
+Tine.HumanResources.Model.ElayerArray = [
+    {name: 'id', type: 'string'},
+    {name: 'start_date', type: 'date'},
+    {name: 'end_date', type: 'date'},
+    {name: 'vacation_days', type: 'int'},
+    {name: 'cost_centre', type: 'string'},
+    {name: 'working_hours', type: 'int'},
+    {name: 'employee_id', type: 'string' }
+];
+
+Tine.HumanResources.Model.Elayer = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ElayerArray, {
+    appName: 'HumanResources',
+    modelName: 'Elayer',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Elayer', 'Elayers', n);
+    recordName: 'Elayer',
+    recordsName: 'Elayers',
+    containerProperty: 'container_id',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'All Elayers',
+    containersName: 'Elayers',
+    getTitle: function() {
+        return this.get('name') ? this.get('name') : false;
+    }
+});
+
+/**
+ * @namespace Tine.HumanResources.Model
+ * 
+ * get default data for a new Elayer
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.HumanResources.Model.Elayer.getDefaultData = function() {
+    
+    var data = {};
+    return data;
+};
+
+/**
+ * @namespace Tine.HumanResources.Model
+ * 
+ * get Elayer filter
+ *  
+ * @return {Array} filter objects
+ * @static
+ */ 
+Tine.HumanResources.Model.Elayer.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('HumanResources');
+    
+    return [
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
+//        {label: app.i18n._('Elayer name'),   field: 'name' },
+//        {filtertype: 'tinebase.tag', app: app},
+//        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
     ];
 };
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Employee controller for HumanResources application
- * 
+ *
  * @package     HumanResources
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -12,7 +12,7 @@
 
 /**
  * Employee controller class for HumanResources application
- * 
+ *
  * @package     HumanResources
  * @subpackage  Controller
  */
@@ -21,7 +21,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
     private function __construct() {
         $this->_applicationName = 'HumanResources';
@@ -30,7 +30,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
-    }    
+    }
     
     /**
      * holds the instance of the singleton
@@ -44,12 +44,18 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      *
      * @return HumanResources_Controller_Employee
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new HumanResources_Controller_Employee();
         }
         
         return self::$_instance;
-    }      
+    }
+    
+    protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
+        die(var_dump($_record->toArray()));
+    }
+    
+    
 }

@@ -308,17 +308,6 @@
                         <name>id</name>
                     </field>
                 </index>
-                <index>
-                    <name>workingtime::elayer_id--elayer::id</name>
-                    <field>
-                        <name>elayer_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>humanresources_elayer</table>
-                        <field>id</field>
-                    </reference>
-                </index>
             </declaration>
         </table>
         <table>
@@ -360,7 +349,6 @@
                     <length>255</length>
                     <default></default>
                     <notnull>true</notnull>
->>>>>>> c123555345af35996b050a02208fef55f90f1286
                 </field>
                 <field>
                     <name>created_by</name>
