@@ -48,6 +48,8 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
             header('HTTP/1.0 401 Unauthorized');
             exit;
         }
+        
+        $_SESSION['phoneIsAutenticated'] = true;
     }
     
     /**

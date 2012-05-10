@@ -14,7 +14,6 @@
  * class to hold snom template data
  * 
  * @package     Voipmanager Management
- * @property  string  setting_id
  */
 class Voipmanager_Model_Snom_Template extends Tinebase_Record_Abstract
 {

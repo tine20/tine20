@@ -5,7 +5,7 @@
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        Check location_id and template_id in javascript edit dialogue, no empty strings allowed
  */
@@ -14,9 +14,6 @@
  * class to hold phone data
  * 
  * @package     Voipmanager Management
- * @property  string  http_client_pass
- * @property  string  http_client_user
- * @property  string  template_id
  */
 class Voipmanager_Model_Snom_Phone extends Tinebase_Record_Abstract
 {

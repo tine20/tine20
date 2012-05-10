@@ -120,17 +120,20 @@ class Voipmanager_Backend_Snom_Xml
         $locationSettings = array();
                                 
         $locationSettings['setting_server']          = $this->_baseURL . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
-        $locationSettings['settings_refresh_timer']  = 600;
+        $locationSettings['settings_refresh_timer']  = 3600;
         $locationSettings['firmware_status']         = $this->_baseURL . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
         
         // add directory button
         $locationSettings['dkey_directory']          = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
         $locationSettings['dkey_menu']               = 'url ' . $this->_baseURL . '?method=Phone.menu&amp;mac=$mac&amp;activeLine=$active_line';
-        $locationSettings['dkey_fkey3']              = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
-        $locationSettings['dkey_fkey4']              = 'url ' . Voipmanager_Frontend_Snom_Abstract::getBaseUrl($_phone) . '?method=Phone.getCallForward&amp;activeLine=$active_line&amp;mac=$mac';
-        $locationSettings['gui_fkey1']               = 'none';
-        $locationSettings['gui_fkey4']               = 'F_ADR_BOOK';
-        $locationSettings['gui_fkey4']               = 'F_REDIRECT';
+        $locationSettings['dkey_fkey1']              = '';
+        $locationSettings['dkey_fkey2']              = 'url ' . $this->_baseURL . '?method=Phone.directory&amp;mac=$mac';
+        $locationSettings['dkey_fkey3']              = 'url ' . $this->_baseURL . '?method=Phone.getCallForward&amp;activeLine=$active_line&amp;mac=$mac';
+        $locationSettings['dkey_fkey4']              = '';
+        $locationSettings['gui_fkey1']               = 'F_CALL_LIST';
+        $locationSettings['gui_fkey2']               = 'F_ADR_BOOK';
+        $locationSettings['gui_fkey3']               = 'F_REDIRECT';
+        $locationSettings['gui_fkey4']               = 'none';
         
         // not used anymore
         $locationSettings['action_redirection_on_url']  = '';
