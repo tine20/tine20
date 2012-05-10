@@ -704,6 +704,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $backend = Tinebase_Core::getPreference($applicationName);
         if ($backend) {
             $records = $backend->search($filter);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got ' . count($records) . ' preferences for app ' . $applicationName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' ' . print_r($records->toArray(), TRUE));
+            
             $result = $this->_multipleRecordsToJson($records, $filter);
 
             // add translated labels and descriptions

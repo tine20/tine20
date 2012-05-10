@@ -145,24 +145,4 @@ class Crm_Preference extends Tinebase_Preference_Abstract
         
         return $preference;
     }
-    
-    /**
-     * get special options
-     *
-     * @param string $_value
-     * @return array
-     */
-    protected function _getSpecialOptions($_value)
-    {
-        $result = array();
-        switch($_value) {
-            case self::DEFAULTPERSISTENTFILTER:
-                $result = Tinebase_PersistentFilter::getPreferenceValues('Crm');
-                break;
-            default:
-                $result = parent::_getSpecialOptions($_value);
-        }
-        
-        return $result;
-    }
 }
