@@ -230,7 +230,17 @@
                     
                     $jsTranslation = Tinebase_Translation::getJsTranslations($locale, $this->appName);
                     file_put_contents('${builddir}/' . "{$this->appName}/js/{$this->appName}-lang-{$locale}-debug.js", $jsTranslation);
-                }         
+                }
+                
+                foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
+                    foreach (scandir($translationPath) as $poFile) {
+                        if (substr($poFile, -3) == '.po') {
+                            $langName = substr($poFile, 0, -3);
+                            `cd "$translationPath"
+                            msgfmt -o $langName.mo $poFile`;
+                        }
+                    }
+                }
             }
         }
     ]]></adhoc-task>

@@ -16,3 +16,4 @@ tine20/build
 scripts/weeklyevents
 scripts/custom
 scripts/syncuuids/conf.php
+tine20/*/translations/*.mo
