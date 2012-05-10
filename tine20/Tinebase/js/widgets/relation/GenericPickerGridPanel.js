@@ -426,10 +426,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             Ext.each(this.constrainsConfig[f], function(c){
                 if(c.type == value) value = c.text;
             });
+        } else if(this.keyFieldConfigs[o]) {
+            renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[o].app, this.keyFieldConfigs[o].name);
+        } else if(this.keyFieldConfigs[f]) {
+            renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[f].app, this.keyFieldConfigs[f].name);
         }
-
-        else if(this.keyFieldConfigs[o]) renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[o].app, this.keyFieldConfigs[o].name);
-        else if(this.keyFieldConfigs[f]) renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[f].app, this.keyFieldConfigs[f].name);
 
         return renderer(value);
     },

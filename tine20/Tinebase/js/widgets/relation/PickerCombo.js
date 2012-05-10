@@ -83,7 +83,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                 if(hasDuplicate) {
                     if(this.combo.startRecord) {
                         var split = this.fullModelName.split('_Model_');
-                        var startRecord = new Tine[split[0]].Model[split[1]](this.combo.startRecord.data);
+                        var startRecord = this.combo.startRecord;
                     } else {
                         startRecord = null;
                     }
@@ -111,6 +111,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                         own_degree: this.relationDegree
                     }), recordToAdd.id);
 
+                    this.combo.startRecord = recordToAdd;
                     this.store.add(relationRecord);
                     }
             } else {
