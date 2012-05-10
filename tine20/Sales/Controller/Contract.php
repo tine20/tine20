@@ -61,7 +61,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id)
     {
-        $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared');
+        $sharedContracts = $this->getSharedContractsContainer();
         return parent::get($_id, $sharedContracts->getId());
     }
     
