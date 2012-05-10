@@ -750,6 +750,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $result = $this->_getDefaultContainerOptions();
                 break;
                 
+            case self::DEFAULTPERSISTENTFILTER:
+                $result = Tinebase_PersistentFilter::getPreferenceValues($this->_application);
+                break;
+                    
             default:
                 throw new Tinebase_Exception_NotFound("Special option '{$_value}' not found.");
         }
