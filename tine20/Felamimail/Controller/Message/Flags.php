@@ -98,6 +98,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * @param array                     $_flags
      * @param string                    $_mode add/clear
      * @return Tinebase_Record_RecordSet with affected folders
+     * 
+     * @todo use iterator here
      */
     protected function _addOrClearFlags($_messages, $_flags, $_mode = 'add')
     {

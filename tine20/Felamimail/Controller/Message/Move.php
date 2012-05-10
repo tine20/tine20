@@ -103,6 +103,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      */
     public function processMoveIteration($_messages, $_targetFolder)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' About to move ' . count($_messages) . ' messages to ' . ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->name : $_targetFolder));
+        
         $_messages->addIndices(array('folder_id'));
         
         $movedMessages = FALSE;
