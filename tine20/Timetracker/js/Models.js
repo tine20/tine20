@@ -30,7 +30,9 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' },
-    { name: 'customfields'}
+    { name: 'customfields'},
+    // relations
+    { name: 'relations'}
 ]);
 
 /**
@@ -117,7 +119,9 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' },
-    { name: 'customfields'}
+    { name: 'customfields'},
+    // relations
+    { name: 'relations'}
 ]);
 
 /**
