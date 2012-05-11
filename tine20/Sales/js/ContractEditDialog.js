@@ -113,7 +113,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'title',
                         allowBlank: false
                     }], [{
-                            columnWidth: .333,
+                            columnWidth: .5,
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Contact Customer'),
                             editDialog: this,
@@ -124,7 +124,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             relationDegree: 'parent',
                             modelUnique: true
                         }, {
-                            columnWidth: .333,
+                            columnWidth: .5,
                             editDialog: this,
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Contact Responsible'),
@@ -134,10 +134,10 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             relationType: 'RESPONSIBLE',
                             relationDegree: 'parent',
                             modelUnique: true
-                        }, {
+                        }/*, {
                             name: 'customer',
                             fieldLabel: this.app.i18n._('Company')
-                        }],[
+                        }*/],[
                     {
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'status',
