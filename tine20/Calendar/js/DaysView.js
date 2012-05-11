@@ -429,7 +429,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 throw new Ext.Error('no valid startime given');
             }
             
-            this.scrollTo(startTime)
+            this.scrollTo(startTime);
         } catch (e) {
             this.scrollTo();
         }

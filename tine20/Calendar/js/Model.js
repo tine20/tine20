@@ -167,7 +167,8 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
         container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
-        attender = Tine.Tinebase.registry.get('currentAccount');
+        attender = Tine.Tinebase.registry.get('currentAccount'),
+        prefs = app.getRegistry().get('preferences');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
@@ -189,6 +190,10 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
             })
         ]
     };
+    
+    if (prefs.get('defaultalarmenabled')) {
+        data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
+    }
     
     return data;
 };
