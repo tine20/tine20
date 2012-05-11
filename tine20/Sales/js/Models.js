@@ -10,14 +10,7 @@
  
 Ext.namespace('Tine.Sales', 'Tine.Sales.Model');
 
-/**
- * @namespace Tine.Sales.Model
- * @class Tine.Sales.Model.Product
- * @extends Tine.Tinebase.data.Record
- * 
- * Product Record Definition
- */ 
-Tine.Sales.Model.Product = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Sales.Model.ProductArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',            type: 'string'},
     {name: 'name',          type: 'string'},
     {name: 'description',   type: 'string'},
@@ -29,7 +22,16 @@ Tine.Sales.Model.Product = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.
     {name: 'notes'},
     // relations with other objects
     { name: 'relations'}
-]), {
+]);
+
+/**
+ * @namespace Tine.Sales.Model
+ * @class Tine.Sales.Model.Product
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Product Record Definition
+ */ 
+Tine.Sales.Model.Product = Tine.Tinebase.data.Record.create(Tine.Sales.Model.ProductArray, {
     appName: 'Sales',
     modelName: 'Product',
     idProperty: 'id',
