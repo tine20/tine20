@@ -234,6 +234,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         $this->_filters['smtp_ssl']         = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
         $this->_filters['sieve_ssl']        = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
         $this->_filters['display_format']   = array(new Zend_Filter_Empty(self::DISPLAY_HTML), 'StringTrim', 'StringToLower');
+        $this->_filters['port']             = new Zend_Filter_Empty(NULL);
         $this->_filters['smtp_port']        = new Zend_Filter_Empty(NULL);
         $this->_filters['sieve_port']       = new Zend_Filter_Empty(NULL);
         
