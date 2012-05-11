@@ -801,6 +801,10 @@
           "path": "css/ux/"
         },
         {
+          "text": "LockTextField.css",
+          "path": "css/ux/"
+        },
+        {
           "text": "Menu.css",
           "path": "css/ux/"
         },
