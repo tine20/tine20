@@ -109,22 +109,52 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     description: pref.get('description')
                 };
                 
-                // evaluate xtype
-                var xtype = (pref.get('options') && pref.get('options').length > 0) ? 'combo' : 'textfield';
-                if (xtype == 'combo' && this.adminMode) {
-                    xtype = 'lockCombo';
-                } else if (xtype == 'textfield' && this.adminMode) {
-                    xtype = 'lockTextfield';
-                }
-                fieldDef.xtype = xtype;
-                
-                if (pref.get('options') && pref.get('options').length > 0) {
-                    // add additional combobox config
-                    fieldDef.store = pref.get('options');
-                    fieldDef.mode = 'local';
-                    fieldDef.forceSelection = true;
-                    fieldDef.allowBlank = false;
-                    fieldDef.triggerAction = 'all';
+                var options = pref.get('options');
+                // NOTE: some prefs have no default and only one option (e.g. std email account)
+                if (options.length > 1 || (options.length == 1 && options[0][0] !== '_default_')) {
+                    Ext.apply(fieldDef, {
+                        xtype: (this.adminMode ? 'lockCombo' : 'combo'),
+                        store: pref.get('options'),
+                        mode: 'local',
+                        forceSelection: true,
+                        allowBlank: false,
+                        triggerAction: 'all'
+                    });
+                } else {
+                    Ext.apply(fieldDef, {
+                        xtype: (this.adminMode ? 'lockTextfield' : 'textfield'),
+                        defaultValue: options[0][1],
+                        isValid: function() {
+                            // crude hack to guess type (prefs need DTD)
+                            var type = this.defaultValue.match(/\(([0-9]*)\)$/) ? 'int' : 'string',
+                                value = this.getValue();
+                            
+                            // default is always valid
+                            if (value == '_default_') {
+                                return true;
+                            }
+                            
+                            if (type == 'int') {
+                                return !! String(value).match(/\d+/);
+                            }
+                            
+                            return true;
+                        },
+                        setValue: function(v) {
+                            v = v == '_default_' ? this.defaultValue : v;
+                            Ext.form.TextField.prototype.setValue.call(this, v);
+                        },
+                        getValue: function() {
+                            var value = Ext.form.TextField.prototype.getValue.call(this);
+                            return value == this.defaultValue ? '_default_' : value;
+                        },
+                        postBlur: function() {
+                            var value = this.getValue();
+                            if (value === '') {
+                                this.setValue('_default_');
+                            }
+                        }
+                    });
                 }
                 
                 if (this.adminMode) {
@@ -190,16 +220,19 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
      * @return {Boolean}
      */
     isValid: function() {
+        var isValid = true;
+        
         if (this.items && this.items.items) {
             var field;
             for (var i=0; i < this.items.items.length; i++) {
                 field = this.items.items[i];
                 if (! field.isValid()) {
-                    return false;
+                    field.markInvalid();
+                    isValid = false;
                 }
             }
         }
         
-        return true;
+        return isValid;
     }
 });
