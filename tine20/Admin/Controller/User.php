@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract
@@ -199,8 +199,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            
+            if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Lock wait timeout exceeded/', $e->getMessage())) {
+                throw new Tinebase_Exception_Backend_Database_LockTimeout($e->getMessage());
+            }
+            
             throw $e;
         }
             
@@ -228,7 +232,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        // avoid forging accountId, get's created in backend
+        // avoid forging accountId, gets created in backend
         unset($_user->accountId);
         
         try {
