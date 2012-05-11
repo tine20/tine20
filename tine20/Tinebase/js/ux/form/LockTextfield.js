@@ -20,8 +20,8 @@ Ext.ux.form.LockTextfield = Ext.extend(Ext.form.TriggerField, {
     hiddenFieldId: '',
     hiddenFieldData: '',
     
-    triggerClassLocked: 'x-form-trigger x-form-locked-trigger',
-    triggerClassUnlocked: 'x-form-trigger x-form-unlocked-trigger',
+    triggerClassLocked: 'x-form-locked-trigger',
+    triggerClassUnlocked: 'x-form-unlocked-trigger',
     
     /**
      * @private
