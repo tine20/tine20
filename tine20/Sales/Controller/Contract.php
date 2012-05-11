@@ -75,12 +75,14 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
     {
         // add container
         $_record->container_id = self::getSharedContractsContainer()->getId();
-        
-        // add number
-        $numberBackend = new Sales_Backend_Number();
-        $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, $this->_currentAccount->getId());
-        $_record->number = $number->number;
-        
+
+        if(Tinebase_Config::getInstance()->getConfig('autogenerate_number', Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(), 'auto')->__get('value') == 'auto') {
+            // add number if configured auto
+            $numberBackend = new Sales_Backend_Number();
+            $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, $this->_currentAccount->getId());
+            $_record->number = $number->number;
+        }
+
         return parent::create($_record);
     }
 
