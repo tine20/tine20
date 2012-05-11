@@ -48,18 +48,18 @@ Tine.widgets.grid.RendererManager = function() {
             var renderer = null;
             
             if (fieldName == 'tags') {
-                renderer = Tine.Tinebase.common.tagsRenderer
+                renderer = Tine.Tinebase.common.tagsRenderer;
             } else if (fieldName == 'notes') {
                 // @TODO
-                renderer = function(value) {return value ? _('has notes') : ''};
+                renderer = function(value) {return value ? _('has notes') : '';};
             } else if (fieldName == 'relations') {
                 // @TODO
-                renderer = function(value) {return value ? _('has relations') : ''};
+                renderer = function(value) {return value ? _('has relations') : '';};
             } else if (fieldName == 'customfields') {
                 // @TODO
                 // we should not come here!
             } else if (fieldName == 'container_id') {
-                renderer = Tine.Tinebase.common.containerRenderer
+                renderer = Tine.Tinebase.common.containerRenderer;
             }
             
             return renderer;
