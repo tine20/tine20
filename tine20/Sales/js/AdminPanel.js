@@ -50,8 +50,6 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
         // get items for this dialog
         this.items = this.getFormItems();
         
-        this.loadConfig();
-        
         Tine.Sales.AdminPanel.superclass.initComponent.call(this);
     },
 
@@ -101,28 +99,6 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
         } ]);
 
     },
-
-    loadConfig: function() {
-        Ext.Ajax.request({
-            url : 'index.php',
-            scope: this,
-            params : {
-                method : 'Sales.getConfig'
-            },
-            success : function(_result, _request) {
-                try {
-                    var result = Ext.decode(_result.responseText);   
-                    if(result.hasOwnProperty('autogenerate_number')) {
-                        this.getForm().findField('autogenerate_number').setValue(result.autogenerate_number);
-                    }
-                } catch (e) {
-                    Tine.log.error('Tine.Sales.AdminPanel::loadRecord::successCallback');
-                    Tine.log.error(e.stack ? e.stack : e);
-                }
-                this.loadMask.hide();
-            }
-        });
-    },
     
     /**
      * closes the window
@@ -142,7 +118,10 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
             scope: this,
             params: {
                 method: 'Sales.setConfig',
-                config: this.getForm().findField('autogenerate_number').getValue()
+                config: {
+                    contractNumberGeneration: this.getForm().findField('contractNumberGeneration').getValue(),
+                    contractNumberValidation: this.getForm().findField('contractNumberValidation').getValue()
+                }
             },
             success : function(_result, _request) {
                 this.onCancel();
@@ -155,6 +134,10 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
      * @return Object
      */
     getFormItems: function() {
+        
+        var cng = Tine.Sales.registry.get('config').contractNumberGeneration,
+            cnv = Tine.Sales.registry.get('config').contractNumberValidation;
+
         return {
             border: false,
             frame:  false,
@@ -175,13 +158,24 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                     frame:   false,
                     items: [
                         {
-                            fieldLabel: this.app.i18n._('Generate contract number'),
-                            name: 'autogenerate_number',
+                            fieldLabel: cng.definition.label,
+                            name: 'contractNumberGeneration',
                             xtype: 'combo',
                             mode: 'local',
                             forceSelection: true,
                             triggerAction: 'all',
-                            store: [['auto', this.app.i18n._('auto')], ['manual', this.app.i18n._('manual')]]
+                            value: cng.value ? cng.value : cng['default'],
+                            store: cng.definition.options
+                        },
+                        {
+                            fieldLabel: cnv.definition.label,
+                            name: 'contractNumberValidation',
+                            xtype: 'combo',
+                            mode: 'local',
+                            value: cnv.value ? cnv.value : cnv['default'],
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store: cnv.definition.options
                         }
                     ] 
                     }]

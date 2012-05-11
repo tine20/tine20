@@ -124,4 +124,26 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('sales_contracts', 2);
         $this->setApplicationVersion('Sales', '5.3');
     }
+    
+    /**
+     * update from 5.3 -> 5.4
+     * - change number type to text
+     * 
+     * @return void
+     */    
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>number</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>'
+        );
+        
+        $this->_backend->alterCol('sales_contracts', $declaration);
+        $this->setTableVersion('sales_contracts', 3);
+        $this->setApplicationVersion('Sales', '5.4');
+    }
 }

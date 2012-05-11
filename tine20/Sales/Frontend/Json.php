@@ -80,12 +80,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $sharedContainer = Sales_Controller_Contract::getSharedContractsContainer();
         $sharedContainer->resolveGrantsAndPath();
-
-        $generateNumber = Tinebase_Config::getInstance()->getConfig('autogenerate_number', Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(), 'auto')->__get('value');
         
         return array(
-            'defaultContainer' => $sharedContainer->toArray(),
-            'numberGeneration' => $generateNumber
+            'defaultContainer' => $sharedContainer->toArray()
         );
     }
     

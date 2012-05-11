@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>5.3</version>
+    <version>5.4</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -76,7 +76,8 @@
                 </field>
                 <field>
                     <name>number</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

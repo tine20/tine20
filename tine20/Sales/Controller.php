@@ -42,6 +42,18 @@ class Sales_Controller extends Tinebase_Controller_Abstract
     private static $_instance = NULL;
     
     /**
+     * Valid config keys for this application
+     * @var array
+     */
+    private static $_configKeys;
+    
+    /**
+     * config defaults
+     * @var array
+     */
+    private static $_configKeyDefaults;
+    
+    /**
      * singleton
      *
      * @return Sales_Controller
@@ -64,14 +76,17 @@ class Sales_Controller extends Tinebase_Controller_Abstract
         if(!Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
-        $cfg = Tinebase_Config::getInstance()->getConfig('autogenerate_number', Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(), 'auto');
-        return array('autogenerate_number' => $cfg->__get('value'));
+        
+        return array(
+            'contractNumberValidation' => Sales_Config::getInstance()->get('contractNumberValidation', 'integer'),
+            'contractNumberGeneration' => Sales_Config::getInstance()->get('contractNumberGeneration', 'auto')
+            );
     }
 
     /**
      * save Sales settings
      *
-     * @param string autogenerate config
+     * @param array config
      * @return Sales_Model_Config
      *
      * @todo generalize this
@@ -81,6 +96,11 @@ class Sales_Controller extends Tinebase_Controller_Abstract
         if(!Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
-        return Tinebase_Config::getInstance()->setConfigForApplication('autogenerate_number', $config, $this->_applicationName);
+        
+        $ret[] = array(
+            Sales_Config::getInstance()->set('contractNumberGeneration', $config['contractNumberGeneration']),
+            Sales_Config::getInstance()->set('contractNumberValidation', $config['contractNumberValidation'])
+        );
+        return $ret;
     }
 }

@@ -48,9 +48,15 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @type {Boolean} autoGenerateNumber
      */
     autoGenerateNumber: null,
+    /**
+     * how should the number be validated text/integer possible
+     * @type {String} validateNumber
+     */
+    validateNumber: null,
     
     initComponent: function() {
-        this.autoGenerateNumber = (Tine.Sales.registry.get('numberGeneration') == 'auto') ? true : false;
+        this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
+        this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
         Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
     },
     
@@ -69,6 +75,19 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 id: this.record.id
             }
         });
+    },
+
+    /**
+     * extra validation for the number field, calls parent
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var valid = Tine.Sales.ContractEditDialog.superclass.isValid.call(this);
+        var isValid = this.autoGenerateNumber ? true : (this.validateNumber == 'integer') ? Ext.isNumber(Ext.num(this.getForm().findField('number').getValue())) : true;
+        if(!isValid) {
+            this.getForm().findField('number').markInvalid(this.app.i18n._('Please use a decimal number here!'));
+        }
+        return isValid && valid;
     },
     
     /**
