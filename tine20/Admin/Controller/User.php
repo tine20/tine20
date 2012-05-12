@@ -287,7 +287,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             if ($accountId === $this->_currentAccount->getId()) {
                 $message = 'You are not allowed to delete yourself!';
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
-                throw new Tinebase_Exception_Record_NotAllowed($message);
+                throw new Tinebase_Exception_AccessDenied($message);
             }
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
