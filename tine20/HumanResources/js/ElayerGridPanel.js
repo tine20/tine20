@@ -43,13 +43,66 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     app: null,
     record: null,
     editDialog: null,
+    enableHdMenu: false,
     
     initComponent: function() {
         this.initStore();
         this.colModel = this.getColumnModel();
-        this.sm = new Ext.grid.RowSelectionModel({singleSelect:true}),
+        
+        this.initActions();
+        this.contextMenu = new Ext.menu.Menu({
+            items: [this.actionAdd, this.actionUnlink, this.actionEdit]
+        });
+        this.plugins = this.plugins || [];
+    this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        // on rowcontextmenu handler
+        this.listeners = {
+            rowcontextmenu: function(grid, row, e) {
+                alert('asd');
+                e.stopEvent();
+                var selModel = grid.getSelectionModel();
+                if(!selModel.isSelected(row)) {
+                    selModel.selectRow(row);
+                }
+                
+                this.contextMenu.showAt(e.getXY());
+            },
+            scope:this
+        };
         
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
+    },
+    
+    initActions: function() {
+        this.actionAdd = new Ext.Action({
+            text: _('Add Elayer'),
+            tooltip: _('Add a new elayer to this employee'),
+            iconCls: 'action_add',
+            scope: this,
+            handler: Ext.emptyFn
+        });
+        
+        this.actionEdit = new Ext.Action({
+            text: _('Add Elayer'),
+            tooltip: _('Add a new elayer to this employee'),
+            iconCls: 'actionEdit',
+            scope: this,
+            handler: Ext.emptyFn
+        });
+        
+        this.actionUnlink = new Ext.Action({
+            text: _('Unlink Elayer'),
+            tooltip: _('Removes Elayer from this employee'),
+            iconCls: 'action_remove',
+            scope: this,
+            handler: Ext.emptyFn
+        });
+        
+        this.actions = [
+            this.actionAdd,
+            this.actionEdit,
+            this.actionUnlink
+        ];
     },
     
     getColumnModel: function() {
@@ -69,9 +122,19 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     initStore: function() {
-        this.store = new Tine.Tinebase.data.RecordStore({
-            recordClass: this.recordClass
-        });
+        this.store = new Ext.data.JsonStore({
+        fields: (this.storeFields) ? this.storeFields : this.recordClass
+    });
+
+    // focus+select new record
+    this.store.on('add', function(store, records, index) {
+        (function() {
+            if (this.rendered) {
+                this.getView().focusRow(index);
+                this.getSelectionModel().selectRow(index);
+            }
+        }).defer(300, this);
+    }, this);
     }
     
 });

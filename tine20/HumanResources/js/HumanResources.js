@@ -56,16 +56,3 @@ Ext.extend(Tine.HumanResources.EmployeeFilterPanel, Tine.widgets.persistentfilte
     filter: [{field: 'model', operator: 'equals', value: 'HumanResources_Model_EmployeeFilter'}]
 });
 
-
-/**
- * @namespace Tine.HumanResources
- * @class Tine.HumanResources.EmployeeBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Employee Backend
- */ 
-Tine.HumanResources.EmployeeBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'HumanResources',
-    modelName: 'Employee',
-    recordClass: Tine.HumanResources.Model.Employee
-});

@@ -65,15 +65,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 //        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
 //    },
 //    
-//    /**
-//     * executed when record gets updated from form
-//     * - add attachments to record here
-//     * 
-//     * @private
-//     */
-//    onRecordUpdate: function() {
-//        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
-//    },
+    /**
+     * executed when record gets updated from form
+     * @private
+     */
+    onRecordUpdate: function() {
+//        this.elayerGridPanel
+        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
+    },
     
     /**
      * returns dialog

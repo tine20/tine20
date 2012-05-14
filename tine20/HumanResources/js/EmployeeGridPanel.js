@@ -36,7 +36,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * eval grants
      * @cfg {Boolean} evalGrants
      */
-    evalGrants: true,
+    evalGrants: false,
     
     /**
      * optional additional filterToolbar configs
@@ -48,9 +48,9 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * grid specific
      * @private
      */
-    defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
+    defaultSortInfo: {field: 'number', direction: 'DESC'},
     gridConfig: {
-        autoExpandColumn: 'id'
+        autoExpandColumn: 'n_fn'
     },
      
     /**
@@ -58,15 +58,29 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.HumanResources.recordBackend;
+        this.recordProxy = Tine.HumanResources.employeeBackend
         
-        this.gridConfig.cm = this.getColumnModel();
+        this.gridConfig.columns = this.getColumns();
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar(this.ftbConfig);
         
-        this.plugins = this.plugins || [];
+        this.initFilterToolbar();
         this.plugins.push(this.filterToolbar);
         
         Tine.HumanResources.EmployeeGridPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * initialises filter toolbar
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: Tine.HumanResources.Model.Employee.getFilterModel(),
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
     },
     
     /**
@@ -75,13 +89,8 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @return Ext.grid.ColumnModel
      * @private
      */
-    getColumnModel: function(){
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true,
-                resizable: true
-            },
-            columns: [
+    getColumns: function(){
+        return [
             {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },                
             {
                 id: 'number',
@@ -91,11 +100,11 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 dataIndex: 'number',
                 hidden: true
             }, {
-                id: 'title',
-                header: this.app.i18n._("Title"),
+                id: 'n_fn',
+                header: this.app.i18n._("Full Name"),
                 width: 350,
                 sortable: true,
-                dataIndex: 'title'
+                dataIndex: 'n_fn'
             }, {
                 id: 'status',
                 header: this.app.i18n._("Status"),
@@ -103,8 +112,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 sortable: true,
                 dataIndex: 'status'
 //                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'projectStatus')
-            }].concat(this.getModlogColumns())
-        });
+            }].concat(this.getModlogColumns());
     },
     
     /**

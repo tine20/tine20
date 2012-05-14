@@ -54,7 +54,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     }
     
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-        die(var_dump($_record->toArray()));
+//         die(var_dump($_record->toArray()));
     }
     
     
