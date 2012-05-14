@@ -10,7 +10,7 @@
  */
 
  
-.TasksIconCls {
+.TasksIconCls, .TasksTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
 .x-btn-medium .TasksIconCls {

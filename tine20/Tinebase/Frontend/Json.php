@@ -614,6 +614,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::getUser()) {
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
+            $genericRelatableModels = array();
             
             foreach ($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
@@ -623,10 +624,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     $applicationJson = new $jsonAppName;
 
-                    $registryData[$application->name] = $applicationJson->getRegistryData();
+                    $registryData[$application->name] = (array_key_exists($application->name, $registryData)) ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) : $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
-                    
+
+                    foreach($applicationJson->getRelatableModels() as $app => $relModels) {
+                        if (!array_key_exists($app, $registryData)) $registryData[$app] = array();
+                        if (!array_key_exists('relatableModels', $registryData[$app])) $registryData[$app]['relatableModels'] = array();
+                        if (!empty($relModels)) $registryData[$app]['relatableModels'] = array_merge_recursive($registryData[$app]['relatableModels'], $relModels);
+                    }
+
                     // @todo do we need this for all apps?
                     $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
                     $registryData[$application->name]['exportDefinitions'] = array(
@@ -655,6 +662,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
+            
+            $registryData['Tinebase']['genericRelatableModels'] = $genericRelatableModels;
             
             if (! array_key_exists('Tinebase', $registryData)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase or unable to get Tinebase preferences. Aborting ...');
@@ -704,6 +713,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $backend = Tinebase_Core::getPreference($applicationName);
         if ($backend) {
             $records = $backend->search($filter);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got ' . count($records) . ' preferences for app ' . $applicationName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' ' . print_r($records->toArray(), TRUE));
+            
             $result = $this->_multipleRecordsToJson($records, $filter);
 
             // add translated labels and descriptions

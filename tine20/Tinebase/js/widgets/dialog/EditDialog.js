@@ -106,10 +106,28 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     disableOnEditMultiple: null,
     
+    /**
+     * selected records for multiple edit
+     * @type {String} (json-encoded Array)
+     */
     selectedRecords: null,
-    selectionFilter: null,
-        
+
+    /**
+     * when a record has the relations-property the relations-panel can be disabled here
+     * @type Boolean
+     */
+    hideRelationsPanel: false,
     
+    /**
+     * selection filter for multiple edit
+     * @type {String} (json-encoded Array)
+     */
+    selectionFilter: null,
+    /**
+     * records to add when called from another app
+     * @type String (json-encoded Array)
+     */
+    addRelations: null,
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -130,7 +148,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-    
+    // the relationsPanel
+    relationsPanel: null,
+    // Array of Relation Pickers
+    relationPickers: null,
     //private
     initComponent: function() {
         this.addEvents(
@@ -181,8 +202,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug('initComponent: modelName: ', this.modelName);
         Tine.log.debug('initComponent: app: ', this.app);
         
-        this.selectedRecords = Ext.decode(this.selectedRecords);
-        this.selectionFilter = Ext.decode(this.selectionFilter);
+        this.addRelations = this.addRelations ? Ext.decode(this.addRelations) : null;
+        this.selectedRecords = this.selectedRecords ? Ext.decode(this.selectedRecords) : null;
+        this.selectionFilter = this.selectionFilter ? Ext.decode(this.selectionFilter) : null;
         
         // init some translations
         if (this.app.i18n && this.recordClass !== null) {
@@ -218,7 +240,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initRecord();
         // get items for this dialog
         this.items = this.getFormItems();
-        
+        // init relations panel if relations are defined
+        this.initRelationsPanel();
+
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
     },
     
@@ -334,7 +358,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         } else {
             // note: in local mode we expect a valid record
-            if (typeof this.record.beginEdit != 'function') {
+            if (!Ext.isFunction(this.record.beginEdit)) {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad();
@@ -351,6 +375,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             success: function(record) {
                 this.record = record;
                 this.onRecordLoad();
+                if(this.relationsPanel) {
+                    this.relationsPanel.loadRecord(record);
+                }
             }
         });
     },
@@ -379,6 +406,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             return;
         }
         
+        if(this.addRelations) {
+            this.addRelationsOnLoad();
+        }
+        
         Tine.log.debug('loading of the following record completed:');
         Tine.log.debug(this.record);
         
@@ -396,7 +427,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.fireEvent('load', this) !== false) {
             this.getForm().loadRecord(this.record);
             this.getForm().clearInvalid();
-            this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            if(Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
+                this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
+            }
             
             this.loadMask.hide();
         }
@@ -407,9 +440,28 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRecordUpdate: function() {
         var form = this.getForm();
-        
+
         // merge changes from form into record
         form.updateRecord(this.record);
+    },
+    
+    /**
+     * called from onRecordLoad to add new records
+     */
+    addRelationsOnLoad: function() {
+        Ext.each(this.addRelations, function(relation) {
+            var add = true;
+            Ext.each(this.record.get('relations'), function(existingRelation){
+                if((relation.related_record.id == existingRelation.related_record.id) && 
+                   (relation.related_model == existingRelation.related_model)) {
+                    add = false;
+                    return false;
+                }
+            });
+            if(add) {
+                this.record.data.relations.push(relation);
+            }
+        }, this);
     },
     
     /**
@@ -502,9 +554,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // current data of other panels
         this.onRecordUpdate();
         
+        // update from relationsPanel if any
+        if(this.relationsPanel) {
+            if(this.relationsPanel.isValid()) {
+                this.record.set('relations', this.relationsPanel.getData());
+            } else {
+                Ext.Msg.alert(_('Relations failure'), _('There are invalid relations. Please check before saving.'));
+                return false;
+            }
+        }
+
         if(this.isValid()) {
             this.loadMask.show();
-            
             if (this.mode !== 'local') {
                 this.fireEvent('save');
                 this.recordProxy.saveRecord(this.record, {
@@ -670,10 +731,27 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         }
     },
-    
+    /**
+     * get disabled items on multiple edit
+     * @return Array
+     */
     getDisableOnEditMultiple: function() {
-        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = new Array();
+        if(!this.disableOnEditMultiple) this.disableOnEditMultiple = [];
         return this.disableOnEditMultiple;
-       
+    },
+    /**
+     * creates the relations panel, if relations are defined
+     */
+    initRelationsPanel: function() {
+        if(!this.relationsPanel && !this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
+            this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({
+                anchor: '100% 100%',
+                record: this.record,
+                app: this.app,
+                ownRecordClass: this.recordClass,
+                editDialog: this
+            }); 
+            this.items.items.push(this.relationsPanel);
+        }
     }
 });

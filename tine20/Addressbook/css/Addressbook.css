@@ -9,7 +9,7 @@
 }
 
 
-.AddressbookIconCls {
+.AddressbookIconCls, .AddressbookContact {
     background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
 }
 .x-btn-medium .AddressbookIconCls {

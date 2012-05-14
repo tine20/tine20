@@ -315,7 +315,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['password'] = ( $_encrypt ) ? Hash_Password::generate('SSHA256', $_password) : $_password;
+        $accountData['password'] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
         $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
@@ -330,7 +330,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         // add data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectSetPassword($userId, $_password);
+            try {
+                $plugin->inspectSetPassword($userId, $_password);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
+                throw new Tinebase_Exception_Backend($e->getMessage());
+            }
         }
     }
     

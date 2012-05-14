@@ -1,4 +1,4 @@
-.CrmIconCls {
+.CrmIconCls, .CrmLead {
     background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
 }
 .x-btn-medium .CrmIconCls {
@@ -91,7 +91,7 @@
 }
 
 .contactIcon {
-	position: relative;
+    position: relative;
 }
 
 
@@ -159,12 +159,12 @@
             }
 
 .contact-grid {
-	border: 1px solid #cccccc;
+    border: 1px solid #cccccc;
 }
 
 /** details panel **/
 .crm-leadgrid-detailspanel-status {
-	margin: 5px 2px 5px 5px;
+    margin: 5px 2px 5px 5px;
     width: 20%;
 }
 
@@ -186,6 +186,6 @@
 .crm-leadgrid-detailspanel-contact {
     width: 50%;
     float:right;
-	height:108px;
-	position:relative;
+    height:108px;
+    position:relative;
 }

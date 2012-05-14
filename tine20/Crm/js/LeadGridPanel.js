@@ -14,7 +14,7 @@ Ext.namespace('Tine.Crm');
  * Lead grid panel
  * 
  * @namespace   Tine.Crm
- * @class       Tine.Crm.GridPanel
+ * @class       Tine.Crm.LeadGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Lead Grid Panel</p>
@@ -28,9 +28,9 @@ Ext.namespace('Tine.Crm');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Crm.GridPanel
+ * Create a new Tine.Crm.LeadGridPanel
  */
-Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
      * @cfg {Tine.Crm.Model.Lead} recordClass
@@ -74,7 +74,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             grid: this
         });
         
-        Tine.Crm.GridPanel.superclass.initComponent.call(this);
+        Tine.Crm.LeadGridPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -103,7 +103,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             '-',
             this.actions_exportLead
         ];
-        
         return items;
     },
     
@@ -142,7 +141,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * TODO use another renderer (with email, phone, ...) here?
      */
     responsibleRenderer: function(value) {
-        return Tine.Crm.GridPanel.shortContactRenderer(value, 'RESPONSIBLE');
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'RESPONSIBLE');
     },
     
     /**
@@ -152,7 +151,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     partnerRenderer: function(value) {
-        return Tine.Crm.GridPanel.shortContactRenderer(value, 'PARTNER');
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'PARTNER');
     },
     
     /**
@@ -162,7 +161,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     customerRenderer: function(value) {
-        return Tine.Crm.GridPanel.shortContactRenderer(value, 'CUSTOMER');
+        return Tine.Crm.LeadGridPanel.shortContactRenderer(value, 'CUSTOMER');
     },
 
     /**
@@ -227,7 +226,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
  * 
  * @namespace   Tine.Crm
  */
-Tine.Crm.GridPanel.shortContactRenderer = function(data, type) {
+Tine.Crm.LeadGridPanel.shortContactRenderer = function(data, type) {
 
     if( Ext.isArray(data) && data.length > 0) {
         var index = 0;

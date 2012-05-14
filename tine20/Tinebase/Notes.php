@@ -335,8 +335,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $data = $_note->toArray(FALSE, FALSE);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, TRUE));
-
         $this->_notesTable->insert($data);
     }
 
@@ -344,7 +342,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * add new system note
      *
      * @param Tinebase_Record_Abstract|string $_record
-     * @param string $_userId
+     * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Model_ModificationLog)
      * @param string $_backend   backend of record
@@ -353,39 +351,42 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @todo get field translations from application?
      * @todo attach modlog record (id) to note instead of saving an ugly string
      */
-    public function addSystemNote($_record, $_userId, $_type, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
+    public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
+        if (empty($_mods) && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> do not add "changed" note.');
+            return FALSE;
+        }
+        
         $id = ($_record instanceof Tinebase_Record_Abstract) ? $_record->getId() : $_record;
         $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : 'unknown');
+        if (($_userId === NULL)) {
+            $_userId = Tinebase_Core::getUser();
+        }
+        $user = ($_userId instanceof Tinebase_Model_User) ? $_userId : Tinebase_User::getInstance()->getUserById($_userId);
         
         $translate = Tinebase_Translation::getTranslation('Tinebase');
-        $backend = ucfirst(strtolower($_backend));
-        
-        $noteType = $this->getNoteTypeByName($_type);
-        $user = Tinebase_User::getInstance()->getUserById($_userId);
-        
         $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
         
         if ($_mods !== NULL && count($_mods) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' mods to log: ' . print_r($_mods->toArray(), TRUE));
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Adding "' . $_type . '" system note note to record.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                .' mods to log: ' . print_r($_mods->toArray(), TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                .' Adding "' . $_type . '" system note note to record.');
             
             $noteText .= ' | ' .$translate->_('Changed fields:');
             foreach ($_mods as $mod) {
                 $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
             }
-        } else if ($_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
-            // nothing changed -> don't add note
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> don\'t add "changed" note.');
-            return FALSE;
         }
         
+        $noteType = $this->getNoteTypeByName($_type);
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
-            'note'              => $noteText,    
+            'note'              => $noteText,
             'record_model'      => $modelName,
-            'record_backend'    => $backend,       
-            'record_id'         => $id,       
+            'record_backend'    => ucfirst(strtolower($_backend)),
+            'record_id'         => $id,
         ));
         
         return $this->addNote($note);

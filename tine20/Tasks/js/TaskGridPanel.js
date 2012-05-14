@@ -14,7 +14,7 @@ Ext.namespace('Tine.Tasks');
  * Tasks grid panel
  * 
  * @namespace   Tine.Tasks
- * @class       Tine.Tasks.GridPanel
+ * @class       Tine.Tasks.TaskGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Tasks Grid Panel</p>
@@ -27,14 +27,14 @@ Ext.namespace('Tine.Tasks');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Tasks.GridPanel
+ * Create a new Tine.Tasks.TaskGridPanel
  */
-Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
-     * @cfg {Tine.Tasks.Task} recordClass
+     * @cfg {Tine.Tasks.Model.Task} recordClass
      */
-    recordClass: Tine.Tasks.Task,
+    recordClass: Tine.Tasks.Model.Task,
     
     /**
      * @private grid cfg
@@ -67,7 +67,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins = this.plugins || [];
         this.plugins.push(/*this.action_showClosedToggle,*/ this.filterToolbar);
         
-        Tine.Tasks.GridPanel.superclass.initComponent.call(this);
+        Tine.Tasks.TaskGridPanel.superclass.initComponent.call(this);
         
         // the editGrids onEditComplete calls the focusCell after a edit operation
         // this leads to a 'flicker' effect we dont want!
@@ -83,7 +83,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterPanel({
             recordClass: this.recordClass,
             app: this.app,
-            filterModels: Tine.Tasks.Task.getFilterModel(),
+            filterModels: Tine.Tasks.Model.Task.getFilterModel(),
             defaultFilter: 'query',
             filters: [
                 {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
@@ -249,7 +249,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * Return CSS class to apply to rows depending upon due status
      * 
-     * @param {Tine.Tasks.Task} record
+     * @param {Tine.Tasks.Model.Task} record
      * @param {Integer} index
      * @return {String}
      */

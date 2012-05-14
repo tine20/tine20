@@ -10,8 +10,7 @@
  
 Ext.namespace('Tine.Sales', 'Tine.Sales.Model');
 
-// Product model fields
-Tine.Sales.Model.ProductArray = [
+Tine.Sales.Model.ProductArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',            type: 'string'},
     {name: 'name',          type: 'string'},
     {name: 'description',   type: 'string'},
@@ -23,7 +22,7 @@ Tine.Sales.Model.ProductArray = [
     {name: 'notes'},
     // relations with other objects
     { name: 'relations'}
-];
+]);
 
 /**
  * @namespace Tine.Sales.Model
@@ -93,9 +92,8 @@ Tine.Sales.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'status' },
     // tine 2.0 notes field
     { name: 'notes'},
-    // linked contacts/accounts
-    { name: 'customers'},
-    { name: 'accounts'}
+    // linked contacts
+    { name: 'relations' }
 ]);
 
 /**
@@ -140,6 +138,8 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Contract name'),   field: 'name' },
         {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'},
+        {label: app.i18n._('Cleared'), field: 'cleared', valueType: 'bool'},
+        {label: app.i18n._('Cleared in'), field: 'cleared_in' },
         {filtertype: 'tinebase.tag', app: app}
         
     ];

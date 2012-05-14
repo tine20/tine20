@@ -8,9 +8,10 @@
  *
  */
  
-.ProjectsIconCls {
+.ProjectsIconCls, .ProjectsProject {
     background-image:url(../../images/../Projects/res/projects_small.png) !important;
 }
+
 .x-btn-medium .ProjectsIconCls {
     background-image:url(../../images/../Projects/res/projects_medium.png) !important;
 }

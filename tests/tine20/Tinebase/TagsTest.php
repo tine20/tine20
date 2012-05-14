@@ -228,6 +228,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
         
         // Try to remove the created Tags
+        sleep(1);
         $this->_instance->detachTagsFromMultipleRecords($filter,$tagIds);
 
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);

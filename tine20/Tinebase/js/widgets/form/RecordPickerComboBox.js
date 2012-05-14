@@ -25,10 +25,10 @@ var resourcePicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
 });
    </code></pre>
  */
-Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, {
+Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.ClearableComboBox, {
     /**
      * @cfg {bool} blurOnSelect
-     * blur this combo when record got selected, usefull to be used in editor grids (defaults to false)
+     * blur this combo when record got selected, useful to be used in editor grids (defaults to false)
      */
     blurOnSelect: false,
     
@@ -72,6 +72,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
+        
+        this.disableClearer = ! this.allowBlank;
         
         this.loadingText = _('Searching...');
         
@@ -238,7 +240,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         if(this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
-        Ext.form.ComboBox.superclass.setValue.call(this, text);
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
         this.value = value;
         return this;
     }

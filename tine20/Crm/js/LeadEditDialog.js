@@ -48,18 +48,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tasksGrid: null,
     
     /**
-     * New contacts when adding contacts from addressbook
-     * @type Array 
-     */
-    additionalContacts: null,
-    
-    /**
-     * New contacts' role when adding contacts from addressbook
-     * @type String 
-     */
-    additionalContactsRole: null,
-    
-    /**
      * @private
      */
     windowNamePrefix: 'LeadEditWindow_',
@@ -68,50 +56,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Crm.leadBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     showContainerSelector: true,
-    
-    /**
-     * Init this component
-     */
-    initComponent: function() {
-        this.additionalContacts = Ext.decode(this.additionalContacts);
-        Tine.Crm.LeadEditDialog.superclass.initComponent.apply(this, arguments);
-    },
 
+    hideRelationsPanel: true,
+    
     /**
      * executed after record got updated from proxy
      * 
      * @private
      */
     onRecordLoad: function() {
-        // add contacts from addressbook if any
-        if(this.additionalContacts) {
-            var relations = this.record.get('relations');
-            Ext.each(this.additionalContacts, function(contact) {
-                var add = true;
-                Ext.each(this.record.get('relations'), function(existingRelation){
-                    if(contact.id == existingRelation.related_record.id) {
-                        add = false;
-                        return false;
-                    }
-                });
-                if(add) {
-                    relations.push({
-                        own_backend: "Sql",
-                        own_degree: "sibling",
-                        own_id: this.record.get('id'),
-                        own_model: "Crm_Model_Lead",
-                        related_backend: "sql",
-                        related_id: contact.id, 
-                        related_model: "Addressbook_Model_Contact",
-                        type: this.additionalContactsRole,
-                        related_record: contact
-                    });
-                }
-            }, this);
-            
-            this.record.set('relations', relations);
-        }
-        
+        Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);
         // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
         if (this.contactGrid && this.tasksGrid && this.productsGrid 
             && this.contactGrid.store.getCount() == 0 
@@ -129,7 +83,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.productsGrid.store.loadData(relations.products, true);
             }
         }
-        Tine.Crm.LeadEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
@@ -230,7 +183,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             newLinkObject.relation = relations[i];
             newLinkObject.relation_type = relations[i]['type'].toLowerCase();
     
-            //console.log(newLinkObject);
             if ((newLinkObject.relation_type === 'responsible' 
               || newLinkObject.relation_type === 'customer' 
               || newLinkObject.relation_type === 'partner')) {

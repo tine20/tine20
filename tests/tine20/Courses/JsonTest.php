@@ -216,6 +216,23 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($result['members']));
     }
     
+    /**
+     * testGetCoursesPreferences
+     * 
+     * @see 0006436: Courses preferences do not work (in pref panel)
+     */
+    public function testGetCoursesPreferences()
+    {
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $coursesPrefs = $tinebaseJson->searchPreferencesForApplication('Courses', array());
+        
+        $this->assertTrue($coursesPrefs['totalcount'] > 0);
+        $pref = $coursesPrefs['results'][0];
+        
+        $this->assertEquals(Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER, $pref['name']);
+        $this->assertEquals(2, count($pref['options']));
+    }
+    
     /************ protected helper funcs *************/
     
     /**

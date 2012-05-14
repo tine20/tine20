@@ -58,6 +58,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "AddToRecordPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },
@@ -418,10 +422,6 @@
           "path": "js/widgets/dialog/"
         },
         {
-          "text": "LinkPanel.js",
-          "path": "js/widgets/dialog/"
-        },
-        {
           "text": "MultiOptionsDialog.js",
           "path": "js/widgets/dialog/"
         },
@@ -508,6 +508,14 @@
         {
           "text": "LinkGridPanel.js",
           "path": "js/widgets/grid/"
+        },
+        {
+            "text": "Manager.js",
+            "path": "js/widgets/relation/"
+        },
+        {
+            "text": "GenericPickerGridPanel.js",
+            "path": "js/widgets/relation/"
         },
         {
           "text": "GridPanel.js",
@@ -632,6 +640,10 @@
         {
           "text": "RecordPickerComboBox.js",
           "path": "js/widgets/form/"
+        },
+        {
+          "text": "PickerCombo.js",
+          "path": "js/widgets/relation/"
         },
         {
           "text": "ConfigPanel.js",
@@ -798,6 +810,10 @@
         },
         {
           "text": "LockCombo.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "LockTextField.css",
           "path": "css/ux/"
         },
         {

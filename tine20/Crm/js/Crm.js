@@ -44,7 +44,12 @@ Tine.Crm.Application = Ext.extend(Tine.Tinebase.Application, {
  * @constructor
  * Constructs mainscreen of the crm application
  */
-Tine.Crm.MainScreen = Tine.widgets.MainScreen;
+Tine.Crm.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
+    activeContentType: 'Lead',
+    contentTypes: [
+        {model: 'Lead', requiredRight: null, singularContainerMode: false}
+        ]
+});
 
 /**
  * @namespace Tine.Crm
@@ -58,16 +63,16 @@ Tine.Crm.MainScreen = Tine.widgets.MainScreen;
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Tine.Crm.TreePanel = function(config) {
+Tine.Crm.LeadTreePanel = function(config) {
     Ext.apply(this, config);
     
-    this.id = 'CrmTreePanel';
+    this.id = 'CrmLeadTreePanel';
     this.filterMode = 'filterToolbar';
     this.recordClass = Tine.Crm.Model.Lead;
-    Tine.Crm.TreePanel.superclass.constructor.call(this);
+    Tine.Crm.LeadTreePanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Crm.TreePanel , Tine.widgets.container.TreePanel);
+Ext.extend(Tine.Crm.LeadTreePanel , Tine.widgets.container.TreePanel);
 
 /**
  * @namespace Tine.Crm
@@ -79,12 +84,12 @@ Ext.extend(Tine.Crm.TreePanel , Tine.widgets.container.TreePanel);
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Tine.Crm.FilterPanel = function(config) {
+Tine.Crm.LeadFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.Crm.FilterPanel.superclass.constructor.call(this);
+    Tine.Crm.LeadFilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Crm.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+Ext.extend(Tine.Crm.LeadFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Crm_Model_LeadFilter'}]
 });
 

@@ -556,6 +556,10 @@ class Tinebase_Timemachine_ModificationLog
      */
     public static function setRecordMetaData($_newRecord, $_action, $_curRecord = NULL)
     {
+        // disable validation as this is slow and we are setting valid data here
+        $bypassFilters = $_newRecord->bypassFilters;
+        $_newRecord->bypassFilters = TRUE;
+        
         list($currentAccountId, $currentTime) = self::getCurrentAccountIdAndTime();
         
         // spoofing protection
@@ -588,6 +592,8 @@ class Tinebase_Timemachine_ModificationLog
                 throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
                 break;
         }
+        
+        $_newRecord->bypassFilters = $bypassFilters;
     }
     
     /**

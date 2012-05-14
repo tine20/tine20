@@ -12,11 +12,15 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
           "text": "Tasks.js",
           "path": "js/"
         },
         {
-          "text": "GridPanel.js",
+          "text": "TaskGridPanel.js",
           "path": "js/"
         },
         {

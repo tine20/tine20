@@ -4,7 +4,7 @@
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <alex@stintzing.net>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -13,85 +13,18 @@ Ext.ns('Tine.Projects');
 /**
  * @namespace   Tine.Projects
  * @class       Tine.Projects.AddToProjectPanel
- * @extends     Ext.FormPanel
+ * @extends     Tine.widgets.dialog.AddToRecordPanel
  * @author      Alexander Stintzing <alex@stintzing.net>
  */
 
-Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
+Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
+    // private
     appName : 'Projects',
+    recordClass: Tine.Projects.Model.Project,
     
-    layout : 'fit',
-    border : false,
-    cls : 'tw-editdialog',    
-    
-    labelAlign : 'top',
-
-    anchor : '100% 100%',
-    deferredRender : false,
-    buttonAlign : null,
-    bufferResize : 500,
-    
-    initComponent: function() {
-        
-        if (!this.app) {
-            this.app = Tine.Tinebase.appMgr.get(this.appName);
-        }
-            
-        Tine.log.debug('initComponent: appName: ', this.appName);
-        Tine.log.debug('initComponent: app: ', this.app);
-
-        // init actions
-        this.initActions();
-        // init buttons and tbar
-        this.initButtons();
-        
-        // get items for this dialog
-        this.items = this.getFormItems();
-
-        Tine.Projects.AddToProjectPanel.superclass.initComponent.call(this);
-    },
-    
-    initActions: function() {
-        this.action_cancel = new Ext.Action({
-            text : this.app.i18n._('Cancel'),
-            minWidth : 70,
-            scope : this,
-            handler : this.onCancel,
-            iconCls : 'action_cancel'
-        });
-        
-        this.action_update = new Ext.Action({
-            text : this.app.i18n._('OK'),
-            minWidth : 70,
-            scope : this,
-            handler : this.onUpdate,
-            iconCls : 'action_saveAndClose'
-        });
-    },
-    
-    initButtons : function() {
-        this.fbar = [ '->', this.action_cancel, this.action_update ];
-    },  
-    
-    onRender : function(ct, position) {
-        Tine.Projects.AddToProjectPanel.superclass.onRender.call(this, ct, position);
-
-        // generalized keybord map for edit dlgs
-        var map = new Ext.KeyMap(this.el, [ {
-            key : [ 10, 13 ], // ctrl + return
-            ctrl : true,
-            fn : this.onUpdate,
-            scope : this
-        } ]);
-
-    },
-       
-    onCancel: function() {
-        this.fireEvent('cancel');
-        this.purgeListeners();
-        this.window.close();
-    },
-    
+    /**
+     * @see Tine.widgets.dialog.AddToRecordPanel::isValid()
+     */
     isValid: function() {
         
         var valid = true;
@@ -107,22 +40,33 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
         return valid;
     },
     
-    onUpdate: function() {
-        if(this.isValid()) {
-            var p = new Tine.Projects.Model.Project({id: this.searchBox.getValue()});
-            var window = Tine.Projects.ProjectEditDialog.openWindow({record: p, selectedRecords: Ext.encode(this.attendee), attendeeRole: this.chooseRoleBox.getValue()});
+    /**
+     * @see Tine.widgets.dialog.AddToRecordPanel::getRecordConfig()
+     */
+    getAddToRecords: function() {
+        var relations = [];
         
-            window.on('close', function() {
-                    this.onCancel();
-            },this);
-        }
+        Ext.each(this.addRecords, function(contact) {
+            var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
+            var rel = new Tine.Tinebase.Model.Relation({
+                own_degree: 'sibling',
+                own_id: null,
+                own_model: 'Projects_Model_Project',
+                related_backend: 'Sql',
+                related_id: contact.id,
+                related_model: 'Addressbook_Model_Contact',
+                related_record: rec.data,
+                type: this.chooseRoleBox.getValue() ? this.chooseRoleBox.getValue() : 'COWORKER'
+            });
+            relations.push(rel.data);
+        },this);
+        return relations;
     },
-    
-    getFormItems : function() {
 
-        this.searchBox = Tine.widgets.form.RecordPickerManager.get('Projects', 'Project', {fieldLabel: this.app.i18n._('Select Project'), anchor : '100% 100%'});
-        var records = [];
-         
+    /**
+     * @see Tine.widgets.dialog.AddToRecordPanel::getFormItems()
+     */
+    getFormItems: function() {
         return {
             border : false,
             frame : false,
@@ -142,7 +86,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
                     border:  false,
                     frame:   false,
                     items: [ 
-                        this.searchBox,
+                        Tine.widgets.form.RecordPickerManager.get('Projects', 'Project', {fieldLabel: this.app.i18n._('Select Project'), anchor : '100% 100%', ref: '../../../searchBox'}),
                         {
                             fieldLabel: this.app.i18n._('Role'),
                             emptyText: this.app.i18n._('Select Role'),
@@ -165,7 +109,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Ext.FormPanel, {
 Tine.Projects.AddToProjectPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : String.format(Tine.Tinebase.appMgr.get('Projects').i18n._('Adding {0} Participants to project'), config.attendee.length),
+        title : String.format(Tine.Tinebase.appMgr.get('Projects').i18n._('Adding {0} Participants to project'), config.addRecords.length),
         width : 250,
         height : 150,
         contentPanelConstructor : 'Tine.Projects.AddToProjectPanel',

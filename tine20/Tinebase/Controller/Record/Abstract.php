@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -116,6 +116,14 @@ abstract class Tinebase_Controller_Record_Abstract
      * @var array
      */
     protected $_updateMultipleResult = array();
+
+    /**
+     * should each record be validated in updateMultiple 
+     * - FALSE: only the first record is validated with the incoming data
+     *
+     * @var boolean
+     */
+    protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
      * returns controller for records of given model
@@ -282,15 +290,15 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_id
      * @param int $_containerId
      * @return Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function get($_id, $_containerId = NULL)
     {
         $this->_checkRight('get');
-
+        
         if (!$_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
-
+            
             if ($this->_doContainerACLChecks) {
                 if ($_containerId === NULL) {
                     $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::GRANT_ADD);
@@ -299,32 +307,39 @@ abstract class Tinebase_Controller_Record_Abstract
                     $record->container_id = $_containerId;
                 }
             }
-
+            
         } else {
             $record = $this->_backend->get($_id);
-
             $this->_checkGrant($record, 'get');
-
-            // get tags / notes / relations / alarms
-            if ($record->has('tags')) {
-                Tinebase_Tags::getInstance()->getTagsOfRecord($record);
-            }
+            $this->_getRelatedData($record);
+            
             if ($record->has('notes')) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
             }
-            if ($record->has('relations')) {
-                $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
-            }
-            if ($record->has('alarms')) {
-                $this->getAlarms($record);
-            }
-
-            if ($this->resolveCustomfields()) {
-                Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
-            }
         }
-
+        
         return $record;
+    }
+    
+    /**
+     * add related data to record
+     * 
+     * @param Tinebase_Record_Interface $record
+     */
+    protected function _getRelatedData($record)
+    {
+        if ($record->has('tags')) {
+            Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+        }
+        if ($record->has('relations')) {
+            $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
+        }
+        if ($record->has('alarms')) {
+            $this->getAlarms($record);
+        }
+        if ($this->resolveCustomfields()) {
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+        }
     }
 
     /**
@@ -614,15 +629,14 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
             
             $this->_inspectAfterUpdate($updatedRecord, $_record);
-            $this->_setRelatedData($updatedRecord, $_record);
-
-            $updatedRecordWithRelatedData = $this->get($_record->getId());
+            $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, TRUE);
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
             
             $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
             $this->_setNotes($updatedRecordWithRelatedData, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
-                        
+            
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
             }
@@ -709,22 +723,30 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * set relations / tags / alarms
      * 
-     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   boolean $returnUpdatedRelatedData
+     * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData($_updatedRecord, $_record)
+    protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
     {
-        if ($_record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
-            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_updatedRecord->getId(), $_record->relations);
+        if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
+            $type = $this->_backend->getType();
+            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations);
         }
-        if ($_record->has('tags') && isset($_record->tags) && (is_array($_record->tags) || $_record->tags instanceof Tinebase_Record_RecordSet)) {
-            $_updatedRecord->tags = $_record->tags;
-            Tinebase_Tags::getInstance()->setTagsOfRecord($_updatedRecord);
+        if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
+            $updatedRecord->tags = $record->tags;
+            Tinebase_Tags::getInstance()->setTagsOfRecord($updatedRecord);
         }
-        if ($_record->has('alarms') && isset($_record->alarms)) {
-            $_updatedRecord->alarms = $_record->alarms;
-            $this->_saveAlarms($_record);
+        if ($record->has('alarms') && isset($record->alarms)) {
+            $this->_saveAlarms($record);
         }
+
+        if ($returnUpdatedRelatedData) {
+            $this->_getRelatedData($updatedRecord);
+        }
+        
+        return $updatedRecord;
     }
 
     /**
@@ -745,7 +767,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $_updatedRecord->notes = $_record->notes;
             Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
         }
-        Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount->getId(), $_systemNoteType, $_currentMods);
+        Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount, $_systemNoteType, $_currentMods);
     }
     
     /**
@@ -854,19 +876,22 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
+        $bypassFilters = FALSE;
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
             $data = array_merge($oldRecordArray, $_data);
 
             try {
-                $record = new $this->_modelName($data);
+                $record = new $this->_modelName($data, $bypassFilters);
                 $updatedRecord = $this->update($record, FALSE);
                 
                 $this->_updateMultipleResult['results']->addRecord($updatedRecord);
                 $this->_updateMultipleResult['totalcount'] ++;
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
-                
+                if ($this->_updateMultipleValidateEachRecord === FALSE) {
+                    throw $e;
+                }
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,
@@ -875,6 +900,10 @@ abstract class Tinebase_Controller_Record_Abstract
                     'message'    => $e->getMessage()
                 )));
                 $this->_updateMultipleResult['failcount'] ++;
+            }
+            if ($this->_updateMultipleValidateEachRecord === FALSE) {
+                // only validate the first record
+                $bypassFilters = TRUE;
             }
         }
     }
@@ -1211,9 +1240,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . " About to save " . count($alarms) . " alarms for {$_record->id} "
-            //.  print_r($alarms->toArray(), true)
-        );
+            . " About to save " . count($alarms) . " alarms for {$_record->id} ");
         $_record->alarms = $alarms;
 
         Tinebase_Alarm::getInstance()->setAlarmsOfRecord($_record);

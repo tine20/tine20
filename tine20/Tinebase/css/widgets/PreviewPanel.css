@@ -1,11 +1,11 @@
 .preview-panel{
-	padding:5px;
-	white-space:normal;
-	height:103px;
-	background-color:#e5edf8;
-	position:relative;
-	display:inline;
-	}
+    padding:5px;
+    white-space:normal;
+    height:103px;
+    background-color:#e5edf8;
+    position:relative;
+    display:inline;
+    }
 .preview-panel img {
     vertical-align: middle;
     }
@@ -24,26 +24,26 @@
     line-height: 16px;
     }
 .preview-panel-bold{
-	font-weight: bold;
-	}
+    font-weight: bold;
+    }
 .preview-panel-image{
-	vertical-align:middle;
-	margin:5px 2px 5px 5px;
-	width:90px;
-	height:113px;
-	padding:0px
-	}
+    vertical-align:middle;
+    margin:5px 2px 5px 5px;
+    width:90px;
+    height:113px;
+    padding:0px
+    }
 .preview-panel-office{
-	width:360px;
-	margin:5px 2px 5px 5px;
-	}
+    width:360px;
+    margin:5px 2px 5px 5px;
+    }
 .preview-panel-privat{
-	width:360px;
-	margin:5px 2px 5px 5px;
-	}
+    width:360px;
+    margin:5px 2px 5px 5px;
+    }
 .preview-panel-description {
-	width: 200px;
-	position: relative;  
+    width: 200px;
+    position: relative;
     height: 97px;
     margin:5px 2px 5px 5px;
     padding: 5px;
@@ -56,25 +56,19 @@
 .preview-panel-description a:visited,
 .preview-panel-description a:hover,
 .preview-panel-description a:active {
-	 color:#a0a0a0;
-	 text-decoration: none;
-	}
-.preview-panel-timesheet-description {
-	width: 98%;
-	position: relative;  
-    height: 97px;
-	padding:3px;  
-    position: relative;
-    }	
-	
+     color:#a0a0a0;
+     text-decoration: none;
+    }
+
+    
 .preview-panel-address{
-	width:150px;
-	padding: 5px;
-	}
+    width:150px;
+    padding: 5px;
+    }
 .preview-panel-contact{
-	width:180px;
-	padding: 5px;
-	}
+    width:180px;
+    padding: 5px;
+    }
 .bordercorner_1{
  background-image: url(../../../images/preview/bordercorner_blue_1.gif);
     background-repeat: no-repeat;
@@ -116,10 +110,10 @@
     height: 4px;
     } 
 .preview-panel-adressbook-nobreak{
-	min-width:1075px;
+    min-width:1075px;
 }
 .bordercorner_gray_1{
- 	background-image: url(../../../images/preview/bordercorner_gray_1.gif);
+     background-image: url(../../../images/preview/bordercorner_gray_1.gif);
     background-repeat: no-repeat;
     background-position: left top;
     position: absolute;
@@ -167,41 +161,11 @@
     bottom: 6px;
     }
 .preview-panel-symbolcompare{
-	color:#a0a0a0;
-	width:45px;
-	text-align: right;
-	display: block;
-	float: left;
-	overflow: hidden;
-	padding-right: 5px;
-	}	
-.preview-panel-timesheet-left {
-	float:left;
-	position: relative;
-	width:48%;
-	height: 102px;
-	padding:5px;
-	margin:5px 2px 5px 5px;
-	font-family:verdana;    
-	}
-.preview-panel-timesheet-right {
-	float:left;
-	position: relative;
-	width:48%;
-	height: 97px;
-	padding:5px;
-	margin:5px 1px 5px 2px;
-	border: solid 3px #e5e6fe;
-	font-family:verdana;
-	}
-.preview-panel-timesheet-leftside{
-	width:180px;
-	padding: 5px;
-	}
-.preview-panel-timesheet-rightside{
-	width:auto;
-	padding: 5px;
-	}
-.preview-panel-timesheet-nobreak{
-	min-width:900px;
-	}
+    color:#a0a0a0;
+    width:45px;
+    text-align: right;
+    display: block;
+    float: left;
+    overflow: hidden;
+    padding-right: 5px;
+    }

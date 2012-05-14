@@ -36,7 +36,7 @@ Ext.ns('Tine.Projects');
  */
 Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
-
+    allowBlank: false,
     itemSelector: 'div.search-item',
     minListWidth: 200,
     
