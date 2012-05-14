@@ -81,7 +81,7 @@ class OpenDocument_Document
         </office:document-content>';
     
     protected $_manifest = '<?xml version="1.0" encoding="UTF-8"?>
-        <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
+        <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">
             <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.spreadsheet" manifest:full-path="/"/>
             <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="content.xml"/>
             <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="styles.xml"/>
@@ -269,7 +269,9 @@ class OpenDocument_Document
         foreach ($iterator as $fullFilename => $cur) {
             // the second parameter of the addFile function needs always the unix directory separator
             $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
-            $zip->addFile($fullFilename, $localname);
+            if ($localname !== '.' && $localname !== '..') {
+                $zip->addFile($fullFilename, $localname);
+            }
         }
 
         $zip->close();
