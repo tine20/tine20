@@ -31,6 +31,9 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat
     { name: 'notes'},
     { name: 'tags' },
     { name: 'customfields'}
+    // relations
+    // TODO fix this, relations do not work yet in TS edit dialog (without admin/manage privileges)
+    //{ name: 'relations'}
 ]);
 
 /**
@@ -117,7 +120,9 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' },
-    { name: 'customfields'}
+    { name: 'customfields'},
+    // relations
+    { name: 'relations'}
 ]);
 
 /**

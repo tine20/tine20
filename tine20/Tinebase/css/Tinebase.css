@@ -719,6 +719,10 @@ html, body {
     background-image:url("../../library/ExtJS/resources/images/default/s.gif");
 }
 
+.tine-editorgrid-row-invalid {
+    border: 1px dotted red;
+}
+
 .tine-duplicateresolve-keepvalue {
     color: #006600;
 }
@@ -729,6 +733,15 @@ html, body {
 
 .tine-duplicateresolve-adoptedvalue {
     color: #666666;
+}
+
+.tine-recordclass-gridicon {
+    background-repeat: no-repeat;
+    display: block;
+    height: 16px;
+    width: 16px;
+    margin: -2px 5px -2px 0;
+    float:left;
 }
 
 /******** downloads ***********/

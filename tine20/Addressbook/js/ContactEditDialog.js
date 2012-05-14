@@ -375,7 +375,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 app: this.appName,
                 record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }), this.linkPanel
+            })
             ]
         };
     },
@@ -384,26 +384,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * init component
      */
     initComponent: function () {
-        var relatedRecords = {};
-        if (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) {
-            relatedRecords.Crm_Model_Lead = {
-                recordClass: Tine.Crm.Model.Lead,
-                dlgOpener: Tine.Crm.LeadEditDialog.openWindow
-            };
-        }
-        if (Tine.Projects && Tine.Tinebase.common.hasRight('run', 'Projects')) {
-            relatedRecords.Projects_Model_Project = {
-                recordClass: Tine.Projects.Model.Project,
-                dlgOpener: Tine.Projects.ProjectEditDialog.openWindow
-            };
-        }
-        
-        this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: relatedRecords
-        });
-        
         this.initToolbar();
-        
         this.supr().initComponent.apply(this, arguments);
     },
     
@@ -563,10 +544,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.mapPanel.onRecordLoad(this.record);
             }
         }
-        
         this.supr().onRecordLoad.apply(this, arguments);
-        
-        this.linkPanel.onRecordLoad(this.record);
     }
 });
 

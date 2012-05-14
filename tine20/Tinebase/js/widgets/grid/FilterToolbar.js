@@ -402,6 +402,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     arrangeButtons: function() {
+
         var numFilters = this.filterStore.getCount();
         var firstId = this.filterStore.getAt(0).id;
         var lastId = this.filterStore.getAt(numFilters-1).id;

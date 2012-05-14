@@ -119,7 +119,7 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
             
         });
         
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: attendee});
+        cp.onEditInNewWindow.call(cp, 'add', null, {attendee: attendee});
     },
     
     /**
