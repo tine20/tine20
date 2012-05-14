@@ -172,7 +172,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                     
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     $this->_importResult['failcount']++;
                 }
@@ -347,11 +347,11 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $_data['n_fn'] = $_card->getProperty('FN')->value;
         
         $components = $_card->getProperty('N')->getComponents();
-        $_data['n_family'] = $components[0];
-        $_data['n_given']  = $components[1];
-        $_data['n_middle'] = $components[2];
-        $_data['n_prefix'] = $components[3];
-        $_data['n_suffix'] = $components[4];
+        $_data['n_family'] = (isset($components[0])) ? $components[0] : '';
+        $_data['n_given']  = (isset($components[1])) ? $components[1] : '';
+        $_data['n_middle'] = (isset($components[2])) ? $components[2] : '';
+        $_data['n_prefix'] = (isset($components[3])) ? $components[3] : '';
+        $_data['n_suffix'] = (isset($components[4])) ? $components[4] : '';
         
         // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
         if (strlen($this->_options['mapNicknameToField'])>0) {
