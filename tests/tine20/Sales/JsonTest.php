@@ -122,10 +122,13 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // check
         $this->assertEquals($contractData['id'], $contractUpdated['id']);
         $this->assertGreaterThan(0, count($contractUpdated['relations']));
-        $this->assertEquals('Addressbook_Model_Contact', $contractUpdated['relations'][0]['related_model']);
-        $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_CUSTOMER, $contractUpdated['relations'][0]['type']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractUpdated['relations'][1]['related_id']);
-        $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_ACCOUNT, $contractUpdated['relations'][1]['type']);
+        $this->assertEquals(2, count($contractUpdated['relations']));
+
+        // cleanup
+        $this->_instance->deleteContracts($contractData['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][0]['related_id']);
+        Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][1]['related_id']);
+        $this->_decreaseNumber();
     }
 
     /**
@@ -290,14 +293,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
             array(
                 'type'              => Sales_Model_Contract::RELATION_TYPE_CUSTOMER,
                 'related_record'    => array(
-                    'org_name'         => 'phpunit erp test company',
+                    'org_name'         => 'phpunit erp test customer',
                     'container_id'  => $personalContainer[0]->getId(),
                 )
             ),
             array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_ACCOUNT,
-                'related_id'        => $currentUser->getId(),
-                'related_record'    => $currentUser->toArray()
+                'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
+                'related_record'    => array(
+                    'org_name'         => 'phpunit erp test responsible',
+                    'container_id'  => $personalContainer[0]->getId(),
+                )
             ),
         );
     }
