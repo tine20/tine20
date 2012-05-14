@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -48,6 +48,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_filename = dirname(__FILE__) . '/files/contacts.vcf';
     }
 
@@ -59,6 +61,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -71,7 +74,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_instance->importFile($this->_filename);
         //print_r($result['results']->getFirstRecord()->toArray());
-                
+        
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
         $this->assertEquals('+49732121258035', $result['results']->getFirstRecord()->tel_home, 'n_fileas not found');
@@ -79,4 +82,22 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Eisenhüttenstraße 723', $result['results']->getFirstRecord()->adr_one_street, 'street not found');
         $this->assertEquals('http://www.vcard.de', $result['results']->getFirstRecord()->url, 'url not found');
     }
-}        
+
+    /**
+     * test import data #2
+     * 
+     * @see 0006248: Error with vcard-import
+     */
+    public function testImportWithUmlaut()
+    {
+        $this->_filename = dirname(__FILE__) . '/files/contactUmlaut.vcf';
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
+        
+        $result = $this->_instance->importFile($this->_filename);
+        
+        $importedContact = $result['results']->getFirstRecord();
+        $this->assertTrue($importedContact !== NULL);
+        $this->assertEquals('Hans Müller', $importedContact->n_fn, print_r($importedContact, TRUE));
+    }
+}
