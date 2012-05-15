@@ -83,7 +83,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        var title = this.windowTitle || this.app.i18n._('Please enter your credentials');
+        var title = this.windowTitle || this.app.i18n._('Add new member to course');
         this.window.setTitle(title);
         
         this.getForm().loadRecord(this.record);
