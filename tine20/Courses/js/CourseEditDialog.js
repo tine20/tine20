@@ -101,7 +101,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onAddNewMember: function(fileSelector) {
         Tine.Courses.AddMemberDialog.openWindow({
             courseData: this.record.data,
-            windowTitle: this.app.i18n._('Add new member to course'),
             app: this.app,
             listeners: {
                 scope: this,
