@@ -1,7 +1,7 @@
 {
   "projectName": "Tine 2.0 - Courses",
   "deployDir": "Courses",
-  "licenseText": "Tine 2.0 - Courses \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "licenseText": "Tine 2.0 - Courses \nCopyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
   "resources": [
     
   ],
@@ -21,6 +21,10 @@
         },
         {
           "text": "CourseGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddMemberDialog.js",
           "path": "js/"
         },
         {

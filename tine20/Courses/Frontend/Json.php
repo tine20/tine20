@@ -242,7 +242,10 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $courseData['type'] = $courseData['type']['value'];
         }
         $course->setFromJsonInUsersTimezone($courseData);
-        $user = new Tinebase_Model_FullUser($userData, TRUE);
+        $user = new Tinebase_Model_FullUser(array(
+            'accountFirstName' => $userData['accountFirstName'],
+            'accountLastName' => $userData['accountLastName'],
+        ), TRUE);
         
         $this->_controller->createNewMember($course, $user);
 

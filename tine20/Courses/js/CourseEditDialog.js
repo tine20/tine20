@@ -97,26 +97,17 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * onAddNewMember
-     * 
-     *  // TODO change loadmask text?
      */
     onAddNewMember: function(fileSelector) {
-        var courseData = this.record.data,
-            userData = {accountFirstName: null, accountLastName: null};
-            
-        Ext.Msg.prompt(this.app.i18n._('First Name'), this.app.i18n._('Please enter the first name:'), function(btn, text){
-            if (btn == 'ok') {
-                userData.accountFirstName = text;
-                Ext.Msg.prompt(this.app.i18n._('Last Name'), this.app.i18n._('Please enter the last name:'), function(btn, text){
-                    if (btn == 'ok') {
-                        userData.accountLastName = text;
-                        
-                        this.loadMask.show();
-                        Tine.Courses.addNewMember(userData, courseData, this.onMembersImport.createDelegate(this));
-                    }
-                }, this);
+        Tine.Courses.AddMemberDialog.openWindow({
+            courseData: this.record.data,
+            windowTitle: this.app.i18n._('Add new member to course'),
+            app: this.app,
+            listeners: {
+                scope: this,
+                'update': this.onMembersImport
             }
-        }, this);
+        });
     },
     
     /**
