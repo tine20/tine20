@@ -347,12 +347,16 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @param   Tinebase_Model_Group  $_group
      * 
      * @return  Tinebase_Model_Group
+     * 
+     * @todo do not create group in sql if sync backend is readonly?
      */
     public function addGroup(Tinebase_Model_Group $_group)
     {
-        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+        if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $groupFromSyncBackend = $this->addGroupInSyncBackend($_group);
-            $_group->setId($groupFromSyncBackend->getId());
+            if ($groupFromSyncBackend !== NULL) {
+                $_group->setId($groupFromSyncBackend->getId());
+            }
         }
         
         return $this->addGroupInSqlBackend($_group);
