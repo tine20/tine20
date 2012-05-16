@@ -51,6 +51,7 @@ class Hash_Password_Crypt
                 break;
                 
             case self::CRYPT_MD5:
+            case 'MD5-CRYPT':
                 // generate 12 character salt
                 $salt = '$1$' . self::getRandomString(9);
             

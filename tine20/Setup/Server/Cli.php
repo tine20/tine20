@@ -40,10 +40,11 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'install-s'                 => 'Install applications [All] or comma separated list;'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
-                'update-s'                  => 'Update applications [All] or comma separated list',             
+                'update-s'                  => 'Update applications [All] or comma separated list',
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
+                'dbmailldap'                => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
                           setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname latin1

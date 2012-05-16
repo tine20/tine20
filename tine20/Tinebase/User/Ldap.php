@@ -169,12 +169,24 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         foreach ($this->_plugins as $plugin) {
             if ($plugin instanceof Tinebase_User_Plugin_LdapInterface) {
-                $plugin->setLdap($this->_ldap);
-                $this->_ldapPlugins[] = $plugin;
+                $this->registerLdapPlugin($plugin);
             }
         }
     }
 
+    /**
+     * register ldap plugin
+     * 
+     * @param Tinebase_User_Plugin_LdapInterface $plugin
+     */
+    public function registerLdapPlugin(Tinebase_User_Plugin_LdapInterface $plugin)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . get_class($plugin) . ' LDAP plugin.');
+        
+        $plugin->setLdap($this->_ldap);
+        $this->_ldapPlugins[] = $plugin;
+    }
+    
     /**
      * get list of users
      *
@@ -241,6 +253,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
     }
     
+    /**
+     * fetch LDAP backend 
+     * 
+     * @return Tinebase_Ldap
+     */
     public function getLdap()
     {
         return $this->_ldap;
@@ -264,7 +281,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $user = $this->_ldap2User($ldapEntry, $_accountClass);
         
         // append data from ldap plugins
-        foreach ($this->_ldapPlugins as $plugin) {
+        foreach ($this->_ldapPlugins as $class => $plugin) {
             $plugin->inspectGetUserByProperty($user, $ldapEntry);
         }
         

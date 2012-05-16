@@ -371,24 +371,35 @@ class Tinebase_User
     /**
      * syncronize user from syncbackend to local sql backend
      * 
-     * @param  mixed  $_username  the login id of the user to synchronize
-     * return Tinebase_Model_FullUser
+     * @param  mixed  $username  the login id of the user to synchronize
+     * @param  array $options
+     * @return Tinebase_Model_FullUser
+     * 
+     * @todo make use of dbmail plugin configurable (should be false by default)
      */
-    public static function syncUser($_username, $_syncContactData = false)
+    public static function syncUser($username, $options)
     {
-        if($_username instanceof Tinebase_Model_FullUser) {
-            $username = $_username->accountLoginName;
+        if ($username instanceof Tinebase_Model_FullUser) {
+            $username = $username->accountLoginName;
         } else {
-            $username = $_username;
+            $username = $username;
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
         
         $userBackend  = Tinebase_User::getInstance();
+        if (isset($options['ldapplugins']) && is_array($options['ldapplugins'])) {
+            foreach ($options['ldapplugins'] as $plugin) {
+                $userBackend->registerLdapPlugin($plugin);
+            }
+        }
+        
         $groupBackend = Tinebase_Group::getInstance();
         
         $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
         $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
         // make sure primary group exists
         try {
@@ -420,7 +431,9 @@ class Tinebase_User
             $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
             $currentUser->accountLoginShell         = $user->accountLoginShell;
         
-            $user = $userBackend->updateUserInSqlBackend($currentUser);
+            $syncedUser = $userBackend->updateUserInSqlBackend($currentUser);
+            $userBackend->updatePluginUser($syncedUser, $user);
+            
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
                 $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
@@ -431,17 +444,18 @@ class Tinebase_User
             }
         
             self::syncContact($user);
-            $user = $userBackend->addUserInSqlBackend($user);
+            $syncedUser = $userBackend->addUserInSqlBackend($user);
+            $userBackend->addPluginUser($syncedUser, $user);
         }
         
         // import contactdata(phone, address, fax, birthday. photo)
-        if($_syncContactData === true && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+        if (isset($options['syncContactData']) && $options['syncContactData'] && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
             
             try {
-                $contact = $addressbook->getByUserId($user->getId());
+                $contact = $addressbook->getByUserId($syncedUser->getId());
                 
-                $userBackend->updateContactFromSyncBackend($user, $contact);
+                $userBackend->updateContactFromSyncBackend($syncedUser, $contact);
                 $addressbook->update($contact);
             } catch (Addressbook_Exception_NotFound $aenf) {
                 // do nothing => user has no contact in addressbook
@@ -449,9 +463,9 @@ class Tinebase_User
         }
         
         // sync group memberships
-        Tinebase_Group::syncMemberships($user);
+        Tinebase_Group::syncMemberships($syncedUser);
         
-        return $user;
+        return $syncedUser;
     }
     
     /**
@@ -491,9 +505,10 @@ class Tinebase_User
     
     /**
      * import users from sync backend
-     *
+     * 
+     * @param array $options
      */
-    public static function syncUsers($_syncContactData = false)
+    public static function syncUsers($options)
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' start synchronizing users');
         
@@ -501,7 +516,7 @@ class Tinebase_User
 
         foreach($users as $user) {
             try {
-                $user = self::syncUser($user, $_syncContactData);
+                $user = self::syncUser($user, $options);
             } catch (Tinebase_Exception_NotFound $ten) {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
                     . $ten->getMessage());

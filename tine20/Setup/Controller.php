@@ -940,7 +940,7 @@ class Setup_Controller
         $roles->deleteAllRoles();
         
         // import users (from new backend) / create initial users (SQL)
-        Tinebase_User::syncUsers(true);
+        Tinebase_User::syncUsers(array('syncContactData' => TRUE));
         
         $roles->createInitialRoles();
         $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');

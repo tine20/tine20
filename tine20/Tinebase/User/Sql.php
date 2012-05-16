@@ -152,9 +152,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         foreach ($this->_sqlPlugins as $plugin) {
             try {
                 $plugin->inspectGetUserByProperty($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // do nothing
             } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' User sql plugin failure: ' . $e->getMessage());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' User sql plugin failure: ' . $e);
             }
         }
             
@@ -533,13 +534,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $updatedUser = $this->updateUserInSqlBackend($_user);
-        
-        // update data from plugins
-        foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectUpdateUser($updatedUser, $_user);
-        }
+        $this->updatePluginUser($updatedUser, $_user);
         
         return $updatedUser;
+    }
+    
+    /**
+    * update data in plugins
+    *
+    * @param Tinebase_Model_FullUser $updatedUser
+    * @param Tinebase_Model_FullUser $newUserProperties
+    */
+    public function updatePluginUser($updatedUser, $newUserProperties)
+    {
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectUpdateUser($updatedUser, $newUserProperties);
+        }
     }
     
     /**
@@ -630,13 +640,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $addedUser = $this->addUserInSqlBackend($_user);
-        
-        // add data from plugins
-        foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectAddUser($addedUser, $_user);
-        }
+        $this->addPluginUser($addedUser, $_user);
         
         return $addedUser;
+    }
+    
+    /**
+     * add data from/to plugins
+     * 
+     * @param Tinebase_Model_FullUser $addedUser
+     * @param Tinebase_Model_FullUser $newUserProperties
+     */
+    public function addPluginUser($addedUser, $newUserProperties)
+    {
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectAddUser($addedUser, $newUserProperties);
+        }
     }
     
     /**

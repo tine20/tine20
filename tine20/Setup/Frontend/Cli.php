@@ -282,7 +282,15 @@ class Setup_Frontend_Cli
         Tinebase_Group::syncGroups();
         
         // import users
-        Tinebase_User::syncUsers(true);
+        $options = array('syncContactData' => TRUE);
+        if ($_opts->dbmailldap) {
+            $options['ldapplugins'] = array(
+                new Tinebase_EmailUser_Imap_LdapDbmailSchema(array(
+                    'backend' => 'ldap_imap',
+                ))
+            );
+        }
+        Tinebase_User::syncUsers($options);
     }
     
     /**
