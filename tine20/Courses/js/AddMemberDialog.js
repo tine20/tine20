@@ -125,7 +125,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Courses.AddMemberDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 240,
+        width: 260,
         height: 160,
         name: Tine.Courses.AddMemberDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Courses.AddMemberDialog',
