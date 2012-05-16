@@ -153,16 +153,16 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         Syncope_Registry::set('contentStateBackend', new Syncope_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
         
-        if(Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN) === true) {
+        if (Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN) === true) {
             Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         }
-        if(Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN) === true) {
+        if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN) === true) {
             Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
         }
-        if(Tinebase_Core::getUser()->hasRight('Felamimail', Tinebase_Acl_Rights::RUN) === true) {
+        if (Tinebase_Core::getUser()->hasRight('Felamimail', Tinebase_Acl_Rights::RUN) === true) {
             Syncope_Registry::setEmailDataClass('ActiveSync_Controller_Email');
         }
-        if(Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN) === true) {
+        if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN) === true) {
             Syncope_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
         }
     }

@@ -101,17 +101,8 @@ class Tinebase_Acl_Roles
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
-        try {
-            $appId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is not installed.');
-            return false;
-            
-        }
-        $application = Tinebase_Application::getInstance()->getApplicationById($appId);
-        if ($application->status != 'enabled') {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Application ' . $_application . ' is disabled.');
-            return false;
+        if (! Tinebase_Application::getInstance()->isInstalled($_application, TRUE)) {
+            return FALSE;
         }
         
         $roleMemberships = $this->getRoleMemberships($_accountId);
@@ -121,6 +112,7 @@ class Tinebase_Acl_Roles
             return false;
         }
 
+        $application = Tinebase_Application::getInstance()->getApplicationById($_application);
         $select = $this->_roleRightsTable->select();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
                ->where('(' .    $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right) 
