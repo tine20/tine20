@@ -951,44 +951,64 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! this.actionToolbar) {
             var additionalItems = this.getActionToolbarItems();
 
+            var items = [];
+            
+            if(this.action_addInNewWindow) {
+                items.push(Ext.apply(
+                    new Ext.SplitButton(this.action_addInNewWindow), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top',
+                        arrowAlign:'right',
+                        menu: new Ext.menu.Menu({
+                            items: [],
+                            plugins: [{
+                                ptype: 'ux.itemregistry',
+                                key:   'Tine.widgets.grid.GridPanel.addButton'
+                            }]
+                        })
+                    })
+                );
+            }
+            
+            if(this.action_editInNewWindow) {
+                items.push(Ext.apply(
+                    new Ext.Button(this.action_editInNewWindow), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                );
+            }
+            
+            if(this.action_deleteRecord) {
+                items.push(Ext.apply(
+                    new Ext.Button(this.action_deleteRecord), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                );
+            }
+            
+            if(this.actions_print) {
+                items.push(Ext.apply(
+                    new Ext.Button(this.actions_print), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                );
+            }
+            
             this.actionToolbar = new Ext.Toolbar({
                 items: [{
                     xtype: 'buttongroup',
-//                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
                     plugins: [{
                         ptype: 'ux.itemregistry',
                         key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
                     }],
-                    items: [
-                        Ext.apply(new Ext.SplitButton(this.action_addInNewWindow), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top',
-                            arrowAlign:'right',
-                            menu: new Ext.menu.Menu({
-                                items: [],
-                                plugins: [{
-                                    ptype: 'ux.itemregistry',
-                                    key:   'Tine.widgets.grid.GridPanel.addButton'
-                                }]
-                            })
-                        }),
-                        Ext.apply(new Ext.Button(this.action_editInNewWindow), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
-                        Ext.apply(new Ext.Button(this.actions_print), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        })
-                    ].concat(Ext.isArray(additionalItems) ? additionalItems : [])
+                    items: items.concat(Ext.isArray(additionalItems) ? additionalItems : [])
                 }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
             });
 
@@ -1035,7 +1055,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items.push(this.action_resolveDuplicates);
             }
             
-            if (! this.action_tagsMassAttach.hidden) {
+            if (this.action_tagsMassAttach && ! this.action_tagsMassAttach.hidden) {
                 items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
             }
 
