@@ -72,6 +72,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         
         $tinebaseServer = new Tinebase_Frontend_Cli();
         
+        $opts = Tinebase_Core::get('opts');
         if (! in_array($method, array(
             'Tinebase.triggerAsyncEvents',
             'Tinebase.processQueue',
@@ -80,7 +81,6 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
             'Tinebase.monitoringCheckCron',
             'Tinebase.monitoringLoginNumber',
         ))) {
-            $opts = Tinebase_Core::get('opts');
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);
