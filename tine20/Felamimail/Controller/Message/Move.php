@@ -276,7 +276,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param string $_targetFolderName
      * @param Felamimail_Backend_ImapProxy $_imap
      * 
-     * @todo perhaps we should check the existance of the messages on the imap instead of catching the exception here
+     * @todo perhaps we should check the existance of the messages on the imap instead of catching the exceptions here
      */
     protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap)
     {
@@ -285,8 +285,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         try {
             $_imap->copyMessage($_uids, Felamimail_Model_Folder::encodeFolderName($_targetFolderName));
             $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmse);
         } catch (Felamimail_Exception_IMAP $fei) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei);
         }
     }
 }
