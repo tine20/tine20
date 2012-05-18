@@ -46,7 +46,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     enableHdMenu: false,
     
     initComponent: function() {
-        this.initStore();
+//        this.initStore();
         this.colModel = this.getColumnModel();
         
         this.initActions();
@@ -54,21 +54,21 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             items: [this.actionAdd, this.actionUnlink, this.actionEdit]
         });
         this.plugins = this.plugins || [];
-    this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         // on rowcontextmenu handler
-        this.listeners = {
-            rowcontextmenu: function(grid, row, e) {
-                alert('asd');
-                e.stopEvent();
-                var selModel = grid.getSelectionModel();
-                if(!selModel.isSelected(row)) {
-                    selModel.selectRow(row);
-                }
-                
-                this.contextMenu.showAt(e.getXY());
-            },
-            scope:this
-        };
+//        this.listeners = {
+//            rowcontextmenu: function(grid, row, e) {
+//                alert('asd');
+//                e.stopEvent();
+//                var selModel = grid.getSelectionModel();
+//                if(!selModel.isSelected(row)) {
+//                    selModel.selectRow(row);
+//                }
+//                
+//                this.contextMenu.showAt(e.getXY());
+//            },
+//            scope:this
+//        };
         
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
     },
@@ -121,20 +121,29 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         })
     },
     
-    initStore: function() {
-        this.store = new Ext.data.JsonStore({
-        fields: (this.storeFields) ? this.storeFields : this.recordClass
-    });
-
-    // focus+select new record
-    this.store.on('add', function(store, records, index) {
-        (function() {
-            if (this.rendered) {
-                this.getView().focusRow(index);
-                this.getSelectionModel().selectRow(index);
-            }
-        }).defer(300, this);
-    }, this);
+    onRecordLoad: function() {
+//        this.store = new Tine.Tinebase.data.RecordStore({
+//                recordClass: this.recordClass
+//            });
+        Ext.each(this.record.get('elayers'), function(record) {
+            console.warn(record);
+        }, this);
     }
+    
+//    initStore: function() {
+//        this.store = new Ext.data.JsonStore({
+//        fields: (this.storeFields) ? this.storeFields : this.recordClass
+//    });
+//
+//    // focus+select new record
+//    this.store.on('add', function(store, records, index) {
+//        (function() {
+//            if (this.rendered) {
+//                this.getView().focusRow(index);
+//                this.getSelectionModel().selectRow(index);
+//            }
+//        }).defer(300, this);
+//    }, this);
+//    }
     
 });

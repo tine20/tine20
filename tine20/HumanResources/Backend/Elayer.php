@@ -16,40 +16,26 @@
  * @package     HumanResources
  * @subpackage  Backend
  */
-class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
+class HumanResources_Backend_Elayer extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'humanresources_employee';
+    protected $_tableName = 'humanresources_elayer';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'HumanResources_Model_Employee';
+    protected $_modelName = 'HumanResources_Model_Elayer';
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
      *
      * @var boolean
      */
-    protected $_modlogActive = TRUE;
-    
-//     /**
-//      * foreign tables (key => tablename)
-//      * @var array
-//      */
-    protected $_foreignTables = array(
-        'elayers'    => array(
-            'table' => 'humanresources_elayer',
-            'joinOn'        => 'employee_id',
-            'joinId'        => 'id',
-            'field'         => 'id',
-            'singleValue'   => false,
-        )
-    );
+    protected $_modlogActive = false;
 }

@@ -102,7 +102,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
                 $_record['contact_id'] = !empty($_record['contact_id']) ? Addressbook_Controller_Contact::getInstance()->get($_record['contact_id'])->toArray() : null;
-//                 $_record['elayers'] = HumanResources_Controller_Elayer()->getInstance()->search->
+                $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+                $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $_record['elayers']));
+                $_record['elayers'] = HumanResources_Controller_Elayer::getInstance()->search($filter, $paging);
                 $recordArray = parent::_recordToJson($_record);
                 break;
 

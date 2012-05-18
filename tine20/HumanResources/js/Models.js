@@ -40,7 +40,7 @@ Tine.HumanResources.Model.EmployeeArray = [
     {name: 'notes'},
     // relations with other objects
     { name: 'relations'},
-    { name: 'elayers' }
+    { name: 'elayers'}
 ];
 
 /**
