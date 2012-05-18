@@ -1,0 +1,52 @@
+Index: tine20-2012.03.2/Setup/Controller.php
+===================================================================
+--- tine20-2012.03.2.orig/Setup/Controller.php	2012-04-12 23:34:26.000000000 +0200
++++ tine20-2012.03.2/Setup/Controller.php	2012-04-12 23:35:39.000000000 +0200
+@@ -981,7 +981,20 @@
+     protected function _getAuthProviderData()
+     {
+         $result = Tinebase_Auth::getBackendConfigurationWithDefaults(Setup_Core::get(Setup_Core::CHECKDB));
+-        $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_Auth::getConfiguredBackend() : Tinebase_Auth::SQL;
++        
++        if (file_exists('/etc/tine20/ldapuser.secret') && !Setup_Controller::getInstance()->isInstalled('Tinebase')) {
++            // force LDAP backend
++            $result['backend'] = Tinebase_User::LDAP;
++            
++            // read default settings via ucr
++            $ldapBase = shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/base'));
++            $result[Tinebase_Auth::LDAP]['host'] = shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/server/name')) . ':' . shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/server/port'));
++            $result[Tinebase_Auth::LDAP]['username'] = "uid=tine20,cn=tine20," . $ldapBase;
++            $result[Tinebase_Auth::LDAP]['password'] = file_get_contents('/etc/tine20/ldapuser.secret');
++            $result[Tinebase_Auth::LDAP]['baseDn'] = 'cn=users,'  . $ldapBase;
++        } else {
++            $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_Auth::getConfiguredBackend() : Tinebase_Auth::SQL;
++        }
+ 
+         return $result;
+     }
+@@ -994,7 +1007,24 @@
+     protected function _getAccountsStorageData()
+     {
+         $result = Tinebase_User::getBackendConfigurationWithDefaults(Setup_Core::get(Setup_Core::CHECKDB));
+-        $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_User::getConfiguredBackend() : Tinebase_User::SQL;
++        
++        if (file_exists('/etc/tine20/ldapuser.secret') && !Setup_Controller::getInstance()->isInstalled('Tinebase')) {
++            // force LDAP backend
++            $result['backend'] = Tinebase_User::LDAP;
++            
++            // read default settings via ucr
++            $ldapBase = shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/base'));
++            $result[Tinebase_User::LDAP]['host']     = shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/server/name')) . ':' . shell_exec(escapeshellcmd('/usr/sbin/ucr get ldap/server/port'));
++            $result[Tinebase_User::LDAP]['username'] = "uid=tine20,cn=tine20," . $ldapBase;
++            $result[Tinebase_User::LDAP]['password'] = file_get_contents('/etc/tine20/ldapuser.secret');
++            $result[Tinebase_User::LDAP]['userDn']   = 'cn=users,'  . $ldapBase;
++            $result[Tinebase_User::LDAP]['groupsDn'] = 'cn=groups,' . $ldapBase;
++            $result[Tinebase_User::LDAP][Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY]  = 'Domain Users';
++            $result[Tinebase_User::LDAP][Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY] = 'Domain Admins';
++            $result[Tinebase_User::LDAP]['readonly'] = true;
++        } else {
++            $result['backend'] = (Setup_Core::get(Setup_Core::CHECKDB)) ? Tinebase_User::getConfiguredBackend() : Tinebase_User::SQL;
++        }
+ 
+         return $result;
+     }

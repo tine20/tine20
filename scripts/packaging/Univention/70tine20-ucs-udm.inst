@@ -1,4 +1,6 @@
-#!/usr/bin/make -f
+#!/bin/sh
+#
+# Tine 2.0 for UCS
 #
 # Copyright 2012-2012 by Metaways Infosystems GmbH
 #
@@ -27,39 +29,38 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
+VERSION="1"
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+. /usr/share/univention-join/joinscripthelper.lib
+. /usr/share/univention-lib/all.sh
 
-PACKAGES := $(shell dh_listpackages)
-MODULES = $(filter-out ucs ucs-udm webstack,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
+joinscript_init
 
-%:
-	dh  $@
+eval "$(ucr --shell dump)"
 
-# overwrite dh_installdeb to execute an additional shell script
-override_dh_installdeb:
-	dh_installdeb
-	
-	# generate list of available subpackages
-	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x,"; done; echo "") >> debian/tine20-webstack.substvars
+ucs_addServiceToLocalhost "Tine20" "$@"
 
-# overwrite dh_fixperms to execute an additional shell script
-override_dh_fixperms:
-	dh_fixperms
-	
-	# remove executable bits from all php files as dh_fixperms does not remove them
-	(find $(CURDIR)/debian/tine20-*/usr/share/tine20 -type f -name "*.php" -print0 2>/dev/null | xargs -0r chmod a-x)
-	
-	# make tine20.php executable again
-	chmod 0755 $(CURDIR)/debian/tine20-tinebase/usr/share/tine20/tine20.php
-	
-	chmod 0755 $(CURDIR)/debian/tine20-ucs-udm/usr/lib/univention-install/70tine20-ucs-udm.inst
+if [ ! -e /etc/tine20/ldapuser.secret ]; then
+    #create a user to use for ldap searches
+    ldappassword=$(makepasswd --minchars=15 --maxchars=20)
+    echo "$ldappassword" > /etc/tine20/ldapuser.secret
+    chmod 640 /etc/tine20/ldapuser.secret
+    chown root:www-data /etc/tine20/ldapuser.secret
+else
+    ldappassword="$(cat /etc/tine20/ldapuser.secret)"
+fi
 
-# UCS specific rules
-#override_dh_auto_test:
-#	ucslint
+udm container/cn create "$@" --ignore_exists \
+    --position "$ldap_base" \
+    --set name=tine20
+                
+udm users/user create "$@" --ignore_exists \
+    --position "cn=tine20,$ldap_base" \
+    --set username="tine20" --set password="$ldappassword" \
+    --set firstname="Tine 2.0 " --set lastname="LDAP account" \
+    --set description="Account used by Tine 2.0 to authenticate against LDAP directory" \
+    --option ldap_pwd
 
-override_dh_auto_install:
-	univention-install-config-registry
-	dh_auto_install
+joinscript_save_current_version
+
+exit 0

@@ -13,41 +13,45 @@ Homepage: http://www.tine20.org/
 Vcs-Git: http://git.tine20.org/git/tine20/scripts/packaging/Univention/
 Vcs-Browser: http://git.tine20.org/git/tine20/scripts/packaging/Univention/
 
-Package: tine204ucs
+Package: tine20-ucs
 Architecture: all
-Depends: tine204ucs-webstack (= ${binary:Version}),
- tine204ucs-mailstack (= ${binary:Version})
-Description: Tine 2.0 integration package for Univention Corporate Server
- Integration package for installation and configuration of the Tine 2.0
- groupware solution on Univention Corporate Server.
-
-Package: tine204ucs-webstack
-Architecture: all
-Depends: ${misc:Depends}, 
- ${python:Depends},
- tine20 (= ${binary:Version}),
- mysql-server
-Description: Tine 2.0 integration package for Univention Corporate Server
- Integration package for installation and configuration of the Tine 2.0
- groupware solution on Univention Corporate Server.
-
-Package: tine204ucs-mailstack
-Architecture: all
-Depends: ${misc:Depends}, 
- ${python:Depends},
+Depends: tine20 (= ${binary:Version}),
+ tine20-ucs-udm (= ${binary:Version}),
+ univention-apache,
  univention-mail-postfix,
  univention-mail-cyrus
-Recommends: bsd-mailx,
- univention-spamassassin,
- univention-antivir-mail
+Description: Tine 2.0 integration package for Univention Corporate Server
+ Integration package for installation and configuration of the Tine 2.0
+ groupware solution on Univention Corporate Server.
+
+Package: tine20-ucs-udm
+Architecture: all
+Depends: ${misc:Depends}, 
+ php5-ldap
+Description: Tine 2.0 integration package for Univention Corporate Server
+ Integration package for installation and configuration of the Tine 2.0
+ groupware solution on Univention Corporate Server.
+
+Package: tine20-webstack
+Architecture: all
+Depends: ${misc:Depends},
+ ${tine20:Modules},
+ wwwconfig-common, 
+ apache2 | lighttpd | nginx,
+ libapache2-mod-php5 | php5-fpm, 
+ php5-mysql | php5-mysqli, 
+ php5-mcrypt, 
+ php5-gd,
+ makepasswd
 Description: Tine 2.0 integration package for Univention Corporate Server
  Integration package for installation and configuration of the Tine 2.0
  groupware solution on Univention Corporate Server.
 
 Package: tine20
 Architecture: all
-Depends: ${misc:Depends}, tine20-tinebase, 
-    ${tine20:Modules}
+Depends: ${misc:Depends}, 
+ tine20-webstack (= ${binary:Version}),
+ mysql-server
 Description: webbased groupware and crm - metapackage
  Tine 2.0 is an open source project which combines groupware and CRM in one
  consistent interface. Tine 2.0 is web-based and optimises collaboration and
@@ -70,16 +74,8 @@ Description: webbased groupware and crm - metapackage
 Package: tine20-tinebase
 Architecture: all
 Depends: ${misc:Depends}, 
-    univention-apache, 
-    libapache2-mod-php5 | php5 | php5-cgi | php5-fpm, 
-    wwwconfig-common, 
-    php5-mysql | php5-mysqli, 
-    php5-mcrypt, 
-    php5-gd,
-    makepasswd
-Recommends: mysql-server, 
-    php5-ldap
-Suggests: www-browser
+ makepasswd
+Recommends: php5-ldap
 Description: webbased groupware and crm - core + addressbook module
  This packages contains the core librarys of Tine 2.0 and the addressbook module.
  Installing this package enables you to manage user accounts and contacts. Also
