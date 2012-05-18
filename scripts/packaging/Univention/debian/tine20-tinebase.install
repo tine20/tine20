@@ -15,4 +15,3 @@ PRIVACY                  /usr/share/tine20
 debian/etc/apache.conf   /etc/tine20
 debian/etc/php5.ini      /etc/tine20
 debian/etc/lighttpd.conf /etc/tine20
-listener/tine20.py       /usr/lib/univention-directory-listener/system/
