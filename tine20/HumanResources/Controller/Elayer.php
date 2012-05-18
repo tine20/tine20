@@ -1,6 +1,6 @@
 <?php
 /**
- * Employee controller for HumanResources application
+ * Elayer controller for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
@@ -11,12 +11,12 @@
  */
 
 /**
- * Employee controller class for HumanResources application
+ * Elayer controller class for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
  */
-class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
+class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -25,8 +25,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     private function __construct() {
         $this->_applicationName = 'HumanResources';
-        $this->_backend = new HumanResources_Backend_Employee();
-        $this->_modelName = 'HumanResources_Model_Employee';
+        $this->_backend = new HumanResources_Backend_Elayer();
+        $this->_modelName = 'HumanResources_Model_Elayer';
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
@@ -35,19 +35,19 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     /**
      * holds the instance of the singleton
      *
-     * @var HumanResources_Controller_Employee
+     * @var HumanResources_Controller_Elayer
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return HumanResources_Controller_Employee
+     * @return HumanResources_Controller_Elayer
      */
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_Employee();
+            self::$_instance = new HumanResources_Controller_Elayer();
         }
         
         return self::$_instance;

@@ -213,9 +213,8 @@
                 </field>
                 <field>
                     <name>working_hours</name>
-                    <type>integer</type>
+                    <type>float</type>
                     <notnull>true</notnull>
-                    <length>2</length>
                 </field>
                 <field>
                     <name>vacation_days</name>

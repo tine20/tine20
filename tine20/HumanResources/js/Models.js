@@ -11,35 +11,36 @@ Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 
 // Employee model fields
 Tine.HumanResources.Model.EmployeeArray = [
-    {name: 'id', type: 'string'},
-    {name: 'contact_id', type: 'string'},
-    {name: 'countryname', type: 'string'},
-    {name: 'locality', type: 'string'},
-    {name: 'postalcode', type: 'string'},
-    {name: 'region', type: 'string'},
-    {name: 'street', type: 'string'},
-    {name: 'street2', type: 'string'},
-    {name: 'email', type: 'string'},
-    {name: 'tel_home', type: 'string'},
-    {name: 'tel_cell', type: 'string'},
-    {name: 'title', type: 'string'},
-    {name: 'n_family', type: 'string'},
-    {name: 'n_given', type: 'string'},
-    {name: 'n_fn', type: 'string'},
-    {name: 'bday', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'id',                  type: 'string'},
+    {name: 'contact_id',          type: Tine.Addressbook.Model.Contact},
+    {name: 'countryname',         type: 'string'},
+    {name: 'locality',            type: 'string'},
+    {name: 'postalcode',          type: 'string'},
+    {name: 'region',              type: 'string'},
+    {name: 'street',              type: 'string'},
+    {name: 'street2',             type: 'string'},
+    {name: 'email',               type: 'string'},
+    {name: 'tel_home',            type: 'string'},
+    {name: 'tel_cell',            type: 'string'},
+    {name: 'title',               type: 'string'},
+    {name: 'n_family',            type: 'string'},
+    {name: 'n_given',             type: 'string'},
+    {name: 'n_fn',                type: 'string'},
+    {name: 'bday',                type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'bank_account_holder', type: 'string'},
     {name: 'bank_account_number', type: 'string'},
-    {name: 'bank_name', type: 'string'},
-    {name: 'bank_code_number', type: 'string'},
+    {name: 'bank_name',           type: 'string'},
+    {name: 'bank_code_number',    type: 'string'},
 
-    {name: 'employment_begin', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'employment_end', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'vacation_days', type: 'int'},
+    {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'vacation_days',       type: 'int'},
     // tine 2.0 tags and notes
     {name: 'tags'},
     {name: 'notes'},
     // relations with other objects
-    { name: 'relations'}
+    { name: 'relations'},
+    { name: 'elayers' }
 ];
 
 /**
@@ -53,16 +54,16 @@ Tine.HumanResources.Model.Employee = Tine.Tinebase.data.Record.create(Tine.Human
     appName: 'HumanResources',
     modelName: 'Employee',
     idProperty: 'id',
-    titleProperty: 'name',
+    titleProperty: 'n_fn',
     // ngettext('Employee', 'Employees', n);
     recordName: 'Employee',
     recordsName: 'Employees',
-    containerProperty: 'container_id',
+//    containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'All Employees',
     containersName: 'Employees',
     getTitle: function() {
-        return this.get('name') ? this.get('name') : false;
+        return this.get('n_fn') ? this.get('n_fn') : false;
     }
 });
 
@@ -99,10 +100,24 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
     ];
 };
 
+
+/**
+ * @namespace Tine.HumanResources
+ * @class Tine.HumanResources.employeeBackend
+ * @extends Tine.Tinebase.data.RecordProxy
+ * 
+ * Employee Backend
+ */ 
+Tine.HumanResources.employeeBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'HumanResources',
+    modelName: 'Employee',
+    recordClass: Tine.HumanResources.Model.Employee
+});
+
 // ELayer
 
 Tine.HumanResources.Model.ElayerArray = [
-    {name: 'id', type: 'string'},
+    {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
     {name: 'end_date', type: 'date'},
     {name: 'vacation_days', type: 'int'},
@@ -119,7 +134,7 @@ Tine.HumanResources.Model.Elayer = Tine.Tinebase.data.Record.create(Tine.HumanRe
     // ngettext('Elayer', 'Elayers', n);
     recordName: 'Elayer',
     recordsName: 'Elayers',
-    containerProperty: 'container_id',
+//    containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'All Elayers',
     containersName: 'Elayers',
@@ -154,7 +169,7 @@ Tine.HumanResources.Model.Elayer.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick search'), field: 'query', operators: ['contains']}
 //        {label: app.i18n._('Elayer name'),   field: 'name' },
 //        {filtertype: 'tinebase.tag', app: app},
 //        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}

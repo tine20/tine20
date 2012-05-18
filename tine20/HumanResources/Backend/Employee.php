@@ -38,4 +38,28 @@ class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
+    
+//     /**
+//      * foreign tables (key => tablename)
+//      * @var array
+//      */
+    protected $_foreignTables = array(
+        'elayers'    => array(
+            'table' => 'humanresources_elayer',
+            'joinOn'        => 'employee_id',
+            'joinId'        => 'id',
+            'field'         => 'id',
+            'select'        => array('elayers' => 'humanresources_elayer.id'),
+            'singleValue'   => false,
+//             'preserve'      => true,
+        )
+    );
+//     protected $_foreignTables = array(
+//         'contact_id'    => array(
+//             'table'         => 'addressbook',
+//             'joinOn'        => 'id',
+//             'field'         => 'id',
+//             'singleValue'   => true,
+//             ),
+//         );
 }

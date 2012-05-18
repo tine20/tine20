@@ -53,7 +53,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchEmployees($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'HumanResources_Model_EmployeeFilter', TRUE);
+        return $this->_search($filter, $paging, $this->_controller, 'HumanResources_Model_EmployeeFilter');
     }     
     
     /**
@@ -74,7 +74,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array created/updated record
      */
     public function saveEmployee($recordData)
-    {
+    {    
+//         $recordData['id'] = time();
         return $this->_save($recordData, $this->_controller, 'Employee');
     }
     
@@ -84,11 +85,89 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array  $ids 
      * @return string
      */
-    public function deleteHumanResources($ids)
+    public function deleteEmployees($ids)
     {
         return $this->_delete($ids, $this->_controller);
     }    
 
+    
+    /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        switch (get_class($_record)) {
+            case 'HumanResources_Model_Employee':
+                $_record['contact_id'] = !empty($_record['contact_id']) ? Addressbook_Controller_Contact::getInstance()->get($_record['contact_id'])->toArray() : null;
+//                 $_record['elayers'] = HumanResources_Controller_Elayer()->getInstance()->search->
+                $recordArray = parent::_recordToJson($_record);
+                break;
+
+//             case 'IPAccounting_Model_IPNet':
+//                 $recordArray = parent::_recordToJson($_record);
+//                 $recordArray['account_grants'] = $this->defaultGrants;
+//                 break;
+                
+//             case 'IPAccounting_Model_IPAggregate':
+//                 $_record['netid'] = $_record['netid'] ? $this->_ipnetController->get($_record['netid']) : $_record['netid'];
+//                 $recordArray = parent::_recordToJson($_record);
+//                 $recordArray['account_grants'] = $this->defaultGrants;
+        }
+
+        return $recordArray;
+    }
+
+//     /**
+//      * returns multiple records prepared for json transport
+//      *
+//      * NOTE: we can't use parent::_multipleRecordsToJson here because of the different container handling
+//      *
+//      * @param Tinebase_Record_RecordSet $_records
+//      * @return array data
+//      */
+//     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+//     {
+//         if (count($_records) == 0) {
+//             return array();
+//         }
+
+//         switch ($_records->getRecordClassName()) {
+//             case 'IPAccounting_Model_IPVolume':
+//             case 'IPAccounting_Model_IPAggregate':
+//                 $ipnetIds = $_records->netid;
+//                 $ipnets = $this->_ipnetController->getMultiple(array_unique(array_values($ipnetIds)), true);
+
+//                 foreach ($_records as $record) {
+//                     $idx = $ipnets->getIndexById($record->netid);
+//                     if ($idx !== FALSE) {
+//                         $record->netid = $ipnets[$idx];
+//                     } else {
+//                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not resolve ipnet (id: ' . $record->netid . '). No permission?');
+//                     }
+//                 }
+//                 break;
+                
+//             case 'IPAccounting_Model_IPNet':
+//                 break;
+//         }
+
+//         $recordArray = $_records->toArray();
+
+//         foreach($recordArray as &$rec) {
+//             $rec['account_grants'] = $this->defaultGrants;
+//         }
+        
+//         return $recordArray;
+//     }
+    
+    
+    
+    
+    
+    
 //     /**
 //      * Returns registry data
 //      * 
