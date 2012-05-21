@@ -11,6 +11,7 @@
 .HumanResourcesEmployee, .HumanResourcesIconCls {
     background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
 }
+
 .x-btn-medium .HumanResourcesIconCls {
     background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
 }
@@ -22,4 +23,24 @@
         height:14px!important;
         width: 14px!important;
         background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
+}
+
+.HumanResourcesSickness {
+    background-image:url(../../images/oxygen/16x16/actions/book.png) !important;
+}
+.x-btn-medium .HumanResourcesSickness {
+    background-image:url(../../images/oxygen/22x22/actions/book.png) !important;
+}
+.x-btn-large .HumanResourcesSickness {
+    background-image:url(../../images/oxygen/32x32/apps/actions/book.png) !important;
+}
+
+.HumanResourcesVacation {
+    background-image:url(../../images/oxygen/16x16/actions/book2.png) !important;
+}
+.x-btn-medium .HumanResourcesVacation {
+    background-image:url(../../images/oxygen/22x22/actions/book2.png) !important;
+}
+.x-btn-large .HumanResourcesVacation {
+    background-image:url(../../images/oxygen/32x32/actions/book2.png) !important;
 }

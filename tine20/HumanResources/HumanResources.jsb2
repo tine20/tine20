@@ -30,6 +30,18 @@
         {
           "text": "ElayerGridPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "FreeTimeGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "SicknessGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "VacationGridPanel.js",
+          "path": "js/"
         }
       ]
     },

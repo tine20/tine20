@@ -36,7 +36,8 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
-        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
+        'query'         => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
+        'employee_id'   => array('filter' => 'Tinebase_Model_Filter_ForeignRecord'),
+        'created_by'    => array('filter' => 'Tinebase_Model_Filter_User')
     );
 }

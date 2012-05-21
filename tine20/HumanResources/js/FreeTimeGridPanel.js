@@ -8,13 +8,13 @@
 Ext.ns('Tine.HumanResources');
 
 /**
- * Employee grid panel
+ * FreeTime grid panel
  * 
  * @namespace   Tine.HumanResources
- * @class       Tine.HumanResources.EmployeeGridPanel
+ * @class       Tine.HumanResources.FreeTimeGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
- * <p>Employee Grid Panel</p>
+ * <p>FreeTime Grid Panel</p>
  * <p><pre>
  * </pre></p>
  * 
@@ -23,50 +23,48 @@ Ext.ns('Tine.HumanResources');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.HumanResources.EmployeeGridPanel
+ * Create a new Tine.HumanResources.FreeTimeGridPanel
  */
-Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
-     * @cfg {Tine.HumanResources.Model.Employee} recordClass
+     * @cfg {Tine.Tinebase.Model.Record} recordClass
      */
-    recordClass: Tine.HumanResources.Model.Employee,
-    
+    recordClass: null,
+    recordProxy: null,
     /**
      * eval grants
      * @cfg {Boolean} evalGrants
      */
-    evalGrants: false,
-    
+    evalGrants: null,
+    fromEditDialog: null,
     /**
      * optional additional filterToolbar configs
      * @cfg {Object} ftbConfig
      */
     ftbConfig: null,
-    
+    recordProxy: null,
     /**
      * grid specific
      * @private
      */
-    defaultSortInfo: {field: 'number', direction: 'DESC'},
-    gridConfig: {
-        autoExpandColumn: 'n_fn'
-    },
+    defaultSortInfo: null,
+    gridConfig: null,
      
     /**
      * inits this cmp
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.HumanResources.employeeBackend
-        
+        this.defaultSortInfo = {field: 'number', direction: 'DESC'};
+        this.gridConfig = { autoExpandColumn: 'n_fn' };
         this.gridConfig.columns = this.getColumns();
-        this.filterToolbar = this.filterToolbar || this.getFilterToolbar(this.ftbConfig);
+        if(! this.fromEditDialog) {
+            this.initFilterToolbar();
+            this.plugins.push(this.filterToolbar);
+        }
         
-        this.initFilterToolbar();
-        this.plugins.push(this.filterToolbar);
-        
-        Tine.HumanResources.EmployeeGridPanel.superclass.initComponent.call(this);
+        Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -74,7 +72,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.HumanResources.Model.Employee.getFilterModel(),
+            filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: [],
             plugins: [
@@ -88,6 +86,14 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * 
      * @return Ext.grid.ColumnModel
      * @private
+     * 
+     * 
+     * 'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'date'
      */
     getColumns: function(){
         return [

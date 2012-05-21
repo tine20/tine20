@@ -41,11 +41,12 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'duration'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'remark'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'date'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'date'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),

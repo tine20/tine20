@@ -179,74 +179,11 @@
             </declaration>
         </table>
         <table>
-            <name>humanresources_elayer</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>start_date</name>
-                    <type>datetime</type>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>end_date</name>
-                    <type>datetime</type>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>employee_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>cost_centre</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
-                    <default></default>
-                </field>
-                <field>
-                    <name>working_hours</name>
-                    <type>float</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>vacation_days</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <length>2</length>
-                </field>
-                <index>
-                    <name>elayer::employee_id--employee::id</name>
-                    <field>
-                        <name>employee_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>humanresources_employee</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-            </declaration>
-        </table>
-        <table>
             <name>humanresources_workingtime</name>
             <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>elayer_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -396,6 +333,80 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>humanresources_employee</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>humanresources_elayer</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>end_date</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>employee_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>workingtime_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>                
+                <field>
+                    <name>cost_centre</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                    <default></default>
+                </field>
+                <field>
+                    <name>working_hours</name>
+                    <type>float</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>vacation_days</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <length>2</length>
+                </field>
+                <index>
+                    <name>elayer::employee_id--employee::id</name>
+                    <field>
+                        <name>employee_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>humanresources_employee</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>elayer::workingtime_id--workingtime::id</name>
+                    <field>
+                        <name>workingtime_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>humanresources_workingtime</table>
                         <field>id</field>
                     </reference>
                 </index>

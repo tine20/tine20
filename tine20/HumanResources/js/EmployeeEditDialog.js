@@ -62,6 +62,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
         this.elayerGridPanel.onRecordLoad();
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
     },
@@ -92,9 +97,28 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         };
         
         this.elayerGridPanel = new Tine.HumanResources.ElayerGridPanel({
-            record: this.record,
             app: this.app,
             editDialog: this
+        });
+        
+        this.vacationGridPanel = new Tine.HumanResources.VacationGridPanel({
+            app: this.app,
+            fromEditDialog: true,
+            title: this.app.i18n._('Vacation Days'),
+            frame: true,
+            border: true,
+            autoScroll: true,
+            layout: 'fit'
+        });
+        
+        this.sicknessGridPanel = new Tine.HumanResources.SicknessGridPanel({
+            app: this.app,
+            fromEditDialog: true,
+            title: this.app.i18n._('Sickness Days'),
+            frame: true,
+            border: true,
+            autoScroll: true,
+            layout: 'fit'
         });
         
         return {
@@ -239,15 +263,15 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }
                             ]]
                         }]
-                    }, {
-                        xtype: 'fieldset',
-                        layout: 'hfit',
-                        autoHeight: true,
-                        title: this.app.i18n._('Contract Information'),
-                        disabled: ! this.showPrivateInformation,
-                        items: [
-                            this.elayerGridPanel
-                            ]
+//                    }, {
+//                        xtype: 'fieldset',
+//                        layout: 'hfit',
+//                        autoHeight: true,
+//                        title: this.app.i18n._('Contract Information'),
+//                        disabled: ! this.showPrivateInformation,
+//                        items: [
+//                            this.elayerGridPanel
+//                            ]
                     },
                         {
                         xtype: 'fieldset',
@@ -323,11 +347,16 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            }, 
+            new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
+                }), 
+            this.elayerGridPanel,
+            this.sicknessGridPanel,
+            this.vacationGridPanel
+            ]
         };
     }
 });
