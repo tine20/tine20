@@ -39,10 +39,10 @@ class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modlogActive = TRUE;
     
-//     /**
-//      * foreign tables (key => tablename)
-//      * @var array
-//      */
+    /**
+     * foreign tables (key => tablename)
+     * @var array
+     */
     protected $_foreignTables = array(
         'elayers'    => array(
             'table' => 'humanresources_elayer',

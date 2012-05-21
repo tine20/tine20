@@ -114,7 +114,6 @@ Tine.HumanResources.employeeBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.HumanResources.Model.Employee
 });
 
-
 // Workingtime
 
 Tine.HumanResources.Model.WorkingTimeArray = [
@@ -123,7 +122,7 @@ Tine.HumanResources.Model.WorkingTimeArray = [
     {name: 'end_date', type: 'date'},
     {name: 'vacation_days', type: 'int'},
     {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'},
+    {name: 'working_hours', type: 'int'}
 ];
 
 Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.WorkingTimeArray, {

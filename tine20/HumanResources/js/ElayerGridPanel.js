@@ -42,6 +42,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     app: null,
     editDialog: null,
+    enableHdMenu: false,
     
     initComponent: function() {
         if (!this.app) {
@@ -75,8 +76,6 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         }, this);
         
     },
-
-    
     
     /**
      * returns column model
