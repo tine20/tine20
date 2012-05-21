@@ -24,6 +24,10 @@
           "path": "js/"
         },
         {
+          "text": "ContractSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractGridPanel.js",
           "path": "js/"
         },

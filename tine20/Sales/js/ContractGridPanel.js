@@ -88,13 +88,15 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Status"),
             width: 100,
             sortable: true,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Sales', 'contractStatus')
         },{
             id: 'cleared',
             header: this.app.i18n._("Cleared"),
             width: 15,
             sortable: true,
-            dataIndex: 'cleared'
+            dataIndex: 'cleared',
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Sales', 'contractCleared')
         },{
             id: 'cleared_in',
             header: this.app.i18n._("Cleared in"),
@@ -103,5 +105,5 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'cleared_in'
         }
         ];
-    }  
+    }
 });

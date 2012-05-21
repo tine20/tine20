@@ -121,13 +121,13 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: .333
                     },
                     items: [[{
-                        columnWidth: .1,
+                        columnWidth: .25,
                         fieldLabel: this.app.i18n._('Number'),
                         name: 'number',
                         readOnly: this.autoGenerateNumber,
                         allowBlank: this.autoGenerateNumber
                     },{
-                        columnWidth: .9,
+                        columnWidth: .75,
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
                         allowBlank: false
@@ -157,29 +157,21 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'customer',
                             fieldLabel: this.app.i18n._('Company')
                         }*/],[
-                    {
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'status',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: 'open',
-                            store: [['closed', this.app.i18n._('closed')], ['open', this.app.i18n._('open')]]
-                        }, {
-                            fieldLabel: this.app.i18n._('Cleared'),
-                            name: 'cleared',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: 'not yet billed',
-                            store: [
-                                ['not yet billed', this.app.i18n._('not yet cleared')], 
-                                ['to bill', this.app.i18n._('to clear')],
-                                ['billed', this.app.i18n._('cleared')]
-                            ]
-                        }, {
+                        
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    app: 'Sales',
+                                    keyFieldName: 'contractStatus',
+                                    fieldLabel: this.app.i18n._('Status'),
+                                    name: 'status'
+                                }),
+                                
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    app: 'Sales',
+                                    keyFieldName: 'contractCleared',
+                                    fieldLabel: this.app.i18n._('Cleared'),
+                                    name: 'cleared'
+                                }),
+                        {
                             fieldLabel: this.app.i18n._('Cleared in'),
                             name: 'cleared_in',
                             xtype: 'textfield'
