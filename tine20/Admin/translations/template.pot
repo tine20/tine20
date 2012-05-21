@@ -163,7 +163,7 @@ msgid "Login Name"
 msgstr ""
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
-#: js/customfield/EditDialog.js:595 js/customfield/GridPanel.js:72
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
 #: js/user/EditDialog.js:285 js/user/EditDialog.js:321
 msgid "Name"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
 #: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/customfield/GridPanel.js:74
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
@@ -290,7 +290,7 @@ msgstr ""
 msgid "No applications to display"
 msgstr ""
 
-#: js/Applications.js:277 js/customfield/EditDialog.js:625
+#: js/Applications.js:277 js/customfield/EditDialog.js:626
 msgid "Order"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/container/EditDialog.js:144 js/container/GridPanel.js:73
-#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
 #: js/customfield/GridPanel.js:73
 msgid "Type"
 msgstr ""
@@ -391,81 +391,81 @@ msgstr ""
 msgid "Given record class not found"
 msgstr ""
 
-#: js/customfield/EditDialog.js:464
+#: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr ""
 
-#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:691
 msgid "Cancel"
 msgstr ""
 
-#: js/customfield/EditDialog.js:503
+#: js/customfield/EditDialog.js:504
 msgid "Configure store"
 msgstr ""
 
-#: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
+#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:75
 msgid "Model"
 msgstr ""
 
-#: js/customfield/EditDialog.js:560
+#: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
 msgstr ""
 
-#: js/customfield/EditDialog.js:571
+#: js/customfield/EditDialog.js:572
 msgid "Text"
 msgstr ""
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:573
 msgid "Number"
 msgstr ""
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:574
 msgid "Date"
 msgstr ""
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:575
 msgid "DateTime"
 msgstr ""
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:576
 msgid "Time"
 msgstr ""
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:577
 msgid "Boolean"
 msgstr ""
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:578
 msgid "Search Combo"
 msgstr ""
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:579
 msgid "Key Field"
 msgstr ""
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:580
 msgid "Record"
 msgstr ""
 
-#: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
 msgstr ""
 
-#: js/customfield/EditDialog.js:607
+#: js/customfield/EditDialog.js:608
 msgid "Length"
 msgstr ""
 
-#: js/customfield/EditDialog.js:615
+#: js/customfield/EditDialog.js:616
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:621 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/customfield/EditDialog.js:648
+#: js/customfield/EditDialog.js:649
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 

@@ -42,43 +42,43 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/Models.js:40
+#: js/Models.js:39
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:44
+#: js/Models.js:43
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:78 js/Models.js:140
+#: js/Models.js:77 js/Models.js:139
 msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:79
+#: js/Models.js:78
 msgid "Product name"
 msgstr ""
 
-#: js/Models.js:81 js/Models.js:142
+#: js/Models.js:80 js/Models.js:141
 msgid "Creator"
 msgstr ""
 
-#: js/Models.js:113
+#: js/Models.js:112
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:117
+#: js/Models.js:116
 msgid "All Contracts"
 msgid_plural "contracts lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:141
+#: js/Models.js:140
 msgid "Contract name"
 msgstr ""
 
@@ -102,18 +102,18 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:62
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
 msgid "My Products"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:63
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
 msgid "Products created by myself"
 msgstr ""
 
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:83
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
 msgid "My Contracts"
 msgstr ""
 
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:84
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
 msgid "Contracts created by myself"
 msgstr ""

@@ -49,7 +49,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:444
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:442
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr ""
@@ -58,17 +58,17 @@ msgstr ""
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:275
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:273
 msgid "End"
 msgstr ""
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:145
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:130
 #: js/Model.js:107
 msgid "Turnover"
 msgstr ""
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:144
-#: js/LeadEditDialog.js:268 js/Model.js:106
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:129
+#: js/LeadEditDialog.js:266 js/Model.js:106
 msgid "Probability"
 msgstr ""
 
@@ -104,14 +104,14 @@ msgstr ""
 msgid "%s's personal leads"
 msgstr ""
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:354 js/Contact.js:394
-#: js/GridPanel.js:142 js/LeadGridDetailsPanel.js:45
+#: Controller.php:153 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/GridPanel.js:127 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr ""
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:355 js/Contact.js:398
-#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
+#: Controller.php:154 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: js/GridPanel.js:126 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr ""
@@ -164,17 +164,17 @@ msgstr ""
 msgid "Lead Data"
 msgstr ""
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:143
-#: js/LeadEditDialog.js:386 js/LeadStateFilterModel.js:32
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:128
+#: js/LeadEditDialog.js:384 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:405
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:403
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr ""
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:412
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:410
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr ""
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:291 js/Task.js:83
+#: Export/Pdf.php:232 js/LeadEditDialog.js:289 js/Task.js:83
 msgid "Tasks"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:302 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:300 js/Product.js:85
 msgid "Products"
 msgstr ""
 
@@ -239,7 +239,7 @@ msgstr ""
 msgid "Please select the attenders' role"
 msgstr ""
 
-#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:315 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
@@ -278,7 +278,7 @@ msgstr ""
 msgid "Change type to Customer"
 msgstr ""
 
-#: js/Contact.js:171 js/Contact.js:353 js/Contact.js:390 js/GridPanel.js:140
+#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392 js/GridPanel.js:125
 msgid "Responsible"
 msgstr ""
 
@@ -318,71 +318,71 @@ msgstr ""
 msgid "New Lead"
 msgstr ""
 
-#: js/GridPanel.js:137
+#: js/GridPanel.js:122
 msgid "Lead id"
 msgstr ""
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:123
 msgid "Tags"
 msgstr ""
 
-#: js/GridPanel.js:139 js/Model.js:104
+#: js/GridPanel.js:124 js/Model.js:104
 msgid "Lead name"
 msgstr ""
 
-#: js/GridPanel.js:146
+#: js/GridPanel.js:131
 msgid "Probable Turnover"
 msgstr ""
 
-#: js/GridPanel.js:188
+#: js/GridPanel.js:173
 msgid "Export Lead"
 msgstr ""
 
-#: js/GridPanel.js:197
+#: js/GridPanel.js:182
 msgid "Export as PDF"
 msgstr ""
 
-#: js/GridPanel.js:204
+#: js/GridPanel.js:189
 msgid "Export as CSV"
 msgstr ""
 
-#: js/GridPanel.js:211
+#: js/GridPanel.js:196
 msgid "Export as ODS"
 msgstr ""
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:203
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadEditDialog.js:292
+#: js/LeadEditDialog.js:290
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:303
+#: js/LeadEditDialog.js:301
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:344
+#: js/LeadEditDialog.js:342
 msgid "Enter short name"
 msgstr ""
 
-#: js/LeadEditDialog.js:428
+#: js/LeadEditDialog.js:426
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:450 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr ""
 
-#: js/LeadEditDialog.js:482 js/Product.js:139
+#: js/LeadEditDialog.js:480 js/Product.js:139
 msgid "Description"
 msgstr ""
 
-#: js/LeadEditDialog.js:496
+#: js/LeadEditDialog.js:494
 msgid "Enter description"
 msgstr ""
 
