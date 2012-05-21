@@ -178,6 +178,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 scope: this,
                 specialkey: this.onSearchComboSpecialkey,
                 blur: function(combo) {
+                    this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
+                    
                     // need to update record because we relay blur event and it might not be updated otherwise
                     if (this.activeEditor) {
                         var value = combo.getValue();
@@ -299,6 +301,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             this.fireEvent('specialkey', combo, e);
             if (this.activeEditor.row == 0) {
                 return false;
+            } else {
+                this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
             }
         }
     },
@@ -360,7 +364,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.setFixedHeight(true);
         
-        this.relayEvents(this.searchCombo, ['blur' ]);
+        this.relayEvents(this.searchCombo, ['blur']);
         
         this.initDropTarget();
     },
