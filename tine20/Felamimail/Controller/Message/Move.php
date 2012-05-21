@@ -209,8 +209,8 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $firstMessage = $_messages->getFirstRecord();
         $folder = Felamimail_Controller_Folder::getInstance()->get($firstMessage->folder_id);
-        $imapBackend = Felamimail_Backend_ImapFactory::factory($firstMessage->account_id);
-        $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
+        
+        $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
         
         $imapMessageUids = array();
         foreach ($_messages as $message) {
