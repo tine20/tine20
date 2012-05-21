@@ -889,19 +889,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('newentry',    this.onStoreNewEntry,   this);
         this.grid.on('headerclick', this.onHeaderClick,   this);
 
-        this.grid.on('rowcontextmenu', function(grid, row, e) {
-            e.stopEvent();
-            var selModel = grid.getSelectionModel();
-            if(!selModel.isSelected(row)) {
-                // disable preview update if config option is set to false
-                this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
-                selModel.selectRow(row);
-            }
-
-            this.getContextMenu().showAt(e.getXY());
-            // reset preview update
-            this.updateOnSelectionChange = true;
-        }, this);
+        this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
 
     },
 
@@ -1321,6 +1309,27 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.onEditInNewWindow.call(this, {actionType: 'edit'});
     }, 
 
+    /**
+     * called on row context click
+     * 
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Number} row
+     * @param {Ext.EventObject} e
+     */
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if(!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
+
+        this.getContextMenu(grid, row, e).showAt(e.getXY());
+        // reset preview update
+        this.updateOnSelectionChange = true;
+    },
+    
     /**
      * generic edit in new window handler
      */

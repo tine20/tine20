@@ -361,50 +361,41 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
         
-//        this.action_renameItem = new Ext.Action({
-//            requiredGrant: 'editGrant',
-//            allowMultiple: false,
-//            singularText: this.app.i18n._('Rename'),
-//            pluralText: this.app.i18n._('Rename'),
-//            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
-//            text: this.app.i18n._('Rename'),
-//            handler: this.onRenameItem,
-//            disabled: false,
-//            iconCls: 'action_rename',
-//            scope: this
-//        });
-        
-        this.action_pause = new Ext.Action({
-            text: _('Pause upload'),
-            iconCls: 'action_pause',
-            scope: this,
-            handler: this.onPause
-        });
-        
-        this.action_resume = new Ext.Action({
-            text: _('Resume upload'),
-            scope: this,
-            iconCls: 'action_resume',
-            handler: this.onResume
-        });
-        
         this.contextMenu = Tine.Filemanager.GridContextMenu.getMenu({
-            nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
+            nodeName: Tine.Filemanager.Model.Node.getRecordName(),
             actions: ['delete', 'rename', 'download', 'resume', 'pause'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
         });
         
+        this.folderContextMenu = Tine.Filemanager.GridContextMenu.getMenu({
+            nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
+            actions: ['delete', 'rename'],
+            scope: this,
+            backend: 'Filemanager',
+            backendModel: 'Node'
+        });
+        
         this.actionUpdater.addActions(this.contextMenu.items);
+        this.actionUpdater.addActions(this.folderContextMenu.items);
         
         this.actionUpdater.addActions([
            this.action_createFolder,
            this.action_goUpFolder,
            this.action_download,
-//           this.action_renameItem,
            this.action_deleteRecord
        ]);
+    },
+    
+    /**
+     * get the right contextMenu
+     */
+    getContextMenu: function(grid, row, e) {
+        var r = this.store.getAt(row),
+            type = r ? r.get('type') : null;
+            
+        return type === 'folder' ? this.folderContextMenu : this.contextMenu;
     },
     
     /**
