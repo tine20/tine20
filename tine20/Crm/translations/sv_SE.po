@@ -1,0 +1,599 @@
+# 
+# Translators:
+#   <tulken_hultan@hotmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-19 14:32+0000\n"
+"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "hantera leads"
+
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "lägg till, redigera och ta bort leads"
+
+#: Acl/Rights.php:110
+msgid "manage shared lead folders"
+msgstr "hantera delade lead mappar"
+
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr "Skapa nya delade lead mappar"
+
+#: Acl/Rights.php:114
+msgid "manage shared leads favorites"
+msgstr "hantera delade leads favoriter"
+
+#: Acl/Rights.php:115
+msgid "Create or update shared leads favorites"
+msgstr "Skapa eller uppdatera delade leads favoriter"
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr "tillstånd"
+
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
+msgid "Role"
+msgstr "Roll"
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "Källa"
+
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:442
+#: js/LeadGridDetailsPanel.js:445
+msgid "Start"
+msgstr "Start"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "Schemalagt slut"
+
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:273
+msgid "End"
+msgstr "Slut"
+
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:130
+#: js/Model.js:107
+msgid "Turnover"
+msgstr "omsättning"
+
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:129
+#: js/LeadEditDialog.js:266 js/Model.js:106
+msgid "Probability"
+msgstr "sannolikt"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "Mapp"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "Uppdaterad av"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "Uppdaterade Fält:"
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s ändrades från %s till %s."
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Lead %s har ändrats"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Lead %s har skapats"
+
+#: Controller.php:112
+#, python-format
+msgid "%s's personal leads"
+msgstr "%s personlig leads"
+
+#: Controller.php:153 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/GridPanel.js:127 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:488
+msgid "Customer"
+msgstr "Kund"
+
+#: Controller.php:154 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: js/GridPanel.js:126 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:471
+msgid "Partner"
+msgstr "Partner"
+
+#: Controller.php:155
+msgid "Reseller"
+msgstr "återförsäljare"
+
+#: Controller.php:158
+msgid "open"
+msgstr "Öppna"
+
+#: Controller.php:159
+msgid "contacted"
+msgstr "Kontaktad"
+
+#: Controller.php:160
+msgid "waiting for feedback"
+msgstr "väntar på feedback"
+
+#: Controller.php:161
+msgid "quote sent"
+msgstr "citera skickat"
+
+#: Controller.php:162
+msgid "accepted"
+msgstr "Godkännd"
+
+#: Controller.php:163
+msgid "lost"
+msgstr "Förlorad"
+
+#: Controller.php:166
+msgid "Market"
+msgstr "Marknad"
+
+#: Controller.php:167 Export/Pdf.php:219
+msgid "Email"
+msgstr "E-post"
+
+#: Controller.php:168 Export/Pdf.php:218
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Controller.php:169
+msgid "Website"
+msgstr "Webbsida"
+
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Lead Data"
+
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:128
+#: js/LeadEditDialog.js:384 js/LeadStateFilterModel.js:32
+msgid "Leadstate"
+msgstr "Leadstatus"
+
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:403
+#: js/LeadGridDetailsPanel.js:455
+msgid "Leadtype"
+msgstr "Leadtyp"
+
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:410
+#: js/LeadGridDetailsPanel.js:460
+msgid "Leadsource"
+msgstr "Leadkälla"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "avsluta Schemalagd"
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Kontakter"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Adress"
+
+#: Export/Pdf.php:232 js/LeadEditDialog.js:289 js/Task.js:83
+msgid "Tasks"
+msgstr "Uppgifter"
+
+#: Export/Pdf.php:252 js/Task.js:176
+msgid "Due Date"
+msgstr "Förfallo Datum"
+
+#: Export/Pdf.php:259 js/Task.js:189
+msgid "Priority"
+msgstr "Prioritet"
+
+#: Export/Pdf.php:274 js/LeadEditDialog.js:300 js/Product.js:85
+msgid "Products"
+msgstr "Produkter"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "Låg"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "Normal"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "Hög"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "Viktig"
+
+#: js/AddToLeadPanel.js:56
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: js/AddToLeadPanel.js:64
+msgid "Ok"
+msgstr "Ok"
+
+#: js/AddToLeadPanel.js:99
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Välj Lead till att lägga till kontakter till"
+
+#: js/AddToLeadPanel.js:104
+msgid "Please select the attenders' role"
+msgstr "Välj deltagarnas roll"
+
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:315 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Leads"
+
+#: js/AddToLeadPanel.js:154
+msgid "Select Lead"
+msgstr "Välj Lead"
+
+#: js/AddToLeadPanel.js:159
+msgid "Select Role"
+msgstr "Välj Roll"
+
+#: js/AddToLeadPanel.js:173
+msgid "Adding {0} Contacts to lead"
+msgstr "Lägga {0} Kontakter för att leda"
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
+msgstr "Leadtillstånd"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
+msgstr "Leadtyper"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
+msgstr "Leadkällor"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr "standardvärden"
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr "Ändra typ till kund"
+
+#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392 js/GridPanel.js:125
+msgid "Responsible"
+msgstr "Ansvarig"
+
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr "Ändra typ till Ansvarig"
+
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr "Ändra typ till Partner"
+
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr "Ändra kontakt typ"
+
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr "Sök på kontakter att lägga till ..."
+
+#: js/Contact.js:222
+msgid "Name"
+msgstr "namn"
+
+#: js/Contact.js:242
+msgid "Data"
+msgstr "Data"
+
+#: js/Contact.js:245 js/LeadGridDetailsPanel.js:48
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Mobiltelefon"
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Ny Lead"
+
+#: js/GridPanel.js:122
+msgid "Lead id"
+msgstr "Lead id"
+
+#: js/GridPanel.js:123
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/GridPanel.js:124 js/Model.js:104
+msgid "Lead name"
+msgstr "Lead Namn"
+
+#: js/GridPanel.js:131
+msgid "Probable Turnover"
+msgstr "Trolig Omsättning"
+
+#: js/GridPanel.js:173
+msgid "Export Lead"
+msgstr "Exportera Lead"
+
+#: js/GridPanel.js:182
+msgid "Export as PDF"
+msgstr "Exportera som PDF"
+
+#: js/GridPanel.js:189
+msgid "Export as CSV"
+msgstr "Exportera som CSV"
+
+#: js/GridPanel.js:196
+msgid "Export as ODS"
+msgstr "Exportera som ODS"
+
+#: js/GridPanel.js:203
+msgid "Export as XLS"
+msgstr "Exportera som XLS"
+
+#: js/LeadEditDialog.js:290
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "Du har inte kör rättigheter för Uppgifts applikation eller är det inte aktiverat"
+
+#: js/LeadEditDialog.js:301
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "Du har inte kör rättigheter för Sälj applikatio så är det inte aktiverat."
+
+#: js/LeadEditDialog.js:342
+msgid "Enter short name"
+msgstr "Skriv kort namn"
+
+#: js/LeadEditDialog.js:426
+msgid "Expected turnover"
+msgstr "Förväntad omsättning"
+
+#: js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:450
+msgid "Estimated end"
+msgstr "beräknat slut"
+
+#: js/LeadEditDialog.js:480 js/Product.js:139
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/LeadEditDialog.js:494
+msgid "Enter description"
+msgstr "Skriv beskrivning"
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "CRM Roll"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "E-post"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "Webb"
+
+#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] "lead Källa"
+msgstr[1] "Lead Källor"
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr "Lägg till Leadkälla..."
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "Lead status"
+msgstr[1] "Lead statusar"
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr "Lägg till Leadstatus"
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr "Visa stängda"
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Lead Typ"
+msgstr[1] "Lead Typer"
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr "Lägg till en Leadtyp..."
+
+#: js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr "Lägg till ny {0}"
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+msgid "Unlink {0}"
+msgstr "Avlänka {0}"
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+msgid "Unlink selected {0}"
+msgstr "Avlänk {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Redigera {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Redigering valt {0}"
+
+#: js/Model.js:52
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "lead lista"
+msgstr[1] "lead listor"
+
+#: js/Model.js:52
+msgid "lead lists"
+msgstr "lead listor"
+
+#: js/Model.js:102
+msgid "Quick search"
+msgstr "Snabbsök"
+
+#: js/Model.js:109
+msgid "Last modified"
+msgstr "Senast ändrad"
+
+#: js/Model.js:110
+msgid "Last modifier"
+msgstr "Senaste ändrare"
+
+#: js/Model.js:111
+msgid "Creation Time"
+msgstr "Skapad Tid"
+
+#: js/Model.js:112
+msgid "Creator"
+msgstr "Skapare"
+
+#: js/Model.js:151
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Inställningar"
+msgstr[1] "Inställningar"
+
+#: js/Model.js:155
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "postlista"
+msgstr[1] "postlistor"
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Produkt"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Pris"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr "kvantitet"
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr "Sök på produkter att lägga till ..."
+
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr "Inga uppgifter att visa"
+
+#: js/Task.js:168
+msgid "Summary"
+msgstr "sammanfattning"
+
+#: js/Task.js:172
+msgid "Add a task..."
+msgstr "Lägg till en uppgift ..."
+
+#: js/Task.js:205
+msgid "Percent"
+msgstr "procent"
+
+#: Preference.php:30
+msgid "All leads"
+msgstr "Alla leads"
+
+#: Preference.php:74
+msgid "Get Notification Emails"
+msgstr "Få Notifierings E-postmeddelanden"
+
+#: Preference.php:75
+msgid "The level of actions you want to be notified about."
+msgstr "Nivån på åtgärder som du vill bli informerad om."
+
+#: Preference.php:79
+msgid "Send Notifications Emails for own actions"
+msgstr "Skicka meddelanden e-post för egna handlingar"
+
+#: Preference.php:80
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Få Notifierings e-post för åtgärder som du gjorde själv"
+
+#: Preference.php:83
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:84
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Standard favoriten som laddas på crm start"
+
+#: Setup/Initialize.php:55 Setup/Update/Release3.php:37
+msgid "All leads I have read grants for"
+msgstr "Alla leads Jag har läs rättigheter för"
+
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
+msgstr "Senast uppdaterad av mig"
+
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
+msgstr "Alla leads jag senast har modifierat"
+
+#: Setup/Initialize.php:72
+msgid "My leads"
+msgstr "Mina leads"
+
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
+msgstr "Alla leads som jag är ansvarig för"
+
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
+msgstr "Leads med förfallna arbetsuppgifter"

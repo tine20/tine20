@@ -1,0 +1,228 @@
+# 
+# Translators:
+#   <tulken_hultan@hotmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-18 13:43+0000\n"
+"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:97
+msgid "manage shared folders"
+msgstr "hantera delade mappar"
+
+#: Acl/Rights.php:98
+msgid "Create new shared folders"
+msgstr "Skapa nya delade mappar"
+
+#: Controller/Node.php:164
+msgid "My folders"
+msgstr "Mina mappar"
+
+#: Controller/Node.php:171
+msgid "Shared folders"
+msgstr "Delade mappar"
+
+#: Controller/Node.php:178
+msgid "Other users folders"
+msgstr "Andra användares mappar"
+
+#: Controller.php:95
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's personliga filer"
+
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Filhanterare"
+
+#: js/Filemanager.js:56
+msgid "Service Unavailable"
+msgstr "Service otillgänglig"
+
+#: js/Filemanager.js:57
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Filhanteraren är inte konfigurerad korrekt. Se {0} Tine 2,0 Admin FAQ {1} för konfigurations råd eller kontakta din administratör."
+
+#: js/Filemanager.js:79
+msgid "Files already exists"
+msgstr "Filer existerar redan"
+
+#: js/Filemanager.js:79
+msgid "Do you want to replace the following file(s)?"
+msgstr "Vill du ersätta följande fil(er)?"
+
+#: js/Filemanager.js:112
+msgid "Failure on create folder"
+msgstr "Det gick inte att skapa en ny mapp"
+
+#: js/Filemanager.js:113
+msgid "Item with this name already exists!"
+msgstr "Ett objekt med detta namnet existerar redan!"
+
+#: js/GridContextMenu.js:35
+msgid "Please enter the new name of the {0}:"
+msgstr "Var god ange det nya namnet för {0}:"
+
+#: js/GridContextMenu.js:41
+msgid "Not renamed {0}"
+msgstr "Ej omdöpt {0}"
+
+#: js/GridContextMenu.js:41 js/GridPanel.js:484
+msgid "You have to supply a {0} name!"
+msgstr "Du måste ange ett {0} namn!"
+
+#: js/GridContextMenu.js:145 js/GridPanel.js:528
+msgid "Do you really want to delete the following files?"
+msgstr "Vill du verkligen radera följande filer?"
+
+#: js/GridPanel.js:132
+msgid "Name"
+msgstr "Namn"
+
+#: js/GridPanel.js:139
+msgid "Size"
+msgstr "Storlek"
+
+#: js/GridPanel.js:146 js/Model.js:522
+msgid "Contenttype"
+msgstr "Innehållstyp"
+
+#: js/GridPanel.js:154
+msgid "Folder"
+msgstr "Mapp"
+
+#: js/GridPanel.js:163
+msgid "Revision"
+msgstr "Revision"
+
+#: js/GridPanel.js:178 js/Model.js:523
+msgid "Creation Time"
+msgstr "Skapad"
+
+#: js/GridPanel.js:186
+msgid "Created By"
+msgstr "Skapad Av "
+
+#: js/GridPanel.js:193
+msgid "Last Modified Time"
+msgstr "Senast Ändrad"
+
+#: js/GridPanel.js:200
+msgid "Last Modified By"
+msgstr "Senast Ändrad Av"
+
+#: js/GridPanel.js:234
+msgid "Show closed"
+msgstr "Visa stängda"
+
+#: js/GridPanel.js:258
+msgid "The max. Upload Filesize is {0} MB"
+msgstr "Max storlek för filuppladning är {0} MB"
+
+#: js/GridPanel.js:296
+msgid "Upload"
+msgstr "Ladda upp"
+
+#: js/GridPanel.js:322
+msgid "Create Folder"
+msgstr "Skapa Mapp"
+
+#: js/GridPanel.js:333
+msgid "Folder Up"
+msgstr "Mapp Upp"
+
+#: js/GridPanel.js:344
+msgid "Save locally"
+msgstr "Spara lokalt"
+
+#: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
+msgid "Delete"
+msgstr "Radera"
+
+#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
+msgid "Rename"
+msgstr "Byt namn"
+
+#: js/GridPanel.js:378
+msgid "Pause upload"
+msgstr "Pausa uppladdning"
+
+#: js/GridPanel.js:385
+msgid "Resume upload"
+msgstr "Återuppta uppladning"
+
+#: js/GridPanel.js:479
+msgid "New Folder"
+msgstr "Ny Mapp"
+
+#: js/GridPanel.js:479
+msgid "Please enter the name of the new folder:"
+msgstr "Var god ange namnet på den nya mappen:"
+
+#: js/GridPanel.js:484
+msgid "No {0} added"
+msgstr "Ingen {0} tillagd"
+
+#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:667
+#: js/TreePanel.js:777
+msgid "Upload Failed"
+msgstr "Uppladdning Misslyckades"
+
+#: js/GridPanel.js:639 js/TreePanel.js:668
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Kan inte ladda upp filen. Filstorleken kan vara för stor. Var vänlig meddela din Administratör.\nMax uppladdningsstorlek: "
+
+#: js/GridPanel.js:792 js/TreePanel.js:778
+msgid "Putting files in this folder is not allowed!"
+msgstr "Skapa filer i denna mappen är inte tillåtet!"
+
+#: js/Model.js:34
+msgid "file"
+msgid_plural "files"
+msgstr[0] "Fil"
+msgstr[1] "Filer"
+
+#: js/Model.js:38
+msgid "folder"
+msgid_plural "folders"
+msgstr[0] "Mapp"
+msgstr[1] "Mappar"
+
+#: js/Model.js:265 js/Model.js:281
+msgid "Copying data .. {0}"
+msgstr "Kopierar data .. {0} "
+
+#: js/Model.js:268 js/Model.js:283
+msgid "Moving data .. {0}"
+msgstr "Flyttar data .. {0}"
+
+#: js/Model.js:287
+msgid "Please wait"
+msgstr "Vänlig vänta"
+
+#: js/Model.js:520
+msgid "Quick search"
+msgstr "Snabbsök"
+
+#: js/Model.js:521
+msgid "Type"
+msgstr "Typ"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "väg"

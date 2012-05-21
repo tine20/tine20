@@ -1,0 +1,145 @@
+# 
+# Translators:
+# Miguel Gutierrez <>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-17 00:43+0000\n"
+"Last-Translator: Miguel Gutierrez <>\n"
+"Language-Team: Spanish (Mexico) (http://www.transifex.net/projects/p/tine20/language/es_MX/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_MX\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "profesor"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Profesor"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Cuenta de Profesor"
+
+#: Frontend/Json.php:256 js/CourseEditDialog.js:141 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Curso"
+msgstr[1] "Cursos"
+
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr "Importar miembros del curso"
+
+#: js/CourseEditDialog.js:157
+msgid "Course Name"
+msgstr "Nombre del Curso"
+
+#: js/CourseEditDialog.js:164
+msgid "Course / School Type"
+msgstr "Tipo de Curso / Escuela"
+
+#: js/CourseEditDialog.js:175
+msgid "Description"
+msgstr "Descripción"
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:85
+msgid "Internet Access"
+msgstr "Acceso a Internet"
+
+#: js/CourseEditDialog.js:190 js/CourseGridPanel.js:93
+msgid "Fileserver Access"
+msgstr "Acceso al Servidor de Archivos"
+
+#: js/CourseEditDialog.js:222
+msgid "Members"
+msgstr "Miembros"
+
+#: js/CourseEditDialog.js:248
+msgid "Login"
+msgstr "Ingreso"
+
+#: js/CourseEditDialog.js:252
+msgid "unknown"
+msgstr "desconocido"
+
+#: js/CourseEditDialog.js:257
+msgid "Reset Password"
+msgstr "Reiniciar Contraseña"
+
+#: js/CourseEditDialog.js:275
+msgid "Set new password"
+msgstr "Establecer nueva contraseña"
+
+#: js/CourseEditDialog.js:275
+msgid "Please enter the new password:"
+msgstr "Por favor escribe tu nueva contraseña:"
+
+#: js/CourseGridPanel.js:48
+msgid "Quick search"
+msgstr "Búsqueda Rápida"
+
+#: js/CourseGridPanel.js:70
+msgid "Name"
+msgstr "Nombre"
+
+#: js/CourseGridPanel.js:76
+msgid "Type"
+msgstr "Tipo"
+
+#: js/CourseGridPanel.js:124
+msgid "Internet Access On"
+msgstr "Acceso a Internet Encendido"
+
+#: js/CourseGridPanel.js:135
+msgid "Internet Access Off"
+msgstr "Acceso a Internet Apagado"
+
+#: js/CourseGridPanel.js:146
+msgid "Fileserver Access On"
+msgstr "Servidor de Archivos Encendido"
+
+#: js/CourseGridPanel.js:157
+msgid "Fileserver Access Off"
+msgstr "Servidor de Archivos Apagado"
+
+#: js/CourseGridPanel.js:217
+msgid "Failed"
+msgstr "Falló"
+
+#: js/CourseGridPanel.js:218
+msgid "Some error occured while trying to update the courses."
+msgstr "Algún error ocurrió mientras intentaba actualizar los cursos."
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista de registro"
+msgstr[1] "listas de registro"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Tipo de Curso"
+msgstr[1] "Tipos de Curso"
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Todos los cursos"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "El favorito predeterminado que cargado al inicio de las clases"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Cursos"
