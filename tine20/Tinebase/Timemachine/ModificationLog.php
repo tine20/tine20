@@ -230,6 +230,9 @@ class Tinebase_Timemachine_ModificationLog
             if (is_array($modificationArray['new_value'])) {
                 throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . " Inserting modlog: " . print_r($modificationArray, TRUE));
+            
             $this->_table->insert($modificationArray);
         } else {
             throw new Tinebase_Exception_Record_Validation(
@@ -400,7 +403,7 @@ class Tinebase_Timemachine_ModificationLog
 
             if ($curValue === $newValue) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
+                    . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
                 continue;
             }
             
@@ -463,6 +466,9 @@ class Tinebase_Timemachine_ModificationLog
         $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData);
         
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Writing modlog for ' . count($_ids) . ' records.');
         
         foreach ($_ids as $id) {
             $commonModLog->record_id = $id;
