@@ -43,6 +43,7 @@ class AllTests
         $suite->addTest(ActiveSync_AllTests::suite());
         $suite->addTest(Filemanager_AllTests::suite());
         $suite->addTest(Projects_AllTests::suite());
+        $suite->addTest(Zend_AllTests::suite());
         
         return $suite;
     }

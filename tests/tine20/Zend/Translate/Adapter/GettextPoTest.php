@@ -37,44 +37,44 @@ class Zend_Translate_Adapter_GettextPoTest extends PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $obj = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po');
-        $this->assertTrue($obj instanceof Zend_Translate, 'failed to create instance');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles' . DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertTrue($translate instanceof Zend_Translate, 'failed to create instance');
     }
     
     public function testTranslationNochEinTest()
     {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po', 'en');
-        $this->assertEquals($translate->_("Noch ein Test"), "Another test", 'Wrong translation!');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles'. DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertEquals("Another test", $translate->_("Noch ein Test", "en"), 'Wrong translation!');
     }
     
     public function testTranslationHunde()
     {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po', 'en');
-        $this->assertEquals($translate->_("Hunde"), "Bunnys", 'Wrong translation!');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles'. DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertEquals("Bunnys", $translate->_("Hunde", "en"), 'Wrong translation!');
     }
     
     public function testTranslationHundPlural()
     {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po', 'en');
-        $this->assertEquals($translate->plural("Hund", "Hunde", 3), "Dogs", 'Wrong translation!');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles'. DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertEquals("Dogs", $translate->plural("Hund", "Hunde", 3, "en"), 'Wrong translation!');
     }
     
     public function testTranslationHundSingular()
     {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po', 'en');
-        $this->assertEquals($translate->plural("Hund","hunde", 1), "Dog", 'Wrong translation!');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles'. DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertEquals("Dog", $translate->plural("Hund","hunde", 1, "en"), 'Wrong translation!');
     }
     
       public function testTranslationHundSingular2()
      {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/test.po', 'en');
-        $this->assertFalse($translate->_("Hund") == "Dog", 'This should Fail! Error when translating singular of a plural without pluralfunction');
-    }
-    
-    public function testWithoutFilename()
-    {
-        $translate = new Zend_Translate('gettextPo', '/var/www/tine20/tine20/tests/tine20/Zend/Translate/TestFiles/', 'en');
-        $this->assertEquals($translate->_("Noch ein Test"), "Another test", 'Wrong translation!');
+        $path = (dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestFiles'. DIRECTORY_SEPARATOR;
+        $translate = new Zend_Translate('gettextPo', $path, 'en');
+        $this->assertEquals("Dog", $translate->_("Hund", "en"), 'This should not Fail any more! Error when translating singular of a plural without pluralfunction');
     }
 }
 
