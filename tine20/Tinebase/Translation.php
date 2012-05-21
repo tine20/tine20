@@ -35,9 +35,10 @@ class Tinebase_Translation
         'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
-        'es',      // Spanish              Enrique Palacios <enriquepalaciosc@gmail.com>
+        'es',      // Spanish (Castilian)  Enrique Palacios <enriquepalaciosc@gmail.com>
+        'es_MX',   // Spanish (Mexico)     Miguel Gutierrez 
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
-        'hu',      // Hungarian            Gump <admin@kemenyfem.hu>
+        'hu',      // Hungarian            Tamás Faragó <admin@kemenyfem.hu>
         'it',      // Italian              Roberto Rossi <impiastro@gmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
         'nb',      // Norwegian Bokmål     Ronny Gonzales <gonzito@online.no>
@@ -45,7 +46,7 @@ class Tinebase_Translation
         'pl',      // Polish               Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>
         //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
         'ru',      // Russian              Nikolay Parukhin <parukhin@gmail.com> 
-        'sv',      // Swedish              Andreas Storbjörk <andreas.storbjork@rambolo.net>
+        'sv_SE',   // Swedish              Andreas Storbjörk <andreas.storbjork@rambolo.net>
         'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
         'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
     );
