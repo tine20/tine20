@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -609,42 +609,51 @@ class Tinebase_Tags
         
         if(!is_array($_tag)) $_tag = array($_tag);
 
-        foreach($_tag as $dirtyTagId) {
+        // @todo remove this when we have record seq for modlog
+        $recordIds = array();
+        
+        foreach ($_tag as $dirtyTagId) {
             $tag = $this->getTagsById($dirtyTagId, Tinebase_Model_TagRight::USE_RIGHT)->getFirstRecord();
-
+            
             if (empty($tag)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No use right for tag, detaching not possible.');
                 return;
             }
             $tagId = $tag->getId();
-
+            
             // only get records user has update rights to
             $controller->checkFilterACL($_filter, 'update');
 
             $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
             $recordIdList = '\'' . implode('\',\'',$recordIds) . '\'';
-
+            
             $attachedIds = array();
             $select = $this->_db->select()
                 ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
                 ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
                 ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
                 ->where('record_id IN ( ' . $recordIdList . ' ) ');
-
+            
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $attachedIds[] = $tagArray['record_id'];
             }
-
+            
             if (empty($attachedIds)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could detach the tag(s) from');
                 return;
             }
-
+            
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Detaching 1 Tag from ' . count($attachedIds) . ' records.');
             foreach ($attachedIds as $recordId) {
                 $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
             }
-
+            
+            // @todo use record seq for modlog instead of sleeping
+            if (count(array_intersect($recordIds, $attachedIds)) > 0) {
+                // sleep due to current modlog restrictions
+                sleep(1);
+            }
+            $recordIds = array_merge($recordIds, $attachedIds);
             $controller->concurrencyManagementAndModlogMultiple(
                 $attachedIds,
                 array('tags' => array($tag->toArray())),
