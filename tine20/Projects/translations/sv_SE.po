@@ -1,0 +1,205 @@
+# 
+# Translators:
+# Markus  <markus.henriksson@marinex.se>, 2012.
+#   <tulken_hultan@hotmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-19 15:08+0000\n"
+"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Config.php:38
+msgid "Project Status Available"
+msgstr "Tillgänglig projektstatus"
+
+#: Config.php:40
+msgid ""
+"Possible Project status. Please note that additional project status might "
+"impact other Projects systems on export or syncronisation."
+msgstr "Möjlig projektstatus. Notera att ytterligare projektstatus kan påverka andra projektsystem vid exportering och synkronisering."
+
+#: Config.php:48
+msgid "Project Attendee Role Available"
+msgstr "Tillgänglig roll för projektdeltagare"
+
+#: Config.php:50
+msgid ""
+"Possible Project attendee roles. Please note that additional project "
+"attendee roles might impact other Projects systems on export or "
+"syncronisation."
+msgstr "Möjliga Projekt deltagares roller. Observera att ytterligare projekt deltagares roller kan påverka andra projekt system på export eller synkronisering."
+
+#: Controller.php:74
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's egna projekt"
+
+#: js/AddToProjectPanel.js:56
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: js/AddToProjectPanel.js:64
+msgid "OK"
+msgstr "Ok"
+
+#: js/AddToProjectPanel.js:99
+msgid "Please choose the Project to add the contacts to"
+msgstr "Vänligen välj ett projekt att lägga deltagaren i"
+
+#: js/AddToProjectPanel.js:103
+msgid "Please select the attenders' role"
+msgstr "Vänligen välj deltagarens roll"
+
+#: js/AddToProjectPanel.js:123
+msgid "Select Project"
+msgstr "Välj projekt"
+
+#: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:112
+msgid "Role"
+msgstr "Roll"
+
+#: js/AddToProjectPanel.js:148
+msgid "Select Role"
+msgstr "Välj roll"
+
+#: js/AddToProjectPanel.js:168
+msgid "Adding {0} Participants to project"
+msgstr "Lägger till {0} deltagare till projektet"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekt"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projektlista"
+msgstr[1] "Projektlistor"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projektlistor"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Snabbsök"
+
+#: js/Model.js:73 js/ProjectEditDialog.js:161 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Titel"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:166 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Nummer"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:202
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:172 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:86
+msgid "Last modified"
+msgstr "Senast modifierad"
+
+#: js/Model.js:87
+msgid "Last modifier"
+msgstr "Senast modifierare"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Skapelsetid"
+
+#: js/Model.js:89
+msgid "Creator"
+msgstr "Skapare"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:111
+msgid "Attendee"
+msgstr "Deltagare"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Deltaganderoll"
+
+#: js/ProjectEditDialog.js:216
+msgid "Enter description"
+msgstr "Ange beskrivning"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projekt"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Alla mina projekt"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standardfavorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standardinställningen favoriten som laddas på Projekt start"
+
+#: Setup/Initialize.php:34
+msgid "On hold"
+msgstr "Inväntar"
+
+#: Setup/Initialize.php:35
+msgid "Completed"
+msgstr "Färdiga"
+
+#: Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr "Avbrutna"
+
+#: Setup/Initialize.php:37
+msgid "In process"
+msgstr "Pågående process"
+
+#: Setup/Initialize.php:50
+msgid "Coworker"
+msgstr "Medarbetare"
+
+#: Setup/Initialize.php:51
+msgid "Responsible"
+msgstr "Ansvarig"
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr "Alla mina öppna projekt"
+
+#: Setup/Initialize.php:99
+msgid "My projects that I'm responsible for"
+msgstr "Mina projekt som Jag är ansvarig för"
+
+#: Setup/Initialize.php:100
+msgid "All my open projects that I am responsible for"
+msgstr "Alla mina projekt som Jag är ansvarig för"
+
+#: Setup/Initialize.php:120
+msgid "My waiting projects"
+msgstr "Mina väntande projekt"
+
+#: Setup/Initialize.php:121
+msgid "My projects that are on hold"
+msgstr "Mina projekt som är pågående"
