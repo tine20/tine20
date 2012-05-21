@@ -103,8 +103,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      */
     public function processMoveIteration($_messages, $_targetFolder)
     {
+        $folderName = ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->globalname : $_targetFolder);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to move ' . count($_messages) . ' messages to ' . ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->globalname : $_targetFolder));
+            . ' About to move ' . count($_messages) . ' messages to ' . $folderName);
         
         $_messages->addIndices(array('folder_id'));
         
@@ -118,8 +119,13 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
             // delete messages in local cache
-            $number = $this->_backend->delete($_messages->getArrayOfIds());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
+            try {
+                $number = $this->_backend->delete($_messages->getArrayOfIds());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse);
+            }
         
             $result = $this->_updateCountsAfterMove($_messages);
         }
