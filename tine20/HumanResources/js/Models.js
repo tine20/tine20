@@ -23,8 +23,6 @@ Tine.HumanResources.Model.EmployeeArray = [
     {name: 'tel_home',            type: 'string'},
     {name: 'tel_cell',            type: 'string'},
     {name: 'title',               type: 'string'},
-    {name: 'n_family',            type: 'string'},
-    {name: 'n_given',             type: 'string'},
     {name: 'n_fn',                type: 'string'},
     {name: 'bday',                type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'bank_account_holder', type: 'string'},
@@ -118,6 +116,7 @@ Tine.HumanResources.employeeBackend = new Tine.Tinebase.data.RecordProxy({
 
 Tine.HumanResources.Model.WorkingTimeArray = [
     {name: 'id',        type: 'string'},
+    { name: 'title', type: 'string' },
     {name: 'start_date', type: 'date'},
     {name: 'end_date', type: 'date'},
     {name: 'vacation_days', type: 'int'},
@@ -129,7 +128,7 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     appName: 'HumanResources',
     modelName: 'WorkingTime',
     idProperty: 'id',
-    titleProperty: 'name',
+    titleProperty: 'title',
     // ngettext('WorkingTime', 'WorkingTimes', n);
     recordName: 'WorkingTime',
     recordsName: 'WorkingTimes',
@@ -138,7 +137,7 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     containerName: 'All WorkingTimes',
     containersName: 'WorkingTimes',
     getTitle: function() {
-        return this.get('name') ? this.get('name') : false;
+        return this.get('title') ? this.get('title') : false;
     }
 });
 
@@ -184,7 +183,7 @@ Tine.HumanResources.Model.WorkingTime.getFilterModel = function() {
  */ 
 Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'HumanResources',
-    modelName: 'Employee',
+    modelName: 'WorkingTime',
     recordClass: Tine.HumanResources.Model.WorkingTime
 });
 

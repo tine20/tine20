@@ -30,7 +30,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowNamePrefix: 'EmployeeEditWindow_',
     appName: 'HumanResources',
     recordClass: Tine.HumanResources.Model.Employee,
-    recordProxy: Tine.HumanResources.recordBackend,
+    recordProxy: Tine.HumanResources.employeeBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     showContainerSelector: false,

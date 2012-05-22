@@ -13,14 +13,14 @@
  * employee filter Class
  * @package     HumanResources
  */
-class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGroup
+class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'HumanResources_Model_FreeTimeFilter';
+    protected $_className = 'HumanResources_Model_WorkingTimeFilter';
     
     /**
      * @var string application of this filter group
@@ -30,7 +30,7 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'HumanResources_Model_FreeTime';
+    protected $_modelName = 'HumanResources_Model_WorkingTime';
     
     /**
      * @var array filter model fieldName => definition

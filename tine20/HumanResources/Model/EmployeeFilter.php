@@ -35,7 +35,7 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_fn'))),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
     );
 }

@@ -55,7 +55,16 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.cm = this.getColumnModel();
 
         this.on('afteredit', this.onAfterRowEdit, this);
+        this.on('newentry', this.onNewEntry, this);
+        
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
+    },
+    
+    onNewEntry: function(recordData) {
+        recordData.employee_id = this.editDialog.record.get('id');
+        var record = new Tine.HumanResources.Model.WorkingTime(recordData);
+        this.store.add(record);
+        
     },
     
     onClose: function() {
@@ -92,7 +101,8 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             }, 
             columns: [
                 {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'), renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime') 
+                     quickaddField: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true}), //renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'),
+                     renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'working_hours', id: 'working_hours', type: 'int',    header: this.app.i18n._('Working Hours'),
                      quickaddField: new Ext.form.TextField(), width: 100
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
@@ -106,6 +116,12 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 }
            ]
        });
+    },
+    
+    renderWorkingTime: function(value,a,b,c) {
+        console.warn(a,b,c);
+        console.warn(value);
+        return Ext.util.Format.htmlEncode(value.title);
     }
     
 //    onAfterRowEdit: function(o,r,s) {

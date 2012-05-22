@@ -88,8 +88,54 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteEmployees($ids)
     {
         return $this->_delete($ids, $this->_controller);
-    }    
+    }
 
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchWorkingTimes($filter, $paging)
+    {
+        return $this->_search($filter, $paging, HumanResources_Controller_WorkingTime::getInstance(), 'HumanResources_Model_WorkingTimeFilter');
+    }     
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getWorkingTime($id)
+    {
+        return $this->_get($id, HumanResources_Controller_WorkingTime::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveWorkingTime($recordData)
+    {    
+//         $recordData['id'] = time();
+        return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'Employee');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids 
+     * @return string
+     */
+    public function deleteWorkingTime($ids)
+    {
+        return $this->_delete($ids, HumanResources_Controller_WorkingTime::getInstance());
+    }
+    
     
     /**
      * returns record prepared for json transport
@@ -107,16 +153,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $_record['elayers'] = HumanResources_Controller_Elayer::getInstance()->search($filter, $paging);
                 $recordArray = parent::_recordToJson($_record);
                 break;
-
-//             case 'IPAccounting_Model_IPNet':
-//                 $recordArray = parent::_recordToJson($_record);
-//                 $recordArray['account_grants'] = $this->defaultGrants;
-//                 break;
-                
-//             case 'IPAccounting_Model_IPAggregate':
-//                 $_record['netid'] = $_record['netid'] ? $this->_ipnetController->get($_record['netid']) : $_record['netid'];
-//                 $recordArray = parent::_recordToJson($_record);
-//                 $recordArray['account_grants'] = $this->defaultGrants;
         }
 
         return $recordArray;
