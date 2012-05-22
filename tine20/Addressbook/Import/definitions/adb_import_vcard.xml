@@ -8,6 +8,7 @@
     <description>Import vCard in AdressBook</description>
     <urlIsHome>0</urlIsHome>
     <mapNicknameToField></mapNicknameToField>
+    <example>Addressbook/Import/examples/adb_vcard_import.vcf</example>
     <extension>vcf</extension>
     <label>Contact VCARD import</label>
     <!-- _("Contact VCARD import") -->
