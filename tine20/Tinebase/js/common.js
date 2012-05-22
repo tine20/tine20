@@ -159,6 +159,33 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * renders bytes for filesize 
+     * @param {Integer} value
+     * @param {Object} metadata
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {String} forceUnit forces rendering in with this unit
+     * @return {String}
+     */
+    byteRenderer: function (value, metadata, record, forceUnit) {
+        value = parseInt(value, 10);
+        
+        if (record && record.get('type') == 'folder') {
+            return '';
+        }
+        
+        var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        
+        if (forceUnit) {
+            var i = suffix.indexOf(forceUnit);
+        } else {
+            for (var i=0,j; i<suffix.length; i++) {
+                if (value < Math.pow(1024, i)) break;
+            }
+        }
+        return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), 2)) + ' ' + suffix[i];
+    },
+    
+    /**
      * Returns rendered tags for grids
      * 
      * @param {mixed} tags
