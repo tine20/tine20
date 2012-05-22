@@ -160,7 +160,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'accountDisplayName'    => 'cronuser',
             'accountExpires'        => NULL,
         ));
-        return Tinebase_User::getInstance()->addUser($cronuser);
+        $cronuser = Tinebase_User::getInstance()->addUser($cronuser);
+        Tinebase_Group::getInstance()->addGroupMember($cronuser->accountPrimaryGroup, $cronuser->getId());
+        
+        return $cronuser;
     }
     
     /**

@@ -41,7 +41,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($job instanceof Tinebase_Model_AsyncJob);
         $this->assertFalse($async->getNextSequence('Test_Job'));
         $async->finishJob($job);
-        $this->assertGreaterThan($sequence + 1, $async->getNextSequence('Test_Job'));
+        $this->assertGreaterThan($sequence, $async->getNextSequence('Test_Job'));
     }
     
     /**
@@ -54,5 +54,71 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         sleep(3);
         $this->assertFalse($async->getNextSequence('Test_Job1'));
         $async->finishJob($job);
+    }
+    
+    /**
+     * run multiple async jobs parallel
+     * 
+     * @todo fix $allJobsDone
+     */
+    public static function triggerAsyncEvents($numOfParallels = 5)
+    {
+        // assemble command
+        $cmd = implode(' ', $_SERVER['argv']);
+        $cmd = preg_replace(array(
+            '/\/phpunit/',
+            '/--stderr /',
+            '/--colors /',
+            '/--stop-on-failure /',
+            '/Calendar_Controller_EventNotificationsTests/',
+            '/--debug /',
+            '/--filter [\S]+\D/',
+            '/[\S]+\.php$/'
+        ), array(
+            '/php',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        ), $cmd);
+        $cmd .= realpath(__DIR__ . "/../../../tine20/tine20.php");
+        $cmd .= " --method Tinebase.triggerAsyncEvents";
+        
+        // start multiple cronruns at the same time
+        // NOTE: we don't use pnctl as we don't need it here and it's not always available
+        for ($i = 0; $i < 5; $i++) {
+            $tempNames[] = $fileName = tempnam(Tinebase_Core::getTempDir(), 'asynctest');
+            $result = exec("$cmd &> $fileName &");
+            //echo $i . ': ' . $cmd . ' ' . $result . "\n";
+        }
+        
+        // wait for processes to complete
+        for ($i = 0; $i < count($tempNames) * 5; $i++) {
+            sleep(1);
+            $allJobsDone = TRUE;
+            foreach ($tempNames as $fileName) {
+                $output = file_get_contents($fileName);
+                //echo $output . "\n";
+                $allJobsDone &= (bool) preg_match('/complete.$/m', $output);
+            }
+            
+            if ($allJobsDone) {
+                break;
+            }
+        }
+        
+        // cleanup
+        foreach ($tempNames as $fileName) {
+            //echo 'removing ' . $fileName . "\n";
+            unlink($fileName);
+        }
+        
+        // $allJobsDone detection does not work on my (ubuntu) system
+//         if (! $allJobsDone) {
+//             throw new Exception('jobs did not complete');
+//         }
     }
 }
