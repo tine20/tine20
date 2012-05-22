@@ -320,7 +320,14 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
                 ');
             $this->_backend->addIndex('async_job', $declaration);
         } catch (Exception $e) {
-            // already done
+            // table might have duplicate seqs
+            $this->_backend->truncateTable('async_job');
+            try {
+                $this->_backend->addIndex('async_job', $declaration);
+            } catch (Exception $e) {
+                // already done: do nothing
+                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add index: ' . $e);
+            }
         }
 
         $this->setTableVersion('async_job', '2');
