@@ -526,6 +526,36 @@ class Tinebase_User
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' finished synchronizing users');
     }
+
+    /**
+     * get all user passwords from ldap
+     * - set pw for user (in sql and sql plugins)
+     * - do not encrypt the pw again as it is encrypted in LDAP
+     * 
+     * @throws Tinebase_Exception_Backend
+     */
+    public static function syncLdapPasswords()
+    {
+        $userBackend = Tinebase_User::getInstance();
+        if (! $userBackend instanceof Tinebase_User_Ldap) {
+            throw new Tinebase_Exception_Backend('Needs LDAP accounts backend');
+        }
+        
+        $result = $userBackend->getUserAttributes(array('entryUUID', 'userPassword'));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' About to sync ' . count($result) . ' user passwords from LDAP to Tine 2.0.');
+        
+        $sqlBackend = Tinebase_User::factory(self::SQL);
+        foreach ($result as $user) {
+            try {
+                $sqlBackend->setPassword($user['entryUUID'], $user['userPassword'], FALSE);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Could not find user with id ' . $user['entryUUID'] . ' in SQL backend.');
+            }
+        }
+    }
     
     /**
      * create initial admin account

@@ -363,11 +363,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
      * 
      * @param  string  $_userId
      * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      */
-    public function inspectSetPassword($_userId, $_password)
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
         $values = array(
-            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password)
+            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $_password) : $_password
         );
         
         $where = array(
@@ -380,6 +381,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             $where[] = $this->_db->quoteIdentifier($this->_userTable . '.domain') . " = ''";
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Updating dovecot password for user ' . $_userId);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($values, TRUE));
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         

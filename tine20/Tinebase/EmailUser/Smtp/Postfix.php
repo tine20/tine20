@@ -246,11 +246,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
      * 
      * @param  string  $_userId
      * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      */
-    public function inspectSetPassword($_userId, $_password)
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
         $values = array(
-            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password)
+            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $_password) : $_password
         );
         
         $where = array(

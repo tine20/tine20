@@ -133,4 +133,4 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * @param Tinebase_Model_FullUser $_user
      */
     abstract protected function _userExists(Tinebase_Model_FullUser $_user);
-}  
+}

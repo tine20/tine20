@@ -200,9 +200,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function getUsersFromSyncBackend($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {
-        $filter = Zend_Ldap_Filter::andFilter(
-            Zend_Ldap_Filter::string($this->_userBaseFilter)
-        );
+        $filter = $this->_getBaseFilter();
 
         if (!empty($_filter)) {
             $filter = $filter->addFilter(Zend_Ldap_Filter::orFilter(
@@ -239,18 +237,62 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         return $result;
 
         // @todo implement limit, start, dir and status
-        $select = $this->_getUserSelectObject()
-            ->limit($_limit, $_start);
+//         $select = $this->_getUserSelectObject()
+//             ->limit($_limit, $_start);
 
-        if ($_sort !== NULL) {
-            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+//         if ($_sort !== NULL) {
+//             $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+//         }
+
+//         // return only active users, when searching for simple users
+//         if ($_accountClass == 'Tinebase_Model_User') {
+//             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
+//         }
+    }
+    
+    /**
+     * returns user base filter
+     * 
+     * @return Zend_Ldap_Filter_And
+     */
+    protected function _getBaseFilter()
+    {
+        return Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_userBaseFilter)
+        );
+    }
+    
+    /**
+     * search for user attributes
+     * 
+     * @param array $attributes
+     * @return array
+     * 
+     * @todo allow multi value attributes
+     * @todo generalize this for usage in other Tinebase_User_Ldap fns?
+     */
+    public function getUserAttributes($attributes)
+    {
+        $ldapCollection = $this->_ldap->search(
+            $this->_getBaseFilter(),
+            $this->_baseDn,
+            $this->_userSearchScope,
+            $attributes
+        );
+        
+        $result = array();
+        foreach ($ldapCollection as $data) {
+            $row = array('dn' => $data['dn']);
+            foreach ($attributes as $key) {
+                $lowerKey = strtolower($key);
+                if (isset($data[$lowerKey]) && isset($data[$lowerKey][0])) {
+                    $row[$key] = $data[$lowerKey][0];
+                }
+            }
+            $result[] = $row;
         }
-
-        // return only active users, when searching for simple users
-        if ($_accountClass == 'Tinebase_Model_User') {
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
-        }
-
+        
+        return (array)$result;
     }
     
     /**

@@ -45,6 +45,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
                 'dbmailldap'                => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
+                'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
                           setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname latin1
@@ -65,6 +66,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->uninstall) && 
             empty($opts->list) && 
             empty($opts->sync_accounts_from_ldap) && 
+            empty($opts->sync_passwords_from_ldap) && 
             empty($opts->egw14import) && 
             empty($opts->check_requirements) && 
             empty($opts->create_admin) && 
