@@ -84,7 +84,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
     onUploadComplete: function(upload, fileRecord) {
         this.fileRecord = fileRecord;
         
-        this.setText([fileRecord.get('name'), ' (', Ext.ux.file.Upload.fileSize(fileRecord.get('size')), ')'].join(''));
+        this.setText([fileRecord.get('name'), ' (', Tine.Tinebase.common.byteRenderer(fileRecord.get('size')), ')'].join(''));
 //        this.setIconClass(this.origIconCls);
         this.setIconClass('action_saveAndClose');
         
