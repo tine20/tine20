@@ -1,0 +1,1033 @@
+# 
+# Translators:
+# Markus Henriksson <markus.henriksson@marinex.se>, 2012.
+#   <tulken_hultan@hotmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-05-09 11:26+0000\n"
+"Last-Translator: Markus Henriksson <markus.henriksson@marinex.se>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:185
+msgid "manage access log"
+msgstr "hantera åtkomstlogg"
+
+#: Acl/Rights.php:186
+msgid "delete access log entries"
+msgstr "radera åtkomstlogg"
+
+#: Acl/Rights.php:189
+msgid "manage accounts"
+msgstr "hantera konton"
+
+#: Acl/Rights.php:190
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "lägga till och redigera användare och grupper, lägga till gruppmedlemmar, ändra lösenord för användare"
+
+#: Acl/Rights.php:193
+msgid "manage applications"
+msgstr "hantera applikationer"
+
+#: Acl/Rights.php:194
+msgid "enable and disable applications, edit application settings"
+msgstr "aktivera och inaktivera applikationer, redigera applikationinställningar"
+
+#: Acl/Rights.php:197
+msgid "manage roles"
+msgstr "hantera roller"
+
+#: Acl/Rights.php:198
+msgid ""
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "lägga till och redigera roller, lägga till nya medlemmar till roller, lägga till applikationsrättigheter till roller"
+
+#: Acl/Rights.php:201
+msgid "manage shared tags"
+msgstr "hantera delade taggar"
+
+#: Acl/Rights.php:202
+msgid "add, delete and edit shared tags"
+msgstr "lägga till, radera och redigera delade taggar"
+
+#: Acl/Rights.php:205
+msgid "manage computers"
+msgstr "hantera datorer"
+
+#: Acl/Rights.php:206
+msgid "add, delete and edit (samba) computers"
+msgstr "lägg till, radera och redigera (samba) datorer"
+
+#: Acl/Rights.php:209
+msgid "manage containers"
+msgstr "hantera behållare"
+
+#: Acl/Rights.php:210
+msgid "add, delete and edit containers and manage container grants"
+msgstr "lägga till, radera och redigera behållare och hantera rättigheter"
+
+#: Acl/Rights.php:213
+msgid "view access log"
+msgstr "visa åtkomst logg"
+
+#: Acl/Rights.php:214
+msgid "view access log list"
+msgstr "visa åtkomst logg lista"
+
+#: Acl/Rights.php:217
+msgid "view accounts"
+msgstr "visa konton"
+
+#: Acl/Rights.php:218
+msgid "view accounts list and details"
+msgstr "visa konto listor och detaljer"
+
+#: Acl/Rights.php:221
+msgid "view applications"
+msgstr "visa tillämpningar"
+
+#: Acl/Rights.php:222
+msgid "view applications list and details"
+msgstr "visa tillämpningars listor och detaljer"
+
+#: Acl/Rights.php:225
+msgid "view roles"
+msgstr "visa roller"
+
+#: Acl/Rights.php:226
+msgid "view roles list and details"
+msgstr "visa rollers lista och detaljer"
+
+#: Acl/Rights.php:229
+msgid "view computers"
+msgstr "visa datorer"
+
+#: Acl/Rights.php:230
+msgid "view computers list and details"
+msgstr "visa dator listor och detaljer"
+
+#: Acl/Rights.php:233
+msgid "view containers"
+msgstr "visa behållare"
+
+#: Acl/Rights.php:234
+msgid "view personal and shared containers"
+msgstr "visa personliga och delade behållare"
+
+#: Controller/Container.php:199
+msgid "Your container has been changed"
+msgstr "Din behållare har blivit ändrad"
+
+#: Controller/Container.php:200
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Din behållare har blivit ändrad av %1$s %2$sNotering: %3$s"
+
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Åtkomst Logg"
+msgstr[1] "Åtkomsts Loggar"
+
+#: js/AccessLog.js:106 js/AccessLog.js:132
+msgid "IP Address"
+msgstr "IP Adress"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Användare"
+msgstr[1] "Användare"
+
+#: js/AccessLog.js:108 js/AccessLog.js:133
+msgid "Login Time"
+msgstr "Inloggningstid Tid"
+
+#: js/AccessLog.js:109 js/AccessLog.js:134
+msgid "Logout Time"
+msgstr "Utloggningstid Tid"
+
+#: js/AccessLog.js:110 js/AccessLog.js:136
+msgid "Client Type"
+msgstr "Klient Typ"
+
+#: js/AccessLog.js:129
+msgid "Session ID"
+msgstr "Sessions ID"
+
+#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+msgid "Login Name"
+msgstr "Inloggnings Namn"
+
+#: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Namn"
+
+#: js/AccessLog.js:135
+msgid "Result"
+msgstr "Resultat"
+
+#: js/AccessLog.js:156
+msgid "user blocked"
+msgstr "Användare blockad"
+
+#: js/AccessLog.js:160
+msgid "password expired"
+msgstr "lösenord utgått"
+
+#: js/AccessLog.js:164
+msgid "user disabled"
+msgstr "användare inatkiverad"
+
+#: js/AccessLog.js:168
+msgid "invalid password"
+msgstr "ogiltligt lösenord"
+
+#: js/AccessLog.js:172
+msgid "ambiguous username"
+msgstr "tvetydligt användarnamn"
+
+#: js/AccessLog.js:176
+msgid "user not found"
+msgstr "användare inte hittad"
+
+#: js/AccessLog.js:180
+msgid "failure"
+msgstr "misslyckande"
+
+#: js/AccessLog.js:184
+msgid "success"
+msgstr "framsteg"
+
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Grupper"
+
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Roller"
+
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Datorer"
+
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Tillämpningar"
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Delade Taggar"
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Behållare"
+
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr "Egna fält"
+
+#: js/Admin.js:161
+msgid "Admin"
+msgstr "Administratör"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Standard Adressbok för nya kontakter och grupper"
+
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
+#: js/Models.js:128
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Tillämpning"
+msgstr[1] "Tillämpningar"
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Inställningar"
+
+#: js/Applications.js:144
+msgid "enable application"
+msgstr "aktivera tillämpning"
+
+#: js/Applications.js:145
+msgid "disable application"
+msgstr "avaktivera tillämpning"
+
+#: js/Applications.js:146
+msgid "settings"
+msgstr "inställningar"
+
+#: js/Applications.js:183 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Sök:"
+
+#: js/Applications.js:226 js/user/EditDialog.js:836
+msgid "disabled"
+msgstr "avaktiverad"
+
+#: js/Applications.js:229 js/user/EditDialog.js:835
+msgid "enabled"
+msgstr "aktiverad"
+
+#: js/Applications.js:233
+msgid "unknown status ({0})"
+msgstr "okänd status ({0})"
+
+#: js/Applications.js:267
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Visar tillämpning {0} - {1} av {2}"
+
+#: js/Applications.js:268
+msgid "No applications to display"
+msgstr "Inga tillämpningar att visa"
+
+#: js/Applications.js:277 js/customfield/EditDialog.js:626
+msgid "Order"
+msgstr "Beställ"
+
+#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Status"
+
+#: js/Applications.js:280
+msgid "Version"
+msgstr "Version"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Behållare"
+msgstr[1] "Behållare"
+
+#: js/container/EditDialog.js:144 js/container/GridPanel.js:73
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:73
+msgid "Type"
+msgstr "Typ"
+
+#: js/container/EditDialog.js:145
+msgid "personal"
+msgstr "personlig"
+
+#: js/container/EditDialog.js:145
+msgid "shared"
+msgstr "Delad"
+
+#: js/container/EditDialog.js:159 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Färg"
+
+#: js/container/EditDialog.js:164
+msgid "Note for Owner"
+msgstr "Notering för Ägare"
+
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID"
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr "Behållare Namn"
+
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Eget fält"
+msgstr[1] "Egna fält"
+
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Fel"
+
+#: js/customfield/EditDialog.js:137
+msgid "Please configure store for this field type"
+msgstr "Konfigurera butiken för denna filtyp"
+
+#: js/customfield/EditDialog.js:244
+msgid "Default"
+msgstr "Standard"
+
+#: js/customfield/EditDialog.js:288
+msgid "Add a New ID..."
+msgstr "Lägg till Nytt ID..."
+
+#: js/customfield/EditDialog.js:292
+msgid "Value"
+msgstr "Värde"
+
+#: js/customfield/EditDialog.js:297
+msgid "Add a New Value..."
+msgstr "Lägg till Nytt Värde..."
+
+#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+msgid "Error"
+msgstr "Fel"
+
+#: js/customfield/EditDialog.js:307
+msgid "ID already exists"
+msgstr "ID existerar redan"
+
+#: js/customfield/EditDialog.js:313
+msgid "Value already exists"
+msgstr "Värde existerar redan"
+
+#: js/customfield/EditDialog.js:407
+msgid "Record Class"
+msgstr "Post Klass"
+
+#: js/customfield/EditDialog.js:432
+msgid "Given record class not found"
+msgstr "Given post klass inte funnen"
+
+#: js/customfield/EditDialog.js:465
+msgid "OK"
+msgstr "OK"
+
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:691
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: js/customfield/EditDialog.js:504
+msgid "Configure store"
+msgstr "Konfigurations butik"
+
+#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:75
+msgid "Model"
+msgstr "Modell"
+
+#: js/customfield/EditDialog.js:561
+msgid "Custom field definition"
+msgstr "Eget fält betydelse"
+
+#: js/customfield/EditDialog.js:572
+msgid "Text"
+msgstr "Text"
+
+#: js/customfield/EditDialog.js:573
+msgid "Number"
+msgstr "Nummer"
+
+#: js/customfield/EditDialog.js:574
+msgid "Date"
+msgstr "Datum"
+
+#: js/customfield/EditDialog.js:575
+msgid "DateTime"
+msgstr "Datumtid"
+
+#: js/customfield/EditDialog.js:576
+msgid "Time"
+msgstr "Tid"
+
+#: js/customfield/EditDialog.js:577
+msgid "Boolean"
+msgstr "Boolean"
+
+#: js/customfield/EditDialog.js:578
+msgid "Search Combo"
+msgstr "Sökkombination"
+
+#: js/customfield/EditDialog.js:579
+msgid "Key Field"
+msgstr "Nyckelfält"
+
+#: js/customfield/EditDialog.js:580
+msgid "Record"
+msgstr "Record"
+
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
+msgid "Label"
+msgstr "Märke"
+
+#: js/customfield/EditDialog.js:608
+msgid "Length"
+msgstr "Längd"
+
+#: js/customfield/EditDialog.js:616
+msgid "Custom field additional properties"
+msgstr "Ytterligare inställningar för anpassade fält"
+
+#: js/customfield/EditDialog.js:621 js/GroupEditDialog.js:222 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grupp"
+msgstr[1] "Grupper"
+
+#: js/customfield/EditDialog.js:649
+msgid "Customfield already exists. Please choose another name."
+msgstr "Anpassade fältet existerar redan. Vänligen välj ett annat namn."
+
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Bekräfta"
+
+#: js/customfield/GridPanel.js:131
+msgid "Restart application to apply new cusomfields?"
+msgstr "Starta om applikationen för att lägga till nya fält?"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Vänligen vänta"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Uppdatera medlemsskap"
+
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:107
+#: js/RoleEditDialog.js:135 js/Roles.js:69 js/TagEditDialog.js:83
+msgid "Failed"
+msgstr "Misslyckades"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Kunde inte spara grupp."
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Åtgärda felen som noterats."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Grupp Namn"
+
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:293
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+msgid "Visibility"
+msgstr "Synlighet"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+msgid "Display in addressbook"
+msgstr "Visa i adressbok"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+msgid "Hide from addressbook"
+msgstr "Dölj från adressbok"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+msgid "Saved in Addressbook"
+msgstr "Spara i Adressbok"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Grupp Medlemmar"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:360 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
+msgstr "Överför {0}..."
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Lägg till ny grupp"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Ändra Grupp \"{0}\""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Vill du verkligen ta bort valda grupper?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Ta bort grupp(er)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Några fel uppstod vid försök att ta bort gruppen."
+
+#: js/Groups.js:104
+msgid "add group"
+msgstr "Lägg till grupp"
+
+#: js/Groups.js:112
+msgid "edit group"
+msgstr "Ändra grupp"
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr "Ta bort grupp"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Visar grupper {0} - {1} av {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Inga grupper att visa"
+
+#: js/RoleEditDialog.js:107
+msgid "Could not save role."
+msgstr "Kunde inte spara roll."
+
+#: js/RoleEditDialog.js:127
+msgid "Deleting role..."
+msgstr "Tar bort roll..."
+
+#: js/RoleEditDialog.js:135 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Några fel uppstod vid försök att ta bort gruppen."
+
+#: js/RoleEditDialog.js:159
+msgid "Rights"
+msgstr "Rättigheter"
+
+#: js/RoleEditDialog.js:261
+msgid "Members"
+msgstr "Medlemmar"
+
+#: js/RoleEditDialog.js:285
+msgid "Role Name"
+msgstr "Roll Namn"
+
+#: js/RoleEditDialog.js:360
+msgid "Role"
+msgstr "Roll"
+
+#: js/RoleEditDialog.js:370
+msgid "Add New Role"
+msgstr "Lägg Till Ny Roll"
+
+#: js/RoleEditDialog.js:372
+msgid "Edit Role \"{0}\""
+msgstr "Ändra Roll \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Vill du verkligen ta bort dom valda rollerna?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "tar bort roll(er)..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "lägg till roll"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "ändra roll"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "ta bort roll"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Visar roller {0} - {1} av {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Inga roller att visa"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "Dator Namn"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Dator"
+msgstr[1] "Datorer"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Updaterings Tagg"
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "Kunde inte spara tagg."
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr "Tillåtna Sammanhang"
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr "Sammanhang"
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr "Konto Rättigheter"
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "Visa "
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "Använda"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "Tagg Namn"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr "Tagg"
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "Lägg till ny tagg"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "Ändra Tagg \"{0}\""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Vill du verkligen ta bort valda taggar?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Tar bort tagg(ar)..."
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr "lägg till tagg"
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr "redigera tagg"
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr "radera tagg"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Visar taggar {0} - {1} av {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Inga taggar att visa"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr "Användande:&#160;"
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domän ej tillåten. Kontrollera konfigurationen för SMTP-domänen."
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:688
+msgid "Passwords do not match!"
+msgstr "Lösenorden matchar inte!"
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr "Lösenorden matchar!"
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+msgid "Primary group"
+msgstr "Primär grupp"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Hemmamapp"
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Inloggningsskal"
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Hemmadisk"
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Påloggningstid"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
+#: js/user/EditDialog.js:926
+msgid "never logged in"
+msgstr "loggade inte in"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Sökväg för hem"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Avloggningstid"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "loggade inte av"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Sökväg för profil"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Ändrade lösenord senast"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
+#: js/user/EditDialog.js:930
+msgid "never"
+msgstr "aldrig"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Inloggningsscript"
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "Lösenordet kan ändras"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "inte inställt"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "Lösenord måste ändras"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Tid för avspark"
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr "IMAP-kvot (MB)"
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Kvot"
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr "ingen kvot satt"
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "Nuvarande storlek på e-postmappen"
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr "Kvot (MB)"
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr "Nuvarande kvot"
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+msgid "Information"
+msgstr "Information"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Senast inloggad"
+
+#: js/user/EditDialog.js:598
+msgid "Email Alias"
+msgstr "E-postalias"
+
+#: js/user/EditDialog.js:604
+msgid "Add an alias address..."
+msgstr "Lägg till ett alias.."
+
+#: js/user/EditDialog.js:617
+msgid "Email Forward"
+msgstr "Vidarebefordra e-post"
+
+#: js/user/EditDialog.js:623
+msgid "Add a forward address..."
+msgstr "Lägg till en vidarebefordringsadress..."
+
+#: js/user/EditDialog.js:635
+msgid "Forward Only"
+msgstr "Vidarebefordra endast"
+
+#: js/user/EditDialog.js:655
+msgid "Password confirmation"
+msgstr "Lösenordskonfirmation"
+
+#: js/user/EditDialog.js:672
+msgid "Repeat password"
+msgstr "Repetera lösenord"
+
+#: js/user/EditDialog.js:698
+msgid "Ok"
+msgstr "Ok"
+
+#: js/user/EditDialog.js:733
+msgid "Account"
+msgstr "Konto"
+
+#: js/user/EditDialog.js:748
+msgid "First Name"
+msgstr "Förnamn"
+
+#: js/user/EditDialog.js:758
+msgid "Last Name"
+msgstr "Efternamn"
+
+#: js/user/EditDialog.js:768
+msgid "Password"
+msgstr "Lösenord"
+
+#: js/user/EditDialog.js:772
+msgid "no password set"
+msgstr "inget lösenord satt"
+
+#: js/user/EditDialog.js:799
+msgid "Emailaddress"
+msgstr "E-postadress"
+
+#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr "ÖppnaID"
+
+#: js/user/EditDialog.js:837
+msgid "expired"
+msgstr "utgången"
+
+#: js/user/EditDialog.js:838
+msgid "blocked"
+msgstr "blockerad"
+
+#: js/user/EditDialog.js:845
+msgid "Invalid Status"
+msgstr "Ogiltig Status"
+
+#: js/user/EditDialog.js:846
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr "Blockerade status är endast giltigt om användaren försökte logga in med fel lösenord för ofta. Det är inte möjligt att ställa in denna status här."
+
+#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Utgår"
+
+#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Senaste Inloggning"
+
+#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+msgid "don't know"
+msgstr "vet inte"
+
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Senaste Inloggning från"
+
+#: js/user/EditDialog.js:928
+msgid "Password set"
+msgstr "Lösenord Satt"
+
+#: js/user/EditDialog.js:935
+msgid "User groups"
+msgstr "Användar grupper"
+
+#: js/user/EditDialog.js:941
+msgid "User roles"
+msgstr "Användar roller"
+
+#: js/user/EditDialog.js:947
+msgid "Fileserver"
+msgstr "Filserver"
+
+#: js/user/EditDialog.js:953
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:962
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "enable account"
+msgstr "aktivera konto"
+
+#: js/user/GridPanel.js:66
+msgid "disable account"
+msgstr "avaktivera konto"
+
+#: js/user/GridPanel.js:76
+msgid "reset password"
+msgstr "återställ lösenord"
+
+#: js/user/GridPanel.js:177
+msgid "Displayname"
+msgstr "Visningsnamn"
+
+#: js/user/GridPanel.js:178
+msgid "Loginname"
+msgstr "Inloggningsnamn"
+
+#: js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Efternamn"
+
+#: js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Förnamn"
+
+#: js/user/GridPanel.js:181
+msgid "Email"
+msgstr "E-post"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Lösenord ändrat"
+
+#: js/user/GridPanel.js:243
+msgid "Set new password"
+msgstr "Välj nytt lösenord"
+
+#: js/user/GridPanel.js:243
+msgid "Please enter the new password:"
+msgstr "Ange nytt lösenord"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Användare"
+
+#: js/user/Users.js:118
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba Användare"
+msgstr[1] "Samba Användare"
+
+#: js/user/Users.js:144
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "E-post Användare"
+msgstr[1] "E-post Användare"

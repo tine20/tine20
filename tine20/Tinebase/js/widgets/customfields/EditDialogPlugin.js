@@ -115,8 +115,6 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         // auto add cf tab
         if (cfConfigs.getCount()) {
             this.addCFTab(cfConfigs);
-            // used for multipleEdit
-            this.editDialog.cfConfigs = cfConfigs;
         }
     },
     

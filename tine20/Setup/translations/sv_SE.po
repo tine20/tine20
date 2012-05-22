@@ -1,0 +1,637 @@
+# 
+# Translators:
+#   <tulken_hultan@hotmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-19 18:16+0000\n"
+"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Namn"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Order"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Installerad Version"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Tillgänglig Version"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Status"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Beror på"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Installera applikation"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Avinstallera applikation"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Uppdatera applikation"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Gå till {0} Logga in"
+
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "Avinstallera"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Vill du verkligen avinstallera programmet (n)?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Detta kan ta ett tag"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Överträdelse"
+
+#: js/AuthenticationPanel.js:127
+msgid "Delete all existing users and groups"
+msgstr "radera alla existerande användare och grupper"
+
+#: js/AuthenticationPanel.js:127
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
+msgstr "Växla från SQL till LDAP kommer att ta bort alla befintliga användarkonton, grupper och roller. Vill du verkligen byta konto lagring backend till LDAP?"
+
+#: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
+#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
+msgid "Backend"
+msgstr "Backend"
+
+#: js/AuthenticationPanel.js:233
+msgid "Initial Admin User"
+msgstr "Första Administratörs Användare"
+
+#: js/AuthenticationPanel.js:246
+msgid "Initial admin login name"
+msgstr "Första administratörs användarnamn"
+
+#: js/AuthenticationPanel.js:251
+msgid "Initial admin Password"
+msgstr "Första administratörs Lösenord"
+
+#: js/AuthenticationPanel.js:255
+msgid "Password confirmation"
+msgstr "Lösenords konfirmation"
+
+#: js/AuthenticationPanel.js:263
+msgid "Authentication provider"
+msgstr "autentiserings leverantör"
+
+#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
+msgid "Try to split username"
+msgstr "Försök att dela användarnamn"
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
+#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
+msgid "Yes"
+msgstr "Ja"
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
+#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
+msgid "No"
+msgstr "nej"
+
+#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
+#: js/AuthenticationPanel.js:405
+msgid "Account canonical form"
+msgstr "Konto canonical form"
+
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
+#: js/AuthenticationPanel.js:409
+msgid "Account domain name "
+msgstr "Konto domän namn"
+
+#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
+#: js/AuthenticationPanel.js:414
+msgid "Account domain short name"
+msgstr "Konto Domän kort namn"
+
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
+msgid "Host"
+msgstr "Host"
+
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
+#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
+msgid "Port"
+msgstr "port"
+
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
+msgid "Login name"
+msgstr "Inloggnins namn"
+
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:478
+#: js/ConfigManagerPanel.js:175 js/ConfigManagerPanel.js:206
+#: js/EmailPanel.js:190
+msgid "Password"
+msgstr "Lösenord"
+
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
+msgid "Bind requires DN"
+msgstr "Bind kräver DN"
+
+#: js/AuthenticationPanel.js:334
+msgid "Base DN"
+msgstr "Bas DN"
+
+#: js/AuthenticationPanel.js:337
+msgid "Search filter"
+msgstr "Sök filter"
+
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
+#: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:390
+msgid "Hostname"
+msgstr "Host namn"
+
+#: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
+#: js/EmailPanel.js:398
+msgid "Secure Connection"
+msgstr "Säker Anslutning"
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:303 js/EmailPanel.js:401
+msgid "None"
+msgstr "Ingen"
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:401
+msgid "TLS"
+msgstr "TLS"
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:401
+msgid "SSL"
+msgstr "SSL"
+
+#: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
+msgid "Append domain to login name"
+msgstr "Fäst domän till inloggnings namn"
+
+#: js/AuthenticationPanel.js:426
+msgid "Accounts storage"
+msgstr "Konto lagring"
+
+#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:545
+msgid "Default user group name"
+msgstr "Standard användare grupp namn"
+
+#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:548
+msgid "Default admin group name"
+msgstr "Standard admin grupp namn"
+
+#: js/AuthenticationPanel.js:457
+msgid "User can change password"
+msgstr "Användare kan byta lösenord"
+
+#: js/AuthenticationPanel.js:489
+msgid "User DN"
+msgstr "Användar DN"
+
+#: js/AuthenticationPanel.js:492
+msgid "User Filter"
+msgstr "Användar Filter"
+
+#: js/AuthenticationPanel.js:496
+msgid "User Search Scope"
+msgstr "Användar Sök Fällt"
+
+#: js/AuthenticationPanel.js:502
+msgid "Groups DN"
+msgstr "Grupp DN"
+
+#: js/AuthenticationPanel.js:505
+msgid "Group Filter"
+msgstr "Grupp Filter"
+
+#: js/AuthenticationPanel.js:509
+msgid "Group Search Scope"
+msgstr "Grupp Sök Fällt"
+
+#: js/AuthenticationPanel.js:515
+msgid "Password encoding"
+msgstr "Lösenord kodning"
+
+#: js/AuthenticationPanel.js:521
+msgid "Use Rfc 2307 bis"
+msgstr "Använd Rfc 2307 bis"
+
+#: js/AuthenticationPanel.js:527
+msgid "Min User Id"
+msgstr "Minsta Användar Id"
+
+#: js/AuthenticationPanel.js:530
+msgid "Max User Id"
+msgstr "Max användar Id"
+
+#: js/AuthenticationPanel.js:533
+msgid "Min Group Id"
+msgstr "Minsta Grupp Id"
+
+#: js/AuthenticationPanel.js:536
+msgid "Max Group Id"
+msgstr "Max Grupp Id"
+
+#: js/AuthenticationPanel.js:539
+msgid "Group UUID Attribute name"
+msgstr "Grupp UUID Attributnamn"
+
+#: js/AuthenticationPanel.js:542
+msgid "User UUID Attribute name"
+msgstr "Användare UUID Attributnamn"
+
+#: js/AuthenticationPanel.js:552
+msgid "Allow user to change her password?"
+msgstr "Tillåt användare att ändra lösenord?"
+
+#: js/AuthenticationPanel.js:558
+msgid "Readonly access"
+msgstr "Bara läsrättighet"
+
+#: js/AuthenticationPanel.js:568
+msgid "Redirect Settings"
+msgstr "Ändra Inställningar"
+
+#: js/AuthenticationPanel.js:576
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr "Ändra Url (Ändra till logga in sida om det är tomt)"
+
+#: js/AuthenticationPanel.js:580
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr "Ändra Alltid (om Nej, bara ändra efter utloggning)"
+
+#: js/AuthenticationPanel.js:586
+msgid "Redirect to referring site, if exists"
+msgstr "Ändra till hänvisnings sida, om en sådan existerar"
+
+#: js/AuthenticationPanel.js:600
+msgid "Save config and install"
+msgstr "Spara ändring och installera"
+
+#: js/AuthenticationPanel.js:602 js/ConfigManagerPanel.js:359
+msgid "Save config"
+msgstr "Spara ändring"
+
+#: js/AuthenticationPanel.js:627
+msgid "Passwords don't match"
+msgstr "Lösenord matchar inte"
+
+#: js/AuthenticationPanel.js:637 js/AuthenticationPanel.js:644
+#: js/AuthenticationPanel.js:648 js/AuthenticationPanel.js:660
+#: js/AuthenticationPanel.js:671
+msgid "Should not be empty"
+msgstr "Ska inte vara tom"
+
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr "Fil"
+
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr "Adapter"
+
+#: js/ConfigManagerPanel.js:159
+msgid "Setup Authentication"
+msgstr "Inställnings Autentisering"
+
+#: js/ConfigManagerPanel.js:166 js/EmailPanel.js:186
+msgid "Username"
+msgstr "Användarnamn"
+
+#: js/ConfigManagerPanel.js:180 js/ConfigManagerPanel.js:198
+msgid "Database"
+msgstr "Databas"
+
+#: js/ConfigManagerPanel.js:202
+msgid "User"
+msgstr "Användare"
+
+#: js/ConfigManagerPanel.js:210
+msgid "Prefix"
+msgstr "Prefix"
+
+#: js/ConfigManagerPanel.js:214
+msgid "Logging"
+msgstr "Loggar"
+
+#: js/ConfigManagerPanel.js:224
+msgid "Filename"
+msgstr "Filnamn"
+
+#: js/ConfigManagerPanel.js:227
+msgid "Priority"
+msgstr "Prioritet"
+
+#: js/ConfigManagerPanel.js:231
+msgid "Caching"
+msgstr "Fångar"
+
+#: js/ConfigManagerPanel.js:241 js/ConfigManagerPanel.js:295
+msgid "Path"
+msgstr "Väg"
+
+#: js/ConfigManagerPanel.js:245 js/ConfigManagerPanel.js:270
+msgid "Lifetime (seconds)"
+msgstr "Livstid (sekunder)"
+
+#: js/ConfigManagerPanel.js:250
+msgid "Temporary files"
+msgstr "Temporära filer"
+
+#: js/ConfigManagerPanel.js:258
+msgid "Temporary Files Path"
+msgstr "Temporära Fil Vägar"
+
+#: js/ConfigManagerPanel.js:262
+msgid "Session"
+msgstr "Se"
+
+#: js/ConfigManagerPanel.js:322
+msgid "Filestore directory"
+msgstr "Session"
+
+#: js/ConfigManagerPanel.js:330
+msgid "Filestore Path"
+msgstr "Fillagrings väg"
+
+#: js/ConfigManagerPanel.js:335
+msgid "Addressbook Map panel"
+msgstr "Adressboks karta"
+
+#: js/ConfigManagerPanel.js:343
+msgid "Map panel"
+msgstr "Karta"
+
+#: js/ConfigManagerPanel.js:345
+msgid "disabled"
+msgstr "Inaktiverad"
+
+#: js/ConfigManagerPanel.js:345
+msgid "enabled"
+msgstr "Aktiverad"
+
+#: js/ConfigManagerPanel.js:357
+msgid "Config file is not writable"
+msgstr "Config fil är inte skrivbar"
+
+#: js/ConfigManagerPanel.js:375
+msgid "Download config file"
+msgstr "Ladda ner config fil"
+
+#: js/EmailPanel.js:150
+msgid "Standard IMAP"
+msgstr "Standard IMAP"
+
+#: js/EmailPanel.js:160
+msgid "Standard SMTP"
+msgstr "Standard SMTP"
+
+#: js/EmailPanel.js:174
+msgid "Imap"
+msgstr "Imap"
+
+#: js/EmailPanel.js:206
+msgid "Use system account"
+msgstr "Använd system konto"
+
+#: js/EmailPanel.js:258
+msgid "Cyrus Admin"
+msgstr "Cyrus Administratör"
+
+#: js/EmailPanel.js:261
+msgid "Cyrus Admin Password"
+msgstr "Cyrus Administratörs Lösenord"
+
+#: js/EmailPanel.js:278
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:300
+msgid "Authentication"
+msgstr "Autentisering"
+
+#: js/EmailPanel.js:303
+msgid "Login"
+msgstr "Logga in"
+
+#: js/EmailPanel.js:303
+msgid "Plain"
+msgstr "Vanlig"
+
+#: js/EmailPanel.js:307
+msgid "Primary Domain"
+msgstr "Primär Domän"
+
+#: js/EmailPanel.js:311
+msgid "Secondary Domains (comma separated)"
+msgstr "Sekundära Domäner (komma separerade)"
+
+#: js/EmailPanel.js:315
+msgid "Notifications service address"
+msgstr "Meddelande service adress"
+
+#: js/EmailPanel.js:319
+msgid "Notification Username"
+msgstr "Meddelande Användarnamn"
+
+#: js/EmailPanel.js:323
+msgid "Notification Password"
+msgstr "Meddelande Lösenord"
+
+#: js/EmailPanel.js:328
+msgid "Notifications local client (hostname or IP address)"
+msgstr "Meddelande lokal klient (hostname eller IP adress)"
+
+#: js/EmailPanel.js:384
+msgid "SIEVE"
+msgstr "SIEVE"
+
+#: js/EmailPanel.js:425
+msgid "MySql Hostname"
+msgstr "MySql Hostname"
+
+#: js/EmailPanel.js:428
+msgid "MySql Database"
+msgstr "Mysql Databas"
+
+#: js/EmailPanel.js:431
+msgid "MySql User"
+msgstr "MySql Användare"
+
+#: js/EmailPanel.js:434
+msgid "MySql Password"
+msgstr "MySql Lösenord"
+
+#: js/EmailPanel.js:438
+msgid "MySql Port"
+msgstr "MySql Port"
+
+#: js/EmailPanel.js:454
+msgid "User or UID"
+msgstr "Användare eller UID"
+
+#: js/EmailPanel.js:457
+msgid "Group or GID"
+msgstr "Grupp eller GID"
+
+#: js/EmailPanel.js:460
+msgid "Home Template"
+msgstr "hem-mall"
+
+#: js/EmailPanel.js:462
+msgid "Password Scheme"
+msgstr "Lösenord ordning"
+
+#: js/EmailPanel.js:473
+msgid "PLAIN-MD5"
+msgstr "VANLIG-MD5"
+
+#: js/EmailPanel.js:474
+msgid "MD5-CRYPT"
+msgstr "MD5-CRYPT"
+
+#: js/EmailPanel.js:475
+msgid "SHA1"
+msgstr "SHA1"
+
+#: js/EmailPanel.js:476
+msgid "SHA256"
+msgstr "SHA256"
+
+#: js/EmailPanel.js:477
+msgid "SSHA256"
+msgstr "SSHA256"
+
+#: js/EmailPanel.js:478
+msgid "SHA512"
+msgstr "SHA512"
+
+#: js/EmailPanel.js:479
+msgid "SSHA512"
+msgstr "SSHA512"
+
+#: js/EmailPanel.js:480
+msgid "PLAIN"
+msgstr "VANLIG"
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Gör Omgivnings Kontroller..."
+
+#: js/EnvCheckGridPanel.js:130
+msgid ""
+"No {0} where found. Please try to change your filter-criteria, view-options "
+"or the {1} you search in."
+msgstr "Ingen {0} var hittad. Försök att ändra dina filter-kriterier, visa-alternativ eller {1} Du sökte i."
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Kontrollera"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Resultat"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Error"
+msgstr "Fel"
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Kör installations tester"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Ignorera installations tester"
+
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Villkor"
+
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Inställnings Kontroller"
+
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Config hanterare"
+
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Verifiering / konton"
+
+#: js/Setup.js:76
+msgid "Email"
+msgstr "E-post"
+
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Applikation Hanterare"
+
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Applikation"
+msgstr[1] "Applikationer"
+
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Jag har läst licens avtalet och accepterat det"
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Licens Avtal"
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "jag har läst sekretess avtalet och accepterat det."
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Sekretess Avtal"
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Acceptera Villkor"
