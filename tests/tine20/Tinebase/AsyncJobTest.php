@@ -58,8 +58,6 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
     
     /**
      * run multiple async jobs parallel
-     * 
-     * @todo fix $allJobsDone
      */
     public static function triggerAsyncEvents($numOfParallels = 5)
     {
@@ -71,11 +69,15 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
             '/--colors /',
             '/--stop-on-failure /',
             '/Calendar_Controller_EventNotificationsTests/',
+            '/AllTests AllTests.php/',
             '/--debug /',
             '/--filter [\S]+\D/',
+            '/--configuration [\S]+\D/',
             '/[\S]+\.php$/'
         ), array(
             '/php',
+            '',
+            '',
             '',
             '',
             '',
@@ -91,8 +93,8 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
         // NOTE: we don't use pnctl as we don't need it here and it's not always available
         for ($i = 0; $i < 5; $i++) {
             $tempNames[] = $fileName = tempnam(Tinebase_Core::getTempDir(), 'asynctest');
-            $result = exec("$cmd &> $fileName &");
-            //echo $i . ': ' . $cmd . ' ' . $result . "\n";
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Starting async job: ' . $cmd);
+            $result = exec("$cmd > $fileName 2> /dev/null &");
         }
         
         // wait for processes to complete
@@ -101,7 +103,6 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
             $allJobsDone = TRUE;
             foreach ($tempNames as $fileName) {
                 $output = file_get_contents($fileName);
-                //echo $output . "\n";
                 $allJobsDone &= (bool) preg_match('/complete.$/m', $output);
             }
             
@@ -116,9 +117,8 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
             unlink($fileName);
         }
         
-        // $allJobsDone detection does not work on my (ubuntu) system
-//         if (! $allJobsDone) {
-//             throw new Exception('jobs did not complete');
-//         }
+        if (! $allJobsDone) {
+            throw new Exception('jobs did not complete');
+        }
     }
 }
