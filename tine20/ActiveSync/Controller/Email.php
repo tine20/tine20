@@ -512,8 +512,15 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " accountData " . print_r($account->toArray(), true));
         
-        // update folder cache
-        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        try {
+            Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        } catch (Felamimail_Exception_IMAPServiceUnavailable $feisu) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feisu);
+            return array();
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feiic);
+            return array();
+        }
         
         // get folders
         $folderController = Felamimail_Controller_Folder::getInstance();
