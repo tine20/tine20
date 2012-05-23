@@ -121,12 +121,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug(this.interRecord);
         
         this.editDialog.updateToolbars(this.interRecord, this.editDialog.recordClass.getMeta('containerProperty'));
-
-        Ext.each(this.editDialog.tbarItems, function(item) {
-            item.setDisabled(true);
-            item.multiEditable = false;
-            });
-
+        if(this.editDialog.tbarItems) {
+            Ext.each(this.editDialog.tbarItems, function(item) {
+                item.setDisabled(true);
+                item.multiEditable = false;
+                });
+        }
+        
         this.editDialog.loadMask.hide();
         return false;
     },
