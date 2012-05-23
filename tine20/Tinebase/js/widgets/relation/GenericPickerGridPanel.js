@@ -88,6 +88,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     border: true,
     autoScroll: true,
     layout: 'fit',
+
     /**
      * initializes the component
      */
@@ -105,6 +106,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             handler: this.onEditInNewWindow,
             iconCls: 'action_edit'
         });
+        
         this.title = _('Relations');
         this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
@@ -282,6 +284,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @private
      */
     getColumnModel: function () {
+        
         this.degreeEditor = new Ext.form.ComboBox({
             store: new Ext.data.ArrayStore({
                 fields: ['id', 'value'],
@@ -297,13 +300,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             this.colModel = new Ext.grid.ColumnModel({
                 defaults: {
                     sortable: true,
-                    width: 100
+                    width: 180
                 },
                 columns: [
                     {id: 'related_model', dataIndex: 'related_model', header: _('Record'), editor: false, renderer: this.relatedModelRenderer.createDelegate(this), scope: this},
                     {id: 'related_record', dataIndex: 'related_record', header: _('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
-                    {id: 'remark', dataIndex: 'remark', header: _('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 250},
-                    {id: 'own_degree', dataIndex: 'own_degree', header: _('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
+                    {id: 'remark', width: 220, dataIndex: 'remark', header: _('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 250},
+                    {id: 'own_degree', hidden: true, dataIndex: 'own_degree', header: _('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
                     {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: _('Type'),  scope: this, width: 100, editor: true}
                 ]
             });
