@@ -60,15 +60,13 @@ Tine.widgets.relation.Manager = function() {
 
             // add generic relations when no config exists
             Tine.Tinebase.data.RecordMgr.each(function(rec) {
-                if(ignoreApplications.indexOf(rec.getMeta('appName')) == -1) {
-                    if(rec.prototype.fields.keys.indexOf('relations') > -1) {
-                        items[key].push({
-                            ownModel: recordClass.getMeta('recordName'),
-                            relatedApp: rec.getMeta('appName'),
-                            relatedModel: rec.getMeta('modelName'),
-                            text: rec.getRecordName() + ' (' + rec.getAppName() + ')'
-                        });
-                    }
+                if (Tine.Tinebase.common.hasRight('run', rec.getMeta('appName')) && (ignoreApplications.indexOf(rec.getMeta('appName')) == -1) && (rec.getFieldNames().indexOf('relations') > -1)) {
+                    items[key].push({
+                        ownModel: recordClass.getMeta('recordName'),
+                        relatedApp: rec.getMeta('appName'),
+                        relatedModel: rec.getMeta('modelName'),
+                        text: rec.getRecordName() + ' (' + rec.getAppName() + ')'
+                    });
                 }
             });
 
