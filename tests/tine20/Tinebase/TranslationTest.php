@@ -210,4 +210,13 @@ msgstr "изпълни"
         Tinebase_Core::setupUserLocale();
         
     }
+    
+    /**
+    * test SingularExistence
+    */
+    public function testSingularExistence()
+    {
+        $jsTranslations = Tinebase_Translation::getJsTranslations('de', 'Tinebase');
+        $this->assertContains(', "Deleting Tag"', $jsTranslations, 'Singular of "Deleting Tag, Deleting Tags" is missing!');
+    }
 }
