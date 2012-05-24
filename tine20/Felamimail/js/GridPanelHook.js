@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -12,9 +12,9 @@ Ext.ns('Tine.Felamimail');
 
 /**
  * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.AddressbookGridPanelHook
+ * @class       Tine.Felamimail.GridPanelHook
  * 
- * <p>Felamimail Addressbook Hook</p>
+ * <p>Felamimail Gridpanel Hook</p>
  * <p>
  * </p>
  * 
@@ -23,9 +23,10 @@ Ext.ns('Tine.Felamimail');
  * 
  * @constructor
  */
-Tine.Felamimail.AddressbookGridPanelHook = function(config) {
-    Tine.log.info('initialising felamimail addressbook hooks');
+Tine.Felamimail.GridPanelHook = function(config) {
     Ext.apply(this, config);
+
+    Tine.log.info('Tine.Felamimail.GridPanelHook::Initialising Felamimail ' + this.foreignAppName + ' hooks.');
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
     this.composeMailAction = new Ext.Action({
@@ -49,11 +50,11 @@ Tine.Felamimail.AddressbookGridPanelHook = function(config) {
     });
     
     // register in toolbar + contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.composeMailBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.composeMailAction, 80);
+    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-GridPanel-ActionToolbar-leftbtngrp', this.composeMailBtn, 30);
+    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-GridPanel-ContextMenu', this.composeMailAction, 80);
 };
 
-Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
+Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     
     /**
      * @property app
@@ -61,6 +62,12 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * @private
      */
     app: null,
+    
+    /**
+     * foreign application name
+     * @type String
+     */
+    foreignAppName: null,
     
     /**
      * @property composeMailAction
@@ -77,21 +84,24 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
     composeMailBtn: null,
     
     /**
-     * @property ContactGridPanel
-     * @type Tine.Addressbook.ContactGridPanel
+     * @property gridPanel
+     * @type Tine.Addressbook.gridPanel
      * @private
      */
-    ContactGridPanel: null,
+    gridPanel: null,
+    
+    contactInRelation: false,
+    relationType: null,
     
     /**
      * get addressbook contact grid panel
      */
-    getContactGridPanel: function() {
-        if (! this.ContactGridPanel) {
-            this.ContactGridPanel = Tine.Tinebase.appMgr.get('Addressbook').getMainScreen().getCenterPanel();
+    getGridPanel: function() {
+        if (! this.gridPanel) {
+            this.gridPanel = Tine.Tinebase.appMgr.get(this.foreignAppName).getMainScreen().getCenterPanel();
         }
         
-        return this.ContactGridPanel;
+        return this.gridPanel;
     },
     
     /**
@@ -101,21 +111,50 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * @param {String} prefered
      * @return {Array}
      */
-    getMailAddresses: function(contacts, prefered) {
+    getMailAddresses: function(records) {
         var mailAddresses = [];
         
-        Ext.each(contacts, function(contact) {
-            if (! Ext.isFunction(contact.beginEdit)) {
-                contact = new Tine.Addressbook.Model.Contact(contact);
+        Ext.each(records, function(record) {
+            var contact = null;
+            if (this.contactInRelation && record.get('relations')) {
+                Ext.each(record.get('relations'), function(relation) {
+                    if (relation.type === this.relationType) {
+                       this.addMailFromContact(mailAddresses, relation.related_record);
+                    }
+                }, this);
+            } else {
+                this.addMailFromContact(mailAddresses, record);
             }
             
-            var mailAddress = contact.getPreferedEmail();
-            if (mailAddress) {
-                mailAddresses.push(mailAddress);
-            }
         }, this);
         
+        Tine.log.debug('Tine.Felamimail.GridPanelHook::getMailAddresses - Got ' + mailAddresses.length + ' email addresses.');
+        if (mailAddresses.length > 0) {
+            Tine.log.debug(mailAddresses);
+        }
+        
         return mailAddresses;
+    },
+    
+    /**
+     * add mail address from contact (if available) and add it to mailAddresses array
+     * 
+     * @param {Array} mailAddresses
+     * @param {Tine.Addressbook.Model.Contact|Object} contact
+     */
+    addMailFromContact: function(mailAddresses, contact) {
+        if (! contact) {
+            return;
+        }
+        if (! Ext.isFunction(contact.beginEdit)) {
+            contact = new Tine.Addressbook.Model.Contact(contact);
+        }
+        
+        var mailAddress = (contact.getPreferedEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
+        
+        if (mailAddress) {
+            mailAddresses.push(mailAddress);
+        }
     },
     
     /**
@@ -124,8 +163,8 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * @param {Button} btn 
      */
     onComposeEmail: function(btn) {
-        var sm = this.getContactGridPanel().grid.getSelectionModel(),
-            mailAddresses = sm.isFilterSelect ? sm.getSelectionFilter() : this.getMailAddresses(this.getContactGridPanel().grid.getSelectionModel().getSelections());
+        var sm = this.getGridPanel().grid.getSelectionModel(),
+            mailAddresses = sm.isFilterSelect ? sm.getSelectionFilter() : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
         
         var defaults = Tine.Felamimail.Model.Message.getDefaultData();
         defaults.body = Tine.Felamimail.getSignature();
@@ -142,7 +181,7 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * add to action updater the first time we render
      */
     onRender: function() {
-        var actionUpdater = this.getContactGridPanel().actionUpdater,
+        var actionUpdater = this.getGridPanel().actionUpdater,
             registeredActions = actionUpdater.actions;
             
         if (registeredActions.indexOf(this.composeMailAction) < 0) {
@@ -158,6 +197,6 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * @param {Object} records
      */
     updateAction: function(action, grants, records) {
-        action.setDisabled(this.getMailAddresses(this.getContactGridPanel().grid.getSelectionModel().getSelections()).length == 0);
+        action.setDisabled(this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections()).length == 0);
     }
 });

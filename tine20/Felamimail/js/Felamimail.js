@@ -106,7 +106,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            var hook = new Tine.Felamimail.AddressbookGridPanelHook({app: this});
+            var adbHook = new Tine.Felamimail.GridPanelHook({
+                app: this,
+                foreignAppName: 'Addressbook'
+            });
+            var crmHook = new Tine.Felamimail.GridPanelHook({
+                app: this,
+                foreignAppName: 'Crm',
+                contactInRelation: true,
+                relationType: 'CUSTOMER'
+            });
         }
     },
     
@@ -750,11 +759,7 @@ Tine.Felamimail.getEmailStringFromContact = function(contact) {
     Tine.log.debug(contact);
     
     var result = contact.get('n_fileas') + ' <';
-    if (contact.get('email')) {
-        result += contact.get('email');
-    } else {
-        result += contact.get('email_home');
-    }
+    result += contact.getPreferedEmail();
     result += '>';
     
     return result;

@@ -506,7 +506,7 @@ Ext.namespace('Tine.Felamimail');
             this['AddressLoadMask'].show();
             
             Tine.Addressbook.searchContacts(filter, null, function(response) {
-                var mailAddresses = Tine.Felamimail.AddressbookGridPanelHook.prototype.getMailAddresses(response.results);
+                var mailAddresses = Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
                 
                 this.record.set(field, mailAddresses);
                 this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
