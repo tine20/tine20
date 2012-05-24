@@ -239,63 +239,21 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         return params;
     },
     
-    /**
-     * adopt attr
-     * 
-     * @param {Object} attr
-     */
     onBeforeCreateNode: function(attr) {
+        Tine.Filemanager.TreePanel.superclass.onBeforeCreateNode.apply(this, arguments);
         
-        if (attr.accountDisplayName) {
-            attr.name = attr.accountDisplayName;
-            attr.path = '/personal/' + attr.accountId;
-            attr.id = attr.accountId;
-        }
-        
-        if (!attr.name && attr.path) {
-            attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
-        }
-        
-        if(attr.path && !attr.created_by) {
-            var matches = attr.path.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
-            if (matches) {
-                if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName && matches[1].length > 0) {
-                    attr.id = matches[1];
-                } 
-                else if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
-                    attr.id = 'otherUsers';
-                }
-            }
-        }
-        
-        // use name as ids to make pathfilter work
-        if (attr.path && attr.created_by) {
-            var keys = attr.path.split('/');
-            attr.id = keys.pop();
-        }
+        attr.leaf = false;
         
         if(attr.name && typeof attr.name == 'object') {
-            Ext.applyIf(attr, {
+            Ext.apply(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
-                qtip: Tine.Tinebase.common.doubleEncode(attr.name.name),
-                leaf: !(attr.type == 'folder')
-                //allowDrop: (attr.type == 'folder')
+                qtip: Tine.Tinebase.common.doubleEncode(attr.name.name)
             });
         }
-        else {
-            Ext.applyIf(attr, {
-                text: Ext.util.Format.htmlEncode(attr.name),
-                qtip: Tine.Tinebase.common.doubleEncode(attr.name),
-                leaf: !!attr.account_grants && !(attr.type == 'folder')
-                //allowDrop: !!attr.account_grants && attr.account_grants.addGrant
-            });
-        }
-        
         
         // copy 'real' data to a node record NOTE: not a full record as we have no record reader here
         var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
         attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
-        
     },
     
     /**
@@ -443,45 +401,69 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     },
     
     /**
-     * convert containerPath to treePath
+     * convert filesystem path to treePath
+     * 
+     * NOTE: only the first depth gets converted!
+     *       fs pathes of not yet loaded tree nodes can't be converted!
      * 
      * @param {String} containerPath
      * @return {String} tree path
      */
-    getTreePath: function(valueItem) {
+    getTreePath: function(path) {
+        var treePath = '/' + this.getRootNode().id;
         
-        var containerPath = '';
-        if(valueItem && !valueItem.id) return valueItem.path;
-        
-        if(valueItem) {
-            var node = this.getNodeById(valueItem.id);
-            if(node) {
-                var returnPath = node.getPath().replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
-                return returnPath;
+        if (path && path != '/') {
+            if (path == '/personal') {
+                treePath += '/otherUsers';
             }
             
-            //NOTE: node might not yet be loaded
-            // /personal/name/id/id/id <=> /personal/name/name/name
-            containerPath = valueItem.path;
-        }
-        var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
-        
-        // replace personal with otherUsers if personal && ! personal/myaccountid
-        var matches = containerPath.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
-        if (matches) {
-            if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
-                treePath = treePath.replace('personal', 'otherUsers');
-            } 
-            else {
-                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
-                
-            }
+            treePath += String(path).replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
         }
         
         return treePath;
     },
     
-   
+    /**
+     * Expands a specified path in this TreePanel. A path can be retrieved from a node with {@link Ext.data.Node#getPath}
+     * 
+     * NOTE: path does not consist of id's starting from the second depth
+     * 
+     * @param {String} path
+     * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
+     * @param {Function} callback (optional) The callback to call when the expand is complete. The callback will be called with
+     * (bSuccess, oLastNode) where bSuccess is if the expand was successful and oLastNode is the last node that was expanded.
+     */
+    expandPath : function(path, attr, callback){
+        var keys = path.split(this.pathSeparator);
+        var curNode = this.root;
+        var curPath = curNode.attributes.path;
+        var index = 1;
+        var f = function(){
+            if(++index == keys.length){
+                if(callback){
+                    callback(true, curNode);
+                }
+                return;
+            }
+            
+            if (index > 2) {
+                var c = curNode.findChild('path', curPath + '/' + keys[index]);
+            } else {
+                var c = curNode.findChild('id', keys[index]);
+            }
+            if(!c){
+                if(callback){
+                    callback(false, curNode);
+                }
+                return;
+            }
+            curNode = c;
+            curPath = c.attributes.path;
+            c.expand(false, false, f);
+        };
+        curNode.expand(false, false, f);
+    },
+    
     /**
      * files/folder got dropped on node
      * 
