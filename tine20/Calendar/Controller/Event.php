@@ -1692,7 +1692,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        $this->doSendNotifications($event, $this->_currentAccount, 'alarm');
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, $this->_currentAccount, 'alarm');
     }
     
     /**
