@@ -74,6 +74,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+        
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }

@@ -67,6 +67,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
             '/\/phpunit/',
             '/--stderr /',
             '/--colors /',
+            '/--verbose /',
             '/--stop-on-failure /',
             '/Calendar_Controller_EventNotificationsTests/',
             '/AllTests AllTests.php/',
@@ -76,6 +77,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
             '/[\S]+\.php$/'
         ), array(
             '/php',
+            '',
             '',
             '',
             '',
