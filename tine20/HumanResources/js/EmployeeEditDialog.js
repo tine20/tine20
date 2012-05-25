@@ -101,20 +101,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             editDialog: this
         });
         
-        this.vacationGridPanel = new Tine.HumanResources.VacationGridPanel({
+        this.freetimeGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
             app: this.app,
-            fromEditDialog: true,
-            title: this.app.i18n._('Vacation Days'),
-            frame: true,
-            border: true,
-            autoScroll: true,
-            layout: 'fit'
-        });
-        
-        this.sicknessGridPanel = new Tine.HumanResources.SicknessGridPanel({
-            app: this.app,
-            fromEditDialog: true,
-            title: this.app.i18n._('Sickness Days'),
+            editDialog: this,
+            title: this.app.i18n._('FreeTime Days'),
             frame: true,
             border: true,
             autoScroll: true,
@@ -354,8 +344,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
                 }), 
             this.elayerGridPanel,
-            this.sicknessGridPanel,
-            this.vacationGridPanel
+            this.freetimeGridPanel
             ]
         };
     }

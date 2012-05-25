@@ -37,7 +37,7 @@ class HumanResources_Model_Elayer extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employee_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'employee_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'start_date'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end_date'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cost_centre'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

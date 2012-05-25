@@ -30,14 +30,14 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * record class
      * @cfg {Tine.Tinebase.Model.Record} recordClass
      */
-    recordClass: null,
-    recordProxy: null,
+    recordClass: Tine.HumanResources.Model.FreeTime,
+    recordProxy: Tine.HumanResources.freetimeBackend,
     /**
      * eval grants
      * @cfg {Boolean} evalGrants
      */
     evalGrants: null,
-    fromEditDialog: null,
+    editDialog: null,
     /**
      * optional additional filterToolbar configs
      * @cfg {Object} ftbConfig
@@ -59,11 +59,12 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.defaultSortInfo = {field: 'number', direction: 'DESC'};
         this.gridConfig = { autoExpandColumn: 'n_fn' };
         this.gridConfig.columns = this.getColumns();
-        if(! this.fromEditDialog) {
-            this.initFilterToolbar();
+        if(!this.initFilterToolbar()) {
+            this.disabled = true;
+        } else {
+            this.plugins = [];
             this.plugins.push(this.filterToolbar);
         }
-        
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
     },
     
@@ -71,14 +72,25 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * initialises filter toolbar
      */
     initFilterToolbar: function() {
+        var plugins = [],
+            filters = [];
+        if(!this.editDialog) {
+            plugins.push(new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()); 
+        } else {
+            if(this.editDialog.record && this.editDialog.record.data.id) {
+                filters = [{field: 'employee_id', operator: 'equals', 'value': this.editDialog.record.data}];
+            } else {
+                return false;
+            }
+        }
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
+            filters: filters,
+            plugins: plugins
         });
+        
+        return true;
     },
     
     /**
@@ -97,35 +109,37 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     getColumns: function(){
         return [
-            {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },                
-            {
-                id: 'number',
-                header: this.app.i18n._("Number"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'number',
-                hidden: true
-            }, {
-                id: 'n_fn',
-                header: this.app.i18n._("Full Name"),
-                width: 350,
-                sortable: true,
-                dataIndex: 'n_fn'
-            }, {
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
-                sortable: true,
-                dataIndex: 'status'
-            }].concat(this.getModlogColumns());
+//            {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
+            { id: 'employee_id', header: this.app.i18n._('Employee'), dataIndex: 'employee_id', width: 200, sortable: true, hidden: (this.editDialog) ? true : false, renderer: this.renderEmployee, scope: this},
+            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeType')},
+            { id: 'date', header: this.app.i18n._('Date Start'), dataIndex: 'date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer},
+            { id: 'date_end', header: this.app.i18n._('Date End'), width: 100, sortable: true, renderer: this.renderDateEnd},
+            { id: 'duration', header: this.app.i18n._('Duration'), dataIndex: 'duration', width: 100, sortable: true},
+            { id: 'remark', header: this.app.i18n._('Remark'), dataIndex: 'remark', width: 200, sortable: true}
+            ].concat(this.getModlogColumns());
     },
     
     /**
-     * status column renderer
-     * @param {string} value
-     * @return {string}
+     * date column renderer
+     * @param {Object} value
+     * @param {Object} row
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {String}
      */
-    statusRenderer: function(value) {
-        return this.app.i18n._hidden(value);
+    renderDateEnd: function(value, row, record) {
+        var date = record.get('date');
+        date.setDate(date.getDate() + Math.ceil(record.get('duration')));
+        return Tine.Tinebase.common.dateRenderer(date);
+    },
+    
+    /**
+     * renders the employee
+     * @param {Object} value
+     * @param {Object} row
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {String}
+     */
+    renderEmployee: function(value, row, record) {
+        return record.get('account_id') ? record.get('account_id').n_fn : '';
     }
 });

@@ -75,7 +75,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEmployee($recordData)
     {    
-//         $recordData['id'] = time();
         return $this->_save($recordData, $this->_controller, 'Employee');
     }
     
@@ -99,6 +98,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchWorkingTimes($filter, $paging)
     {
+        
         return $this->_search($filter, $paging, HumanResources_Controller_WorkingTime::getInstance(), 'HumanResources_Model_WorkingTimeFilter');
     }     
     
@@ -121,8 +121,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveWorkingTime($recordData)
     {    
-//         $recordData['id'] = time();
-        return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'Employee');
+        return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'WorkingTime');
     }
     
     /**
@@ -135,7 +134,52 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, HumanResources_Controller_WorkingTime::getInstance());
     }
+
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchFreeTimes($filter, $paging)
+    {
+        return $this->_search($filter, $paging, HumanResources_Controller_FreeTime::getInstance(), 'HumanResources_Model_FreeTimeFilter');
+    }     
     
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getFreeTime($id)
+    {
+        return $this->_get($id, HumanResources_Controller_FreeTime::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveFreeTime($recordData)
+    {    
+        return $this->_save($recordData, HumanResources_Controller_FreeTime::getInstance(), 'FreeTime');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids 
+     * @return string
+     */
+    public function deleteFreeTime($ids)
+    {
+        return $this->_delete($ids, HumanResources_Controller_FreeTime::getInstance());
+    }
     
     /**
      * returns record prepared for json transport
@@ -151,13 +195,65 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $_record['elayers']));
                 $_record['elayers'] = HumanResources_Controller_Elayer::getInstance()->search($filter, $paging);
-                $recordArray = parent::_recordToJson($_record);
+                break;
+            case 'HumanResources_Model_FreeTime':
+                $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
                 break;
         }
 
-        return $recordArray;
+        return parent::_recordToJson($_record);
+    }
+    /**
+     * resolves multiple records
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+    {
+        switch ($_records->getRecordClassName()) {
+            case 'HumanResources_Model_FreeTime':
+                $this->_resolveMultipleEmployees($_records);
+                break;
+        }
+//                             die(var_dump($_records->toArray()));
+        return parent::_multipleRecordsToJson($_records);
     }
 
+    /**
+     * resolves multiple contacts
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveMultipleContacts(Tinebase_Record_RecordSet $_records)
+    {
+        $contactIds = array_unique($_records->contact_id);
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contactIds);
+        foreach ($_records as $record) {
+            $idx = $contacts->getIndexById($record->contact_id);
+            if($idx) {
+                $record->contact_id = $contacts[$idx];
+            } else {
+                $record->contact_id = NULL;
+            }
+        }
+    }
+
+    /**
+     * resolves multiple contacts
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveMultipleEmployees(Tinebase_Record_RecordSet $_records)
+    {
+        $eIds = array_unique($_records->employee_id);
+        $e = HumanResources_Controller_Employee::getInstance()->getMultiple($eIds);
+        foreach ($_records as $record) {
+            $id = $e->getIndexById($record->employee_id);
+            if(isset($id)) {
+                $record->employee_id = $e[$id];
+            } else {
+                $record->employee_id = NULL;
+            }
+        }
+    }    
+    
 //     /**
 //      * returns multiple records prepared for json transport
 //      *

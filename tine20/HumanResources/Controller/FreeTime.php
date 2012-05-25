@@ -1,6 +1,6 @@
 <?php
 /**
- * Sickness controller for HumanResources application
+ * FreeTime controller for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
@@ -11,12 +11,12 @@
  */
 
 /**
- * Sickness controller class for HumanResources application
+ * FreeTime controller class for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
  */
-class HumanResources_Controller_Sickness extends Tinebase_Controller_Record_Abstract
+class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -35,19 +35,19 @@ class HumanResources_Controller_Sickness extends Tinebase_Controller_Record_Abst
     /**
      * holds the instance of the singleton
      *
-     * @var HumanResources_Controller_Sickness
+     * @var HumanResources_Controller_FreeTime
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return HumanResources_Controller_Sickness
+     * @return HumanResources_Controller_FreeTime
      */
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_Sickness();
+            self::$_instance = new HumanResources_Controller_FreeTime();
         }
         
         return self::$_instance;

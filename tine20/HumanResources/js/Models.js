@@ -10,8 +10,9 @@
 Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 
 // Employee model fields
-Tine.HumanResources.Model.EmployeeArray = [
+Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',                  type: 'string'},
+    {name: 'number',               type: 'string'},
     {name: 'contact_id',          type: Tine.Addressbook.Model.Contact},
     {name: 'countryname',         type: 'string'},
     {name: 'locality',            type: 'string'},
@@ -39,7 +40,7 @@ Tine.HumanResources.Model.EmployeeArray = [
     // relations with other objects
     { name: 'relations'},
     { name: 'elayers'}
-];
+]);
 
 /**
  * @namespace Tine.HumanResources.Model
@@ -189,7 +190,7 @@ Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
 
 // ELayer
 
-Tine.HumanResources.Model.ElayerArray = [
+Tine.HumanResources.Model.ElayerArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
     {name: 'end_date', type: 'date'},
@@ -198,7 +199,7 @@ Tine.HumanResources.Model.ElayerArray = [
     {name: 'working_hours', type: 'int'},
     {name: 'employee_id', type: 'string'},
     {name: 'workingtime_id', type: Tine.HumanResources.Model.WorkingTime }
-];
+]);
 
 Tine.HumanResources.Model.Elayer = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ElayerArray, {
     appName: 'HumanResources',
@@ -267,29 +268,26 @@ Tine.HumanResources.elayerBackend = new Tine.Tinebase.data.RecordProxy({
 /*
  * Vacation
  */
+Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.genericFields.concat([
+    {name: 'id',          type: 'string'},
+    {name: 'employee_id', type: Tine.HumanResources.Model.Employee},
+    {name: 'type', type: 'string'},
+    {name: 'date', type: 'date'},
+    {name: 'duration', type: 'float'},
+    {name: 'remark', type: 'string'}
+]);
 
-
-Tine.HumanResources.Model.VacationArray = [
-    {name: 'id',        type: 'string'},
-    {name: 'start_date', type: 'date'},
-    {name: 'end_date', type: 'date'},
-    {name: 'vacation_days', type: 'int'},
-    {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'},
-    {name: 'employee_id', type: 'string' }
-];
-
-Tine.HumanResources.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.VacationArray, {
+Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.FreeTimeArray, {
     appName: 'HumanResources',
-    modelName: 'Vacation',
+    modelName: 'FreeTime',
     idProperty: 'id',
     titleProperty: 'name',
-    // ngettext('Vacation Day', 'Vacation Days', n);
-    recordName: 'Vacation Day',
-    recordsName: 'Vacation Days',
+    // ngettext('FreeTime Day', 'FreeTime Days', n);
+    recordName: 'FreeTime Day',
+    recordsName: 'FreeTime Days',
 //    containerProperty: 'container_id',
-    // ngettext('Vacation days', 'All vacations days', n);
-    containerName: 'Vacation days',
+    // ngettext('FreeTime days', 'All vacations days', n);
+    containerName: 'FreeTime days',
     containersName: 'All vacations days',
     getTitle: function() {
         return this.get('name') ? this.get('name') : false;
@@ -299,12 +297,12 @@ Tine.HumanResources.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Human
 /**
  * @namespace Tine.HumanResources.Model
  * 
- * get default data for a new Vacation
+ * get default data for a new FreeTime
  *  
  * @return {Object} default data
  * @static
  */ 
-Tine.HumanResources.Model.Vacation.getDefaultData = function() {
+Tine.HumanResources.Model.FreeTime.getDefaultData = function() {
     
     var data = {};
     return data;
@@ -313,19 +311,24 @@ Tine.HumanResources.Model.Vacation.getDefaultData = function() {
 /**
  * @namespace Tine.HumanResources.Model
  * 
- * get Vacation filter
+ * get FreeTime filter
  *  
  * @return {Array} filter objects
  * @static
  */ 
-Tine.HumanResources.Model.Vacation.getFilterModel = function() {
+Tine.HumanResources.Model.FreeTime.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']}
-//        {label: app.i18n._('Vacation name'),   field: 'name' },
-//        {filtertype: 'tinebase.tag', app: app},
-//        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
+        { label: _('Quick search'), field: 'query', operators: ['contains']},
+        {
+            label: app.i18n._('Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'freetimeType'
+        },
+        { filtertype: 'humanresources.freetimeemployee' } 
     ];
 };
 
@@ -336,89 +339,10 @@ Tine.HumanResources.Model.Vacation.getFilterModel = function() {
  * 
  * Employee Backend
  */ 
-Tine.HumanResources.vacationBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.HumanResources.freetimeBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'HumanResources',
-    modelName: 'Employee',
-    recordClass: Tine.HumanResources.Model.Vacation
+    modelName: 'FreeTime',
+    recordClass: Tine.HumanResources.Model.FreeTime
 });
 
 
-
-
-/*
- * Sickness
- */
-
-
-Tine.HumanResources.Model.SicknessArray = [
-    {name: 'id',        type: 'string'},
-    {name: 'start_date', type: 'date'},
-    {name: 'end_date', type: 'date'},
-    {name: 'sickness_days', type: 'int'},
-    {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'},
-    {name: 'employee_id', type: 'string' }
-];
-
-Tine.HumanResources.Model.Sickness = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.SicknessArray, {
-    appName: 'HumanResources',
-    modelName: 'Sickness',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Sickness Day', 'Sickness Days', n);
-    recordName: 'Sickness Day',
-    recordsName: 'Sickness Days',
-//    containerProperty: 'container_id',
-    // ngettext('All sickness days', 'All sickness days', n);
-    containerName: 'All sickness days',
-    containersName: 'All sickness days',
-    getTitle: function() {
-        return this.get('name') ? this.get('name') : false;
-    }
-});
-
-/**
- * @namespace Tine.HumanResources.Model
- * 
- * get default data for a new Sickness
- *  
- * @return {Object} default data
- * @static
- */ 
-Tine.HumanResources.Model.Sickness.getDefaultData = function() {
-    
-    var data = {};
-    return data;
-};
-
-/**
- * @namespace Tine.HumanResources.Model
- * 
- * get Sickness filter
- *  
- * @return {Array} filter objects
- * @static
- */ 
-Tine.HumanResources.Model.Sickness.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('HumanResources');
-    
-    return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']}
-//        {label: app.i18n._('Sickness name'),   field: 'name' },
-//        {filtertype: 'tinebase.tag', app: app},
-//        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
-    ];
-};
-
-/**
- * @namespace Tine.HumanResources
- * @class Tine.HumanResources.sicknessBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Employee Backend
- */ 
-Tine.HumanResources.sicknessBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'HumanResources',
-    modelName: 'Employee',
-    recordClass: Tine.HumanResources.Model.Sickness
-});

@@ -20,9 +20,7 @@ Tine.HumanResources.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Employee',
     contentTypes: [
         {model: 'Employee',  requiredRight: null, singularContainerMode: true},
-        {model: 'Vacation',  requiredRight: null, singularContainerMode: true},
-        {model: 'Sickness',  requiredRight: null, singularContainerMode: true}
-//        {model: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']}
+        {model: 'FreeTime',  requiredRight: null, singularContainerMode: true}
         ]
 });
 
@@ -65,10 +63,10 @@ Ext.extend(Tine.HumanResources.EmployeeFilterPanel, Tine.widgets.persistentfilte
  * 
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-Tine.HumanResources.VacationTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.HumanResources.FreeTimeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     id: 'HumanResources_Tree',
     filterMode: 'filterToolbar',
-    recordClass: Tine.HumanResources.Model.Vacation
+    recordClass: Tine.HumanResources.Model.FreeTime
 });
 
 /**
@@ -81,46 +79,15 @@ Tine.HumanResources.VacationTreePanel = Ext.extend(Tine.widgets.container.TreePa
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Tine.HumanResources.VacationFilterPanel = function(config) {
+Tine.HumanResources.FreeTimeFilterPanel = function(config) {
     Ext.apply(this, config);
-    Tine.HumanResources.VacationFilterPanel.superclass.constructor.call(this);
+    Tine.HumanResources.FreeTimeFilterPanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.HumanResources.VacationFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
-    filter: [{field: 'model', operator: 'equals', value: 'HumanResources_Model_VacationFilter'}]
+Ext.extend(Tine.HumanResources.FreeTimeFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'HumanResources_Model_FreeTimeFilter'}]
 });
 
 
 
 
-/**
- * @namespace   Tine.HumanResources
- * @class       Tine.HumanResources.TreePanel
- * @extends     Tine.widgets.container.TreePanel
- * 
- * @author      Alexander Stintzing <a.stintzing@metaways.de>
- */
-Tine.HumanResources.SicknessTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
-    id: 'HumanResources_Tree',
-    filterMode: 'filterToolbar',
-    recordClass: Tine.HumanResources.Model.Sickness
-});
-
-/**
- * @namespace Tine.HumanResources
- * @class Tine.HumanResources.FilterPanel
- * @extends Tine.widgets.persistentfilter.PickerPanel
- * HumanResources Filter Panel<br>
- * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- */
-Tine.HumanResources.SicknessFilterPanel = function(config) {
-    Ext.apply(this, config);
-    Tine.HumanResources.SicknessFilterPanel.superclass.constructor.call(this);
-};
-
-Ext.extend(Tine.HumanResources.SicknessFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
-    filter: [{field: 'model', operator: 'equals', value: 'HumanResources_Model_SicknessFilter'}]
-});

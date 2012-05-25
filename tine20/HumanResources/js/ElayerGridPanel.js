@@ -23,7 +23,7 @@ Ext.ns('Tine.HumanResources');
  * Create a new Tine.HumanResources.EmployeeEditDialog
  */
 
-Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     frame: true,
     border: true,
     autoScroll: true,
@@ -45,33 +45,33 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     enableHdMenu: false,
     
     initComponent: function() {
-        if (!this.app) {
-            this.app = Tine.Tinebase.appMgr.get(this.appName);
-        }  
-        this.defaultSortInfo = {field: 'start_date', direction: 'DESC'};
+//        if (!this.app) {
+//            this.app = Tine.Tinebase.appMgr.get(this.appName);
+//        }  
+//        this.defaultSortInfo = {field: 'start_date', direction: 'DESC'};
         this.title = this.app.i18n._('Elayers');
-        this.recordProxy = Tine.HumanResources.elayerBackend;
-        
-        this.cm = this.getColumnModel();
-
-        this.on('afteredit', this.onAfterRowEdit, this);
-        this.on('newentry', this.onNewEntry, this);
-        
+//        this.recordProxy = Tine.HumanResources.elayerBackend;
+//        
+//        this.cm = this.getColumnModel();
+//
+//        this.on('afteredit', this.onAfterRowEdit, this);
+//        this.on('newentry', this.onNewEntry, this);
+//        
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
     },
+//    
+//    onNewEntry: function(recordData) {
+//        recordData.employee_id = this.editDialog.record.get('id');
+//        var record = new Tine.HumanResources.Model.WorkingTime(recordData);
+//        this.store.add(record);
+//        
+//    },
     
-    onNewEntry: function(recordData) {
-        recordData.employee_id = this.editDialog.record.get('id');
-        var record = new Tine.HumanResources.Model.WorkingTime(recordData);
-        this.store.add(record);
-        
-    },
-    
-    onClose: function() {
-        this.fireEvent('cancel');
-        this.purgeListeners();
-        this.window.close();
-    },
+//    onClose: function() {
+//        this.fireEvent('cancel');
+//        this.purgeListeners();
+//        this.window.close();
+//    },
     
     onRecordLoad: function() {
         this.store = new Tine.Tinebase.data.RecordStore({
@@ -106,7 +106,8 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 }, { dataIndex: 'working_hours', id: 'working_hours', type: 'int',    header: this.app.i18n._('Working Hours'),
                      quickaddField: new Ext.form.TextField(), width: 100
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
-                     quickaddField: new Ext.ux.form.ClearableDateField(), renderer: new Ext.ux.form.ClearableDateField()
+                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
+//								renderer : new Ext.ux.form.ClearableDateField()
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 100
                 }, { dataIndex: 'cost_centre',   id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
@@ -124,148 +125,5 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         return Ext.util.Format.htmlEncode(value.title);
     }
     
-//    onAfterRowEdit: function(o,r,s) {
-//        console.warn(o,r,s);
-//        Ext.each(this.editDialog.record.set('lines'), function(line) {
-//            
-//        }, this);
-////        o.record.set('user_id', )
-////        o.grid.store.save(o.record);
-////        this.onUpdate(o.grid.store, o.record);
-////        this.view.refresh();
-//    }
-    
-//    onChange: function(combo, record,a,b) {
-//        console.warn(combo, record,a,b);
-////        this.recordProxy.saveRecord(record);
-        
-//    }
 });
 
-    
-    
-//    
-//    /* private */
-//    
-//    /**
-//     * 
-//     * @type Ext.data.store 
-//     */
-//    store: null,
-//    recordClass: Tine.HumanResources.Model.Elayer,
-//    
-//    /* config */
-//    
-//    height: 100,
-//    defaultSortInfo: {field: 'start_date', direction: 'ASC'},
-//    autoExpandColumn: 'cost_centre',
-//
-//    /* public */
-//    
-//    app: null,
-//    record: null,
-//    editDialog: null,
-//    enableHdMenu: false,
-//    
-//    initComponent: function() {
-////        this.initStore();
-//        this.colModel = this.getColumnModel();
-//        
-//        this.initActions();
-//        this.contextMenu = new Ext.menu.Menu({
-//            items: [this.actionAdd, this.actionUnlink, this.actionEdit]
-//        });
-//        this.plugins = this.plugins || [];
-//        this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-//        // on rowcontextmenu handler
-////        this.listeners = {
-////            rowcontextmenu: function(grid, row, e) {
-////                alert('asd');
-////                e.stopEvent();
-////                var selModel = grid.getSelectionModel();
-////                if(!selModel.isSelected(row)) {
-////                    selModel.selectRow(row);
-////                }
-////                
-////                this.contextMenu.showAt(e.getXY());
-////            },
-////            scope:this
-////        };
-//        
-//        Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
-//    },
-//    
-//    initActions: function() {
-//        this.actionAdd = new Ext.Action({
-//            text: _('Add Elayer'),
-//            tooltip: _('Add a new elayer to this employee'),
-//            iconCls: 'action_add',
-//            scope: this,
-//            handler: Ext.emptyFn
-//        });
-//        
-//        this.actionEdit = new Ext.Action({
-//            text: _('Add Elayer'),
-//            tooltip: _('Add a new elayer to this employee'),
-//            iconCls: 'actionEdit',
-//            scope: this,
-//            handler: Ext.emptyFn
-//        });
-//        
-//        this.actionUnlink = new Ext.Action({
-//            text: _('Unlink Elayer'),
-//            tooltip: _('Removes Elayer from this employee'),
-//            iconCls: 'action_remove',
-//            scope: this,
-//            handler: Ext.emptyFn
-//        });
-//        
-//        this.actions = [
-//            this.actionAdd,
-//            this.actionEdit,
-//            this.actionUnlink
-//        ];
-//    },
-//    
-//    getColumnModel: function() {
-//        return new Ext.grid.ColumnModel({
-//            defaults: {
-//                width: 120,
-//                sortable: true
-//            },
-//            columns: [
-//                {id: 'start_date', type: 'date', header: this.app.i18n._('Start Date')},
-//                {id: 'end_date', type: 'date', header: this.app.i18n._('End Date')},
-//                {id: 'vacation_days', type: 'int', header: this.app.i18n._('Vacation Days')},
-//                {id: 'cost_centre', type: 'string', header: this.app.i18n._('Cost Centre')},
-//                {id: 'working_hours', type: 'int', header: this.app.i18n._('Working Hours')}
-//                ]
-//        })
-//    },
-//    
-//    onRecordLoad: function() {
-////        this.store = new Tine.Tinebase.data.RecordStore({
-////                recordClass: this.recordClass
-////            });
-//        Ext.each(this.record.get('elayers'), function(record) {
-//            console.warn(record);
-//        }, this);
-//    }
-//    
-////    initStore: function() {
-////        this.store = new Ext.data.JsonStore({
-////        fields: (this.storeFields) ? this.storeFields : this.recordClass
-////    });
-////
-////    // focus+select new record
-////    this.store.on('add', function(store, records, index) {
-////        (function() {
-////            if (this.rendered) {
-////                this.getView().focusRow(index);
-////                this.getSelectionModel().selectRow(index);
-////            }
-////        }).defer(300, this);
-////    }, this);
-////    }
-//    
-//});

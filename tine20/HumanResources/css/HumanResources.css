@@ -25,22 +25,12 @@
         background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
 }
 
-.HumanResourcesSickness {
-    background-image:url(../../images/oxygen/16x16/actions/book.png) !important;
-}
-.x-btn-medium .HumanResourcesSickness {
-    background-image:url(../../images/oxygen/22x22/actions/book.png) !important;
-}
-.x-btn-large .HumanResourcesSickness {
-    background-image:url(../../images/oxygen/32x32/apps/actions/book.png) !important;
-}
-
-.HumanResourcesVacation {
+.HumanResourcesFreeTime {
     background-image:url(../../images/oxygen/16x16/actions/book2.png) !important;
 }
-.x-btn-medium .HumanResourcesVacation {
+.x-btn-medium .HumanResourcesFreeTime {
     background-image:url(../../images/oxygen/22x22/actions/book2.png) !important;
 }
-.x-btn-large .HumanResourcesVacation {
+.x-btn-large .HumanResourcesFreeTime {
     background-image:url(../../images/oxygen/32x32/actions/book2.png) !important;
 }
