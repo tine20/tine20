@@ -38,12 +38,12 @@ class HumanResources_Model_Elayer extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employee_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'workingtime_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'start_date'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end_date'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cost_centre'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'vacation_days'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
+        'feast_calendar_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

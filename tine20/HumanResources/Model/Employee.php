@@ -123,4 +123,20 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             $this->_validators = array_diff_key($this->_validators, array_flip($this->_privateFields));
         }
     }
+    
+    /**
+//      * can be reimplemented by subclasses to modify values during setFromJson
+//      * @param array $_data the json decoded values
+//      * @return void
+//      */
+//     protected function _setFromJson(array &$_data)
+//     {
+//         for ($i = 0; $i < count($_data['elayers']); $i++) {
+//             $_data['elayers'][$i]['workingtime_id'] = $_data['elayers'][$i]['workingtime_id']['id'];
+//         }
+// // //         foreach($_data['workingtime_id']['elayers'] as $elayer) {
+// // //             = $_data['workingtime_id']['id'];
+// // //         }
+//         die(var_dump($_data));
+//     }
 }

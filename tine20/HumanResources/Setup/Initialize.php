@@ -46,13 +46,22 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     function _initializeWorkingTimeModels()
     {
         $_record = new HumanResources_Model_WorkingTime(array(
-            'title' => 'Vollzeit',
+            'title' => 'Vollzeit 40 Stunden',
+            'working_hours' => '40',
             'type'  => 'static',
             'json'  => ''
             ));
         HumanResources_Controller_WorkingTime::getInstance()->create($_record);
         $_record = new HumanResources_Model_WorkingTime(array(
-            'title' => 'Teilzeit',
+            'title' => 'Vollzeit 37,5 Stunden',
+            'working_hours' => '37.5',
+            'type'  => 'static',
+            'json'  => ''
+            ));
+        HumanResources_Controller_WorkingTime::getInstance()->create($_record);
+        $_record = new HumanResources_Model_WorkingTime(array(
+            'title' => 'Teilzeit 20 Stunden',
+            'working_hours' => '20',
             'type'  => 'static',
             'json'  => ''
             ));

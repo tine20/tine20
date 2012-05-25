@@ -76,7 +76,13 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordUpdate: function() {
-//        this.elayerGridPanel
+        var elayers = [];
+        this.elayerGridPanel.store.query().each(function(elayer) {
+            console.warn(elayer.data);
+            elayers.push(elayer.data);
+        }, this);
+        this.record.set('elayers', elayers);
+        
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
     },
     
@@ -253,15 +259,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }
                             ]]
                         }]
-//                    }, {
-//                        xtype: 'fieldset',
-//                        layout: 'hfit',
-//                        autoHeight: true,
-//                        title: this.app.i18n._('Contract Information'),
-//                        disabled: ! this.showPrivateInformation,
-//                        items: [
-//                            this.elayerGridPanel
-//                            ]
                     },
                         {
                         xtype: 'fieldset',

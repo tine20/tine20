@@ -53,9 +53,68 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         return self::$_instance;
     }
     
-    protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-//         die(var_dump($_record->toArray()));
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        die(var_dump($_record->toArray()));
+    }
+        
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+
     }
     
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+//         $ec = HumanResources_Controller_Elayer::getInstance();
+        
+//         foreach($_record->elayers as $elayer) {
+//             if((!array_key_exists($elayer, 'id')) || (! $elayer['id'])) {
+//                 $elayer['workingtime_id'] = $elayer['workingtime_id']['id'];
+//                 $elayers[] = $elayer;
+// //                 die(var_dump($elayer));
+// //                 $_record = new HumanResources_Model_Elayer($elayer);
+// //                 $ec->create($_record);
+//             }
+            
+// //             $_record->elayers;
+// //             $elayer->workingtime_id = 
+// //             if($elayer->workingtime_i)
+// //             die(var_dump($elayer));
+//         }
+//         die(var_dump($elayers));
+//         $_record->elayers = null;
+// //         die(var_dump($_record->toArray()));
+    }
+    
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    {
+    }
     
 }

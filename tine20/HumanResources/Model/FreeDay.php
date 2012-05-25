@@ -16,7 +16,7 @@
  * @package     HumanResources
  * @subpackage  Model
  */
-class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
+class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which
@@ -42,18 +42,10 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'firstday_date' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'freetime_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
+        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'date'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -61,8 +53,6 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
+            'date',
     );
 }

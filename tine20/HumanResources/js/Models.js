@@ -116,13 +116,10 @@ Tine.HumanResources.employeeBackend = new Tine.Tinebase.data.RecordProxy({
 // Workingtime
 
 Tine.HumanResources.Model.WorkingTimeArray = [
-    {name: 'id',        type: 'string'},
-    { name: 'title', type: 'string' },
-    {name: 'start_date', type: 'date'},
-    {name: 'end_date', type: 'date'},
-    {name: 'vacation_days', type: 'int'},
-    {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'}
+    { name: 'id',            type: 'string'},
+    { name: 'title',         type: 'string' },
+    { name: 'json',          type: 'string'},
+    { name: 'working_hours', type: 'float'}
 ];
 
 Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.WorkingTimeArray, {
@@ -193,11 +190,11 @@ Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
 Tine.HumanResources.Model.ElayerArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
+    {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
     {name: 'end_date', type: 'date'},
     {name: 'vacation_days', type: 'int'},
     {name: 'cost_centre', type: 'string'},
-    {name: 'working_hours', type: 'int'},
-    {name: 'employee_id', type: 'string'},
+    {name: 'employee_id', type: Tine.HumanResources.Model.Employee },
     {name: 'workingtime_id', type: Tine.HumanResources.Model.WorkingTime }
 ]);
 

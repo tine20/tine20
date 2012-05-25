@@ -24,6 +24,9 @@ Ext.ns('Tine.HumanResources');
  */
 
 Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
+    /*
+     * config
+     */
     frame: true,
     border: true,
     autoScroll: true,
@@ -34,56 +37,37 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     clicksToEdit: 1,
     enableColumnHide:false,
     enableColumnMove:false,
-    
+    enableHdMenu: false,
     recordClass: Tine.HumanResources.Model.Elayer,
-
+    
     /*
-     * config
+     * public
      */
     app: null,
     editDialog: null,
-    enableHdMenu: false,
     
     initComponent: function() {
-//        if (!this.app) {
-//            this.app = Tine.Tinebase.appMgr.get(this.appName);
-//        }  
-//        this.defaultSortInfo = {field: 'start_date', direction: 'DESC'};
         this.title = this.app.i18n._('Elayers');
-//        this.recordProxy = Tine.HumanResources.elayerBackend;
-//        
-//        this.cm = this.getColumnModel();
-//
-//        this.on('afteredit', this.onAfterRowEdit, this);
-//        this.on('newentry', this.onNewEntry, this);
-//        
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
     },
-//    
-//    onNewEntry: function(recordData) {
-//        recordData.employee_id = this.editDialog.record.get('id');
-//        var record = new Tine.HumanResources.Model.WorkingTime(recordData);
-//        this.store.add(record);
-//        
-//    },
-    
-//    onClose: function() {
-//        this.fireEvent('cancel');
-//        this.purgeListeners();
-//        this.window.close();
-//    },
     
     onRecordLoad: function() {
-        this.store = new Tine.Tinebase.data.RecordStore({
-            recordClass: this.recordClass,
-            remoteSort: false,
-            sortInfo: this.defaultSortInfo
-        }, this);
-        
         Ext.each(this.editDialog.record.get('elayers'), function(ar) {
             this.store.addSorted(new this.recordClass(ar));
         }, this);
         
+    },
+    
+    /**
+     * new entry event -> add new record to store
+     * @see Tine.widgets.grid.QuickaddGridPanel
+     * @param {Object} recordData
+     * @return {Boolean}
+     */
+    onNewentry: function(recordData) {
+        recordData.workingtime_id = this.workingTimePicker.selectedRecord.data;
+        recordData.employee_id = this.editDialog.record.get('id');
+        this.store.addSorted(new this.recordClass(recordData));
     },
     
     /**
@@ -93,35 +77,54 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
      * @private
      */
     getColumnModel: function() {
+        
+        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
+        
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
-//                menuDisabled: true,
                 width: 160
             }, 
             columns: [
                 {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true}), //renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'),
+                     quickaddField: this.workingTimePicker, //renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'),
                      renderer: this.renderWorkingTime, scope: this
-                }, { dataIndex: 'working_hours', id: 'working_hours', type: 'int',    header: this.app.i18n._('Working Hours'),
-                     quickaddField: new Ext.form.TextField(), width: 100
+                }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
+                     quickaddField: new Ext.form.TextField(), width: 90
+                }, { dataIndex: 'cost_centre', width:90,  id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
+                     quickaddField: new Ext.form.TextField()
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
-//								renderer : new Ext.ux.form.ClearableDateField()
-                }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
-                     quickaddField: new Ext.form.TextField(), width: 100
-                }, { dataIndex: 'cost_centre',   id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
-                     quickaddField: new Ext.form.TextField()
                 }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
                      renderer: Tine.Tinebase.common.dateRenderer
-                }
+                }/*, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',      type: 'date',   header: this.app.i18n._('Feast Calendar'),
+                     renderer: Tine.Tinebase.common.dateRenderer, 
+                     quickaddField: new Tine.widgets.container.selectionComboBox({
+                        hideLabel: true,
+                        containerName: this.app.i18n._('Calendar'),
+                        containersName: this.app.i18n._('Calendars'),
+                        appName: 'Calendar',
+                        requiredGrant: 'readGrant',
+                        hideTrigger2: true,
+//                        trigger2Class: 'cal-invitation-trigger',
+//                        onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
+                        allowBlank: true
+//                        listeners: {
+//                            scope: this,
+//                            beforequery: this.onBeforeCalComboQuery,
+//                            select: this.onCalComboSelect
+//                        }
+                    })
+                }*/
            ]
        });
     },
-    
-    renderWorkingTime: function(value,a,b,c) {
-        console.warn(a,b,c);
-        console.warn(value);
+    /**
+     * renders the working time
+     * @param {Object} value
+     * @return {String}
+     */
+    renderWorkingTime: function(value) {
         return Ext.util.Format.htmlEncode(value.title);
     }
     

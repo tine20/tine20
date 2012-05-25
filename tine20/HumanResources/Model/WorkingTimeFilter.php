@@ -16,13 +16,6 @@
 class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'HumanResources_Model_WorkingTimeFilter';
-    
-    /**
      * @var string application of this filter group
      */
     protected $_applicationName = 'HumanResources';
@@ -36,6 +29,7 @@ class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_Filte
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
     );

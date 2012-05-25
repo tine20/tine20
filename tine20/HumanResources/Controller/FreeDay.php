@@ -1,6 +1,6 @@
 <?php
 /**
- * Elayer controller for HumanResources application
+ * FreeDay controller for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
@@ -11,12 +11,12 @@
  */
 
 /**
- * Elayer controller class for HumanResources application
+ * FreeDay controller class for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
  */
-class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstract
+class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -25,47 +25,37 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
      */
     private function __construct() {
         $this->_applicationName = 'HumanResources';
-        $this->_backend = new HumanResources_Backend_Elayer();
-        $this->_modelName = 'HumanResources_Model_Elayer';
+        $this->_backend = new HumanResources_Backend_FreeDay();
+        $this->_modelName = 'HumanResources_Model_FreeDay';
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }
-
+    
     /**
      * holds the instance of the singleton
      *
-     * @var HumanResources_Controller_Elayer
+     * @var HumanResources_Controller_FreeDay
      */
     private static $_instance = NULL;
-
+    
     /**
      * the singleton pattern
      *
-     * @return HumanResources_Controller_Elayer
+     * @return HumanResources_Controller_FreeDay
      */
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_Elayer();
+            self::$_instance = new HumanResources_Controller_FreeDay();
         }
-
+        
         return self::$_instance;
     }
-
+    
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-        //         die(var_dump($_record->toArray()));
+//         die(var_dump($_record->toArray()));
     }
-
-    /**
-     * inspect creation of one record (before create)
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
-    {
-        die('asd');
-        $_record->workingtime_id = $_record->workingtime_id->id; 
-    }
+    
+    
 }

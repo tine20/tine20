@@ -44,7 +44,8 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
         'id'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'title' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'json' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-
+        'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

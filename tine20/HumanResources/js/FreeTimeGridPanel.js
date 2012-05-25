@@ -112,24 +112,9 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
 //            {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
             { id: 'employee_id', header: this.app.i18n._('Employee'), dataIndex: 'employee_id', width: 200, sortable: true, hidden: (this.editDialog) ? true : false, renderer: this.renderEmployee, scope: this},
             { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeType')},
-            { id: 'date', header: this.app.i18n._('Date Start'), dataIndex: 'date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer},
-            { id: 'date_end', header: this.app.i18n._('Date End'), width: 100, sortable: true, renderer: this.renderDateEnd},
-            { id: 'duration', header: this.app.i18n._('Duration'), dataIndex: 'duration', width: 100, sortable: true},
+            { id: 'firstday_date', header: this.app.i18n._('Date Start'), dataIndex: 'firstday_date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer, hidden: true},
             { id: 'remark', header: this.app.i18n._('Remark'), dataIndex: 'remark', width: 200, sortable: true}
             ].concat(this.getModlogColumns());
-    },
-    
-    /**
-     * date column renderer
-     * @param {Object} value
-     * @param {Object} row
-     * @param {Tine.Tinebase.data.Record} record
-     * @return {String}
-     */
-    renderDateEnd: function(value, row, record) {
-        var date = record.get('date');
-        date.setDate(date.getDate() + Math.ceil(record.get('duration')));
-        return Tine.Tinebase.common.dateRenderer(date);
     },
     
     /**
