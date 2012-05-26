@@ -74,9 +74,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveEmployee($recordData)
     {
-        foreach($recordData['elayers'] as &$elayer) {
-            $elayer['workingtime_id'] = $elayer['workingtime_id']['id'];
-        } 
         return $this->_save($recordData, HumanResources_Controller_Employee::getInstance(), 'Employee');
     }
     

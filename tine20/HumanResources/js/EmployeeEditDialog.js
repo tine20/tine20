@@ -78,7 +78,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onRecordUpdate: function() {
         var elayers = [];
         this.elayerGridPanel.store.query().each(function(elayer) {
-            console.warn(elayer.data);
+//            console.warn(elayer.data);
+//            elayer.set('workingtime_id', elayer.get('workingtime_id').id);
             elayers.push(elayer.data);
         }, this);
         this.record.set('elayers', elayers);

@@ -18,6 +18,26 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
+
+    /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_elayersToCreate = NULL;
+    
+    /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_elayersToUpdate = NULL;
+    
+    /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_elayersToDelete = NULL;
+    /**
+     * 
+     * @var HumanResources_Controller_Elayer
+     */
+    protected $elayerController = NULL;
     /**
      * the constructor
      *
@@ -27,7 +47,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Employee();
         $this->_modelName = 'HumanResources_Model_Employee';
-        $this->_purgeRecords = TRUE;
+        $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }
@@ -85,25 +105,28 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-//         $ec = HumanResources_Controller_Elayer::getInstance();
+        $this->_elayerController = HumanResources_Controller_Elayer::getInstance();
+        $this->_elayersToUpdate= $_oldRecord->elayers;
         
-//         foreach($_record->elayers as $elayer) {
-//             if((!array_key_exists($elayer, 'id')) || (! $elayer['id'])) {
-//                 $elayer['workingtime_id'] = $elayer['workingtime_id']['id'];
-//                 $elayers[] = $elayer;
-// //                 die(var_dump($elayer));
-// //                 $_record = new HumanResources_Model_Elayer($elayer);
-// //                 $ec->create($_record);
-//             }
+        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_ForeignId($array()));
+        $this->_elayersToDelete = $this->_elayerController->search(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId()));
+        
+        
+        die(var_dump($this->_elayersToDelete->toArray()));
+        
+//         foreach($this->_elayersToDelete as $elayer) {
+//             $this->_elayersToUpdate->
+        
+        foreach($_record->elayers as $elayer) {
+            if((!array_key_exists($elayer, 'id')) || (! $elayer['id'])) {
+                $this->_elayersToCreate[] = $elayer;
+            } else {
+                
+            }
             
-// //             $_record->elayers;
-// //             $elayer->workingtime_id = 
-// //             if($elayer->workingtime_i)
-// //             die(var_dump($elayer));
-//         }
-//         die(var_dump($elayers));
-//         $_record->elayers = null;
-// //         die(var_dump($_record->toArray()));
+        }
+        $_record->elayers = null;
     }
     
     /**
@@ -115,6 +138,17 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
+        if($this->_elayersToUpdate) {
+//             foreach($this->_elayersToUpdate->getIterator() as $_elayer)
+        }
+        
+        if($this->_elayersToCreate) {
+            foreach($this->_elayersToCreate as $elayerArray) {
+                $elayerArray['employee_id'] = $_record->getId();
+                $elayer = new HumanResources_Model_Elayer($elayerArray);
+                $this->_elayerController->create($_record, false);
+            }
+        }
     }
     
 }

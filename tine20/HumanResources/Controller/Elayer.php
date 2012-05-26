@@ -27,7 +27,7 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Elayer();
         $this->_modelName = 'HumanResources_Model_Elayer';
-        $this->_purgeRecords = TRUE;
+        $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }

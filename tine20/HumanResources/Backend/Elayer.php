@@ -37,5 +37,19 @@ class HumanResources_Backend_Elayer extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = false;
+    protected $_modlogActive = TRUE;
+    
+//     /**
+//      * foreign tables (key => tablename)
+//      * @var array
+//      */
+//     protected $_foreignTables = array(
+//         'elayers'    => array(
+//             'table'         => 'humanresources_workingtime',
+//             'joinOn'        => 'workingtime_id',
+//             'joinId'        => 'id',
+//             'field'         => 'id',
+//             'singleValue'   => true,
+//         )
+//     );
 }
