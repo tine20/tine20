@@ -18,26 +18,6 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
-
-    /**
-     * @var Tinebase_Record_RecordSet
-     */
-    protected $_elayersToCreate = NULL;
-    
-    /**
-     * @var Tinebase_Record_RecordSet
-     */
-    protected $_elayersToUpdate = NULL;
-    
-    /**
-     * @var Tinebase_Record_RecordSet
-     */
-    protected $_elayersToDelete = NULL;
-    /**
-     * 
-     * @var HumanResources_Controller_Elayer
-     */
-    protected $elayerController = NULL;
     /**
      * the constructor
      *
@@ -79,10 +59,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
-    {
-        die(var_dump($_record->toArray()));
-    }
+//     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+//     {
+// //         die(var_dump($_record->toArray()));
+//     }
         
     /**
      * inspect creation of one record (after create)
@@ -93,7 +73,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-
+        $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        
+        foreach($_record->elayers as $elayerArray) {
+            $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
+            $elayer = new HumanResources_Model_Elayer($elayerArray);
+            $elayer->employee_id = $_createdRecord->getId();
+            $elayers->addRecord($elayer);
+        }
+        $elayers->sort('start_date', 'ASC');
+        foreach($elayers->getIterator() as $elayer) {
+            $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
+        }
+        $_createdRecord->elayers = $createdElayers;
     }
     
     /**
@@ -105,28 +98,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $this->_elayerController = HumanResources_Controller_Elayer::getInstance();
-        $this->_elayersToUpdate= $_oldRecord->elayers;
         
-        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_ForeignId($array()));
-        $this->_elayersToDelete = $this->_elayerController->search(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId()));
-        
-        
-        die(var_dump($this->_elayersToDelete->toArray()));
-        
-//         foreach($this->_elayersToDelete as $elayer) {
-//             $this->_elayersToUpdate->
-        
-        foreach($_record->elayers as $elayer) {
-            if((!array_key_exists($elayer, 'id')) || (! $elayer['id'])) {
-                $this->_elayersToCreate[] = $elayer;
-            } else {
-                
-            }
-            
-        }
-        $_record->elayers = null;
     }
     
     /**
@@ -138,17 +110,29 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
-        if($this->_elayersToUpdate) {
-//             foreach($this->_elayersToUpdate->getIterator() as $_elayer)
-        }
+        $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        $oldElayers  = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
         
-        if($this->_elayersToCreate) {
-            foreach($this->_elayersToCreate as $elayerArray) {
-                $elayerArray['employee_id'] = $_record->getId();
+        foreach($_record->elayers as $elayerArray) {
+            $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
+            if(strlen($elayerArray['id']) != 40) {
                 $elayer = new HumanResources_Model_Elayer($elayerArray);
-                $this->_elayerController->create($_record, false);
+                $elayer->employee_id = $_updatedRecord->getId();
+                $elayers->addRecord($elayer);
+            } else {
+                $elayer = new HumanResources_Model_Elayer($elayerArray);
+                $oldElayers->addRecord($elayer);
             }
         }
+        $elayers->sort('start_date', 'ASC');
+        foreach($elayers->getIterator() as $elayer) {
+            $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
+        }
+        $createdElayers->merge($oldElayers);
+        $createdElayers->sort('start_date', 'DESC');
+        
+        $_updatedRecord->elayers = $createdElayers;
     }
     
 }

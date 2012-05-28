@@ -54,7 +54,6 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
     }
 
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-        //         die(var_dump($_record->toArray()));
     }
 
     /**
@@ -65,7 +64,14 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        die('asd');
-        $_record->workingtime_id = $_record->workingtime_id->id; 
+        $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
+        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
+        $lastRecord = $this->search($filter, $paging)->getFirstRecord();
+        if($lastRecord && empty($lastRecord->end_date)) {
+            $date = clone $_record->start_date;
+            $lastRecord->end_date = $date->subDay(1);
+            $this->update($lastRecord, false);
+        }
     }
 }

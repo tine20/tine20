@@ -33,8 +33,10 @@ class HumanResources_Model_ElayerFilter extends Tinebase_Model_Filter_FilterGrou
             'options' => array(
                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
                 'controller'        => 'HumanResources_Controller_Employee', 
-            )
+                )
             ),
+        'start_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'end_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
 //         'text' => array('filter' => 'Tinebase_Model_Filter_Text'),
 //         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
 //         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')

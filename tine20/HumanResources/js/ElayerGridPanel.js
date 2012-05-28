@@ -31,7 +31,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     border: true,
     autoScroll: true,
     layout: 'fit',
-    defaultSortInfo: null,
+    defaultSortInfo: {field: 'start_date', direction: 'DESC'},
     autoExpandColumn: 'cost_centre',
     quickaddMandatory: 'workingtime_id',
     clicksToEdit: 1,
@@ -49,6 +49,8 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     initComponent: function() {
         this.title = this.app.i18n._('Elayers');
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
+        this.store.sortInfo = this.defaultSortInfo;
+        this.store.sort();
     },
     
     onRecordLoad: function() {
@@ -96,7 +98,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
                 }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
-                     renderer: Tine.Tinebase.common.dateRenderer
+                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
                 }/*, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',      type: 'date',   header: this.app.i18n._('Feast Calendar'),
                      renderer: Tine.Tinebase.common.dateRenderer, 
                      quickaddField: new Tine.widgets.container.selectionComboBox({

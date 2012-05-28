@@ -87,6 +87,30 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        
+        this.datePicker = new Ext.DatePicker({
+            plugins: [new Ext.ux.DatePickerWeekPlugin({
+                weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
+            })]
+//                inspectMonthPickerClick: function(btn, e) {
+//                    if (e.getTarget('button')) {
+//                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
+//                        contentPanel.changeView('month', this.activeDate);
+//                        
+//                        return false;
+//                    }
+//                }
+//            listeners: {
+//                scope: this, 
+//                select: function(picker, value, weekNumber) {
+//                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
+//                    contentPanel.changeView(weekNumber ? 'week' : 'day', value);
+//                }
+//            ,handleDateClick: function() {
+                
+//            }
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -112,49 +136,50 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         autoHeight: true,
                         title: this.app.i18n._('FreeTime'),
                         items: [{
+                            xtype: 'panel',
+//                            layout: 'fit',
+                            width: 175,
+//                            height: 220,
+                            style: {
+                                position: 'absolute',
+                                width: '175px',
+                                left: '300px',
+                                'float': 'right'
+                            },
+                            items: [this.datePicker]
+                        },
+                            
+                                {
                             xtype: 'columnform',
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'textfield',
                                 anchor: '100%',
                                 labelSeparator: '',
-                                columnWidth: .333
+                                columnWidth: .5
                             },
                             items: [[
                                 new Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
                                     fieldLabel: this.app.i18n._('Employee'),
                                     name: 'employee_id',
                                     allowBlank: false
-                                }),
+                                })],[
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'HumanResources',
                                     keyFieldName: 'freetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
                                     name: 'type'
-                                }),
-                                {
-                                    name: 'date',
-                                    fieldLabel: this.app.i18n._('Date'),
-                                    xtype: 'extuxclearabledatefield'
-                                }],
-                                [
-                                {
-                                    name: 'duration',
-                                    fieldLabel: this.app.i18n._('Duration in Days'),
-                                    value: 1
-                                }
-//                                {
-//                                    name: '',
-//                                    fieldLabel: this.app.i18n._('')
-//                                },
-//                                {
-//                                    name: '',
-//                                    fieldLabel: this.app.i18n._('')
-//                                }
+                                })
                                 ]
                             ]
                         }]
-                    }
+                    }/*, {
+                        xtype: 'fieldset',
+                        padding: '10px',
+                        autoHeight: true,
+                        title: this.app.i18n._('Dates'),
+                        items: [ this.datePicker ]
+                       }*/
                     ]
                 }, {
                     // activities and tags
