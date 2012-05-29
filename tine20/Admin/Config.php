@@ -41,14 +41,14 @@ class Admin_Config extends Tinebase_Config_Abstract
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */    
+     */
     private function __construct() {}
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */    
+     */
     private function __clone() {}
     
     /**

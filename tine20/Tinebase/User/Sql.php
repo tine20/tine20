@@ -311,6 +311,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
+        $this->checkPasswordPolicy($_password);
+        
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
@@ -337,6 +339,70 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 throw new Tinebase_Exception_Backend($e->getMessage());
             }
         }
+    }
+    
+    /**
+     * ensure password policy
+     * 
+     * @param $password
+     * @throws Tinebase_Exception_PasswordPolicyViolation
+     * 
+     * @todo implement PASSWORD_POLICY_ONLYASCII
+     */
+    public function checkPasswordPolicy($password)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_ACTIVE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' No password policy enabled');
+            return;
+        }
+        
+        $failedTests = array();
+        
+        $policy = array(
+            //Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '',
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => NULL,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
+            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => '/[\w]*/',
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => '/[^0-9]*/',
+        );
+        
+        foreach ($policy as $key => $regex) {
+            $test = $this->_testPolicy($password, $key, $regex);
+            if ($test !== TRUE) {
+                $failedTests[$key] = $test;
+            }
+        }
+        
+        if (! empty($failedTests)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($failedTests, TRUE));
+            
+            $policyException = new Tinebase_Exception_PasswordPolicyViolation('Password failed to match the following policy requirements: ' 
+                . implode('|', array_keys($failedTests)));
+            throw $policyException;
+        }
+    }
+    
+    /**
+     * test password policy
+     * 
+     * @param string $password
+     * @param string $configKey
+     * @param string $regex
+     */
+    protected function _testPolicy($password, $configKey, $regex = NULL)
+    {
+        $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
+        if ($minLength > 0) {
+            $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
+            if (strlen($reduced) < $minLength) {
+                return array('expected' => $minLength, 'got' => strlen($reduced));
+            }
+        }
+        
+        return TRUE;
     }
     
     /**

@@ -154,7 +154,7 @@ abstract class Tinebase_Config_Abstract
         $config = $this->_loadConfig($_name);
         if ($config) {
             $this->_getBackend()->delete($config->getId());
-            $this->_clearCache();
+            $this->clearCache();
         }
     }
     
@@ -169,7 +169,7 @@ abstract class Tinebase_Config_Abstract
     public function deleteConfigByApplicationId($_applicationId)
     {
         $count = $this->_getBackend()->deleteByProperty($_applicationId, 'application_id');
-        $this->_clearCache();
+        $this->clearCache();
         
         return $count;
     }
@@ -316,7 +316,7 @@ abstract class Tinebase_Config_Abstract
             $result = $this->_getBackend()->create($_config);
         }
         
-        $this->_clearCache();
+        $this->clearCache();
         
         return $result;
     }
@@ -324,7 +324,7 @@ abstract class Tinebase_Config_Abstract
     /**
      * clear the cache
      */
-    protected function _clearCache()
+    public function clearCache()
     {
         if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing config cache');
         $this->_cachedApplicationConfig = NULL;

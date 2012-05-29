@@ -287,6 +287,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             return;
         }
         
+        $this->checkPasswordPolicy($_password);
+        
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
 
         $metaData = $this->_getMetaData($user);

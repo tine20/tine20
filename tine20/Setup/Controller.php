@@ -787,7 +787,8 @@ class Setup_Controller
         return array(
             'authentication'    => $this->_getAuthProviderData(),
             'accounts'          => $this->_getAccountsStorageData(),
-            'redirectSettings'  => $this->_getRedirectSettings()
+            'redirectSettings'  => $this->_getRedirectSettings(),
+            'password'          => $this->_getPasswordSettings(),
         );
     }
     
@@ -835,6 +836,10 @@ class Setup_Controller
         
         if (isset($_authenticationData['redirectSettings'])) {
             $this->_updateRedirectSettings($_authenticationData['redirectSettings']);
+        }
+        
+        if (isset($_authenticationData['password'])) {
+            $this->_updatePasswordSettings($_authenticationData['password']);
         }
         
         if (isset($_authenticationData['acceptedTermsVersion'])) {
@@ -971,6 +976,18 @@ class Setup_Controller
     }
     
     /**
+     * update pw settings
+     * 
+     * @param array $data
+     */
+    protected function _updatePasswordSettings($data)
+    {
+        foreach ($data as $config => $value) {
+            Tinebase_Config::getInstance()->set($config, $value);
+        }
+    }
+    
+    /**
      *
      * get auth provider data
      *
@@ -1018,6 +1035,34 @@ class Setup_Controller
         return $return;
     }
 
+    /**
+     * get password settings
+     * 
+     * @return array
+     * 
+     * @todo should use generic mechanism to fetch setup related configs
+     */
+    protected function _getPasswordSettings()
+    {
+        $configs = array(
+            Tinebase_Config::PASSWORD_CHANGE,
+            Tinebase_Config::PASSWORD_POLICY_ACTIVE,
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS,
+            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS,
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS,
+        );
+
+        $result = array();
+        foreach ($configs as $config) {
+            $result[$config] = Tinebase_Config::getInstance()->get($config, 0);
+        }
+        
+        return $result;
+    }
+    
     /**
      * get email config
      *

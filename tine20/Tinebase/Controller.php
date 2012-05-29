@@ -293,10 +293,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     public function changePassword($_oldPassword, $_newPassword)
     {
-        //error_log(print_r(Tinebase_Core::getUser()->toArray(), true));
-        
-        // check config setting 
-        if (!Tinebase_User::getBackendConfiguration('changepw', true)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');
         }
         

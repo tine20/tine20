@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -159,6 +159,62 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const APPDEFAULTS = 'appdefaults';
+    
+    /**
+    * PASSWORD_CHANGE
+    *
+    * @var string
+    */
+    const PASSWORD_CHANGE = 'changepw';
+    
+    /**
+     * PASSWORD_POLICY_ACTIVE
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_ACTIVE = 'pwPolicyActive';
+    
+    /**
+     * PASSWORD_POLICY_ONLYASCII
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_ONLYASCII = 'pwPolicyOnlyASCII';
+    
+    /**
+     * PASSWORD_POLICY_MIN_LENGTH
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_MIN_LENGTH = 'pwPolicyMinLength';
+    
+    /**
+     * PASSWORD_POLICY_MIN_WORD_CHARS
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_MIN_WORD_CHARS = 'pwPolicyMinWordChars';
+    
+    /**
+     * PASSWORD_POLICY_MIN_UPPERCASE_CHARS
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_MIN_UPPERCASE_CHARS = 'pwPolicyMinUppercaseChars';
+    
+    /**
+     * PASSWORD_POLICY_MIN_SPECIAL_CHARS
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_MIN_SPECIAL_CHARS = 'pwPolicyMinSpecialChars';
+    
+    /**
+     * PASSWORD_POLICY_MIN_NUMBERS
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_MIN_NUMBERS = 'pwPolicyMinNumbers';
     
     /**
      * (non-PHPdoc)
@@ -336,6 +392,86 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Directory with web server write access for user files.')
             'description'           => 'Directory with web server write access for user files.',
             'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_CHANGE => array(
+        //_('User may change password')
+            'label'                 => 'User may change password',
+        //_('User may change password')
+            'description'           => 'User may change password',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_ACTIVE => array(
+        //_('Enable password policy')
+            'label'                 => 'Enable password policy',
+        //_('Enable password policy')
+            'description'           => 'Enable password policy',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_ONLYASCII => array(
+        //_('Only ASCII')
+            'label'                 => 'Only ASCII',
+        //_('Only ASCII characters are allowed in passwords.')
+            'description'           => 'Only ASCII characters are allowed in passwords.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_LENGTH => array(
+        //_('Minimum length')
+            'label'                 => 'Minimum length',
+        //_('Minimum password length')
+            'description'           => 'Minimum password length.',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_WORD_CHARS => array(
+        //_('Minimum word chars')
+            'label'                 => 'Minimum word chars',
+        //_('Minimum word chars in password')
+            'description'           => 'Minimum word chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => array(
+        //_('Minimum uppercase chars')
+            'label'                 => 'Minimum uppercase chars',
+        //_('Minimum uppercase chars in password')
+            'description'           => 'Minimum uppercase chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_SPECIAL_CHARS => array(
+        //_('Minimum special chars')
+            'label'                 => 'Minimum special chars',
+        //_('Minimum special chars in password')
+            'description'           => 'Minimum special chars in password',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_MIN_NUMBERS => array(
+        //_('Minimum numbers')
+            'label'                 => 'Minimum numbers',
+        //_('Minimum numbers in password')
+            'description'           => 'Minimum numbers in password',
+            'type'                  => 'int',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
