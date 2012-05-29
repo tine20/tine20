@@ -77,7 +77,7 @@ class Setup_Server_Json extends Tinebase_Server_Json
             $response = $server->handle($request);
             
         } catch (Exception $exception) {
-            $response = $this->_handleException($server, $request, $exception);
+            $response = $this->_handleException($request, $exception);
         }
         
         echo $response;
