@@ -98,7 +98,7 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
         this.selection = [];
         
         this.form.items.each(function(item) {
-            if (item instanceof Ext.form.TextField && ! item.disabled && ! Ext.isFunction(item.expand)) {
+            if (item instanceof Ext.form.TextField && ! item.disabled && ! item.forceSelection) {
                 if (item.rendered) {
                     this.tokenizeField(item);
                 } else {
