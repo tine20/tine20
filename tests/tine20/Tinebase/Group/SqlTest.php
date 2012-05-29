@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Group_SqlTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -139,17 +135,14 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to delete a group
-     *
      */
     public function testDeleteGroups()
     {
         $this->_backend->deleteGroups($this->objects['initialGroup']);
 
-        $this->setExpectedException('Exception');
-
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         $group = $this->_backend->getGroupById($this->objects['initialGroup']);
     }
-    
     
     public function testSetGroupMembershipsWithRecordset()
     {
@@ -216,9 +209,4 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         
         
     }
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Group_SqlTest::main') {
-    Tinebase_Group_SqlTest::main();
 }
