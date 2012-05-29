@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test for addSingleRight
  */
@@ -15,10 +15,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Acl_RolesTest::main');
-}
 
 /**
  * Test class for Tinebase_Acl_Roles
@@ -278,15 +274,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role_2']->getId(), array());
         
         Tinebase_Acl_Roles::getInstance()->deleteRoles(array($this->objects['role']->getId(), $this->objects['role_2']->getId()));
-                      
-        $this->setExpectedException('Exception');
-        
+      
+        $this->setExpectedException('Tinebase_Exception_NotFound');
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
-    }    
-    
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Acl_RolesTest::main') {
-    Tinebase_Acl_RolesTest::main();
+    }
 }

@@ -58,14 +58,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorException()
     {
-        $this->setExpectedException('Exception');
-        try {
-            $this->objects['TestRecordBroken'] = new Tinebase_Record_DummyRecordBroken();
-        }
-        catch (Tinebase_Exception_UnexpectedValue $expected) {
-            return;
-        }
-        $this->fail('An expected exception has not been raised.');
+        $this->setExpectedException('Tinebase_Exception_Record_DefinitionFailure');
+        $this->objects['TestRecordBroken'] = new Tinebase_Record_DummyRecordBroken();
     }
     
     /**
@@ -177,10 +171,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
                     return;
                 }
                   $this->fail('An expected exception has not been raised.');
-             }    
-         } /*else {
-            $this->markTestIncomplete('This test has not been implemented yet.');
-        }   */
+             }
+         }
     }
  
     /**
@@ -192,28 +184,6 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
     {
     }
     
-    /**
-     * testSetTimezoneException
-     */
-    public function testSetTimezoneException()
-    {
-        if(isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {
-            foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
-                
-                $this->setExpectedException($pair[0]);
-                try {
-                    $this->objects['TestRecord']->setTimezone($pair[1]);
-                }
-                catch (Tinebase_Exception_UnexpectedValue $expected) {
-                    return;
-                }
-                $this->fail('An expected exception has not been raised.');
-            }
-        } else {
-            $this->markTestIncomplete('This test has not been implemented yet.');
-        }   
-    }
-
     /**
      * test set timezone
      *

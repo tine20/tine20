@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -14,12 +14,8 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_ControllerTest::main');
-}
-
 /**
- * Test class for Tinebase_Group
+ * Test class for Addressbook_Controller
  */
 class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -310,7 +306,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact->jpegphoto = '';
         $contact = $this->_instance->update($contact);
         
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Addressbook_Exception_NotFound');
         $image = Addressbook_Controller::getInstance()->getImage($contact->id);
     }
     
