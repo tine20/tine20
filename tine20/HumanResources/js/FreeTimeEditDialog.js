@@ -102,6 +102,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        this.freeDayGridPanel = new Tine.HumanResources.FreeDayGridPanel({app:this.app, editDialog: this, recordClass: this.recordClass});
         return {
             xtype: 'tabpanel',
             border: false,
@@ -175,13 +176,20 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             },
                             items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                         }]
-                    }/*, {
+                    },
+                    
+                    
+                    {
                         xtype: 'fieldset',
-                        padding: '10px',
-                        autoHeight: true,
-                        title: this.app.i18n._('Dates'),
-                        items: [ this.datePicker ]
-                       }*/
+//                        autoHeight: true,
+                        title: this.app.i18n._('FreeTime'),
+                        items: [this.freeDayGridPanel]
+                    }
+                    
+                    
+                    
+                    
+                    
                     ]
                 }, {
                     // activities and tags

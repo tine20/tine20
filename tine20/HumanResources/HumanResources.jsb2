@@ -32,6 +32,10 @@
           "path": "js/"
         },
         {
+          "text": "FreeDayGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "FreeTimeEditDialog.js",
           "path": "js/"
         },
