@@ -282,7 +282,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
             'pwPolicyMinWordChars',
         );
         foreach ($configs as $config) {
-            $this->assertEquals(1, $testAuthenticationData['password'][$config], 'pw setting ' . $config . ' not found: ' . print_r($testAuthenticationData['password'], TRUE));
+            $this->assertTrue($testAuthenticationData['password'][$config], 'pw setting ' . $config . ' not found: ' . print_r($testAuthenticationData['password'], TRUE));
         }
     }
     
