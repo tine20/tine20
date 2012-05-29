@@ -365,6 +365,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             validator: this.validateFilter.createDelegate(this),
             tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>'
         });
+        filter.formFields.field.setValue = filter.formFields.field.setValue.createInterceptor(function() {
+            // NOTE: as this.fieldStore is a shared store we need to clear the filter before we use it,
+            //       otherwise the record (e.g. query) might not be in the store
+            this.fieldStore.clearFilter();
+        }, this);
+        
         filter.formFields.field.on('select', function(combo, newRecord, newKey) {
             if (combo.value != combo.filter.get('field')) {
                 this.onFieldChange(combo.filter, combo.value);
