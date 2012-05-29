@@ -19,7 +19,15 @@ error_reporting( E_ALL | E_STRICT );
 /*
  * Set white / black lists
  */
-PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
+$phpUnitVersion = explode(' ',PHPUnit_Runner_Version::getVersionString());
+if (version_compare($phpUnitVersion[1], "3.6.0") >= 0) {
+    $filter = new PHP_CodeCoverage_Filter();
+    $filter->addDirectoryToBlacklist(dirname(__FILE__));
+} else if (version_compare($phpUnitVersion[1], "3.5.0") >= 0) {
+    PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(dirname(__FILE__));
+} else {
+    PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
+}
 
 /*
  * Set include path

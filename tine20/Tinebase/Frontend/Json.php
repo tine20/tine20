@@ -590,7 +590,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'userApplications'  => $user->getApplications()->toArray(),
                 'NoteTypes'         => $this->getNoteTypes(),
                 'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
-                'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
+                'changepw'          => Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE),
                 'mustchangepw'      => $user->mustChangePassword(),
                 'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),

@@ -48,6 +48,8 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         $this->_originalBackendConfiguration = Tinebase_User::getBackendConfiguration();
         $this->_originalBackendType = Tinebase_User::getConfiguredBackend();
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
@@ -58,12 +60,19 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_Config::getInstance()->clearCache();
+        
+        // needs to be reverted because we use Tinebase_User as a singleton
         Tinebase_User::setBackendType($this->_originalBackendType);
         Tinebase_User::deleteBackendConfiguration();
         Tinebase_User::setBackendConfiguration($this->_originalBackendConfiguration);
         Tinebase_User::saveBackendConfiguration();
     }
 
+    /**
+     * testSaveBackendConfiguration
+     */
     public function testSaveBackendConfiguration()
     {
         Tinebase_User::setBackendType(Tinebase_User::LDAP);
@@ -77,6 +86,9 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($rawConfigBefore, $rawConfigAfter);
     }
     
+    /**
+     * testSetBackendConfiguration
+     */
     public function testSetBackendConfiguration()
     {
         Tinebase_User::setBackendType(Tinebase_User::LDAP);
@@ -118,6 +130,9 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count(Tinebase_User::getBackendConfiguration()) == 0, 'should be empty: ' . print_r(Tinebase_User::getBackendConfiguration(), TRUE));
     }
     
+    /**
+     * get backend cfg defaults
+     */
     public function testGetBackendConfigurationDefaults()
     {
         $defaults = Tinebase_User::getBackendConfigurationDefaults();
@@ -129,5 +144,37 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $defaults = Tinebase_User::getBackendConfigurationDefaults(Tinebase_User::LDAP);
         $this->assertTrue(array_key_exists('host', $defaults));
         $this->assertFalse(array_key_exists(Tinebase_User::LDAP, $defaults));
+    }
+    
+    /**
+     * testPasswordPolicy
+     * 
+     * @see 0003008: add password policies
+     */
+    public function testPasswordPolicy()
+    {
+        // activate pw policies
+        $policy = array(
+            Tinebase_Config::PASSWORD_POLICY_ACTIVE                 => TRUE,
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => TRUE,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => 20,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => 4,
+            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => 3,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => 2,
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => 3,
+        );
+        foreach ($policy as $key => $value) {
+            Tinebase_Config::getInstance()->set($key, $value);
+        }
+        
+        $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
+        
+        try {
+            Tinebase_User::getInstance()->setPassword($sclever, 'nOve!ry1leverPw2');
+            $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation');
+        } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
+            $this->assertContains('Password failed to match the following policy requirements: '.
+                'pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers', $tppv->getMessage());
+        }
     }
 }
