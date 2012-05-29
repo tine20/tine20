@@ -53,6 +53,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     initComponent: function() {
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
+        this.initDatePicker();
+        
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -78,6 +80,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
     },
     
+    initDatePicker: function() {
+        this.datePicker = new Tine.HumanResources.DatePicker({app: this.app, record: this.record});
+    },
+    
     /**
      * returns dialog
      * 
@@ -88,10 +94,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     getFormItems: function() {
         
-        this.datePicker = new Ext.DatePicker({
-            plugins: [new Ext.ux.DatePickerWeekPlugin({
-                weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
-            })]
+        
 //                inspectMonthPickerClick: function(btn, e) {
 //                    if (e.getTarget('button')) {
 //                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
@@ -109,7 +112,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 //            ,handleDateClick: function() {
                 
 //            }
-        });
+        
         
         return {
             xtype: 'tabpanel',

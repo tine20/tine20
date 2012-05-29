@@ -28,6 +28,10 @@
           "path": "js/"
         },
         {
+          "text": "DatePicker.js",
+          "path": "js/"
+        },
+        {
           "text": "FreeTimeEditDialog.js",
           "path": "js/"
         },
