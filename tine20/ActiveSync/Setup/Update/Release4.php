@@ -15,6 +15,7 @@ class ActiveSync_Setup_Update_Release4 extends Setup_Update_Abstract
 {
     /**
      * update to 5.0
+     * 
      * @return void
      */
     public function update_0()

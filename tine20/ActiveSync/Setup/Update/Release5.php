@@ -432,4 +432,14 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '5.8');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_8()
+    {
+        $this->setApplicationVersion('ActiveSync', '6.0');
+    }
 }

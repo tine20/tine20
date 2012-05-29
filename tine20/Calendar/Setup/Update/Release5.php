@@ -185,4 +185,14 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '5.5');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_5()
+    {
+        $this->setApplicationVersion('Calendar', '6.0');
+    }
 }

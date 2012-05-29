@@ -410,4 +410,14 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->_backend->createTable($declaration, 'Tinebase', 'container_content');
         $this->setApplicationVersion('Tinebase', '5.10');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_10()
+    {
+        $this->setApplicationVersion('Tinebase', '6.0');
+    }
 }

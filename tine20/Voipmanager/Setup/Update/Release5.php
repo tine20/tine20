@@ -277,4 +277,14 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('asterisk_redirects', 3);
         $this->setApplicationVersion('Voipmanager', '5.3');
     }
+
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Voipmanager', '6.0');
+    }
 }

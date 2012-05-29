@@ -29,4 +29,14 @@ class Phone_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('phone_callhistory', 2);
         $this->setApplicationVersion('Phone', '5.1');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Phone', '6.0');
+    }
 }

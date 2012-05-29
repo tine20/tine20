@@ -120,6 +120,7 @@ class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Timetracker', '5.3');
     }
+    
     /**
     * rename timesheet favorites and update to 5.4
     *
@@ -136,5 +137,15 @@ class Timetracker_Setup_Update_Release5 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Timetracker', '5.4');
+    }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_4()
+    {
+        $this->setApplicationVersion('Timetracker', '6.0');
     }
 }

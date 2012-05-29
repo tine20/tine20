@@ -40,4 +40,14 @@ class Crm_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '5.1');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Crm', '6.0');
+    }
 }

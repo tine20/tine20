@@ -199,4 +199,14 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tasks', '5.4');
     }
+    
+    /**
+    * update to 6.0
+    *
+    * @return void
+    */
+    public function update_4()
+    {
+        $this->setApplicationVersion('Tasks', '6.0');
+    }
 }
