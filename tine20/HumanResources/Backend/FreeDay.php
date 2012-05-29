@@ -23,7 +23,7 @@ class HumanResources_Backend_FreeDay extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_tableName = 'humanresources_freetime';
+    protected $_tableName = 'humanresources_freeday';
     
     /**
      * Model name
@@ -37,5 +37,5 @@ class HumanResources_Backend_FreeDay extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = true;
+    protected $_modlogActive = false;
 }

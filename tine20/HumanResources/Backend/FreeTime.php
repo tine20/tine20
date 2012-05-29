@@ -38,4 +38,16 @@ class HumanResources_Backend_FreeTime extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = true;
+    
+//     protected $_foreignTables = array(
+//         'count_days'    => array(
+//                 'table'         => 'humanresources_freeday',
+//                 'joinOn'        => 'id',
+//                 'joinId'        => 'freeday_id',
+//                 'select'        => array('is_billable_combined'    => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)'),
+//                 'singleValue'   => TRUE,
+//                 // needs to be preserved in select
+//                 'preserve'      => TRUE,
+//             ),
+//         );
 }

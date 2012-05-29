@@ -43,9 +43,8 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'freetime_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-
-        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'date'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

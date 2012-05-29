@@ -54,6 +54,8 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
+        'freedays'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

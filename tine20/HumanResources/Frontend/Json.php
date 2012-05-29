@@ -199,6 +199,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
             case 'HumanResources_Model_FreeTime':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
+                $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
+                $filter->addFilter(new Tinebase_Model_Filter_Text('freetime_id', 'equals', $_record['id']));
+                $recs = HumanResources_Controller_FreeDay::getInstance()->search($filter);
+                $recs->sort('date', 'ASC');
+                $_record['freedays'] = $this->_multipleRecordsToJson($recs);
                 break;
             case 'HumanResources_Model_Elayer':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;

@@ -17,9 +17,6 @@ Ext.ns('Tine.HumanResources');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * 
- * @param       {Object} config
- * @constructor
  * Create a new Tine.HumanResources.FreeTimeEditDialog
  */
 Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -35,6 +32,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     evalGrants: false,
     showContainerSelector: false,
     
+    dayLengths: null,
     /**
      * show private Information (autoset due to rights)
      * @type 
@@ -52,6 +50,12 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * inits the component
      */
     initComponent: function() {
+        this.dayLengths = [
+            [0.25, 0.25],
+            [0.5, 0.5],
+            [0.75, 0.75],
+            [1, 1]
+            ];
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.initDatePicker();
         
@@ -69,6 +73,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.onRecordLoad.defer(250, this);
             return;
         }
+
+        this.datePicker.onRecordLoad(this.record);
+        this.firstDayLengthPicker.setValue(this.datePicker.store.getFirstDay().get('duration'));
+        this.lastDayLengthPicker.setValue(this.datePicker.store.getLastDay().get('duration'));
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
     },
 //    
@@ -78,10 +86,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onRecordUpdate: function() {
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
+        this.record.set('freedays', this.datePicker.getData());
     },
     
     initDatePicker: function() {
-        this.datePicker = new Tine.HumanResources.DatePicker({app: this.app, record: this.record});
+        this.datePicker = new Tine.HumanResources.DatePicker({initDate: this.record.get('firstday_date'), app: this.app, record: this.record, recordClass: this.recordClass, editDialog: this, dateProperty: 'date', recordsProperty: 'freedays', foreignIdProperty: 'freeday_id'});
     },
     
     /**
@@ -93,27 +102,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        
-        
-//                inspectMonthPickerClick: function(btn, e) {
-//                    if (e.getTarget('button')) {
-//                        var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
-//                        contentPanel.changeView('month', this.activeDate);
-//                        
-//                        return false;
-//                    }
-//                }
-//            listeners: {
-//                scope: this, 
-//                select: function(picker, value, weekNumber) {
-//                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
-//                    contentPanel.changeView(weekNumber ? 'week' : 'day', value);
-//                }
-//            ,handleDateClick: function() {
-                
-//            }
-        
-        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -135,46 +123,57 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     border: false,
                     items: [{
                         xtype: 'fieldset',
-                        layout: 'hfit',
                         autoHeight: true,
                         title: this.app.i18n._('FreeTime'),
                         items: [{
-                            xtype: 'panel',
-//                            layout: 'fit',
-                            width: 175,
-//                            height: 220,
-                            style: {
-                                position: 'absolute',
-                                width: '175px',
-                                left: '300px',
-                                'float': 'right'
-                            },
-                            items: [this.datePicker]
-                        },
-                            
-                                {
                             xtype: 'columnform',
+                            style: { float: 'left', width: '50%', 'min-width': '250px' },
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'textfield',
                                 anchor: '100%',
                                 labelSeparator: '',
-                                columnWidth: .5
+                                allowBlank: false,
+                                columnWidth: 1
                             },
                             items: [[
                                 new Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
                                     fieldLabel: this.app.i18n._('Employee'),
-                                    name: 'employee_id',
-                                    allowBlank: false
+                                    name: 'employee_id'
                                 })],[
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'HumanResources',
                                     keyFieldName: 'freetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
+                                    value: 'VACATION',
                                     name: 'type'
-                                })
+                                })],[
+                                {
+                                    fieldLabel: this.app.i18n._('First Day Length'),
+                                    xtype: 'combo',
+                                    store: this.dayLengths,
+                                    value: 1,
+                                    columnWidth: .5,
+                                    ref: '../../../../../../../firstDayLengthPicker'
+                                },{
+                                    fieldLabel: this.app.i18n._('Last Day Length'),
+                                    xtype: 'combo',
+                                    store: this.dayLengths,
+                                    value: 1,
+                                    columnWidth: .5,
+                                    ref: '../../../../../../../lastDayLengthPicker'
+                                }]
                                 ]
-                            ]
+                        }, {
+                            xtype: 'panel',
+                            cls: 'HumanResources x-form-item',
+                            width: 220,
+                            style: {
+//                                padding: '18px',
+                                float: 'right',
+                                margin: '0 5px 10px 0'
+                            },
+                            items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                         }]
                     }/*, {
                         xtype: 'fieldset',

@@ -125,6 +125,6 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @return {String}
      */
     renderEmployee: function(value, row, record) {
-        return record.get('account_id') ? record.get('account_id').n_fn : '';
+        return record.get('employee_id') ? record.get('employee_id').n_fn : '';
     }
 });

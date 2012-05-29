@@ -269,9 +269,9 @@ Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'id',          type: 'string'},
     {name: 'employee_id', type: Tine.HumanResources.Model.Employee},
     {name: 'type', type: 'string'},
-    {name: 'date', type: 'date'},
-    {name: 'duration', type: 'float'},
-    {name: 'remark', type: 'string'}
+    {name: 'firstday_date', type: 'date'},
+    {name: 'remark', type: 'string' },
+    {name: 'freedays' }
 ]);
 
 Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.FreeTimeArray, {
@@ -341,5 +341,76 @@ Tine.HumanResources.freetimeBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'FreeTime',
     recordClass: Tine.HumanResources.Model.FreeTime
 });
+
+
+// FREEDAY
+
+
+/*
+ * Vacation
+ */
+Tine.HumanResources.Model.FreeDayArray = [
+    {name: 'id',          type: 'string'},
+    {name: 'freetime_id', type: Tine.HumanResources.Model.Employee},
+    {name: 'type', type: 'string'},
+    {name: 'date', type: 'date'},
+    {name: 'duration', type: 'float'}
+];
+
+Tine.HumanResources.Model.FreeDay = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.FreeDayArray, {
+    appName: 'HumanResources',
+    modelName: 'FreeDay',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('FreeDay Day', 'FreeDay Days', n);
+    recordName: 'FreeDay Day',
+    recordsName: 'FreeDay Days',
+//    containerProperty: 'container_id',
+    // ngettext('FreeDay days', 'All vacations days', n);
+    containerName: 'FreeDay days',
+    containersName: 'All vacations days',
+    getTitle: function() {
+        return this.get('name') ? this.get('name') : false;
+    }
+});
+
+/**
+ * @namespace Tine.HumanResources.Model
+ * 
+ * get default data for a new FreeDay
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.HumanResources.Model.FreeDay.getDefaultData = function() {
+    return {
+        workingtime_id: null,
+        duration: null
+    };
+};
+
+///**
+// * @namespace Tine.HumanResources.Model
+// * 
+// * get FreeDay filter
+// *  
+// * @return {Array} filter objects
+// * @static
+// */ 
+//Tine.HumanResources.Model.FreeDay.getFilterModel = function() {
+//    var app = Tine.Tinebase.appMgr.get('HumanResources');
+//    
+//    return [
+//        { label: _('Quick search'), field: 'query', operators: ['contains']},
+//        {
+//            label: app.i18n._('Type'),
+//            field: 'type',
+//            filtertype: 'tine.widget.keyfield.filter', 
+//            app: app, 
+//            keyfieldName: 'freetimeType'
+//        },
+//        { filtertype: 'humanresources.freetimeemployee' } 
+//    ];
+//};
 
 

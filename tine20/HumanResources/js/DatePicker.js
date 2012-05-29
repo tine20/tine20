@@ -1,163 +1,141 @@
-
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
 Ext.ns('Tine.HumanResources');
 
+/**
+ * @namespace   Tine.HumanResources
+ * @class       Tine.HumanResources.FreeTimeEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>DatePicker with multiple days</p>
+ * <p></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * Create a new Tine.HumanResources.DatePicker
+ */
 Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
+    
+    recordClass: null,
+    app: null,
+    record: null,
+    dateProperty: 'date',
+    recordsProperty: 'freedays',
+    foreignIdProperty: 'freetime_id',
+    useWeekPickerPlugin: false,
+    initDate: null,
+    /**
+     * initializes the component
+     */
     initComponent: function() {
-        this.plugins = [new Ext.ux.DatePickerWeekPlugin({
+        if(this.useWeekPickerPlugin) {
+            this.plugins = this.plugins ? this.plugins : [];
+            this.plugins.push(new Ext.ux.DatePickerWeekPlugin({
                 weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
-            })];
-        
+            }));
+        }
         this.initStore();
-            
+        this.on('show', this.onAfterRender, this);
         Tine.HumanResources.DatePicker.superclass.initComponent.call(this);
     },
-    
-    initStore: function() {
-        this.store = new Tine.Tinebase.
-    }
 
-//    update : function(date, forceRefresh){
-//        if(this.rendered){
-//            var vd = this.activeDate, vis = this.isVisible();
-//            this.activeDate = date;
-//            if(!forceRefresh && vd && this.el){
-//                var t = date.getTime();
-//                if(vd.getMonth() == date.getMonth() && vd.getFullYear() == date.getFullYear()){
-//                    this.cells.removeClass('x-date-selected');
-//                    this.cells.each(function(c){
-//                       if(c.dom.firstChild.dateValue == t){
-//                           c.addClass('x-date-selected');
-//                           if(vis && !this.cancelFocus){
-//                               Ext.fly(c.dom.firstChild).focus(50);
-//                           }
-//                           return false;
-//                       }
-//                    }, this);
-//                    return;
-//                }
-//            }
-//            var days = date.getDaysInMonth(),
-//                firstOfMonth = date.getFirstDateOfMonth(),
-//                startingPos = firstOfMonth.getDay()-this.startDay;
-//    
-//            if(startingPos < 0){
-//                startingPos += 7;
-//            }
-//            days += startingPos;
-//    
-//            var pm = date.add('mo', -1),
-//                prevStart = pm.getDaysInMonth()-startingPos,
-//                cells = this.cells.elements,
-//                textEls = this.textNodes,
-//                // convert everything to numbers so it's fast
-//                day = 86400000,
-//                d = (new Date(pm.getFullYear(), pm.getMonth(), prevStart)).clearTime(),
-//                today = new Date().clearTime().getTime(),
-//                sel = date.clearTime(true).getTime(),
-//                min = this.minDate ? this.minDate.clearTime(true) : Number.NEGATIVE_INFINITY,
-//                max = this.maxDate ? this.maxDate.clearTime(true) : Number.POSITIVE_INFINITY,
-//                ddMatch = this.disabledDatesRE,
-//                ddText = this.disabledDatesText,
-//                ddays = this.disabledDays ? this.disabledDays.join('') : false,
-//                ddaysText = this.disabledDaysText,
-//                format = this.format;
-//    
-//            if(this.showToday){
-//                var td = new Date().clearTime(),
-//                    disable = (td < min || td > max ||
-//                    (ddMatch && format && ddMatch.test(td.dateFormat(format))) ||
-//                    (ddays && ddays.indexOf(td.getDay()) != -1));
-//    
-//                if(!this.disabled){
-//                    this.todayBtn.setDisabled(disable);
-//                    this.todayKeyListener[disable ? 'disable' : 'enable']();
-//                }
-//            }
-//    
-//            var setCellClass = function(cal, cell){
-//                cell.title = '';
-//                var t = d.getTime();
-//                cell.firstChild.dateValue = t;
-//                if(t == today){
-//                    cell.className += ' x-date-today';
-//                    cell.title = cal.todayText;
-//                }
-//                if(t == sel){
-//                    cell.className += ' x-date-selected';
-//                    if(vis){
-//                        Ext.fly(cell.firstChild).focus(50);
-//                    }
-//                }
-//                // disabling
-//                if(t < min) {
-//                    cell.className = ' x-date-disabled';
-//                    cell.title = cal.minText;
-//                    return;
-//                }
-//                if(t > max) {
-//                    cell.className = ' x-date-disabled';
-//                    cell.title = cal.maxText;
-//                    return;
-//                }
-//                if(ddays){
-//                    if(ddays.indexOf(d.getDay()) != -1){
-//                        cell.title = ddaysText;
-//                        cell.className = ' x-date-disabled';
-//                    }
-//                }
-//                if(ddMatch && format){
-//                    var fvalue = d.dateFormat(format);
-//                    if(ddMatch.test(fvalue)){
-//                        cell.title = ddText.replace('%0', fvalue);
-//                        cell.className = ' x-date-disabled';
-//                    }
-//                }
-//            };
-//    
-//            var i = 0;
-//            for(; i < startingPos; i++) {
-//                textEls[i].innerHTML = (++prevStart);
-//                d.setDate(d.getDate()+1);
-//                cells[i].className = 'x-date-prevday';
-//                setCellClass(this, cells[i]);
-//            }
-//            for(; i < days; i++){
-//                var intDay = i - startingPos + 1;
-//                textEls[i].innerHTML = (intDay);
-//                d.setDate(d.getDate()+1);
-//                cells[i].className = 'x-date-active';
-//                setCellClass(this, cells[i]);
-//            }
-//            var extraDays = 0;
-//            for(; i < 42; i++) {
-//                 textEls[i].innerHTML = (++extraDays);
-//                 d.setDate(d.getDate()+1);
-//                 cells[i].className = 'x-date-nextday';
-//                 setCellClass(this, cells[i]);
-//            }
-//    
-//            this.mbtn.setText(this.monthNames[date.getMonth()] + ' ' + date.getFullYear());
-//    
-//            if(!this.internalRender){
-//                var main = this.el.dom.firstChild,
-//                    w = main.offsetWidth;
-//                this.el.setWidth(w + this.el.getBorderWidth('lr'));
-//                Ext.fly(main).setWidth(w);
-//                this.internalRender = true;
-//                // opera does not respect the auto grow header center column
-//                // then, after it gets a width opera refuses to recalculate
-//                // without a second pass
-//                if(Ext.isOpera && !this.secondPass){
-//                    main.rows[0].cells[1].style.width = (w - (main.rows[0].cells[0].offsetWidth+main.rows[0].cells[2].offsetWidth)) + 'px';
-//                    this.secondPass = true;
-//                    this.update.defer(10, this, [date]);
-//                }
-//            }
-//        }
-//    }
-    
-    update: function(date, forceRefresh) {
-        
+    initStore: function() {
+        var picker = this;
+        this.store = new Tine.Tinebase.data.RecordStore({
+            remoteSort: false,
+            recordClass: this.recordClass,
+            autoSave: false,
+            getByDate: function(date) {
+                if(!Ext.isDate(date)) {
+                    date = new Date(date);
+                }
+                var index = this.findBy(function(record) {
+                    if(record.get(picker.dateProperty).toString() == date.toString()) {
+                        return true;
+                    }
+                });
+                return this.getAt(index);
+            },
+            getFirstDay: function() {
+                this.sort({field: 'date', direction: 'ASC'});
+                return this.getAt(0);
+            },
+            
+            getLastDay: function() {
+                this.sort({field: 'date', direction: 'ASC'});
+                return this.getAt(this.getCount() - 1);
+            }
+        }, this);
+    },
+
+    update : function(date, forceRefresh) {
         Tine.HumanResources.DatePicker.superclass.update.call(this, date, forceRefresh);
+        this.updateCellClasses();
+        },
+    
+    handleDateClick: function(e, t) {
+        date = new Date(t.dateValue);
+        date.clearTime();
+        if (existing = this.store.getByDate(date)) {
+            this.store.remove(existing);
+        } else {
+            this.store.add(new this.recordClass({date: date, duration: 1}));
+        }
+        Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
+    },
+    
+    updateCellClasses: function() {
+        this.cells.each(function(c){
+           if(this.store.getByDate(c.dom.firstChild.dateValue)) {
+               c.addClass('x-date-selected');
+           } else {
+               c.removeClass('x-date-selected');
+           }
+        }, this);
+    },
+    
+    getData: function() {
+        var ret = [];
+        this.store.sort({field: 'date', direction: 'ASC'});
+        var i=0;
+        this.store.query().each(function(record) {
+            i++;
+            if(i == 1) {
+                first = false;
+                record.set('duration', this.editDialog.firstDayLengthPicker.getValue());
+            } else if (this.store.getCount() == i) {
+                record.set('duration', this.editDialog.lastDayLengthPicker.getValue());
+            } else {
+                record.set('duration', 1);
+            }
+            record.set('freetime_id', this.record.get(this.recordClass.getMeta('idProperty')));
+            ret.push(record.data);
+        }, this);
+        return ret;
+    },
+    
+    onRecordLoad: function(record) {
+        Ext.each(record.get(this.recordsProperty), function(fd) {
+            fd.date = new Date(fd.date);
+            fd.date.clearTime();
+            this.store.add(new this.recordClass(fd));
+        }, this);
+
+        // focus
+        this.setValue(this.initDate);
+        
+        // clear invalid
+        this.store.each(function(record) {
+            if(!record.get('freetime_id')) {
+                this.store.remove(record);
+            }
+        }, this);
+        
+        this.updateCellClasses();
     }
 });

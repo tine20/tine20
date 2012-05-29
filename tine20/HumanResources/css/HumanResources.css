@@ -34,3 +34,7 @@
 .x-btn-large .HumanResourcesFreeTime {
     background-image:url(../../images/oxygen/32x32/actions/book2.png) !important;
 }
+
+.HumanResources .x-date-picker {
+    border-color: #B5B8C8!important;
+}

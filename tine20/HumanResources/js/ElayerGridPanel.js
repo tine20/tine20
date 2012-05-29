@@ -85,22 +85,25 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
-                width: 160
+                width: 160,
+                editable: true
             }, 
             columns: [
                 {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
                      quickaddField: this.workingTimePicker, //renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'),
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
-                     quickaddField: new Ext.form.TextField(), width: 90
-                }, { dataIndex: 'cost_centre', width:90,  id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
-                     quickaddField: new Ext.form.TextField()
+                     quickaddField: new Ext.form.TextField(), width: 90, editor: true
+                }, { dataIndex: 'cost_centre', width:50,  id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
+                     quickaddField: new Ext.form.TextField(), editor: true
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
-                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
+                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
+                     editor: new Ext.ux.form.ClearableDateField()
                 }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
-                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer
-                }/*, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',      type: 'date',   header: this.app.i18n._('Feast Calendar'),
-                     renderer: Tine.Tinebase.common.dateRenderer, 
+                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
+                     editor: new Ext.ux.form.ClearableDateField()
+                }, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
+                     renderer: Tine.Tinebase.common.containerRenderer, scope: this,
                      quickaddField: new Tine.widgets.container.selectionComboBox({
                         hideLabel: true,
                         containerName: this.app.i18n._('Calendar'),
@@ -108,16 +111,18 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                         appName: 'Calendar',
                         requiredGrant: 'readGrant',
                         hideTrigger2: true,
-//                        trigger2Class: 'cal-invitation-trigger',
-//                        onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
-                        allowBlank: true
-//                        listeners: {
-//                            scope: this,
-//                            beforequery: this.onBeforeCalComboQuery,
-//                            select: this.onCalComboSelect
-//                        }
-                    })
-                }*/
+                        allowBlank: false
+                    }),
+                    editor: new Tine.widgets.container.selectionComboBox({
+                        hideLabel: true,
+                        containerName: this.app.i18n._('Calendar'),
+                        containersName: this.app.i18n._('Calendars'),
+                        appName: 'Calendar',
+                        requiredGrant: 'readGrant',
+                        hideTrigger2: true,
+                        allowBlank: false
+                     })
+                }
            ]
        });
     },
