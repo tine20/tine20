@@ -53,7 +53,7 @@ user     = smtpUser
 password = smtpPass
 hosts    = 127.0.0.1
 dbname   = smtp
-query    = SELECT DISTINCT 1 FROM smtp_aliases WHERE SUBSTRING_INDEX(source, '@', -1) = '%s';
+query    = SELECT DISTINCT 1 FROM smtp_destinations WHERE SUBSTRING_INDEX(source, '@', -1) = '%s';
 -- ----------------------------------------------------
 
 --
@@ -75,7 +75,7 @@ user     = smtpUser
 password = smtpPass
 hosts    = 127.0.0.1
 dbname   = smtp
-query = SELECT destination FROM smtp_aliases WHERE source='%s'
+query = SELECT destination FROM smtp_destinations WHERE source='%s'
 
 -- -----------------------------------------------------
  */
