@@ -263,26 +263,24 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     public function testSavePasswordSettings()
     {
         $testAuthenticationData = $this->_json->loadAuthenticationData();
-        
-        $testAuthenticationData['password']['changepw'] = TRUE;
-        $testAuthenticationData['password']['pwPolicyActive'] = TRUE;
-        $testAuthenticationData['password']['pwPolicyMinLength'] = 1;
-        $testAuthenticationData['password']['pwPolicyMinWordChars'] = 1;
-        
+
+        $configs = array(
+            'changepw' => TRUE,
+            'pwPolicyActive' => TRUE,
+            'pwPolicyMinLength' => 1,
+            'pwPolicyMinWordChars' => 1,
+        );
+        foreach ($configs as $config => $value) {
+            $testAuthenticationData['password'][$config] = $value;
+        }
         $result = $this->_json->saveAuthentication($testAuthenticationData);
         
         $this->assertTrue($result['success'], 'saveAuthentication unsuccessful');
         
         $testAuthenticationData = $this->_json->loadAuthenticationData();
         $this->assertTrue(isset($testAuthenticationData['password']), 'pw settings not found: ' . print_r($testAuthenticationData, TRUE));
-        $configs = array(
-            'changepw',
-            'pwPolicyActive',
-            'pwPolicyMinLength',
-            'pwPolicyMinWordChars',
-        );
-        foreach ($configs as $config) {
-            $this->assertTrue($testAuthenticationData['password'][$config], 'pw setting ' . $config . ' not found: ' . print_r($testAuthenticationData['password'], TRUE));
+        foreach ($configs as $config => $expected) {
+            $this->assertEquals($expected, $testAuthenticationData['password'][$config], 'pw setting ' . $config . ' not found: ' . print_r($testAuthenticationData['password'], TRUE));
         }
     }
     
