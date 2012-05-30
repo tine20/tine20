@@ -88,11 +88,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 id: 'container_id',
                 header: this.recordClass.getContainerName(),
                 width: 150,
-                dataIndex: 'dtstart',
-                renderer: function(value, metaData, record) {
-                    var displayContainer = record.getDisplayContainer();
-                    return Tine.Tinebase.common.containerRenderer(displayContainer);
-                }
+                renderer: Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id')
             }, {
                 id: 'class',
                 header: this.app.i18n._("Private"),

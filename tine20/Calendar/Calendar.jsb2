@@ -138,6 +138,10 @@
         {
           "text": "AddToEventPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "calendarRenderer.js",
+          "path": "js/"
         }
       ]
     },
