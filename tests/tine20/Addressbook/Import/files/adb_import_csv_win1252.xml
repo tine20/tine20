@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<name>adb_simple_csv</name>
+<model>Addressbook_Model_Contact</model>
+<plugin>Addressbook_Import_Csv</plugin>
+<type>import</type>
+<headline>1</headline>
+<dryrun>0</dryrun>
+<delimiter>;</delimiter>
+<encoding>WINDOWS-1252</encoding>
+<label>Simple CSV import</label>
+<description>simple import</description>
+<extension>csv</extension>
+<mapping>
+<field>
+<source>First Name</source>
+<destination>n_given</destination>
+</field>
+<field>
+<source>Last Name</source>
+<destination>n_family</destination>
+</field>
+<field>
+<source>E-Mail</source>
+<destination>email</destination>
+</field>
+</mapping>
+</config>

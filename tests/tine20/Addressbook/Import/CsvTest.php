@@ -202,6 +202,27 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testImportWithUmlautsWin1252
+     * 
+     * @see 0006534: import of contacts with umlaut as first char fails
+     */
+    public function testImportWithUmlautsWin1252()
+    {
+        $filename = dirname(__FILE__) . '/files/adb_import_csv_win1252.xml';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        $this->_filename = dirname(__FILE__) . '/files/importtest_win1252.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalContacts = TRUE;
+        
+        $this->assertEquals(4, $result['totalcount']);
+        $this->assertEquals('Üglü, ÖzdemirÖ', $result['results'][2]->n_fileas, 'Umlauts were not imported correctly: ' . print_r($result['results'][2]->toArray(), TRUE));
+    }
+    
+    /**
      * import helper
      * 
      * @param array $_options
