@@ -241,6 +241,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     this.onOperatorChange(combo.filter, combo.value);
                 }
             }, this);
+            
+            operator.on('blur', function(combo) {
+                if (combo.value != combo.filter.get('operator')) {
+                    this.onOperatorChange(combo.filter, combo.value);
+                }
+            }, this);
+            
         } else if (this.operators[0] == 'freeform') {
             var operator = new Ext.form.TextField({
                 filter: filter,
