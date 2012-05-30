@@ -79,7 +79,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.lastDayLengthPicker.setValue(this.datePicker.store.getLastDay().get('duration'));
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
     },
-//    
+
     /**
      * executed when record gets updated from form
      * @private
@@ -170,27 +170,12 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             cls: 'HumanResources x-form-item',
                             width: 220,
                             style: {
-//                                padding: '18px',
                                 float: 'right',
                                 margin: '0 5px 10px 0'
                             },
                             items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                         }]
-                    },
-                    
-                    
-                    {
-                        xtype: 'fieldset',
-//                        autoHeight: true,
-                        title: this.app.i18n._('FreeTime'),
-                        items: [this.freeDayGridPanel]
-                    }
-                    
-                    
-                    
-                    
-                    
-                    ]
+                    }]
                 }, {
                     // activities and tags
                     layout: 'accordion',

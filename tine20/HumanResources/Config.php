@@ -22,6 +22,12 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FREETIME_TYPE = 'freetimeType';
     
     /**
+     * Default Feast Calendar (used for tailoring datepicker)
+     * @var string
+     */
+    const DEFAULT_FEAST_CALENDAR = 'defaultFeastCalendar';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -36,6 +42,17 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => 'VACATION'
         ),
+        self::DEFAULT_FEAST_CALENDAR => array(
+                'label'         => 'Default Feast Calendar',
+                'description'   => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
+                'type'          => 'string',
+//                                     // _('automatically')
+//                                     // _('manually')
+//             'options'               => array(array('auto', 'automatically'), array('manual', 'manually')),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+//             'default'               => 'auto'
+                )
     );
     
     /**
