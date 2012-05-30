@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add tests for notes
  * @todo        add more documentation
@@ -97,7 +97,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             // $this->_options['escape']
         );
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
         if (is_array($lineData) && count($lineData) == 1) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
         }
