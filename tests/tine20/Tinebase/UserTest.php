@@ -150,6 +150,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      * testPasswordPolicy
      * 
      * @see 0003008: add password policies
+     * @see 0003978: Option to only allow US-ASCII Charsets (for passwords)
      */
     public function testPasswordPolicy()
     {
@@ -160,7 +161,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => 20,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => 4,
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => 3,
-            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => 2,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => 3,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => 3,
         );
         foreach ($policy as $key => $value) {
@@ -170,11 +171,11 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
         
         try {
-            Tinebase_User::getInstance()->setPassword($sclever, 'nOve!ry1leverPw2');
+            Tinebase_User::getInstance()->setPassword($sclever, 'nOve!ry1leverPw2ä');
             $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation');
         } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
             $this->assertContains('Password failed to match the following policy requirements: '.
-                'pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers', $tppv->getMessage());
+                'pwPolicyOnlyASCII|pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers', $tppv->getMessage());
         }
     }
 }
