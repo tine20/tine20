@@ -98,41 +98,61 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        
-    }
-    
-    /**
-     * inspect update of one record (after update)
-     *
-     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $_record          the update record
-     * @return  void
-     */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record)
-    {
         $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-        $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-        $oldElayers  = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        $ec = HumanResources_Controller_Elayer::getInstance();
         
         foreach($_record->elayers as $elayerArray) {
             $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
-            if(strlen($elayerArray['id']) != 40) {
-                $elayer = new HumanResources_Model_Elayer($elayerArray);
-                $elayer->employee_id = $_updatedRecord->getId();
-                $elayers->addRecord($elayer);
+            $elayer = new HumanResources_Model_Elayer($elayerArray);
+            if($elayer->id) {
+                $elayers->addRecord($ec->update($elayer));
             } else {
-                $elayer = new HumanResources_Model_Elayer($elayerArray);
-                $oldElayers->addRecord($elayer);
+                $elayers->addRecord($ec->create($elayer));
             }
         }
-        $elayers->sort('start_date', 'ASC');
-        foreach($elayers->getIterator() as $elayer) {
-            $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
-        }
-        $createdElayers->merge($oldElayers);
-        $createdElayers->sort('start_date', 'DESC');
-        
-        $_updatedRecord->elayers = $createdElayers;
+
+        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
+        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $elayers->id));
+        $deleteElayers = HumanResources_Controller_Elayer::getInstance()->search($filter);
+        // update first date
+        $elayers->sort('start_date', 'DESC');
+        $ec->delete($deleteElayers->id);
+        $_record->elayers = $elayers->toArray();
     }
+    
+//     /**
+//      * inspect update of one record (after update)
+//      *
+//      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+//      * @param   Tinebase_Record_Interface $_record          the update record
+//      * @return  void
+//      */
+//     protected function _inspectAfterUpdate($_updatedRecord, $_record)
+//     {
+//         $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+//         $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+//         $oldElayers  = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        
+//         foreach($_record->elayers as $elayerArray) {
+//             $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
+//             if(strlen($elayerArray['id']) != 40) {
+//                 $elayer = new HumanResources_Model_Elayer($elayerArray);
+//                 $elayer->employee_id = $_updatedRecord->getId();
+//                 $elayers->addRecord($elayer);
+//             } else {
+//                 $elayer = new HumanResources_Model_Elayer($elayerArray);
+//                 $oldElayers->addRecord($elayer);
+//             }
+//         }
+//         $elayers->sort('start_date', 'ASC');
+//         foreach($elayers->getIterator() as $elayer) {
+//             $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
+//         }
+//         $createdElayers->merge($oldElayers);
+//         $createdElayers->sort('start_date', 'DESC');
+        
+//         $_updatedRecord->elayers = $createdElayers;
+//     }
     
 }

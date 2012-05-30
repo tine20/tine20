@@ -192,10 +192,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'HumanResources_Model_Employee':
                 $_record['contact_id'] = !empty($_record['contact_id']) ? Addressbook_Controller_Contact::getInstance()->get($_record['contact_id'])->toArray() : null;
                 $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
-                $filter->addFilter(new Tinebase_Model_Filter_Id('employee_id', 'equals', $_record['id']));
-                $recs = HumanResources_Controller_Elayer::getInstance()->search($filter, $paging);
-                $this->_resolveMultipleWorkingTimes($recs);
-                $_record['elayers'] = $recs;
+                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
+                $recs = HumanResources_Controller_Elayer::getInstance()->search($filter, null);
+                $_record['elayers'] = $this->_multipleRecordsToJson($recs);
                 break;
             case 'HumanResources_Model_FreeTime':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
@@ -207,6 +206,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
             case 'HumanResources_Model_Elayer':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
+                $_record['workingtime_id'] = HumanResources_Controller_WorkingTime::getInstance()->get($_record['workingtime_id']);
+                if(!empty($_record['feast_calendar_id'])) {
+                    $_record['feast_calendar_id'] = Tinebase_Container::getInstance()->getContainerById($_record['feast_calendar_id']);
+                }
                 break;
         }
 
@@ -225,6 +228,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'HumanResources_Model_Elayer':
                 $this->_resolveMultipleEmployees($_records);
                 $this->_resolveMultipleWorkingTimes($_records);
+                $this->_resolveMultipleCalendars($_records);
                 break;
 //             case 'HumanResources_Model_WorkingTime':
 //                 $this->_resolveMultipleEmployees($_records);
@@ -234,6 +238,19 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return parent::_multipleRecordsToJson($_records);
     }
 
+    protected function _resolveMultipleCalendars(Tinebase_Record_RecordSet $_records)
+    {
+        $cIds = array_unique($_records->feast_calendar_id);
+        $cal = Tinebase_Container::getInstance()->getMultiple($cIds);
+        foreach ($_records as $record) {
+            $idx = $cal->getIndexById($record->feast_calendar_id);
+            if(isset($idx)) {
+                $record->feast_calendar_id = $wt[$idx];
+            } else {
+                $record->feast_calendar_id = NULL;
+            }
+        }
+    }
     /**
      * resolves multiple working times
      * @param Tinebase_Record_RecordSet $_records

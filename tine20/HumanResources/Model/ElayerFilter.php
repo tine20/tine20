@@ -29,7 +29,7 @@ class HumanResources_Model_ElayerFilter extends Tinebase_Model_Filter_FilterGrou
      */
     protected $_filterModel = array(
         'id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'employee_id' => array('filer' => 'Tinebase_Model_Filter_ForeignId',
+        'employee_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
                 'controller'        => 'HumanResources_Controller_Employee', 

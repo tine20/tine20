@@ -104,7 +104,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                      editor: new Ext.ux.form.ClearableDateField()
                 }, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
                      renderer: Tine.Tinebase.common.containerRenderer, scope: this,
-                     quickaddField: new Tine.widgets.container.selectionComboBox({
+                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                         hideLabel: true,
                         containerName: this.app.i18n._('Calendar'),
                         containersName: this.app.i18n._('Calendars'),
@@ -112,8 +112,8 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                         requiredGrant: 'readGrant',
                         hideTrigger2: true,
                         allowBlank: false
-                    }),
-                    editor: new Tine.widgets.container.selectionComboBox({
+                     }),
+                    editor: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                         hideLabel: true,
                         containerName: this.app.i18n._('Calendar'),
                         containersName: this.app.i18n._('Calendars'),

@@ -64,6 +64,7 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null; 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
