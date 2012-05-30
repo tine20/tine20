@@ -377,6 +377,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }, this);
         
+        filter.formFields.field.on('blur', function(combo) {
+            if (combo.value != combo.filter.get('field')) {
+                this.onFieldChange(combo.filter, combo.value);
+            }
+        }, this);
+        
         // operator
         filter.formFields.operator = filterModel.operatorRenderer(filter, fRow.child('td[class^=tw-ftb-frow-operator]'));
         
