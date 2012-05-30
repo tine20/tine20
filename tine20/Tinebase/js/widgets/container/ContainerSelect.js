@@ -88,6 +88,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     displayField: 'name',
     
     /**
+     * is set to true if subpanels (selectionDialog) are active
+     * useful in QuickAddGrid
+     * @type Boolean
+     */
+    hasFocusedSubPanels: null,
+    /**
      * @private
      */
     initComponent: function() {
@@ -135,7 +141,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.selectedContainer = this.defaultContainer;
             this.value = this.defaultContainer.name;
         }
-        
+        this.on('blur', function() {
+            if(this.hasFocusedSubPanels) {
+                return false;
+            }
+        }, this);
         this.on('beforequery', this.onBeforeQuery, this);
     },
     
@@ -279,6 +289,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
     onSelect: function(record, index) {
+        this.hasFocusedSubPanels = true;
         if (record == this.otherRecord) {
             this.onChoseOther();
         } else {
@@ -313,7 +324,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @todo // records might be in from state, but value is conainerData only
      */
     setValue: function(container) {
-        if (typeof container.get === 'function') {
+        
+        if(!container) return;
+        
+        if (container.hasOwnProperty('get') && Ext.isFunction(container.get)) {
             // container is a record -> already in store -> nothing to do
         } else if (this.store.getById(container)) {
             // store already has a record of this container
@@ -393,6 +407,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 });
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
 
+Tine.widgets.form.RecordPickerManager.register('Tinebase', 'Container', Tine.widgets.container.selectionComboBox);
 /**
  * @namespace Tine.widgets.container
  * @class Tine.widgets.container.selectionDialog
@@ -542,6 +557,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     onOk: function() {
         var  node = this.tree.getSelectionModel().getSelectedNode();
         if (node) {
+            this.TriggerField.hasFocusedSubPanels = false;
             var container = this.TriggerField.setValue(node.attributes.container);
             this.TriggerField.manageRecents(container);
             this.TriggerField.fireEvent('select', this.TriggerField, node.attributes.container);
