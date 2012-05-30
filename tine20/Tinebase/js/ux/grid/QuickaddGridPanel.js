@@ -141,7 +141,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // check if all quickadd fields are blured
         var hasFocus;
         Ext.each(this.getCols(true), function(item){
-            if(item.quickaddField && item.quickaddField.hasFocus){
+            if(item.quickaddField && (item.quickaddField.hasFocus || item.quickaddField.hasFocusedSubPanels)){
                 hasFocus = true;
             }
         }, this);
