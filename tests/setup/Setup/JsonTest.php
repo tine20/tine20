@@ -271,7 +271,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->saveAuthentication($testAuthenticationData);
         
-        $this->assertEquals(1, $result['success']);
+        $this->assertTrue($result['success'], 'saveAuthentication unsuccessful');
         
         $testAuthenticationData = $this->_json->loadAuthenticationData();
         $this->assertTrue(isset($testAuthenticationData['password']), 'pw settings not found: ' . print_r($testAuthenticationData, TRUE));
