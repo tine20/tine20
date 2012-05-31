@@ -1179,6 +1179,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('pwulf@tine20.org', $preparediMIPPart->originator);
     }
     
+    /**
+     * testFromUTF8Encoding
+     * 
+     * @see 0006538: charset problems with recipients/senders
+     */
+    public function testFromUTF8Encoding()
+    {
+        $cachedMessage = $this->messageTestHelper('UTF8inFrom.eml');
+        $this->assertEquals('Philipp Schüle', $cachedMessage->from_name, print_r($cachedMessage->toArray(), TRUE));
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**

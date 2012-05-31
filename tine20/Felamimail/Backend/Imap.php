@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -929,16 +929,68 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     protected function _fixHeader($_header, $_messageId, &$_leadingSpaces = 0)
     {
+        $header = $this->_replaceHeaderSpaces($_header, $_messageId, $_leadingSpaces);
+        $result = $this->_fixHeaderEncoding($header);
+        
+        return $result;
+    }
+    
+    /**
+     * remove leading spaces from headers
+     * 
+     * @param string $_header
+     * @param string $_messageId
+     * @param integer $_leadingSpaces
+     * @return string
+     */
+    protected function _replaceHeaderSpaces($_header, $_messageId, &$_leadingSpaces = 0)
+    {
         // check for valid header at first line (this is done again in Zend_Mime_Decode)
         $firstline = strtok($_header, "\n");
         if (preg_match('/^([\s]+)[^:]+:/', $firstline, $matches)) {
             // replace all spaces before headers
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No headers found. Removing leading spaces from headers for message ' . $_messageId . '.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' No headers found. Removing leading spaces from headers for message ' . $_messageId . '.');
             $_leadingSpaces = strlen($matches[1]);
             $result = preg_replace("/^[\s]{1," . $_leadingSpaces . "}/m", "", $_header);
         } else {
             $_leadingSpaces = 0;
             $result = $_header;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * (mime) encode some headers ('subject', 'from', 'to', ...)
+     * 
+     * @param string $_header
+     * @return string
+     * 
+     * @todo support multiple to, ... headers
+     */
+    protected function _fixHeaderEncoding($_header)
+    {
+        $result = $_header;
+
+        $encoding = (extension_loaded('mbstring')) ? mb_detect_encoding($result) : 'unknown';
+        if ($encoding !== 'ASCII' && preg_match('/[^\x20-\x7E]*/', $result)) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Non-ASCII character (encoding:' . $encoding .') detected, mime encode some headers.');
+            
+            foreach (array('subject', 'from', 'to', 'cc', 'bcc') as $field) {
+                if (preg_match('/' . $field . ': (.*?[\n][\s]*?)/i', $result, $matches)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' ' . print_r($matches, TRUE));
+                    
+                    $headerValue = str_replace("\n", '', $matches[1]);
+                    $result = str_replace($matches[0], iconv_mime_encode(ucfirst($field), $headerValue) . "\n", $result);
+                }
+            }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' ' .$result);
         }
         
         return $result;
