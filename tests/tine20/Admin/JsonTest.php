@@ -118,6 +118,18 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testGetUserCount
+     * 
+     * @see 0006544: fix paging in admin/users grid
+     */
+    public function testGetUserCount()
+    {
+        $this->testSetAccountState();
+        $accounts = $this->_json->getUsers('PHPUnit', 'accountDisplayName', 'ASC', 0, 100);
+        $this->assertEquals(count($accounts['results']), $accounts['totalcount'], print_r($accounts['results'], TRUE));
+    }
+    
+    /**
      * get account that doesn't exist (by id)
      */
     public function testGetNonExistentAccountById()

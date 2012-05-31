@@ -101,7 +101,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $users = $this->_userBackend->getUsers($_filter);
+        $users = $this->_userBackend->getUsers($_filter, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         $result = count($users);
         
         return $result;
