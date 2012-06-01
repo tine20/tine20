@@ -208,9 +208,16 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
             field: 'attender_status',
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
-            defaultValue: ['DECLINED'], 
             keyfieldName: 'attendeeStatus', 
-            defaultOperator: 'notin'
+            defaultOperator: 'notin',
+            defaultValue: ['DECLINED']
+        },
+        {
+            label: app.i18n._('Attendee Role'),
+            field: 'attender_role',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'attendeeRoles'
         },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app}

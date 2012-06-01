@@ -35,6 +35,22 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller = Calendar_Controller_Event::getInstance();
     }
     
+    public function testInvalidRruleUntil()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2012-06-01 18:00:00',
+            'dtend'         => '2012-06-01 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-05-31 17:30:00',
+            'container_id'  => $this->_testCalendar->getId(),
+        ));
+        
+        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $persistentEvent = $this->_controller->create($event);
+    }
+    
     public function testFirstInstanceExcepetion()
     {
         $from = new Tinebase_DateTime('2011-04-18 00:00:00');

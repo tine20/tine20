@@ -217,6 +217,9 @@ function createArchives()
                     
                     # cleanup qCal
                     (cd $TEMPDIR/tine20/library/qCal;  rm -rf docs tests)
+
+                    # cleanup jsb2tk
+                    (cd $TEMPDIR/tine20/library/jsb2tk;  rm -rf JSBuilder2 tests)
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES setup.php tine20.php"

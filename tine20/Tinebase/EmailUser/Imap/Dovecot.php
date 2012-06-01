@@ -507,6 +507,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
      * check if user exists already in dovecot user table
      * 
      * @param  Tinebase_Model_FullUser  $_user
+     * @throws Tinebase_Exception_Backend_Database
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
@@ -515,13 +516,18 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         $select
           ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $_user->getId());
           
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
-        // Perferom query - retrieve user from database
-        $stmt = $this->_db->query($select);
+        // Perform query - retrieve user from database
+        try {
+            $stmt = $this->_db->query($select);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $zdse);
+            throw new Tinebase_Exception_Backend_Database($zdse->getMessage());
+        }
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-                
+        
         if (!$queryResult) {
             return false;
         }

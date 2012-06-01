@@ -21,124 +21,48 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:62
-msgid "My Products"
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:82
+msgid "Title"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:63
-msgid "Products created by myself"
+#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductGridPanel.js:123
+msgid "Description"
 msgstr ""
 
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:83
-msgid "My Contracts"
-msgstr ""
-
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:84
-msgid "Contracts created by myself"
-msgstr ""
-
-#: Frontend/Json.php:43
-msgid "Responsible"
-msgstr ""
-
-#: Frontend/Json.php:44
-msgid "Customer"
-msgstr ""
-
-#: Frontend/Json.php:45
-msgid "Partner"
+#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+msgid "Enter description..."
 msgstr ""
 
 #: js/ContractGridPanel.js:76
 msgid "Contract number"
 msgstr ""
 
-#: js/ContractGridPanel.js:82 js/ContractEditDialog.js:112
-msgid "Title"
-msgstr ""
-
-#: js/ContractGridPanel.js:88 js/ContractEditDialog.js:142
+#: js/ContractGridPanel.js:88
 msgid "Status"
 msgstr ""
 
-#: js/ContractGridPanel.js:94 js/Models.js:142 js/ContractEditDialog.js:151
-msgid "Cleared"
-msgstr ""
-
-#: js/ContractGridPanel.js:100 js/Models.js:143 js/ContractEditDialog.js:164
-msgid "Cleared in"
-msgstr ""
-
-#: js/AdminPanel.js:63
-msgid "Cancel"
-msgstr ""
-
-#: js/AdminPanel.js:71
-msgid "OK"
-msgstr ""
-
-#: js/AdminPanel.js:92
-msgid "Loading..."
-msgstr ""
-
-#: js/AdminPanel.js:178
-msgid "Generate contract number"
-msgstr ""
-
-#: js/AdminPanel.js:184
-msgid "auto"
-msgstr ""
-
-#: js/AdminPanel.js:184
-msgid "manual"
-msgstr ""
-
-#: js/ProductEditDialog.js:90 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr ""
-
-#: js/ProductEditDialog.js:96 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr ""
-
-#: js/ProductEditDialog.js:103 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductEditDialog.js:107 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr ""
-
-#: js/ProductEditDialog.js:111 js/ContractEditDialog.js:170
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr ""
-
-#: js/ProductEditDialog.js:112 js/ContractEditDialog.js:171
-msgid "Enter description..."
-msgstr ""
-
-#: js/Models.js:40
+#: js/Models.js:39
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:44
+#: js/Models.js:43
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:78 js/Models.js:139
+#: js/Models.js:77 js/Models.js:139
 msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:79
+#: js/Models.js:78
 msgid "Product name"
 msgstr ""
 
-#: js/Models.js:81 js/Models.js:141
+#: js/Models.js:80 js/Models.js:141
 msgid "Creator"
 msgstr ""
 
@@ -158,46 +82,38 @@ msgstr[1] ""
 msgid "Contract name"
 msgstr ""
 
-#: js/ContractEditDialog.js:106
-msgid "Number"
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
 msgstr ""
 
-#: js/ContractEditDialog.js:118
-msgid "Contact Customer"
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
 msgstr ""
 
-#: js/ContractEditDialog.js:130
-msgid "Contact Responsible"
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
 msgstr ""
 
-#: js/ContractEditDialog.js:139
-msgid "Company"
-msgstr ""
-
-#: js/ContractEditDialog.js:149
-msgid "closed"
-msgstr ""
-
-#: js/ContractEditDialog.js:149
-msgid "open"
-msgstr ""
-
-#: js/ContractEditDialog.js:159
-msgid "not yet cleared"
-msgstr ""
-
-#: js/ContractEditDialog.js:160
-msgid "to clear"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "cleared"
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
 msgstr ""
 
 #: js/ProductGridPanel.js:119
 msgid "Tags"
 msgstr ""
 
-#: Controller.php:65 Controller.php:82
-msgid "You do not have admin rights on Sales"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr ""
+
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr ""
+
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr ""
+
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
 msgstr ""

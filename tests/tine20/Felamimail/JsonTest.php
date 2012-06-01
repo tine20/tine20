@@ -898,6 +898,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testRemoveRules
+     * 
+     * @see 0006490: can not delete single filter rule
+     */
+    public function testRemoveRules()
+    {
+        $this->testGetSetRules();
+        $this->_json->saveRules($this->_account->getId(), array());
+        
+        $result = $this->_json->getRules($this->_account->getId());
+        $this->assertEquals(0, $result['totalcount'], 'found rules: ' . print_r($result, TRUE));
+    }
+    
+    /**
      * get sieve rule data
      * 
      * @return array

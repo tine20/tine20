@@ -304,9 +304,14 @@ class Tinebase_Relations
             } else {
                 try {
                     $appController = Tinebase_Core::getApplicationInstance($modelName);
-                    $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                    if (method_exists($appController, $getMultipleMethod)) {
+                        $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                    } else {
+                        throw Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
+                    }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
-                    // remove relations, user has no permission
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                        . ' Removing relations from result. Got exception: ' . $tea);
                     $_relations->removeRecords($relations);
                     continue;
                 }

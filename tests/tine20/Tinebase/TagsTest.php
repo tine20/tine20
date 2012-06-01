@@ -28,13 +28,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     protected $_instance;
 
     /**
-    * tags that should be deleted in tearDown
-    *
-    * @var array
-    */
-    protected $_tagIdsToDelete = array();
-
-    /**
      * Runs the test methods of this class.
      */
     public static function main()
@@ -49,6 +42,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_Tags::getInstance();
     }
 
@@ -60,9 +54,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     */
     protected function tearDown()
     {
-        if (! empty($this->_tagIdsToDelete)) {
-            $this->_instance->deleteTags($this->_tagIdsToDelete);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -79,7 +71,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             'color' => '#FF0000',
         ));
         $savedPersonalTag = $this->_instance->createTag($personalTag);
-        $this->_tagIdsToDelete[] = $savedPersonalTag->getId();
         $this->assertEquals($personalTag->description, $savedPersonalTag->description);
     }
 
@@ -106,7 +97,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
                     'use_right'     => true,
         ));
         $this->_instance->setRights($right);
-        $this->_tagIdsToDelete[] = $savedSharedTag->getId();
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
 
         return $savedSharedTag;
@@ -218,7 +208,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         );
         $tag2 = $this->_instance->attachTagToMultipleRecords($filter, $tagData2);
         $tagIds[] = $tag2->getId();
-        sleep(1);
         
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
 
@@ -229,7 +218,11 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         
         // Try to remove the created Tags
         sleep(1);
-        $this->_instance->detachTagsFromMultipleRecords($filter,$tagIds);
+        try {
+            $this->_instance->detachTagsFromMultipleRecords($filter, $tagIds);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            $this->fail('failed to detach tags: ' . print_r($tagIds, TRUE) . ' / exception: ' . $zdse);
+        }
 
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);
 

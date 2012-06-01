@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add 'getTitleTranslation' function?
@@ -269,16 +269,15 @@ class Tinebase_Application
     /**
      * return if application is installed (and enabled)
      *
-     * @param  string  $applicationName  the application name
+     * @param  Tinebase_Model_Application|string  $applicationId  the application name/id/object
      * @param  booelan $checkEnabled (FALSE by default)
      * 
      * @return boolean
      */
-    public function isInstalled($applicationName, $checkEnabled = FALSE)
+    public function isInstalled($applicationId, $checkEnabled = FALSE)
     {
         try {
-            $app = $this->getApplicationByName($applicationName);
-            
+            $app = $this->getApplicationById($applicationId);
             return ($checkEnabled) ? ($app->status === self::ENABLED) : TRUE;
         } catch (Tinebase_Exception_NotFound $tenf) {
             return FALSE;

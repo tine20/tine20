@@ -65,7 +65,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         
         $this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
         $this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
-        $this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
+        $this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Tinebase_Exception_Record_NotAllowed', 'UTC', );
         
         $dummy = array(
                     'id'=>2, 

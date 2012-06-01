@@ -205,7 +205,7 @@ Tine.Admin.Tags.Main = {
                 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 25,
+            pageSize: 50,
             store: dataStore,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying tags {0} - {1} of {2}'),

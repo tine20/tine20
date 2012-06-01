@@ -1,10 +1,11 @@
 # 
 # Translators:
+#   <mail@corneliusweiss.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 14:07+0000\n"
+"PO-Revision-Date: 2012-05-21 11:54+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -45,19 +46,29 @@ msgstr "Persönliche Dateien von %s"
 msgid "Filemanager"
 msgstr "Dateimanager"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:56
+msgid "Service Unavailable"
+msgstr "Dienst nicht verfügbar"
+
+#: js/Filemanager.js:57
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
+
+#: js/Filemanager.js:79
 msgid "Files already exists"
 msgstr "Datei(en) schon vorhanden"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:79
 msgid "Do you want to replace the following file(s)?"
 msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
 
-#: js/Filemanager.js:100
+#: js/Filemanager.js:112
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
 
-#: js/Filemanager.js:101
+#: js/Filemanager.js:113
 msgid "Item with this name already exists!"
 msgstr "Item(s) mit diesem Namen schon vorhanden!"
 

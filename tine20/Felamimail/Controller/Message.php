@@ -812,6 +812,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean                   $_select
      * @param Felamimail_Backend_ImapProxy   $_imapBackend
      * @throws Felamimail_Exception_IMAPServiceUnavailable
+     * @throws Felamimail_Exception_IMAPFolderNotFound
      * @return Felamimail_Backend_ImapProxy
      */
     protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
@@ -828,9 +829,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     . ' Select folder ' . $_folder->globalname);
                 $backendFolderValues = $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
             }
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // @todo remove the folder from cache if it could not be found on the IMAP server?
+            throw new Felamimail_Exception_IMAPFolderNotFound($zmse->getMessage());
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            // no imap connection
-            throw new Felamimail_Exception_IMAPServiceUnavailable();
+            throw new Felamimail_Exception_IMAPServiceUnavailable($zmpe->getMessage());
         }
         
         return $imapBackend;

@@ -10,6 +10,7 @@
     <description>google adb import</description>
     <label>Contact import from Google address book</label>
     <!-- _("Contact import from Google address book") -->
+    <example>Addressbook/Import/examples/adb_google_import.csv</example>
     <extension>csv</extension>
     <mapping>
         <field>

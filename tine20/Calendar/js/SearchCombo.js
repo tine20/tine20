@@ -27,6 +27,9 @@ Ext.ns('Tine.Calendar');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Calendar.SearchCombo
+ * 
+ * @TODO        Extend Tine.Tinebase.widgets.form.RecordPickerComboBox once this class
+ *              is rewritten to use beforeload/load events
  */
 
 Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
@@ -68,7 +71,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.loadingText = _('Searching...');
 
         this.recordClass = Tine.Calendar.Model.Event;
-        this.recordProxy = Tine.Calendar.eventBackend;
+        this.recordProxy = Tine.Calendar.backend;
 
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
@@ -76,6 +79,8 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.fieldLabel = this.app.i18n._('Event'),
         this.emptyText = this.app.i18n._('Search Event'),
 
+        this.disableClearer = ! this.allowBlank;
+        
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
             sortInfo: {
@@ -93,6 +98,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         Tine.Calendar.SearchCombo.superclass.initComponent.call(this);
     },
 
+    setValue: Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setValue,
     
     /**
      * is called, when records has been fetched

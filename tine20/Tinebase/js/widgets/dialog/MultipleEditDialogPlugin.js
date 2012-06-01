@@ -121,12 +121,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug(this.interRecord);
         
         this.editDialog.updateToolbars(this.interRecord, this.editDialog.recordClass.getMeta('containerProperty'));
-
-        Ext.each(this.editDialog.tbarItems, function(item) {
-            item.setDisabled(true);
-            item.multiEditable = false;
-            });
-
+        if(this.editDialog.tbarItems) {
+            Ext.each(this.editDialog.tbarItems, function(item) {
+                item.setDisabled(true);
+                item.multiEditable = false;
+                });
+        }
+        
         this.editDialog.loadMask.hide();
         return false;
     },
@@ -149,8 +150,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             keys.push({key: key, type: 'default', formField: field, recordKey: key});
         }, this);
         
-        if(this.editDialog.cfConfigs) {
-            this.editDialog.cfConfigs.each(function(config) {
+        var cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.editDialog.recordClass);
+        if(cfConfigs) {
+            Ext.each(cfConfigs, function(config) {
                 var field = this.form.findField('customfield_' + config.data.name);
                 if (!field) return true;
                 keys.push({key: config.data.name, type: 'custom', formField: field, recordKey: '#' + config.data.name});

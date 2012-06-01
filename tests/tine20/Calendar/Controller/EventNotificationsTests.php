@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -40,6 +40,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected $_testCalendar;
     
+   /**
+    * email test class
+    *
+    * @var Felamimail_Controller_MessageTest
+    */
+    protected $_emailTestClass;
+    
     /**
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
@@ -57,6 +64,21 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_notificationController = Calendar_Controller_EventNotifications::getInstance();
         
         $this->_setupPreferences();
+    }
+    
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        
+        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->_emailTestClass->tearDown();
+        }
     }
     
     /**
@@ -262,6 +284,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
+    /**
+     * testRecuringExceptions
+     */
     public function testRecuringExceptions()
     {
         $from = new Tinebase_DateTime('2012-03-01 00:00:00');
@@ -314,6 +339,52 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
     }
     
+    /**
+     * testParallelAlarmTrigger
+     * 
+     * @see 0004878: improve asyncJob fencing
+     */
+    public function testParallelAlarmTrigger()
+    {
+        $this->_testNeedsTransaction();
+        
+        try {
+            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+            $this->_emailTestClass->setup();
+        } catch (Exception $e) {
+            $this->markTestIncomplete('email not available.');
+        }
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        $this->_getAlarmMails(TRUE);
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        try {
+            Tinebase_AsyncJobTest::triggerAsyncEvents();
+        } catch (Exception $e) {
+            // something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this
+            $this->markTestIncomplete($e->getMessage());
+        }
+        
+        $result = $this->_getAlarmMails(TRUE);
+        $this->assertEquals(1, count($result), 'expected exactly 1 alarm mail, got: ' . print_r($result->toArray(), TRUE));
+    }
+    
+    /**
+     * testRecuringAlarm
+     */
     public function testRecuringAlarm()
     {
         $event = $this->_getEvent();
@@ -397,7 +468,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime is not adjusted');
     }
     
-    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    /**
+     * test alarm inspection from 24.03.2012 -> 25.03.2012
+     */
     public function testAdoptAlarmDSTBoundary()
     {
         $event = $this->_getEvent();
@@ -428,7 +501,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals('2012-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
     }
     
-    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    /**
+     * test alarm inspection from 24.03.2012 -> 25.03.2012
+     */
     public function testAdoptAlarmDSTBoundaryWithSkipping()
     {
         $event = new Calendar_Model_Event(array(
@@ -451,6 +526,38 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->adoptAlarmTime($event, $alarm, 'instance');
         
         $this->assertEquals('2012-04-02 06:30:00', $alarm->alarm_time->toString());
+    }
+    
+    /**
+     * get test alarm emails
+     * 
+     * @param boolean $deleteThem
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getAlarmMails($deleteThem = FALSE)
+    {
+        // search and assert alarm mail
+        $folder = $this->_emailTestClass->getFolder('INBOX');
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
+        $i = 0;
+        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
+            $i++;
+        }
+        $account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'folder_id',  'operator' => 'equals',     'value' => $folder->getId()),
+            array('field' => 'account_id', 'operator' => 'equals',     'value' => $account->getId()),
+            array('field' => 'subject',    'operator' => 'startswith', 'value' => 'Alarm for event "Wakeup" at'),
+        ));
+        
+        $result = Felamimail_Controller_Message::getInstance()->search($filter);
+        
+        if ($deleteThem) {
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, Felamimail_Model_Folder::FOLDER_TRASH);
+        }
+        
+        return $result;
     }
     
     public static function getMessages()

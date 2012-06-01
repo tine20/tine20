@@ -168,6 +168,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
      * @param {Function} callback (optional) The callback to call when the selection is complete. The callback will be called with
      * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
+     * @param {keep} bool keep current selection
      */
     selectPath : function(path, attr, callback, keep){
         attr = attr || 'id';
@@ -175,8 +176,8 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             v = keys.pop();
         if(keys.length > 1){
             var f = function(success, node){
-                if(success && node){
-                    var n = node.findChild(attr, v);
+                if(success && node) {
+                    var n = node.findChild(attr, v) || node.findChild('path', node.attributes.path + '/' + v);
                     if(n){
                         n.getOwnerTree().getSelectionModel().select(n, false, keep);
                         if(callback){

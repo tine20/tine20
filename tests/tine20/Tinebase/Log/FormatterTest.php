@@ -54,7 +54,8 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
      */
     public function testPWReplacements()
     {
-        $writer = new Zend_Log_Writer_Stream('test.log');
+        $logfile = tempnam(Tinebase_Core::getTempDir(), 'testlog');
+        $writer = new Zend_Log_Writer_Stream($logfile);
         $formatter = new Tinebase_Log_Formatter();
         $formatter->setReplacements();
         $writer->setFormatter($formatter);
@@ -64,8 +65,8 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
         
         $config = Tinebase_Core::getConfig();
         $this->_logger->notice($config->database->password);
-        $loggerFile = file_get_contents('test.log');
-        unlink('test.log');
+        $loggerFile = file_get_contents($logfile);
+        unlink($logfile);
         
         $this->assertFalse(strpos($loggerFile, $config->database->password), 'pw found!');
         $this->assertContains('********', $loggerFile);
