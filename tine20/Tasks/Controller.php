@@ -28,7 +28,6 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_Con
      */
     private function __construct() {
         $this->_applicationName = 'Tasks';
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

@@ -28,7 +28,6 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
      */
     private function __construct() {
         $this->_applicationName = 'ExampleApplication';
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

@@ -54,7 +54,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function __construct() 
     {
-        $this->_currentAccount     = Tinebase_Core::getUser();
         $this->_fileObjectBackend  = new Tinebase_Tree_FileObject();
         $this->_treeNodeBackend    = new Tinebase_Tree_Node();
         

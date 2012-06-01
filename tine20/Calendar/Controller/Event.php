@@ -76,11 +76,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     private static $_instance = NULL;
     
     /**
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount = NULL;
-    
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -90,7 +85,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
-        $this->_currentAccount  = Tinebase_Core::getUser();
     }
 
     /**
@@ -200,7 +194,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // send notifications
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($createdEvent, $this->_currentAccount, 'created');
+            $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
         }
         
         return $createdEvent;
@@ -476,7 +470,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         $this->sendNotifications($sendNotifications);
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         return $updatedEvent;
     }
@@ -844,7 +838,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 $_event->created_by = $baseEvent->created_by;
                 
-                $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction, $originalEvent);
+                $this->doSendNotifications($notificationEvent, Tinebase_Core::getUser(), $notificationAction, $originalEvent);
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
@@ -1177,7 +1171,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (    !$this->_doContainerACLChecks 
             // admin grant includes all others
-            ||  ($_record->container_id && $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
+            ||  ($_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
             return TRUE;
         }
 
@@ -1190,7 +1184,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 break;
             case 'create':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
                 $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
@@ -1430,7 +1424,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
             $updatedEvent = $this->get($event->getId());
-            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         
         return $updatedAttender;
@@ -1692,7 +1686,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, $this->_currentAccount, 'alarm');
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm');
     }
     
     /**

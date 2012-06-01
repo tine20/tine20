@@ -42,7 +42,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             'tableName'     => 'importexport_definition',
             'modlogActive'  => TRUE,
         ));
-        $this->_currentAccount = Tinebase_Core::getUser();
     }    
     
     /**
