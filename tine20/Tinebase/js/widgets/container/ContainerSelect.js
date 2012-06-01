@@ -313,10 +313,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @todo // records might be in from state, but value is conainerData only
      */
     setValue: function(container) {
-        
-        if(!container) return;
-        
-        if (container.hasOwnProperty('get') && Ext.isFunction(container.get)) {
+        if (typeof container.get === 'function') {
             // container is a record -> already in store -> nothing to do
         } else if (this.store.getById(container)) {
             // store already has a record of this container
@@ -396,7 +393,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
 });
 Ext.reg('tinewidgetscontainerselectcombo', Tine.widgets.container.selectionComboBox);
 
-Tine.widgets.form.RecordPickerManager.register('Tinebase', 'Container', Tine.widgets.container.selectionComboBox);
 /**
  * @namespace Tine.widgets.container
  * @class Tine.widgets.container.selectionDialog
