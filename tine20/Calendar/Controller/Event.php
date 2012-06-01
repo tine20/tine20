@@ -1090,6 +1090,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_record->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $ownAttendee ? array($ownAttendee) : array());
         }
         
+        if ($_record->is_all_day_event) {
+            // harmonize dtend of all day events
+            $_record->dtend->addSecond($_record->dtend->get('s') == 0 ? 59 : 0);
+            $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
+        }
         $_record->setRruleUntil();
     }
     
