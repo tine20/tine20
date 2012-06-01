@@ -124,21 +124,29 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($eventDaily, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $eventDaily->dtstart, $eventDaily->rrule_until);
         
         // first deleted instance
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($recurSet[0]);
+        $recurSet[0]->last_modified_time = $updatedBaseEvent->last_modified_time;
         Calendar_Controller_Event::getInstance()->createRecurException($recurSet[0], true);
         
         // second deleted instance
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($recurSet[1]);
+        $recurSet[1]->last_modified_time = $updatedBaseEvent->last_modified_time;
         Calendar_Controller_Event::getInstance()->createRecurException($recurSet[1], true);
         
         // first exception instance
         $recurSet[2]->dtstart->addHour(2);
         $recurSet[2]->dtend->addHour(2);
         $recurSet[2]->summary = 'Test Exception 1';
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($recurSet[2]);
+        $recurSet[2]->last_modified_time = $updatedBaseEvent->last_modified_time;
         Calendar_Controller_Event::getInstance()->createRecurException($recurSet[2]);
         
         // first exception instance
         $recurSet[3]->dtstart->addHour(3);
         $recurSet[3]->dtend->addHour(3);
         $recurSet[3]->summary = 'Test Exception 2';
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($recurSet[3]);
+        $recurSet[3]->last_modified_time = $updatedBaseEvent->last_modified_time;
         Calendar_Controller_Event::getInstance()->createRecurException($recurSet[3]);
         
         // reread event from database again

@@ -747,6 +747,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptionBeforeDstBoundary = clone $recurSet[1]; // 28. 
         $persistentExceptionBeforeDstBoundary = $this->_controller->createRecurException($exceptionBeforeDstBoundary);
         
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
         $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
         

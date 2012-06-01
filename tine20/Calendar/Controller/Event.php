@@ -615,6 +615,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
         
+        // only allow creation if recur instance if clone of base event
+        if ($baseEvent->last_modified_time != $_event->last_modified_time) {
+            throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
+        }
         // check if this is an exception to the first occurence
         if ($baseEvent->getId() == $_event->getId()) {
             if ($_allFollowing) {
@@ -1114,15 +1118,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $exceptionIds = $this->getRecurExceptions($event)->getId();
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
-            }
-            
-            // deleted persistent recur instances must be added to exdate of the baseEvent
-            if (! empty($event->recurid)) {
-                try {
-                    $this->createRecurException($event, true);
-                } catch (Tinebase_Exception_NotFound $e) {
-                    // base event gone, do nothing
-                }
             }
         }
         

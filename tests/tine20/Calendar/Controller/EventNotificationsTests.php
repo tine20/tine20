@@ -314,12 +314,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         // update instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[5]->summary = 'exceptional summary';
         $this->_eventController->createRecurException($recurSet[5], FALSE, FALSE); //2012-03-20
         $this->_assertMail('jmcblack', 'update');
         
         // reschedule instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[6]);
+        $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[6]->dtstart->addHour(2);
         $recurSet[6]->dtend->addHour(2);
         $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
@@ -329,6 +333,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // @TODO check RANGE in ics
         // @TODO add RANGE text to message
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[16]);
+        $recurSet[16]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_eventController->createRecurException($recurSet[16], TRUE, TRUE); //2012-03-31
         $this->_assertMail('jmcblack', 'cancel');
         
