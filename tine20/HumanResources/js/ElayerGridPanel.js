@@ -80,7 +80,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
      */
     getColumnModel: function() {
         
-        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
+        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true, callingComponent: this });
         
         return new Ext.grid.ColumnModel({
             defaults: {
