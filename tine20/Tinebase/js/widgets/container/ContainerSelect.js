@@ -72,6 +72,8 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     trigger2width: 100,
     
+    callingComponent: null,
+    
     // private
     allowBlank: false,
     triggerAction: 'all',
@@ -290,7 +292,13 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    onChoseOther: function() {
+    onChoseOther: function() { 
+        console.warn(this,this.callingComponent);
+        if(this.callingComponent) {
+            Tine.log.debug('suspending listeners of the calling component');
+            console.warn(callingComponent);
+            this.callingComponent.suspendListeners();
+        }
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
             allowNodeSelect: this.allowNodeSelect,
