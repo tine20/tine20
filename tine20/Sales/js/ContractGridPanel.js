@@ -39,6 +39,8 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         autoExpandColumn: 'title'
     },
     
+    multipleEdit: true,
+    
     initComponent: function() {
         this.recordProxy = Tine.Sales.contractBackend;
         

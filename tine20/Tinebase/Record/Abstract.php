@@ -149,6 +149,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static $_inputFilters = array();
     
+    /**
+     * If model is relatable and a special config should be applied, this is configured here
+     * @var array
+     */
+    protected static $_relatableConfig = NULL;
+
     /******************************** functions ****************************************/
     
     /**
@@ -966,5 +972,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function getReadOnlyFields()
     {
         return $this->_readOnlyFields;
+    }
+
+    /**
+     * returns the relation config
+     * @return array
+     */
+    public static function getRelatableConfig()
+    {
+        return static::$_relatableConfig;
     }
 }

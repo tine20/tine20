@@ -35,25 +35,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_productController = NULL;
     
     /**
-     * special config for relatable models
-     * @var array
+     * @see Tinebase_Frontend_Json_Abstract
      */
-    protected $_relatableModelsConfig = array(
-        array('ownModel' => 'Contract', 'relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
-            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
-            array('type' => 'PARTNER', 'degree' => 'sibling', 'text' => 'Partner', 'max' => '0:0'),  // _('Partner')
-            )
-        ),
-        array('ownModel' => 'Contract', 'relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
-            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:0'),
-            )
-        ),
-        array('ownModel' => 'Contract', 'relatedApp' => 'Sales', 'relatedModel' => 'Product', 'config' => array(
-            array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
-            )
-        ),
-    );
+    protected $_relatableModels = array('Sales_Model_Contract');
+
     /**
      * the constructor
      *

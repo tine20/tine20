@@ -59,6 +59,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     init : function(editDialog) {
         this.interRecord = new editDialog.recordClass({});
         this.editDialog = editDialog;
+        this.editDialog.evalGrants = false;
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.form = this.editDialog.getForm();
         // load in editDialog means rendered and loaded
@@ -87,21 +88,24 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             Ext.each(this.editDialog.selectedRecords, function(recordData, index) {
 
                 var record = this.editDialog.recordProxy.recordReader({responseText: Ext.encode(recordData)});
-
-                // the first record of the selected is the reference
-                if(index === 0) {
-                    refData = record.get(field.recordKey);
-                }
-
-                if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData)) || this.editDialog.isFilterSelect) {
-                    this.interRecord.set(field.recordKey, '');
+                if(field.type == 'relation') {
                     this.setFieldValue(field, false);
-                    return false;
                 } else {
-                    if (index == this.editDialog.selectedRecords.length - 1) {
-                        this.interRecord.set(field.recordKey, refData);
-                        this.setFieldValue(field, true);
-                        return true;
+                    // the first record of the selected is the reference
+                    if(index === 0) {
+                        refData = record.get(field.recordKey);
+                    }
+
+                    if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData)) || this.editDialog.isFilterSelect) {
+                        this.interRecord.set(field.recordKey, '');
+                        this.setFieldValue(field, false);
+                        return false;
+                    } else {
+                        if (index == this.editDialog.selectedRecords.length - 1) {
+                            this.interRecord.set(field.recordKey, refData);
+                            this.setFieldValue(field, true);
+                            return true;
+                        }
                     }
                 }
             }, this);
@@ -121,12 +125,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug(this.interRecord);
         
         this.editDialog.updateToolbars(this.interRecord, this.editDialog.recordClass.getMeta('containerProperty'));
-
-        Ext.each(this.editDialog.tbarItems, function(item) {
-            item.setDisabled(true);
-            item.multiEditable = false;
-            });
-
+        if(this.editDialog.tbarItems) {
+            Ext.each(this.editDialog.tbarItems, function(item) {
+                if(Ext.isFunction(item.setDisabled)) item.setDisabled(true);
+                item.multiEditable = false;
+                });
+        }
+        
         this.editDialog.loadMask.hide();
         return false;
     },
@@ -157,6 +162,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }, this);
         }
         
+        if(this.editDialog.relationPickers) {
+            Ext.each(this.editDialog.relationPickers, function(picker){
+                keys.push({key: picker.relationType + '-' + picker.fullModelName, type: 'relation', formField: picker.combo, recordKey: '%' + picker.relationType + '-' + picker.fullModelName});
+            });
+        }
+        
         Ext.each(keys, function(field) {
             var ff = field.formField;
             if ((!(ff.isXType('textfield'))) && (!(ff.isXType('checkbox'))) || ff.multiEditable === false) {
@@ -168,14 +179,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.handleFields.push(field);
 
             ff.on('focus', function() {
-
-                if (! ff.isXType('extuxclearabledatefield', true)) {
-                var subLeft = 0;
-                if (ff.isXType('trigger')) subLeft += 17;
-
+                var subLeft = 18;
+                
+                if(ff.isXType('tinerecordpickercombobox')) {
+                    ff.disableClearer = true;
+                    subLeft += 19;
+                } else if (ff.isXType('trigger')) {
+                    subLeft += 17; 
+                }
                 var el = this.el.parent().select('.tinebase-editmultipledialog-clearer'), 
                     width = this.getWidth(), 
-                    left = (width - 18 - subLeft) + 'px';
+                    left = (width - subLeft) + 'px';
 
                 if (el.elements.length > 0) {
                     el.setStyle({left: left});
@@ -198,10 +212,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 this.multiButton.on('click', function() {
                     if(this.multiButton.hasClass('undo')) {
                         this.setValue(this.originalValue);
+                        this.clearInvalid();
                         if (this.multi) this.cleared = false;
                     } else {
                         this.setValue('');
-                        if (this.multi) this.cleared = true;
+                        if (this.multi) {
+                            this.cleared = true;
+                            this.allowBlank = this.origAllowBlank;
+                            this.markInvalid();
+                        }
                     }
 
                     this.fireEvent('blur', this);
@@ -209,12 +228,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 }, this);
                 
                 this.el.insertSibling(this.multiButton);
-              }
+                
                 this.on('blur', function(action) {
 
                     var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
+                    
+                    var currentValue = this.getValue();
+                    var originalValue = this.originalValue;
 
-                    if ((this.originalValue != this.getValue()) || this.cleared) {  // if edited or cleared
+                    if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
                         // Create or set arrow
                         if(ar.elements.length > 0) {
                             ar.setStyle('display','block');
@@ -278,11 +300,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         if (! samevalue) {  // The records does not have the same value on this field
             ff.setReadOnly(true);
             ff.addClass('tinebase-editmultipledialog-noneedit');
-            
+            ff.origAllowBlank = ff.allowBlank;
+            ff.allowBlank = true;
             ff.multi = true;
             
             ff.setValue('');
             ff.originalValue = '';
+            ff.clearInvalid();
             Ext.QuickTips.register({
                 target: ff,
                 dismissDelay: 30000,
@@ -348,10 +372,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 renderer = Ext.util.Format.htmlEncode;
         
             if (ff.edited === true) {
-                var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel;
+                var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel ? ff.boxLabel : ff.ownerCt.fieldLabel;
                     label = label ? label : ff.ownerCt.title;
 
-                changes.push({name: ff.getName(), value: ff.getValue()});
+                changes.push({name: (field.type == 'relation') ? field.recordKey : ff.getName(), value: ff.getValue()});
                 this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
                 if(ff.isXType('checkbox')) renderer = Tine.Tinebase.common.booleanRenderer;
                 this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());
@@ -365,7 +389,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.editDialog.onCancel();
             return false;
         }
-
         if(!this.editDialog.isMultipleValid()) {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
             Ext.each(this.handleFields, function(item) {

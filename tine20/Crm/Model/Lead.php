@@ -94,6 +94,17 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+    
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            )
+        )
+    );
 
     /**
      * overwrite constructor to add more filters

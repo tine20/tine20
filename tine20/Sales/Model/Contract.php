@@ -85,6 +85,26 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
     );
     
     /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            array('type' => 'PARTNER', 'degree' => 'sibling', 'text' => 'Partner', 'max' => '0:0'),  // _('Partner')
+            )
+        ),
+        array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
+            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:0'),
+            )
+        ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Product', 'config' => array(
+            array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
+            )
+        ),
+    );
+    
+    /**
      * fill record from json data
      *
      * @param  array &$data

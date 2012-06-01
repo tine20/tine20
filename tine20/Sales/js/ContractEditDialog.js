@@ -76,7 +76,15 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
     },
-
+    
+    /**
+     * called on multiple edit
+     * @return {Boolean}
+     */
+    isMultipleValid: function() {
+        return true;
+    },
+    
     /**
      * extra validation for the number field, calls parent
      * @return {Boolean}
@@ -124,6 +132,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: .25,
                         fieldLabel: this.app.i18n._('Number'),
                         name: 'number',
+                        multiEditable: false,
                         readOnly: this.autoGenerateNumber,
                         allowBlank: this.autoGenerateNumber
                     },{
@@ -140,7 +149,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             app: 'Addressbook',
                             recordClass: Tine.Addressbook.Model.Contact,
                             relationType: 'CUSTOMER',
-                            relationDegree: 'parent',
+                            relationDegree: 'sibling',
                             modelUnique: true
                         }, {
                             columnWidth: .5,
@@ -151,7 +160,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             app: 'Addressbook',
                             recordClass: Tine.Addressbook.Model.Contact,
                             relationType: 'RESPONSIBLE',
-                            relationDegree: 'parent',
+                            relationDegree: 'sibling',
                             modelUnique: true
                         }/*, {
                             name: 'customer',

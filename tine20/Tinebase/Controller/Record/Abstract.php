@@ -109,6 +109,18 @@ abstract class Tinebase_Controller_Record_Abstract
      * @var array
      */
     protected $_duplicateCheckFields = NULL;
+
+    /**
+     * holds new relation on update multiple
+     * @var array
+     */
+    protected $_newRelations = NULL;
+    
+    /**
+     * holds relations to remove on update multiple
+     * @var array
+     */
+    protected $_removeRelations = NULL;
     
     /**
      * result of updateMultiple function
@@ -801,6 +813,60 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * handles relations on update multiple
+     * @param string $key
+     * @param string $value
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    protected function _handleRelations($key, $value)
+    {
+        $model = new $this->_modelName;
+        $relConfig = $model::getRelatableConfig();
+        unset($model);
+        $getRelations = true;
+        preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a);
+        if(count($a) < 4) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('The relation to delete/set is not configured properly!');
+        } 
+        // TODO: check config from foreign side
+        // $relConfig = $a[2]::getRelatableConfig();
+
+        $constrainsConfig = false;
+        foreach($relConfig as $config) {
+            if($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && array_key_exists('config', $config) && is_array($config['config'])) {
+                foreach($config['config'] as $constrain) {
+                    if($constrain['type'] == $a[1]) {
+                        $constrainsConfig = $constrain;
+                        break 2; 
+                    }
+                }
+            }
+        }
+
+        if(!$constrainsConfig) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('No relation definition could be found for this model!');
+        }
+
+        $rel = array(
+            'own_model' => $this->_modelName,
+            'own_backend' => 'Sql',
+            'own_degree' =>array_key_exists('sibling', $constrainsConfig) ? $constrainsConfig['sibling'] : 'sibling',
+            'related_model' => $a[2],
+            'related_backend' => 'Sql',
+            'type' => array_key_exists('type', $constrainsConfig) ? $constrainsConfig['type'] : '-',
+            'remark' => array_key_exists('defaultRemark', $constrainsConfig) ? $constrainsConfig['defaultRemark'] : ' '
+        );
+        
+        if(empty($value)) { // delete relations in iterator
+            if(!$this->_removeRelations) $this->removeRelations = array();
+            $this->_removeRelations[] = $rel;
+        } else { // create relations in iterator
+            if(! $this->_newRelations) $this->_newRelations = array();
+            $rel['related_id'] = $value;
+            $this->_newRelations[] = $rel;
+        }
+    }
+    /**
      * update multiple records
      *
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
@@ -813,10 +879,16 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('update');
         $this->checkFilterACL($_filter, 'update');
-
+        $getRelations = false;
+        
         foreach($_data as $key => $value) {
             if(stristr($key,'#')) {
                 $_data['customfields'][substr($key,1)] = $value;
+                unset($_data[$key]);
+            }
+            if(stristr($key, '%')) {
+                $getRelations = true;
+                $this->_handleRelations($key, $value);
                 unset($_data[$key]);
             }
         }
@@ -832,6 +904,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
+            'options'    => array('getRelations' => $getRelations),
             'function'   => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);
@@ -839,6 +912,40 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
         
         return $this->_updateMultipleResult;
+    }
+    
+    protected function _iterateRelations($currentRecord)
+    {
+        // handle relations to remove
+        if($this->_removeRelations) {
+            foreach($this->_removeRelations as $remRelation) {
+                $removeRelations = $currentRecord->relations->filter('type', $remRelation['type']);
+                $removeRelations = $removeRelations->filter('related_model', $remRelation['related_model']);
+                $removeRelations = $removeRelations->filter('own_degree', $remRelation['own_degree']);
+                $currentRecord->relations->removeRecords($removeRelations);
+            }
+        }
+        
+        // handle new relations
+        if($this->_newRelations) {
+            $removeRelations = NULL;
+            foreach($this->_newRelations as $newRelation) {
+                $removeRelations = $currentRecord->relations->filter('type', $newRelation['type']);
+                $removeRelations = $removeRelations->filter('related_model', $newRelation['related_model']);
+                $removeRelations = $removeRelations->filter('own_degree', $newRelation['own_degree']);
+                $already = $removeRelations->filter('related_id', $newRelation['related_id']);
+                if($already->count() > 0) {
+                    $removeRelations = NULL;
+                } else {
+                    $newRelation['own_id'] = $currentRecord->getId();
+                    $rel = new Tinebase_Model_Relation();
+                    $rel->setFromArray($newRelation);
+                    if($removeRelations) $currentRecord->relations->removeRecords($removeRelations);
+                    $currentRecord->relations->addRecord($rel);
+                }
+            }
+        }
+        return $currentRecord->relations->toArray();
     }
     
     /**
@@ -853,20 +960,28 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count($_records) === 0) {
             return;
         }
-        
+        $bypassFilters = FALSE;
+
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
+            unset($oldRecordArray['relations']);
+            
             $data = array_merge($oldRecordArray, $_data);
-
+            
+            if($this->_newRelations || $this->_removeRelations) {
+                $data['relations'] = $this->_iterateRelations($currentRecord);
+            }
             try {
-                $record = new $this->_modelName($data);
+                $record = new $this->_modelName($data, $bypassFilters);
                 $updatedRecord = $this->update($record, FALSE);
                 
                 $this->_updateMultipleResult['results']->addRecord($updatedRecord);
                 $this->_updateMultipleResult['totalcount'] ++;
                 
             } catch (Tinebase_Exception_Record_Validation $e) {
-                
+                if ($this->_updateMultipleValidateEachRecord === FALSE) {
+                    throw $e;
+                }
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,

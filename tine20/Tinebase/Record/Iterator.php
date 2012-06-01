@@ -165,7 +165,7 @@ class Tinebase_Record_Iterator
                 return new Tinebase_Record_RecordSet($this->_filter->getModelName());
             }
         }
-        
+
         $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
         if ($this->_start !== NULL) {
             $pagination->start = $this->_start;
@@ -180,7 +180,7 @@ class Tinebase_Record_Iterator
         // get records by filter (ensure acl)
         $filterClassname = get_class($this->_filter);
         $idFilter = new $filterClassname(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => $this->_recordIds)
+            array('field' => array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id', 'operator' => 'in', 'value' => $this->_recordIds)
         ));
         $records = $this->_controller->search($idFilter, $pagination, $this->_options['getRelations']);
         
