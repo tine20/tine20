@@ -42,7 +42,6 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     private function __construct() 
     {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

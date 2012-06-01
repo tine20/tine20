@@ -75,7 +75,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * don't use the constructor. use the singleton
      */
     private function __construct() {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_backend = new Felamimail_Backend_Folder();
         $this->_cacheController = Felamimail_Controller_Cache_Folder::getInstance();
     }
@@ -131,7 +130,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $result = $this->_cacheController->update($filterValues['account_id'], $filterValues['globalname']);
         }             
         
-        $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']] = count($result);
+        $this->_lastSearchCount[Tinebase_Core::getUser()->getId()][$filterValues['account_id']] = count($result);
         
         // sort folders
         $account = Felamimail_Controller_Account::getInstance()->get($filterValues['account_id']);
@@ -150,7 +149,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         $filterValues = $this->_extractFilter($_filter);
         
-        return $this->_lastSearchCount[$this->_currentAccount->getId()][$filterValues['account_id']];
+        return $this->_lastSearchCount[Tinebase_Core::getUser()->getId()][$filterValues['account_id']];
     }
     
     /**

@@ -26,7 +26,6 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
         $this->_backend = Tinebase_Tags::getInstance();
         $this->_doContainerACLChecks = FALSE;

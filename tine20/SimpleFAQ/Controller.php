@@ -36,7 +36,6 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
      */
     private function  __construct()
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'SimpleFAQ';
     }
 

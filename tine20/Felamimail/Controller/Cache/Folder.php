@@ -48,7 +48,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     private function __construct() {
         $this->_backend = new Felamimail_Backend_Folder();
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -365,7 +364,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'account_id'        => $_account->getId(),
                         'imap_timestamp'    => Tinebase_DateTime::now(),
                         'imap_status'       => Felamimail_Model_Folder::IMAP_STATUS_OK,
-                        'user_id'           => $this->_currentAccount->getId(),
+                        'user_id'           => Tinebase_Core::getUser()->getId(),
                         'parent'            => $parentFolder,
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
                         'delimiter'         => $delimiter,

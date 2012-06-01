@@ -71,7 +71,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     private function __construct()
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -240,9 +239,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $addresses = array();
         if ($_account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+            $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
             
-            $addresses[] = (! empty($this->_currentAccount->accountEmailAddress)) ? $this->_currentAccount->accountEmailAddress : $_account->email;
+            $addresses[] = (! empty(Tinebase_Core::getUser()->accountEmailAddress)) ? Tinebase_Core::getUser()->accountEmailAddress : $_account->email;
             if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
                 $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
             }
@@ -296,7 +295,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if ($this->_isDbmailSieve()) {
             // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $this->_currentAccount->accountFullName);
+            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
         }
     }
     

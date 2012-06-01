@@ -37,11 +37,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     private static $_instance = NULL;
     
     /**
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount = NULL;
-    
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -55,8 +50,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             'tableName' => 'cal_resources'
         ));
         $this->_backend->setModlogActive(TRUE);
-        
-        $this->_currentAccount  = Tinebase_Core::getUser();
     }
 
     /**

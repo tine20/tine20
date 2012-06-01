@@ -63,7 +63,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() {
         $this->_backend = new Courses_Backend_Course();
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_config = Courses_Config::getInstance();
     }
     

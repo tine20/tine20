@@ -37,7 +37,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
         
         $this->_userBackend = Tinebase_User::getInstance();
@@ -284,7 +283,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $groupsController = Admin_Controller_Group::getInstance();
         
         foreach ((array)$_accountIds as $accountId) {
-            if ($accountId === $this->_currentAccount->getId()) {
+            if ($accountId === Tinebase_Core::getUser()->getId()) {
                 $message = 'You are not allowed to delete yourself!';
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
                 throw new Tinebase_Exception_AccessDenied($message);
@@ -320,7 +319,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return Tinebase_Container::getInstance()->getSharedContainer($this->_currentAccount, 'Addressbook', Tinebase_Model_Grants::GRANT_READ, TRUE);
+        return Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ, TRUE);
     }
     
     /**

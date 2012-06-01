@@ -31,7 +31,6 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
     }
 
