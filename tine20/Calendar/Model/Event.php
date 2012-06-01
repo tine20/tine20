@@ -363,6 +363,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->rrule_until = $rrule->until;
             }
         }
+        
+        if ($this->rrule_until && $this->rrule_until < $this->dtstart) {
+            throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
+        }
     }
     
     /**
