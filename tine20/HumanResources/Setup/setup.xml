@@ -16,7 +16,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>contact_id</name>
+                    <name>account_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
@@ -166,13 +166,13 @@
                     </field>
                 </index>
                 <index>
-                    <name>humanresources_employee::contact_id--addressbook::id</name>
+                    <name>humanresources_employee::account_id--addressbook::id</name>
                     <field>
-                        <name>contact_id</name>
+                        <name>account_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>addressbook</table>
+                        <table>accounts</table>
                         <field>id</field>
                     </reference>
                 </index>

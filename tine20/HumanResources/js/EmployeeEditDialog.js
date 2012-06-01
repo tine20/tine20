@@ -154,9 +154,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .125
                                 }, 
                                     Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                        userOnly: true,
+                                        useAccountRecord: true,
                                         blurOnSelect: true,
-                                        name: 'contact_id',
-                                        fieldLabel: this.app.i18n._('Contact'),
+                                        name: 'account_id',
+                                        fieldLabel: this.app.i18n._('Account'),
                                         columnWidth: .380,
                                         ref: '../../../../../../../contactPicker',
                                         allowBlank: true,
@@ -164,6 +166,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                             scope: this,
                                             blur: function() { 
                                                 if(this.contactPicker.selectedRecord) {
+//                                                    this.contactPicker.accountStruct =  {
+//                                                        accountId: this.contactPicker.selectedRecord.get('account_id'),
+//                                                        accountDisplayName: this.contactPicker.selectedRecord.get('n_fileas'),
+//                                                        accountFullName: this.contactPicker.selectedRecord.get('n_fn'),
+//                                                        accountLastName: this.contactPicker.selectedRecord.get('n_family'),
+//                                                        accountFirstName: this.contactPicker.selectedRecord.get('n_given'),
+//                                                        contactId: this.contactPicker.selectedRecord.get('id')
+//                                                    }
                                                     this.contactButton.enable();
                                                 } else {
                                                     this.contactButton.disable();
@@ -187,7 +197,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                                 if(this.showPrivateInformation) {
                                                     this.form.findField('bank_account_holder').setValue(sr.get('n_fn'));
                                                     Ext.each(['countryname', 'locality', 'postalcode', 'region', 'street', 'street2'], function(f){
-                                                        this.form.findField(f).setValue(sr.get('adr_one_'+f));
+                                                        this.form.findField(f).setValue(sr.get('adr_two_'+f));
                                                     }, this);
                                                     
                                                     Ext.each(['email', 'tel_home', 'tel_cell', 'bday'], function(f){

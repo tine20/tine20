@@ -56,6 +56,11 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
     }
 
+    protected function _inspectBeforeUpdate(Tinebase_Record_Interface $_record, $_oldRecord)
+    {
+        $this->_checkDates($record);
+    }
+    
     /**
      * inspect creation of one record (before create)
      *
@@ -64,6 +69,8 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_checkDates();
+        
         if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null; 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');

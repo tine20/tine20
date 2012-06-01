@@ -46,11 +46,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_Employee();
+        if (static::$_instance === NULL) {
+            static::$_instance = new HumanResources_Controller_Employee();
         }
         
-        return self::$_instance;
+        return static::$_instance;
     }
     
     /**
@@ -103,6 +103,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         foreach($_record->elayers as $elayerArray) {
             $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
+            $elayerArray['employee_id'] = $_oldRecord->getId();
             $elayer = new HumanResources_Model_Elayer($elayerArray);
             if($elayer->id) {
                 $elayers->addRecord($ec->update($elayer));

@@ -37,7 +37,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contact_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'countryname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'locality'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'postalcode'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),

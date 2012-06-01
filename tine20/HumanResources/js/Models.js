@@ -12,8 +12,8 @@ Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 // Employee model fields
 Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',                  type: 'string'},
-    {name: 'number',               type: 'string'},
-    {name: 'contact_id',          type: Tine.Addressbook.Model.Contact},
+    {name: 'number',              type: 'string'},
+    {name: 'account_id',          type: Tine.Tinebase.Model.Account},
     {name: 'countryname',         type: 'string'},
     {name: 'locality',            type: 'string'},
     {name: 'postalcode',          type: 'string'},

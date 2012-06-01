@@ -31,7 +31,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_resolveUserFields = array(
-        'HumanResources_Model_Employee' => array('created_by', 'last_modified_by')
+        'HumanResources_Model_Employee' => array('created_by', 'last_modified_by', 'account_id')
     );
     
     /**
@@ -190,7 +190,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
-                $_record['contact_id'] = !empty($_record['contact_id']) ? Addressbook_Controller_Contact::getInstance()->get($_record['contact_id'])->toArray() : null;
+                $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
                 $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
                 $recs = HumanResources_Controller_Elayer::getInstance()->search($filter, null);
