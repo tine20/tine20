@@ -59,6 +59,7 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
     protected function _inspectBeforeUpdate(Tinebase_Record_Interface $_record, $_oldRecord)
     {
         $this->_checkDates($_record);
+        $this->_containerToId(&$_record);
     }
     
     /**
@@ -73,6 +74,15 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
             }
         }
     }
+    /**
+     * resolves the container array to the corresponding id
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _containerToId(Tinebase_Record_Interface $_record) {
+        if(is_array($_record->feast_calendar_id)) {
+            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
+        }
+    }
     
     /**
      * inspect creation of one record (before create)
@@ -83,6 +93,7 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_checkDates($_record);
+        $this->_containerToId(&$_record);
         
         if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null; 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));

@@ -245,7 +245,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($_records as $record) {
             $idx = $cal->getIndexById($record->feast_calendar_id);
             if(isset($idx)) {
-                $record->feast_calendar_id = $wt[$idx];
+                $record->feast_calendar_id = $cal[$idx];
             } else {
                 $record->feast_calendar_id = NULL;
             }

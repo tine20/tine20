@@ -50,6 +50,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
         this.title = this.app.i18n._('Elayers');
         Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
+        this.on('afteredit', this.onAfterEdit, this);
         this.store.sort();
     },
     
@@ -67,9 +68,9 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        recordData.workingtime_id = this.workingTimePicker.selectedRecord.data;
+        recordData.workingtime_id = this.workingTimeQuickAdd.selectedRecord.data;
         recordData.employee_id = this.editDialog.record.get('id');
-        recordData.feast_calendar_id = this.calendarPicker.selectedContainer;
+        recordData.feast_calendar_id = this.calendarQuickAdd.selectedContainer;
         this.store.addSorted(new this.recordClass(recordData));
     },
     
@@ -81,17 +82,25 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
      */
     getColumnModel: function() {
         
-        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
-        this.calendarPicker = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
-                        hideLabel: true,
-                        containerName: this.app.i18n._('Calendar'),
-                        containersName: this.app.i18n._('Calendars'),
-                        appName: 'Calendar',
-                        requiredGrant: 'readGrant',
-                        hideTrigger2: true,
-                        allowBlank: false
-                     });
-                     
+        this.workingTimeQuickAdd = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
+        this.workingTimeEditor = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
+        var calConfig = {
+            hideLabel: true,
+            containerName: this.app.i18n._('Calendar'),
+            containersName: this.app.i18n._('Calendars'),
+            appName: 'Calendar',
+            requiredGrant: 'readGrant',
+            hideTrigger2: true,
+            allowBlank: false
+        };
+
+        this.calendarQuickAdd = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
+        this.calendarEditor = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
+        this.calendarEditor.on('blur', function() {
+            if(this.calendarEditor.hasFocusedSubPanels) {
+                return false;
+            }
+        }, this);
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
@@ -100,7 +109,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
             }, 
             columns: [
                 {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
-                     quickaddField: this.workingTimePicker, //renderer: Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime'),
+                     quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 90, editor: true
@@ -112,22 +121,25 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                 }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
                      editor: new Ext.ux.form.ClearableDateField()
-                }, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
+                }, { dataIndex: 'feast_calendar_id', width: 280, id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
                      renderer: Tine.Tinebase.common.containerRenderer, scope: this,
-                     quickaddField: this.calendarPicker,
-                     editor: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
-                        hideLabel: true,
-                        containerName: this.app.i18n._('Calendar'),
-                        containersName: this.app.i18n._('Calendars'),
-                        appName: 'Calendar',
-                        requiredGrant: 'readGrant',
-                        hideTrigger2: true,
-                        allowBlank: false
-                     })
+                     quickaddField: this.calendarQuickAdd, editor: this.calendarEditor
                 }
            ]
        });
     },
+    
+    onAfterEdit: function(o) {
+        switch (o.field) {
+            case 'workingtime_id':
+                    o.record.set('workingtime_id', this.workingTimeEditor.selectedRecord.data);
+                break;
+                case 'feast_calendar_id':
+                    o.record.set('feast_calendar_id', this.calendarEditor.selectedContainer);
+                break;
+        }
+    },
+    
     /**
      * renders the working time
      * @param {Object} value
