@@ -22,6 +22,12 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FREETIME_TYPE = 'freetimeType';
     
     /**
+     * FreeTime Status
+     * @var string
+     */
+    const FREETIME_STATUS = 'freetimeStatus';
+    
+    /**
      * Default Feast Calendar (used for tailoring datepicker)
      * @var string
      */
@@ -42,17 +48,27 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => 'VACATION'
         ),
-        self::DEFAULT_FEAST_CALENDAR => array(
-                'label'         => 'Default Feast Calendar',
-                'description'   => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
-                'type'          => 'string',
-//                                     // _('automatically')
-//                                     // _('manually')
-//             'options'               => array(array('auto', 'automatically'), array('manual', 'manually')),
+        self::FREETIME_STATUS => array(
+                                   //_('Freetime Status')
+            'label'                 => 'Freetime Status',
+                                   //_('Possible free time status definitions.')
+            'description'           => 'Possible free time status definitions',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
             'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
-//             'default'               => 'auto'
-                )
+            'default'               => 'REQUESTED'
+        ),
+//         self::DEFAULT_FEAST_CALENDAR => array(
+//                 'label'         => 'Default Feast Calendar',
+//                 'description'   => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
+//                 'type'          => 'string',
+// //                                     // _('automatically')
+// //                                     // _('manually')
+// //             'options'               => array(array('auto', 'automatically'), array('manual', 'manually')),
+//             'clientRegistryInclude' => TRUE,
+//             'setByAdminModule'      => TRUE,
+// //             'default'               => 'auto'
+//                 )
     );
     
     /**

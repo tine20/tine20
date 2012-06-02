@@ -70,7 +70,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.contractGridPanel.onRecordLoad();
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
     },
-//    
+
     /**
      * executed when record gets updated from form
      * @private
@@ -78,13 +78,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onRecordUpdate: function() {
         var contracts = [];
         this.contractGridPanel.store.query().each(function(contract) {
-            console.warn(contract.data);
-//            contract.set('workingtime_id', contract.get('workingtime_id').id);
             contracts.push(contract.data);
         }, this);
         
         this.record.set('contracts', contracts);
-//        asd;
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
     },
     
@@ -166,14 +163,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                             scope: this,
                                             blur: function() { 
                                                 if(this.contactPicker.selectedRecord) {
-//                                                    this.contactPicker.accountStruct =  {
-//                                                        accountId: this.contactPicker.selectedRecord.get('account_id'),
-//                                                        accountDisplayName: this.contactPicker.selectedRecord.get('n_fileas'),
-//                                                        accountFullName: this.contactPicker.selectedRecord.get('n_fn'),
-//                                                        accountLastName: this.contactPicker.selectedRecord.get('n_family'),
-//                                                        accountFirstName: this.contactPicker.selectedRecord.get('n_given'),
-//                                                        contactId: this.contactPicker.selectedRecord.get('id')
-//                                                    }
                                                     this.contactButton.enable();
                                                 } else {
                                                     this.contactButton.disable();
@@ -271,8 +260,35 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }
                             ]]
                         }]
-                    },
-                        {
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Internal Information'),
+                        disabled: ! this.showPrivateInformation,
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                            items: [
+                                [{
+                                    xtype: 'combo',
+                                    name: 'state',
+                                    fieldLabel: this.app.i18n._('State'),
+                                    store: [[0, this.app.i18n._('hired')], [1, this.app.i18n._('unhired')], [2, this.app.i18n._('suspended')]]
+                                }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                        name: 'vacation_manager',
+                                        fieldLabel: this.app.i18n._('Vacation Manager'),
+                                        useAccountRecord: true,
+                                        userOnly: true
+                                }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                        name: 'sickness_manager',
+                                        fieldLabel: this.app.i18n._('Sickness Manager'),
+                                        useAccountRecord: true,
+                                        userOnly: true
+                                })]]
+                        }]
+                    }, {
                         xtype: 'fieldset',
                         layout: 'hfit',
                         autoHeight: true,

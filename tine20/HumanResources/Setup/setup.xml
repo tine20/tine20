@@ -117,6 +117,25 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>state</name>
+                    <type>integer</type>
+                    <length>1</length>
+                    <notnull>false</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>vacation_manager_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>sickness_manager_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>employment_begin</name>
                     <type>datetime</type>
                     <notnull>false</notnull>
@@ -166,9 +185,31 @@
                     </field>
                 </index>
                 <index>
-                    <name>humanresources_employee::account_id--addressbook::id</name>
+                    <name>humanresources_employee::account_id--accounts::id</name>
                     <field>
                         <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>humanresources_employee::sickness_manager_id--accounts::id</name>
+                    <field>
+                        <name>sickness_manager_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>humanresources_employee::vacation_manager_id--accounts::id</name>
+                    <field>
+                        <name>vacation_manager_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
@@ -283,6 +324,13 @@
                     <type>text</type>
                     <length>255</length>
                     <default></default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>state</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>REQUESTED</default>
                     <notnull>true</notnull>
                 </field>
                 <field>

@@ -45,6 +45,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'state'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firstday_date' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),

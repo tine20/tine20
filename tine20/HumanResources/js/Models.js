@@ -280,12 +280,12 @@ Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.Human
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('FreeTime Day', 'FreeTime Days', n);
-    recordName: 'FreeTime Day',
-    recordsName: 'FreeTime Days',
+    recordName: 'FreeTime',
+    recordsName: 'FreeTime',
 //    containerProperty: 'container_id',
     // ngettext('FreeTime days', 'All vacations days', n);
-    containerName: 'FreeTime days',
-    containersName: 'All vacations days',
+    containerName: 'FreeTime',
+    containersName: '',
     getTitle: function() {
         return this.get('name') ? this.get('name') : false;
     }

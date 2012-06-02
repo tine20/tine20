@@ -21,7 +21,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
      */
     function _initializeKeyfields()
     {
-        // create status config
+        // create type config
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config', 
             'tableName' => 'config',
@@ -31,8 +31,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $freeTimeTypeConfig = array(
             'name'    => HumanResources_Config::FREETIME_TYPE,
             'records' => array(
-                array('id' => 'SICKNESS', 'value' => 'Sickness', 'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/book.png', 'system' => true),  //_('On hold')
-                array('id' => 'VACATION', 'value' => 'Vacation', 'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true),  //_('Completed')
+                array('id' => 'SICKNESS', 'value' => 'Sickness', 'states' => array('REQUESTED', 'IN-PROCESS', 'ACCEPTED', 'DECLINED'), 'icon' => 'images/oxygen/16x16/actions/book.png', 'system' => true),  //_('Sickness')
+                array('id' => 'VACATION', 'value' => 'Vacation', 'states' => array('REQUESTED', 'ACCEPTED'), 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true),  //_('Vacation')
             ),
         );
         
@@ -40,6 +40,24 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'application_id'    => $appId,
             'name'              => HumanResources_Config::FREETIME_TYPE,
             'value'             => json_encode($freeTimeTypeConfig),
+        )));
+        
+        // create status config
+        $freeTimeStatusConfig = array(
+            'name'    => HumanResources_Config::FREETIME_STATUS,
+            'records' => array(
+                array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true),  //_('Requested')
+                array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true),  //_('In process')
+                array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/oxygen/16x16/actions/ok.png', 'system' => true),  //_('Accepted')
+                array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png', 'system' => true),  //_('Declined')
+                
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => HumanResources_Config::FREETIME_STATUS,
+            'value'             => json_encode($freeTimeStatusConfig),
         )));
     }
     
