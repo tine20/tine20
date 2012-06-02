@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_AllTests::main');
-}
-
 class Tinebase_User_EmailUser_AllTests
 {
     public static function main ()
@@ -39,8 +35,4 @@ class Tinebase_User_EmailUser_AllTests
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_EmailUser_AllTests::main') {
-    Tinebase_User_AllTests::main();
 }

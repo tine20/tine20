@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -14,12 +14,10 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_Imap_DovecotTest::main');
-}
-
 /**
  * Test class for Tinebase_DovecotTest
+ * 
+ * @todo add transaction with rollback
  */
 class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCase
 {
@@ -29,14 +27,17 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      * @var Tinebase_User_Plugin_Abstract
      */
     protected $_backend = NULL;
-        
+    
     /**
      * @var array test objects
      */
     protected $_objects = array();
     
+    /**
+     * @var array config
+     */
     protected $_config;
-
+    
     /**
      * Runs the test methods of this class.
      *
@@ -66,6 +67,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         
         $personas = Zend_Registry::get('personas');
         $this->_objects['user'] = clone $personas['jsmith'];
+        //$this->_objects['user']->setId(Tinebase_Record_Abstract::generateUID());
 
         $this->_objects['addedUsers'] = array();
     }
@@ -98,8 +100,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         
         $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
         $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
-        
-        //var_dump($this->_objects['user']->imapUser->toArray());
         
         $this->assertEquals(array(
             'emailUserId'     => $this->_objects['user']->getId(),
@@ -145,15 +145,47 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     }
     
     /**
+     * testSavingDuplicateAccount
+     * 
+     * @see 0006546: saving user with duplicate imap/smtp user entry fails
+     */
+    public function testSavingDuplicateAccount()
+    {
+        $user = $this->testAddEmailAccount();
+        $userId = $user->getId();
+        
+        // delete user in tine accounts table
+        $userBackend = new Tinebase_User_Sql();
+        $userBackend->deleteUserInSqlBackend($userId);
+        
+        // create user again
+        unset($user->accountId);
+        $newUser = Tinebase_User::getInstance()->addUser($user);
+        
+        $this->assertNotEquals($userId, $newUser->getId());
+        $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), TRUE));
+    }
+    
+    /**
      * try to update an email account
      */
     public function testSetPassword()
     {
-        // add smtp user
         $user = $this->testAddEmailAccount();
         
-        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), Tinebase_Record_Abstract::generateUID());
+        $newPassword = Tinebase_Record_Abstract::generateUID();
+        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), $newPassword);
         
-        //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
+        // fetch email pw from db
+        $db = $this->_backend->getDb();
+        $select = $db->select()
+            ->from(array('dovecot_users'))
+            ->where($db->quoteIdentifier('username') . ' = ?', $user->accountEmailAddress);
+        $stmt = $db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        $hashPw = new Hash_Password();
+        $this->assertTrue($hashPw->validate($queryResult['password'], $newPassword), 'password mismatch');
     }
-}    
+}

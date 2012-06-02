@@ -16,17 +16,17 @@
 */
 
 /**
- * SSHA hash class
+ * MD5 hash class
  * 
  * @package    Hash
  */
 class Hash_Password_MD5
 {
     /**
-     * generate SSHA hash
+     * generate MD5 hash
      * 
      * @param  string  $password
-     * @return string  the SSHA hash
+     * @return string  the MD5 hash
      */
     public function generate($algo, $password, $addPrefix = true)
     {   

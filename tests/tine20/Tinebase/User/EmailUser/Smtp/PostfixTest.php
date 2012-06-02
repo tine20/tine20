@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -103,6 +103,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
 
+        $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
+        $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(), TRUE));
         $this->assertEquals(array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain), $testUser->smtpUser->emailForwards);
         $this->assertEquals(array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain),     $testUser->smtpUser->emailAliases);
         $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
@@ -127,9 +129,9 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         $testUser = $this->_backend->updateUser($user);
         
-        $this->assertEquals(array(),                 $testUser->smtpUser->emailForwards, 'forwards mismatch');
+        $this->assertEquals(array(),                            $testUser->smtpUser->emailForwards, 'forwards mismatch');
         $this->assertEquals(array('bla@' . $this->_mailDomain), $testUser->smtpUser->emailAliases,  'aliases mismatch');
-        $this->assertEquals(false,                   $testUser->smtpUser->emailForwardOnly);
+        $this->assertEquals(false,                              $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals('j.smith@' . $this->_mailDomain,    $testUser->smtpUser->emailAddress);
     }
     
@@ -166,8 +168,20 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         // add smtp user
         $user = $this->testAddUser();
         
-        $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
+        $newPassword = Tinebase_Record_Abstract::generateUID();
+        $this->_backend->setPassword($user->getId(), $newPassword);
         
-        //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
+        // fetch email pw from db
+        $db = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
+        $select = $db->select()
+            ->from(array('smtp_users'))
+            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
+        $stmt = $db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        $this->assertTrue(isset($queryResult['passwd']), 'no password in result: ' . print_r($queryResult, TRUE));
+        $hashPw = new Hash_Password();
+        $this->assertTrue($hashPw->validate($queryResult['passwd'], $newPassword), 'password mismatch: ' . print_r($queryResult, TRUE));
     }
-}    
+}
