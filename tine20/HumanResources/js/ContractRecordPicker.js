@@ -29,7 +29,6 @@ Ext.ns('Tine.HumanResources');
  */
 Tine.HumanResources.ContractRecordPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
-    allowBlank: false,
     itemSelector: 'div.search-item',
     minListWidth: 200,
     

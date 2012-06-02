@@ -85,6 +85,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 this.editDialog.contractPicker.setValue(exception.nearestRecord);
                 this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
                 this.editDialog.contractPicker.fireEvent('select');
+            } else {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             }
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
@@ -97,14 +99,17 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     onFeastDaysLoad: function(result) {
         if(result.totalcount > 0) {
             this.disabledDates = [];
-            Ext.each(result.result, function(date){
+            Ext.each(result.results, function(date){
                 var date = new Date(date.date);
                 this.disabledDates.push(date);
             }, this);
-
-            this.setMinDate(new Date(result.first_day.date));
-            if(result.last_day) this.setMaxDate(new Date(result.last_day.date));
-
+            
+            this.editDialog.contractPicker.setValue(result.contract);
+            this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
+            this.editDialog.contractPicker.enable();
+            
+            this.setMinDate(new Date(result.contract.start_date));
+            if(result.contract.end_date) this.setMaxDate(new Date(result.contract.end_date));
             this.setDisabledDates(this.disabledDates);
         }
         this.loadMask.hide();

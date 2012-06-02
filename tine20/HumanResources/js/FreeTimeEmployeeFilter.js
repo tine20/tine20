@@ -28,7 +28,7 @@ Tine.HumanResources.FreeTimeEmployeeFilterModel = Ext.extend(Tine.widgets.grid.F
         this.app = Tine.Tinebase.appMgr.get('HumanResources');
         this.label = this.app.i18n._('Employee');
         this.foreignRecordClass = Tine.HumanResources.Model.Employee;
-        this.pickerConfig = {allowBlank: true, };
+        this.pickerConfig = {allowBlank: true };
 
         Tine.HumanResources.FreeTimeEmployeeFilterModel.superclass.initComponent.call(this);
     }

@@ -331,7 +331,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $freedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
         $dates = array_merge($freedays->date, $dates);
         
-        return array('result' => $dates, 'totalcount' => count($dates), 'first_day' => $contract->start_date, 'last_day' => $contract->end_date);
+        $contract->workingtime_id = HumanResources_Controller_WorkingTime::getInstance()->get($contract->workingtime_id);
+        
+        return array('results' => $dates, 'totalcount' => count($dates), 'contract' => $contract->toArray());
         
     }
     

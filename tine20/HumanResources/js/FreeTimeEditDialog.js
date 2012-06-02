@@ -73,8 +73,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.onRecordLoad.defer(250, this);
             return;
         }
-
+        
         this.datePicker.onRecordLoad(this.record);
+        if(this.record.get('employee_id')) {
+            this.employeePicker.selectedRecord = new Tine.HumanResources.Model.Employee(this.record.get('employee_id'));
+        }
         this.firstDayLengthPicker.setValue(this.datePicker.store.getFirstDay() ? this.datePicker.store.getFirstDay().get('duration') : 1);
         this.lastDayLengthPicker.setValue(this.datePicker.store.getLastDay() ? this.datePicker.store.getLastDay().get('duration') : 1);
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
@@ -110,7 +113,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         });
         this.employeePicker.on('select', function(){
             this.datePicker.loadFeastDays(this.employeePicker.selectedRecord.get('id'));
-            this.contractPicker.reset();
             this.contractPicker.enable();
         }, this);
         var that = this;
@@ -119,12 +121,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             app: this,
             disabled: true,
             onBeforeQuery: function(qevent) {
-                this.supr().onBeforeQuery.call(this, qevent);
+                this.store.baseParams.filter = [
+                    {field: 'query', operator: 'contains', value: qevent.query }
+                ];
+                this.store.removeAll();
                 this.store.baseParams.filter.push({field: 'employee_id', operator: 'equals', value: that.employeePicker.selectedRecord.get('id')})
             }
         });
         this.contractPicker.on('select', function() {
-            that.datePicker.loadFeastDays(that.employeePicker.selectedRecord.get('id'), this.selectedRecord.get('id'));
+            that.datePicker.loadFeastDays(that.employeePicker.selectedRecord ? that.employeePicker.selectedRecord.get('id') : null, this.selectedRecord.get('id'));
+            return true;
         });
         
         return {
@@ -161,8 +167,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 allowBlank: false,
                                 columnWidth: 1
                             },
-                            items: [[
-                                this.employeePicker],[this.contractPicker],[
+                            items: [
+                                [this.employeePicker],[this.contractPicker],[
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'HumanResources',
                                     keyFieldName: 'freetimeType',
