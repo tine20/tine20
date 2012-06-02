@@ -90,7 +90,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     initDatePicker: function() {
-        this.datePicker = new Tine.HumanResources.DatePicker({initDate: this.record.get('firstday_date'), app: this.app, record: this.record, recordClass: this.recordClass, editDialog: this, dateProperty: 'date', recordsProperty: 'freedays', foreignIdProperty: 'freeday_id'});
+        this.datePicker = new Tine.HumanResources.DatePicker({disabled: true, initDate: this.record.get('firstday_date'), app: this.app, record: this.record, recordClass: this.recordClass, editDialog: this, dateProperty: 'date', recordsProperty: 'freedays', foreignIdProperty: 'freeday_id'});
     },
     
     /**

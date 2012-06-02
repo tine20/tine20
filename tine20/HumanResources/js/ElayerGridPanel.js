@@ -91,16 +91,13 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
             appName: 'Calendar',
             requiredGrant: 'readGrant',
             hideTrigger2: true,
-            allowBlank: false
+            allowBlank: false,
+            blurOnSelect: true
         };
 
         this.calendarQuickAdd = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
         this.calendarEditor = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
-        this.calendarEditor.on('blur', function() {
-            if(this.calendarEditor.hasFocusedSubPanels) {
-                return false;
-            }
-        }, this);
+
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
