@@ -10,12 +10,12 @@
  */
 
 /**
- * class to hold Elayer data
+ * class to hold Contract data
  * 
  * @package     HumanResources
  * @subpackage  Model
  */
-class HumanResources_Model_Elayer extends Tinebase_Record_Abstract
+class HumanResources_Model_Contract extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which
@@ -52,7 +52,7 @@ class HumanResources_Model_Elayer extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked HumanResources_Model_Elayer records) and other metadata
+    // relations (linked HumanResources_Model_Contract records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),

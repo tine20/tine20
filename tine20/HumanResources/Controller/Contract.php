@@ -1,6 +1,6 @@
 <?php
 /**
- * Elayer controller for HumanResources application
+ * Contract controller for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
@@ -11,12 +11,12 @@
  */
 
 /**
- * Elayer controller class for HumanResources application
+ * Contract controller class for HumanResources application
  *
  * @package     HumanResources
  * @subpackage  Controller
  */
-class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstract
+class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -25,8 +25,8 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
      */
     private function __construct() {
         $this->_applicationName = 'HumanResources';
-        $this->_backend = new HumanResources_Backend_Elayer();
-        $this->_modelName = 'HumanResources_Model_Elayer';
+        $this->_backend = new HumanResources_Backend_Contract();
+        $this->_modelName = 'HumanResources_Model_Contract';
         $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
@@ -35,19 +35,19 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
     /**
      * holds the instance of the singleton
      *
-     * @var HumanResources_Controller_Elayer
+     * @var HumanResources_Controller_Contract
      */
     private static $_instance = NULL;
 
     /**
      * the singleton pattern
      *
-     * @return HumanResources_Controller_Elayer
+     * @return HumanResources_Controller_Contract
      */
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_Elayer();
+            self::$_instance = new HumanResources_Controller_Contract();
         }
 
         return self::$_instance;
@@ -97,7 +97,7 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
         
         if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null; 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
-        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
         $lastRecord = $this->search($filter, $paging)->getFirstRecord();
         if($lastRecord && empty($lastRecord->end_date)) {
@@ -105,5 +105,40 @@ class HumanResources_Controller_Elayer extends Tinebase_Controller_Record_Abstra
             $lastRecord->end_date = $date->subDay(1);
             $this->update($lastRecord, false);
         }
+    }
+    /**
+     * returns the active contract for the given employee and date or now, when no date is given
+     * @param string $_employeeId
+     * @param Tinebase_DateTime $_firstDayDate
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws HumanResources_Exception_NoCurrentContract
+     * @throws Tinebase_Exception_Duplicate
+     */
+    public function getValidContract($_employeeId, $_firstDayDate = NULL)
+    {
+        if(!$_employeeId) {
+            throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
+        }
+        $_firstDayDate = ($_firstDayDate instanceof Date) ? $_firstDayDate : new Tinebase_DateTime();
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_firstDayDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+        $endDate = new Tinebase_Model_Filter_FilterGroup(array(), 'OR');
+        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $_firstDayDate)));
+        $endDate->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'equals', 'value' =>  '')));
+        $filter->addFilterGroup($endDate);
+        $contracts = $this->search($filter);
+        if($contracts->count() < 1) {
+            $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+            $contracts = $this->search($filter);
+            $e = new HumanResources_Exception_NoCurrentContract();
+            $e->addRecord($contracts->getFirstRecord());
+            throw $e;
+        } else if($contracts->count() > 1) {
+            throw new Tinebase_Exception_Duplicate('There are more than 1 valid contracts for this employee!');
+        }
+        
+        return $contracts->getFirstRecord();
     }
 }

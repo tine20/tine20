@@ -53,7 +53,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchEmployees($filter, $paging)
     {
         return $this->_search($filter, $paging, HumanResources_Controller_Employee::getInstance(), 'HumanResources_Model_EmployeeFilter');
-    }     
+    }
     
     /**
      * Return a single record
@@ -181,6 +181,18 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchContracts($filter, $paging)
+    {
+        return $this->_search($filter, $paging, HumanResources_Controller_Contract::getInstance(), 'HumanResources_Model_ContractFilter');
+    }
+    
+    /**
      * returns record prepared for json transport
      *
      * @param Tinebase_Record_Interface $_record
@@ -191,10 +203,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
                 $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
-                $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+                $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
-                $recs = HumanResources_Controller_Elayer::getInstance()->search($filter, null);
-                $_record['elayers'] = $this->_multipleRecordsToJson($recs);
+                $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
+                $_record['contracts'] = $this->_multipleRecordsToJson($recs);
                 break;
             case 'HumanResources_Model_FreeTime':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
@@ -204,7 +216,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $recs->sort('date', 'ASC');
                 $_record['freedays'] = $this->_multipleRecordsToJson($recs);
                 break;
-            case 'HumanResources_Model_Elayer':
+            case 'HumanResources_Model_Contract':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
                 $_record['workingtime_id'] = HumanResources_Controller_WorkingTime::getInstance()->get($_record['workingtime_id']);
                 if(!empty($_record['feast_calendar_id'])) {
@@ -225,16 +237,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'HumanResources_Model_FreeTime':
                 $this->_resolveMultipleEmployees($_records);
                 break;
-            case 'HumanResources_Model_Elayer':
+            case 'HumanResources_Model_Contract':
                 $this->_resolveMultipleEmployees($_records);
                 $this->_resolveMultipleWorkingTimes($_records);
                 $this->_resolveMultipleCalendars($_records);
                 break;
-//             case 'HumanResources_Model_WorkingTime':
-//                 $this->_resolveMultipleEmployees($_records);
-//                 break;
         }
-//                             die(var_dump($_records->toArray()));
         return parent::_multipleRecordsToJson($_records);
     }
 
@@ -285,7 +293,47 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $record->employee_id = NULL;
             }
         }
-    }    
+    }
+    
+    /**
+     * returns feast days
+     * @param string $_employeeId
+     * @param DateTime $_firstDayDate
+     * @param string $_excludeFreeTimeId
+     * @param string $_contractId
+     */
+    public function getFeastAndFreeDays($_employeeId, $_firstDayDate = NULL, $_excludeFreeTimeId = NULL, $_contractId = NULL)
+    {
+        if($_contractId) {
+            $contract = HumanResources_Controller_Contract::getInstance()->get($_contractId);
+        } else {
+            $contract = HumanResources_Controller_Contract::getInstance()->getValidContract($_employeeId, $_firstDayDate);
+        }
+        $filter = new Calendar_Model_EventFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
+        $dates = Calendar_Controller_Event::getInstance()->search($filter)->dtstart;
+        
+        $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+        if ($contract->end_date) {
+            $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $contract->end_date)));
+        }
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date)));
+        if($_excludeFreeTimeId) {
+            $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'id', 'operator' => 'notin', 'value' => array($_excludeFreeTimeId))));
+        }
+        $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
+        
+        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
+
+        $freedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
+        $dates = array_merge($freedays->date, $dates);
+        
+        return array('result' => $dates, 'totalcount' => count($dates), 'first_day' => $contract->start_date, 'last_day' => $contract->end_date);
+        
+    }
     
 //     /**
 //      * returns multiple records prepared for json transport

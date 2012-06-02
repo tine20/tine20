@@ -70,7 +70,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'elayers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contracts'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -131,10 +131,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 //      */
 //     protected function _setFromJson(array &$_data)
 //     {
-//         for ($i = 0; $i < count($_data['elayers']); $i++) {
-//             $_data['elayers'][$i]['workingtime_id'] = $_data['elayers'][$i]['workingtime_id']['id'];
+//         for ($i = 0; $i < count($_data['contracts']); $i++) {
+//             $_data['contracts'][$i]['workingtime_id'] = $_data['contracts'][$i]['workingtime_id']['id'];
 //         }
-// // //         foreach($_data['workingtime_id']['elayers'] as $elayer) {
+// // //         foreach($_data['workingtime_id']['contracts'] as $contract) {
 // // //             = $_data['workingtime_id']['id'];
 // // //         }
 //         die(var_dump($_data));

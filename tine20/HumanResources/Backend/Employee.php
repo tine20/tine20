@@ -44,8 +44,8 @@ class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
 //      * @var array
 //      */
 //     protected $_foreignTables = array(
-//         'elayers'    => array(
-//             'table' => 'humanresources_elayer',
+//         'contracts'    => array(
+//             'table' => 'humanresources_contract',
 //             'joinOn'        => 'employee_id',
 //             'joinId'        => 'id',
 //             'field'         => 'id',

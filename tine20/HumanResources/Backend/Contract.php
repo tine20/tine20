@@ -16,21 +16,21 @@
  * @package     HumanResources
  * @subpackage  Backend
  */
-class HumanResources_Backend_Elayer extends Tinebase_Backend_Sql_Abstract
+class HumanResources_Backend_Contract extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'humanresources_elayer';
+    protected $_tableName = 'humanresources_contract';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'HumanResources_Model_Elayer';
+    protected $_modelName = 'HumanResources_Model_Contract';
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
@@ -44,7 +44,7 @@ class HumanResources_Backend_Elayer extends Tinebase_Backend_Sql_Abstract
 //      * @var array
 //      */
 //     protected $_foreignTables = array(
-//         'elayers'    => array(
+//         'contracts'    => array(
 //             'table'         => 'humanresources_workingtime',
 //             'joinOn'        => 'workingtime_id',
 //             'joinId'        => 'id',

@@ -20,6 +20,10 @@
           "path": "js/"
         },
         {
+          "text": "ContractRecordPicker.js",
+          "path": "js/"
+        },
+        {
           "text": "EmployeeGridPanel.js",
           "path": "js/"
         },
@@ -40,7 +44,7 @@
           "path": "js/"
         },
         {
-          "text": "ElayerGridPanel.js",
+          "text": "ContractGridPanel.js",
           "path": "js/"
         },
         {

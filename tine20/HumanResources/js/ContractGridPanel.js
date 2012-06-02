@@ -23,7 +23,7 @@ Ext.ns('Tine.HumanResources');
  * Create a new Tine.HumanResources.EmployeeEditDialog
  */
 
-Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
+Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     /*
      * config
      */
@@ -38,7 +38,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     enableColumnHide:false,
     enableColumnMove:false,
     enableHdMenu: false,
-    recordClass: Tine.HumanResources.Model.Elayer,
+    recordClass: Tine.HumanResources.Model.Contract,
     
     /*
      * public
@@ -47,15 +47,15 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     editDialog: null,
     
     initComponent: function() {
-        this.title = this.app.i18n._('Elayers');
-        Tine.HumanResources.ElayerGridPanel.superclass.initComponent.call(this);
+        this.title = this.app.i18n._('Contracts');
+        Tine.HumanResources.ContractGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
         this.on('afteredit', this.onAfterEdit, this);
         this.store.sort();
     },
     
     onRecordLoad: function() {
-        Ext.each(this.editDialog.record.get('elayers'), function(ar) {
+        Ext.each(this.editDialog.record.get('contracts'), function(ar) {
             this.store.addSorted(new this.recordClass(ar));
         }, this);
         

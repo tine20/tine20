@@ -12,7 +12,7 @@
  * employee filter Class
  * @package     HumanResources
  */
-class HumanResources_Model_ElayerFilter extends Tinebase_Model_Filter_FilterGroup
+class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string application of this filter group
@@ -22,19 +22,19 @@ class HumanResources_Model_ElayerFilter extends Tinebase_Model_Filter_FilterGrou
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'HumanResources_Model_Elayer';
+    protected $_modelName = 'HumanResources_Model_Contract';
     
     /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
         'id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'employee_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
-            'options' => array(
-                'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
-                'controller'        => 'HumanResources_Controller_Employee', 
-                )
-            ),
+        'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
+//             'options' => array(
+//                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
+//                 'controller'        => 'HumanResources_Controller_Employee', 
+//                 )
+//             ),
         'start_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
         'end_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
 //         'text' => array('filter' => 'Tinebase_Model_Filter_Text'),

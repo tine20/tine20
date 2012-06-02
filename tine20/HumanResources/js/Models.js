@@ -39,7 +39,7 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'notes'},
     // relations with other objects
     { name: 'relations'},
-    { name: 'elayers'}
+    { name: 'contracts'}
 ]);
 
 /**
@@ -187,7 +187,7 @@ Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
 
 // ELayer
 
-Tine.HumanResources.Model.ElayerArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
     {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
@@ -198,32 +198,32 @@ Tine.HumanResources.Model.ElayerArray = Tine.Tinebase.Model.genericFields.concat
     {name: 'workingtime_id', type: Tine.HumanResources.Model.WorkingTime }
 ]);
 
-Tine.HumanResources.Model.Elayer = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ElayerArray, {
+Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ContractArray, {
     appName: 'HumanResources',
-    modelName: 'Elayer',
+    modelName: 'Contract',
     idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Elayer', 'Elayers', n);
-    recordName: 'Elayer',
-    recordsName: 'Elayers',
+    titleProperty: 'workingtime_id.title',
+    // ngettext('Contract', 'Contracts', n);
+    recordName: 'Contract',
+    recordsName: 'Contracts',
 //    containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
-    containerName: 'All Elayers',
-    containersName: 'Elayers',
+    containerName: 'All Contracts',
+    containersName: 'Contracts',
     getTitle: function() {
-        return this.get('name') ? this.get('name') : false;
+        return this.get('workingtime_id') ? Ext.util.Format.htmlEncode(this.get('workingtime_id').title) + ' ' + Tine.Tinebase.common.dateRenderer(this.get('start_date')) + ' - ' + Tine.Tinebase.common.dateRenderer(this.get('end_date')) : '';
     }
 });
 
 /**
  * @namespace Tine.HumanResources.Model
  * 
- * get default data for a new Elayer
+ * get default data for a new Contract
  *  
  * @return {Object} default data
  * @static
  */ 
-Tine.HumanResources.Model.Elayer.getDefaultData = function() {
+Tine.HumanResources.Model.Contract.getDefaultData = function() {
     
     var data = {};
     return data;
@@ -232,17 +232,17 @@ Tine.HumanResources.Model.Elayer.getDefaultData = function() {
 /**
  * @namespace Tine.HumanResources.Model
  * 
- * get Elayer filter
+ * get Contract filter
  *  
  * @return {Array} filter objects
  * @static
  */ 
-Tine.HumanResources.Model.Elayer.getFilterModel = function() {
+Tine.HumanResources.Model.Contract.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']}
-//        {label: app.i18n._('Elayer name'),   field: 'name' },
+//        {label: app.i18n._('Contract name'),   field: 'name' },
 //        {filtertype: 'tinebase.tag', app: app},
 //        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
     ];
@@ -250,15 +250,15 @@ Tine.HumanResources.Model.Elayer.getFilterModel = function() {
 
 /**
  * @namespace Tine.HumanResources
- * @class Tine.HumanResources.elayerBackend
+ * @class Tine.HumanResources.contractBackend
  * @extends Tine.Tinebase.data.RecordProxy
  * 
  * Employee Backend
  */ 
-Tine.HumanResources.elayerBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.HumanResources.contractBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'HumanResources',
     modelName: 'Employee',
-    recordClass: Tine.HumanResources.Model.Elayer
+    recordClass: Tine.HumanResources.Model.Contract
 });
 
 

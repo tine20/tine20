@@ -67,7 +67,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.onRecordLoad.defer(250, this);
             return;
         }
-        this.elayerGridPanel.onRecordLoad();
+        this.contractGridPanel.onRecordLoad();
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
     },
 //    
@@ -76,14 +76,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordUpdate: function() {
-        var elayers = [];
-        this.elayerGridPanel.store.query().each(function(elayer) {
-            console.warn(elayer.data);
-//            elayer.set('workingtime_id', elayer.get('workingtime_id').id);
-            elayers.push(elayer.data);
+        var contracts = [];
+        this.contractGridPanel.store.query().each(function(contract) {
+            console.warn(contract.data);
+//            contract.set('workingtime_id', contract.get('workingtime_id').id);
+            contracts.push(contract.data);
         }, this);
         
-        this.record.set('elayers', elayers);
+        this.record.set('contracts', contracts);
 //        asd;
         Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
     },
@@ -104,7 +104,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             columnWidth: .333
         };
         
-        this.elayerGridPanel = new Tine.HumanResources.ElayerGridPanel({
+        this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
             app: this.app,
             editDialog: this
         });
@@ -352,7 +352,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
                 }), 
-            this.elayerGridPanel,
+            this.contractGridPanel,
             this.freetimeGridPanel
             ]
         };

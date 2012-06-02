@@ -73,20 +73,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-        $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+        $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         
-        foreach($_record->elayers as $elayerArray) {
-            $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
-            $elayer = new HumanResources_Model_Elayer($elayerArray);
-            $elayer->employee_id = $_createdRecord->getId();
-            $elayers->addRecord($elayer);
+        foreach($_record->contracts as $contractArray) {
+            $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+            $contract = new HumanResources_Model_Contract($contractArray);
+            $contract->employee_id = $_createdRecord->getId();
+            $contracts->addRecord($contract);
         }
-        $elayers->sort('start_date', 'ASC');
-        foreach($elayers->getIterator() as $elayer) {
-            $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
+        $contracts->sort('start_date', 'ASC');
+        foreach($contracts->getIterator() as $contract) {
+            $createdContracts->addRecord(HumanResources_Controller_Contract::getInstance()->create($contract));
         }
-        $_createdRecord->elayers = $createdElayers;
+        $_createdRecord->contracts = $createdContracts;
     }
     
     /**
@@ -98,28 +98,28 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-        $ec = HumanResources_Controller_Elayer::getInstance();
+        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+        $ec = HumanResources_Controller_Contract::getInstance();
         
-        foreach($_record->elayers as $elayerArray) {
-            $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
-            $elayerArray['employee_id'] = $_oldRecord->getId();
-            $elayer = new HumanResources_Model_Elayer($elayerArray);
-            if($elayer->id) {
-                $elayers->addRecord($ec->update($elayer));
+        foreach($_record->contracts as $contractArray) {
+            $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+            $contractArray['employee_id'] = $_oldRecord->getId();
+            $contract = new HumanResources_Model_Contract($contractArray);
+            if($contract->id) {
+                $contracts->addRecord($ec->update($contract));
             } else {
-                $elayers->addRecord($ec->create($elayer));
+                $contracts->addRecord($ec->create($contract));
             }
         }
 
-        $filter = new HumanResources_Model_ElayerFilter(array(), 'AND');
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
-        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $elayers->id));
-        $deleteElayers = HumanResources_Controller_Elayer::getInstance()->search($filter);
+        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
+        $deleteContracts = HumanResources_Controller_Contract::getInstance()->search($filter);
         // update first date
-        $elayers->sort('start_date', 'DESC');
-        $ec->delete($deleteElayers->id);
-        $_record->elayers = $elayers->toArray();
+        $contracts->sort('start_date', 'DESC');
+        $ec->delete($deleteContracts->id);
+        $_record->contracts = $contracts->toArray();
     }
     
 //     /**
@@ -131,29 +131,29 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
 //      */
 //     protected function _inspectAfterUpdate($_updatedRecord, $_record)
 //     {
-//         $elayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-//         $createdElayers = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
-//         $oldElayers  = new Tinebase_Record_RecordSet('HumanResources_Model_Elayer');
+//         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+//         $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+//         $oldContracts  = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         
-//         foreach($_record->elayers as $elayerArray) {
-//             $elayerArray['workingtime_id'] = $elayerArray['workingtime_id']['id'];
-//             if(strlen($elayerArray['id']) != 40) {
-//                 $elayer = new HumanResources_Model_Elayer($elayerArray);
-//                 $elayer->employee_id = $_updatedRecord->getId();
-//                 $elayers->addRecord($elayer);
+//         foreach($_record->contracts as $contractArray) {
+//             $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+//             if(strlen($contractArray['id']) != 40) {
+//                 $contract = new HumanResources_Model_Contract($contractArray);
+//                 $contract->employee_id = $_updatedRecord->getId();
+//                 $contracts->addRecord($contract);
 //             } else {
-//                 $elayer = new HumanResources_Model_Elayer($elayerArray);
-//                 $oldElayers->addRecord($elayer);
+//                 $contract = new HumanResources_Model_Contract($contractArray);
+//                 $oldContracts->addRecord($contract);
 //             }
 //         }
-//         $elayers->sort('start_date', 'ASC');
-//         foreach($elayers->getIterator() as $elayer) {
-//             $createdElayers->addRecord(HumanResources_Controller_Elayer::getInstance()->create($elayer));
+//         $contracts->sort('start_date', 'ASC');
+//         foreach($contracts->getIterator() as $contract) {
+//             $createdContracts->addRecord(HumanResources_Controller_Contract::getInstance()->create($contract));
 //         }
-//         $createdElayers->merge($oldElayers);
-//         $createdElayers->sort('start_date', 'DESC');
+//         $createdContracts->merge($oldContracts);
+//         $createdContracts->sort('start_date', 'DESC');
         
-//         $_updatedRecord->elayers = $createdElayers;
+//         $_updatedRecord->contracts = $createdContracts;
 //     }
     
 }

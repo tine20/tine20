@@ -29,21 +29,88 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     foreignIdProperty: 'freetime_id',
     useWeekPickerPlugin: false,
     initDate: null,
+
     /**
      * initializes the component
      */
     initComponent: function() {
+        this.disabledDays = [0,6];
+        
         if(this.useWeekPickerPlugin) {
             this.plugins = this.plugins ? this.plugins : [];
             this.plugins.push(new Ext.ux.DatePickerWeekPlugin({
                 weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
             }));
         }
+
         this.initStore();
         this.on('show', this.onAfterRender, this);
         Tine.HumanResources.DatePicker.superclass.initComponent.call(this);
     },
 
+    /**
+     * loads the feast days of the configured feast calendar from the server
+     * @param {} data
+     */
+    loadFeastDays: function(employeeId, contractId) {
+        if(employeeId || contractId) {
+            var fdd = this.record.get('firstday_date') ? this.record.get('firstday_date') : new Date();
+            var excludeFreeTimeId = this.record.get('id') ? this.record.get('id') : null;
+            this.loadMask = new Ext.LoadMask(this.getEl(), {
+                msg: this.app.i18n._('Loading calendar data...')
+            });
+            this.loadMask.show();
+            var req = Ext.Ajax.request({
+                url : 'index.php',
+                params : { method : 'HumanResources.getFeastAndFreeDays', _employeeId : employeeId, _firstDayDate: fdd, _excludeFreeTimeId: excludeFreeTimeId, _contractId: contractId},
+                success : function(_result, _request) {
+                    this.onFeastDaysLoad(Ext.decode(_result.responseText));
+                },
+                failure : this.onFailure,
+                scope: this
+            });
+        }
+    },
+    
+    onFailure: function(exception) {
+        if (! exception.code && exception.responseText) {
+            // we need to decode the exception first
+            var response = Ext.util.JSON.decode(exception.responseText);
+            exception = response.data;
+        }
+        
+        if(exception.code == 910) {
+            if(exception.nearestRecord) {
+                
+                this.editDialog.contractPicker.setValue(exception.nearestRecord);
+                this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
+                this.editDialog.contractPicker.fireEvent('select');
+            }
+        } else {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+        }
+    },
+    /**
+     * loads the feast days from loadFeastDays
+     * @param {Object} result
+     */
+    onFeastDaysLoad: function(result) {
+        if(result.totalcount > 0) {
+            this.disabledDates = [];
+            Ext.each(result.result, function(date){
+                var date = new Date(date.date);
+                this.disabledDates.push(date);
+            }, this);
+
+            this.setMinDate(new Date(result.first_day.date));
+            if(result.last_day) this.setMaxDate(new Date(result.last_day.date));
+
+            this.setDisabledDates(this.disabledDates);
+        }
+        this.loadMask.hide();
+        this.enable();
+    },
+    
     initStore: function() {
         var picker = this;
         this.store = new Tine.Tinebase.data.RecordStore({
@@ -79,7 +146,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         },
     
     handleDateClick: function(e, t) {
-        date = new Date(t.dateValue);
+        var date = new Date(t.dateValue),
+            existing;
+            
         date.clearTime();
         if (existing = this.store.getByDate(date)) {
             this.store.remove(existing);
@@ -106,7 +175,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.store.query().each(function(record) {
             i++;
             if(i == 1) {
-                first = false;
                 record.set('duration', this.editDialog.firstDayLengthPicker.getValue());
             } else if (this.store.getCount() == i) {
                 record.set('duration', this.editDialog.lastDayLengthPicker.getValue());
@@ -120,6 +188,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     },
     
     onRecordLoad: function(record) {
+        if(record.get('employee_id')) {
+            this.loadFeastDays(record.get('employee_id').id);
+        }
         Ext.each(record.get(this.recordsProperty), function(fd) {
             fd.date = new Date(fd.date);
             fd.date.clearTime();
@@ -127,6 +198,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }, this);
 
         // focus
+        this.initDate = this.initDate ? this.initDate : new Date();
         this.setValue(this.initDate);
         
         // clear invalid

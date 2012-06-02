@@ -384,7 +384,7 @@
             </declaration>
         </table>
         <table>
-            <name>humanresources_elayer</name>
+            <name>humanresources_contract</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -468,7 +468,7 @@
                     <type>datetime</type>
                 </field>
                 <index>
-                    <name>elayer::employee_id--employee::id</name>
+                    <name>contract::employee_id--employee::id</name>
                     <field>
                         <name>employee_id</name>
                     </field>
@@ -479,7 +479,7 @@
                     </reference>
                 </index>
                 <index>
-                    <name>elayer::workingtime_id--workingtime::id</name>
+                    <name>contract::workingtime_id--workingtime::id</name>
                     <field>
                         <name>workingtime_id</name>
                     </field>
@@ -490,7 +490,7 @@
                     </reference>
                 </index>
                 <index>
-                    <name>elayer::feast_calendar_id--container::id</name>
+                    <name>contract::feast_calendar_id--container::id</name>
                     <field>
                         <name>feast_calendar_id</name>
                     </field>
