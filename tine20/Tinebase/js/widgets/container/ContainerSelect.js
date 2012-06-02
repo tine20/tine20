@@ -72,8 +72,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     trigger2width: 100,
     
-    callingComponent: null,
-    
     // private
     allowBlank: false,
     triggerAction: 'all',
@@ -281,6 +279,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
     onSelect: function(record, index) {
+        this.hasFocusedSubPanels = true;
         if (record == this.otherRecord) {
             this.onChoseOther();
         } else {
@@ -293,12 +292,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     onChoseOther: function() { 
-        console.warn(this,this.callingComponent);
-        if(this.callingComponent) {
-            Tine.log.debug('suspending listeners of the calling component');
-            console.warn(callingComponent);
-            this.callingComponent.suspendListeners();
-        }
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
             allowNodeSelect: this.allowNodeSelect,
@@ -307,6 +300,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             requiredGrant: this.requiredGrant,
             TriggerField: this
         });
+        this.dlg.on('close', function() {
+            this.hasFocusedSubPanels = false;
+        }, this);
     },
     
     /**
@@ -545,6 +541,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onClose: function() {
+        this.fireEvent('close');
         this.win.close();
     },
     
