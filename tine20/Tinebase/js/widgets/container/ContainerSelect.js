@@ -141,7 +141,11 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.selectedContainer = this.defaultContainer;
             this.value = this.defaultContainer.name;
         }
-        
+        this.on('blur', function() {
+            if(this.hasFocusedSubPanels) {
+                return false;
+            }
+        }, this);
         this.on('beforequery', this.onBeforeQuery, this);
     },
     
@@ -297,7 +301,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    onChoseOther: function() { 
+    onChoseOther: function() {
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
             allowNodeSelect: this.allowNodeSelect,
@@ -306,9 +310,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             requiredGrant: this.requiredGrant,
             TriggerField: this
         });
-        this.dlg.on('close', function() {
-            this.hasFocusedSubPanels = false;
-        }, this);
     },
     
     /**
@@ -547,7 +548,6 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onClose: function() {
-        this.fireEvent('close');
         this.win.close();
     },
     
@@ -557,6 +557,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     onOk: function() {
         var  node = this.tree.getSelectionModel().getSelectedNode();
         if (node) {
+            this.TriggerField.hasFocusedSubPanels = false;
             var container = this.TriggerField.setValue(node.attributes.container);
             this.TriggerField.manageRecents(container);
             this.TriggerField.fireEvent('select', this.TriggerField, node.attributes.container);
