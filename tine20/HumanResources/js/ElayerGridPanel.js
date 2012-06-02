@@ -69,6 +69,7 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
     onNewentry: function(recordData) {
         recordData.workingtime_id = this.workingTimePicker.selectedRecord.data;
         recordData.employee_id = this.editDialog.record.get('id');
+        recordData.feast_calendar_id = this.calendarPicker.selectedContainer;
         this.store.addSorted(new this.recordClass(recordData));
     },
     
@@ -80,8 +81,17 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
      */
     getColumnModel: function() {
         
-        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true, callingComponent: this });
-        
+        this.workingTimePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
+        this.calendarPicker = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
+                        hideLabel: true,
+                        containerName: this.app.i18n._('Calendar'),
+                        containersName: this.app.i18n._('Calendars'),
+                        appName: 'Calendar',
+                        requiredGrant: 'readGrant',
+                        hideTrigger2: true,
+                        allowBlank: false
+                     });
+                     
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
@@ -104,16 +114,8 @@ Tine.HumanResources.ElayerGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridP
                      editor: new Ext.ux.form.ClearableDateField()
                 }, { dataIndex: 'feast_calendar_id',      id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
                      renderer: Tine.Tinebase.common.containerRenderer, scope: this,
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
-                        hideLabel: true,
-                        containerName: this.app.i18n._('Calendar'),
-                        containersName: this.app.i18n._('Calendars'),
-                        appName: 'Calendar',
-                        requiredGrant: 'readGrant',
-                        hideTrigger2: true,
-                        allowBlank: false
-                     }),
-                    editor: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
+                     quickaddField: this.calendarPicker,
+                     editor: Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                         hideLabel: true,
                         containerName: this.app.i18n._('Calendar'),
                         containersName: this.app.i18n._('Calendars'),
