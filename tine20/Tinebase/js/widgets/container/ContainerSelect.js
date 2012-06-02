@@ -301,7 +301,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
      * @private
      */
-    onChoseOther: function() { 
+    onChoseOther: function() {
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
             allowNodeSelect: this.allowNodeSelect,
@@ -310,9 +310,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             requiredGrant: this.requiredGrant,
             TriggerField: this
         });
-//        this.dlg.on('close', function() {
-//            this.hasFocusedSubPanels = false;
-//        }, this);
     },
     
     /**
@@ -551,7 +548,6 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onClose: function() {
-        this.fireEvent('close');
         this.win.close();
     },
     
