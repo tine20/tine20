@@ -59,6 +59,12 @@ Tine.widgets.form.RecordPickerManager = function() {
          * @param {String/Object} component the component or xtype to register 
          */
         register: function(appName, modelName, component) {
+            
+            if(!Tine.hasOwnProperty('log')) {
+                this.register.defer(100, this, [appName, modelName, component]);
+                return false;
+            }
+            
             var appName = Ext.isString(appName) ? appName : appName.appName,
                 modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
                 key = appName+modelName;
