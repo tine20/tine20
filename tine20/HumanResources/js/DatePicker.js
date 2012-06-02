@@ -52,9 +52,13 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * loads the feast days of the configured feast calendar from the server
      * @param {} data
      */
-    loadFeastDays: function(employeeId, contractId) {
+    loadFeastDays: function(employee, contract, freetime) {
+        var contractId = contract ? contract.get('id') : null;
+        var employeeId = employee ? employee.get('id') : null;
+        var firstDay = freetime ? freetime.get('firstday_date') : null;
+        console.warn(employee, contract, freetime);
         if(employeeId || contractId) {
-            var fdd = this.record.get('firstday_date') ? this.record.get('firstday_date') : new Date();
+            var fdd = firstDay ? firstDay : new Date();
             var excludeFreeTimeId = this.record.get('id') ? this.record.get('id') : null;
             this.loadMask = new Ext.LoadMask(this.getEl(), {
                 msg: this.app.i18n._('Loading calendar data...')
@@ -72,6 +76,10 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }
     },
     
+    /**
+     * is called on failure of loadFeastDays
+     * @param {Object} exception
+     */
     onFailure: function(exception) {
         if (! exception.code && exception.responseText) {
             // we need to decode the exception first
@@ -81,7 +89,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         if(exception.code == 910) {
             if(exception.nearestRecord) {
-                
                 this.editDialog.contractPicker.setValue(exception.nearestRecord);
                 this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
                 this.editDialog.contractPicker.fireEvent('select');
@@ -103,7 +110,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 var date = new Date(date.date);
                 this.disabledDates.push(date);
             }, this);
-            
             this.editDialog.contractPicker.setValue(result.contract);
             this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
             this.editDialog.contractPicker.enable();
@@ -116,6 +122,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.enable();
     },
     
+    /**
+     * initializes the store
+     */
     initStore: function() {
         var picker = this;
         this.store = new Tine.Tinebase.data.RecordStore({
@@ -145,11 +154,21 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }, this);
     },
 
+    /**
+     * overwrites update function of superclass
+     * @param {} date
+     * @param {} forceRefresh
+     */
     update : function(date, forceRefresh) {
         Tine.HumanResources.DatePicker.superclass.update.call(this, date, forceRefresh);
         this.updateCellClasses();
         },
     
+    /**
+     * removes or adds a date on date click
+     * @param {Object} e
+     * @param {Object} t
+     */
     handleDateClick: function(e, t) {
         var date = new Date(t.dateValue),
             existing;
@@ -163,6 +182,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
     },
     
+    /**
+     * updates the cell classes
+     */
     updateCellClasses: function() {
         this.cells.each(function(c){
            if(this.store.getByDate(c.dom.firstChild.dateValue)) {
@@ -173,6 +195,10 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }, this);
     },
     
+    /**
+     * returns data for the editDialog
+     * @return {Array}
+     */
     getData: function() {
         var ret = [];
         this.store.sort({field: 'date', direction: 'ASC'});
@@ -192,9 +218,14 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         return ret;
     },
     
+    /**
+     * is called on editdialog record load
+     * @param {Tine.HumanResources.Model.FreeTime} record
+     */
     onRecordLoad: function(record) {
         if(record.get('employee_id')) {
-            this.loadFeastDays(record.get('employee_id').id);
+            var employee = new Tine.HumanResources.Model.Employee(record.get('employee_id'));
+            this.loadFeastDays(employee, null, record);
         }
         Ext.each(record.get(this.recordsProperty), function(fd) {
             fd.date = new Date(fd.date);

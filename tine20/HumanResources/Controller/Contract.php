@@ -119,7 +119,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         if(!$_employeeId) {
             throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
         }
-        $_firstDayDate = ($_firstDayDate instanceof Date) ? $_firstDayDate : new Tinebase_DateTime();
+        $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_firstDayDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));

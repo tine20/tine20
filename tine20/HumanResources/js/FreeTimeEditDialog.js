@@ -92,6 +92,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('freedays', this.datePicker.getData());
     },
     
+    /**
+     * creates the date picker
+     */
     initDatePicker: function() {
         this.datePicker = new Tine.HumanResources.DatePicker({disabled: true, initDate: this.record.get('firstday_date'), app: this.app, record: this.record, recordClass: this.recordClass, editDialog: this, dateProperty: 'date', recordsProperty: 'freedays', foreignIdProperty: 'freeday_id'});
     },
@@ -112,7 +115,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             app: this
         });
         this.employeePicker.on('select', function(){
-            this.datePicker.loadFeastDays(this.employeePicker.selectedRecord.get('id'));
+            this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
             this.contractPicker.enable();
         }, this);
         var that = this;
@@ -129,7 +132,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
         });
         this.contractPicker.on('select', function() {
-            that.datePicker.loadFeastDays(that.employeePicker.selectedRecord ? that.employeePicker.selectedRecord.get('id') : null, this.selectedRecord.get('id'));
+            that.datePicker.loadFeastDays(that.employeePicker.selectedRecord, this.selectedRecord);
             return true;
         });
         
