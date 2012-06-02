@@ -88,6 +88,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     displayField: 'name',
     
     /**
+     * is set to true if subpanels (selectionDialog) are active
+     * useful in QuickAddGrid
+     * @type Boolean
+     */
+    hasFocusedSubPanels: null,
+    /**
      * @private
      */
     initComponent: function() {
