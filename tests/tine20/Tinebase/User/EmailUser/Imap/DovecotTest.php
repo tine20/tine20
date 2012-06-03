@@ -191,10 +191,11 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $db = $this->_backend->getDb();
         $select = $db->select()
             ->from(array('dovecot_users'))
-            ->where($db->quoteIdentifier('username') . ' = ?', $user->accountEmailAddress);
+            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
         $stmt = $db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
+        $this->assertTrue(! empty($queryResult), 'user not found in dovecot users table');
         
         $hashPw = new Hash_Password();
         $this->assertTrue($hashPw->validate($queryResult['password'], $newPassword), 'password mismatch');
