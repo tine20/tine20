@@ -57,6 +57,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'bank_code_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_begin'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_end'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sickness_manager_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'vacation_manager_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'state'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
         
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
