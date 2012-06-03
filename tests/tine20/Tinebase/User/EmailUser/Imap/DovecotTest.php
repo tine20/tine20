@@ -16,8 +16,6 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 
 /**
  * Test class for Tinebase_DovecotTest
- * 
- * @todo add transaction with rollback
  */
 class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCase
 {
@@ -70,6 +68,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         //$this->_objects['user']->setId(Tinebase_Record_Abstract::generateUID());
 
         $this->_objects['addedUsers'] = array();
+        $this->_objects['fullUsers'] = array();
     }
 
     /**
@@ -83,6 +82,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         // delete email account
         foreach ($this->_objects['addedUsers'] as $user) {
             $this->_backend->inspectDeleteUser($user);
+        }
+        
+        foreach ($this->_objects['fullUsers'] as $user) {
+            Tinebase_User::getInstance()->deleteUser($user);
         }
     }
     
@@ -151,7 +154,14 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testSavingDuplicateAccount()
     {
-        $user = $this->testAddEmailAccount();
+        $user =  $user = Tinebase_User_LdapTest::getTestRecord();
+        $user->imapUser = new Tinebase_Model_EmailUser(array(
+            'emailPassword' => Tinebase_Record_Abstract::generateUID(),
+            'emailUID'      => '1000',
+            'emailGID'      => '1000'
+        ));
+        $user = Tinebase_User::getInstance()->addUser($user);
+        $this->_objects['fullUsers'] = array($user);
         $userId = $user->getId();
         
         // delete user in tine accounts table
@@ -161,6 +171,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         // create user again
         unset($user->accountId);
         $newUser = Tinebase_User::getInstance()->addUser($user);
+        $this->_objects['fullUsers'] = array($newUser);
         
         $this->assertNotEquals($userId, $newUser->getId());
         $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), TRUE));
