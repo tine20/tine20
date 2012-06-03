@@ -320,6 +320,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
         
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
+        
+        $this->_setPluginsPassword($userId, $_password);
     }
 
     /**
