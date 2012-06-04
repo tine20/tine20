@@ -314,12 +314,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         // update instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[5]->summary = 'exceptional summary';
         $this->_eventController->createRecurException($recurSet[5], FALSE, FALSE); //2012-03-20
         $this->_assertMail('jmcblack', 'update');
         
         // reschedule instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[6]);
+        $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[6]->dtstart->addHour(2);
         $recurSet[6]->dtend->addHour(2);
         $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
@@ -329,6 +333,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // @TODO check RANGE in ics
         // @TODO add RANGE text to message
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[16]);
+        $recurSet[16]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_eventController->createRecurException($recurSet[16], TRUE, TRUE); //2012-03-31
         $this->_assertMail('jmcblack', 'cancel');
         
@@ -337,6 +343,35 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // reschedule thisandfuture
         
         
+    }
+    
+    public function testAlarm()
+    {
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        Calendar_Model_Attender::getOwnAttender($persistentEvent->attendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        // hack to get declined attendee
+        $this->_eventController->sendNotifications(FALSE);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->sendNotifications(TRUE);
+        
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever', 'Alarm');
+        $this->assertEquals(1, count(self::getMessages()));
     }
     
     /**

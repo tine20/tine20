@@ -362,9 +362,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // create exception date
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent(new Calendar_Model_Event($recurSet[2]));
+        $recurSet[2]['last_modified_time'] = $updatedBaseEvent->last_modified_time;
         $this->_uit->createRecurException($recurSet[2], TRUE, FALSE);
         
         // delete all following (including this)
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent(new Calendar_Model_Event($recurSet[4]));
+        $recurSet[4]['last_modified_time'] = $updatedBaseEvent->last_modified_time;
         $this->_uit->createRecurException($recurSet[4], TRUE, TRUE);
         
         $from = $recurSet[0]['dtstart'];

@@ -373,6 +373,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         
         // create recur exception with scheduling change
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[6]);
+        $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[6]->dtstart->addHour(2);
         $recurSet[6]->dtend->addHour(2);
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[6], FALSE, FALSE);
@@ -407,8 +409,17 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $recurSet[5]->dtend->addHour(2);
         
         $this->_controller->createRecurException($recurSet[1], TRUE);  // (23) delete instance
+        
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[2]);
+        $recurSet[2]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[2], FALSE); // (24) move instance
+        
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[4]);
+        $recurSet[4]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[4], TRUE);  // (26) delete instance
+        
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[5], FALSE); // (27) move instance
         
         // now test update allfollowing
@@ -416,6 +427,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $recurSet[3]->dtstart->addHour(4);
         $recurSet[3]->dtend->addHour(4);
         
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[3]);
+        $recurSet[3]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE);
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
@@ -500,6 +513,41 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $updatedPersistentSClever = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $event->attendee[1]);
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedPersistentSClever->status, 'status must not change');
+    }
+    
+    /**
+     * @see https://forge.tine20.org/mantisbt/view.php?id=6548
+     */
+    public function testCreateRecurExceptionsConcurrently()
+    {
+        $from = new Tinebase_DateTime('2012-06-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-06-30 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Concurrent Recur updates',
+            'dtstart'       => '2012-06-01 10:00:00',
+            'dtend'         => '2012-06-01 12:00:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1',
+            'container_id'  => $this->_testCalendar->getId()
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        // create all following exception with first session
+        $firstSessionExdate = clone $recurSet[1];
+        $firstSessionExdate->summary = 'all following update';
+        $this->_controller->createRecurException($firstSessionExdate, FALSE, TRUE);
+        
+        // try to update exception concurrently
+        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $secondSessionExdate = clone $recurSet[1];
+        $secondSessionExdate->summary = 'just an update';
+        $this->_controller->createRecurException($secondSessionExdate, FALSE, TRUE);
     }
     
     /**

@@ -273,21 +273,22 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $newPersistentExceptions = $exceptions->filter('is_deleted', 0);
-        $this->_prepareException($_event, $newPersistentExceptions);
         
         $migration = $this->_getExceptionsMigration($currentPersistentExceptions, $newPersistentExceptions);
         
         $this->_eventController->delete($migration['toDelete']->getId());
         
+        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
+        
         foreach($migration['toCreate'] as $exception) {
+            $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
         
         foreach($migration['toUpdate'] as $exception) {
+            $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->update($exception, $_checkBusyConflicts);
         }
-        
-        $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
         
         return $this->_toiTIP($updatedBaseEvent);
     }
@@ -531,15 +532,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     protected function _prepareException($_baseEvent, $_exception)
     {
-        if ($_exception instanceof Tinebase_Record_RecordSet) {
-            foreach($_exception as $exception) {
-                $this->_prepareException($_baseEvent, $exception);
-            }
-            
-            return;
-        }
-        
-        
         if (! $_baseEvent->uid) {
             throw new Tinebase_Exception_InvalidArgument('base event has no uid');
         }
@@ -549,5 +541,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         $_exception->uid = $_baseEvent->uid;
         $_exception->recurid = $_baseEvent->uid . '-' . $_exception->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        // NOTE: we always refetch the base event as it might be touched in the meantime
+        $currBaseEvent = $this->_eventController->getRecurBaseEvent($_exception);
+        $_exception->last_modified_time = $currBaseEvent->last_modified_time;
     }
 }
