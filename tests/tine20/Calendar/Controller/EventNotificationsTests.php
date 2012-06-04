@@ -339,6 +339,35 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
     }
     
+    public function testAlarm()
+    {
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        Calendar_Model_Attender::getOwnAttender($persistentEvent->attendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        // hack to get declined attendee
+        $this->_eventController->sendNotifications(FALSE);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->sendNotifications(TRUE);
+        
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever', 'Alarm');
+        $this->assertEquals(1, count(self::getMessages()));
+    }
+    
     /**
      * testParallelAlarmTrigger
      * 

@@ -134,7 +134,9 @@
         switch ($_action) {
             case 'alarm':
                 foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
+                    if ($attender->status != Calendar_Model_Attender::STATUS_DECLINED) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
+                    }
                 }
                 break;
             case 'created':
