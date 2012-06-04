@@ -148,14 +148,14 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * returns contact image
      *
-     * @param int $_contactId
-     * @return blob
+     * @param int $contactId
+     * @return blob|string
      */
-    public function getImage($_contactId)
+    public function getImage($contactId)
     {
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'addressbook_image', array('image'))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $_contactId));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $contactId));
         $imageData = $this->_db->fetchOne($select, 'image');
         
         return $imageData ? base64_decode($imageData) : '';
@@ -164,16 +164,29 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * saves image to db
      *
-     * @param  int $_contactId
+     * @param  string $contactId
      * @param  blob $imageData
-     * @return blob
+     * @return blob|string
      */
-    public function _saveImage($_contactId, $imageData)
+    public function _saveImage($contactId, $imageData)
     {
-        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId));
+        if (! empty($imageData)) {
+            // make sure that we got a valid image blob
+            try {
+                Tinebase_ImageHelper::getImageInfoFromBlob($imageData);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Invalid image blob data, preserving old image. Error: ' . $e);
+                    
+                // return current image
+                return $this->getImage($contactId);
+            }
+        }
+        
+        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId));
         if (! empty($imageData)) {
             $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
-                'contact_id'    => $_contactId,
+                'contact_id'    => $contactId,
                 'image'         => base64_encode($imageData)
             ));
         }

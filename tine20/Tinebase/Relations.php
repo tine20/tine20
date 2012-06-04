@@ -239,9 +239,13 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation)
     {
+        if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
+            throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
+        }
+        
         $appController = Tinebase_Core::getApplicationInstance($_relation->related_model);
         
-        if (!$_relation->related_record->getId()) {
+        if (! $_relation->related_record->getId()) {
             $method = 'create';
         } else {
             $method = 'update';
