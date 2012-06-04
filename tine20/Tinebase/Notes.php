@@ -344,7 +344,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param Tinebase_Record_Abstract|string $_record
      * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
-     * @param Tinebase_Record_RecordSet RecordSet $_mods (Tinebase_Model_ModificationLog)
+     * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
      * @param string $_backend   backend of record
      * @return Tinebase_Model_Note|boolean
      * 
@@ -368,15 +368,19 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
         
-        if ($_mods !== NULL && count($_mods) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                .' mods to log: ' . print_r($_mods->toArray(), TRUE));
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                .' Adding "' . $_type . '" system note note to record.');
-            
-            $noteText .= ' | ' .$translate->_('Changed fields:');
-            foreach ($_mods as $mod) {
-                $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
+        if ($_mods !== NULL) {
+            if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    .' mods to log: ' . print_r($_mods->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    .' Adding "' . $_type . '" system note note to record.');
+                
+                $noteText .= ' | ' .$translate->_('Changed fields:');
+                foreach ($_mods as $mod) {
+                    $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
+                }
+            } else if (is_string($_mods)) {
+                $noteText = $_mods;
             }
         }
         
