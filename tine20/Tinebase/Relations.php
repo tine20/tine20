@@ -95,17 +95,17 @@ class Tinebase_Relations
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
         
+        // break relations
+        foreach ($toDel as $relationId) {
+            $this->_backend->breakRelation($relationId);
+        }
+
         // add new relations
         foreach ($toAdd as $idx) {
             if(empty($relations[$idx]->related_id)) {
                 $this->_setAppRecord($relations[$idx]);
             }
             $this->_addRelation($relations[$idx]);
-        }
-        
-        // break relations
-        foreach ($toDel as $relationId) {
-            $this->_backend->breakRelation($relationId);
         }
         
         // update relations
