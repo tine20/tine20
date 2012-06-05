@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
           "text": "HumanResources.js",
           "path": "js/"
         },

@@ -276,7 +276,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         name: 'supervisor_id',
                                         fieldLabel: this.app.i18n._('Supervisor'),
                                         useAccountRecord: true,
-                                        userOnly: true
+                                        userOnly: true,
+                                        allowBlank: true
                                 })
                             ]]
                         }]

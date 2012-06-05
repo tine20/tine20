@@ -56,7 +56,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         var contractId = contract ? contract.get('id') : null;
         var employeeId = employee ? employee.get('id') : null;
         var firstDay = freetime ? freetime.get('firstday_date') : null;
-        console.warn(employee, contract, freetime);
+
         if(employeeId || contractId) {
             var fdd = firstDay ? firstDay : new Date();
             var excludeFreeTimeId = this.record.get('id') ? this.record.get('id') : null;
@@ -70,35 +70,12 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 success : function(_result, _request) {
                     this.onFeastDaysLoad(Ext.decode(_result.responseText));
                 },
-                failure : this.onFailure,
+                failure : Tine.HumanResources.handleRequestException,
                 scope: this
             });
         }
     },
     
-    /**
-     * is called on failure of loadFeastDays
-     * @param {Object} exception
-     */
-    onFailure: function(exception) {
-        if (! exception.code && exception.responseText) {
-            // we need to decode the exception first
-            var response = Ext.util.JSON.decode(exception.responseText);
-            exception = response.data;
-        }
-        
-        if(exception.code == 910) {
-            if(exception.nearestRecord) {
-                this.editDialog.contractPicker.setValue(exception.nearestRecord);
-                this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
-                this.editDialog.contractPicker.fireEvent('select');
-            } else {
-                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-            }
-        } else {
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-        }
-    },
     /**
      * loads the feast days from loadFeastDays
      * @param {Object} result

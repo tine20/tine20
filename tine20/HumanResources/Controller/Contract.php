@@ -132,9 +132,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
             $contracts = $this->search($filter);
-            $e = new HumanResources_Exception_NoCurrentContract();
-            $e->addRecord($contracts->getFirstRecord());
-            throw $e;
+            if($contracts->count() > 0) {
+                $e = new HumanResources_Exception_NoCurrentContract();
+                $e->addRecord($contracts->getFirstRecord());
+                throw $e;
+            } else {
+                throw new HumanResources_Exception_NoContract();
+            }
         } else if($contracts->count() > 1) {
             throw new Tinebase_Exception_Duplicate('There are more than 1 valid contracts for this employee!');
         }

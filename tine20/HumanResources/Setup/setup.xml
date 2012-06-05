@@ -183,20 +183,9 @@
                     </reference>
                 </index>
                 <index>
-                    <name>hr_employee::sickness_manager_id--accounts::id</name>
+                    <name>hr_employee::supervisor_id--accounts::id</name>
                     <field>
-                        <name>sickness_manager_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
-                    <name>hr_employee::vacation_manager_id--accounts::id</name>
-                    <field>
-                        <name>vacation_manager_id</name>
+                        <name>supervisor_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
