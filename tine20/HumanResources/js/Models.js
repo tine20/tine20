@@ -30,9 +30,7 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'bank_account_number', type: 'string'},
     {name: 'bank_name',           type: 'string'},
     {name: 'bank_code_number',    type: 'string'},
-    {name: 'status',    type: 'string'},
-    {name: 'vacation_manager_id', type: Tine.Tinebase.Model.Account },
-    {name: 'sickness_manager_id', type: Tine.Tinebase.Model.Account },
+    {name: 'supervisor_id', type: Tine.Tinebase.Model.Account },
 
     {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},

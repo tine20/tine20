@@ -271,22 +271,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             labelAlign: 'top',
                             formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
                             items: [
-                                [{
-                                    xtype: 'combo',
-                                    name: 'status',
-                                    fieldLabel: this.app.i18n._('Status'),
-                                    store: [[0, this.app.i18n._('hired')], [1, this.app.i18n._('unhired')], [2, this.app.i18n._('suspended')]]
-                                }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                        name: 'vacation_manager_id',
-                                        fieldLabel: this.app.i18n._('Vacation Manager'),
+                                [
+                                Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                        name: 'supervisor_id',
+                                        fieldLabel: this.app.i18n._('Supervisor'),
                                         useAccountRecord: true,
                                         userOnly: true
-                                }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                        name: 'sickness_manager_id',
-                                        fieldLabel: this.app.i18n._('Sickness Manager'),
-                                        useAccountRecord: true,
-                                        userOnly: true
-                                })]]
+                                })
+                            ]]
                         }]
                     }, {
                         xtype: 'fieldset',

@@ -117,20 +117,7 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>status</name>
-                    <type>integer</type>
-                    <length>1</length>
-                    <notnull>false</notnull>
-                    <default>0</default>
-                </field>
-                <field>
-                    <name>vacation_manager_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>sickness_manager_id</name>
+                    <name>supervisor_id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>

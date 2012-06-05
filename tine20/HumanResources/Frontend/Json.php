@@ -203,8 +203,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
                 $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
-                $_record['sickness_manager_id'] = !empty($_record['sickness_manager_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['sickness_manager_id'])->toArray() : null;
-                $_record['vacation_manager_id'] = !empty($_record['vacation_manager_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['vacation_manager_id'])->toArray() : null;
+                $_record['supervisor_id'] = !empty($_record['supervisor_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['supervisor_id'])->toArray() : null;
                 $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
                 $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);

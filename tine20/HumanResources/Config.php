@@ -34,18 +34,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const DEFAULT_FEAST_CALENDAR = 'defaultFeastCalendar';
     
     /**
-     * Default Feast Manager
-     * @var string
-     */
-    const DEFAULT_VACATION_MANAGER = 'defaultVacationManager';
-    
-    /**
-     * Default Sickness Manager
-     * @var string
-     */
-    const DEFAULT_SICKNESS_MANAGER = 'defaultSicknessManager';
-    
-    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -74,20 +62,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'label'                 => 'Default Feast Calendar',
             'description'           => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
             'type'                  => 'container',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
-        ),
-        self::DEFAULT_VACATION_MANAGER => array(
-            'label'                 => 'Default Vacation Manager',
-            'description'           => 'Here you can define a vacation manager used per default',
-            'type'                  => 'string',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
-        ),
-        self::DEFAULT_SICKNESS_MANAGER => array(
-            'label'                 => 'Default Sickness Manager',
-            'description'           => 'Here you can define a sickness manager used per default',
-            'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
         ),
