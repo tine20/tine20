@@ -270,12 +270,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $wIds = array_unique($_records->workingtime_id);
         $wt = HumanResources_Controller_WorkingTime::getInstance()->getMultiple($wIds);
-        foreach ($_records as $record) {
-            $idx = $wt->getIndexById($record->workingtime_id);
-            if(isset($idx)) {
-                $record->workingtime_id = $wt[$idx];
-            } else {
-                $record->workingtime_id = NULL;
+        if($wt->count()) {
+            foreach ($_records as $record) {
+                $idx = $wt->getIndexById($record->workingtime_id);
+                if(isset($idx)) {
+                    $record->workingtime_id = $wt[$idx];
+                } else {
+                    $record->workingtime_id = NULL;
+                }
             }
         }
     }
@@ -288,12 +290,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $eIds = array_unique($_records->employee_id);
         $e = HumanResources_Controller_Employee::getInstance()->getMultiple($eIds);
-        foreach ($_records as $record) {
-            $id = $e->getIndexById($record->employee_id);
-            if(isset($id)) {
-                $record->employee_id = $e[$id];
-            } else {
-                $record->employee_id = NULL;
+        if($e->count()) {
+            foreach ($_records as $record) {
+                $id = $e->getIndexById($record->employee_id);
+                if(isset($id)) {
+                    $record->employee_id = $e[$id];
+                } else {
+                    $record->employee_id = NULL;
+                }
             }
         }
     }
