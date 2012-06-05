@@ -45,7 +45,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'state'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firstday_date' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -55,6 +55,9 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
+        'sickness_manager_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'vacation_manager_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         'freedays'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );

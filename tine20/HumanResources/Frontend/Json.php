@@ -119,7 +119,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array created/updated record
      */
     public function saveWorkingTime($recordData)
-    {    
+    {
         return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'WorkingTime');
     }
     
@@ -203,6 +203,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
                 $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
+                $_record['sickness_manager_id'] = !empty($_record['sickness_manager_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['sickness_manager_id'])->toArray() : null;
+                $_record['vacation_manager_id'] = !empty($_record['vacation_manager_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['vacation_manager_id'])->toArray() : null;
                 $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
                 $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
@@ -318,10 +320,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($contract->end_date) {
             $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $contract->end_date)));
         }
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date)));
+        //$filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date)));
         if($_excludeFreeTimeId) {
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'id', 'operator' => 'notin', 'value' => array($_excludeFreeTimeId))));
-        }
+        }//die(var_dump($filter->toArray()));
         $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
         
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');

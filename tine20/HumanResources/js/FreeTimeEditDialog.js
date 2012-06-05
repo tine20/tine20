@@ -177,8 +177,18 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     keyFieldName: 'freetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
                                     value: 'VACATION',
-                                    name: 'type'
-                                })],[
+                                    name: 'type',
+                                    columnWidth: .5
+                                }),
+                                new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    app: 'HumanResources',
+                                    keyFieldName: 'freetimeStatus',
+                                    fieldLabel: this.app.i18n._('Status'),
+                                    value: 'REQUESTED',
+                                    name: 'status',
+                                    columnWidth: .5
+                                })
+                                ],[
                                 {
                                     fieldLabel: this.app.i18n._('First Day Length'),
                                     xtype: 'combo',

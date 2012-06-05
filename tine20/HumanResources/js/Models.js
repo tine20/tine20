@@ -30,6 +30,9 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'bank_account_number', type: 'string'},
     {name: 'bank_name',           type: 'string'},
     {name: 'bank_code_number',    type: 'string'},
+    {name: 'status',    type: 'string'},
+    {name: 'vacation_manager_id', type: Tine.Tinebase.Model.Account },
+    {name: 'sickness_manager_id', type: Tine.Tinebase.Model.Account },
 
     {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
@@ -96,6 +99,7 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         {label: app.i18n._('Employee name'),   field: 'name' },
         {filtertype: 'tinebase.tag', app: app},
         {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
+        
     ];
 };
 
@@ -271,7 +275,9 @@ Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'type', type: 'string'},
     {name: 'firstday_date', type: 'date'},
     {name: 'remark', type: 'string' },
-    {name: 'freedays' }
+    {name: 'freedays' },
+    {name: 'status', type: 'string' }
+    
 ]);
 
 Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.FreeTimeArray, {
@@ -325,7 +331,21 @@ Tine.HumanResources.Model.FreeTime.getFilterModel = function() {
             app: app, 
             keyfieldName: 'freetimeType'
         },
-        { filtertype: 'humanresources.freetimeemployee' } 
+        { filtertype: 'humanresources.freetimeemployee' },
+        {
+            label: app.i18n._('Type'),
+            field: 'type',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'freetimeType'
+        },
+        {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'freetimeStatus'
+        }
     ];
 };
 

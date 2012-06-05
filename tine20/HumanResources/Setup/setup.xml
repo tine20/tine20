@@ -117,7 +117,7 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>state</name>
+                    <name>status</name>
                     <type>integer</type>
                     <length>1</length>
                     <notnull>false</notnull>
@@ -327,7 +327,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>state</name>
+                    <name>status</name>
                     <type>text</type>
                     <length>64</length>
                     <default>REQUESTED</default>
