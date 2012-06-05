@@ -281,7 +281,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'transp':
                 return $_value && $_value == Calendar_Model_Event::TRANSP_TRANSP ? $_translation->_('No') : $_translation->_('Yes');
             case 'organizer':
-                $organizer = $this->resolveOrganizer();
+                if (! $_value instanceof Addressbook_Model_Contact) {
+                    $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE)->getFirstRecord();
+                }
                 return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
             default:
                 return $_value;
