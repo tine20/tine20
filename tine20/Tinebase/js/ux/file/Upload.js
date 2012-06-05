@@ -752,21 +752,3 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
 Ext.ux.file.Upload.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type']);
 };
-
-/**
- * generic size renderer
- */
-Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
-    value = parseInt(value, 10);
-    
-    if (record && record.get('type') == 'folder') {
-        return '';
-    }
-    
-    var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    for (var i=0,j; i<suffix.length; i++) {
-        if (value < Math.pow(1024, i)) break;
-    }
-    
-    return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), 2)) + ' ' + suffix[i];
-};

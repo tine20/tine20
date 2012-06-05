@@ -164,7 +164,7 @@ class Tinebase_Record_Iterator
         $filterClassname = get_class($this->_filter);
         $recordIdsForIteration = array_splice($this->_recordIds, 0, $this->_options['limit']);
         $idFilter = new $filterClassname(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
+            array('field' => array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
         ));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Getting records using filter: ' . print_r($idFilter->toArray(), TRUE));

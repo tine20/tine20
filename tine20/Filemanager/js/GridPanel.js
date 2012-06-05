@@ -140,7 +140,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 40,
                 sortable: true,
                 dataIndex: 'size',
-                renderer: Ext.ux.file.Upload.fileSize
+                renderer: Tine.Tinebase.common.byteRenderer
             },{
                 id: 'contenttype',
                 header: this.app.i18n._("Contenttype"),
@@ -628,7 +628,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') 
-            + Ext.ux.file.Upload.fileSize(Tine.Tinebase.registry.get('maxFileUploadSize')) 
+            + Tine.Tinebase.common.byteRenderer(Tine.Tinebase.registry.get('maxFileUploadSize')) 
         ).setIcon(Ext.MessageBox.ERROR);
         
         var app = Tine.Tinebase.appMgr.get('Filemanager'),

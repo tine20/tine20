@@ -842,18 +842,23 @@ abstract class Tinebase_Controller_Record_Abstract
                 unset($_data[$key]);
             }
         }
-        
+
         $this->_updateMultipleResult = array(
             'results'           => new Tinebase_Record_RecordSet($this->_modelName),
             'exceptions'        => new Tinebase_Record_RecordSet('Tinebase_Model_UpdateMultipleException'),
             'totalcount'        => 0,
             'failcount'         => 0,
         );
+        // TODO: idProperty should be callable statically
+        $model = new $this->_modelName();
+        $idProperty = $model->getIdProperty();
+        unset($model);
         
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
+            'options'    => array('idProperty' => $idProperty),
             'function'   => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);
