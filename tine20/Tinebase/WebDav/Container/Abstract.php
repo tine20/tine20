@@ -242,6 +242,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
                     'protected' => true,
                 );
             }
+            if($grant[Tinebase_Model_Grants::GRANT_ADMIN] == true) {
+                $acl[] = array(
+                    'privilege' => '{DAV:}write-properties',
+                    'principal' => $principal,
+                    'protected' => true,
+                );
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' webdav acl ' . print_r($acl, true));
