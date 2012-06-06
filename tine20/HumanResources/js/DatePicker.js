@@ -70,7 +70,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 success : function(_result, _request) {
                     this.onFeastDaysLoad(Ext.decode(_result.responseText));
                 },
-                failure : Tine.HumanResources.handleRequestException,
+                failure : function(exception) {
+                    Tine.HumanResources.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);
+                },
                 scope: this
             });
         }
@@ -87,16 +89,24 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 var date = new Date(date.date);
                 this.disabledDates.push(date);
             }, this);
-            this.editDialog.contractPicker.setValue(result.contract);
-            this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
-            this.editDialog.contractPicker.enable();
-            
-            this.setMinDate(new Date(result.contract.start_date));
-            if(result.contract.end_date) this.setMaxDate(new Date(result.contract.end_date));
             this.setDisabledDates(this.disabledDates);
+        }
+        this.editDialog.contractPicker.setValue(result.contract);
+        this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
+        this.editDialog.contractPicker.enable();
+        
+        this.setMinDate(new Date(result.contract.start_date));
+        if(result.contract.end_date) {
+            this.setMaxDate(new Date(result.contract.end_date));
         }
         this.loadMask.hide();
         this.enable();
+    },
+    
+    onFeastDaysLoadFailureCallback: function() {
+        this.editDialog.contractPicker.disable();
+        this.loadMask.hide();
+        this.editDialog.employeePicker.reset();
     },
     
     /**

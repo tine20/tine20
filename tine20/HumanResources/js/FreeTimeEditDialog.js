@@ -115,8 +115,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             app: this
         });
         this.employeePicker.on('select', function(){
-            this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
             this.contractPicker.enable();
+            this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
         }, this);
         var that = this;
         this.contractPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Contract', {

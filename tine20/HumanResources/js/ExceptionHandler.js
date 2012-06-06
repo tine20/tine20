@@ -17,7 +17,7 @@ Ext.ns('Tine.HumanResources');
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
-Tine.HumanResources.handleRequestException = function(exception) {
+Tine.HumanResources.handleRequestException = function(exception, callback, callbackScope) {
     if (! exception.code && exception.responseText) {
         // we need to decode the exception first
         var response = Ext.util.JSON.decode(exception.responseText);
@@ -25,7 +25,9 @@ Tine.HumanResources.handleRequestException = function(exception) {
     }
     var defaults = {
         buttons: Ext.Msg.OK,
-        icon: Ext.MessageBox.WARNING
+        icon: Ext.MessageBox.WARNING,
+        fn: callback,
+        scope: callbackScope
     };
         
     Tine.log.warn('Request exception :');
@@ -42,7 +44,7 @@ Tine.HumanResources.handleRequestException = function(exception) {
             }
         case 911:
             Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('No contract could not be found.'), 
+                    title: _('No contract could be found.'), 
                     msg: _('Please create a contract for this employee!'),
                     icon: Ext.MessageBox.ERROR
                 }));
