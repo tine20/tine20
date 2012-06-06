@@ -161,7 +161,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         title: this.app.i18n._('FreeTime'),
                         items: [{
                             xtype: 'columnform',
-                            style: { float: 'left', width: '50%', 'min-width': '250px' },
+                            style: { 'float': 'left', width: '50%', 'min-width': '250px' },
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'textfield',
