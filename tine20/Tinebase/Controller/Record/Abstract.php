@@ -916,13 +916,19 @@ abstract class Tinebase_Controller_Record_Abstract
     
     protected function _iterateRelations($currentRecord)
     {
+        if(! $currentRecord->relations || get_class($currentRecord->relations) != 'Tinebase_Record_RecordSet') {
+            $currentRecord->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        }
+        
         // handle relations to remove
         if($this->_removeRelations) {
-            foreach($this->_removeRelations as $remRelation) {
-                $removeRelations = $currentRecord->relations->filter('type', $remRelation['type']);
-                $removeRelations = $removeRelations->filter('related_model', $remRelation['related_model']);
-                $removeRelations = $removeRelations->filter('own_degree', $remRelation['own_degree']);
-                $currentRecord->relations->removeRecords($removeRelations);
+            if($currentRecord->relations->count()) {
+                foreach($this->_removeRelations as $remRelation) {
+                    $removeRelations = $currentRecord->relations->filter('type', $remRelation['type']);
+                    $removeRelations = $removeRelations->filter('related_model', $remRelation['related_model']);
+                    $removeRelations = $removeRelations->filter('own_degree', $remRelation['own_degree']);
+                    $currentRecord->relations->removeRecords($removeRelations);
+                }
             }
         }
         
