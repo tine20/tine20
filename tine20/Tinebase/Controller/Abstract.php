@@ -33,13 +33,6 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     protected $_applicationName = '';
     
     /**
-     * the current account
-     * 
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount = NULL;
-    
-    /**
      * disable events on demand
      * 
      * @var mixed   false => no events filtered, true => all events filtered, array => disable only specific events

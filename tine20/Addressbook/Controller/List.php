@@ -46,7 +46,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     private function __construct()
     {
         $this->_backend = new Addressbook_Backend_List();
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

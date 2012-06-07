@@ -70,8 +70,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_backend = new Felamimail_Backend_Account();
         
-        $this->_currentAccount = Tinebase_Core::getUser();
-        
         $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         $this->_useSystemAccount = (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount']);
     }
@@ -200,8 +198,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $userFilter = $_filter->getFilter('user_id');
         
         // force a $userFilter filter (ACL)
-        if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== $this->_currentAccount->getId()) {
-            $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
+        if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
+            $userFilter = $_filter->createFilter('user_id', 'equals', Tinebase_Core::getUser()->getId());
             $_filter->addFilter($userFilter);
         }
     }
@@ -216,7 +214,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
-        $_record->user_id = $this->_currentAccount->getId();
+        $_record->user_id = Tinebase_Core::getUser()->getId();
         
         // use the imap host as smtp host if empty
         if (! $_record->smtp_hostname) {
@@ -754,7 +752,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addSystemAccount(Tinebase_Record_RecordSet $_accounts)
     {
-        $userId = $this->_currentAccount->getId();
+        $userId = Tinebase_Core::getUser()->getId();
         $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
         $email = $this->_getAccountEmail($fullUser);
         
@@ -957,7 +955,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user = NULL, $_email = NULL)
     {
         if ($_user === NULL) {
-            $_user = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+            $_user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
         }
         
         if ($_email === NULL) {

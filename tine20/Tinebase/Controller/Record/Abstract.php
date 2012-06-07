@@ -97,13 +97,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_recordAlarmField = 'dtstart';
 
     /**
-     * the current user
-     *
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount = NULL;
-
-    /**
      * duplicate check fields / if this is NULL -> no duplicate check
      *
      * @var array
@@ -301,7 +294,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             if ($this->_doContainerACLChecks) {
                 if ($_containerId === NULL) {
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::GRANT_ADD);
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                     $record->container_id = $containers[0]->getId();
                 } else {
                     $record->container_id = $_containerId;
@@ -356,7 +349,7 @@ abstract class Tinebase_Controller_Record_Abstract
         // get all allowed containers and add them to getMultiple query
         $containerIds = ($this->_doContainerACLChecks && $_ignoreACL !== TRUE)
            ? Tinebase_Container::getInstance()->getContainerByACL(
-               $this->_currentAccount,
+               Tinebase_Core::getUser(),
                $this->_applicationName,
                Tinebase_Model_Grants::GRANT_READ,
                TRUE)
@@ -416,7 +409,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             // add personal container id if container id is missing in record
             if ($_record->has('container_id') && empty($_record->container_id)) {
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer($this->_currentAccount, $this->_applicationName, $this->_currentAccount, Tinebase_Model_Grants::GRANT_ADD);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
                 $_record->container_id = $containers[0]->getId();
             }
 
@@ -438,7 +431,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_setNotes($createdRecord, $_record);
 
             if ($this->sendNotifications()) {
-                $this->doSendNotifications($createdRecord, $this->_currentAccount, 'created');
+                $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
             }
             
             $this->_increaseContainerContentSequence($createdRecord, Tinebase_Model_ContainerContent::ACTION_CREATE);
@@ -638,7 +631,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_setNotes($updatedRecordWithRelatedData, $_record, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             
             if ($this->_sendNotifications && count($currentMods) > 0) {
-                $this->doSendNotifications($updatedRecordWithRelatedData, $this->_currentAccount, 'changed', $currentRecord);
+                $this->doSendNotifications($updatedRecordWithRelatedData, Tinebase_Core::getUser(), 'changed', $currentRecord);
             }
             
             if ($_record->has('container_id') && $currentRecord->container_id !== $updatedRecord->container_id) {
@@ -767,7 +760,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $_updatedRecord->notes = $_record->notes;
             Tinebase_Notes::getInstance()->setNotesOfRecord($_updatedRecord);
         }
-        Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, $this->_currentAccount, $_systemNoteType, $_currentMods);
+        Tinebase_Notes::getInstance()->addSystemNote($_updatedRecord, Tinebase_Core::getUser(), $_systemNoteType, $_currentMods);
     }
     
     /**
@@ -950,7 +943,7 @@ abstract class Tinebase_Controller_Record_Abstract
             // send notifications
             if ($this->sendNotifications()) {
                 foreach ($records as $record) {
-                    $this->doSendNotifications($record, $this->_currentAccount, 'deleted');
+                    $this->doSendNotifications($record, Tinebase_Core::getUser(), 'deleted');
                 }
             }
 
@@ -1013,13 +1006,13 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if ($this->_doContainerACLChecks) {
             // check add grant in target container
-            if (! $this->_currentAccount->hasGrant($targetContainerId, Tinebase_Model_Grants::GRANT_ADD)) {
+            if (! Tinebase_Core::getUser()->hasGrant($targetContainerId, Tinebase_Model_Grants::GRANT_ADD)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Permission denied to add records to container.');
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to move records to this container');
             }
 
             // check delete grant in source container
-            $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL($this->_currentAccount, $this->_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
+            $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
             foreach ($records as $index => $record) {
                 if (! in_array($record->{$_containerProperty}, $containerIdsWithDeleteGrant)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -1122,7 +1115,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (   !$this->_doContainerACLChecks
             || !$_record->has('container_id')
             // admin grant includes all others
-            || $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            || Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
             return TRUE;
         }
 
@@ -1130,17 +1123,17 @@ abstract class Tinebase_Controller_Record_Abstract
 
         switch ($_action) {
             case 'get':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_READ);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_READ);
                 break;
             case 'create':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT);
                 break;
             case 'delete':
                 $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
 

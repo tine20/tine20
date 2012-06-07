@@ -28,7 +28,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timesheet();
         $this->_modelName = 'Timetracker_Model_Timesheet';
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_resolveCustomFields = TRUE;
         
         // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
@@ -210,12 +209,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                         Timetracker_Model_TimeaccountGrants::BOOK_ALL
                     ))
-                    || ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    || ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                 );
                 break;
             case 'create':
                 $hasGrant = (
-                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
@@ -230,7 +229,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'update':
                 $hasGrant = (
-                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
@@ -245,7 +244,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'delete':
                 $hasGrant = (
-                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 break;

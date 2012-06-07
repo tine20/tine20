@@ -62,7 +62,6 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() {
         $this->_backend         = new ActiveSync_Backend_Device();
-        $this->_currentAccount  = Tinebase_Core::getUser();
     }
     
     /**
@@ -119,7 +118,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
     {
         $device = $this->_backend->get($_deviceId);
         
-        if($device->owner_id != $this->_currentAccount->getId()) {
+        if($device->owner_id != Tinebase_Core::getUser()->getId()) {
             throw new Tinebase_Exception_AccessDenied('not owner of device ' . $_deviceId);
         }
         

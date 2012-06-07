@@ -47,7 +47,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_backend = Tinebase_FileSystem::getInstance();
     }
     
@@ -105,7 +104,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     $path->statpath === $this->_backend->getApplicationBasePath(
                         Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName), 
                         Tinebase_Model_Container::TYPE_PERSONAL
-                    ) . '/' . $this->_currentAccount->getId()
+                    ) . '/' . Tinebase_Core::getUser()->getId()
                 ) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                         ' Creating new path ' . $path->statpath);
@@ -193,7 +192,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _getOtherUserNodes()
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
-        $users = Tinebase_Container::getInstance()->getOtherUsers($this->_currentAccount, $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+        $users = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
         foreach ($users as $user) {
             $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
             $record = new Tinebase_Model_Tree_Node(array(
@@ -277,7 +276,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     protected function _checkACLContainer($_container, $_action = 'get')
     {
-        if (Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
+        if (Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             return TRUE;
         }
         
@@ -298,7 +297,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
         
-        return Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, $requiredGrant);
+        return Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $_container, $requiredGrant);
     }
     
     /**
@@ -527,7 +526,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             switch ($_path->containerType) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     if ($_path->containerOwner) {
-                        $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName || $_action === 'get');
+                        $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
                     } else {
                         $hasPermission = ($_action === 'get');
                     }

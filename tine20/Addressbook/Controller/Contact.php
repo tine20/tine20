@@ -34,7 +34,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_applicationName = 'Addressbook';
         $this->_modelName = 'Addressbook_Model_Contact';
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
         $this->_updateMultipleValidateEachRecord = TRUE;
@@ -139,7 +138,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             if (empty($contact->container_id)) {
                 throw new Addressbook_Exception_NotFound('Contact is hidden from addressbook (container id is empty).');
             }
-            if (! $this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
+            if (! Tinebase_Core::getUser()->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
                 throw new Addressbook_Exception_AccessDenied('Read access to contact denied.');
             }
         }
@@ -331,7 +330,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $traceException = new Exception($noteMessage);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' ' . $traceException);
-            Tinebase_Notes::getInstance()->addSystemNote($_record, $this->_currentAccount, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
+            Tinebase_Notes::getInstance()->addSystemNote($_record, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteMessage);
         }
         
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
