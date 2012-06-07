@@ -28,13 +28,8 @@ class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGr
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
-//             'options' => array(
-//                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
-//                 'controller'        => 'HumanResources_Controller_Employee', 
-//                 )
-//             ),
+        'id'          => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'HumanResources_Model_Contract')),
+        'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id','options' => array('modelName' => 'HumanResources_Model_Employee')),
         'start_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
         'end_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
 //         'text' => array('filter' => 'Tinebase_Model_Filter_Text'),
