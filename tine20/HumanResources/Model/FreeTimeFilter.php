@@ -33,11 +33,17 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
         'firstday_date'  => array( 'filter' => 'Tinebase_Model_Filter_Date'),
         'type'           => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
+        'remark'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'employee_id'    => array( 'filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
                 'controller'        => 'HumanResources_Controller_Employee', 
             )
         ),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
+        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
     );
 }

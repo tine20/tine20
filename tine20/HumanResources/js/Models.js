@@ -96,8 +96,10 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Employee name'),   field: 'name' },
         {filtertype: 'tinebase.tag', app: app},
-        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
-        
+        {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'), field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'), field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),       field: 'created_by',         valueType: 'user'}
     ];
 };
 
@@ -333,7 +335,12 @@ Tine.HumanResources.Model.FreeTime.getFilterModel = function() {
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
             keyfieldName: 'freetimeStatus'
-        }
+        },
+        { field: 'remark', label: app.i18n._('Remark'), type: 'text' },
+        {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'),   field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'),      field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),         field: 'created_by',         valueType: 'user'}
     ];
 };
 
@@ -352,11 +359,6 @@ Tine.HumanResources.freetimeBackend = new Tine.Tinebase.data.RecordProxy({
 
 
 // FREEDAY
-
-
-/*
- * Vacation
- */
 Tine.HumanResources.Model.FreeDayArray = [
     {name: 'id',          type: 'string'},
     {name: 'freetime_id', type: Tine.HumanResources.Model.Employee},
@@ -370,13 +372,12 @@ Tine.HumanResources.Model.FreeDay = Tine.Tinebase.data.Record.create(Tine.HumanR
     modelName: 'FreeDay',
     idProperty: 'id',
     titleProperty: 'name',
-    // ngettext('FreeDay Day', 'FreeDay Days', n);
-    recordName: 'FreeDay Day',
-    recordsName: 'FreeDay Days',
-//    containerProperty: 'container_id',
-    // ngettext('FreeDay days', 'All vacations days', n);
-    containerName: 'FreeDay days',
-    containersName: 'All vacations days',
+    // ngettext('Free Day', 'Free Days', n);
+    recordName: 'Free Day',
+    recordsName: 'Free Days',
+    // ngettext('Free Days', 'Free Days', n);
+    containerName: 'Free Days',
+    containersName: 'Free Days',
     getTitle: function() {
         return this.get('name') ? this.get('name') : false;
     }
@@ -396,29 +397,3 @@ Tine.HumanResources.Model.FreeDay.getDefaultData = function() {
         duration: null
     };
 };
-
-///**
-// * @namespace Tine.HumanResources.Model
-// * 
-// * get FreeDay filter
-// *  
-// * @return {Array} filter objects
-// * @static
-// */ 
-//Tine.HumanResources.Model.FreeDay.getFilterModel = function() {
-//    var app = Tine.Tinebase.appMgr.get('HumanResources');
-//    
-//    return [
-//        { label: _('Quick search'), field: 'query', operators: ['contains']},
-//        {
-//            label: app.i18n._('Type'),
-//            field: 'type',
-//            filtertype: 'tine.widget.keyfield.filter', 
-//            app: app, 
-//            keyfieldName: 'freetimeType'
-//        },
-//        { filtertype: 'humanresources.freetimeemployee' } 
-//    ];
-//};
-
-
