@@ -65,6 +65,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             this.plugins = [];
             this.plugins.push(this.filterToolbar);
         }
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
     },
     
@@ -112,6 +113,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
 //            {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
             { id: 'employee_id', header: this.app.i18n._('Employee'), dataIndex: 'employee_id', width: 200, sortable: true, hidden: (this.editDialog) ? true : false, renderer: this.renderEmployee, scope: this},
             { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeType')},
+            { id: 'status', header: this.app.i18n._('Status'), dataIndex: 'status', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeStatus')},
             { id: 'firstday_date', header: this.app.i18n._('Date Start'), dataIndex: 'firstday_date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer, hidden: true},
             { id: 'remark', header: this.app.i18n._('Remark'), dataIndex: 'remark', width: 200, sortable: true}
             ].concat(this.getModlogColumns());
