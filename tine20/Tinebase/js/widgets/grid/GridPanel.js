@@ -1354,7 +1354,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         var totalcount = this.selectionModel.getCount(),
             useMultiple = ((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
-            selectedRecords = [];
+            selectedRecords = [],
+            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isArray(button.fixedFields)) ? Ext.encode(button.fixedFields) : null;
 
         if (useMultiple) {
             Ext.each(this.selectionModel.getSelections(), function(record) {
@@ -1373,13 +1374,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 isFilterSelect: this.selectionModel.isFilterSelect,
                 totalRecordCount: totalcount,
                 /* end multi edit stuff */
+                fixedFields: fixedFields,
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,fixedFields,copyRecord')
         );
     },
 
