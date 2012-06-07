@@ -32,8 +32,8 @@ class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGr
         'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id','options' => array('modelName' => 'HumanResources_Model_Employee')),
         'start_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
         'end_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
-//         'text' => array('filter' => 'Tinebase_Model_Filter_Text'),
-//         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_given', 'n_family', 'title'))),
+//         'number' => array('filter' => 'Tinebase_Model_Filter_Int'),
+//         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_fn', 'bank_account_holder', 'email'))),
 //         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
     );
 }

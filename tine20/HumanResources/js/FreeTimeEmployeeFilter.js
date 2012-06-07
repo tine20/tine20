@@ -19,15 +19,16 @@ Ext.ns('Tine.HumanResources');
 Tine.HumanResources.FreeTimeEmployeeFilterModel = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
     
     // private
-    field: 'employee_id',
-    valueType: 'foreignId',
+    ownField: 'employee_id',
+    linkType: 'foreignId',
+    foreignRecordClass: Tine.HumanResources.Model.Employee,
+    filterName: 'EmployeeFilter',
     /**
      * @private
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('HumanResources');
         this.label = this.app.i18n._('Employee');
-        this.foreignRecordClass = Tine.HumanResources.Model.Employee;
         this.pickerConfig = {allowBlank: true };
 
         Tine.HumanResources.FreeTimeEmployeeFilterModel.superclass.initComponent.call(this);
