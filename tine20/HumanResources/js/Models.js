@@ -328,13 +328,6 @@ Tine.HumanResources.Model.FreeTime.getFilterModel = function() {
         },
         { filtertype: 'humanresources.freetimeemployee' },
         {
-            label: app.i18n._('Type'),
-            field: 'type',
-            filtertype: 'tine.widget.keyfield.filter', 
-            app: app, 
-            keyfieldName: 'freetimeType'
-        },
-        {
             label: app.i18n._('Status'),
             field: 'status',
             filtertype: 'tine.widget.keyfield.filter', 

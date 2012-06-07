@@ -60,13 +60,45 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.gridConfig = { autoExpandColumn: 'n_fn' };
         this.gridConfig.columns = this.getColumns();
         if(!this.initFilterToolbar()) {
-            this.disabled = true;
+            this.getActionToolbar = Ext.emptyFn;
+            
         } else {
             this.plugins = [];
             this.plugins.push(this.filterToolbar);
         }
         
+        if(this.editDialog) {
+            this.bbar = [];
+        }
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
+        if(this.editDialog) {
+            this.fillBottomToolbar();
+        }
+        
+    },
+    
+    /**
+     * will be called in Edit Dialog Mode
+     */
+    fillBottomToolbar: function() {
+        var tbar = this.getBottomToolbar();
+        tbar.addButton(new Ext.Button(this.action_editInNewWindow));
+        tbar.addButton(new Ext.Button(this.action_addInNewWindow));
+        tbar.addButton(new Ext.Button(this.action_deleteRecord));
+    },
+    
+    /**
+     * overwrites and calls superclass
+     * @param {Object} button
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Array} addRelations
+     */
+    onEditInNewWindow: function(button, record, addRelations) {
+        if(this.editDialog) {
+            button.fixedFields = [{key: 'employee_id', value: this.editDialog.record.data}];
+        }
+        Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, addRelations);
     },
     
     /**
@@ -74,7 +106,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     initFilterToolbar: function() {
         var plugins = [],
-            filters = [];
+            filters = [],
+            hidden = false;
         if(!this.editDialog) {
             plugins.push(new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()); 
         } else {
@@ -88,7 +121,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: filters,
-            plugins: plugins
+            plugins: plugins,
+            hidden: hidden
         });
         
         return true;

@@ -113,7 +113,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             frame: true,
             border: true,
             autoScroll: true,
-            layout: 'fit'
+            layout: 'border'
         });
         
         return {

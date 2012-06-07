@@ -57,6 +57,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             [0.75, 0.75],
             [1, 1]
             ];
+
         this.initDatePicker();
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
