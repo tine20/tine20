@@ -522,8 +522,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getVacationMessageTemplates()
     {
-        $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
         try {
+            $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
             $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer);
             $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
             $filter = new Tinebase_Model_Tree_Node_Filter(array(
@@ -532,9 +532,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $templates = Tinebase_FileSystem::getInstance()->searchNodes($filter);
             $result = $this->_multipleRecordsToJson($templates, $filter);
-        } catch (Tinebase_Exception_Backend $teb) {
+        } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Could not get vacation template files: ' . $teb);
+                . ' Could not get vacation template files: ' . $e);
             $result = array();
         }
         
