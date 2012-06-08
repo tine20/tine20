@@ -431,13 +431,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-                        
+                $this->_inspectEvent($_record);
+               
                 if ($_checkBusyConflicts) {
                     // only do free/busy check if start/endtime changed  or attendee added or rrule changed
-                    if (   ! $event->dtstart->equals($_record->dtstart) || 
-                           ! $event->dtend->equals($_record->dtend) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 || 
-                           $event->rrule != $_record->rrule // attendee add
+                    if ($event->isRescheduled($_record) ||
+                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 // attendee add
                        ) {
                         
                         // ensure that all attendee are free
@@ -445,7 +444,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $this->_inspectEvent($_record);
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 

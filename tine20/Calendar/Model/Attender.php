@@ -273,10 +273,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
-        // collect emails of new attendees
+        // collect emails of new attendees (skipping if no email present)
         $emailsOfNewAttendees = array();
         foreach ($_emails as $newAttendee) {
-            $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
+            if ($newAttendee['email']) {
+                $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
+            }
         }
         
         // attendees to remove
