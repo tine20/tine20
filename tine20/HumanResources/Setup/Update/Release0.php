@@ -26,17 +26,19 @@ class HumanResources_Setup_Update_Release0 extends Setup_Update_Abstract
                 </field>';
         
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->alterCol('humanresources_contract', $declaration, 'cost_centre');
+        
+        $this->_backend->addCol('humanresources_contract', $declaration);
+        $this->_backend->dropCol('humanresources_contract', 'cost_centre');
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
-                    <name>contract::cost_center_id--sales_cost_center::id</name>
+                    <name>contract::cost_center_id--sales_cost_centers::id</name>
                     <field>
                         <name>cost_center_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>sales_cost_center</table>
+                        <table>sales_cost_centers</table>
                         <field>id</field>
                     </reference>
             </index>

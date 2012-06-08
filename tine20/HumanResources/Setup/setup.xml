@@ -524,13 +524,13 @@
                     </reference>
                 </index>
                 <index>
-                    <name>contract::cost_center_id--sales_cost_center::id</name>
+                    <name>contract::cost_center_id--sales_cost_centers::id</name>
                     <field>
                         <name>cost_center_id</name>
                     </field>
                     <foreign>true</foreign>
                     <reference>
-                        <table>sales_cost_center</table>
+                        <table>sales_cost_centers</table>
                         <field>id</field>
                     </reference>
                 </index>

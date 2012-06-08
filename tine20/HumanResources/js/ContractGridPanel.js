@@ -81,7 +81,6 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * @private
      */
     getColumnModel: function() {
-        
         this.workingTimeQuickAdd = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
         this.workingTimeEditor = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTime', {blurOnSelect: true});
         var calConfig = {
@@ -110,7 +109,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 90, editor: true
-                }, { dataIndex: 'cost_centre', width:50,  id: 'cost_centre',   type: 'string', header: this.app.i18n._('Cost Centre'),
+                }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id',   type: 'string', header: this.app.i18n._('Cost Centre'),
                      quickaddField: new Ext.form.TextField(), editor: true
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
