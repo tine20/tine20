@@ -236,70 +236,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         switch ($_records->getRecordClassName()) {
             case 'HumanResources_Model_FreeTime':
-                $this->_resolveMultipleEmployees($_records);
+                $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
                 break;
             case 'HumanResources_Model_Contract':
-                $this->_resolveMultipleEmployees($_records);
-                $this->_resolveMultipleWorkingTimes($_records);
-                $this->_resolveMultipleCalendars($_records);
+                $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
+                $this->_resolveMultiple($_records, 'workingtime_id', 'HumanResources_Model_WorkingTime');
+                $this->_resolveMultiple($_records, 'feast_calendar_id', 'Calendar_Model_Event');
+                $this->_resolveMultiple($_records, 'cost_center_id', 'Sales_Model_CostCenter');
                 break;
         }
         return parent::_multipleRecordsToJson($_records);
-    }
-
-    protected function _resolveMultipleCalendars(Tinebase_Record_RecordSet $_records)
-    {
-        $cIds = array_unique($_records->feast_calendar_id);
-        $cal = Tinebase_Container::getInstance()->getMultiple($cIds);
-        if($cal->count()) {
-            foreach ($_records as $record) {
-                $idx = $cal->getIndexById($record->feast_calendar_id);
-                if(isset($idx)) {
-                    $record->feast_calendar_id = $cal[$idx];
-                } else {
-                    $record->feast_calendar_id = NULL;
-                }
-            }
-        }
-    }
-    /**
-     * resolves multiple working times
-     * @param Tinebase_Record_RecordSet $_records
-     */
-    protected function _resolveMultipleWorkingTimes(Tinebase_Record_RecordSet $_records)
-    {
-        $wIds = array_unique($_records->workingtime_id);
-        $wt = HumanResources_Controller_WorkingTime::getInstance()->getMultiple($wIds);
-        if($wt->count()) {
-            foreach ($_records as $record) {
-                $idx = $wt->getIndexById($record->workingtime_id);
-                if(isset($idx)) {
-                    $record->workingtime_id = $wt[$idx];
-                } else {
-                    $record->workingtime_id = NULL;
-                }
-            }
-        }
-    }
-
-    /**
-     * resolves multiple contacts
-     * @param Tinebase_Record_RecordSet $_records
-     */
-    protected function _resolveMultipleEmployees(Tinebase_Record_RecordSet $_records)
-    {
-        $eIds = array_unique($_records->employee_id);
-        $e = HumanResources_Controller_Employee::getInstance()->getMultiple($eIds);
-        if($e->count()) {
-            foreach ($_records as $record) {
-                $id = $e->getIndexById($record->employee_id);
-                if(isset($id)) {
-                    $record->employee_id = $e[$id];
-                } else {
-                    $record->employee_id = NULL;
-                }
-            }
-        }
     }
     
     /**
@@ -343,67 +289,4 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('results' => $dates, 'totalcount' => count($dates), 'contract' => $contract->toArray());
         
     }
-    
-//     /**
-//      * returns multiple records prepared for json transport
-//      *
-//      * NOTE: we can't use parent::_multipleRecordsToJson here because of the different container handling
-//      *
-//      * @param Tinebase_Record_RecordSet $_records
-//      * @return array data
-//      */
-//     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
-//     {
-//         if (count($_records) == 0) {
-//             return array();
-//         }
-
-//         switch ($_records->getRecordClassName()) {
-//             case 'IPAccounting_Model_IPVolume':
-//             case 'IPAccounting_Model_IPAggregate':
-//                 $ipnetIds = $_records->netid;
-//                 $ipnets = $this->_ipnetController->getMultiple(array_unique(array_values($ipnetIds)), true);
-
-//                 foreach ($_records as $record) {
-//                     $idx = $ipnets->getIndexById($record->netid);
-//                     if ($idx !== FALSE) {
-//                         $record->netid = $ipnets[$idx];
-//                     } else {
-//                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not resolve ipnet (id: ' . $record->netid . '). No permission?');
-//                     }
-//                 }
-//                 break;
-                
-//             case 'IPAccounting_Model_IPNet':
-//                 break;
-//         }
-
-//         $recordArray = $_records->toArray();
-
-//         foreach($recordArray as &$rec) {
-//             $rec['account_grants'] = $this->defaultGrants;
-//         }
-        
-//         return $recordArray;
-//     }
-    
-    
-    
-    
-    
-    
-//     /**
-//      * Returns registry data
-//      * 
-//      * @return array
-//      */
-//     public function getRegistryData()
-//     {
-//         $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName)->toArray();
-//         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainerArray['id'])->toArray();
-        
-//         return array(
-//             'defaultContainer' => $defaultContainerArray
-//         );
-//     }
 }

@@ -109,8 +109,8 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 90, editor: true
-                }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id',   type: 'string', header: this.app.i18n._('Cost Centre'),
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), 
+                }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Centre'),
+                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), renderer: this.renderCostCenter,
                      editor: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter')
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
@@ -144,7 +144,14 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      */
     renderWorkingTime: function(value) {
         return Ext.util.Format.htmlEncode(value.title);
+    },
+    /**
+     * renders the cost center
+     * @param {Object} value
+     * return {String}
+     */
+    renderCostCenter: function(value) {
+        return Ext.util.Format.htmlEncode(value.number); 
     }
-    
 });
 
