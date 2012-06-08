@@ -195,8 +195,12 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
 
         $userProperty = $this->_configKey . 'User';
-        $_user->{$userProperty}  = $emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->{$userProperty}, isset($_user->emailUser) ? $_user->emailUser : null);
+        $_user->{$userProperty} = $emailUser;
+        
+        $_user->emailUser = isset($_user->emailUser) ? $_user->emailUser : null;
+        $imapUser = ($this->_configKey === Tinebase_Config::SMTP) ? $_user->emailUser : clone($emailUser);
+        $smtpUser = ($this->_configKey === Tinebase_Config::SMTP) ? clone($emailUser) : $_user->emailUser;
+        $_user->emailUser = Tinebase_EmailUser::merge($imapUser, $smtpUser);
     }
     
     /**
