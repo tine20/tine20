@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <order>150</order>
     <status>enabled</status>
     <tables>
@@ -409,7 +409,7 @@
         </table>
         <table>
             <name>humanresources_contract</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -445,13 +445,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
-                    <name>cost_centre</name>
+                    <name>cost_center_id</name>
                     <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
-                    <default></default>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>vacation_days</name>
@@ -521,6 +520,17 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>container</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>contract::cost_center_id--sales_cost_center::id</name>
+                    <field>
+                        <name>cost_center_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>sales_cost_center</table>
                         <field>id</field>
                     </reference>
                 </index>
