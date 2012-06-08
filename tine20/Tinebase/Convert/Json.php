@@ -49,6 +49,41 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         return $_record->toArray();
     }
     
+
+    /**
+     * resolves multiple records
+     * @param Tinebase_Record_RecordSet $_records the records
+     */
+    protected function _resolveMultipleIdFields(Tinebase_Record_RecordSet $_records)
+    {
+        $ownRecordClass = $_records->getRecordClassName();
+        if(! $resolveFields = $ownRecordClass::getResolveForeignIdFields()) {
+            return;
+        }
+
+        foreach($resolveFields as $foreignRecordClassName => $fields) {
+            if(!is_array($fields)) $fields = array($fields);
+            $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            foreach($fields as $field) {
+                $foreignIds = array_unique($_records->{$field});
+            }
+
+            $foreignRecords = $controller->getMultiple($foreignIds);
+            if($foreignRecords->count()) {
+                foreach ($_records as $record) {
+                    foreach($fields as $field) {
+                        $idx = $foreignRecords->getIndexById($record->{$field});
+                        if(isset($idx)) {
+                            $record->{$field} = $foreignRecords[$idx];
+                        } else {
+                            $record->{$field} = NULL;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * converts Tinebase_Record_RecordSet to external format
      * 
@@ -61,8 +96,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (count($_records) == 0) {
             return array();
         }
-
+        
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, $_resolveUserFields);
+        $this->_resolveMultipleIdFields($_records);
 
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
