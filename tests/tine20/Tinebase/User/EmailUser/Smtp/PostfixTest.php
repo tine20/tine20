@@ -133,6 +133,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(array('bla@' . $this->_mailDomain), $testUser->smtpUser->emailAliases,  'aliases mismatch');
         $this->assertEquals(false,                              $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals('j.smith@' . $this->_mailDomain,    $testUser->smtpUser->emailAddress);
+        $this->assertEquals($testUser->smtpUser->emailAliases,  $testUser->emailUser->emailAliases,
+            'smtp user data needs to be merged in email user: ' . print_r($testUser->emailUser->toArray(), TRUE));
     }
     
     /**
