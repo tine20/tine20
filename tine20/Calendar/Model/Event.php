@@ -499,7 +499,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function isRescheduled($_event)
     {
         return $this->dtstart != $_event->dtstart
-            || $this->dtend != $_event->dtend
+            || (! $this->is_all_day_event && $this->dtend != $_event->dtend)
             || $this->rrule != $_event->rrule;
     }
     
