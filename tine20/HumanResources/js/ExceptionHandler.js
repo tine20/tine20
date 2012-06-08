@@ -37,9 +37,9 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
     switch(exception.code) {
         case 910:
             if(exception.nearestRecord) {
-                this.editDialog.contractPicker.setValue(exception.nearestRecord);
-                this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
-                this.editDialog.contractPicker.fireEvent('select');
+                callbackScope.editDialog.contractPicker.setValue(exception.nearestRecord);
+                callbackScope.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
+                callbackScope.editDialog.contractPicker.fireEvent('select');
                 break;
             }
         case 911:

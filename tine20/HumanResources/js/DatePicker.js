@@ -56,7 +56,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         var contractId = contract ? contract.get('id') : null;
         var employeeId = employee ? employee.get('id') : null;
         var firstDay = freetime ? freetime.get('firstday_date') : null;
-console.warn(contractId, employeeId);
         if(employeeId || contractId) {
             var fdd = firstDay ? firstDay : new Date();
             var excludeFreeTimeId = this.record.get('id') ? this.record.get('id') : null;
