@@ -85,8 +85,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('sambaSAM', this.samRecord.data);
 
         if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
-            this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
-            this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
+            if (this.emailRecord.get('emailAliases')) {
+                this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
+            }
+            if (this.emailRecord.get('emailForwards')) {
+                this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
+            }
         }
         
         // load stores for memberships
