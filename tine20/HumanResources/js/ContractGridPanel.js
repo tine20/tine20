@@ -32,7 +32,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
     autoScroll: true,
     layout: 'fit',
     defaultSortInfo: {field: 'start_date', direction: 'DESC'},
-    autoExpandColumn: 'cost_centre',
+    autoExpandColumn: 'cost_center_id',
     quickaddMandatory: 'workingtime_id',
     clicksToEdit: 1,
     enableColumnHide:false,
@@ -110,7 +110,8 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 90, editor: true
                 }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id',   type: 'string', header: this.app.i18n._('Cost Centre'),
-                     quickaddField: new Ext.form.TextField(), editor: true
+                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), 
+                     editor: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter')
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
                      editor: new Ext.ux.form.ClearableDateField()
