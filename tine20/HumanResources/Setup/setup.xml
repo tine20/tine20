@@ -4,6 +4,9 @@
     <version>0.2</version>
     <order>150</order>
     <status>enabled</status>
+    <depends>
+        <application>Sales</application>
+    </depends>
     <tables>
         <table>
             <name>humanresources_employee</name>

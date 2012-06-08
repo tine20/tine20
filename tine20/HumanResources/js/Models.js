@@ -197,7 +197,7 @@ Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
     {name: 'end_date', type: 'date'},
     {name: 'vacation_days', type: 'int'},
-    {name: 'cost_center', type: Tine.Sales.Model.CostCenter },
+    {name: 'cost_center_id', type: Tine.Sales.Model.CostCenter },
     {name: 'employee_id', type: Tine.HumanResources.Model.Employee },
     {name: 'workingtime_id', type: Tine.HumanResources.Model.WorkingTime }
 ]);

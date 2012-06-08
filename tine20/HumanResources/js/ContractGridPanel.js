@@ -107,7 +107,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                 {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
                      quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
                      renderer: this.renderWorkingTime, scope: this
-                }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'int',    header: this.app.i18n._('Vacation Days'),
+                }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer',    header: this.app.i18n._('Vacation Days'),
                      quickaddField: new Ext.form.TextField(), width: 90, editor: true
                 }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id',   type: 'string', header: this.app.i18n._('Cost Centre'),
                      quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), 
