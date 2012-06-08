@@ -160,3 +160,31 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
         
     ];
 };
+
+// COST CENTER
+Tine.Sales.Model.CostCenterArray = [
+    { name: 'id' },
+    { name: 'number' },
+    { name: 'remark' },
+    { name: 'relations' }
+];
+
+/**
+ * @namespace Tine.Sales.Model
+ * @class Tine.Sales.Model.CostCenter
+ * @extends Tine.Tinebase.data.Record
+ *
+ * CostCenter Record Definition
+ */
+Tine.Sales.Model.CostCenter = Tine.Tinebase.data.Record.create(Tine.Sales.Model.CostCenterArray, {
+    appName: 'Sales',
+    modelName: 'CostCenter',
+    idProperty: 'id',
+    titleProperty: 'number',
+    // ngettext('CostCenter', 'CostCenters', n);
+    recordName: 'CostCenter',
+    recordsName: 'CostCenters',
+    // ngettext('All CostCenters', 'All CostCenters', n);
+    containerName: 'All CostCenters',
+    containersName: 'All CostCenters'
+});
