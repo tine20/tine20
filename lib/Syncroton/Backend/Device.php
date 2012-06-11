@@ -104,7 +104,7 @@ class Syncroton_Backend_Device implements Syncroton_Backend_IDevice
     
     public function delete($_id)
     {
-        $id = $_id instanceof Syncroton_Model_IDevice ? $_id->id : $id;
+        $id = $_id instanceof Syncroton_Model_IDevice ? $_id->id : $_id;
         
         $result = $this->_db->delete($this->_tablePrefix . 'device', array('id = ?' => $id));
         
