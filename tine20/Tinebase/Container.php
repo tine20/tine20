@@ -1390,10 +1390,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function checkSystemContainer($containerIds) {
         if (!is_array($containerIds)) $containerIds = array($containerIds);
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        // at the moment, just the internal addressbook is checked
+        try {
+            $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
+        } catch (Tinebase_Exception_NotFound $e) {
+            $defaultAddressbook = null;
+        }
 
-        $defaultAddressbook = $this->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray();
-
-        if (in_array($defaultAddressbook['id'], $containerIds)) {
+        if ($defaultAddressbook && in_array($defaultAddressbook['id'], $containerIds)) {
             // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
             throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!');
         }
