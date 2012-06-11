@@ -44,7 +44,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 traceHtml += '<tr><td><b>' + p + '</b></td><td>' + error[p] + '</td></tr>'
             }
         }
-        traceHtml += '</table>'
+        traceHtml += '</table>';
         
          // check for special cases we don't want to handle
         if (traceHtml.match(/versioncheck/)) {

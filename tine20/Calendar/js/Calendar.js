@@ -115,3 +115,4 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
     }
 });
 
+Tine.Calendar.handleRequestException = Tine.Tinebase.ExceptionHandler.handleRequestException;
