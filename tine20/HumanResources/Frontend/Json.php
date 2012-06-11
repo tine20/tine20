@@ -228,25 +228,26 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return parent::_recordToJson($_record);
     }
-    /**
-     * resolves multiple records
-     * @param Tinebase_Record_RecordSet $_records
-     */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
-    {
-        switch ($_records->getRecordClassName()) {
-            case 'HumanResources_Model_FreeTime':
+// not needed anymore due to task #6600
+//     /**
+//      * resolves multiple records
+//      * @param Tinebase_Record_RecordSet $_records
+//      */
+//     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
+//     {
+//         switch ($_records->getRecordClassName()) {
+//             case 'HumanResources_Model_FreeTime':
 //                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
-                break;
-            case 'HumanResources_Model_Contract':
+//                 break;
+//             case 'HumanResources_Model_Contract':
 //                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
 //                 $this->_resolveMultiple($_records, 'workingtime_id', 'HumanResources_Model_WorkingTime');
 //                 $this->_resolveMultiple($_records, 'feast_calendar_id', 'Calendar_Model_Event');
 //                 $this->_resolveMultiple($_records, 'cost_center_id', 'Sales_Model_CostCenter');
-                break;
-        }
-        return parent::_multipleRecordsToJson($_records);
-    }
+//                 break;
+//         }
+//         return parent::_multipleRecordsToJson($_records);
+//     }
     
     /**
      * returns feast days
@@ -262,8 +263,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $contract = HumanResources_Controller_Contract::getInstance()->getValidContract($_employeeId, $_firstDayDate);
         }
+        
+        $maxDate = new Tinebase_DateTime();
+        $maxDate->addYear(2);
+        $minDate = new Tinebase_DateTime();
+        $minDate->subYear(1);
+        
         $filter = new Calendar_Model_EventFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $maxDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $minDate)));
         $dates = Calendar_Controller_Event::getInstance()->search($filter)->dtstart;
         
         $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
@@ -271,15 +280,17 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($contract->end_date) {
             $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $contract->end_date)));
         }
-        //$filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date)));
+
         if($_excludeFreeTimeId) {
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'id', 'operator' => 'notin', 'value' => array($_excludeFreeTimeId))));
-        }//die(var_dump($filter->toArray()));
+        }
         $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
         
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
         $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'date', 'operator' => 'before', 'value' => $maxDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'date', 'operator' => 'after', 'value' => $minDate)));
 
         $freedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
         $dates = array_merge($freedays->date, $dates);

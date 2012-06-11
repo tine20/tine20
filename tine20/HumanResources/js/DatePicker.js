@@ -94,10 +94,24 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
         this.editDialog.contractPicker.enable();
         
-        this.setMinDate(new Date(result.contract.start_date));
+        var maxDate = null;
+        
         if(result.contract.end_date) {
-            this.setMaxDate(new Date(result.contract.end_date));
+            maxDate = new Date(result.contract.end_date);
+            this.setMaxDate(maxDate);
+        } else {
+            var now = new Date();
+            this.setMaxDate(now.add(Date.YEAR, 2));
         }
+        
+        var now1 = new Date().add(Date.YEAR, -1);
+        var minDate = new Date(result.contract.start_date);
+        if(now1 > minDate) {
+            this.setMinDate(now1);
+        } else {
+            this.setMinDate(minDate);
+        }
+        
         this.loadMask.hide();
         this.enable();
     },
