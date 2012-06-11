@@ -236,13 +236,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         switch ($_records->getRecordClassName()) {
             case 'HumanResources_Model_FreeTime':
-                $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
+//                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
                 break;
             case 'HumanResources_Model_Contract':
-                $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
-                $this->_resolveMultiple($_records, 'workingtime_id', 'HumanResources_Model_WorkingTime');
-                $this->_resolveMultiple($_records, 'feast_calendar_id', 'Calendar_Model_Event');
-                $this->_resolveMultiple($_records, 'cost_center_id', 'Sales_Model_CostCenter');
+//                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
+//                 $this->_resolveMultiple($_records, 'workingtime_id', 'HumanResources_Model_WorkingTime');
+//                 $this->_resolveMultiple($_records, 'feast_calendar_id', 'Calendar_Model_Event');
+//                 $this->_resolveMultiple($_records, 'cost_center_id', 'Sales_Model_CostCenter');
                 break;
         }
         return parent::_multipleRecordsToJson($_records);

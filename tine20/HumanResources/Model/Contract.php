@@ -30,6 +30,13 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      */
     protected $_application = 'HumanResources';
 
+    protected static $_resolveForeignIdFields = array(
+        'HumanResources_Model_Employee' => 'employee_id',
+        'HumanResources_Model_WorkingTime' => 'workingtime_id',
+        'Tinebase_Model_Container' => 'feast_calendar_id',
+        'Sales_Model_CostCenter' => 'cost_center_id',
+        );
+    
     /**
      * list of zend validator
      * this validators get used when validating user generated content with Zend_Input_Filter

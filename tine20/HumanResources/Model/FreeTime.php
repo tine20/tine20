@@ -34,6 +34,14 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
     protected $_application = 'HumanResources';
 
     /**
+     * @see Tinebase_Record_Abstract
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'HumanResources_Model_Employee' => 'employee_id',
+        );
+
+    /**
      * list of zend validator
      *
      * this validators get used when validating user generated content with Zend_Input_Filter
