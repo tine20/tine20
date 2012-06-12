@@ -477,6 +477,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         $_attendee->addIndices(array('user_type'));
         
+        // flatten user_ids (not groups for group/list handling bellow)
+        foreach($_attendee as $attendee) {
+            if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Abstract) {
+                $attendee->user_id = $attendee->user_id->getId();
+            }
+        }
+        
         $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         
         $allCurrGroupMembers = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
