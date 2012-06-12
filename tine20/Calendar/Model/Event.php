@@ -272,7 +272,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         switch ($_field) {
             case 'transp':
-                return $_value ? $_translation->_('Yes') : $_translation->_('No');
+                return $_value && $_value == Calendar_Model_Event::TRANSP_TRANSP ? $_translation->_('No') : $_translation->_('Yes');
             case 'organizer':
                 $organizer = $this->resolveOrganizer();
                 return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
