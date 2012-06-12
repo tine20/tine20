@@ -149,7 +149,7 @@ Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
     
     onAddLead: function(btn) {
         var contacts = this.getSelectionsAsArray();
-        Tine.Crm.AddToLeadPanel.openWindow({attendee: contacts});
+        Tine.Crm.AddToLeadPanel.openWindow({addRecords: contacts});
     },
 
     /**

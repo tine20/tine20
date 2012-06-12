@@ -71,7 +71,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.loadingText = _('Searching...');
 
         this.recordClass = Tine.Calendar.Model.Event;
-        this.recordProxy = Tine.Calendar.backend;
+        this.recordProxy = Tine.Calendar.eventBackend;
 
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');

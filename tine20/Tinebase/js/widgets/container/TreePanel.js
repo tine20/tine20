@@ -20,7 +20,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
 <pre><code>
 var taskPanel =  new Tine.containerTreePanel({
     app: Tine.Tinebase.appMgr.get('Tasks'),
-    recordClass: Tine.Tasks.Task
+    recordClass: Tine.Tasks.Model.Task
 });
 </code></pre>
  */

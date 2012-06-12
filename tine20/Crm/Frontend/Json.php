@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  */
 
 /**
@@ -32,6 +32,18 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_resolveUserFields = array(
         'Crm_Model_Lead' => array('created_by', 'last_modified_by')
+    );
+    
+    /**
+     * special config for relatable models
+     * @var array
+     */
+    protected $_relatableModelsConfig = array(
+        array('ownModel' => 'Lead', 'relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            )
+        )
     );
     
     /**
@@ -65,7 +77,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['totalcount'] = $result['totalcount']['totalcount'];
                 
         return $result;
-    }     
+    }
     
     /**
      * Return a single record
@@ -92,20 +104,20 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return string
      */
     public function deleteLeads($ids)
     {
         return $this->_delete($ids, $this->_controller);
-    }    
+    }
 
     /**
      * Returns registry data of crm.
      * @see Tinebase_Application_Json_Abstract
-     * 
+     *
      * @return  mixed array 'variable name' => 'data'
-     * 
+     *
      * @todo    add preference for default container_id
      */
     public function getRegistryData()
@@ -116,22 +128,22 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // get default container
         $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName)->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
-            Tinebase_Core::getUser(), 
+            Tinebase_Core::getUser(),
             $defaultContainerArray['id']
         )->toArray();
         $defaults['container_id'] = $defaultContainerArray;
         
         $registryData = array(
             'leadtypes'     => array(
-                'results' => $settings[Crm_Model_Config::LEADTYPES], 
+                'results' => $settings[Crm_Model_Config::LEADTYPES],
                 'totalcount' => count($settings[Crm_Model_Config::LEADTYPES])
             ),
             'leadstates'    => array(
-                'results' => $settings[Crm_Model_Config::LEADSTATES], 
+                'results' => $settings[Crm_Model_Config::LEADSTATES],
                 'totalcount' => count($settings[Crm_Model_Config::LEADSTATES])
             ),
             'leadsources'   => array(
-                'results' => $settings[Crm_Model_Config::LEADSOURCES], 
+                'results' => $settings[Crm_Model_Config::LEADSOURCES],
                 'totalcount' => count($settings[Crm_Model_Config::LEADSOURCES])
             ),
             'defaults'      => $defaults,
@@ -144,7 +156,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Returns settings for crm app
      *
      * @return  array record data
-     * 
+     *
      * @todo    return json store style with totalcount/result?
      */
     public function getSettings()

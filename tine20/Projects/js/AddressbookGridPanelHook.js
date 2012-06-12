@@ -106,8 +106,7 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
      * adds contacts to an existing project
      */
     onAddProject: function() {
-        var cont = this.getSelectionsAsArray();
-        var window = Tine.Projects.AddToProjectPanel.openWindow({attendee: cont});
+        var window = Tine.Projects.AddToProjectPanel.openWindow({addRecords: this.getSelectionsAsArray()});
     },
     
     /**
