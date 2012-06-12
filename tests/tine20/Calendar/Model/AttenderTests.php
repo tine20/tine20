@@ -146,10 +146,18 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         $persistentEvent = Calendar_Controller_Event::getInstance()->update($persistentEvent);
         
-        //var_dump($persistentEvent->attendee->toArray());
+//         print_r($persistentEvent->attendee->toArray());
         
         // there must be more than 2 attendees the user, the group + the groupmembers
         $this->assertGreaterThan(2, count($persistentEvent->attendee));
+        
+        // current account must not be a groupmember
+        $this->assertFalse(!! Calendar_Model_Attender::getAttendee($persistentEvent->attendee, new Calendar_Model_Attender(array(
+            'user_type'    => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+            'user_id'      => $this->_testUser->contact_id
+        ))), 'found user as groupmember');
+        
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getOwnAttender($persistentEvent->attendee)->status);
     }
     
     public function testEmailsToAttendeeWithMissingMail()
