@@ -481,12 +481,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      *
      * @param  Tinebase_Model_Group  $_group
      * 
-     * @return Tinebase_Model_Group
+     * @return Tinebase_Model_Group|NULL
      */
     public function addGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
         if ($this->_isReadOnlyBackend) {
-            return;
+            return NULL;
         }
         
         $dn = $this->_generateDn($_group);

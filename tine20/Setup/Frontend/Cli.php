@@ -58,6 +58,8 @@ class Setup_Frontend_Cli
             $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->sync_passwords_from_ldap)) {
+            $this->_syncPasswords($_opts);
         } elseif(isset($_opts->egw14import)) {
             $this->_egw14Import($_opts);
         } elseif(isset($_opts->check_requirements)) {
@@ -282,7 +284,25 @@ class Setup_Frontend_Cli
         Tinebase_Group::syncGroups();
         
         // import users
-        Tinebase_User::syncUsers(true);
+        $options = array('syncContactData' => TRUE);
+        if ($_opts->dbmailldap) {
+            $options['ldapplugins'] = array(
+                new Tinebase_EmailUser_Imap_LdapDbmailSchema(array(
+                    'backend' => 'ldap_imap',
+                ))
+            );
+        }
+        Tinebase_User::syncUsers($options);
+    }
+    
+    /**
+     * sync ldap passwords
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _syncPasswords(Zend_Console_Getopt $_opts)
+    {
+        Tinebase_User::syncLdapPasswords();
     }
     
     /**

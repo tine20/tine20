@@ -61,8 +61,9 @@ interface Tinebase_User_Plugin_SqlInterface extends Tinebase_User_Plugin_Interfa
      * 
      * @param  string  $_userId
      * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      */
-    public function inspectSetPassword($_userId, $_password);
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE);
 
     /**
      * delete user by id
