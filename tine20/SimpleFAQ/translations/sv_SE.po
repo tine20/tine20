@@ -43,14 +43,14 @@ msgstr "Interna"
 msgid "Public"
 msgstr "Publik"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
 #: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "FAQ-status"
 msgstr[1] "FAQ-status"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
 #: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -61,7 +61,7 @@ msgstr[1] "FAQ typer"
 msgid "Defaults"
 msgstr "Standard"
 
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:120
 msgid "Question"
 msgstr "Fråga"
@@ -70,7 +70,7 @@ msgstr "Fråga"
 msgid "Enter a question..."
 msgstr "Ställ en fråga"
 
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
 #: js/FaqGridPanel.js:127
 msgid "Answer"
 msgstr "Svar"
@@ -87,23 +87,23 @@ msgstr "Typ"
 msgid "Status"
 msgstr "Status"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
 msgid "FAQ Infos"
 msgstr "FAQ info"
 
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
+#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
 msgid "Tags"
 msgstr "Taggar"
 
-#: js/FaqGridDetailsPanel.js:189
+#: js/FaqGridDetailsPanel.js:195
 msgid "Creation Time"
 msgstr "Skapelsedatum"
 
-#: js/FaqGridDetailsPanel.js:194
+#: js/FaqGridDetailsPanel.js:200
 msgid "Created By"
 msgstr "Skapad av"
 
-#: js/FaqGridDetailsPanel.js:226
+#: js/FaqGridDetailsPanel.js:232
 msgid "No answer yet"
 msgstr "Inget svar ännu"
 

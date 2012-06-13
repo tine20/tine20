@@ -61,154 +61,154 @@ msgstr ""
 msgid "The right to manage the own client state."
 msgstr ""
 
-#: Config.php:167
+#: Config.php:169
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:169
+#: Config.php:171
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:178
+#: Config.php:180
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:180
+#: Config.php:182
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:189
+#: Config.php:191
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:191
+#: Config.php:193
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:200
+#: Config.php:202
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:202
+#: Config.php:204
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:210
+#: Config.php:212
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:212
+#: Config.php:214
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:221
+#: Config.php:223
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:223
+#: Config.php:225
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:231
+#: Config.php:233
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:233
+#: Config.php:235
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:242
+#: Config.php:244
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:244
+#: Config.php:246
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:252
+#: Config.php:254
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:254
+#: Config.php:256
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:262
+#: Config.php:264
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:264
+#: Config.php:266
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:272
+#: Config.php:274
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:274
+#: Config.php:276
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:282
+#: Config.php:284
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:284
+#: Config.php:286
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:292
+#: Config.php:294
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:294
+#: Config.php:296
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:302
+#: Config.php:304
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:304
+#: Config.php:306
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:312
+#: Config.php:314
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:314
+#: Config.php:316
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:322
+#: Config.php:324
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:324
+#: Config.php:326
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:332
+#: Config.php:334
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:334
+#: Config.php:336
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:608
+#: Container.php:615
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1407
+#: Container.php:1397
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr ""
 
-#: Container.php:1408
+#: Container.php:1398
 msgid "System Container"
 msgstr ""
 
@@ -355,13 +355,13 @@ msgstr ""
 msgid "My {0}"
 msgstr ""
 
-#: js/data/Record.js:162
+#: js/data/Record.js:163
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/data/Record.js:166
+#: js/data/Record.js:167
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
@@ -612,11 +612,11 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:385
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:388
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
-#: js/widgets/tree/ContextMenu.js:183
+#: js/widgets/tree/ContextMenu.js:181
 msgid "Please wait"
 msgstr ""
 
@@ -638,7 +638,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:371
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
@@ -646,7 +646,7 @@ msgstr ""
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:371
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -699,10 +699,10 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:380
-#: js/widgets/grid/GridPanel.js:1470
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:383
+#: js/widgets/grid/GridPanel.js:1493
 #: js/widgets/persistentfilter/PickerPanel.js:312
-#: js/widgets/tree/ContextMenu.js:337
+#: js/widgets/tree/ContextMenu.js:335
 msgid "Confirm"
 msgstr ""
 
@@ -756,7 +756,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:401 js/widgets/account/PickerGridPanel.js:265
-#: js/widgets/container/PropertiesDialog.js:104
+#: js/widgets/container/PropertiesDialog.js:107
 #: js/widgets/grid/LinkGridPanel.js:103
 msgid "Name"
 msgstr ""
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1139
 msgid "Created By"
 msgstr ""
 
@@ -1148,16 +1148,16 @@ msgstr ""
 msgid "The grant to access records marked as private in this container"
 msgstr ""
 
-#: js/widgets/container/PropertiesDialog.js:87
+#: js/widgets/container/PropertiesDialog.js:90
 msgid "Properties"
 msgstr ""
 
-#: js/widgets/container/PropertiesDialog.js:110
+#: js/widgets/container/PropertiesDialog.js:113
 #: js/widgets/tags/TagsPanel.js:616
 msgid "Color"
 msgstr ""
 
-#: js/widgets/container/PropertiesDialog.js:116
+#: js/widgets/container/PropertiesDialog.js:119
 msgid "My Grants"
 msgstr ""
 
@@ -1183,11 +1183,11 @@ msgstr ""
 msgid "Select a country..."
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:148
+#: js/widgets/customfields/EditDialogPlugin.js:146
 msgid "General"
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:160
+#: js/widgets/customfields/EditDialogPlugin.js:158
 msgid "Custom Fields"
 msgstr ""
 
@@ -1367,7 +1367,7 @@ msgstr ""
 msgid "Do you really want to delete this {0}?"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
+#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1526
 msgid "Deleting {0}"
 msgstr ""
 
@@ -1576,30 +1576,30 @@ msgstr ""
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:188
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:254
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:191
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:257
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:237
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:240
 msgid "Undo change for all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:287
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:290
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:288
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:291
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:381
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:384
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:385
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:388
 msgid "Applying changes"
 msgstr ""
 
@@ -1716,11 +1716,11 @@ msgstr ""
 msgid "Remove file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:111
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:109
 msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:103
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:101
 msgid "Resume upload"
 msgstr ""
 
@@ -1874,16 +1874,16 @@ msgstr ""
 msgid "Attention: There are more filters active!"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:475
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:479
 msgid "Criteria {0}"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:256
+#: js/widgets/grid/FilterPanel.js:260
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
 msgid "show details"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:257
+#: js/widgets/grid/FilterPanel.js:261
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
 msgid "Always show advanced filters"
 msgstr ""
@@ -1982,7 +1982,7 @@ msgid "Print Page"
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
-#: js/widgets/grid/GridPanel.js:472 js/widgets/tree/ContextMenu.js:55
+#: js/widgets/grid/GridPanel.js:472 js/widgets/tree/ContextMenu.js:53
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
@@ -1996,41 +1996,41 @@ msgstr ""
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1055
+#: js/widgets/grid/GridPanel.js:1075
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1094
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1118
+#: js/widgets/grid/GridPanel.js:1138
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1140
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1121
+#: js/widgets/grid/GridPanel.js:1141
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1467
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1445
+#: js/widgets/grid/GridPanel.js:1468
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1468
+#: js/widgets/grid/GridPanel.js:1491
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1503
+#: js/widgets/grid/GridPanel.js:1526
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -2335,67 +2335,67 @@ msgstr ""
 msgid "setting new timezone..."
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:256
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:254
 msgid "Rename {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:64
+#: js/widgets/tree/ContextMenu.js:62
 msgid "Manage {0} Permissions"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:72
+#: js/widgets/tree/ContextMenu.js:70
 msgid "{0} Properties"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:81
+#: js/widgets/tree/ContextMenu.js:79
 msgid "Set {0} color"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:95
+#: js/widgets/tree/ContextMenu.js:93
 msgid "Reload {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:119
+#: js/widgets/tree/ContextMenu.js:117
 msgid "Download"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:177
+#: js/widgets/tree/ContextMenu.js:175
 msgid "New {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:177
+#: js/widgets/tree/ContextMenu.js:175
 msgid "Please enter the name of the new {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:180
+#: js/widgets/tree/ContextMenu.js:178
 msgid "No {0} added"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:180 js/widgets/tree/ContextMenu.js:263
+#: js/widgets/tree/ContextMenu.js:178 js/widgets/tree/ContextMenu.js:261
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:183
+#: js/widgets/tree/ContextMenu.js:181
 msgid "Creating {0}..."
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:257
+#: js/widgets/tree/ContextMenu.js:255
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:263
+#: js/widgets/tree/ContextMenu.js:261
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:337
+#: js/widgets/tree/ContextMenu.js:335
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:449
+#: js/widgets/tree/ContextMenu.js:447
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:475
+#: js/widgets/tree/ContextMenu.js:473
 msgid "Properties for {0} \"{1}\""
 msgstr ""
 
@@ -2415,11 +2415,11 @@ msgstr ""
 msgid "Please consider updating!"
 msgstr ""
 
-#: Notes.php:367
+#: Notes.php:369
 msgid "by"
 msgstr ""
 
-#: Notes.php:373
+#: Notes.php:377
 msgid "Changed fields:"
 msgstr ""
 

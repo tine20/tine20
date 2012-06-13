@@ -1329,11 +1329,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
+<<<<<<< HEAD
      * Opens the required EditDialog
      * @param {Object} actionButton
      * @param {Tine.Tinebase.data.Record} record
      * @param {Array} addRelations
      * @return {Boolean}
+=======
+     * generic edit in new window handler
+>>>>>>> gerrit/pu/cal2012
      */
     onEditInNewWindow: function(button, record, addRelations) {
         if(!record) {

@@ -155,7 +155,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }, this);
         
         var cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.editDialog.recordClass);
-
         if(cfConfigs) {
             Ext.each(cfConfigs, function(config) {
                 var field = this.form.findField('customfield_' + config.data.name);

@@ -185,13 +185,32 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '5.5');
     }
-    
+
+    public function update_5()
+    {
+        // alter status_id -> status
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>status</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>false</notnull>
+            </field>');
+        
+        $this->_backend->alterCol('cal_events', $declaration, 'status_id');
+        
+        $this->setTableVersion('cal_events', 6);
+        
+        $this->setApplicationVersion('Calendar', '5.6');
+    }
+
+        
     /**
     * update to 6.0
     *
     * @return void
     */
-    public function update_5()
+    public function update_6()
     {
         $this->setApplicationVersion('Calendar', '6.0');
     }

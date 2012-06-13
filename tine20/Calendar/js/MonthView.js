@@ -492,6 +492,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 
             var tmpl = this.templates.event;
             data.extraCls = event.get('editGrant') ? 'cal-monthview-event-editgrant' : '';
+            data.extraCls += ' cal-status-' + event.get('status');
             
             if (event.ui.is_all_day_event) {
                 tmpl = this.templates.allDayEvent;

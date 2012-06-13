@@ -43,6 +43,16 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
     
     /**
+     * enable default alarm 
+     */
+    const DEFAULTALARM_ENABLED = 'defaultalarmenabled';
+    
+    /**
+     * default alarm time in minutes before
+     */
+    const DEFAULTALARM_MINUTESBEFORE = 'defaultalarmminutesbefore';
+    
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -60,6 +70,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::DEFAULTALARM_ENABLED,
+            self::DEFAULTALARM_MINUTESBEFORE,
         );
             
         return $allPrefs;
@@ -94,6 +106,14 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
                 'label'         => $translate->_('Send Notifications Emails of own Actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+            ),
+            self::DEFAULTALARM_ENABLED => array(
+                'label'         => $translate->_('Enable Standard Alarm'),
+                'description'   => $translate->_('New events get a standard alarm as defined below'),
+            ),
+            self::DEFAULTALARM_MINUTESBEFORE => array(
+                'label'         => $translate->_('Standard Alarm Time'),
+                'description'   => $translate->_('Minutes before the event starts'),
             ),
         );
         
@@ -178,6 +198,17 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
+                break;
+            case self::DEFAULTALARM_ENABLED:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::DEFAULTALARM_MINUTESBEFORE:
+                $preference->value      = 15;
+                $preference->options    = '';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

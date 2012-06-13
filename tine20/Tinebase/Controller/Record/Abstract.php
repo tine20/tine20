@@ -99,12 +99,15 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * duplicate check fields / if this is NULL -> no duplicate check
      *
+<<<<<<< HEAD
      * @var array
      */
     protected $_duplicateCheckFields = NULL;
 
     /**
      * holds new relation on update multiple
+=======
+>>>>>>> gerrit/pu/cal2012
      * @var array
      */
     protected $_newRelations = NULL;

@@ -29,7 +29,7 @@ msgstr "Lärare"
 msgid "Teacher Account"
 msgstr "Lärar Konto"
 
-#: Frontend/Json.php:256 js/CourseEditDialog.js:141 js/Models.js:41
+#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"

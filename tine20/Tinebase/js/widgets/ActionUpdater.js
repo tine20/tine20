@@ -163,7 +163,6 @@
                     }
                 }
             }
-            
             if (action.initialConfig.singularText && action.initialConfig.pluralText && action.initialConfig.translationObject) {
                 var text = action.initialConfig.translationObject.n_(action.initialConfig.singularText, action.initialConfig.pluralText, records.length);
                 action.setText(text);

@@ -175,18 +175,18 @@ msgstr ""
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:667
-#: js/TreePanel.js:777
+#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
+#: js/TreePanel.js:760
 msgid "Upload Failed"
 msgstr ""
 
-#: js/GridPanel.js:639 js/TreePanel.js:668
+#: js/GridPanel.js:639 js/TreePanel.js:651
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:792 js/TreePanel.js:778
+#: js/GridPanel.js:792 js/TreePanel.js:761
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 

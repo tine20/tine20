@@ -16,7 +16,7 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  * @class       Ext.ux.form.ClearableComboBox
  * @extends     Ext.form.ComboBox
  */
-Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
+Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {  
     
     /**
      * @cfg {bool} disableClearer
