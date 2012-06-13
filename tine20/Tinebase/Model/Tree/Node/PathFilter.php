@@ -22,7 +22,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      * @var array list of allowed operators
      */
     protected $_operators = array(
-        0 => 'equals',       
+        0 => 'equals',
     );
     
     /**

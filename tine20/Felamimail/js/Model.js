@@ -606,6 +606,11 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
     { name: 'reason' },
     { name: 'enabled', type: 'boolean'},
     { name: 'days' },
+    { name: 'start_date', type: 'date' },
+    { name: 'end_date', type: 'date' },
+    { name: 'contact_ids' },
+    { name: 'template_id' },
+    { name: 'signature' },
     { name: 'mime' }
 ]), {
     appName: 'Felamimail',

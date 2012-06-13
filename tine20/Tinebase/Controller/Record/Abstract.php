@@ -635,7 +635,6 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $this->_inspectAfterUpdate($updatedRecord, $_record);
             $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, TRUE);
-            
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
             
@@ -984,6 +983,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count($_records) === 0) {
             return;
         }
+        
         $bypassFilters = FALSE;
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();

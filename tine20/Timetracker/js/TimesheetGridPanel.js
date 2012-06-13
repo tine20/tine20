@@ -299,7 +299,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             value = Ext.util.Format.htmlEncode(value);
                         }
                         
-                        var encoded = Ext.util.Format.htmlEncode(value);
+                        var encoded = Tine.Tinebase.common.doubleEncode(value);
                         encoded = Ext.util.Format.nl2br(encoded);
                         
                         return encoded;

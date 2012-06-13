@@ -244,10 +244,30 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         attr.leaf = false;
         
+        // use name as ids to make pathfilter work
+        if (attr.path && attr.created_by) {
+            var keys = attr.path.split('/');
+            attr.id = keys.pop();
+        }
+        
         if(attr.name && typeof attr.name == 'object') {
             Ext.apply(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
+<<<<<<< HEAD
                 qtip: Tine.Tinebase.common.doubleEncode(attr.name.name)
+=======
+                qtip: Tine.Tinebase.common.doubleEncode(attr.name.name),
+                leaf: !(attr.type == 'folder')
+                //allowDrop: (attr.type == 'folder')
+            });
+        }
+        else {
+            Ext.applyIf(attr, {
+                text: Ext.util.Format.htmlEncode(attr.name),
+                qtip: Tine.Tinebase.common.doubleEncode(attr.name),
+                leaf: !!attr.account_grants && !(attr.type == 'folder')
+                //allowDrop: !!attr.account_grants && attr.account_grants.addGrant
+>>>>>>> gerrit/pu/6130_vacation
             });
         }
         

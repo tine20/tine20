@@ -228,8 +228,10 @@ Tine.Tinebase.common = {
                 '<div class="x-tree-node-leaf x-unselectable file">',
                     '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
                     '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
-                    '<span> ', '{name}','</span>',
-                '</div>'
+                    '<span> ', '{[this.encode(name)]}','</span>',
+                '</div>',{
+                    encode : function(v) { return Ext.util.Format.htmlEncode(v); }
+                }
             ).compile();
         }
         

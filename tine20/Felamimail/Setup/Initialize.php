@@ -71,4 +71,30 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             )
         ))));
     }
+    
+    /**
+     * init application folders
+     */
+    protected function _initializeFolders()
+    {
+        self::createVacationTemplatesFolder();
+    }
+    
+    /**
+     * create vacation templates folder
+     */
+    public static function createVacationTemplatesFolder()
+    {
+        $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
+            'Felamimail', 
+            'Vacation Templates', 
+            Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID
+        );
+        try {
+            Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create vacation template folder: ' . $teb);
+        }
+    }
 }

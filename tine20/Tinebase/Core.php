@@ -1140,12 +1140,9 @@ class Tinebase_Core
     {
         if (! self::get(self::LOGLEVEL)) {
             $config = self::getConfig();
-        
             $logLevel = isset($config->logger) && $config->logger->priority ? (int)$config->logger->priority : Zend_Log::EMERG;
-            
             self::set(self::LOGLEVEL, $logLevel);
         }
-        
         return self::get(self::LOGLEVEL);
     }
     

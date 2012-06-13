@@ -102,6 +102,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var Felamimail_Model_Folder
      */
     protected $_folder = NULL;
+    
+    /**
+     * paths in the vfs to delete
+     * 
+     * @var array
+     */
+    protected $_pathsToDelete = array();
 
     /**
      * Runs the test methods of this class.
@@ -189,7 +196,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 // do not delete script if active
-            }            
+            }
             Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
             
             if ($this->_oldSieveData !== NULL) {
@@ -199,6 +206,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if ($this->_oldActiveSieveScriptName !== NULL) {
             Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_oldActiveSieveScriptName);
             Felamimail_Controller_Sieve::getInstance()->activateScript($this->_account->getId());
+        }
+        
+        // vfs cleanup
+        foreach ($this->_pathsToDelete as $path) {
+            $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+            //echo "delete $path";
+            $webdavRoot->delete($path);
         }
     }
 
@@ -728,7 +742,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test move
-     * 
      */
     public function testMoveMessage()
     {
@@ -821,16 +834,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetVacation()
     {
-        $vacationData = array(
-            'id'                    => $this->_account->getId(),
-            'subject'               => 'unittest vacation subject',
-            'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
-            'days'                  => 7,
-            'enabled'               => TRUE,
-            'reason'                => 'unittest vacation message<br /><br />signature',
-            'mime'                  => '',
-        );
-        
+        $vacationData = $this->_getVacationData();
         $this->_sieveTestHelper($vacationData);
         
         // check if script was activated
@@ -854,19 +858,30 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test mime vacation sieve script
+     * get vacation data
+     * 
+     * @return array
      */
-    public function testMimeVacation()
+    protected function _getVacationData()
     {
-        $vacationData = array(
+        return array(
             'id'                    => $this->_account->getId(),
             'subject'               => 'unittest vacation subject',
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>",
+            'reason'                => 'unittest vacation message<br /><br />signature',
             'mime'                  => NULL,
         );
+    }
+    
+    /**
+     * test mime vacation sieve script
+     */
+    public function testMimeVacation()
+    {
+        $vacationData = $this->_getVacationData();
+        $vacationData['reason'] = "\n<html><body><h1>unittest vacation&nbsp;message</h1></body></html>";
         
         $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (! in_array('mime', $_sieveBackend->capability())) {
@@ -983,6 +998,77 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // this should work
         $ruleData[0]['enabled'] = 0;
         $this->_sieveTestHelper($ruleData);
+    }
+    
+    /**
+     * testGetVacationTemplates
+     * 
+     * @return array
+     */
+    public function testGetVacationTemplates()
+    {
+        $this->_addVacationTemplateFile();
+        $result = $this->_json->getVacationMessageTemplates();
+        
+        $this->assertTrue($result['totalcount'] > 0, 'no templates found');
+        $found = FALSE;
+        foreach ($result['results'] as $template) {
+            if ($template['name'] === 'vacation_template_test.tpl') {
+                $found = TRUE;
+                break;
+            }
+        }
+        
+        $this->assertTrue($found, 'wrong templates: ' . print_r($result['results'], TRUE));
+        
+        return $template;
+    }
+    
+    /**
+     * add vacation template file to vfs
+     */
+    protected function _addVacationTemplateFile()
+    {
+        $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+        $path = '/webdav/Felamimail/shared/Vacation Templates';
+        $node = $webdavRoot->getNodeForPath($path);
+        $this->_pathsToDelete[] = $path . '/vacation_template_test.tpl';
+        $node->createFile('vacation_template_test.tpl', fopen(dirname(__FILE__) . '/files/vacation_template.tpl', 'r'));
+    }
+    
+    /**
+     * testGetVacationMessage
+     */
+    public function testGetVacationMessage()
+    {
+        $template = $this->testGetVacationTemplates();
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date'   => '2012-04-20',
+            'contact_ids' => array(
+                Tinebase_User::getInstance()->getFullUserByLoginName('pwulf')->contact_id,
+                Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->contact_id,
+            ),
+            'template_id' => $template['id'],
+        ));
+        
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (sclever@tine20.org).<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (sclever@tine20.org) instead.<br />", $result['message']);
+    }
+    
+    /**
+    * testSetVacationWithStartAndEndDate
+    *
+    * @see 0006266: automatic deactivation of vacation message
+    */
+    public function testSetVacationWithStartAndEndDate()
+    {
+        $vacationData = $this->_getVacationData();
+        $vacationData['start_date'] = '2012-04-18';
+        $vacationData['end_date'] = '2012-04-20';
+        $result = $this->_sieveTestHelper($vacationData);
+        
+        $this->assertContains($vacationData['start_date'], $result['start_date']);
+        $this->assertContains($vacationData['end_date'], $result['end_date']);
     }
     
     /**
@@ -1137,6 +1223,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * sieve test helper
      * 
      * @param array $_sieveData
+     * @return array
      */
     protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
@@ -1173,5 +1260,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
             $this->assertEquals($_sieveData, $resultSet);
         }
+        
+        return $resultSet;
     }
 }

@@ -151,7 +151,8 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
      * 
      * @return Felamimail_Sieve_Vacation
      */
-    protected function _getVacation() {
+    protected function _getVacation()
+    {
         $vacation = new Felamimail_Sieve_Vacation();
         
         $vacation->setEnabled(true)
@@ -181,6 +182,27 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains('vacation :days 8 :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" :from "sieve@example.com" :addresses ["info@example.com"] :mime text:', $sieveScript);
         $this->assertContains('<html><body><strong>AWAY!</strong></body></html>', $sieveScript);
         $this->assertContains('--foo--', $sieveScript);
+    }
+    
+    /**
+     * testStartAndEndDate
+     * 
+     * @see 0006266: automatic deactivation of vacation message
+     */
+    public function testStartAndEndDate()
+    {
+        $vacation = $this->_getVacation();
+        $vacation->setStartdate('2012-05-08');
+        $vacation->setEnddate('2012-05-18');
+        $vacation->setDateEnabled(TRUE);
+        
+        $script = new Felamimail_Sieve_Backend_Script();
+        $script->setVacation($vacation);
+        $sieveScript = $script->getSieve();
+        
+        $this->assertContains('require ["vacation","date","relational"]', $sieveScript);
+        $this->assertContains('if allof(currentdate :value "le" "date" "2012-05-18",', $sieveScript);
+        $this->assertContains('currentdate :value "ge" "date" "2012-05-08")', $sieveScript);
     }
     
     /**
