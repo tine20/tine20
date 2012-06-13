@@ -75,6 +75,101 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     );
     
     /**
+     * adds email and samba users, generates username + user password and 
+     *   applies multiple options (like accountLoginNamePrefix, accountHomeDirectoryPrefix, ...)
+     * 
+     * @param array $options
+     * @param string $password
+     * @return string
+     */
+    public function applyOptionsAndGeneratePassword($options, $password = NULL)
+    {
+        // create valid login name
+        if (! isset($this->accountLoginName)) {
+            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
+        }
+        
+        if (! isset($this->accountPrimaryGroup)) {
+            if (! empty($options['group_id'])) {
+                $groupId = $options['group_id'];
+            } else {
+                // use default user group
+                $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+                $groupId = $defaultUserGroup->getId();
+            }
+            $this->accountPrimaryGroup = $groupId;
+        }
+        
+        // add prefix to login name if given
+        if (! empty($options['accountLoginNamePrefix'])) {
+            $this->accountLoginName = $options['accountLoginNamePrefix'] . $this->accountLoginName;
+        }
+        
+        // add home dir if empty and prefix is given (append login name)
+        if (empty($this->accountHomeDirectory) && ! empty($options['accountHomeDirectoryPrefix'])) {
+            $this->accountHomeDirectory = $options['accountHomeDirectoryPrefix'] . $this->accountLoginName;
+        }
+        
+        // create email address if accountEmailDomain if given
+        if (empty($this->accountEmailAddress) && ! empty($options['accountEmailDomain'])) {
+            $this->accountEmailAddress = $this->accountLoginName . '@' . $options['accountEmailDomain'];
+        }
+        
+        if (! empty($options['samba'])) {
+            $this->_addSambaSettings($options);
+        }
+        
+        // generate passwd (use accountLoginName or password from options or password from csv in this order)
+        $userPassword = $this->accountLoginName;
+        
+        if (! empty($password)) {
+            $userPassword = $password;
+        } else if (! empty($options['password'])) {
+            $userPassword = $options['password'];
+        }
+        
+        $this->_addEmailUser($userPassword);
+        
+        return $userPassword;
+    }
+    
+    /**
+    * add samba settings to user
+    *
+    * @param array $options
+    */
+    protected function _addSambaSettings($options)
+    {
+        $samUser = new Tinebase_Model_SAMUser(array(
+            'homePath'      => (isset($options['homePath'])) ? $options['homePath'] . $this->accountLoginName : '',
+            'homeDrive'     => (isset($options['homeDrive'])) ? $options['homeDrive'] : '',
+            'logonScript'   => (isset($options['logonScript'])) ? $options['logonScript'] : '',
+            'profilePath'   => (isset($options['profilePath'])) ? $options['profilePath'] . $this->accountLoginName : '',
+            'pwdCanChange'  => isset($options['pwdCanChange'])  ? $options['pwdCanChange']  : new Tinebase_DateTime('@1'),
+            'pwdMustChange' => isset($options['pwdMustChange']) ? $options['pwdMustChange'] : new Tinebase_DateTime('@2147483647')
+        ));
+    
+        $this->sambaSAM = $samUser;
+    }
+    
+    /**
+     * add email users to record (if email set + config exists)
+     *
+     * @param string $_password
+     */
+    protected function _addEmailUser($password)
+    {
+        if (! empty($this->accountEmailAddress)) {
+            $this->imapUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $password
+            ));
+            $this->smtpUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $password
+            ));
+        }
+    }
+    
+    /**
      * @see Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)

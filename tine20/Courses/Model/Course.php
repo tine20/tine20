@@ -4,8 +4,8 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -45,7 +45,7 @@ class Courses_Model_Course extends Tinebase_Record_Abstract
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'internet'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'internet'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'OFF'),
         'fileserver'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -71,15 +71,4 @@ class Courses_Model_Course extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
-    
-    /**
-     * fills a record from json data
-     *
-     * @param string $_data json encoded data
-     * @return void
-     */
-    public function setFromJson($_data)
-    {
-        parent::setFromJson($_data);
-    }
 }

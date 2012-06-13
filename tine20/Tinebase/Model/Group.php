@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -88,5 +88,23 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     static public function convertGroupIdToInt($_groupId)
     {
         return self::convertId($_groupId, 'Tinebase_Model_Group');
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Record_Abstract::setFromArray()
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        
+        // sanitize members (could be an array of user arrays -> expecting to contain only ids)
+        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && is_array($this->members[0])) {
+            $memberIds = array();
+            foreach ($this->members as $member) {
+                $memberIds[] = $member['id'];
+            }
+            $this->members = $memberIds;
+        }
     }
 }
