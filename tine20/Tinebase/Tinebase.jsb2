@@ -46,6 +46,10 @@
           "path": "../library/GeoExt/script/"
         },
         {
+          "text": "tinycon.js",
+          "path": "../library/tinycon/"
+        },
+        {
           "text": "MapPanel.js",
           "path": "js/widgets/"
         },
