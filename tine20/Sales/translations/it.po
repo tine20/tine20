@@ -24,87 +24,6 @@ msgstr "gestisci prodotti"
 msgid "add, edit and delete products"
 msgstr "aggiungi, modifica e cancella i prodotti"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:82
-msgid "Title"
-msgstr "Titolo"
-
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr "Descrizione"
-
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
-msgid "Enter description..."
-msgstr "Inserisci descrizione..."
-
-#: js/ContractGridPanel.js:76
-msgid "Contract number"
-msgstr "Numero contratto"
-
-#: js/ContractGridPanel.js:88
-msgid "Status"
-msgstr "Stato"
-
-#: js/Models.js:40
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Prodotto"
-msgstr[1] "Prodotti"
-
-#: js/Models.js:44
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lista record"
-msgstr[1] "liste record"
-
-#: js/Models.js:78 js/Models.js:140
-msgid "Quick search"
-msgstr "Ricerca veloce"
-
-#: js/Models.js:79
-msgid "Product name"
-msgstr "Nome prodotto"
-
-#: js/Models.js:81 js/Models.js:142
-msgid "Creator"
-msgstr ""
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Contratto"
-msgstr[1] "Contratti"
-
-#: js/Models.js:117
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:141
-msgid "Contract name"
-msgstr ""
-
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Nome"
-
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Prezzo"
-
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Produttore"
-
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Categoria"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Tag"
-
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:62
 msgid "My Products"
 msgstr ""
@@ -121,20 +40,185 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-msgid "Shared Contracts"
-msgstr "Contratti Condivisi"
+#: Frontend/Json.php:43
+msgid "Responsible"
+msgstr ""
 
-msgid "Summary"
-msgstr "Sommario"
+#: Frontend/Json.php:44
+msgid "Customer"
+msgstr ""
 
-msgid "Products"
-msgstr "Prodotti"
+#: Frontend/Json.php:45
+msgid "Partner"
+msgstr ""
 
-msgid "All Products"
-msgstr "Tutti i Prodotti"
+#: js/ContractGridPanel.js:76
+msgid "Contract number"
+msgstr "Numero contratto"
 
-msgid "Contracts"
-msgstr "Contratti"
+#: js/ContractGridPanel.js:82 js/ContractEditDialog.js:112
+msgid "Title"
+msgstr "Titolo"
+
+#: js/ContractGridPanel.js:88 js/ContractEditDialog.js:142
+msgid "Status"
+msgstr "Stato"
+
+#: js/ContractGridPanel.js:94 js/Models.js:142 js/ContractEditDialog.js:151
+msgid "Cleared"
+msgstr ""
+
+#: js/ContractGridPanel.js:100 js/Models.js:143 js/ContractEditDialog.js:164
+msgid "Cleared in"
+msgstr ""
+
+#: js/AdminPanel.js:63
+msgid "Cancel"
+msgstr ""
+
+#: js/AdminPanel.js:71
+msgid "OK"
+msgstr ""
+
+#: js/AdminPanel.js:92
+msgid "Loading..."
+msgstr ""
+
+#: js/AdminPanel.js:178
+msgid "Generate contract number"
+msgstr ""
+
+#: js/AdminPanel.js:184
+msgid "auto"
+msgstr ""
+
+#: js/AdminPanel.js:184
+msgid "manual"
+msgstr ""
+
+#: js/ProductEditDialog.js:90 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Nome"
+
+#: js/ProductEditDialog.js:96 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Prezzo"
+
+#: js/ProductEditDialog.js:103 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Produttore"
+
+#: js/ProductEditDialog.js:107 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Categoria"
+
+#: js/ProductEditDialog.js:111 js/ContractEditDialog.js:170
+#: js/ProductGridPanel.js:123
+msgid "Description"
+msgstr "Descrizione"
+
+#: js/ProductEditDialog.js:112 js/ContractEditDialog.js:171
+msgid "Enter description..."
+msgstr "Inserisci descrizione..."
+
+#: js/Models.js:40
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Prodotto"
+msgstr[1] "Prodotti"
+
+#: js/Models.js:44
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista record"
+msgstr[1] "liste record"
+
+#: js/Models.js:78 js/Models.js:139
+msgid "Quick search"
+msgstr "Ricerca veloce"
+
+#: js/Models.js:79
+msgid "Product name"
+msgstr "Nome prodotto"
+
+#: js/Models.js:81 js/Models.js:141
+msgid "Creator"
+msgstr ""
+
+#: js/Models.js:112
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contratto"
+msgstr[1] "Contratti"
+
+#: js/Models.js:116
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:140
+msgid "Contract name"
+msgstr ""
+
+#: js/ContractEditDialog.js:106
+msgid "Number"
+msgstr ""
+
+#: js/ContractEditDialog.js:118
+msgid "Contact Customer"
+msgstr ""
+
+#: js/ContractEditDialog.js:130
+msgid "Contact Responsible"
+msgstr ""
+
+#: js/ContractEditDialog.js:139
+msgid "Company"
+msgstr ""
+
+#: js/ContractEditDialog.js:149
+msgid "closed"
+msgstr ""
+
+#: js/ContractEditDialog.js:149
+msgid "open"
+msgstr ""
+
+#: js/ContractEditDialog.js:159
+msgid "not yet cleared"
+msgstr ""
+
+#: js/ContractEditDialog.js:160
+msgid "to clear"
+msgstr ""
+
+#: js/ContractEditDialog.js:161
+msgid "cleared"
+msgstr ""
+
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Tag"
+
+#: Controller.php:65 Controller.php:82
+msgid "You do not have admin rights on Sales"
+msgstr ""
+
+#~ msgid "Shared Contracts"
+#~ msgstr "Contratti Condivisi"
+
+#~ msgid "Summary"
+#~ msgstr "Sommario"
+
+#~ msgid "Products"
+#~ msgstr "Prodotti"
+
+#~ msgid "All Products"
+#~ msgstr "Tutti i Prodotti"
+
+#~ msgid "Contracts"
+#~ msgstr "Contratti"
 
 #~ msgid "contracts list"
 #~ msgid_plural "contracts lists"

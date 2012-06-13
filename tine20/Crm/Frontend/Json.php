@@ -34,17 +34,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Crm_Model_Lead' => array('created_by', 'last_modified_by')
     );
     
-    /**
-     * special config for relatable models
-     * @var array
-     */
-    protected $_relatableModelsConfig = array(
-        array('ownModel' => 'Lead', 'relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
-            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
-            )
-        )
-    );
+    protected $_relatableModels = array('Crm_Model_Lead');
     
     /**
      * the constructor

@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>1</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -76,7 +76,8 @@
                 </field>
                 <field>
                     <name>number</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -89,6 +90,7 @@
                     <name>status</name>
                     <type>text</type>
                     <length>64</length>
+                    <default>open</default>
                 </field>
                 <field>
                     <name>description</name>
@@ -126,6 +128,18 @@
                     <name>deleted_time</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>cleared_in</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>cleared</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>not yet cleared</default>
+                </field>                
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -221,7 +235,7 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
-                </field>                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>

@@ -60,34 +60,37 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $ret = array();
         
-        // if configured
-        if(!empty($this->_relatableModelsConfig)) {
+        if(property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
             $i=0;
-            foreach($this->_relatableModelsConfig as $cItem) {
-                if(is_array($cItem)) {
+            foreach($this->_relatableModels as $model) {
+                $cItems = $model::getRelatableConfig();
+                $ownModel = explode('_Model_', $model);
+                $ownModel = $ownModel[1];
+                foreach($cItems as $cItem) {
+                    $cItem['ownModel'] = $ownModel;
                     $ret[$this->_applicationName][$i] = $cItem;
                     $ret[$cItem['relatedApp']][$i] = array('reverted' => true, 'ownModel' => $cItem['relatedModel'], 'relatedModel' => $cItem['ownModel'], 'relatedApp' => $this->_applicationName);
                     // KeyfieldConfigs
                     if(array_key_exists('keyfieldConfig', $cItem)) {
                         $ret[$cItem['relatedApp']][$i]['keyfieldConfig'] = $cItem['keyfieldConfig'];
                         if($cItem['keyfieldConfig']['from']) $ret[$cItem['relatedApp']][$i]['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
-                }
-                $j=0;
-                if(array_key_exists('config', $cItem)) {
-                    foreach($cItem['config'] as $conf) {
-                        $max = explode(':',$conf['max']);
-                        $ret[$this->_applicationName][$i]['config'][$j]['max'] = $max[0];
-                        $ret[$cItem['relatedApp']][$i]['config'][$j] = $conf;
-                        $ret[$cItem['relatedApp']][$i]['config'][$j]['max'] = $max[1];
-                        if($conf['degree'] == 'sibling') {
-                            $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'];
-                        } else {
-                            $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
-                        }
-                        $j++;
                     }
-                }
-                $i++;
+                    $j=0;
+                    if(array_key_exists('config', $cItem)) {
+                        foreach($cItem['config'] as $conf) {
+                            $max = explode(':',$conf['max']);
+                            $ret[$this->_applicationName][$i]['config'][$j]['max'] = $max[0];
+                            $ret[$cItem['relatedApp']][$i]['config'][$j] = $conf;
+                            $ret[$cItem['relatedApp']][$i]['config'][$j]['max'] = $max[1];
+                            if($conf['degree'] == 'sibling') {
+                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'];
+                            } else {
+                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
+                            }
+                            $j++;
+                        }
+                    }
+                    $i++;
                 }
             }
         }
