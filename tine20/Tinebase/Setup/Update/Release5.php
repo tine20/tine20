@@ -410,4 +410,29 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->_backend->createTable($declaration, 'Tinebase', 'container_content');
         $this->setApplicationVersion('Tinebase', '5.10');
     }
+    
+   /**
+    * update to 5.11
+    * - remove unique key from alarm table
+    */
+    public function update_10()
+    {
+        $this->_backend->dropIndex('alarm', 'record_id-model');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>record_id-model</name>
+                <field>
+                    <name>record_id</name>
+                </field>
+                <field>
+                    <name>model</name>
+                </field>
+            </index>
+        ');
+        
+        $this->_backend->addIndex('alarm', $declaration);
+        $this->setTableVersion('alarm', '3');
+        $this->setApplicationVersion('Tinebase', '5.11');
+    }
+    
 }

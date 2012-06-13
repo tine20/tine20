@@ -135,9 +135,9 @@ Ext.namespace('Tine.Tasks');
         
         var dueField = this.getForm().findField('due'),
             dueDate = dueField.getValue(),
-            alarmValue = parseInt(this.alarmPanel.alarmCombo.getValue(), 10);
+            alarms = this.alarmPanel.alarmGrid.getFromStoreAsArray();
             
-        if (Ext.isNumber(alarmValue) && ! Ext.isDate(dueDate)) {
+        if (! Ext.isEmpty(alarms) && ! Ext.isDate(dueDate)) {
             dueField.markInvalid(this.app.i18n._('You have to supply a due date, because an alarm ist set!'));
             
             isValid = false;

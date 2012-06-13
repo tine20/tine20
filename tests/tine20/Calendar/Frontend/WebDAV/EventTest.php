@@ -281,9 +281,6 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('New Event', $record->summary);
     }
     
-    /**
-     * @see #5788: Silently discard alarms if more than 1 alarm is defined
-     */
     public function testPutEventMultipleAlarms()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
@@ -296,7 +293,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         
         $record = $event->getRecord();
         
-        $this->assertEquals('1', count($record->alarms));
+        $this->assertEquals('3', count($record->alarms));
     }
     
     /**

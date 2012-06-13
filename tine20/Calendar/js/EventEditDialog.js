@@ -88,10 +88,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         layout: 'hbox',
+                        items: [{
+                            margins: '5',
+                            width: 100,
+                            xtype: 'label',
+                            text: this.app.i18n._('View')
+                        }, Ext.apply(this.perspectiveCombo, {
+                            flex: 1
+                        })]
+                    }, {
+                        layout: 'hbox',
                         height: 115,
                         layoutConfig: {
                             align : 'stretch',
-                            pack  : 'start',
+                            pack  : 'start'
                         },
                         items: [{
                             flex: 1,
@@ -176,7 +186,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     var bool = (value == 'TRANSPARENT' || value === true);
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
-                            }, {
+                            }, Ext.apply(this.perspectiveCombo.getAttendeeTranspField(), {
+                                hideLabel: true
+                            }), {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('Tentative'),
@@ -204,7 +216,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     var bool = (value == 'PRIVATE' || value === true);
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
-                            }]
+                            }, Ext.apply(this.perspectiveCombo.getAttendeeStatusField(), {
+                                width: 115,
+                                hideLabel: true
+                            })]
                         }]
                     }, {
                         xtype: 'tabpanel',
@@ -281,7 +296,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
             bbar: [{
                 xtype: 'label',
-                html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;",
+                html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;"
             }, organizerCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 width: 300,
                 name: 'organizer',
@@ -308,7 +323,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
-//        this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
+        // a combo with all attendee + origin/organizer
+        this.perspectiveCombo = new Tine.Calendar.PerspectiveCombo({
+            editDialog: this
+        });
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
@@ -370,7 +388,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.attendeeGridPanel.onRecordLoad(this.record, this.attendee);
             this.rrulePanel.onRecordLoad(this.record);
             this.alarmPanel.onRecordLoad(this.record);
-//            this.CalendarSelectWidget.onRecordLoad(this.record);
             
             // apply grants
             if (! this.record.get('editGrant')) {
@@ -380,6 +397,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }, this);
             }
+            
+            Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
+            this.perspectiveCombo.loadPerspective();
+            return;
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
@@ -390,7 +411,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.onRecordUpdate(this.record);
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
-//        this.CalendarSelectWidget.onRecordUpdate(this.record);
+        this.perspectiveCombo.updatePerspective();
     },
     
     setTabHeight: function() {

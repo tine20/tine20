@@ -79,6 +79,14 @@ Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     // pass to original combobox trigger handler
     onTrigger2Click : function() {
         this.onTriggerClick();
+    },
+    
+    setValue: function(v) {
+        if (!v) {
+            this.triggers[0].hide();
+        }
+        
+        return Ext.ux.form.ClearableDateField.superclass.setValue.apply(this, arguments);
     }
 });
 Ext.reg('extuxclearabledatefield', Ext.ux.form.ClearableDateField);

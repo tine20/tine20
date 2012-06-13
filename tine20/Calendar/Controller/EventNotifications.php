@@ -119,9 +119,10 @@
      * @param Tinebase_Model_FullAccount $_updater
      * @param Sting                      $_action
      * @param Calendar_Model_Event       $_oldEvent
+     * @param Tinebase_Model_Alarm       $_alarm
      * @return void
      */
-    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL, $_alarm=NULL)
     {
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             return;
@@ -134,7 +135,7 @@
         switch ($_action) {
             case 'alarm':
                 foreach($_event->attendee as $attender) {
-                    if ($attender->status != Calendar_Model_Attender::STATUS_DECLINED) {
+                    if (Calendar_Model_Attender::isAlarmForAttendee($attender, $_alarm)) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
                     }
                 }

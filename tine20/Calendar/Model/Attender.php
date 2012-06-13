@@ -749,4 +749,33 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
     }
+    
+    /**
+     * checks if given alarm should be send to given attendee
+     * 
+     * @param  Calendar_Model_Attender $_attendee
+     * @param  Tinebase_Model_Alarm    $_alarm
+     * @return bool
+     */
+    public static function isAlarmForAttendee($_attendee, $_alarm)
+    {
+        // attendee: array with one user_type/id if alarm is for one attendee only
+        $attendeeOption = $_alarm->getOption('attendee');
+        
+        // skip: array of array of user_type/id with attendees this alarm is to skip for
+        $skipOption = $_alarm->getOption('skip');
+        
+        if ($attendeeOption) {
+            return (bool) self::getAttendee(new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($_attendee)), new Calendar_Model_Attender($attendeeOption));
+        }
+        
+        if (is_array($skipOption)) {
+            $skipAttendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $skipOption);
+            if(self::getAttendee($skipAttendees, $_attendee)) {
+                return false;
+            }
+        }
+        
+        return $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
+    }
 }

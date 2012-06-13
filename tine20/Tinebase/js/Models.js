@@ -244,17 +244,39 @@ Tine.Tinebase.Model.Preference = Ext.data.Record.create([
  * 
  * @constructor {Ext.data.Record}
  */
-Tine.Tinebase.Model.Alarm = Ext.data.Record.create([
+Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
     {name: 'id'             },
     {name: 'record_id'      },
     {name: 'model'          },
-    {name: 'alarm_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long     },
-    {name: 'minutes_before' },
-    {name: 'sent_time'      },
+    {name: 'alarm_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    {name: 'minutes_before',  sortType: Ext.data.SortTypes.asInt},
+    {name: 'sent_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'sent_status'    },
     {name: 'sent_message'   },
     {name: 'options'        }
-]);
+], {
+    appName: 'Tinebase',
+    modelName: 'Alarm',
+    idProperty: 'id',
+    titleProperty: 'minutes_before',
+    // ngettext('Alarm', 'Alarms', n); gettext('Alarm');
+    recordName: 'Alarm',
+    recordsName: 'Alarms',
+    containerProperty: null,
+    getOption: function(name) {
+        var encodedOptions = this.get('options'),
+            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+        
+        return options[name];
+    },
+    setOption: function(name, value) {
+        var encodedOptions = this.get('options'),
+            options = encodedOptions ? Ext.decode(encodedOptions) : {}
+        
+        options[name] = value;
+        this.set('options', Ext.encode(options));
+    }
+});
 
 /**
  * @namespace Tine.Tinebase.Model
