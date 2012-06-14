@@ -390,7 +390,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $interval = $rrule->interval ? $rrule->interval : 1;
             $recurrence->appendChild(new DOMElement('Interval', $interval, 'uri:Calendar'));
             
-            if($rrule->until instanceof DateTime) {
+            if($rrule->count) {
+                $recurrence->appendChild(new DOMElement('Occurrences', $rrule->count, 'uri:Calendar'));
+            } else  if($rrule->until instanceof DateTime) {
                 $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
             }
             
@@ -746,13 +748,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
             
-            if(isset($xmlData->Recurrence->Until)) {
+            if(isset($xmlData->Recurrence->Occurrences)) {
+                $rrule->count = (int) $xmlData->Recurrence->Occurrences;
+            } else if(isset($xmlData->Recurrence->Until)) {
+                $rrule->count = null;
                 $rrule->until = new Tinebase_DateTime((string)$xmlData->Recurrence->Until);
                 // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
                 if ($rrule->until->format('s') == '00') {
                     $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
                 }
             } else {
+                $rrule->count = null;
                 $rrule->until = null;
             }
             
