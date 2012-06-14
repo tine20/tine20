@@ -757,7 +757,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @param  Tinebase_Model_Alarm    $_alarm
      * @return bool
      */
-    public static function isAlarmForAttendee($_attendee, $_alarm)
+    public static function isAlarmForAttendee($_attendee, $_alarm, $_event=NULL)
     {
         // attendee: array with one user_type/id if alarm is for one attendee only
         $attendeeOption = $_alarm->getOption('attendee');
@@ -776,6 +776,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
-        return $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
+        $isOrganizerCondition = $_event ? $_event->isOrganizer($_attendee) : TRUE;
+        $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
+        return ($isAttendeeCondition || $isOrganizerCondition)&& $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
     }
 }

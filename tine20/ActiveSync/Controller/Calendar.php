@@ -326,6 +326,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
            
         if(!empty($data->alarms)) {
+            $data->alarms->sort('alarm_time');
             $alarm = $data->alarms->getFirstRecord();
             if($alarm instanceof Tinebase_Model_Alarm) {
                 // NOTE: option minutes_before is always calculated by Calendar_Controller_Event::_inspectAlarmSet
@@ -804,20 +805,37 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected function _handleAlarms($xmlData, $event)
     {
-        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        // NOTE: existing alarms are already filtered for CU by MSEF
+        $event->alarms = $event->alarms instanceof Tinebase_Record_RecordSet ? $event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $event->alarms->sort('alarm_time');
+        
+        $currentAlarm = $event->alarms->getFirstRecord();
+        $alarm = NULL;
+        
         if (isset($xmlData->Reminder)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . 'Add alarm: ' . (int)$xmlData->Reminder . ' minutes before.');
-            $alarm = clone $event->dtstart;
+            $dtstart = clone $event->dtstart;
             
-            $event->alarms->addRecord(new Tinebase_Model_Alarm(array(
-                'alarm_time'        => $alarm->subMinute((int)$xmlData->Reminder),
-                'minutes_before'    => (int)$xmlData->Reminder,
+            $alarm = new Tinebase_Model_Alarm(array(
+                'alarm_time'        => $dtstart->subMinute((int)$xmlData->Reminder),
+                'minutes_before'    => in_array((int)$xmlData->Reminder, array(0, 5, 15, 30, 60, 120, 720, 1440, 2880)) ? (int)$xmlData->Reminder : 'custom',
                 'model'             => 'Calendar_Model_Event'
-            )));
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Do not add or remove existing alarm.');
+            ));
+            
+            $alarmUpdate = Calendar_Controller_Alarm::getMatchingAlarm($event->alarms, $alarm);
+            if (!$alarmUpdate) {
+                // alarm not existing -> add it
+                $event->alarms->addRecord($alarm);
+                
+                if ($currentAlarm) {
+                    // ActiveSync supports one alarm only -> current got deleted
+                    $event->alarms->removeRecord($currentAlarm);
+                }
+            }
+        }
+        
+        else if ($currentAlarm) {
+            // current alarm got removed
+            $event->alarms->removeRecord($currentAlarm);
         }
     }
     

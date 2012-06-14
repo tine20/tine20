@@ -415,14 +415,19 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $this->assertContains('X-MOZ-LASTACK;VALUE=DATE-TIME:21', $sharedVCalendar, $sharedVCalendar);
     }
     
-    public function testGetNoAlarmAsNonAtendee()
+    public function testGetNoAlarmAsNonAttendee()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
+        $currentCU = Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => 'someoneelse'
+        )));
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
+        Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser($currentCU);
         
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
         $ics = stream_get_contents($loadedEvent->get());
@@ -525,7 +530,7 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         
         $record = $event->getRecord();
         
-        $this->assertEquals('2011-10-04 06:30:00', (string) $record->alarms[0]->alarm_time);
+        $this->assertEquals('2011-10-04 06:30:00', (string) $record->alarms->getFirstRecord()->alarm_time);
     }
     
     /**

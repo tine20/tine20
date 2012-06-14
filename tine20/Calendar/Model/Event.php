@@ -525,4 +525,21 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         return $this->organizer;
     }
+    
+    /**
+     * checks if given attendee is organizer of this event
+     * 
+     * @param Calendar_Model_Attendee $_attendee
+     */
+    public function isOrganizer($_attendee=NULL)
+    {
+        $organizerContactId = NULL;
+        if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        } else {
+            $organizerContactId = Tinebase_Core::getUser()->contact_id;
+        }
+        
+        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
+    }
 }
