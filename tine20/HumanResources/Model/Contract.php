@@ -48,7 +48,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'workingtime_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cost_center_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cost_center_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'vacation_days'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'feast_calendar_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information

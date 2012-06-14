@@ -105,6 +105,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'bank_code_number',
         'employment_begin',
         'employment_end',
+        'contracts'
     );
     
     /**

@@ -89,7 +89,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @return Ext.grid.ColumnModel
      * @private
      */
-    getColumns: function(){
+    getColumns: function() {
         return [
             {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },                
             {
@@ -106,20 +106,28 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 sortable: true,
                 dataIndex: 'n_fn'
             }, {
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
+                id: 'employment_begin',
+                header: this.app.i18n._("Employment begins"),
+                width: 350,
                 sortable: true,
-                dataIndex: 'status'
-            }].concat(this.getModlogColumns());
-    },
-    
-    /**
-     * status column renderer
-     * @param {string} value
-     * @return {string}
-     */
-    statusRenderer: function(value) {
-        return this.app.i18n._hidden(value);
+                dataIndex: 'employment_begin',
+                renderer: Tine.Tinebase.common.dateRenderer
+            }, {
+                id: 'employment_end',
+                header: this.app.i18n._("Employment ends"),
+                width: 350,
+                sortable: true,
+                dataIndex: 'employment_end',
+                renderer: Tine.Tinebase.common.dateRenderer
+            }, {
+                id: 'supervisor_id',
+                header: this.app.i18n._("Full Name"),
+                width: 350,
+                sortable: true,
+                dataIndex: 'supervisor_id',
+                renderer: Tine.Tinebase.common.accountRenderer 
+            }
+            
+            ].concat(this.getModlogColumns());
     }
 });

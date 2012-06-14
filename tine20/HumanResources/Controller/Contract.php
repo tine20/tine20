@@ -59,7 +59,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeUpdate(Tinebase_Record_Interface $_record, $_oldRecord)
     {
         $this->_checkDates($_record);
-        $this->_containerToId(&$_record);
+        $this->_containerToId($_record);
     }
     
     /**
@@ -70,7 +70,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     {
         if($_record->end_date) {
             if($_record->start_date > $_record->end_date) {
-                throw new Tinebase_Exception_Record_Validation('The start date of the record must be before the end date');
+                throw new Tinebase_Exception_Record_Validation('The start date of the contract must be before the end date');
             }
         }
     }
@@ -81,6 +81,12 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _containerToId(Tinebase_Record_Interface $_record) {
         if(is_array($_record->feast_calendar_id)) {
             $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
+        }
+        if(is_array($_record->workingtime_id)) {
+            $_record->workingtime_id = $_record->workingtime_id['id'];
+        }
+        if(is_array($_record->cost_center_id)) {
+            $_record->cost_center_id = $_record->cost_center_id['id'];
         }
     }
     
@@ -93,7 +99,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_checkDates($_record);
-        $this->_containerToId(&$_record);
+        $this->_containerToId($_record);
         
         if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null; 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
@@ -140,7 +146,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                 throw new HumanResources_Exception_NoContract();
             }
         } else if($contracts->count() > 1) {
-            throw new Tinebase_Exception_Duplicate('There are more than 1 valid contracts for this employee!');
+            throw new Tinebase_Exception_Duplicate('There are more than one valid contracts for this employee!');
         }
         
         return $contracts->getFirstRecord();

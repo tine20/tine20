@@ -30,11 +30,10 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'bank_account_number', type: 'string'},
     {name: 'bank_name',           type: 'string'},
     {name: 'bank_code_number',    type: 'string'},
-    {name: 'supervisor_id', type: Tine.Tinebase.Model.Account },
+    {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account },
 
     {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'vacation_days',       type: 'int'},
     // tine 2.0 tags and notes
     {name: 'tags'},
     {name: 'notes'},

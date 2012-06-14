@@ -103,7 +103,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
             app: this.app,
-            editDialog: this
+            editDialog: this,
+            disabled: ! this.showPrivateInformation
         });
         
         this.freetimeGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
@@ -265,11 +266,13 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         layout: 'hfit',
                         autoHeight: true,
                         title: this.app.i18n._('Internal Information'),
-                        disabled: ! this.showPrivateInformation,
+//                        disabled: ! this.showPrivateInformation,
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'top',
-                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {
+//                                disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation
+                                }),
                             items: [
                                 [
                                 Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {

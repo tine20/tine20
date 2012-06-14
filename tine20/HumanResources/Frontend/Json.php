@@ -31,7 +31,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_resolveUserFields = array(
-        'HumanResources_Model_Employee' => array('created_by', 'last_modified_by', 'account_id')
+        'HumanResources_Model_Employee' => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id')
     );
     
     /**
@@ -204,10 +204,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'HumanResources_Model_Employee':
                 $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
                 $_record['supervisor_id'] = !empty($_record['supervisor_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['supervisor_id'])->toArray() : null;
-                $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
-                $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
-                $_record['contracts'] = $this->_multipleRecordsToJson($recs);
+                if(array_key_exists($_record, 'contracts')) {
+                    $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+                    $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
+                    $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
+                    $_record['contracts'] = $this->_multipleRecordsToJson($recs);
+                }
                 break;
             case 'HumanResources_Model_FreeTime':
                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
