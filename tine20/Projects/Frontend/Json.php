@@ -35,15 +35,6 @@ class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     );
     
     /**
-     * special config for relatable models
-     * @var array
-     */
-    protected $_relatableModelsConfig = array(
-        array('ownModel' => 'Project', 'relatedApp' => 'Addressbook', 'relatedModel' => 'Contact',
-            'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'))
-        );
-    
-    /**
      * the constructor
      *
      */

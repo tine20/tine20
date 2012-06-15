@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>5.4</version>
+    <version>5.6</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -90,6 +90,7 @@
                     <name>status</name>
                     <type>text</type>
                     <length>64</length>
+                    <default>open</default>
                 </field>
                 <field>
                     <name>description</name>
@@ -135,8 +136,9 @@
                 </field>
                 <field>
                     <name>cleared</name>
-                    <type>boolean</type>
-                    <default>false</default>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>not yet cleared</default>
                 </field>                
                 <index>
                     <name>id</name>
@@ -239,6 +241,44 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>sales_cost_centers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>remark</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>number</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>number</name>
                     </field>
                 </index>
             </declaration>

@@ -40,7 +40,7 @@ class Sales_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Sales')),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'cleared'              => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'cleared'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'cleared_in'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Text'),

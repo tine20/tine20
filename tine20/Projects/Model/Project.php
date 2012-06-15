@@ -73,30 +73,10 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
     );
     
     /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
+     * @see Tinebase_Record_Abstract
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        // do something here if you like (add default empty values, ...)
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-
-    /**
-     * fills a record from json data
-     *
-     * @param string $_data json encoded data
-     * @return void
-     */
-    public function setFromJson($_data)
-    {
-        parent::setFromJson($_data);
-        
-        // do something here if you like
-    }
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact',
+            'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'))
+        );
 }
