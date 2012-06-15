@@ -447,13 +447,13 @@
                     <name>workingtime_id</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>cost_center_id</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>vacation_days</name>
