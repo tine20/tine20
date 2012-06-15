@@ -155,6 +155,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static $_relatableConfig = NULL;
 
+    /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format: 
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = NULL;
+    
     /******************************** functions ****************************************/
     
     /**
@@ -985,5 +996,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function getRelatableConfig()
     {
         return static::$_relatableConfig;
+    }
+    
+    /**
+     * returns the foreignId fields (used in Tinebase_Convert_Json)
+     * @return array
+     */
+    public static function getResolveForeignIdFields()
+    {
+        return static::$_resolveForeignIdFields;
     }
 }
