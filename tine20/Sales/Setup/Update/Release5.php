@@ -237,12 +237,65 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setApplicationVersion('Sales', '5.5');
     }
 
-    /*
-    * update to 6.0
-    *
-    * @return void
-    */
+    /**
+     * update from 5.5 -> 5.6
+     * - added table cost_centers
+     * 
+     * @return void
+     */    
     public function update_5()
+    {
+        $tableDefinition = '
+            <table>
+            <name>sales_cost_centers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>remark</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>number</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>number</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        ';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        $this->setApplicationVersion('Sales', '5.6');
+    }
+
+    /*
+     * update to 6.0
+     *
+     * @return void
+     */
+    public function update_6()
     {
         $this->setApplicationVersion('Sales', '6.0');
     }
