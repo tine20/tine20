@@ -114,7 +114,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 renderer: Tine.Tinebase.common.dateRenderer
             }, {
                 id: 'employment_end',
-                header: this.app.i18n._("Employment ends"),
+                header: this.app.i18n._("Employment end"),
                 width: 350,
                 sortable: true,
                 dataIndex: 'employment_end',

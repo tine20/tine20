@@ -58,8 +58,8 @@ Tine.HumanResources.Model.Employee = Tine.Tinebase.data.Record.create(Tine.Human
     recordName: 'Employee',
     recordsName: 'Employees',
 //    containerProperty: 'container_id',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'All Employees',
+    // ngettext('Employees', 'Employees', n);
+    containerName: 'Employees',
     containersName: 'Employees',
     getTitle: function() {
         return this.get('n_fn') ? this.get('n_fn') : false;
@@ -130,13 +130,13 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     modelName: 'WorkingTime',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('WorkingTime', 'WorkingTimes', n);
-    recordName: 'WorkingTime',
-    recordsName: 'WorkingTimes',
+    // ngettext('Working Time', 'Working Times', n);
+    recordName: 'Working Time',
+    recordsName: 'Working Times',
 //    containerProperty: 'container_id',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'All WorkingTimes',
-    containersName: 'WorkingTimes',
+    // ngettext('Working Times', 'Working Times', n);
+    containerName: 'Working Times',
+    containersName: 'Working Times',
     getTitle: function() {
         return this.get('title') ? this.get('title') : false;
     }
@@ -169,9 +169,6 @@ Tine.HumanResources.Model.WorkingTime.getFilterModel = function() {
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']}
-//        {label: app.i18n._('WorkingTime name'),   field: 'name' },
-//        {filtertype: 'tinebase.tag', app: app},
-//        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
     ];
 };
 
@@ -210,8 +207,8 @@ Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Human
     recordName: 'Contract',
     recordsName: 'Contracts',
 //    containerProperty: 'container_id',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'All Contracts',
+    // ngettext('Contracts', 'Contracts', n);
+    containerName: 'Contracts',
     containersName: 'Contracts',
     getTitle: function() {
         return this.get('workingtime_id') ? Ext.util.Format.htmlEncode(this.get('workingtime_id').title) + ' ' + Tine.Tinebase.common.dateRenderer(this.get('start_date')) + ' - ' + Tine.Tinebase.common.dateRenderer(this.get('end_date')) : '';
@@ -245,9 +242,6 @@ Tine.HumanResources.Model.Contract.getFilterModel = function() {
     
     return [
         {label: _('Quick search'), field: 'query', operators: ['contains']}
-//        {label: app.i18n._('Contract name'),   field: 'name' },
-//        {filtertype: 'tinebase.tag', app: app},
-//        {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
     ];
 };
 
