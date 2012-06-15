@@ -86,7 +86,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testInvitation()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         
         self::flushMailer();
@@ -120,7 +120,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateChangeAttendee()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -146,7 +146,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateReschedule()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -165,7 +165,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateDetails()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -184,7 +184,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateAttendeeStatus()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -218,7 +218,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testOrganizerNotificationSend()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         $persistentEvent = $this->_eventController->create($event);
@@ -236,7 +236,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testNotificationToNonAccounts()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         
@@ -372,6 +372,21 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
         $this->_assertMail('sclever', 'Alarm');
         $this->assertEquals(1, count(self::getMessages()));
+    }
+    
+    public function testSkipPastAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever');
     }
     
     /**
