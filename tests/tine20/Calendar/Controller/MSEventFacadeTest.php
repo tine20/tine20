@@ -37,6 +37,31 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $event->rrule = 'FREQ=DAILY;INTERVAL=1';
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
+        $event->attendee[1]->transp = Calendar_Model_Event::TRANSP_TRANSP;
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            array('minutes_before' => 15),
+            array('minutes_before' => 30),
+            array('minutes_before' => 'custom', 'alarm_time' => '2009-03-25 04:33:00'),
+            array('minutes_before' => 60),
+            array('minutes_before' => 90),
+        ), TRUE);
+        $event->alarms[0]->setOption('skip', array(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_testUserContact->getId()
+        )));
+        $event->alarms[1]->setOption('attendee', array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_testUserContact->getId()
+        ));
+        $event->alarms[2]->setOption('skip', array(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['sclever']->getId()
+        )));
+        $event->alarms[3]->setOption('attendee', array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['sclever']->getId()
+        ));
+        
         $persistentException = clone $event;
         $persistentException->recurid = clone $persistentException->dtstart;
         $persistentException->recurid->addDay(1);
@@ -112,6 +137,62 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(1, $events->count());
         $this->assertEquals('exception', $events->getFirstRecord()->summary);
         
+    }
+    
+    /**
+     * test organizer based updates 
+     */
+    public function testUpdateFromOrganizer()
+    {
+        $event = $this->testCreate();
+        
+        // fake what the client does
+        $event->alarms->setId(NULL);
+        
+        $event = $this->_uit->update($event);
+        $this->_assertTestEvent($event);
+        
+        $sclever = new Calendar_Model_Attender(array(
+            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        
+        $currUser = $this->_uit->setCalendarUser($sclever);
+        $event = $this->_uit->get($event->getId());
+        $this->_uit->setCalendarUser($currUser);
+        
+        $this->assertEquals(Calendar_Model_Event::TRANSP_TRANSP, $event->transp, 'transp not from perspective');
+        $this->assertEquals(3, $event->alarms->count(), 'alarms for 15, 60, 90 should be present for sclever'); 
+        $this->assertEquals(1, $event->alarms->filter('minutes_before', 15)->count(), '15 min. before is not present');
+        $this->assertEquals(1, $event->alarms->filter('minutes_before', 60)->count(), '60 min. before is not present');
+        $this->assertEquals(1, $event->alarms->filter('minutes_before', 90)->count(), '90 min. before is not present');
+    }
+    
+    /**
+     * test attendee based updates 
+     */
+    public function testUpdateFromAttendee()
+    {
+        $event = $this->testCreate();
+        
+        $sclever = new Calendar_Model_Attender(array(
+            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        $currUser = $this->_uit->setCalendarUser($sclever);
+        $event = $this->_uit->get($event->getId());
+        
+        // fake what the client does
+        $event->alarms->setId(NULL);
+        $event->alarms->addRecord(new Tinebase_Model_Alarm(array(
+            'minutes_before' => 5,
+        ), TRUE));
+        $event = $this->_uit->update($event);
+        $this->_uit->setCalendarUser($currUser);
+        
+        $this->assertEquals(Calendar_Model_Event::TRANSP_TRANSP, $event->transp, 'transp not from perspective');
+        $this->assertEquals(4, $event->alarms->count(), 'alarms for 5, 15, 60, 90 should be present for sclever'); 
+        $this->assertEquals(1, $event->alarms->filter('minutes_before', 5)->count(), '5 min. before is not present');
     }
     
     public function testUpdateRemoveExceptions()
@@ -226,12 +307,12 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentSClever = Calendar_Model_Attender::getAttendee($persistentException->attendee, $sclever);
         $persistentException->attendee->removeRecord($persistentSClever);
         
+        $currUser = $this->_uit->setCalendarUser($sclever);
         $event = $this->_uit->update($event);
         
         //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
         //$this->_uit->attenderStatusUpdate($event, $persistentSClever);
         
-        $currUser = $this->_uit->setCalendarUser($sclever);
         $event = $this->_uit->get($event->getId());
         $this->_uit->setCalendarUser($currUser);
         
@@ -243,10 +324,19 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     {
         $this->assertEquals(2, $persistentEvent->exdate->count());
         
+        $this->assertEquals(Calendar_Model_Event::TRANSP_OPAQUE, $persistentEvent->transp, 'base transp from perspective');
+        $this->assertEquals(3, count($persistentEvent->alarms), 'base alarms not from perspective');
+        $this->assertEquals(0, count($persistentEvent->alarms->filter('minutes_before', 15)), '15 min. before is not skipped');
+        $this->assertEquals(0, count($persistentEvent->alarms->filter('minutes_before', 60)), '60 min. before is not for test CU');
+        
         $persistException = $persistentEvent->exdate->filter('is_deleted', 0)->getFirstRecord();
         $this->assertEquals('2009-03-26 08:00:00', $persistException->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-26 06:00:00', $persistException->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('exception', $persistException->summary);
+        $this->assertEquals(Calendar_Model_Event::TRANSP_OPAQUE, $persistException->transp, 'recur transp from perspective');
+        $this->assertEquals(3, count($persistException->alarms), 'exception alarms not from perspective');
+        $this->assertEquals(0, count($persistException->alarms->filter('minutes_before', 15)), '15 min. before is not skipped');
+        $this->assertEquals(0, count($persistException->alarms->filter('minutes_before', 60)), '60 min. before is not for test CU');
         
         $deletedInstance = $persistentEvent->exdate->filter('is_deleted', 1)->getFirstRecord();
         $this->assertEquals('2009-03-27 06:00:00', $deletedInstance->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));

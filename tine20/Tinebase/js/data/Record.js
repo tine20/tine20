@@ -204,16 +204,28 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         return p.fields.indexOfKey(n) >= 0;
     };
     f.getRecordName = function() {
-        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 1);
+        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            
+        return i18n.n_(p.recordName, p.recordsName, 1);
     };
     f.getRecordsName = function() {
-        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.recordName, p.recordsName, 50);
+        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            
+        return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getContainerName = function() {
-        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 1);
+        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            
+        return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
-        return Tine.Tinebase.appMgr.get(p.appName).i18n.n_(p.containerName, p.containersName, 50);
+        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            
+        return i18n.n_(p.containerName, p.containersName, 50);
     };
     f.getAppName = function() {
         return Tine.Tinebase.appMgr.get(p.appName).i18n._(p.appName);

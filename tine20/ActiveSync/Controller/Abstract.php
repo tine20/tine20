@@ -194,30 +194,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
         return $folders;
     }
     
-    /**
-     * Returns a set of records identified by their id's
-     * 
-     * @param   array $_ids       array of record identifiers
-     * @return  Tinebase_Record_RecordSet 
-     */
-    public function getMultiple($_ids)
-    {
-        $records = $this->_contentController->getMultiple($_ids);
-        
-        $firstRecord = $records->getFirstRecord();
-        if ($firstRecord) {
-            // get tags / alarms
-            if ($firstRecord->has('tags')) {
-                Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($records);
-            }
-            if ($firstRecord->has('alarms')) {
-                $this->_contentController->getAlarms($records);
-            }
-        }
-        
-        return $records;
-    }
-    
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
         $item = $this->_contentController->get($_serverId);

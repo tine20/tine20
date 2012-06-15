@@ -344,6 +344,66 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         
     }
+    public function testAttendeeAlarmSkip()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
+        $event->organizer = $this->_personasContacts['sclever']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        // pwulf skips alarm
+        $event->alarms->setOption('skip', array(
+            array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $this->_personasContacts['pwulf']->getId(),
+            )
+        ));
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $persistentEvent = $this->_eventController->create($event);
+        self::flushMailer();
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever', 'Alarm for event');
+        $this->_assertMail('pwulf');
+    }
+    
+    public function testAttendeeAlarmOnly()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
+        $event->organizer = $this->_personasContacts['sclever']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $event->alarms->setOption('attendee', array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['pwulf']->getId()
+        ));
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $persistentEvent = $this->_eventController->create($event);
+        self::flushMailer();
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('pwulf', 'Alarm for event');
+        $this->_assertMail('sclever');
+        
+    }
     
     public function testAlarm()
     {

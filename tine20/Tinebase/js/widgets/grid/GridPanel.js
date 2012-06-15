@@ -1295,7 +1295,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             grid.view.focusRow(row);
         }
     },
+    
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if(!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
 
+        this.getContextMenu().showAt(e.getXY());
+        // reset preview update
+        this.updateOnSelectionChange = true;
+    },
+    
     /**
      * row doubleclick handler
      * 

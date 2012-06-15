@@ -155,9 +155,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($updatedEvent->attendee));
         
         $updatedEvent->attendee->getFirstRecord()->role = Calendar_Model_Attender::ROLE_OPTIONAL;
+        $updatedEvent->attendee->getFirstRecord()->transp = Calendar_Model_Event::TRANSP_TRANSP;
+        
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
         $this->assertEquals(1, count($secondUpdatedEvent->attendee));
         $this->assertEquals(Calendar_Model_Attender::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
+        $this->assertEquals(Calendar_Model_Event::TRANSP_TRANSP, $secondUpdatedEvent->attendee->getFirstRecord()->transp);
     }
     
     public function testAttendeeFilter()
@@ -386,6 +389,20 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
         ));
+        
+        $this->_controller->create($nonConflictEvent, TRUE);
+    }
+    
+    public function testCreateNoConflictParallelAtendeeTrasparentEvent()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        unset ($event->attendee[1]); // no group here
+        $event->attendee->transp = Calendar_Model_Event::TRANSP_TRANSP;
+        $persistentEvent = $this->_controller->create($event);
+        
+        $nonConflictEvent = $this->_getEvent();
+        $nonConflictEvent->attendee = $this->_getAttendee();
         
         $this->_controller->create($nonConflictEvent, TRUE);
     }
