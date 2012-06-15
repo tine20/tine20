@@ -204,11 +204,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             case 'HumanResources_Model_Employee':
                 $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
                 $_record['supervisor_id'] = !empty($_record['supervisor_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['supervisor_id'])->toArray() : null;
-                if(array_key_exists('contracts', $_record)) {
+                if ( Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
                     $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                     $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
                     $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
                     $_record['contracts'] = $this->_multipleRecordsToJson($recs);
+                } else {
+                    $_record['contracts'] = NULL;
                 }
                 break;
             case 'HumanResources_Model_FreeTime':
@@ -230,26 +232,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return parent::_recordToJson($_record);
     }
-// not needed anymore due to task #6600
-//     /**
-//      * resolves multiple records
-//      * @param Tinebase_Record_RecordSet $_records
-//      */
-//     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records)
-//     {
-//         switch ($_records->getRecordClassName()) {
-//             case 'HumanResources_Model_FreeTime':
-//                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
-//                 break;
-//             case 'HumanResources_Model_Contract':
-//                 $this->_resolveMultiple($_records, 'employee_id', 'HumanResources_Model_Employee');
-//                 $this->_resolveMultiple($_records, 'workingtime_id', 'HumanResources_Model_WorkingTime');
-//                 $this->_resolveMultiple($_records, 'feast_calendar_id', 'Calendar_Model_Event');
-//                 $this->_resolveMultiple($_records, 'cost_center_id', 'Sales_Model_CostCenter');
-//                 break;
-//         }
-//         return parent::_multipleRecordsToJson($_records);
-//     }
     
     /**
      * returns feast days
