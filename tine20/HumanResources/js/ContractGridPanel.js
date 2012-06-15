@@ -66,10 +66,12 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * loads the existing contracts into the store
      */
     onRecordLoad: function() {
-        Ext.each(this.editDialog.record.get('contracts'), function(ar) {
-            this.store.addSorted(new this.recordClass(ar));
-        }, this);
-        
+        var c = this.editDialog.record.get('contracts');
+        if(Ext.isArray(c)) {
+            Ext.each(c, function(ar) {
+                this.store.addSorted(new this.recordClass(ar));
+            }, this);
+        }
     },
     
     /**

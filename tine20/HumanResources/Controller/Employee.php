@@ -69,6 +69,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
             $contractArray['employee_id'] = $_createdRecord->getId();
             $contract = new HumanResources_Model_Contract($contractArray);
+            var_dump($contract->toArray());
             $contracts->addRecord($contract);
         }
         $contracts->sort('start_date', 'ASC');

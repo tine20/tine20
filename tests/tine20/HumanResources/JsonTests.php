@@ -36,8 +36,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $e = $this->_getEmployee();
         $e->contracts = array($this->_getContract()->toArray());
-        
         $savedEmployee = $this->_json->saveEmployee($e->toArray());
         $this->assertEquals($e->n_fn, $savedEmployee['n_fn']);
+        var_dump($savedEmployee);
     }
 }
