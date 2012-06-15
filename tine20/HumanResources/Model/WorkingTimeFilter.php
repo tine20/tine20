@@ -26,6 +26,11 @@ class HumanResources_Model_WorkingTimeFilter extends Tinebase_Model_Filter_Filte
     protected $_modelName = 'HumanResources_Model_WorkingTime';
     
     /**
+     * @var string class name of this filter group
+     */
+    protected $_className = 'HumanResources_Model_WorkingTimeFilter';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

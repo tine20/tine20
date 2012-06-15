@@ -26,12 +26,17 @@ class HumanResources_Model_FreeDayFilter extends Tinebase_Model_Filter_FilterGro
     protected $_modelName = 'HumanResources_Model_FreeDay';
     
     /**
+     * @var string class name of this filter group
+     */
+    protected $_className = 'HumanResources_Model_FreeDayFilter';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
         'date' => array( 'filter' => 'Tinebase_Model_Filter_Date'),
         'id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
-//         'duration' => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'duration' => array('filter' => 'Tinebase_Model_Filter_Int'),
         'freetime_id'   => array('filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
                 'filtergroup'       => 'HumanResources_Model_FreeTimeFilter', 

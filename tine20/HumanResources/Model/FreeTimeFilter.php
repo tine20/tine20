@@ -26,6 +26,11 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
     protected $_modelName = 'HumanResources_Model_FreeTime';
     
     /**
+     * @var string class name of this filter group
+     */
+    protected $_className = 'HumanResources_Model_FreeTimeFilter';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

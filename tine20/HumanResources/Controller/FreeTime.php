@@ -85,7 +85,13 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $_record->freedays = $freeDays->toArray();
     }
     
-    protected function _inspectBeforeCreate($_record)
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_freedaysToCreate = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
         

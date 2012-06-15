@@ -18,6 +18,9 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
+    
+    protected $_duplicateCheckFields = array(array('account_id'));
+    
     /**
      * the constructor
      *
@@ -91,11 +94,16 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     {
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $ec = HumanResources_Controller_Contract::getInstance();
-        // property does not exist if user has no right to see private information
-        if(property_exists($_record, 'contracts')) {
+
+        if(is_array($_record->account_id)) {
+            $_record->account_id = $_record->account_id['accountId'];
+        }
+        
+        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
             foreach($_record->contracts as $contractArray) {
-                $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-                $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
                 $contractArray['employee_id'] = $_oldRecord->getId();
                 $contract = new HumanResources_Model_Contract($contractArray);
                 if($contract->id) {

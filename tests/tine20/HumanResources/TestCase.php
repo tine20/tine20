@@ -19,6 +19,11 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
+     * Feast Calendar
+     * @var Tinebase_Model_Container
+     */
+    protected $_feast_calendar = NULL;
+    /**
      * @var HumanResources_Frontend_Json
      */
     protected $_json = array();
@@ -86,16 +91,18 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getFeastCalendar()
     {
-        $fc = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'Feast Calendar',
-            'type'           => Tinebase_Model_Container::TYPE_SHARED,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00'
-        ), true));
-
-        return $fc;
+        if(!$this->_feast_calendar) {
+            $this->_feast_calendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                'name'           => 'Feast Calendar',
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'       => Tinebase_Core::getUser(),
+                'backend'        => 'SQL',
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'color'          => '#00FF00'
+            ), true));
+        }
+        
+        return $this->_feast_calendar;
     }
     /**
      * returns the contact of the current user
@@ -109,8 +116,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     protected function _getCostCenter()
     {
         $c = new Sales_Model_CostCenter(array(
-            'number' => 'wks-1',
-            'remark' => 'Production'
+            'number' => Tinebase_Record_Abstract::generateUID(),
+            'remark' => Tinebase_Record_Abstract::generateUID(),
             ));
         $c = Sales_Controller_CostCenter::getInstance()->create($c);
         return $c;
@@ -122,13 +129,11 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     protected function _getContract()
     {
         $sdate = new Tinebase_DateTime();
-        $edate = new Tinebase_DateTime();
         $sdate->subMonth(1);
-        $edate->addMonth(5);
         
         $c = new HumanResources_Model_Contract(array(
             'start_date' => $sdate,
-            'end_date'   => $edate,
+            'end_date'   => null,
             'employee_id' => null,
             'cost_center_id' => $this->_getCostCenter(),
             'vacation_days' => 30,
