@@ -52,13 +52,7 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFaqs($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, $this->_controller, 'SimpleFAQ_Model_FaqFilter', TRUE);
-        
-        $result['totalfaqstatuses'] = $result['totalcount']['faqstatuses'];
-        $result['totalfaqtypes'] = $result['totalcount']['faqtypes'];
-        
-        $result['totalcount'] = $result['totalcount']['totalcount'];
-        return $result;
+        return $this->_search($filter, $paging, $this->_controller, 'SimpleFAQ_Model_FaqFilter', TRUE);
     }
 
     /**
