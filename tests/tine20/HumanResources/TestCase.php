@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
+class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * @var HumanResources_Frontend_Json
@@ -50,7 +50,6 @@ class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $this->_json = new HumanResources_Frontend_Json();
     }
 
     /**
@@ -71,11 +70,32 @@ class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
     {
         return Tinebase_Core::getUser();
     }
-    
+    /**
+     * returns one of the un setup created workintimes
+     * @return HumanResources_Model_WorkingTime
+     */
+    protected function _getWorkingTime()
+    {
+        $filter = new HumanResources_Model_WorkingTimeFilter();
+        $wt = HumanResources_Controller_WorkingTime::getInstance()->search($filter);
+        return $wt->getFirstRecord();
+    }
+    /**
+     * returns the default feast calendar
+     * @return Tinebase_Model_Container
+     */
     protected function _getFeastCalendar()
     {
-        return new Tinebase_Container(
-            );
+        $fc = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'Feast Calendar',
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'       => Tinebase_Core::getUser(),
+            'backend'        => 'SQL',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'color'          => '#00FF00'
+        ), true));
+
+        return $fc;
     }
     /**
      * returns the contact of the current user
@@ -85,8 +105,19 @@ class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
     {
         return Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
     }
+    
+    protected function _getCostCenter()
+    {
+        $c = new Sales_Model_CostCenter(array(
+            'number' => 'wks-1',
+            'remark' => 'Production'
+            ));
+        $c = Sales_Controller_CostCenter::getInstance()->create($c);
+        return $c;
+    }
     /**
      * returns a new contract
+     * return HumanResources_Model_Contract
      */
     protected function _getContract()
     {
@@ -99,10 +130,18 @@ class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
             'start_date' => $sdate,
             'end_date'   => $edate,
             'employee_id' => null,
-            'feast_calendar_id' => 
-            ));
+            'cost_center_id' => $this->_getCostCenter(),
+            'vacation_days' => 30,
+            'feast_calendar_id' => $this->_getFeastCalendar(),
+            'workingtime_id' => $this->_getWorkingTime()
+            ), true);
+            
+        return $c;
     }
-    
+    /**
+     * returns an employee with account_id
+     * @return HumanResources_Model_Employee
+     */
     protected function _getEmployee() {
         $a = $this->_getAccount();
         $c = $this->_getContact();
@@ -117,12 +156,4 @@ class HumanResources_JsonTest extends PHPUnit_Framework_TestCase
         
         return $e;
     }
-    
-    /**
-     * try to add an employee
-     *
-     */
-    public function testAddEmployee()
-    {
-        $project = $this->_getProjectData();}
 }

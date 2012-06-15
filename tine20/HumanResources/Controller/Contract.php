@@ -56,7 +56,14 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
     }
 
-    protected function _inspectBeforeUpdate(Tinebase_Record_Interface $_record, $_oldRecord)
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_checkDates($_record);
         $this->_containerToId($_record);
