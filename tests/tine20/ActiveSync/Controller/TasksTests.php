@@ -147,7 +147,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         $this->assertEquals('Testaufgabe auf mfe', $task->summary);
         $this->assertEquals(0,                     $task->percent);
-        $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $task->description);
+        $this->assertEquals("test beschreibung zeile 1\nZeile 2\nZeile 3", $task->description);
         $this->assertEquals(Tasks_Model_Priority::NORMAL, $task->priority);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $task->organizer);
     }

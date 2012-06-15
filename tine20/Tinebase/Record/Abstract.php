@@ -193,6 +193,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $this->dateConversionFormat = $_convertDates;
         }
 
+        if($this->has('description')) {
+            $this->_filters['description'] = new Tinebase_Model_InputFilter_CrlfConvert();
+        }
+
         if(is_array($_data)) {
             $this->setFromArray($_data);
         }

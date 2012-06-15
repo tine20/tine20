@@ -81,6 +81,15 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         return $loadedEventData;
     }
+    
+    public function testStripWindowsLinebreaks()
+    {
+        $e = $this->_getEvent();
+        $e->description = 'Hello my friend,' . chr(13) . chr(10) .'bla bla bla.'  . chr(13) . chr(10) .'good bye.';
+        $persistentEventData = $this->_uit->saveEvent($e->toArray());
+        $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
+        $this->assertEquals($loadedEventData['description'], 'Hello my friend,' . chr(10) . 'bla bla bla.' . chr(10) . 'good bye.');
+    }
 
     /**
     * testCreateEventWithNonExistantAttender
