@@ -162,7 +162,11 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * @return {String}
      */
     renderWorkingTime: function(value) {
-        return Ext.util.Format.htmlEncode(value.title);
+        if(value && Ext.isObject(value)) {
+            return Ext.util.Format.htmlEncode(value.title);
+        } else {
+            return _('undefined');
+        }
     },
     /**
      * renders the cost center
@@ -170,7 +174,11 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * return {String}
      */
     renderCostCenter: function(value) {
-        return Ext.util.Format.htmlEncode(value.number); 
+        if(value && Ext.isObject(value)) {
+            return Ext.util.Format.htmlEncode(value.number);
+        } else {
+            return _('undefined');
+        }
     }
 });
 
