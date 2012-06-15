@@ -408,7 +408,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->assertEquals('2010-11-03 23:00:00', $event->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2010-11-06 22:59:59', $event->dtend->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertTrue(!!$event->is_all_day_event);
-        $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $event->description);
+        $this->assertEquals("test beschreibung zeile 1\nZeile 2\nZeile 3", $event->description);
     }
     
     /**

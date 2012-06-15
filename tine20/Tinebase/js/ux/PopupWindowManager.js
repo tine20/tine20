@@ -44,18 +44,16 @@ Ext.ux.PopupWindowGroup = function(config) {
                 }
                 
                 doc = list[id].popup.document;
-                if ((Ext.isChrome || Ext.isOpera) && ! doc.defaultView) {
+                if(!Ext.isIE && !doc.defaultView) {
                     doc = false;
                 }
             } catch(e)  {
                 doc = false;
                 
             }
-            
             if (! doc) {
                 accessList.remove(list[id]);
                 delete list[id];
-                
             }
         }
     };
