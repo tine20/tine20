@@ -316,7 +316,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function __get($_name)
     {
-        if (array_key_exists($_name, $this->_indices)) {
+        // NOTE: indices may lead to wrong results if a record is changed after build of indices
+        if (FALSE && array_key_exists($_name, $this->_indices)) {
             $propertiesArray = $this->_indices[$_name];
         } else {
             $propertiesArray = array();
@@ -538,11 +539,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
     {
-        if (array_key_exists($_field, $this->_indices)) {
+        // NOTE: indices may lead to wrong results if a record is changed after build of indices
+        if (FALSE && array_key_exists($_field, $this->_indices)) {
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'filtering with indices, expecting fast results ;-)');
             $valueMap = $this->_indices[$_field];
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . "filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . "filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
             $valueMap = $this->$_field;
         }
         
