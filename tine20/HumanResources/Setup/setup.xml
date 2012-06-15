@@ -2,8 +2,8 @@
 <application>
     <name>HumanResources</name>
     <version>0.2</version>
-    <order>150</order>
-    <status>enabled</status>
+    <order>51</order>
+    <status>disabled</status>
     <depends>
         <application>Sales</application>
     </depends>
