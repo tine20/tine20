@@ -37,6 +37,11 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @cfg {Boolean} evalGrants
      */
     evalGrants: null,
+    
+    /**
+     * the calling editDialog
+     * @type Tine.HumanResources.EmployeeEditDialog
+     */
     editDialog: null,
     /**
      * optional additional filterToolbar configs
@@ -129,18 +134,9 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     },
     
     /**
-     * returns cm
-     * 
+     * returns ColumnModel
      * @return Ext.grid.ColumnModel
      * @private
-     * 
-     * 
-     * 'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'duration'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'date'
      */
     getColumns: function(){
         return [
