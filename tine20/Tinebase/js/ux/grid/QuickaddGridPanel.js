@@ -48,6 +48,11 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * Mandatory field which must be set before quickadd fields will be enabled
      */
     quickaddMandatory: false,
+    /**
+     * if set, the quickadd fields are validated on blur
+     * @type Boolean
+     */
+    validate: false,
     
     /**
      * @cfg {Bool} resetAllOnNew
@@ -138,16 +143,16 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     doBlur: function(){
         
-        // check if all quickadd fields are blured
-        var hasFocus;
+        // check if all quickadd fields are blured, validate them if required
+        var focusedOrInvalid;
         Ext.each(this.getCols(true), function(item){
-            if(item.quickaddField && (item.quickaddField.hasFocus || item.quickaddField.hasFocusedSubPanels)){
-                hasFocus = true;
+            if(item.quickaddField && (item.quickaddField.hasFocus || item.quickaddField.hasFocusedSubPanels || (this.validate && !item.quickaddField.isValid()))) {
+                focusedOrInvalid = true;
             }
         }, this);
         
         // only fire a new record if no quickaddField is focused
-        if (!hasFocus) {
+        if (!focusedOrInvalid) {
             var data = {};
             Ext.each(this.getCols(true), function(item){
                 if(item.quickaddField){
@@ -159,6 +164,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
                 if (this.fireEvent('newentry', data)){
                     this.colModel.getColumnById(this.quickaddMandatory).quickaddField.setValue('');
+                    if(this.validate) {
+                        this.colModel.getColumnById(this.quickaddMandatory).quickaddField.clearInvalid();
+                    }
                     if (this.resetAllOnNew) {
                         var columns = this.colModel.config;
                         for (var i = 0, len = columns.length; i < len; i++) {
@@ -239,7 +247,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var columns = this.getCols();
         for (var column, td, i=columns.length -1; i>=0; i--) {
             column = columns[i];
-            tdEl = this.getQuickAddWrap(column).parent();
+            var tdEl = this.getQuickAddWrap(column).parent();
             
             // resort columns
             newRowEl.insertFirst(tdEl);
