@@ -64,7 +64,7 @@ msgstr ""
 
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:148
 #: js/FreeDayGridPanel.js:113 js/Models.js:57 js/EmployeeEditDialog.js:130
-#: js/EmployeeEditDialog.js:143 js/FreeTimeEditDialog.js:114
+#: js/EmployeeEditDialog.js:143
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] ""
@@ -101,39 +101,39 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/ContractGridPanel.js:101 js/AdminPanel.js:159
+#: js/ContractGridPanel.js:104 js/AdminPanel.js:159
 msgid "Calendar"
 msgstr ""
 
-#: js/ContractGridPanel.js:102 js/AdminPanel.js:160
+#: js/ContractGridPanel.js:105 js/AdminPanel.js:160
 msgid "Calendars"
 msgstr ""
 
-#: js/ContractGridPanel.js:121
+#: js/ContractGridPanel.js:124
 msgid "Working Time Model"
 msgstr ""
 
-#: js/ContractGridPanel.js:124
+#: js/ContractGridPanel.js:127
 msgid "Vacation Days"
 msgstr ""
 
-#: js/ContractGridPanel.js:126
+#: js/ContractGridPanel.js:129
 msgid "Cost Centre"
 msgstr ""
 
-#: js/ContractGridPanel.js:129
+#: js/ContractGridPanel.js:132
 msgid "Start Date"
 msgstr ""
 
-#: js/ContractGridPanel.js:132
+#: js/ContractGridPanel.js:135
 msgid "End Date"
 msgstr ""
 
-#: js/ContractGridPanel.js:135
+#: js/ContractGridPanel.js:138
 msgid "Feast Calendar"
 msgstr ""
 
-#: js/ContractGridPanel.js:170 js/ContractGridPanel.js:182
+#: js/ContractGridPanel.js:177 js/ContractGridPanel.js:189
 msgid "undefined"
 msgstr ""
 
@@ -340,6 +340,10 @@ msgstr ""
 
 #: js/DatePicker.js:63
 msgid "Loading calendar data..."
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:114
+msgid "The Employee"
 msgstr ""
 
 #: js/FreeTimeEditDialog.js:150 js/FreeTimeEditDialog.js:162

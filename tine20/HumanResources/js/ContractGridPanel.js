@@ -55,7 +55,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * initializes the component
      */
     initComponent: function() {
-        this.title = this.app.i18n._('Contracts');
+        this.title = this.app.i18n.ngettext('Contract', 'Contracts', 2),
         Tine.HumanResources.ContractGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
         this.on('afteredit', this.onAfterEdit, this);

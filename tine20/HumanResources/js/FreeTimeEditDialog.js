@@ -111,7 +111,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getFormItems: function() {
         
         this.employeePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
-            fieldLabel: this.app.i18n._('Employee'),
+            fieldLabel: this.app.i18n._('The Employee'),
             name: 'employee_id',
             app: this
         });
@@ -121,7 +121,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }, this);
         var that = this;
         this.contractPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Contract', {
-            fieldLabel: this.app.i18n._('Contract'),
+            fieldLabel: this.app.i18n.ngettext('Contract', 'Contracts', 1),
             app: this,
             disabled: true,
             onBeforeQuery: function(qevent) {
