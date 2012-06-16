@@ -225,7 +225,6 @@ msgid "Apply contact data on form"
 msgstr ""
 
 #: js/EmployeeEditDialog.js:204 js/EmployeeGridPanel.js:104
-#: js/EmployeeGridPanel.js:124
 msgid "Full Name"
 msgstr ""
 
@@ -273,11 +272,11 @@ msgstr ""
 msgid "Birthday"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:255
+#: js/EmployeeEditDialog.js:255 js/EmployeeGridPanel.js:110
 msgid "Employment begin"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:260
+#: js/EmployeeEditDialog.js:260 js/EmployeeGridPanel.js:117
 msgid "Employment end"
 msgstr ""
 
@@ -285,7 +284,7 @@ msgstr ""
 msgid "Internal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:280
+#: js/EmployeeEditDialog.js:280 js/EmployeeGridPanel.js:124
 msgid "Supervisor"
 msgstr ""
 
@@ -323,14 +322,6 @@ msgstr ""
 
 #: js/DatePicker.js:63
 msgid "Loading calendar data..."
-msgstr ""
-
-#: js/EmployeeGridPanel.js:110
-msgid "Employment begins"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:117
-msgid "Employment ends"
 msgstr ""
 
 #: js/FreeTimeEditDialog.js:150 js/FreeTimeEditDialog.js:162
