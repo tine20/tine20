@@ -107,7 +107,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 dataIndex: 'n_fn'
             }, {
                 id: 'employment_begin',
-                header: this.app.i18n._("Employment begins"),
+                header: this.app.i18n._("Employment begin"),
                 width: 350,
                 sortable: true,
                 dataIndex: 'employment_begin',
@@ -121,7 +121,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 renderer: Tine.Tinebase.common.dateRenderer
             }, {
                 id: 'supervisor_id',
-                header: this.app.i18n._("Full Name"),
+                header: this.app.i18n._("Supervisor"),
                 width: 350,
                 sortable: true,
                 dataIndex: 'supervisor_id',
