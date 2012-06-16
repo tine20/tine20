@@ -18,9 +18,9 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
-    
+
     protected $_duplicateCheckFields = array(array('account_id'));
-    
+
     /**
      * the constructor
      *
@@ -98,8 +98,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         if(is_array($_record->account_id)) {
             $_record->account_id = $_record->account_id['accountId'];
         }
-        
-        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+
+        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE) ||
+            Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
             foreach($_record->contracts as $contractArray) {
                 if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
                 if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];

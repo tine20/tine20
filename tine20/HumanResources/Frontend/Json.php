@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  */
 
 /**
@@ -24,7 +24,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var HumanResources_Controller_Employee
      */
     protected $_controller = NULL;
-    
+
     /**
      * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
      *
@@ -33,7 +33,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_resolveUserFields = array(
         'HumanResources_Model_Employee' => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id')
     );
-    
+
     /**
      * the constructor
      *
@@ -42,7 +42,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_applicationName = 'HumanResources';
     }
-    
+
     /**
      * Search for records matching given arguments
      *
@@ -54,7 +54,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, HumanResources_Controller_Employee::getInstance(), 'HumanResources_Model_EmployeeFilter');
     }
-    
+
     /**
      * Return a single record
      *
@@ -76,11 +76,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, HumanResources_Controller_Employee::getInstance(), 'Employee');
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return string
      */
     public function deleteEmployees($ids)
@@ -97,10 +97,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchWorkingTimes($filter, $paging)
     {
-        
         return $this->_search($filter, $paging, HumanResources_Controller_WorkingTime::getInstance(), 'HumanResources_Model_WorkingTimeFilter');
-    }     
-    
+    }
+
     /**
      * Return a single record
      *
@@ -122,18 +121,17 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'WorkingTime');
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return string
      */
     public function deleteWorkingTime($ids)
     {
         return $this->_delete($ids, HumanResources_Controller_WorkingTime::getInstance());
     }
-
 
     /**
      * Search for records matching given arguments
@@ -145,8 +143,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchFreeTimes($filter, $paging)
     {
         return $this->_search($filter, $paging, HumanResources_Controller_FreeTime::getInstance(), 'HumanResources_Model_FreeTimeFilter');
-    }     
-    
+    }
+
     /**
      * Return a single record
      *
@@ -165,21 +163,21 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array created/updated record
      */
     public function saveFreeTime($recordData)
-    {    
+    {
         return $this->_save($recordData, HumanResources_Controller_FreeTime::getInstance(), 'FreeTime');
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return string
      */
     public function deleteFreeTime($ids)
     {
         return $this->_delete($ids, HumanResources_Controller_FreeTime::getInstance());
     }
-    
+
     /**
      * Search for records matching given arguments
      *
@@ -191,7 +189,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, HumanResources_Controller_Contract::getInstance(), 'HumanResources_Model_ContractFilter');
     }
-    
+
     /**
      * returns record prepared for json transport
      *
@@ -229,10 +227,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
         }
-
         return parent::_recordToJson($_record);
     }
-    
+
     /**
      * returns feast days
      * @param string $_employeeId
@@ -247,18 +244,18 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $contract = HumanResources_Controller_Contract::getInstance()->getValidContract($_employeeId, $_firstDayDate);
         }
-        
+
         $maxDate = new Tinebase_DateTime();
         $maxDate->addYear(2);
         $minDate = new Tinebase_DateTime();
         $minDate->subYear(1);
-        
+
         $filter = new Calendar_Model_EventFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $maxDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $minDate)));
         $dates = Calendar_Controller_Event::getInstance()->search($filter)->dtstart;
-        
+
         $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         if ($contract->end_date) {
@@ -269,7 +266,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'id', 'operator' => 'notin', 'value' => array($_excludeFreeTimeId))));
         }
         $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
-        
+
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
         $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
@@ -278,10 +275,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $freedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
         $dates = array_merge($freedays->date, $dates);
-        
+
         $contract->workingtime_id = HumanResources_Controller_WorkingTime::getInstance()->get($contract->workingtime_id);
-        
+
         return array('results' => $dates, 'totalcount' => count($dates), 'contract' => $contract->toArray());
-        
+
     }
 }

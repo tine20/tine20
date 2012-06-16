@@ -9,7 +9,7 @@
 
 /**
  * HumanResources config class
- * 
+ *
  * @package     HumanResources
  * @subpackage  Config
  */
@@ -20,28 +20,28 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FREETIME_TYPE = 'freetimeType';
-    
+
     /**
      * FreeTime Status
      * @var string
      */
     const FREETIME_STATUS = 'freetimeStatus';
-    
+
     /**
      * Default Feast Calendar (used for tailoring datepicker)
      * @var string
      */
     const DEFAULT_FEAST_CALENDAR = 'defaultFeastCalendar';
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
         self::FREETIME_TYPE => array(
-                                   //_('Freetime Type')
+            //_('Freetime Type')
             'label'                 => 'Freetime Type',
-                                   //_('Possible free time definitions.')
+            //_('Possible free time definitions.')
             'description'           => 'Possible free time definitions',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeType'),
@@ -49,9 +49,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'default'               => 'VACATION'
         ),
         self::FREETIME_STATUS => array(
-                                   //_('Freetime Status')
+            //_('Freetime Status')
             'label'                 => 'Freetime Status',
-                                   //_('Possible free time status definitions.')
+            //_('Possible free time status definitions.')
             'description'           => 'Possible free time status definitions',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
@@ -66,48 +66,50 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
         ),
     );
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
     protected $_appName = 'HumanResources';
-    
+
     /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Config
      */
     private static $_instance = NULL;
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
-    private function __construct() {}
-    
+     * don't use the constructor. use the singleton
+     */
+    private function __construct() {
+    }
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
-     */    
-    private function __clone() {}
-    
+     * don't use the constructor. use the singleton
+     */
+    private function __clone() {
+    }
+
     /**
      * Returns instance of Tinebase_Config
      *
      * @return Tinebase_Config
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new self();
         }
-        
+
         return self::$_instance;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::getProperties()

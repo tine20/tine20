@@ -45,7 +45,7 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
         'title' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'json' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
+
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -54,15 +54,15 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
+        );
 
     /**
      * name of fields containing datetime or an array of datetime information
      * @var array list of datetime fields
      */
     protected $_datetimeFields = array(
-            'creation_time',
-            'last_modified_time',
-            'deleted_time',
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
     );
 }

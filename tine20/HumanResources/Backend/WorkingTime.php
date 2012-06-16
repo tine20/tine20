@@ -24,7 +24,7 @@ class HumanResources_Backend_WorkingTime extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'humanresources_workingtime';
-    
+
     /**
      * Model name
      *

@@ -11,7 +11,7 @@
 
 /**
  * class to hold Contract data
- * 
+ *
  * @package     HumanResources
  * @subpackage  Model
  */
@@ -23,7 +23,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_identifier = 'id';
-    
+
     /**
      * application the record belongs to
      * @var string
@@ -35,8 +35,8 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'HumanResources_Model_WorkingTime' => 'workingtime_id',
         'Tinebase_Model_Container' => 'feast_calendar_id',
         'Sales_Model_CostCenter' => 'cost_center_id',
-        );
-    
+    );
+
     /**
      * list of zend validator
      * this validators get used when validating user generated content with Zend_Input_Filter
@@ -51,7 +51,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'cost_center_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'vacation_days'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'feast_calendar_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // modlog information
+        // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -59,10 +59,10 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked HumanResources_Model_Contract records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // relations (linked HumanResources_Model_Contract records) and other metadata
+    'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -76,16 +76,4 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'start_date',
         'end_date'
     );
-    
-//     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
-//         $this->_doPrivateCleanup();
-//         parent::__construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
-//     }
-    
-//     protected function _doPrivateCleanup()
-//     {
-//         if (! Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
-//             $this->_properties = array_intersect_key($this->_properties, array_flip($this->_privateFields));
-//         }
-//     }
 }

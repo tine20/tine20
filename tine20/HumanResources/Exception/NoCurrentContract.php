@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     HumanResources
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -12,17 +12,17 @@
 
 /**
  * No Current Contract Exception
- * 
+ *
  * @package     HumanResources
  * @subpackage  Exception
  */
 class HumanResources_Exception_NoCurrentContract extends HumanResources_Exception
 {
     protected $_nearest_record = NULL;
-    
+
     /**
      * construct
-     * 
+     *
      * @param string $_message
      * @param integer $_code
      * @return void
@@ -37,12 +37,12 @@ class HumanResources_Exception_NoCurrentContract extends HumanResources_Exceptio
     public function addRecord(Tinebase_Record_Interface $_record)
     {
         $_record->workingtime_id = HumanResources_Controller_WorkingTime::getInstance()->get($_record->workingtime_id);
-        $this->_nearest_record = $_record; 
+        $this->_nearest_record = $_record;
     }
-    
+
     /**
      * returns existing nodes info as array
-     * 
+     *
      * @return array
      */
     public function toArray()

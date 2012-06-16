@@ -11,7 +11,7 @@
 
 /**
  * class to hold Employee data
- * 
+ *
  * @package     HumanResources
  * @subpackage  Model
  */
@@ -23,7 +23,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_identifier = 'id';
-    
+
     /**
      * application the record belongs to
      * @var string
@@ -58,9 +58,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'employment_begin'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_end'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'supervisor_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
-        
-    // modlog information
+
+        // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -68,12 +67,12 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked HumanResources_Model_Employee records) and other metadata
+        // relations (linked HumanResources_Model_Employee records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contracts'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
+        );
 
     /**
      * name of fields containing datetime or an array of datetime information
@@ -87,7 +86,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'employment_begin',
         'employment_end'
     );
-    
+
     protected $_privateFields = array(
         'countryname',
         'locality',
@@ -107,7 +106,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'employment_end',
         'contracts'
     );
-    
+
     /**
      * the constructor
      * @see Tinebase_Record_Abstract
@@ -116,30 +115,18 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         $this->_doPrivateCleanup();
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
-    
+
     /**
-     * removes privat information from the Employee
+     * removes privat information from the Employee if user is no admin and has no EDIT_PRIVATE rights on this application
      */
     protected function _doPrivateCleanup()
     {
-        if (! Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+        // no private cleanup with admin rights
+        if (Tinebase_Core::getUser()->hasRight('HumanResources', 'admin') ||
+            Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+            return;
+        } else {
             $this->_validators = array_diff_key($this->_validators, array_flip($this->_privateFields));
         }
     }
-    
-    /**
-//      * can be reimplemented by subclasses to modify values during setFromJson
-//      * @param array $_data the json decoded values
-//      * @return void
-//      */
-//     protected function _setFromJson(array &$_data)
-//     {
-//         for ($i = 0; $i < count($_data['contracts']); $i++) {
-//             $_data['contracts'][$i]['workingtime_id'] = $_data['contracts'][$i]['workingtime_id']['id'];
-//         }
-// // //         foreach($_data['workingtime_id']['contracts'] as $contract) {
-// // //             = $_data['workingtime_id']['id'];
-// // //         }
-//         die(var_dump($_data));
-//     }
 }

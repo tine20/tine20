@@ -24,7 +24,7 @@ class HumanResources_Backend_FreeDay extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'humanresources_freeday';
-    
+
     /**
      * Model name
      *

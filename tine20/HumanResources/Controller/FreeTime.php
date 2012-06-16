@@ -23,7 +23,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
      * @var Tinebase_Record_RecordSet
      */
     protected $_freedaysToCreate = NULL;
-    
+
     /**
      * the constructor
      *
@@ -37,14 +37,14 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }
-    
+
     /**
      * holds the instance of the singleton
      *
      * @var HumanResources_Controller_FreeTime
      */
     private static $_instance = NULL;
-    
+
     /**
      * the singleton pattern
      *
@@ -55,15 +55,15 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         if (self::$_instance === NULL) {
             self::$_instance = new HumanResources_Controller_FreeTime();
         }
-        
+
         return self::$_instance;
     }
-    
+
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $freeDays = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
         $fc = HumanResources_Controller_FreeDay::getInstance();
-        
+
         foreach($_record->freedays as $freedayArray) {
             $freeday = new HumanResources_Model_FreeDay($freedayArray);
             if($freeday->id) {
@@ -80,11 +80,11 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         // update first date
         $freeDays->sort('date', 'ASC');
         $_record->firstday_date = $freeDays->getFirstRecord()->date;
-        
+
         $fc->delete($deleteFreedays->id);
         $_record->freedays = $freeDays->toArray();
     }
-    
+
     /**
      * inspect creation of one record (before create)
      *
@@ -94,18 +94,18 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_freedaysToCreate = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
-        
+
         if($_record->freedays && !empty($_record->freedays)) {
             foreach($_record->freedays as $freedayArray) {
                 $this->_freedaysToCreate->addRecord(new HumanResources_Model_FreeDay($freedayArray));
             }
             $this->_freedaysToCreate->sort('date', 'ASC');
-            $_record->firstday_date = $this->_freedaysToCreate->getFirstRecord()->date; 
+            $_record->firstday_date = $this->_freedaysToCreate->getFirstRecord()->date;
         } else {
             $_record->firstday_date = NULL;
         }
     }
-    
+
     /**
      * inspect creation of one record (after create)
      *
@@ -121,10 +121,10 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         }
         $_createdRecord->freedays = $this->_freedaysToCreate;
     }
-    
+
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-//         die(var_dump($_record->toArray()));
+        //         die(var_dump($_record->toArray()));
     }
-    
-    
+
+
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     HumanResources
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -12,7 +12,7 @@
 
 /**
  * General HR Exception
- * 
+ *
  * @package     HumanResources
  * @subpackage  Exception
  */

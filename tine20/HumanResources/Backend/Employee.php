@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-
 /**
  * backend for HumanResources
  *
@@ -24,7 +23,7 @@ class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'humanresources_employee';
-    
+
     /**
      * Model name
      *
@@ -38,18 +37,4 @@ class HumanResources_Backend_Employee extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-    
-//     /**
-//      * foreign tables (key => tablename)
-//      * @var array
-//      */
-//     protected $_foreignTables = array(
-//         'contracts'    => array(
-//             'table' => 'humanresources_contract',
-//             'joinOn'        => 'employee_id',
-//             'joinId'        => 'id',
-//             'field'         => 'id',
-//             'singleValue'   => false,
-//         )
-//     );
 }

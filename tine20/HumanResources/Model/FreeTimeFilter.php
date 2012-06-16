@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -19,17 +19,17 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
      * @var string application of this filter group
      */
     protected $_applicationName = 'HumanResources';
-    
+
     /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'HumanResources_Model_FreeTime';
-    
+
     /**
      * @var string class name of this filter group
      */
     protected $_className = 'HumanResources_Model_FreeTimeFilter';
-    
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -41,8 +41,8 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
         'remark'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'employee_id'    => array( 'filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
-                'filtergroup'       => 'HumanResources_Model_EmployeeFilter', 
-                'controller'        => 'HumanResources_Controller_Employee', 
+                'filtergroup'       => 'HumanResources_Model_EmployeeFilter',
+                'controller'        => 'HumanResources_Controller_Employee',
             )
         ),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
@@ -50,5 +50,5 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-    );
+        );
 }

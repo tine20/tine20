@@ -18,12 +18,12 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
      * @var string application of this filter group
      */
     protected $_applicationName = 'HumanResources';
-    
+
     /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'HumanResources_Model_Employee';
-    
+
     /**
      * @var string class name of this filter group
      */

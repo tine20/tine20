@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     HumanResources
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -12,7 +12,7 @@
 
 /**
  * Project FreeTimeStatus Record Class
- * 
+ *
  * @package     HumanResources
  * @subpackage  Model
  */

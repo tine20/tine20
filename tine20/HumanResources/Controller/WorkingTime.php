@@ -31,14 +31,14 @@ class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_A
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }
-    
+
     /**
      * holds the instance of the singleton
      *
      * @var HumanResources_Controller_WorkingTime
      */
     private static $_instance = NULL;
-    
+
     /**
      * the singleton pattern
      *
@@ -49,10 +49,10 @@ class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_A
         if (self::$_instance === NULL) {
             self::$_instance = new HumanResources_Controller_WorkingTime();
         }
-        
+
         return self::$_instance;
     }
-    
+
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
     }
 }

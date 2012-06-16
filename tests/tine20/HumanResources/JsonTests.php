@@ -79,4 +79,25 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $this->assertEquals($exception->getCode(), 629);
     }
+
+    /**
+     * Tests if multiple records get resolved properly
+     *
+     * #6600: generic foreign record resolving method
+     * https://forge.tine20.org/mantisbt/view.php?id=6600
+     */
+    public function testResolveMultiple()
+    {
+        $e = $this->_getEmployee('rwright');
+        $e->contracts = array($this->_getContract()->toArray());
+        $savedEmployee = $this->_json->saveEmployee($e->toArray());
+
+        $r = $this->_json->searchContracts(array(), array());
+        $this->assertEquals($r['results'][0]['employee_id']['id'], $savedEmployee['id']);
+
+        $this->assertTrue(is_array($r['results'][0]['cost_center_id']));
+        $this->assertTrue(is_array($r['results'][0]['workingtime_id']));
+        $this->assertTrue(is_array($r['results'][0]['feast_calendar_id']));
+
+    }
 }

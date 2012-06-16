@@ -73,7 +73,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getAccount($loginName = NULL)
     {
-        if($username) {
+        if($loginName) {
             return Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
         }
         return Tinebase_Core::getUser();
@@ -150,8 +150,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      * returns an employee with account_id
      * @return HumanResources_Model_Employee
      */
-    protected function _getEmployee() {
-        $a = $this->_getAccount();
+    protected function _getEmployee($loginName = NULL) {
+        $a = $this->_getAccount($loginName);
         $c = $this->_getContact();
 
         $e = new HumanResources_Model_Employee(

@@ -18,17 +18,17 @@ class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGr
      * @var string application of this filter group
      */
     protected $_applicationName = 'HumanResources';
-    
+
     /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'HumanResources_Model_Contract';
-    
+
     /**
      * @var string class name of this filter group
      */
     protected $_className = 'HumanResources_Model_ContractFilter';
-    
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -37,8 +37,5 @@ class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGr
         'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id','options' => array('modelName' => 'HumanResources_Model_Employee')),
         'start_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
         'end_date' => array('filter' => 'Tinebase_Model_Filter_Date'),
-//         'number' => array('filter' => 'Tinebase_Model_Filter_Int'),
-//         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_fn', 'bank_account_holder', 'email'))),
-//         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User')
     );
 }

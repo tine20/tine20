@@ -19,17 +19,17 @@ class HumanResources_Model_FreeDayFilter extends Tinebase_Model_Filter_FilterGro
      * @var string application of this filter group
      */
     protected $_applicationName = 'HumanResources';
-    
+
     /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'HumanResources_Model_FreeDay';
-    
+
     /**
      * @var string class name of this filter group
      */
     protected $_className = 'HumanResources_Model_FreeDayFilter';
-    
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -39,8 +39,8 @@ class HumanResources_Model_FreeDayFilter extends Tinebase_Model_Filter_FilterGro
         'duration' => array('filter' => 'Tinebase_Model_Filter_Int'),
         'freetime_id'   => array('filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
-                'filtergroup'       => 'HumanResources_Model_FreeTimeFilter', 
-                'controller'        => 'HumanResources_Controller_FreeTime', 
+                'filtergroup'       => 'HumanResources_Model_FreeTimeFilter',
+                'controller'        => 'HumanResources_Controller_FreeTime',
             )
         ),
     );
