@@ -92,13 +92,14 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
-        {label: app.i18n._('Employee name'),   field: 'name' },
-        {filtertype: 'tinebase.tag', app: app},
-        {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'), field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'), field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),       field: 'created_by',         valueType: 'user'}
+        { label: _('Quick search'),           field: 'query', operators: ['contains']},
+        { label: app.i18n._('Employee name'), field: 'name' },
+        { filtertype: 'tinebase.tag', app: app},
+        { label: _('Last Modified Time'),     field: 'last_modified_time', valueType: 'date'},
+        { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
+        { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
+        { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
+        { label: _('Account'),                field: 'account_id',         valueType: 'user'}
     ];
 };
 
