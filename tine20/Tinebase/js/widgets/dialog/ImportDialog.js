@@ -230,7 +230,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + String.format(_('Please choose the file that contains the {0} you want to add to Tine 2.0'), this.recordClass.getRecordsName()).replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'tw.uploadbutton',
                     ref: '../../uploadButton',
@@ -588,7 +588,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         p.next.setDisabled(ap == ps);
         p.last.setDisabled(ap == ps);
         this.conflictIndexText.setText(nextRecord ? 
-            String.format(_('(This is record {0} in you import file)'), nextRecord.get('index') + 1) :
+            String.format(_('(This is record {0} in your import file)'), nextRecord.get('index') + 1) :
             _('No conflict to resolve')
         );
         
