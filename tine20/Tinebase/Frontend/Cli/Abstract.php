@@ -111,6 +111,58 @@ class Tinebase_Frontend_Cli_Abstract
     }
     
     /**
+     * create demo data
+     * 
+     * example usages: 
+     * (1) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz locale=de users=pwulf,rwright // Creates demo events for pwulf and rwright with the locale de, just de and en is supported at the moment
+     * (2) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz models=Calendar,Event sharedonly // Creates shared calendars and events with the default locale en                
+     * (3) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz // Creates all demo calendars and events for all users
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    
+    public function createDemoData($_opts)
+    {
+        // just admins can perform this action
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        $args = $this->_parseArgs($_opts, array());
+
+        $createUsers = in_array('sharedonly', $args['other']) ? false : true;
+        $createShared = in_array('noshared', $args['other']) ? false : true;
+        
+        $locale     = isset($args['locale']) ? $args['locale'] : 'en';
+        
+        if(isset($args['users'])) {
+            $users = is_array($args['users']) ? $args['users'] : array($args['users']);
+        } else {
+            $users = null;
+        }
+        
+        if(isset($args['models'])) {
+            $models = is_array($args['models']) ? $args['models'] : array($args['models']);
+        } else {
+            $models = null;
+        }
+        $className = $this->_applicationName . '_Setup_DemoData';
+        
+        if(class_exists($className)) {
+//             echo chr(10);
+//             echo 'Creating Demo Data for Application ' . $this->_applicationName . ' ...' . chr(10);
+            if($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers)) {
+                echo 'Demo Data was created successfully' . chr(10) . chr(10);
+            } else {
+                echo 'No Demo Data has been created' . chr(10) . chr(10);
+            }
+        } else {
+            echo chr(10);
+            echo 'Creating Demo Data is not implemented yet for this Application!' . chr(10);
+            echo chr(10);
+        }
+    }
+    
+    /**
      * get container for setContainerGrants
      * 
      * @param array $_params
