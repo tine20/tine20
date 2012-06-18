@@ -1344,11 +1344,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     /**
      * Opens the required EditDialog
-     * @param {Object} button
+     * @param {Object} actionButton
      * @param {Tine.Tinebase.data.Record} record
      * @param {Array} addRelations
      * @return {Boolean}
-     * generic edit in new window handler
      */
     onEditInNewWindow: function(button, record, addRelations) {
         if(!record) {

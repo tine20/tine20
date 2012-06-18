@@ -218,7 +218,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
             
         }
-        $this->_appendEffectiveGrantCalculationSql($select, is_array($attenderFilter) ? $attenderFilter[0] : $attenderFilter);
+        $this->_appendEffectiveGrantCalculationSql($select, (is_array($attenderFilter) && count($attenderFilter)) ? $attenderFilter[0] : $attenderFilter);
         if ($grantsFilter) {
             $grantsFilter->appendFilterSql($select, $this);
         }

@@ -148,7 +148,6 @@
                         Tine.log.debug('multiple edit right was not properly applied');
                     }
                 }
-    
                 if(action.initialConfig.requiredMultipleGrant) {
                     var hasRight = true;
                     if(Ext.isArray(records)) {
