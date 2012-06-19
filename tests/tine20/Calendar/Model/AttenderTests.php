@@ -200,47 +200,6 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $this->assertTrue(in_array($this->_personasContacts['sclever']->getId(), $userIds), 'sclever missing');
         $this->assertTrue(in_array($persistentContact->getId(), $userIds), 'unittestorg missing');
     }
-    
-    public function testEmailsToAttendeeWithMissingMail()
-    {
-        $contact = new Addressbook_Model_Contact(array(
-            'org_name'   => 'unittestorg',
-            'email'      => '',
-            'email_home' => '',
-        ));
-        $persistentContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
-        
-        $event = $this->_getEvent();
-        $event->attendee->addRecord(new Calendar_Model_Attender(array(
-            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'      => $persistentContact->getId(),
-            'role'         => Calendar_Model_Attender::ROLE_REQUIRED,
-        )));
-        
-        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
-        
-        $clientAttendee = array();
-        foreach($persistentEvent->attendee as $attendee) {
-            $clientAttendee[] = array(
-                'userType'  => Calendar_Model_Attender::USERTYPE_USER,
-                'email'     => $attendee->getEmail(),
-                'role'      => $attendee->role,
-            );
-        }
-        
-        Calendar_Model_Attender::emailsToAttendee($persistentEvent, $clientAttendee, TRUE);
-        
-        $userIds = $persistentEvent->attendee->user_id;
-        foreach($userIds as $idx => $id) {
-            if ($id instanceof Tinebase_Record_Abstract) {
-                $userIds[$idx] = $id->getId();
-            }
-        }
-        $this->assertEquals(3, count($userIds));
-        $this->assertTrue(in_array($this->_testUserContact->getId(), $userIds), 'testaccount missing');
-        $this->assertTrue(in_array($this->_personasContacts['sclever']->getId(), $userIds), 'sclever missing');
-        $this->assertTrue(in_array($persistentContact->getId(), $userIds), 'unittestorg missing');
-    }
 }
     
 

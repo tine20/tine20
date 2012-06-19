@@ -893,6 +893,10 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('update');
         $this->checkFilterACL($_filter, 'update');
+        $getRelations = false;
+        
+        $this->_newRelations = NULL;
+        $this->_removeRelations = NULL;
         
         foreach($_data as $key => $value) {
             if(stristr($key,'#')) {
@@ -921,7 +925,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
-            'options'    => array('idProperty' => $idProperty),
+            'options'    => array('idProperty' => $idProperty, 'getRelations' => $getRelations),
             'function'   => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);

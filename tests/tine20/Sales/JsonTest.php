@@ -229,7 +229,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->_instance->deleteContracts($contractData['id']);
         Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][0]['related_id']);
         Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][1]['related_id']);
-        $this->_decreaseNumber();
     }
 
     /**
