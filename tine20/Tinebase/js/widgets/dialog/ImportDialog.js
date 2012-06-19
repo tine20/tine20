@@ -105,6 +105,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 
                 this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
             }, this);
+            this.definitionsStore.sort('label');
         }
         if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
             this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
