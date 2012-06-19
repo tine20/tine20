@@ -344,9 +344,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _createCustomfield()
+    protected function _createCustomfield($cfName = NULL)
     {
-        $cfName = Tinebase_Record_Abstract::generateUID();
+        $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
         
         $cfc = new Tinebase_Model_CustomField_Config(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
@@ -592,7 +592,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $personalTagToDelete = Tinebase_Tags::getInstance()->getTagByName($personalTagName);
         Tinebase_Tags::getInstance()->deleteTags(array($sharedTagToDelete->getId(), $personalTagToDelete->getId()));
     }
-    
+
     /**
      * tag attachment helper
      * 
@@ -625,6 +625,38 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    /**
+     * testExportXlsWithCustomfield
+     * 
+     * @see 0006634: custom fields missing in XLS export
+     */
+    public function testExportXlsWithCustomfield()
+    {
+        $exportCf = $this->_createCustomfield('exportcf');
+        $filter = new Addressbook_Model_ContactFilter(array(array(
+            'field'    => 'n_fileas',
+            'operator' => 'equals',
+            'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+        )));
+        
+        $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $ownContact->customfields = array('exportcf' => 'testcustomfieldvalue');
+        Addressbook_Controller_Contact::getInstance()->update($ownContact);
+        
+        $definition = dirname(__FILE__) . '/Export/definitions/adb_cf_xls_test.xml';
+        $exporter = new Addressbook_Export_Xls($filter, Addressbook_Controller_Contact::getInstance(), array('definitionFilename' => $definition));
+        $doc = $exporter->generate();
+        
+        $xlswriter = PHPExcel_IOFactory::createWriter($doc, 'CSV');
+        ob_start();
+        $xlswriter->save('php://output');
+        $out = ob_get_clean();
+        
+        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertContains('exportcf', $out, 'customfield not found in headline.');
+        $this->assertContains('testcustomfieldvalue', $out, 'customfield value not found.');
+    }
+    
     /**
      * test import
      * 

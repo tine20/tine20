@@ -131,6 +131,13 @@ abstract class Tinebase_Export_Abstract
     protected $_getRelations = FALSE;
     
     /**
+     * custom field names for this model
+     * 
+     * @var array
+     */
+    protected $_customFieldNames = NULL;
+    
+    /**
      * the constructor
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -154,6 +161,20 @@ abstract class Tinebase_Export_Abstract
      * @return mixed filename/generated object/...
      */
     abstract public function generate();
+    
+    /**
+     * get custom field names for this app
+     * 
+     * @return array
+     */
+    protected function _getCustomFieldNames()
+    {
+        if ($this->_customFieldNames === NULL) {
+            $this->_customFieldNames = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_applicationName, $this->_modelName)->name;
+        }
+        
+        return $this->_customFieldNames;
+    }
     
     /**
      * get export format string (csv, ...)
@@ -328,7 +349,10 @@ abstract class Tinebase_Export_Abstract
             }
         }
         
-        return Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($definition, $_additionalOptions);
+        $config = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($definition, $_additionalOptions);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' export config: ' . print_r($config->toArray(), TRUE));
+        
+        return $config;
     }
 
     /**
