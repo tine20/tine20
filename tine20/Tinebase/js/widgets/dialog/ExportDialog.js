@@ -42,8 +42,11 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     //private
     initComponent: function(){
+        this.app = Tine.Tinebase.appMgr.get(this.appName);
+        
         this.recordClass = Tine.Tinebase.Model.ExportJob;
         this.saveAndCloseButtonText = _('Export');
+        
 
         this.definitionsStore = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.ImportExportDefinition,
@@ -55,7 +58,14 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // check if initial data available
         if (Tine[this.appName].registry.get('exportDefinitions')) {
-            this.definitionsStore.loadData(Tine[this.appName].registry.get('exportDefinitions'));
+            Ext.each(Tine[this.appName].registry.get('exportDefinitions').results, function(defData) {
+                var options = defData.plugin_options,
+                    extension = options ? options.extension : null;
+                
+                defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
+                this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
+            }, this);
+            this.definitionsStore.sort('label');
         }
         
         Tine.widgets.dialog.ExportDialog.superclass.initComponent.call(this);
@@ -101,7 +111,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 fieldLabel: _('Export definition'), 
                 name:'export_definition_id',
                 store: this.definitionsStore,
-                displayField:'name',
+                displayField:'label',
                 mode: 'local',
                 triggerAction: 'all',
                 editable: false,

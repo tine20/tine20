@@ -317,7 +317,7 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
 Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'             },
     {name: 'name'           },
-    {name: 'label'          },
+    {name: 'label', sortType: Ext.data.SortTypes.asUCText },
     {name: 'filename'       },
     {name: 'plugin'         },
     {name: 'description'    },
