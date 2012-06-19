@@ -41,8 +41,6 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
     {
         $result = NULL;
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
-        
         if (in_array($_field->type, $this->_specialFields)) {
             // special field handling
             $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
@@ -52,7 +50,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
         } else if (isset($field->formula) 
             || (! isset($_record->{$_field->identifier}) 
                 && ! in_array($_field->type, $this->_resolvedFields) 
-                && ! isset($_field->custom)
+                && ! in_array($_field->identifier, $this->_getCustomFieldNames())
             )
         ) {
             // check if empty -> use alternative field
@@ -77,7 +75,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             case 'date':
                 $result = ($_record->{$_field->identifier} instanceof DateTime) ? $_record->{$_field->identifier}->toString('Y-m-d') : $_record->{$_field->identifier};
                 // empty date cells, get displayed as 30.12.1899
-                if(empty($result)) {
+                if (empty($result)) {
                     $result = NULL;
                 }
                 break;
@@ -107,7 +105,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 $result = $this->_addNotes($_record);
                 break;
             default:
-                if (isset($_field->custom) && $_field->custom) {
+                if (in_array($_field->identifier, $this->_getCustomFieldNames())) {
                     // add custom fields
                     if (isset($_record->customfields[$_field->identifier])) {
                         $result = $_record->customfields[$_field->identifier];
@@ -144,6 +142,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 
                 $result = $this->_replaceAndMatchvalue($result, $_field);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' field def: ' . print_r($_field->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' result: ' . $result);
         
         return $result;
     }

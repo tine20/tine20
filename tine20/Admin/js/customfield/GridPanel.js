@@ -128,7 +128,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * Confirm application restart
      */
     confirmApplicationRestart: function () {
-        Ext.Msg.confirm(this.app.i18n._('Confirm'), this.app.i18n._('Restart application to apply new cusomfields?'), function (btn) {
+        Ext.Msg.confirm(this.app.i18n._('Confirm'), this.app.i18n._('Restart application to apply new customfields?'), function (btn) {
             if (btn == 'yes') {
                 // reload mainscreen to make sure registry gets updated
                 window.location = window.location.href.replace(/#+.*/, '');
