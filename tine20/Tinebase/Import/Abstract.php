@@ -216,11 +216,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     
                     // just add autotags to record (if id is available)
                     if ($recordToImport->getId()) {
-                        $this->_addAutoTags($recordToImport);
-                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToImport);
+                        $record = call_user_func(array($this->_controller, 'get'), $recordToImport->getId());
+                        $this->_addAutoTags($record);
+                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
                     }
                 }
-                    
             } catch (Exception $e) {
                 $this->_handleImportException($e, $recordIndex, $recordToImport);
             }
@@ -542,6 +542,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Trying to add ' . count($autotags) . ' autotag(s) to record.');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($autotags, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
         
         $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {
