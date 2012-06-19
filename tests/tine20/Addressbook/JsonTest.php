@@ -738,9 +738,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testImportWithTags()
     {
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
-        
         $options = array(
             'dryrun'     => 0,
             'autotags'   => array(array(
@@ -799,8 +796,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         $tag = Tinebase_Tags::getInstance()->create($tag);
         
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
         $options = array(
             'dryrun'     => 0,
             'autotags'   => array($tag->getId()),
@@ -818,8 +813,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
         $options = array(
             'dryrun'     => 0,
             'autotags'   => array($tag->toArray()),
@@ -828,6 +821,68 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, count($result['exceptions']));
         $this->assertEquals($tag->name, $result['results'][0]['tags'][0]['name']);
+    }
+    
+    /**
+     * testImportKeepExistingWithTag
+     * 
+     * @see 0006628: tag handling on duplicate resolve actions in import fails
+     */
+    public function testImportKeepExistingWithTag()
+    {
+        $klaus = $this->_tagImportHelper('discard');
+        $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus['tags'], TRUE));
+    }
+    
+    /**
+     * helper for import with tags and keep/discard strategy
+     * 
+     * @param string $resolveStrategy
+     * @return array
+     */
+    protected function _tagImportHelper($resolveStrategy)
+    {
+        $result = $this->_importHelper(array('dryrun' => 0));
+        $klaus =  $result['results'][0];
+        $currentTag = $klaus['tags'][0];
+        $klausId = $klaus['id'];
+        
+        if ($resolveStrategy === 'keep') {
+            unset($klaus['id']);
+        }
+        
+        // keep existing record and discard mine + add new tag
+        $clientRecords = array(array(
+            'recordData'        => $klaus,
+            'resolveStrategy'   => $resolveStrategy,
+            'index'             => 0,
+        ));
+        $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
+        $options = array(
+            'dryrun'     => 0,
+            'autotags'   => array($tag->toArray()),
+        );
+        
+        $result = $this->_importHelper($options, $clientRecords);
+        
+        $expectedTotalcount = ($resolveStrategy === 'keep') ? 1 : 0;
+        $this->assertEquals($expectedTotalcount, $result['totalcount'], 'Should discard fritz');
+        $this->assertEquals(1, $result['duplicatecount'], 'fritz should still be a duplicate');
+        
+        $klaus = $this->_instance->getContact($klausId);
+        
+        return $klaus;
+    }
+
+    /**
+     * testImportKeepBothWithTag
+     * 
+     * @see 0006628: tag handling on duplicate resolve actions in import fails
+     */
+    public function testImportKeepBothWithTag()
+    {
+        $klaus = $this->_tagImportHelper('keep');
+        $this->assertEquals(1, count($klaus['tags']), 'klaus should have only one tag: ' . print_r($klaus['tags'], TRUE));
     }
     
     /**
