@@ -681,12 +681,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 });
                 
                 this.doImport(function(request, success, response) {
-                    // @todo: show errors and fence finish btn
-                    
                     this.importMask.hide();
                     
                     this.fireEvent('finish', this, this.layout.activeItem);
-                    this.window.close();
+                    
+                    if (Ext.isArray(response.exceptions) && response.exceptions.length > 0) {
+                        // show errors and fence finish/back btn
+                        this.backButton.setDisabled(true);
+                        this.finishButton.setHandler(function() {this.window.close()}, this);
+                        
+                        this.summaryPanelInfo.hide();
+                        this.exceptionStore.clearFilter(true);
+                        
+                        this.summaryPanelFailures.show();
+                        this.summaryPanelFailures.setTitle(String.format(_('{0} records had failures and where discarded.'), response.exceptions.length));
+                    } else {
+                        this.window.close();
+                    }
                 }, importOptions, clientRecordData);
                 
             }).createDelegate(this)
@@ -706,7 +717,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         var rsp = this.lastImportResponse,
             totalcount = rsp.totalcount,
             failcount = 0,
-            mergecount = 0
+            mergecount = 0,
             discardcount = 0;
             
         this.exceptionStore.clearFilter();
