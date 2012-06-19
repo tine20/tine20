@@ -163,22 +163,28 @@ Tine.Tinebase.common = {
      * @param {Integer} value
      * @param {Object} metadata
      * @param {Tine.Tinebase.data.Record} record
-     * @param {String} forceUnit forces rendering in with this unit
-     * @param {Integer} decimals forces showing amount with this number of decimals
      * @return {String}
      */
-    byteRenderer: function (value, metadata, record, forceUnit, decimals) {
-        value = parseInt(value, 10);
-        decimals = Ext.isNumber(decimals) ? decimals : 2;
-        
+    byteRenderer: function (value, metadata, record) {
         if (record && record.get('type') == 'folder') {
             return '';
         }
-        
+        return Tine.Tinebase.common.byteFormatter(value, null, 2);
+    },
+
+    /**
+     * format byte values
+     * @param {String} value
+     * @param {Boolean} forceUnit
+     * @param {Integer} decimals
+     */
+    byteFormatter: function(value, forceUnit, decimals) {
+        value = parseInt(value, 10);
+        decimals = Ext.isNumber(decimals) ? decimals : 2;
         var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        
         if (forceUnit) {
             var i = suffix.indexOf(forceUnit);
+            i = -1 ? 0 : i;
         } else {
             for (var i=0,j; i<suffix.length; i++) {
                 if (value < Math.pow(1024, i)) break;
