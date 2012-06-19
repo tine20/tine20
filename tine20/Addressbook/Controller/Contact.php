@@ -323,7 +323,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
         
-        if (isset($_record->jpegphoto)) {
+        if (isset($_record->jpegphoto) && ! empty($_record->jpegphoto)) {
             // add system note when jpegphoto gets updated
             $translate = $translate = Tinebase_Translation::getTranslation('Addressbook');
             $noteMessage = $translate->_('Uploaded new contact image.');
