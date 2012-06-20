@@ -450,14 +450,15 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             // special merge for tags
             // TODO generalize me
             if (resolveRecord.get('fieldName') == 'tags') {
-                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(mine).concat(theirs)));
-                Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record (tags field)');
-                Tine.log.debug(resolveRecord);
+                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(strategy != 'discard' ? mine : []).concat(strategy != 'keep' ? theirs : [])));
             } else {
                 resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
             }
+            
+            Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record (tags field)');
+            Tine.log.debug(resolveRecord);
         }, this);
-
+        
         this.commitChanges();
     },
 
