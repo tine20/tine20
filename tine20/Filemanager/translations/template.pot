@@ -21,19 +21,19 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: Controller/Node.php:164
+#: Controller/Node.php:163
 msgid "My folders"
 msgstr ""
 
-#: Controller/Node.php:171
+#: Controller/Node.php:170
 msgid "Shared folders"
 msgstr ""
 
-#: Controller/Node.php:178
+#: Controller/Node.php:177
 msgid "Other users folders"
 msgstr ""
 
-#: Controller.php:95
+#: Controller.php:94
 #, python-format
 msgid "%s's personal files"
 msgstr ""
@@ -76,11 +76,11 @@ msgstr ""
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:484
+#: js/GridContextMenu.js:41 js/GridPanel.js:475
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:528
+#: js/GridContextMenu.js:145 js/GridPanel.js:519
 msgid "Do you really want to delete the following files?"
 msgstr ""
 
@@ -148,42 +148,30 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
-msgid "Rename"
-msgstr ""
-
-#: js/GridPanel.js:378
-msgid "Pause upload"
-msgstr ""
-
-#: js/GridPanel.js:385
-msgid "Resume upload"
-msgstr ""
-
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "New Folder"
 msgstr ""
 
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/GridPanel.js:484
+#: js/GridPanel.js:475
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:667
-#: js/TreePanel.js:777
+#: js/GridPanel.js:629 js/GridPanel.js:782 js/TreePanel.js:649
+#: js/TreePanel.js:759
 msgid "Upload Failed"
 msgstr ""
 
-#: js/GridPanel.js:639 js/TreePanel.js:668
+#: js/GridPanel.js:630 js/TreePanel.js:650
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:792 js/TreePanel.js:778
+#: js/GridPanel.js:783 js/TreePanel.js:760
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 

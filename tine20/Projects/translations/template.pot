@@ -34,7 +34,7 @@ msgid ""
 "syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal Projects"
 msgstr ""

@@ -1,20 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Calendar\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:01+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 12:23+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Spanish (Castilian) (http://www.transifex.net/projects/p/tine20/language/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-Language: Spanish\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:96
@@ -46,9 +45,7 @@ msgid "Fixed Calendars"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"Calendars always selected regardless of all filter parameters. A valid use "
-"case might be to force the display of an certain holiday calendar."
+msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:55
@@ -56,9 +53,7 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:57
-msgid ""
-"Possible event attendee status. Please note that additional attendee status "
-"might impact other calendar systems on export or syncronisation."
+msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:65
@@ -66,48 +61,46 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:67
-msgid ""
-"Possible event attendee roles. Please note that additional attendee roles "
-"might impact other calendar systems on export or syncronisation."
+msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarma para evento \"%1$s\" a las %2$s"
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Invitación a Evento \"%1$s\" a las %2$s"
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Evento \"%1$s\" a las %2$s ha sido reagendado"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Evento \"%1$s\" a las %2$s ha sido actualizado"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s aceptó el evento \"%2$s\" a las %3$s"
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$ rechazó el evento \"%2$s\" a las %3$s"
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Respuesta tentativa de %1$s para el evento \"%2$s\" a las %3$s"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "No hay respuesta de %1$s para el evento \"%2$s\" a las %3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Cambios de Asistentes para el evento \"%1$s\" a las %2$s"
 
@@ -154,7 +147,7 @@ msgid "Manage Resources"
 msgstr "Administrar Recursos"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Asistentes"
 
@@ -182,7 +175,7 @@ msgstr "Usuario"
 msgid "Group"
 msgstr "Grupo"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Recurso"
@@ -206,7 +199,7 @@ msgid "Click here to invite another attender..."
 msgstr "Haga clic aquí para invitar a otro asistente..."
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Sin Información"
 
@@ -232,7 +225,7 @@ msgstr[1] "Calendarios"
 msgid "Originally"
 msgstr "Originalmente"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "Eventos"
 
@@ -291,12 +284,12 @@ msgstr "Bloquear"
 msgid "Location"
 msgstr "Ubicación"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organizador"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "todo el día"
 
@@ -486,12 +479,8 @@ msgid "Please Change Selection"
 msgstr "Por favor Cambie la Selección"
 
 #: js/MainScreenCenterPanel.js:742
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-"Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos "
-"repetitivos deben eliminarse por separado!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos repetitivos deben eliminarse por separado!"
 
 #: js/MainScreenCenterPanel.js:756
 msgid "Delete Event"
@@ -547,7 +536,7 @@ msgstr "Editar Evento"
 msgid "Cancel this action"
 msgstr ""
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Evento"
@@ -565,25 +554,29 @@ msgstr ""
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:225
-msgid "Event (as attendee)"
+#: js/Model.js:216
+msgid "Attendee Role"
 msgstr ""
 
 #: js/Model.js:232
+msgid "Event (as attendee)"
+msgstr ""
+
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr ""
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Asistente"
 msgstr[1] "Asistentes"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Recursos"
 
@@ -708,15 +701,15 @@ msgstr ""
 msgid "of"
 msgstr "de"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr ""
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr ""
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr ""
 
@@ -728,12 +721,9 @@ msgstr ""
 msgid "unknown"
 msgstr "desconocido"
 
-#: Model/Attender.php:427
-msgid ""
-"This contact has been automatically added by the system as an event attender"
-msgstr ""
-"Este contacto se a agregado automáticamente por el sistema como un asistente "
-"al evento"
+#: Model/Attender.php:444
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Este contacto se a agregado automáticamente por el sistema como un asistente al evento"
 
 #: Model/Event.php:237
 msgid "Start"
@@ -764,12 +754,12 @@ msgid "Organizer timezone"
 msgstr "Zona Horaria del Organizador"
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Si"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "No"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Si"
 
 #: Preference.php:31
 msgid "All my events"
@@ -800,15 +790,8 @@ msgid "Get Notification Emails"
 msgstr "Obtener Emails de Notificación"
 
 #: Preference.php:92
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"El nivel de acciones que desea se le notifice. Por favor considere que los "
-"organizadores obtendrán las notificaciones de todas actualizaciones acerca "
-"de la asistencia de los participantes, a no ser que Ud. lo configure de otra "
-"manera en las preferencias \"Nunca\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "El nivel de acciones que desea se le notifice. Por favor considere que los organizadores obtendrán las notificaciones de todas actualizaciones acerca de la asistencia de los participantes, a no ser que Ud. lo configure de otra manera en las preferencias \"Nunca\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -929,80 +912,3 @@ msgstr ""
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "Detalles del Evento"
-
-msgid "forever"
-msgstr "para siempre"
-
-msgid "Forever"
-msgstr "Para Siempre"
-
-msgid "Until"
-msgstr "Hasta"
-
-msgid "Unknown calendar"
-msgstr "Calendario desconocido"
-
-msgid "unknown)"
-msgstr "desconocido)"
-
-msgid "Confirm Update of Series"
-msgstr "Confirmar Actualización de la Serie"
-
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"¿Está seguro que quiere actualizar todos los eventos para esta serie de "
-"eventos repetitivos?"
-
-msgid "Confirm Deletion of Series"
-msgstr "Confirme la Eliminación de las Series"
-
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"¿Realmente desea eliminar todos los eventos de esta serie de eventos "
-"repetitivos?"
-
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "Evento \"%1$s\" a las %s ha sido cancelado"
-
-msgid "Resources {0}"
-msgstr "Recursos {0}"
-
-msgid "Show declined events"
-msgstr "Mostrar eventos rechazados"
-
-msgid "Publish Free/Busy Information"
-msgstr "Publicar si está Libre/Ocupado"
-
-msgid "Allow all users to view your free/busy information"
-msgstr "Permitir a todos los usuarios si está libre/ocupado"
-
-msgid "Do you want to update the whole series, or just this event"
-msgstr "Desea actualizar toda la serie o solamente este evento"
-
-msgid "Failed not update recurring event series"
-msgstr "Falló en actualizar la serie de eventos repetitivos"
-
-msgid "Failed not update event"
-msgstr "Falló en actualizar el evento"
-
-msgid ""
-"Do you want to delete the whole series, this and all future events of this "
-"series, or just this event"
-msgstr ""
-"Desea eliminar la serie completa, éstsa y todos los eventos futuros de esta "
-"serie, o solamente éste evento"
-
-msgid "Every"
-msgstr "Cada"
-
-msgid ". Day"
-msgstr ". Día"
-
-msgid ". Week at"
-msgstr ". Semana de"
-
-msgid ". Month"
-msgstr ". Mes"
-
-msgid ". Year"
-msgstr ". Año"

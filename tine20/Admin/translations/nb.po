@@ -1,20 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Admin\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:07+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-04-02 13:52+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-Language: Norwegian Bokmål\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
@@ -46,11 +45,8 @@ msgid "manage roles"
 msgstr "behandle roller"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"legg til og redgier roller, legg til nye medlemmer til roller, legg til "
-"program rettigheter til roller"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "legg til og redgier roller, legg til nye medlemmer til roller, legg til program rettigheter til roller"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -124,11 +120,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:199
+#: Controller/Container.php:198
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:200
+#: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -164,14 +160,14 @@ msgstr ""
 msgid "Session ID"
 msgstr "Sessjons ID"
 
-#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+#: js/AccessLog.js:130 js/user/EditDialog.js:767 js/user/EditDialog.js:810
 msgid "Login Name"
 msgstr "Logg inn Navn"
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
-#: js/customfield/EditDialog.js:595 js/customfield/GridPanel.js:72
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:325
 msgid "Name"
 msgstr "Navn"
 
@@ -249,7 +245,7 @@ msgstr ""
 
 #: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
 #: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/customfield/GridPanel.js:74
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
@@ -276,11 +272,11 @@ msgstr "instillinger"
 msgid "Search:"
 msgstr "Søk:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:836
+#: js/Applications.js:226 js/user/EditDialog.js:840
 msgid "disabled"
 msgstr "deaktivert"
 
-#: js/Applications.js:229 js/user/EditDialog.js:835
+#: js/Applications.js:229 js/user/EditDialog.js:839
 msgid "enabled"
 msgstr "aktivert"
 
@@ -296,11 +292,11 @@ msgstr "Viser program {0} - {1} of {2}"
 msgid "No applications to display"
 msgstr "Ingen program å vise"
 
-#: js/Applications.js:277 js/customfield/EditDialog.js:625
+#: js/Applications.js:277 js/customfield/EditDialog.js:626
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+#: js/Applications.js:279 js/user/EditDialog.js:832 js/user/GridPanel.js:176
 msgid "Status"
 msgstr "Status"
 
@@ -315,7 +311,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/container/EditDialog.js:144 js/container/GridPanel.js:73
-#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
 #: js/customfield/GridPanel.js:73
 msgid "Type"
 msgstr ""
@@ -397,81 +393,81 @@ msgstr ""
 msgid "Given record class not found"
 msgstr ""
 
-#: js/customfield/EditDialog.js:464
+#: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr ""
 
-#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:695
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: js/customfield/EditDialog.js:503
+#: js/customfield/EditDialog.js:504
 msgid "Configure store"
 msgstr ""
 
-#: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
+#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:75
 msgid "Model"
 msgstr ""
 
-#: js/customfield/EditDialog.js:560
+#: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
 msgstr ""
 
-#: js/customfield/EditDialog.js:571
+#: js/customfield/EditDialog.js:572
 msgid "Text"
 msgstr ""
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:573
 msgid "Number"
 msgstr ""
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:574
 msgid "Date"
 msgstr ""
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:575
 msgid "DateTime"
 msgstr ""
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:576
 msgid "Time"
 msgstr ""
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:577
 msgid "Boolean"
 msgstr ""
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:578
 msgid "Search Combo"
 msgstr ""
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:579
 msgid "Key Field"
 msgstr ""
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:580
 msgid "Record"
 msgstr ""
 
-#: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
 msgstr ""
 
-#: js/customfield/EditDialog.js:607
+#: js/customfield/EditDialog.js:608
 msgid "Length"
 msgstr ""
 
-#: js/customfield/EditDialog.js:615
+#: js/customfield/EditDialog.js:616
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:621 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/customfield/EditDialog.js:648
+#: js/customfield/EditDialog.js:649
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
@@ -481,7 +477,7 @@ msgid "Confirm"
 msgstr "Bekreft"
 
 #: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
+msgid "Restart application to apply new customfields?"
 msgstr ""
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
@@ -515,19 +511,19 @@ msgstr "Gruppe Navn"
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:877
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Display in addressbook"
 msgstr "Vis i adressebok"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Hide from addressbook"
 msgstr "Skjul fra adressebok"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:897
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -729,245 +725,243 @@ msgstr "Ingen overskrifter å vise"
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/user/EditDialog.js:187
+#: js/user/EditDialog.js:191
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
 
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:688
+#: js/user/EditDialog.js:238 js/user/EditDialog.js:241
+#: js/user/EditDialog.js:692
 msgid "Passwords do not match!"
 msgstr "Passordene stemmer ikke!"
 
-#: js/user/EditDialog.js:240
+#: js/user/EditDialog.js:244
 msgid "Passwords match!"
 msgstr ""
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+#: js/user/EditDialog.js:290 js/user/EditDialog.js:815
 msgid "Primary group"
 msgstr "Primær gruppe"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:367
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:377
+#: js/user/EditDialog.js:381
 msgid "Home Directory"
 msgstr "Hjemme Mappe"
 
-#: js/user/EditDialog.js:381
+#: js/user/EditDialog.js:385
 msgid "Login Shell"
 msgstr "Logg inn skall"
 
-#: js/user/EditDialog.js:387
+#: js/user/EditDialog.js:391
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:401
+#: js/user/EditDialog.js:405
 msgid "Home Drive"
 msgstr "Hjemme Stasjon"
 
-#: js/user/EditDialog.js:406
+#: js/user/EditDialog.js:410
 msgid "Logon Time"
 msgstr "Logg in Tid"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
-#: js/user/EditDialog.js:926
+#: js/user/EditDialog.js:412 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:930
 msgid "never logged in"
 msgstr "aldri logget på"
 
-#: js/user/EditDialog.js:411
+#: js/user/EditDialog.js:415
 msgid "Home Path"
 msgstr "Hjemme Sti"
 
-#: js/user/EditDialog.js:416
+#: js/user/EditDialog.js:420
 msgid "Logoff Time"
 msgstr "Logg av Tid"
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:422
 msgid "never logged off"
 msgstr "aldri logget av"
 
-#: js/user/EditDialog.js:421
+#: js/user/EditDialog.js:425
 msgid "Profile Path"
 msgstr "Profil Sti"
 
-#: js/user/EditDialog.js:426
+#: js/user/EditDialog.js:430
 msgid "Password Last Set"
 msgstr "Passord Sist Satt"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
-#: js/user/EditDialog.js:930
+#: js/user/EditDialog.js:432 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:934
 msgid "never"
 msgstr "aldri"
 
-#: js/user/EditDialog.js:431
+#: js/user/EditDialog.js:435
 msgid "Logon Script"
 msgstr "Logg inn Skript"
 
-#: js/user/EditDialog.js:436
+#: js/user/EditDialog.js:440
 msgid "Password Can Change"
 msgstr "Passord Kan Endres"
 
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:442 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:452
 msgid "not set"
 msgstr "ikke satt"
 
-#: js/user/EditDialog.js:441
+#: js/user/EditDialog.js:445
 msgid "Password Must Change"
 msgstr "Passord Må Endres"
 
-#: js/user/EditDialog.js:446
+#: js/user/EditDialog.js:450
 msgid "Kick Off Time"
 msgstr "Utkastelses Tid"
 
-#: js/user/EditDialog.js:466
+#: js/user/EditDialog.js:470
 msgid "IMAP Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
 msgid "Quota"
 msgstr "Kvote"
 
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+#: js/user/EditDialog.js:490 js/user/EditDialog.js:528
 msgid "no quota set"
 msgstr ""
 
-#: js/user/EditDialog.js:496
+#: js/user/EditDialog.js:500
 msgid "Current Mailbox size"
 msgstr ""
 
-#: js/user/EditDialog.js:504
+#: js/user/EditDialog.js:508
 msgid "Sieve Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:534
+#: js/user/EditDialog.js:538
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+#: js/user/EditDialog.js:547 js/user/EditDialog.js:909
 msgid "Information"
 msgstr "Informasjon"
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:561
 msgid "Last Login"
 msgstr "Siste logg inn"
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:602
 msgid "Email Alias"
 msgstr "E-post Alias"
 
-#: js/user/EditDialog.js:604
+#: js/user/EditDialog.js:608
 msgid "Add an alias address..."
 msgstr "Legg til en alias adresse..."
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:621
 msgid "Email Forward"
 msgstr "E-post Videresending"
 
-#: js/user/EditDialog.js:623
+#: js/user/EditDialog.js:627
 msgid "Add a forward address..."
 msgstr "Legg til en videresendings adresse..."
 
-#: js/user/EditDialog.js:635
+#: js/user/EditDialog.js:639
 msgid "Forward Only"
 msgstr "Kun Videresending"
 
-#: js/user/EditDialog.js:655
+#: js/user/EditDialog.js:659
 msgid "Password confirmation"
 msgstr "Passord bekreftelse"
 
-#: js/user/EditDialog.js:672
+#: js/user/EditDialog.js:676
 msgid "Repeat password"
 msgstr "Gjenta passord"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:702
 msgid "Ok"
 msgstr "Ok"
 
-#: js/user/EditDialog.js:733
+#: js/user/EditDialog.js:737
 msgid "Account"
 msgstr "Konto"
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:752
 msgid "First Name"
 msgstr "Fornavn"
 
-#: js/user/EditDialog.js:758
+#: js/user/EditDialog.js:762
 msgid "Last Name"
 msgstr "Etter Navn"
 
-#: js/user/EditDialog.js:768
+#: js/user/EditDialog.js:772
 msgid "Password"
 msgstr "Passord"
 
-#: js/user/EditDialog.js:772
+#: js/user/EditDialog.js:776
 msgid "no password set"
 msgstr "ingen passord er satt"
 
-#: js/user/EditDialog.js:799
+#: js/user/EditDialog.js:803
 msgid "Emailaddress"
 msgstr "Epost adresse"
 
-#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+#: js/user/EditDialog.js:809 js/user/GridPanel.js:182
 msgid "OpenID"
 msgstr "ÅpenID"
 
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:841
 msgid "expired"
 msgstr "Utgått"
 
-#: js/user/EditDialog.js:838
+#: js/user/EditDialog.js:842
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:845
+#: js/user/EditDialog.js:849
 msgid "Invalid Status"
 msgstr ""
 
-#: js/user/EditDialog.js:846
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
+#: js/user/EditDialog.js:850
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
 msgstr ""
 
-#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:872 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Utgår"
 
-#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Siste logg inn kl"
 
-#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:926 js/user/EditDialog.js:930
 msgid "don't know"
 msgstr "vet ikke"
 
-#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:928 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Siste logg inn fra"
 
-#: js/user/EditDialog.js:928
+#: js/user/EditDialog.js:932
 msgid "Password set"
 msgstr "Passord satt"
 
-#: js/user/EditDialog.js:935
+#: js/user/EditDialog.js:939
 msgid "User groups"
 msgstr ""
 
-#: js/user/EditDialog.js:941
+#: js/user/EditDialog.js:945
 msgid "User roles"
 msgstr ""
 
-#: js/user/EditDialog.js:947
+#: js/user/EditDialog.js:951
 msgid "Fileserver"
 msgstr "Fil server"
 
-#: js/user/EditDialog.js:953
+#: js/user/EditDialog.js:957
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:962
+#: js/user/EditDialog.js:966
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -1030,96 +1024,3 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-post Bruker"
 msgstr[1] "E-Post Brukere"
-
-msgid "Current Mail Size"
-msgstr "Gjeldende E-post Størrelse"
-
-msgid "Sieve Quota"
-msgstr "Sieve Kvote"
-
-msgid "Aliases"
-msgstr "Aliaser"
-
-msgid "Forwards"
-msgstr "Vidresendinger"
-
-msgid "Loading Tag..."
-msgstr "Laster Overskrift..."
-
-msgid "Please Wait"
-msgstr "Vennligst Vent"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Vil du virkelig slette valgte tilgangs logg poster?"
-
-msgid "delete entry"
-msgstr "slett post"
-
-msgid "select all"
-msgstr "velg alle"
-
-msgid "Display from:"
-msgstr "Vis fra:"
-
-msgid "to:"
-msgstr "til:"
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Viser tilgangs logg poster {0} - {1} of {2}"
-
-msgid "No access log entries to display"
-msgstr "Ingen tilgangs logg poster å vise"
-
-msgid "Account ID"
-msgstr "Konto ID"
-
-msgid "Loading Role..."
-msgstr "Laster Rolle..."
-
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "Vil du virkelig slette den valgte kontoen(e)?"
-
-msgid "Deleting account(s)..."
-msgstr "Sletter konto(er)..."
-
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "En feil oppstå ved forsøk på å slette kontoen(e)."
-
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "Viser konto {0} - {1} of {2}"
-
-msgid "No accounts to display"
-msgstr "Ingen kontoer å vise"
-
-msgid "add account"
-msgstr "legg til konto"
-
-msgid "edit account"
-msgstr "redigere konto"
-
-msgid "delete account"
-msgstr "slette konto"
-
-msgid "Deleting group..."
-msgstr "Sletter gruppe..."
-
-msgid "Email UID"
-msgstr "E-post UID"
-
-msgid "Email GID"
-msgstr "E-post GID"
-
-msgid "Email Username"
-msgstr "E-post Brukernavn"
-
-msgid "Current Sieve Size"
-msgstr "Gjeldende Sieve Størrelse"
-
-msgid "enter searchfilter"
-msgstr "skriv inn søkefilter"
-
-msgid "remove account"
-msgstr "fjern konto"
-
-msgid "Role members"
-msgstr "Rolle medlemmer"

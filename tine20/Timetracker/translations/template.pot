@@ -72,12 +72,12 @@ msgid "Description"
 msgstr ""
 
 #: js/Models.js:88 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:391
+#: js/TimesheetGridPanel.js:393
 msgid "Billable"
 msgstr ""
 
 #: js/Models.js:89 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:396
+#: js/TimesheetGridPanel.js:398
 msgid "Cleared"
 msgstr ""
 
@@ -242,15 +242,15 @@ msgid "Tags"
 msgstr ""
 
 #: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:109
-#: js/TimesheetGridPanel.js:401
+#: js/TimesheetGridPanel.js:403
 msgid "Cleared in"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:326
+#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:328
 msgid "Export as ODS"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:333
+#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:335
 msgid "Export as CSV"
 msgstr ""
 
@@ -330,19 +330,19 @@ msgstr ""
 msgid "Detail"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:317
+#: js/TimesheetGridPanel.js:319
 msgid "Export Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:340
+#: js/TimesheetGridPanel.js:342
 msgid "Export as ..."
 msgstr ""
 
-#: js/TimesheetGridPanel.js:383
+#: js/TimesheetGridPanel.js:385
 msgid "Mass Update"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:389
+#: js/TimesheetGridPanel.js:391
 msgid "Update field:"
 msgstr ""
 

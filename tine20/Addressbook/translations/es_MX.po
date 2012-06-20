@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Miguel Gutierrez <>, 2012.
 msgid ""
@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-25 00:18+0000\n"
 "Last-Translator: Miguel Gutierrez <>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.net/projects/p/tine20/language/es_MX/)\n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_MX\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -38,9 +38,7 @@ msgid "Contact duplicate check fields"
 msgstr "Revisar campos por contactos duplicados"
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the"
-" same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr "Estos campos son revisados cuando un nuevo contacto es creado. Si un registro con la misma información en los campos es identificado, se produce una excepción por duplicidad."
 
 #: Config.php:59
@@ -48,9 +46,7 @@ msgid "Contact salutations available"
 msgstr "Saludos de contacto disponibles"
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr "Posibles saludos de contacto. Por favor toma en cuenta que valores adicionales podrían impactar otros  sistemas de Libretas de Direcciones al ser exportados o sincronizados."
 
 #: Config.php:69
@@ -61,7 +57,11 @@ msgstr "Analizando reglas para direcciones"
 msgid "Path to a XML file with address parsing rules."
 msgstr "Ruta hacia el archivo XML con reglas de dirección de análisis."
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller.php:97
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "Libreta de direcciones de %s's"
@@ -171,11 +171,11 @@ msgstr "Nombre del Cargo"
 msgid "Contact import from Google address book"
 msgstr "Importar contacto desde libreta de direcciones de Google"
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr "Importar VCARD de contacto"
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr "Importar CSV de contacto de libreta de direcciones mac"
 
@@ -196,9 +196,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22

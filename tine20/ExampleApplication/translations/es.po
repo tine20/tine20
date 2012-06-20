@@ -22,12 +22,10 @@ msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal example records"
 msgstr ""
@@ -109,16 +107,16 @@ msgstr ""
 msgid "ExampleApplication"
 msgstr "AplicaciónDeEjemplo"
 
-msgid "ExampleRecords"
-msgstr "RegistrosDeEjemplo"
+#~ msgid "ExampleRecords"
+#~ msgstr "RegistrosDeEjemplo"
 
-msgid "All ExampleRecords"
-msgstr "Todos los RegistrosDeEjemplo"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Todos los RegistrosDeEjemplo"
 
-msgid "Description"
-msgstr "Descripción"
+#~ msgid "Description"
+#~ msgstr "Descripción"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "listado de registro"
-msgstr[1] "listado de registros"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "listado de registro"
+#~ msgstr[1] "listado de registros"

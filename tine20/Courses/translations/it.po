@@ -17,19 +17,19 @@ msgstr ""
 "X-Poedit-Language: Italian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Course.php:107
+#: Controller/Course.php:106
 msgid "teacher"
 msgstr ""
 
-#: Controller/Course.php:115
+#: Controller/Course.php:114
 msgid "Teacher"
 msgstr ""
 
-#: Controller/Course.php:116
+#: Controller/Course.php:115
 msgid "Teacher Account"
 msgstr ""
 
-#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
+#: Frontend/Json.php:256 js/CourseEditDialog.js:141 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""

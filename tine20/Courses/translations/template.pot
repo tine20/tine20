@@ -13,15 +13,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:107
+#: Controller/Course.php:106
 msgid "teacher"
 msgstr ""
 
-#: Controller/Course.php:115
+#: Controller/Course.php:114
 msgid "Teacher"
 msgstr ""
 
-#: Controller/Course.php:116
+#: Controller/Course.php:115
 msgid "Teacher Account"
 msgstr ""
 

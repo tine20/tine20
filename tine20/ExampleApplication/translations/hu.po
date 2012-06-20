@@ -22,14 +22,10 @@ msgid "Status Available"
 msgstr "Állapot elérhető"
 
 #: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-msgstr ""
-"Lehetséges állapot. Kérlek jegyezd meg, hogy a további állapotok ütközhetnek "
-"a más Példa Alkalmazás rendszerekkel exportálások vagy szinkronizáláskor."
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr "Lehetséges állapot. Kérlek jegyezd meg, hogy a további állapotok ütközhetnek a más Példa Alkalmazás rendszerekkel exportálások vagy szinkronizáláskor."
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal example records"
 msgstr "%s személyes példa rekordjai"
@@ -111,5 +107,5 @@ msgstr "Feldolgozás alatt"
 msgid "ExampleApplication"
 msgstr "PéldaAlkalmazás"
 
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#~ msgid "Example Application"
+#~ msgstr "Példa Alkalmazás"

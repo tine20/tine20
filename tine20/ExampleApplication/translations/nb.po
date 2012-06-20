@@ -22,12 +22,10 @@ msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal example records"
 msgstr ""
@@ -109,46 +107,46 @@ msgstr ""
 msgid "ExampleApplication"
 msgstr "EksempelApplikasjon"
 
-msgid "ExampleRecords"
-msgstr "EksempelPoster"
+#~ msgid "ExampleRecords"
+#~ msgstr "EksempelPoster"
 
-msgid "All ExampleRecords"
-msgstr "Alle EksempelPoster"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle EksempelPoster"
 
-msgid "Description"
-msgstr "Beskrivelse"
+#~ msgid "Description"
+#~ msgstr "Beskrivelse"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lagre liste"
-msgstr[1] "lagre lister"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "lagre liste"
+#~ msgstr[1] "lagre lister"
 
-msgid "Number"
-msgstr "Nummer"
+#~ msgid "Number"
+#~ msgstr "Nummer"
 
-msgid "Unit"
-msgstr "Enhet"
+#~ msgid "Unit"
+#~ msgstr "Enhet"
 
-msgid "Unit Price"
-msgstr "Enhets Pris"
+#~ msgid "Unit Price"
+#~ msgstr "Enhets Pris"
 
-msgid "Timesheets are billable"
-msgstr "Tidskjemaer er fakturerbare"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Tidskjemaer er fakturerbare"
 
-msgid "closed"
-msgstr "lukket"
+#~ msgid "closed"
+#~ msgstr "lukket"
 
-msgid "open"
-msgstr "åpen"
+#~ msgid "open"
+#~ msgstr "åpen"
 
-msgid "Billed"
-msgstr "Fakturert"
+#~ msgid "Billed"
+#~ msgstr "Fakturert"
 
-msgid "not yet billed"
-msgstr "ikke fakturert enda"
+#~ msgid "not yet billed"
+#~ msgstr "ikke fakturert enda"
 
-msgid "to bill"
-msgstr "å fakturere"
+#~ msgid "to bill"
+#~ msgstr "å fakturere"
 
-msgid "billed"
-msgstr "fakturert"
+#~ msgid "billed"
+#~ msgstr "fakturert"
