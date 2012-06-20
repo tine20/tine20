@@ -1586,7 +1586,10 @@ class Setup_Controller
         $result = TRUE;
         try {
             $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $result = FALSE;
         } catch (Exception $e) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             $result = FALSE;
         }
         
