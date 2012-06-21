@@ -139,7 +139,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         // only activate import and ok buttons if editing existing course / user has the appropriate right
-        var disabled = !this.record.get('id') || !Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts');
+        var disabled = ! this.record.get('id') 
+            || ! Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')
+            || ! Tine.Tinebase.common.hasRight('add_new_user', 'Courses');
         this.action_import.setDisabled(disabled);
         this.action_addNewMember.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
@@ -324,7 +326,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.membersGrid = new Tine.widgets.account.PickerGridPanel({
                 store: this.membersStore,
                 contextMenuItems: [action_resetPwd],
-                configColumns: columns
+                configColumns: columns,
+                enableTbar: Tine.Tinebase.common.hasRight('add_existing_user', 'Courses')
             });
         }
         return this.membersGrid;

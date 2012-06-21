@@ -102,11 +102,9 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     },
 
     /**
-     * init actions and toolbars
+     * init top toolbar
      */
-    initActionsAndToolbars: function () {
-        Tine.widgets.account.PickerGridPanel.superclass.initActionsAndToolbars.call(this);
-        
+    initTbar: function() {
         this.accountTypeSelector = this.getAccountTypeSelector();
         this.contactSearchCombo = this.getContactSearchCombo();
         this.groupSearchCombo = this.getGroupSearchCombo();

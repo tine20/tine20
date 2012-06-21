@@ -54,18 +54,21 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo move that to *_Acl_Rights
-     */    
+     * @todo include Tinebase admin? atm only the application admin right is checked
+     */
     public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) 
     {
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
         }
-                
+        
         $right = strtoupper($_right);
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $_right . $this->_applicationName);
+        $cacheId = convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
         $result = $cache->load($cacheId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $cacheId);
         
         if (!$result) {
             $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
@@ -73,20 +76,18 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             // array with the rights that should be checked, ADMIN is in it per default
             $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
             
-            if (preg_match("/MANAGE_/", $right)) {
-                $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
-            }
-    
             if (preg_match("/VIEW_([A-Z_]*)/", $right, $matches)) {
-                $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
                 // manage right includes view right
                 $rightsToCheck[] = constant($applicationRightsClass. '::MANAGE_' . $matches[1]);
-            }
+            } 
+            
+            $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
             
             $result = FALSE;
             
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Checking rights: ' . print_r($rightsToCheck, TRUE));
+            
             foreach ($rightsToCheck as $rightToCheck) {
-                //echo "check right: " . $rightToCheck;
                 if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
                     $result = TRUE;
                     break;
@@ -95,7 +96,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
             $cache->save($result, $cacheId, array('rights'), 120);
         }
-            
+        
         if (!$result && $_throwException) {
             throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
         }

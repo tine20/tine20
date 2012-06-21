@@ -134,7 +134,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             $savedRecord      = $this->update($course);
             $currentMembers   = $this->_groupController->getGroupMembers($course->group_id);
             $newCourseMembers = array_diff((array)$group->members, $currentMembers);
-            $this->addCourseMembers($course, $newCourseMembers);
+            if (count($newCourseMembers) > 0) {
+                $this->addCourseMembers($course, $newCourseMembers);
+            }
         
             $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
             // delete members which got removed from course
@@ -303,6 +305,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     public function addCourseMembers($_courseId, array $_members = array())
     {
+        $this->checkRight(Courses_Acl_Rights::ADD_EXISTING_USER);
+        
         $course = $_courseId instanceof Courses_Model_Course ? $_courseId : $this->get($_courseId);
         
         $tinebaseUser  = Tinebase_User::getInstance();
@@ -364,6 +368,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
+        $this->checkRight(Courses_Acl_Rights::ADD_NEW_USER);
+        
         $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
     
         // get definition and start import with admin user import csv plugin
@@ -420,6 +426,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     public function createNewMember(Courses_Model_Course $course, Tinebase_Model_FullUser $user)
     {
+        $this->checkRight(Courses_Acl_Rights::ADD_NEW_USER);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new member for ' . $course->name);
 

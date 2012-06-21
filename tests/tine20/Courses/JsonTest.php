@@ -326,7 +326,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                 'field' => 'name', 
                 'operator' => 'contains', 
                 'value' => $_courseName
-            ),     
+            ),
         );
     }
     

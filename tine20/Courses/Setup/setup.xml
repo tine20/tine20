@@ -4,7 +4,7 @@
     <!-- gettext('Courses') -->   
     <version>5.2</version>
     <order>50</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <depends>
         <application>Admin</application>
         <application>Addressbook</application>
