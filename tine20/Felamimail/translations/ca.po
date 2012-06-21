@@ -1,19 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Felamimail\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:52+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:54+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Catalan\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -52,17 +52,17 @@ msgstr ""
 msgid "Flagged"
 msgstr ""
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Assumpte"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "Cos"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Signature"
 msgstr "Signatura"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Compte"
@@ -290,9 +290,7 @@ msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
 #: js/Felamimail.js:821
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr ""
 
 #: js/Felamimail.js:850
@@ -320,7 +318,7 @@ msgid "Could not save script on Sieve server."
 msgstr ""
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
@@ -408,7 +406,7 @@ msgstr "Elimina"
 msgid "Add Account"
 msgstr "Afegeix un compte"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Previsualitza la impressió"
@@ -441,7 +439,7 @@ msgstr ""
 msgid "To"
 msgstr "A"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Enviat"
 
@@ -461,15 +459,15 @@ msgstr "Reenviat"
 msgid "Recent"
 msgstr "Recent"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr ""
 
@@ -498,9 +496,7 @@ msgid "Save Email Note"
 msgstr ""
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the "
-"recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr ""
 
 #: js/MessageEditDialog.js:192
@@ -585,79 +581,79 @@ msgstr "Cc"
 msgid "Bcc"
 msgstr "Bcc"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr ""
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "llista de registres"
 msgstr[1] "llistes de registres"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr ""
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "A:"
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr "Elimina"
 
@@ -910,21 +906,15 @@ msgstr "Compte de correu electrònic per defecte"
 
 #: Preference.php:107
 msgid "The default email account to use when sending mails."
-msgstr ""
-"Compte de correu electrònic a utilitzar per defecte per a l'enviament de "
-"correus."
+msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
 
 #: Preference.php:110
 msgid "Email Update Interval"
 msgstr "Interval d'actualització de correu electrònic"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr ""
-"Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous "
-"correus electrònics (en minuts). \"0\" significa mai."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous correus electrònics (en minuts). \"0\" significa mai."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -932,8 +922,7 @@ msgstr "Utilitza-ho a la llibreta d'adreces"
 
 #: Preference.php:115
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr ""
-"Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
+msgstr "Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
 
 #: Preference.php:118
 msgid "Use for NOTES"
@@ -978,81 +967,3 @@ msgstr ""
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr ""
-
-msgid "wrote"
-msgstr "ha escrit"
-
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Heu rebut {0} nou(s) correu(s) a la carpeta {1}."
-
-msgid "Write"
-msgstr "Escriu"
-
-msgid "Invalid drop target"
-msgstr "la destinació no és correcta"
-
-msgid "Could not move message(s)."
-msgstr "No s'ha(n) pogut moure el(s) missatge(s)."
-
-msgid "Marked"
-msgstr "Marcat"
-
-msgid "Contains marked messages"
-msgstr "Conté missatges marcats"
-
-msgid "Unread"
-msgstr "No llegit"
-
-msgid "Contains unread messages"
-msgstr "Conté missatges no llegits"
-
-msgid "Show Intelligent Folders"
-msgstr "Mostra les carpetes inteligents"
-
-msgid "No"
-msgstr "No"
-
-msgid "Yes"
-msgstr "Sí"
-
-msgid "Toggle Flag"
-msgstr "Commuta bandera"
-
-msgid "Recipients"
-msgstr "Destinataris"
-
-msgid "Save contact note"
-msgstr "Desa la nota de contacte"
-
-msgid "Error"
-msgstr "Error"
-
-msgid "No Account configured"
-msgstr "No hi ha cap compte configurat"
-
-msgid "Re: "
-msgstr "Re:"
-
-msgid "Original Message"
-msgstr "Missatge original"
-
-msgid "Fwd: "
-msgstr "Fwd:"
-
-msgid "Sort Folders"
-msgstr "Ordena les carpetes"
-
-msgid "Some error occured while trying to update the messages."
-msgstr "S'ha produït un error quan s'intentava actualitzar els missatges."
-
-msgid "Totalcount"
-msgstr "Recompte total"
-
-msgid "Cache"
-msgstr "Cau"
-
-#~ msgid "Update {0} Cache"
-#~ msgstr "Actualitza la cau {0}"
-
-#~ msgid "Reload {0}"
-#~ msgstr "Torna a carregar el {0}"

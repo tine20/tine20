@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Markus  <markus.henriksson@marinex.se>, 2012.
 #   <tulken_hultan@hotmail.com>, 2012.
@@ -9,10 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-18 15:36+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -47,9 +47,7 @@ msgid "Fixed Calendars"
 msgstr "Korrigerade kalendrar"
 
 #: Config.php:47
-msgid ""
-"Calendars always selected regardless of all filter parameters. A valid use "
-"case might be to force the display of an certain holiday calendar."
+msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr "Kalendrar alltid utvalda oavsett av alla filter parametrar. En godkännd användning kan vara att tvinga visning av en viss helgdag kalender."
 
 #: Config.php:55
@@ -57,9 +55,7 @@ msgid "Attendee Status Available"
 msgstr "Deltagarstatus tillgänglig"
 
 #: Config.php:57
-msgid ""
-"Possible event attendee status. Please note that additional attendee status "
-"might impact other calendar systems on export or syncronisation."
+msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarstatus vid händelse. Var vänlig notera att ytterliggare deltagar status kan påverka andra kalendersystem vid export eller synkronisering."
 
 #: Config.php:65
@@ -67,48 +63,46 @@ msgid "Attendee Roles Available"
 msgstr "Tillgängliga deltagarroller"
 
 #: Config.php:67
-msgid ""
-"Possible event attendee roles. Please note that additional attendee roles "
-"might impact other calendar systems on export or syncronisation."
+msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarroll vid händelse. Var vänlig notera att ytterliggare deltagar roller kan påverka andra kalendersystem vid export eller synkronisering."
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarm för händelse \"%1$s\" vid %2$s"
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Inbjudan till händelse \"%1$s\" vid %2$s"
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Händelse \"%1$s\" vid %2$s har blivit inställd"
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Händelse \"%1$s\" vid %2$s har blivit ombokad"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Händelse \"%1$s\" vid %2$s har blivit uppdaterad"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s accepterade händelsen \"%2$s\" vid %3$s"
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s nekade händelsen \"%2$s\" vid %3$s"
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Preliminärt svar från %1$s för evenemanget \"%2$s\" på %3$s"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Ingen respons från %1$s för händelsen \"%2$s\" vid %3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Deltagarens förändringar för evenemanget \"%1$s\" på %2$s"
 
@@ -155,7 +149,7 @@ msgid "Manage Resources"
 msgstr "Hantera resurser"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Deltagare"
 
@@ -183,7 +177,7 @@ msgstr "Användare"
 msgid "Group"
 msgstr "Grupp"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Resurs"
@@ -207,7 +201,7 @@ msgid "Click here to invite another attender..."
 msgstr "Klicka här för att bjuda in ytterligare deltagare"
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Ingen information"
 
@@ -233,7 +227,7 @@ msgstr[1] "Kalendrar"
 msgid "Originally"
 msgstr "Ursprungligen"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "Händelse"
 
@@ -292,12 +286,12 @@ msgstr "blockerande"
 msgid "Location"
 msgstr "Plats"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organiserare"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "hela dagen"
 
@@ -487,9 +481,7 @@ msgid "Please Change Selection"
 msgstr "Var god byt val"
 
 #: js/MainScreenCenterPanel.js:742
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr "Ditt val innehåller återkommande händelser. Återkommande händelser måste tas bort separat"
 
 #: js/MainScreenCenterPanel.js:756
@@ -546,7 +538,7 @@ msgstr "Ända Händelse"
 msgid "Cancel this action"
 msgstr "Avbryt denna åtgärd"
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Händelse"
@@ -564,25 +556,29 @@ msgstr "Snabb sök"
 msgid "Attendee Status"
 msgstr "deltagar Status"
 
-#: js/Model.js:225
+#: js/Model.js:216
+msgid "Attendee Role"
+msgstr ""
+
+#: js/Model.js:232
 msgid "Event (as attendee)"
 msgstr "Händelse (som deltagare)"
 
-#: js/Model.js:232
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr "Händelse (som organiserare)"
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr "Händelse deltagare"
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Deltagare"
 msgstr[1] "Deltagare"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Resurser"
 
@@ -707,15 +703,15 @@ msgstr "Varje {0}. år"
 msgid "of"
 msgstr "av"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr "inga händelser funna"
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr "Söker..."
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr "Sök Händelse"
 
@@ -727,9 +723,8 @@ msgstr "Mini Kalender"
 msgid "unknown"
 msgstr "okänd"
 
-#: Model/Attender.php:427
-msgid ""
-"This contact has been automatically added by the system as an event attender"
+#: Model/Attender.php:444
+msgid "This contact has been automatically added by the system as an event attender"
 msgstr "Denna kontakt har automatiskt lagts till av systemet som en händelse deltagare"
 
 #: Model/Event.php:237
@@ -761,12 +756,12 @@ msgid "Organizer timezone"
 msgstr "Organisera tidzoner"
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Ja"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "Nej"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Ja"
 
 #: Preference.php:31
 msgid "All my events"
@@ -797,10 +792,7 @@ msgid "Get Notification Emails"
 msgstr "Få Notifierings Mail"
 
 #: Preference.php:92
-msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers"
-" unless this preference is set to \"Never\""
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr "Nivån på åtgärder som du vill bli informerad om. Observera att arrangörerna kommer att få meddelanden för alla uppdateringar, inklusive deltagarnas svar om den här inställningen är inställd på \"Aldrig\""
 
 #: Preference.php:95

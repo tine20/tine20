@@ -10,8 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
 "X-Generator: Launchpad (build 14886)\n"
 "X-Poedit-Language: Russian\n"
@@ -22,12 +21,10 @@ msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal example records"
 msgstr ""
@@ -109,47 +106,47 @@ msgstr ""
 msgid "ExampleApplication"
 msgstr "ПриложениеПример"
 
-msgid "ExampleRecords"
-msgstr "ЗаписиПримеры"
+#~ msgid "ExampleRecords"
+#~ msgstr "ЗаписиПримеры"
 
-msgid "All ExampleRecords"
-msgstr "Все ЗаписиПримеры"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Все ЗаписиПримеры"
 
-msgid "Description"
-msgstr "Описание"
+#~ msgid "Description"
+#~ msgstr "Описание"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "список записей"
-msgstr[1] "списка записей"
-msgstr[2] "списков записей"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "список записей"
+#~ msgstr[1] "списка записей"
+#~ msgstr[2] "списков записей"
 
-msgid "Number"
-msgstr "Номер"
+#~ msgid "Number"
+#~ msgstr "Номер"
 
-msgid "Unit"
-msgstr "Единица"
+#~ msgid "Unit"
+#~ msgstr "Единица"
 
-msgid "Unit Price"
-msgstr "Цена за единицу"
+#~ msgid "Unit Price"
+#~ msgstr "Цена за единицу"
 
-msgid "Timesheets are billable"
-msgstr "Табели оплачиваемы"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Табели оплачиваемы"
 
-msgid "closed"
-msgstr "закрыт"
+#~ msgid "closed"
+#~ msgstr "закрыт"
 
-msgid "open"
-msgstr "открыт"
+#~ msgid "open"
+#~ msgstr "открыт"
 
-msgid "Billed"
-msgstr "Оплачен"
+#~ msgid "Billed"
+#~ msgstr "Оплачен"
 
-msgid "not yet billed"
-msgstr "ещё не оплачен"
+#~ msgid "not yet billed"
+#~ msgstr "ещё не оплачен"
 
-msgid "to bill"
-msgstr "к оплате"
+#~ msgid "to bill"
+#~ msgstr "к оплате"
 
-msgid "billed"
-msgstr "оплачен"
+#~ msgid "billed"
+#~ msgstr "оплачен"

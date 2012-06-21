@@ -49,11 +49,11 @@ msgid ""
 "impact other Tasks systems on export or syncronisation."
 msgstr ""
 
-#: Controller/Task.php:165
+#: Controller/Task.php:164
 msgid "Notification for Task "
 msgstr ""
 
-#: Controller.php:96
+#: Controller.php:95
 #, python-format
 msgid "%s's personal tasks"
 msgstr ""

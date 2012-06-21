@@ -1,19 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - CRM\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:03+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:53+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Catalan\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
@@ -40,126 +40,126 @@ msgstr "gestiona preferits de clients potencials compartits"
 msgid "Create or update shared leads favorites"
 msgstr "Crea o actualitza preferits de clients potencials compartits"
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:176
 msgid "State"
 msgstr "Estat"
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
+#: Controller/Lead.php:177 js/AddToLeadPanel.js:158 js/Contact.js:252
 msgid "Role"
 msgstr "Rol"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:178
 msgid "Source"
 msgstr "Font"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:444
+#: Controller/Lead.php:179 Export/Pdf.php:93 js/LeadEditDialog.js:442
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Inici"
 
-#: Controller/Lead.php:181
+#: Controller/Lead.php:180
 msgid "Scheduled end"
 msgstr "Finalització prevista"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:275
+#: Controller/Lead.php:181 Export/Pdf.php:96 js/LeadEditDialog.js:273
 msgid "End"
 msgstr "Finalització"
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:145
+#: Controller/Lead.php:182 Export/Pdf.php:87 js/GridPanel.js:130
 #: js/Model.js:107
 msgid "Turnover"
 msgstr "Volum de negoci"
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:144
-#: js/LeadEditDialog.js:268 js/Model.js:106
+#: Controller/Lead.php:183 Export/Pdf.php:90 js/GridPanel.js:129
+#: js/LeadEditDialog.js:266 js/Model.js:106
 msgid "Probability"
 msgstr "Probabilitat"
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:184
 msgid "Folder"
 msgstr "Carpeta"
 
-#: Controller/Lead.php:186
+#: Controller/Lead.php:185
 msgid "Updated by"
 msgstr "Actualitzat per"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:186
 msgid "Updated Fields:"
 msgstr "Camps actualitzats:"
 
-#: Controller/Lead.php:188
+#: Controller/Lead.php:187
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s ha canviat de %s a %s."
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:193
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "S'ha modificat el client potencial %s"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:195
 #, python-format
 msgid "Lead %s has been created"
 msgstr ""
 
-#: Controller.php:112
+#: Controller.php:111
 #, python-format
 msgid "%s's personal leads"
 msgstr "clients potencials personals de %s"
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:354 js/Contact.js:394
-#: js/GridPanel.js:142 js/LeadGridDetailsPanel.js:45
+#: Controller.php:152 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/GridPanel.js:127 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr "Client"
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:355 js/Contact.js:398
-#: js/GridPanel.js:141 js/LeadGridDetailsPanel.js:45
+#: Controller.php:153 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: js/GridPanel.js:126 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr "Col·laborador"
 
-#: Controller.php:155
+#: Controller.php:154
 msgid "Reseller"
 msgstr "Distribuïdor"
 
-#: Controller.php:158
+#: Controller.php:157
 msgid "open"
 msgstr "obert"
 
-#: Controller.php:159
+#: Controller.php:158
 msgid "contacted"
 msgstr "contactat"
 
-#: Controller.php:160
+#: Controller.php:159
 msgid "waiting for feedback"
 msgstr "esperant resposta"
 
-#: Controller.php:161
+#: Controller.php:160
 msgid "quote sent"
 msgstr "pressupost enviat"
 
-#: Controller.php:162
+#: Controller.php:161
 msgid "accepted"
 msgstr "acceptat"
 
-#: Controller.php:163
+#: Controller.php:162
 msgid "lost"
 msgstr "perdut"
 
-#: Controller.php:166
+#: Controller.php:165
 msgid "Market"
 msgstr "Mercat"
 
-#: Controller.php:167 Export/Pdf.php:219
+#: Controller.php:166 Export/Pdf.php:219
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: Controller.php:168 Export/Pdf.php:218
+#: Controller.php:167 Export/Pdf.php:218
 msgid "Telephone"
 msgstr "Telèfon"
 
-#: Controller.php:169
+#: Controller.php:168
 msgid "Website"
 msgstr "Lloc web"
 
@@ -167,17 +167,17 @@ msgstr "Lloc web"
 msgid "Lead Data"
 msgstr "Dades del client potencial"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:143
-#: js/LeadEditDialog.js:386 js/LeadStateFilterModel.js:32
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/GridPanel.js:128
+#: js/LeadEditDialog.js:384 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Estat"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:405
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:403
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Tipus"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:412
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:410
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Font"
@@ -194,7 +194,7 @@ msgstr "Contactes"
 msgid "Address"
 msgstr "Adreça"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:291 js/Task.js:83
+#: Export/Pdf.php:232 js/LeadEditDialog.js:289 js/Task.js:83
 msgid "Tasks"
 msgstr "Tasques"
 
@@ -206,7 +206,7 @@ msgstr "Data de venciment"
 msgid "Priority"
 msgstr "Prioritat"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:302 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:300 js/Product.js:85
 msgid "Products"
 msgstr "Productes"
 
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Please select the attenders' role"
 msgstr ""
 
-#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:317 js/Model.js:48
+#: js/AddToLeadPanel.js:153 js/LeadEditDialog.js:315 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Client potencial"
@@ -281,7 +281,7 @@ msgstr "Valors per defecte"
 msgid "Change type to Customer"
 msgstr "Canvia el tipus a Client"
 
-#: js/Contact.js:171 js/Contact.js:353 js/Contact.js:390 js/GridPanel.js:140
+#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392 js/GridPanel.js:125
 msgid "Responsible"
 msgstr "Responsable"
 
@@ -321,75 +321,67 @@ msgstr "Mòbil"
 msgid "New Lead"
 msgstr ""
 
-#: js/GridPanel.js:137
+#: js/GridPanel.js:122
 msgid "Lead id"
 msgstr "Identificador del client potencial"
 
-#: js/GridPanel.js:138
+#: js/GridPanel.js:123
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: js/GridPanel.js:139 js/Model.js:104
+#: js/GridPanel.js:124 js/Model.js:104
 msgid "Lead name"
 msgstr "Nom del client potencial"
 
-#: js/GridPanel.js:146
+#: js/GridPanel.js:131
 msgid "Probable Turnover"
 msgstr "Volum de negoci probable"
 
-#: js/GridPanel.js:188
+#: js/GridPanel.js:173
 msgid "Export Lead"
 msgstr "Exporta el client potencial"
 
-#: js/GridPanel.js:197
+#: js/GridPanel.js:182
 msgid "Export as PDF"
 msgstr "Exporta com a PDF"
 
-#: js/GridPanel.js:204
+#: js/GridPanel.js:189
 msgid "Export as CSV"
 msgstr "Exporta com a CSV"
 
-#: js/GridPanel.js:211
+#: js/GridPanel.js:196
 msgid "Export as ODS"
 msgstr "Exporta com a ODS"
 
-#: js/GridPanel.js:218
+#: js/GridPanel.js:203
 msgid "Export as XLS"
 msgstr "Exporta com a XLS"
 
-#: js/LeadEditDialog.js:292
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no "
-"es troba activada."
+#: js/LeadEditDialog.js:290
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Tasques o bé aquesta no es troba activada."
 
-#: js/LeadEditDialog.js:303
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr ""
-"No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no "
-"es troba activada."
+#: js/LeadEditDialog.js:301
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "No disposeu dels permisos per a executar l'aplicació Vendes o bé aquesta no es troba activada."
 
-#: js/LeadEditDialog.js:344
+#: js/LeadEditDialog.js:342
 msgid "Enter short name"
 msgstr "Introduïu el nom curt"
 
-#: js/LeadEditDialog.js:428
+#: js/LeadEditDialog.js:426
 msgid "Expected turnover"
 msgstr "Volum de negoci previst"
 
-#: js/LeadEditDialog.js:450 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Finalització estimada"
 
-#: js/LeadEditDialog.js:482 js/Product.js:139
+#: js/LeadEditDialog.js:480 js/Product.js:139
 msgid "Description"
 msgstr "Descripció"
 
-#: js/LeadEditDialog.js:496
+#: js/LeadEditDialog.js:494
 msgid "Enter description"
 msgstr "Introduïu una descripció"
 
@@ -600,15 +592,3 @@ msgstr ""
 #: Setup/Initialize.php:86
 msgid "Leads with overdue tasks"
 msgstr ""
-
-msgid "Lead %s has been creaded"
-msgstr "S'ha creat el client potencial %s"
-
-msgid "Last Modified Time"
-msgstr "Modificat per darrera vegada"
-
-msgid "Add task"
-msgstr "Afegeix una tasca"
-
-msgid "Add task for selected lead"
-msgstr "Afegeix una tasca per al client potencial seleccionat"

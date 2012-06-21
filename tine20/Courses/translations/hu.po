@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Tamás Faragó <>, 2012.
 msgid ""
@@ -8,28 +8,28 @@ msgstr ""
 "PO-Revision-Date: 2012-04-03 17:32+0000\n"
 "Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Course.php:107
+#: Controller/Course.php:106
 msgid "teacher"
 msgstr "tanár"
 
-#: Controller/Course.php:115
+#: Controller/Course.php:114
 msgid "Teacher"
 msgstr "Tanár"
 
-#: Controller/Course.php:116
+#: Controller/Course.php:115
 msgid "Teacher Account"
 msgstr "Tanár felhasználó"
 
-#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
+#: Frontend/Json.php:256 js/CourseEditDialog.js:141 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurzus"

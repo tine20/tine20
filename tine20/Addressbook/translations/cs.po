@@ -1,24 +1,20 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 Addressbook\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:53+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:51+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: CZECH REPUBLIC\n"
-"X-Poedit-Language: Czech\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-SearchPath-0: Addressbook\n"
-"X-Poedit-Basepath: ../../\n"
-"X-Poedit-KeywordsList: _\n"
 
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
@@ -41,9 +37,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -51,9 +45,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -64,7 +56,11 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller.php:97
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "Osobní adresář uživatele %s"
@@ -174,11 +170,11 @@ msgstr "Povolání"
 msgid "Contact import from Google address book"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr ""
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
@@ -199,9 +195,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -253,7 +247,7 @@ msgstr "Příjmení"
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
 #: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
 msgstr "Firma"
 
@@ -466,6 +460,7 @@ msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
@@ -628,6 +623,7 @@ msgid "List"
 msgid_plural "Lists"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Model.js:201
 msgid "Lists"
@@ -653,11 +649,11 @@ msgstr "Výchozí oblíbené položky kontaktů"
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění adresáře"
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
 msgid "Mr"
 msgstr "Pan"
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
 msgid "Ms"
 msgstr "Paní"
 
@@ -692,138 +688,3 @@ msgstr ""
 #: Setup/setup.xml:648
 msgid "Internal Contacts"
 msgstr "Interní kontakty"
-
-msgid "Searching..."
-msgstr "Hledám..."
-
-msgid "Call contact"
-msgstr "Volat kontakt"
-
-msgid "Compose email"
-msgstr "Napsat email"
-
-msgid "Work"
-msgstr "Práce"
-
-msgid "Home"
-msgstr "Doma"
-
-msgid "Cell"
-msgstr "Mobil"
-
-msgid "Cell private"
-msgstr "Privátní mobil"
-
-msgid "Last Modified Time"
-msgstr "Naposledy změněno"
-
-msgid "addressbook"
-msgid_plural "addressbooks"
-msgstr[0] "adresář"
-msgstr[1] "adresáře"
-msgstr[2] "adresáře"
-
-msgid "addressbooks"
-msgstr "adresáře"
-
-msgid "contacts"
-msgstr "kontakty"
-
-msgid "export as pdf"
-msgstr "exportovat do pdf"
-
-msgid "Loading Contact..."
-msgstr "Načítám kontakt..."
-
-msgid "Please Wait"
-msgstr "Čekejte prosím"
-
-msgid "Add new contact"
-msgstr "Přidat nový kontakt"
-
-msgid "Edit Contact \"{0}\""
-msgstr "Editovat kontakt \"{0}\""
-
-msgid "Please wait a moment..."
-msgstr "Počkejte prosím okamžik..."
-
-msgid "Saving Contact"
-msgstr "Ukládám kontakt"
-
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-msgid "Could not save contact."
-msgstr "Nepodařilo se uložit kontakt."
-
-msgid "Either "
-msgstr "Buď"
-
-msgid "Start date is not valid"
-msgstr "Počáteční datum je neplatné"
-
-msgid "Errors"
-msgstr "Chyby"
-
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
-
-msgid "Deleting contact..."
-msgstr "Mažu kontakt..."
-
-msgid "Some error occured while trying to delete the contact."
-msgstr "Při mazání kontaktu došlo k chybě."
-
-msgid "Custom Fields"
-msgstr "Volitelné položky"
-
-msgid "Link"
-msgid_plural "Links [%d]"
-msgstr[0] "Odkaz"
-msgstr[1] "Odkazy [%d]"
-msgstr[2] "Odkazů [%d]"
-
-msgid "manage shared folders"
-msgstr "spravovat sdílené složky"
-
-msgid "Export"
-msgstr "Exportovat"
-
-msgid "Are you Sure?"
-msgstr "Jste si jistý(á)?"
-
-msgid "Do you really want to delete the selected contact?"
-msgid_plural "Do you really want to delete the selected contacts?"
-msgstr[0] "Určitě chcete smazat vybraný kontakt?"
-msgstr[1] "Určitě chcete smazat vybrané kontakty?"
-msgstr[2] "Určitě chcete smazat vybrané kontakty?"
-
-msgid "add contact"
-msgstr "přidat kontakt"
-
-msgid "edit contact"
-msgstr "editovat kontakt"
-
-msgid "delete contact"
-msgid_plural "delete contacts"
-msgstr[0] "smazat kontakt"
-msgstr[1] "smazat kontakty"
-msgstr[2] "smazat kontakty"
-
-msgid "Displaying contacts {0} - {1} of {2}"
-msgstr "Zobrazuji kontakty {0} - {1} z {2}"
-
-msgid "No contacts to display"
-msgstr "Žádné kontakty ke zobrazení"
-
-msgid "Saved in"
-msgstr "Uloženo v"
-
-msgid "History"
-msgstr "Historie"
-
-msgid "Notes"
-msgstr "Poznámky"
-
-#~ msgid "Export Contact"
-#~ msgstr "Exportovat kontakt"

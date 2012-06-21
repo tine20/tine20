@@ -1,20 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Timetracker\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:07+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-04-02 13:58+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: CHINA\n"
-"X-Poedit-Language: Chinese\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:105
@@ -74,12 +73,12 @@ msgid "Description"
 msgstr "描述"
 
 #: js/Models.js:88 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:391
+#: js/TimesheetGridPanel.js:393
 msgid "Billable"
 msgstr "记帐"
 
 #: js/Models.js:89 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:396
+#: js/TimesheetGridPanel.js:398
 msgid "Cleared"
 msgstr "已清除"
 
@@ -242,15 +241,15 @@ msgid "Tags"
 msgstr ""
 
 #: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:109
-#: js/TimesheetGridPanel.js:401
+#: js/TimesheetGridPanel.js:403
 msgid "Cleared in"
 msgstr "已清除于"
 
-#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:326
+#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:328
 msgid "Export as ODS"
 msgstr "导出 ODS"
 
-#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:333
+#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:335
 msgid "Export as CSV"
 msgstr "导出 CSV"
 
@@ -330,19 +329,19 @@ msgstr "记帐时间表的时间"
 msgid "Detail"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:317
+#: js/TimesheetGridPanel.js:319
 msgid "Export Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:340
+#: js/TimesheetGridPanel.js:342
 msgid "Export as ..."
 msgstr ""
 
-#: js/TimesheetGridPanel.js:383
+#: js/TimesheetGridPanel.js:385
 msgid "Mass Update"
 msgstr "整个更新"
 
-#: js/TimesheetGridPanel.js:389
+#: js/TimesheetGridPanel.js:391
 msgid "Update field:"
 msgstr "更新字段："
 
@@ -397,70 +396,3 @@ msgstr ""
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "时间跟踪器"
-
-msgid "Update {0} records"
-msgstr "更新 {0} 条记录"
-
-msgid "Cancel"
-msgstr "取消"
-
-msgid "Ok"
-msgstr "好"
-
-msgid "Success"
-msgstr "成功"
-
-msgid "Updated {0} records"
-msgstr "已更新 {0} 记录"
-
-msgid "Add, edit and delete timeaccounts"
-msgstr "添加、编辑和删除时间帐户"
-
-msgid "Total Sum"
-msgstr "合计"
-
-msgid "Not billable"
-msgstr "不记帐"
-
-msgid "Total"
-msgstr "所有"
-
-msgid "Timeaccount Number"
-msgstr "时间帐户号码"
-
-msgid "Timeaccount"
-msgstr "时间帐户"
-
-msgid "Staff Member"
-msgstr "员工成员"
-
-#, fuzzy
-msgid "Open"
-msgstr "打开"
-
-msgid "Filter"
-msgstr "过滤器"
-
-msgid "Times could be added"
-msgstr "可能要加时间"
-
-msgid "Implementation"
-msgstr "实现"
-
-msgid "Timesheets"
-msgstr "时间表"
-
-msgid "All Timesheets"
-msgstr "所有的时间表"
-
-msgid "Timeaccounts"
-msgstr "时间帐户"
-
-msgid "All Timeaccounts"
-msgstr "所有时间帐户"
-
-#~ msgid "Billed in ..."
-#~ msgstr "记帐于"
-
-#~ msgid "Searching..."
-#~ msgstr "搜索 ..."

@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Markus Henriksson <markus.henriksson@marinex.se>, 2012.
 #   <tulken_hultan@hotmail.com>, 2012.
@@ -9,10 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-05-09 11:26+0000\n"
 "Last-Translator: Markus Henriksson <markus.henriksson@marinex.se>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -31,8 +31,7 @@ msgid "manage accounts"
 msgstr "hantera konton"
 
 #: Acl/Rights.php:190
-msgid ""
-"add and edit users and groups, add group members, change user passwords"
+msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "lägga till och redigera användare och grupper, lägga till gruppmedlemmar, ändra lösenord för användare"
 
 #: Acl/Rights.php:193
@@ -48,9 +47,7 @@ msgid "manage roles"
 msgstr "hantera roller"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to "
-"roles"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
 msgstr "lägga till och redigera roller, lägga till nya medlemmar till roller, lägga till applikationsrättigheter till roller"
 
 #: Acl/Rights.php:201
@@ -125,11 +122,11 @@ msgstr "visa behållare"
 msgid "view personal and shared containers"
 msgstr "visa personliga och delade behållare"
 
-#: Controller/Container.php:199
+#: Controller/Container.php:198
 msgid "Your container has been changed"
 msgstr "Din behållare har blivit ändrad"
 
-#: Controller/Container.php:200
+#: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Din behållare har blivit ändrad av %1$s %2$sNotering: %3$s"
 
@@ -165,14 +162,14 @@ msgstr "Klient Typ"
 msgid "Session ID"
 msgstr "Sessions ID"
 
-#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+#: js/AccessLog.js:130 js/user/EditDialog.js:767 js/user/EditDialog.js:810
 msgid "Login Name"
 msgstr "Inloggnings Namn"
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
 #: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:325
 msgid "Name"
 msgstr "Namn"
 
@@ -277,11 +274,11 @@ msgstr "inställningar"
 msgid "Search:"
 msgstr "Sök:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:836
+#: js/Applications.js:226 js/user/EditDialog.js:840
 msgid "disabled"
 msgstr "avaktiverad"
 
-#: js/Applications.js:229 js/user/EditDialog.js:835
+#: js/Applications.js:229 js/user/EditDialog.js:839
 msgid "enabled"
 msgstr "aktiverad"
 
@@ -301,7 +298,7 @@ msgstr "Inga tillämpningar att visa"
 msgid "Order"
 msgstr "Beställ"
 
-#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+#: js/Applications.js:279 js/user/EditDialog.js:832 js/user/GridPanel.js:176
 msgid "Status"
 msgstr "Status"
 
@@ -402,7 +399,7 @@ msgstr "Given post klass inte funnen"
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:695
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -482,8 +479,8 @@ msgid "Confirm"
 msgstr "Bekräfta"
 
 #: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
-msgstr "Starta om applikationen för att lägga till nya fält?"
+msgid "Restart application to apply new customfields?"
+msgstr ""
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
@@ -516,19 +513,19 @@ msgstr "Grupp Namn"
 msgid "Description"
 msgstr "Beskrivning"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:877
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Display in addressbook"
 msgstr "Visa i adressbok"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Hide from addressbook"
 msgstr "Dölj från adressbok"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:897
 msgid "Saved in Addressbook"
 msgstr "Spara i Adressbok"
 
@@ -730,245 +727,243 @@ msgstr "Inga taggar att visa"
 msgid "Usage:&#160;"
 msgstr "Användande:&#160;"
 
-#: js/user/EditDialog.js:187
+#: js/user/EditDialog.js:191
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Domän ej tillåten. Kontrollera konfigurationen för SMTP-domänen."
 
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:688
+#: js/user/EditDialog.js:238 js/user/EditDialog.js:241
+#: js/user/EditDialog.js:692
 msgid "Passwords do not match!"
 msgstr "Lösenorden matchar inte!"
 
-#: js/user/EditDialog.js:240
+#: js/user/EditDialog.js:244
 msgid "Passwords match!"
 msgstr "Lösenorden matchar!"
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+#: js/user/EditDialog.js:290 js/user/EditDialog.js:815
 msgid "Primary group"
 msgstr "Primär grupp"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:367
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:377
+#: js/user/EditDialog.js:381
 msgid "Home Directory"
 msgstr "Hemmamapp"
 
-#: js/user/EditDialog.js:381
+#: js/user/EditDialog.js:385
 msgid "Login Shell"
 msgstr "Inloggningsskal"
 
-#: js/user/EditDialog.js:387
+#: js/user/EditDialog.js:391
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:401
+#: js/user/EditDialog.js:405
 msgid "Home Drive"
 msgstr "Hemmadisk"
 
-#: js/user/EditDialog.js:406
+#: js/user/EditDialog.js:410
 msgid "Logon Time"
 msgstr "Påloggningstid"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
-#: js/user/EditDialog.js:926
+#: js/user/EditDialog.js:412 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:930
 msgid "never logged in"
 msgstr "loggade inte in"
 
-#: js/user/EditDialog.js:411
+#: js/user/EditDialog.js:415
 msgid "Home Path"
 msgstr "Sökväg för hem"
 
-#: js/user/EditDialog.js:416
+#: js/user/EditDialog.js:420
 msgid "Logoff Time"
 msgstr "Avloggningstid"
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:422
 msgid "never logged off"
 msgstr "loggade inte av"
 
-#: js/user/EditDialog.js:421
+#: js/user/EditDialog.js:425
 msgid "Profile Path"
 msgstr "Sökväg för profil"
 
-#: js/user/EditDialog.js:426
+#: js/user/EditDialog.js:430
 msgid "Password Last Set"
 msgstr "Ändrade lösenord senast"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
-#: js/user/EditDialog.js:930
+#: js/user/EditDialog.js:432 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:934
 msgid "never"
 msgstr "aldrig"
 
-#: js/user/EditDialog.js:431
+#: js/user/EditDialog.js:435
 msgid "Logon Script"
 msgstr "Inloggningsscript"
 
-#: js/user/EditDialog.js:436
+#: js/user/EditDialog.js:440
 msgid "Password Can Change"
 msgstr "Lösenordet kan ändras"
 
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:442 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:452
 msgid "not set"
 msgstr "inte inställt"
 
-#: js/user/EditDialog.js:441
+#: js/user/EditDialog.js:445
 msgid "Password Must Change"
 msgstr "Lösenord måste ändras"
 
-#: js/user/EditDialog.js:446
+#: js/user/EditDialog.js:450
 msgid "Kick Off Time"
 msgstr "Tid för avspark"
 
-#: js/user/EditDialog.js:466
+#: js/user/EditDialog.js:470
 msgid "IMAP Quota (MB)"
 msgstr "IMAP-kvot (MB)"
 
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
 msgid "Quota"
 msgstr "Kvot"
 
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+#: js/user/EditDialog.js:490 js/user/EditDialog.js:528
 msgid "no quota set"
 msgstr "ingen kvot satt"
 
-#: js/user/EditDialog.js:496
+#: js/user/EditDialog.js:500
 msgid "Current Mailbox size"
 msgstr "Nuvarande storlek på e-postmappen"
 
-#: js/user/EditDialog.js:504
+#: js/user/EditDialog.js:508
 msgid "Sieve Quota (MB)"
 msgstr "Kvot (MB)"
 
-#: js/user/EditDialog.js:534
+#: js/user/EditDialog.js:538
 msgid "Current Sieve size"
 msgstr "Nuvarande kvot"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+#: js/user/EditDialog.js:547 js/user/EditDialog.js:909
 msgid "Information"
 msgstr "Information"
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:561
 msgid "Last Login"
 msgstr "Senast inloggad"
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:602
 msgid "Email Alias"
 msgstr "E-postalias"
 
-#: js/user/EditDialog.js:604
+#: js/user/EditDialog.js:608
 msgid "Add an alias address..."
 msgstr "Lägg till ett alias.."
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:621
 msgid "Email Forward"
 msgstr "Vidarebefordra e-post"
 
-#: js/user/EditDialog.js:623
+#: js/user/EditDialog.js:627
 msgid "Add a forward address..."
 msgstr "Lägg till en vidarebefordringsadress..."
 
-#: js/user/EditDialog.js:635
+#: js/user/EditDialog.js:639
 msgid "Forward Only"
 msgstr "Vidarebefordra endast"
 
-#: js/user/EditDialog.js:655
+#: js/user/EditDialog.js:659
 msgid "Password confirmation"
 msgstr "Lösenordskonfirmation"
 
-#: js/user/EditDialog.js:672
+#: js/user/EditDialog.js:676
 msgid "Repeat password"
 msgstr "Repetera lösenord"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:702
 msgid "Ok"
 msgstr "Ok"
 
-#: js/user/EditDialog.js:733
+#: js/user/EditDialog.js:737
 msgid "Account"
 msgstr "Konto"
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:752
 msgid "First Name"
 msgstr "Förnamn"
 
-#: js/user/EditDialog.js:758
+#: js/user/EditDialog.js:762
 msgid "Last Name"
 msgstr "Efternamn"
 
-#: js/user/EditDialog.js:768
+#: js/user/EditDialog.js:772
 msgid "Password"
 msgstr "Lösenord"
 
-#: js/user/EditDialog.js:772
+#: js/user/EditDialog.js:776
 msgid "no password set"
 msgstr "inget lösenord satt"
 
-#: js/user/EditDialog.js:799
+#: js/user/EditDialog.js:803
 msgid "Emailaddress"
 msgstr "E-postadress"
 
-#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+#: js/user/EditDialog.js:809 js/user/GridPanel.js:182
 msgid "OpenID"
 msgstr "ÖppnaID"
 
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:841
 msgid "expired"
 msgstr "utgången"
 
-#: js/user/EditDialog.js:838
+#: js/user/EditDialog.js:842
 msgid "blocked"
 msgstr "blockerad"
 
-#: js/user/EditDialog.js:845
+#: js/user/EditDialog.js:849
 msgid "Invalid Status"
 msgstr "Ogiltig Status"
 
-#: js/user/EditDialog.js:846
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
+#: js/user/EditDialog.js:850
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
 msgstr "Blockerade status är endast giltigt om användaren försökte logga in med fel lösenord för ofta. Det är inte möjligt att ställa in denna status här."
 
-#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:872 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Utgår"
 
-#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Senaste Inloggning"
 
-#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:926 js/user/EditDialog.js:930
 msgid "don't know"
 msgstr "vet inte"
 
-#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:928 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Senaste Inloggning från"
 
-#: js/user/EditDialog.js:928
+#: js/user/EditDialog.js:932
 msgid "Password set"
 msgstr "Lösenord Satt"
 
-#: js/user/EditDialog.js:935
+#: js/user/EditDialog.js:939
 msgid "User groups"
 msgstr "Användar grupper"
 
-#: js/user/EditDialog.js:941
+#: js/user/EditDialog.js:945
 msgid "User roles"
 msgstr "Användar roller"
 
-#: js/user/EditDialog.js:947
+#: js/user/EditDialog.js:951
 msgid "Fileserver"
 msgstr "Filserver"
 
-#: js/user/EditDialog.js:953
+#: js/user/EditDialog.js:957
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:962
+#: js/user/EditDialog.js:966
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -1031,3 +1026,6 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-post Användare"
 msgstr[1] "E-post Användare"
+
+#~ msgid "Restart application to apply new cusomfields?"
+#~ msgstr "Starta om applikationen för att lägga till nya fält?"

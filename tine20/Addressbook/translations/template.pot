@@ -57,7 +57,11 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller.php:97
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
@@ -167,11 +171,11 @@ msgstr ""
 msgid "Contact import from Google address book"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr ""
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
