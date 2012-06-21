@@ -94,7 +94,9 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     setValue: function(value) {
         
         if (typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]') {
-            this.store.addSorted(new Tine.Tinebase.Model.Tag(value));
+            if (! this.store.getById(value.id)) {
+                this.store.addSorted(new Tine.Tinebase.Model.Tag(value));
+            }
             value = value.id;
         }
         
