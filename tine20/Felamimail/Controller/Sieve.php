@@ -203,10 +203,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Sieve_Vacation $_vacation
      * @return Felamimail_Model_Sieve_Vacation
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
+        if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+            throw new Tinebase_Exception_AccessDenied('It is not allowed to set the vacation message of another user.');
+        }
         
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
