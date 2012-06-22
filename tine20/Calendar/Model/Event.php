@@ -385,7 +385,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'id', 
             'dtstart', 
             'dtend',
-            'is_all_day_event',
             'transp',
             'seq',
             'uid',

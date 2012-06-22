@@ -523,6 +523,56 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to filter for me as attender');
     }
     
+    public function testFreeBusyCleanup()
+    {
+        // give fb grants from sclever
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ), array(
+            'account_id'    => $this->_testUser->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ))), TRUE);
+        
+        $eventData = $this->testCreateEvent();
+        $eventData['container_id'] = $this->_personasDefaultCals['sclever']->getId();
+        $eventData['attendee'] = array(array(
+            'user_id' => $this->_personasContacts['sclever']->getId()
+        ));
+        $eventData['organizer'] = $this->_personasContacts['sclever']->getId();
+        
+        try {
+            $eventData = $this->_uit->saveEvent($eventData);
+        } catch (Exception $e) {
+            // add but not read
+        }
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_personasDefaultCals['sclever']->getId()),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $eventData = $searchResultData['results'][0];
+        
+        $this->assertFalse(array_key_exists('summary', $eventData), 'summary not empty');
+        $this->assertFalse(array_key_exists('description', $eventData), 'description not empty');
+        $this->assertFalse(array_key_exists('tags', $eventData), 'tags not empty');
+        $this->assertFalse(array_key_exists('notes', $eventData), 'notes not empty');
+        $this->assertFalse(array_key_exists('attendee', $eventData), 'attendee not empty');
+        $this->assertFalse(array_key_exists('organizer', $eventData), 'organizer not empty');
+        $this->assertFalse(array_key_exists('alarms', $eventData), 'alarms not empty');
+        
+    }
+    
     /**
      * compare expected event data with test event
      *
