@@ -124,7 +124,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.booleanRenderer
             }, {
                 id: 'transp',
-                header: this.app.i18n._("blocking"),
+                header: this.app.i18n._("Blocking"),
                 width: 50,
                 dataIndex: 'transp',
                 renderer: function(transp) {
@@ -132,7 +132,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 }
             }, {
                 id: 'status',
-                header: this.app.i18n._("tentative"),
+                header: this.app.i18n._("Tentative"),
                 width: 50,
                 dataIndex: 'status',
                 renderer: function(transp) {
