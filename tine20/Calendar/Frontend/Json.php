@@ -304,13 +304,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Calendar_Controller_Event::getInstance()->getAlarms($_records);
             
             Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
-            
             $_records->sortByPagination($_pagination);
             $eventsData = parent::_multipleRecordsToJson($_records);
-            foreach ($eventsData as $eventData) {
+            foreach ($eventsData as $idx => $eventData) {
                 if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
-                    $eventData['notes'] = array();
-                    $eventData['tags'] = array();
+                       $eventsData[$idx] = array_intersect_key($eventsData[$idx], array_flip(array(
+                           'id', 
+                            'dtstart', 
+                            'dtend',
+                            'transp',
+                            'is_all_day_event',
+                       )));
                 }
             }
             
