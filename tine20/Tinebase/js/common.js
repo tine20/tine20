@@ -184,7 +184,7 @@ Tine.Tinebase.common = {
         var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         if (forceUnit) {
             var i = suffix.indexOf(forceUnit);
-            i = -1 ? 0 : i;
+            i = (i == -1) ? 0 : i;
         } else {
             for (var i=0,j; i<suffix.length; i++) {
                 if (value < Math.pow(1024, i)) break;
