@@ -95,8 +95,9 @@
      * @param {Array|SelectionModel} records
      */
     updateActions: function(records) {
-        
+        var isFilterSelect = false;
         if (typeof(records.getSelections) == 'function') {
+            isFilterSelect = records.isFilterSelect;
             records = records.getSelections();
         } else if (typeof(records.beginEdit) == 'function') {
             records = [records];
@@ -111,7 +112,7 @@
                 var scope = action.scope || action.initialConfig.scope || window;
                 actionUpdater.call(scope, action, grants, records);
             } else {
-                this.defaultUpdater(action, grants, records);
+                this.defaultUpdater(action, grants, records, isFilterSelect);
             }
         }, this);
         
@@ -127,8 +128,9 @@
      * @param {Ext.Action} action
      * @param {Object} grants
      * @param {Object} records
+     * @param {Boolean} isFilterSelect
      */
-    defaultUpdater: function(action, grants, records) {
+    defaultUpdater: function(action, grants, records, isFilterSelect) {
         var nCondition = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true),
             mCondition = records && records.length > 1,
             grantCondition = (! this.evalGrants) || grants[action.initialConfig.requiredGrant];
@@ -137,7 +139,13 @@
         if (action.initialConfig.requiredGrant && action.initialConfig.requiredGrant != 'addGrant') {
             action.setDisabled(! (grantCondition && nCondition));
         }
-
+        
+        // disable on filter selection if required
+        if(action.disableOnFilterSelection && isFilterSelect) {
+            action.setDisabled(true);
+            return;
+        }
+        
         if (nCondition) {
             if (mCondition) {
                 if (action.initialConfig.requiredMultipleRight) {

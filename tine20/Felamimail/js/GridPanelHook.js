@@ -197,6 +197,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * @param {Object} records
      */
     updateAction: function(action, grants, records) {
-        action.setDisabled(this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections()).length == 0);
+        var sm = this.getGridPanel().grid.getSelectionModel();
+        action.setDisabled(sm.isFilterSelect ? true : this.getMailAddresses(sm.getSelections()).length == 0);
     }
 });
