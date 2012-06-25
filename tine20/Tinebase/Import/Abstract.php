@@ -120,7 +120,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import the data
      *
-     * @param  resource $_resource (if $_filename is a stream)
+     * @param resource $_resource (if $_filename is a stream)
      * @param array $_clientRecordData
      * @return array with import data (imported records, failures, duplicates and totalcount)
      */
@@ -130,6 +130,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             . ' Starting import of ' . ((! empty($this->_options['model'])) ? $this->_options['model'] . 's' : ' records'));
         
         $this->_initImportResult();
+        $this->_appendStreamFilters($_resource);
         $this->_beforeImport($_resource);
         $this->_doImport($_resource, $_clientRecordData);
         
@@ -139,6 +140,34 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
         
         return $this->_importResult;
+    }
+    
+    /**
+     * append stream filter for correct linebreaks and encoding
+     * 
+     * @param resource $resource
+     */
+    protected function _appendStreamFilters($resource)
+    {
+        if (! $resource) {
+            return;
+        }
+
+        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
+            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add convert stream filter: ' . $filter);
+            stream_filter_append($resource, $filter);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Adding streamfilter for correct linebreaks');
+        require_once 'StreamFilter/StringReplace.php';
+        $filter = stream_filter_append($resource, 'str.replace', STREAM_FILTER_READ, array(
+            'search'            => '/\r\n{0,1}/',
+            'replace'           => "\r\n",
+            'searchIsRegExp'    => TRUE
+        ));
     }
     
     /**
@@ -157,7 +186,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _beforeImport($_resource = NULL)
     {
-        
     }
     
     /**
@@ -169,13 +197,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _doImport($_resource = NULL, $_clientRecordData = array())
     {
         $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
-        
-        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
-            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Add convert stream filter: ' . $filter);
-            stream_filter_append($_resource, $filter);
-        }
         
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {

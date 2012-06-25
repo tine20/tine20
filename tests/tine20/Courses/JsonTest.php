@@ -215,6 +215,25 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($result['members']), 'import failed');
         $this->assertEquals(5, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
     }
+
+    /**
+     * test for import of members (4) / json import
+     * 
+     * @see 0006672: allow to import (csv) files with only CR linebreaks
+     */
+    public function testImportMembersIntoCourse4()
+    {
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/testklasse.csv', $this->_getCourseImportDefinition2(), TRUE);
+        $this->assertEquals(25, count($result['members']), 'import failed');
+        $found = FALSE;
+        foreach($result['members'] as $member) {
+            if ($member['name'] === 'Kućuk, Orkide' && $member['data'] === 'kuukor') {
+                $found = TRUE;
+            }
+        }
+        $this->assertTrue($found, 'Member "Kućuk, Orkide" not found in result: ' . print_r($result['members'], TRUE));
+        $this->assertEquals(25, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
+    }
     
     /**
      * testGetCoursesPreferences
@@ -349,7 +368,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         if ($_useJsonImportFn) {
             $tempFileBackend = new Tinebase_TempFile();
             $tempFile = $tempFileBackend->createTempFile($_filename);
-            Courses_Config::getInstance()->set(Courses_Config::STUDENTS_IMPORT_DEFINITION, 'course_user_import_csv');
+            Courses_Config::getInstance()->set(Courses_Config::STUDENTS_IMPORT_DEFINITION, $definition->name);
             $result = $this->_json->importMembers($tempFile->getId(), $courseData['group_id'], $courseData['id']);
             
             $this->assertGreaterThan(0, $result['results']);
@@ -411,6 +430,46 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                         <destination>accountFirstName</destination>
                     </field>
                 </mapping>
+            </config>')
+            ));
+        }
+        
+        return $definition;
+    }
+    
+ /**
+     * returns course import definition
+     * 
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    protected function _getCourseImportDefinition2()
+    {
+        try {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('course_user_import_csv2');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
+                    'name'              => 'course_user_import_csv2',
+                    'type'              => 'import',
+                    'model'             => 'Tinebase_Model_FullUser',
+                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
+            <config>
+                <headline>1</headline>
+                <use_headline>0</use_headline>
+                <dryrun>0</dryrun>
+                <encoding>MAC-CENTRALEUROPE</encoding>
+                <delimiter>;</delimiter>
+                <mapping>
+                    <field>
+                        <source>VORNAME</source>
+                        <destination>accountFirstName</destination>
+                    </field>
+                    <field>
+                        <source>NAME</source>
+                        <destination>accountLastName</destination>
+                    </field>
+                    </mapping>
             </config>')
             ));
         }
