@@ -180,14 +180,10 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: Controller/Course.php:220
-msgid "teacher"
-msgstr ""
-
-#: Controller/Course.php:228
+#: Controller/Course.php:246 Controller/Course.php:287
 msgid "Teacher"
 msgstr ""
 
-#: Controller/Course.php:229
+#: Controller/Course.php:247
 msgid "Teacher Account"
 msgstr ""

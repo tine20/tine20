@@ -16,9 +16,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:61
-#: js/Models.js:72
-#: js/CourseEditDialog.js:227
+#: Config.php:61 js/Models.js:72 js/CourseEditDialog.js:227
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
@@ -26,23 +24,19 @@ msgstr "Internet freigegeben"
 msgid "Internet access options."
 msgstr "Internet -Zugangsoptionen"
 
-#: Config.php:70
-#: Config.php:72
+#: Config.php:70 Config.php:72
 msgid "Internet Access Group (ON)"
 msgstr "Internet Zugangsgruppe (AN)"
 
-#: Config.php:78
-#: Config.php:80
+#: Config.php:78 Config.php:80
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Zugangsgruppe (GEFILTERT)"
 
-#: Config.php:86
-#: Config.php:88
+#: Config.php:86 Config.php:88
 msgid "Students Group"
 msgstr "Studentengruppe"
 
-#: Config.php:94
-#: Config.php:96
+#: Config.php:94 Config.php:96
 msgid "Students Import Definition"
 msgstr "Schülerimportdefinition"
 
@@ -50,9 +44,7 @@ msgstr "Schülerimportdefinition"
 msgid "Courses"
 msgstr "Klassen"
 
-#: Setup/Update/Release5.php:30
-#: Setup/Initialize.php:35
-#: Preference.php:24
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
 #: Preference.php:60
 msgid "All courses"
 msgstr "Alle Klassen"
@@ -109,8 +101,7 @@ msgstr "Fehler"
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die genannten Fehler."
 
-#: js/CourseGridPanel.js:48
-#: js/Models.js:70
+#: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Name"
 
@@ -126,9 +117,7 @@ msgstr "Fehlgeschlagen"
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
-#: js/Models.js:41
-#: js/CourseEditDialog.js:187
-#: Controller/Course.php:121
+#: js/Models.js:41 js/CourseEditDialog.js:187 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
@@ -190,17 +179,16 @@ msgstr "unbekannt"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-#: Controller/Course.php:220
-msgid "teacher"
-msgstr "lehrer"
-
-#: Controller/Course.php:228
+#: Controller/Course.php:246 Controller/Course.php:287
 msgid "Teacher"
 msgstr "Lehrer"
 
-#: Controller/Course.php:229
+#: Controller/Course.php:247
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
+
+#~ msgid "teacher"
+#~ msgstr "lehrer"
 
 #~ msgid "Set new password"
 #~ msgstr "Neues Passwort setzen"

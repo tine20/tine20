@@ -180,17 +180,16 @@ msgstr "ismeretlen"
 msgid "Reset Password"
 msgstr "Jelszó újraállítása"
 
-#: Controller/Course.php:220
-msgid "teacher"
-msgstr "tanár"
-
-#: Controller/Course.php:228
+#: Controller/Course.php:246 Controller/Course.php:287
 msgid "Teacher"
 msgstr "Tanár"
 
-#: Controller/Course.php:229
+#: Controller/Course.php:247
 msgid "Teacher Account"
 msgstr "Tanár felhasználó"
+
+#~ msgid "teacher"
+#~ msgstr "tanár"
 
 #~ msgid "Set new password"
 #~ msgstr "Új jelszó beállítása"

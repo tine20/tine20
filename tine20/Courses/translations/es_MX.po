@@ -180,17 +180,16 @@ msgstr "desconocido"
 msgid "Reset Password"
 msgstr "Reiniciar Contraseña"
 
-#: Controller/Course.php:220
-msgid "teacher"
-msgstr "profesor"
-
-#: Controller/Course.php:228
+#: Controller/Course.php:246 Controller/Course.php:287
 msgid "Teacher"
 msgstr "Profesor"
 
-#: Controller/Course.php:229
+#: Controller/Course.php:247
 msgid "Teacher Account"
 msgstr "Cuenta de Profesor"
+
+#~ msgid "teacher"
+#~ msgstr "profesor"
 
 #~ msgid "Set new password"
 #~ msgstr "Establecer nueva contraseña"

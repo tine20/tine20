@@ -182,17 +182,16 @@ msgstr ""
 msgid "Reset Password"
 msgstr "Resetovat heslo"
 
-#: Controller/Course.php:220
-msgid "teacher"
-msgstr "lektor"
-
-#: Controller/Course.php:228
+#: Controller/Course.php:246 Controller/Course.php:287
 msgid "Teacher"
 msgstr "Lektor"
 
-#: Controller/Course.php:229
+#: Controller/Course.php:247
 msgid "Teacher Account"
 msgstr "Účet lektora"
+
+#~ msgid "teacher"
+#~ msgstr "lektor"
 
 #~ msgid "Set new password"
 #~ msgstr "Nastavit nové heslo"
