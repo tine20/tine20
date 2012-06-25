@@ -211,13 +211,31 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $course = $_createdRecord;
+        $teacherAccount = $this->_addNewTeacherAccount($_createdRecord);
         
-        // add teacher account
+        // add to teacher group if available
+        if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
+            $this->_groupController->addGroupMember($this->_config->teacher_group, $teacherAccount->getId());
+        }
+        
+        // add to students group if available
+        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
+            $this->_groupController->addGroupMember($this->_config->students_group, $teacherAccount->getId());
+        }
+    }
+    
+    /**
+     * add new teacher account to course
+     * 
+     * @param Courses_Model_Course $course
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _addNewTeacherAccount($course)
+    {
         $i18n = Tinebase_Translation::getTranslation('Courses');
         
         $courseName = strtolower($course->name);
-        $loginName  = strtolower($i18n->_('teacher') . '-' . $course->name);
+        $loginName  = $this->_getTeacherLoginName($course, $i18n);
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         $account = new Tinebase_Model_FullUser(array(
@@ -245,23 +263,29 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created teacher account for course '
-        . $course->name . ': ' . print_r($account->toArray(), true));
-        
-        #$event = new Courses_Event_BeforeAddTeacher($account, $course);
-        #Tinebase_Event::fireEvent($event);
+            . $course->name . ': ' . print_r($account->toArray(), true));
         
         $password = $this->_config->get('teacher_password', $account->accountLoginName);
-            $account = $this->_userController->create($account, $password, $password);
+        $account = $this->_userController->create($account, $password, $password);
         
-        // add to teacher group if available
-        if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
-            $this->_groupController->addGroupMember($this->_config->teacher_group, $account->getId());
+        return $account;
+    }
+    
+    /**
+     * create new teacher login name from course name
+     * 
+     * @param Courses_Model_Course $course
+     * @param Zend_Translate $i18n
+     * @return string
+     */
+    protected function _getTeacherLoginName($course, $i18n = NULL)
+    {
+        if ($i18n === NULL) {
+            $i18n = Tinebase_Translation::getTranslation('Courses');
         }
         
-        // add to students group if available
-        if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
-            $this->_groupController->addGroupMember($this->_config->students_group, $account->getId());
-        }
+        $loginname = $i18n->_('Teacher') . Courses_Config::getInstance()->get('teacher_login_name_delimiter', '-') . $course->name;
+        return strtolower($loginname);
     }
     
     /**
