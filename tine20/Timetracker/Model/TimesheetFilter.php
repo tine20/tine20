@@ -78,6 +78,12 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             'applicationName' => 'Timetracker',
         )),
         'customfield'    => array('filter' => 'Tinebase_Model_Filter_CustomField',  'options' => array('idProperty' => 'timetracker_timesheet.id')),
+    // modlog
+        'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
     );
     
     /**

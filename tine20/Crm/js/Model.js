@@ -106,10 +106,10 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
-            {label: app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
-            {label: app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
-            {label: app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
-            {label: app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
+            {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+            {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+            {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
             {filtertype: 'crm.contact'},
             {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Task, ownField: 'task'}
         ];
