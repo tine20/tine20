@@ -48,6 +48,10 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
             'applicationName' => 'Timetracker',
         )),
         'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
+        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'showClosed'     => array('filter' => 'Timetracker_Model_TimeaccountClosedFilter'),
     );
     

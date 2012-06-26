@@ -83,10 +83,10 @@ Tine.Projects.Model.Project.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Projects.Model.Project},
         {filtertype: 'tine.projects.attendee', app: app},
-        {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
-        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by',   valueType: 'user'},
-        {label: app.i18n._('Creation Time'),                                            field: 'creation_time',      valueType: 'date'},
-        {label: app.i18n._('Creator'),                                                  field: 'created_by',         valueType: 'user'}
+        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
     ];
 };
 

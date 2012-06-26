@@ -205,6 +205,8 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
         }]
+        // TODO add customfields and modlog columns, atm they break the layout :(
+        //.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))
         });
     },
     
