@@ -116,6 +116,13 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addDay(6)->setHour(22)->setMinute(59)->setSecond(59)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 22:59:59',
             'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
+            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id' => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
+                )
+            ))
         ));
                 
         $eventDaily = Calendar_Controller_Event::getInstance()->create($eventDaily);
@@ -160,36 +167,13 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         ########### define test filter
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         
-        try {
-            $filter = $filterBackend->getByProperty('Calendar Sync Test', 'name');
-        } catch (Tinebase_Exception_NotFound $e) {
-            $filter = new Tinebase_Model_PersistentFilter(array(
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'account_id'        => Tinebase_Core::getUser()->getId(),
-                'model'             => 'Calendar_Model_EventFilter',
-                'filters'           => array(array(
-                    'field'     => 'container_id', 
-                    'operator'  => 'equals', 
-                    'value'     => $this->_getContainerWithSyncGrant()->getId()
-                )),
-                'name'              => 'Calendar Sync Test',
-                'description'       => 'Created by unit test'
-            ));
-            
-            $filter = $filterBackend->create($filter);
-        }
-        $this->objects['filter'] = $filter;
-        
-        
         ########### define test devices
         $palm = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_WEBOS);
         $palm->owner_id     = $this->_testUser->getId();
-        $palm->calendarfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceWebOS']   = ActiveSync_Controller_Device::getInstance()->create($palm);
         
         $iphone = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_IPHONE);
         $iphone->owner_id   = $this->_testUser->getId();
-        $iphone->calendarfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
     }
 
@@ -301,6 +285,45 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $untilTime = Calendar_Model_Rrule::getRruleFromString($this->objects['eventDaily']->rrule)->until->format("Ymd\THis") . 'Z';
         $this->assertEquals($untilTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
         
+    }
+    
+    public function testRecurEventExceptionFilters()
+    {
+        // decline one exception, remove attendee from other exception
+        $persistentExceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($this->objects['eventDaily']);
+        $persistentExceptions[0]->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentExceptions[1]->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        
+        $updatedBaseEvent = Calendar_Controller_Event::getInstance()->update($persistentExceptions[0]);
+        Calendar_Controller_Event::getInstance()->update($persistentExceptions[1]);
+        
+        $imp                   = new DOMImplementation();
+        
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDom->formatOutput = true;
+        $testDom->encoding     = 'utf-8';
+        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Calendar', 'uri:Calendar');
+        
+        $collections    = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'Collections'));
+        $collection     = $collections->appendChild($testDom->createElementNS('uri:AirSync', 'Collection'));
+        $commands       = $collection->appendChild($testDom->createElementNS('uri:AirSync', 'Commands'));
+        $add            = $commands->appendChild($testDom->createElementNS('uri:AirSync', 'Add'));
+        $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
+        
+        
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());
+        
+        $controller->appendXML($appData, null, $this->objects['eventDaily']->getId(), array());
+        
+        // all exceptions fall out (2 implicit fallouts by filter)
+        $this->assertEquals(ActiveSync_Controller_Calendar::RECUR_TYPE_DAILY, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Type')->item(0)->nodeValue, $testDom->saveXML());
+        $this->assertEquals(4, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Exception')->length, $testDom->saveXML());
+        $this->assertEquals(4, @$testDom->getElementsByTagNameNS('uri:Calendar', 'ExceptionStartTime')->length, $testDom->saveXML());
+        $this->assertEquals(1, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Subject')->length, $testDom->saveXML());
+        
+        //@TODO test way back -> no deltes but how?
+//         $event = $controller->toTineModel(simplexml_import_dom($testDom), $this->objects['eventDaily']);
     }
     
     /**

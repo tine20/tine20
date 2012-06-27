@@ -58,6 +58,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
+        $this->_eventFilter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_container->getId())
+        ));
+        $this->_assertEventFilter();
+        
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
     
@@ -89,6 +94,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
         
         $event->setId($id);
+        
+        $filter =  new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
+        ));
+        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($filter);
         
         self::enforceEventParameters($event);
         
@@ -214,6 +224,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         sleep(1);
         
         // (re) fetch event as tree move does not refresh src node before delete
+        $this->_assertEventFilter();
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         
         // allow delete only if deleted in origin calendar
@@ -392,6 +403,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function put($cardData) 
     {
+        $this->_assertEventFilter();
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendat_Convert_Event_VCalendar_Factory for supported clients.");
@@ -501,6 +513,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     }
     
     /**
+     * asserts correct event filter in MSEventFacade
+     * 
+     * NOTE: this is nessesary as MSEventFacade is a singleton and in some operations (e.g. move) there are 
+     *       multiple instances of self
+     */
+    protected function _assertEventFilter()
+    {
+        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($this->_eventFilter);
+    }
+    
+    /**
      * Updates the ACL
      *
      * This method will receive a list of new ACE's. 
@@ -521,6 +544,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
     public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
+            $this->_assertEventFilter();
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));

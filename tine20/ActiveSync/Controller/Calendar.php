@@ -231,6 +231,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     );
     
     /**
+     * the constructor
+     *
+     * @param Tinebase_DateTime $_syncTimeStamp
+     */
+    public function __construct(Syncope_Model_IDevice $_device, DateTime $_syncTimeStamp)
+    {
+        parent::__construct($_device, $_syncTimeStamp);
+        
+        $this->_contentController->setEventFilter($this->_getContentFilter(0));
+    }
+    
+    /**
      * append event data to xml element
      *
      * @todo handle BusyStatus
@@ -950,12 +962,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $filter = parent::_getContentFilter($_filterType);
         
         // no persistent filter set -> add default filter
+        // NOTE: we use attender+status as devices always show declined events
         if ($filter->isEmpty()) {
-            $defaultFilter = $filter->createFilter('container_id', 'equals', array(
-                'path' => '/personal/' . Tinebase_Core::getUser()->getId()
+            $attendeeFilter = $filter->createFilter('attender', 'equals', array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => Tinebase_Core::getUser()->contact_id,
             ));
-            
-            $filter->addFilter($defaultFilter);
+            $statusFilter = $filter->createFilter('attender_status', 'notin', array(
+                Calendar_Model_Attender::STATUS_DECLINED
+            ));
+            $filter->addFilter($attendeeFilter);
+            $filter->addFilter($statusFilter);
         }
         
         if(in_array($_filterType, $this->_filterArray)) {

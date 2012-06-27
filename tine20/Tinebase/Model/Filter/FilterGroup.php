@@ -187,6 +187,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
+     * clone filters after creating clone of filter group
+     */
+    public function __clone()
+    {
+        foreach($this->_filterObjects as $idx => $filter) {
+            $this->_filterObjects[$idx] = clone $filter;
+        }
+    }
+    
+    /**
      * sets this filter group from filter data in array representation
      *
      * @param array $_data

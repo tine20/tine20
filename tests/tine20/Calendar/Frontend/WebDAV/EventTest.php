@@ -165,11 +165,42 @@ class Calendar_Frontend_WebDAV_EventTest extends PHPUnit_Framework_TestCase
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
     
         $record = $event->getRecord();
-        #var_dump($record->exdate->toArray());
+//         print_r($record->exdate->is_deleted);
         $this->assertEquals('New Event', $record->summary);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->organizer);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->attendee[0]->user_id);
         return $event;
+    }
+    
+    public function testFilterRepeatingException()
+    {
+        // create event in shared calendar test user is attendee
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendarStream);
+        
+        // decline exception -> no implicit fallout as exception is still in initialContainer via displaycal
+        $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $exception->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        Calendar_Controller_Event::getInstance()->update($exception);
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
+        $vcalendar = stream_get_contents($event->get());
+        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
+        
+        // delete attendee from exception -> implicit fallout exception is not longer in displaycal
+        $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $exception->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        Calendar_Controller_Event::getInstance()->update($exception);
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
+        $vcalendar = stream_get_contents($event->get());
+        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted');
+        
+        // save back event -> implicit delete must not be deleted on server
+        $event->put($vcalendar);
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], $event->getRecord()->getId());
+        $vcalendar = stream_get_contents($event->get());
+        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted after update');
     }
     
     /**
