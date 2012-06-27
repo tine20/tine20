@@ -26,6 +26,8 @@ abstract class Console_Daemon
     
     protected $_children = array();
     
+    protected $_verbose = FALSE;
+    
     /**
      * 
      * @var Zend_Config
@@ -60,10 +62,18 @@ abstract class Console_Daemon
                 // @todo write pid file
             }
             
+            if (isset($options->v)) {
+                $this->_verbose = TRUE;
+            }
+            
             $configPath = (isset($options->config)) ? $options->config : $this->_defaultConfigPath;
             $this->_config = $this->_loadConfig($configPath);
         } else {
             $this->_config = $config;
+        }
+        
+        if ($this->_verbose) {
+            fwrite(STDOUT, "Starting Console_Daemon ..." . PHP_EOL);
         }
         
         if (isset($this->_config->general) && isset($this->_config->general->user) && isset($this->_config->general->group)) {
@@ -143,14 +153,14 @@ abstract class Console_Daemon
     {
         $childPid = pcntl_fork();
         
-        if($childPid < 0) {
+        if ($childPid < 0) {
             #fwrite(STDERR, "Something went wrong while forking to background" . PHP_EOL);
             exit;
         }
         
         // fork was successfull
         // we can finish the main process
-        if($childPid > 0) {
+        if ($childPid > 0) {
             echo "We are master. Exiting main process now..." . PHP_EOL;
             exit;
         }
@@ -195,7 +205,9 @@ abstract class Console_Daemon
      */
     public function handleSigTERM($signal)
     {
-        //fwrite(STDOUT, "sigterm received" . PHP_EOL);
+        if ($this->_verbose) {
+            fwrite(STDOUT, "Sigterm received" . PHP_EOL);
+        }
         
         foreach($this->_children as $pid) {
             posix_kill($pid, SIGTERM);
