@@ -44,7 +44,7 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
     
     /**
      * implement logic for each controller in this function
-
+     * 
      * @param Tinebase_Event_Abstract $_eventObject
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)

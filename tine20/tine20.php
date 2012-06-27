@@ -26,11 +26,6 @@ $autoloader->setFallbackAutoloader(true);
 Tinebase_Autoloader::initialize($autoloader);
 
 /**
- * path to tine 2.0 checkout
- */
-$tine20path = dirname(__FILE__);
-
-/**
  * anonymous methods (no pw/user required)
  */
 $anonymousMethods = array(

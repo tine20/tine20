@@ -80,7 +80,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
     /**
      * Redis object
      *
-     * @var redis redis object
+     * @var Redis redis object
      */
     protected $_redis = null;
 
