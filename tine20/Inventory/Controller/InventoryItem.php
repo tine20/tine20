@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -23,11 +23,10 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {        
+    private function __construct() {
         $this->_applicationName = 'Inventory';
         $this->_backend = new Inventory_Backend_InventoryItem();
         $this->_modelName = 'Inventory_Model_InventoryItem';
-        $this->_currentAccount = Tinebase_Core::getUser();   
         $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;

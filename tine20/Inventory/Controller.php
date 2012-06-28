@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -28,7 +28,6 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
      */
     private function __construct() {
         $this->_applicationName = 'Inventory';
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -36,7 +35,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
      *
      */
     private function __clone() 
-    {        
+    {
     }
     
     /**
@@ -68,16 +67,17 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
     {
         $translation = Tinebase_Translation::getTranslation('Inventory');
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $account = Tinebase_User::getInstance()->getUserById($accountId);
+        $account = Tinebase_User::getInstance()->getUserById($_accountId);
+        
         $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal inventory"), $account->accountFullName),
+            'name'              => sprintf($translation->_("%s's personal inventorys"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'          => $_accountId,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId() 
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;

@@ -2,7 +2,7 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Inventory');
@@ -43,7 +43,7 @@ Tine.Inventory.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Inventory.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.Inventory.InventoryItemTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     id: 'Inventory_Tree',
     filterMode: 'filterToolbar',
     recordClass: Tine.Inventory.Model.InventoryItem

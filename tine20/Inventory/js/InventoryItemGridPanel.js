@@ -2,7 +2,7 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Inventory');
@@ -19,7 +19,7 @@ Ext.ns('Tine.Inventory');
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
@@ -32,7 +32,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @cfg {Tine.Inventory.Model.InventoryItem} recordClass
      */
     recordClass: Tine.Inventory.Model.InventoryItem,
-   
+    
     /**
      * eval grants
      * @cfg {Boolean} evalGrants
@@ -73,7 +73,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * TODO    add more columns
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({ 
+        return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
                 resizable: true
@@ -128,25 +128,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 width: 50,
                 sortable: true,
                 dataIndex: 'description'
-            }
-            
-            
-            
-            
-            
-            /*,{
-                id: 'title',
-                header: this.app.i18n._("Title"),
-                width: 350,
-                sortable: true,
-                dataIndex: 'title'
-            },{
-                id: 'budget',
-                header: this.app.i18n._("Budget"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'budget'
-            }*/].concat(this.getModlogColumns())
+            }].concat(this.getModlogColumns())
         });
     },
     
@@ -164,19 +146,9 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @private
      */
     getToolbarItems: function(){
-    	/*
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        */
+
         
         return [
-            /*
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
-            */
         ];
     }    
 });

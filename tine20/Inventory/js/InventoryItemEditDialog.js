@@ -2,7 +2,7 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Inventory');
@@ -16,7 +16,7 @@ Ext.ns('Tine.Inventory');
  * <p></p>
  * 
  *  @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
@@ -51,9 +51,9 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordLoad: function() {
-    	// you can do something here
+    // you can do something here
 
-    	Tine.Inventory.InventoryItemEditDialog.superclass.onRecordLoad.call(this);        
+        Tine.Inventory.InventoryItemEditDialog.superclass.onRecordLoad.call(this);
     },
     
     /**
@@ -97,14 +97,15 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             plain:true,
             activeTab: 0,
             border: false,
-            items:[{               
+            items:[{
                 title: this.app.i18n._('Inventory Item'),
                 autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
-                items: [{
-                	region: 'center',
+                items: [
+                    {
+                    region: 'center',
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
@@ -113,7 +114,9 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         labelSeparator: '',
                         columnWidth: .333
                     },
-                    items: [[{
+                    items: [
+                        //Start name type
+                        [{
                         columnWidth: 1,
                         xtype: 'tine.widget.field.AutoCompleteField',
                         recordClass: this.recordClass,
@@ -131,14 +134,18 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             allowBlank: false,
                             maxLength: 100
                         })],
+                        //End name type
+                        //Start ID
                         [{
                             columnWidth: 1,
                             fieldLabel: this.app.i18n._('ID'),
                             name: 'inventory_id',
                             maxLength: 100
                         }],
+                        //End ID
+                        //Start description
                         [{
-                        	xtype: 'textarea',
+                            xtype: 'textarea',
                             name: 'description',
                             fieldLabel: this.app.i18n._('Description'),
                             grow: false,
@@ -147,6 +154,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             height: 150,
                             emptyText: this.app.i18n._('Enter description')
                         }],
+                        //End description
+                        //Start Place and time
                         [{
                             columnWidth: 0.5,
                             xtype: 'tine.widget.field.AutoCompleteField',
@@ -157,14 +166,16 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             
                         },
                         {
-                        	xtype: 'extuxclearabledatefield',
+                            xtype: 'extuxclearabledatefield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Added'),
                             name: 'add_time'
                             
                         }],
+                        //end Place and time
+                        //Start number
                         [{
-                        	xtype:'numberfield',
+                            xtype:'numberfield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Total number'),
                             name: 'total_number',
@@ -172,14 +183,16 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             minValue: 1
                         },
                         {
-                        	xtype:'numberfield',
+                            xtype:'numberfield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Active number'),
                             name: 'active_number',
                             value: 1,
                             minValue: 0
-                        }], 
-                    ] 
+                        }],
+                        //End number
+                    ]
+                    
                 },
                 {
                     // activities and tags
