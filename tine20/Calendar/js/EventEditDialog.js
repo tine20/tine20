@@ -300,7 +300,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, organizerCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 width: 300,
                 name: 'organizer',
-                userOnly: true
+                userOnly: true,
+                getValue: function() {
+                    var id = Tine.Addressbook.SearchCombo.prototype.getValue.apply(this, arguments),
+                        record = this.store.getById(id);
+                        
+                    return record ? record.data : id;
+                }
             })]
         });
         
