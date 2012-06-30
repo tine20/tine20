@@ -121,6 +121,16 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
     }
 
     /**
+     * delete all personal user folders and the contacts associated with these folders
+     *
+     * @param Tinebase_Model_User $_account the accountd object
+     * @todo implement and write test
+     */
+    public function deletePersonalFolder($_account)
+    {
+    }
+    
+    /**
      * Returns settings for SimpleFAQ app
      * - result is cached
      *
