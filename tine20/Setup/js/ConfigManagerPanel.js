@@ -276,7 +276,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 id: this.sessionBackendIdPrefix + 'CardLayout',
                 xtype: 'panel',
                 layout: 'card',
-                activeItem: this.sessionBackendIdPrefix + 'file',
+                activeItem: this.sessionBackendIdPrefix + 'File',
                 border: false,
                 width: '100%',
                 defaults: {border: false},

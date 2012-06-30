@@ -42,7 +42,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * definition properties for cusomfield
      * @type {Array}
      */
-    definitionFields: ['label', 'type', 'value_search', 'length'],
+    definitionFields: ['label', 'type', 'value_search', 'length', 'required'],
     
     /**
      * ui properties for customfield
@@ -608,6 +608,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Length'),
                     name: 'length',
                     disabled: this.record.id == 0 || this.record.get('definition').type !== 'string'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Required'),
+                    name: 'required'
                 }]
             }, {
                 xtype: 'fieldset',
@@ -687,7 +691,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Admin.CustomfieldEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 500,
-        height: 450,
+        height: 500,
         name: Tine.Admin.CustomfieldEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.CustomfieldEditDialog',
         contentPanelConstructorConfig: config

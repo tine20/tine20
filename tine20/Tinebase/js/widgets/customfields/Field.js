@@ -81,6 +81,10 @@ Tine.widgets.customfields.Field = {
             fieldDef.maxLength = def.length;
         }
         
+        if (def.required) {
+            fieldDef.allowBlank = false;
+        }
+        
         try {
             var fieldObj = Ext.ComponentMgr.create(Ext.apply(fieldDef, config));
             return fieldObj;
