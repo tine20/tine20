@@ -37,7 +37,14 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-    
+
+    /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
     /**
      * foreign tables 
      * name => array(table, joinOn, field)
@@ -150,9 +157,9 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         
         if (!empty($idsToRemove)) {
             $where = '(' . 
-                $this->_db->quoteInto($this->_tablePrefix . $this->_foreignTables['members']['table'] . '.' . $this->_foreignTables['members']['joinOn'] . ' = ?', $listId) . 
-                ' AND ' . 
-                $this->_db->quoteInto($this->_tablePrefix . $this->_foreignTables['members']['table'] . '.' . $this->_foreignTables['members']['field'] . ' IN (?)', $idsToRemove) . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['members']['table'] . '.' . $this->_foreignTables['members']['joinOn']) . ' = ?', $listId) .
+                ' AND ' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['members']['table'] . '.' . $this->_foreignTables['members']['field']) . ' IN (?)', $idsToRemove) .
             ')';
                 
             $this->_db->delete($this->_tablePrefix . $this->_foreignTables['members']['table'], $where);

@@ -73,6 +73,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     private static $_instance = NULL;
     
     /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
+    /**
      * the singleton pattern
      *
      * @return Tinebase_Container

@@ -441,6 +441,11 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                 $_buffer = array_merge($_buffer, $fieldBuffer);
             } else {
                 if ($_field->length !== NULL) {
+                    if ($this->_db instanceof Zend_Db_Adapter_Oracle) {
+                        if ($_field->type == 'integer' && $_field->length == '64') {
+                            $_field->length = '38';
+                        }
+                    }
                     if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
                         foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
                             if ($_field->length <= $maxLength) {
@@ -530,6 +535,4 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         }
         return $_name;
     }
-    
-
 }

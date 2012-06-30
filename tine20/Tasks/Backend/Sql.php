@@ -47,6 +47,13 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
 
     /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
+    /**
      * For some said reason, Zend_Db doesn't support table prefixes. Thus each 
      * table calss needs to implement it its own.
      * 

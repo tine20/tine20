@@ -31,4 +31,11 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Sales_Model_Contract';
+
+    /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
 }

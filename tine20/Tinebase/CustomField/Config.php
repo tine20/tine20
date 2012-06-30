@@ -30,7 +30,14 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Tinebase_Model_CustomField_Config';
-    
+
+    /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
     /**
      * get customfield config ids by grant
      * 
@@ -58,7 +65,7 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
-    
+
     /**
      * get acl select
      * 

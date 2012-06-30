@@ -40,6 +40,13 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
     protected $_modlogActive = TRUE;
     
     /**
+     * default column(s) for count
+     * MOD set $_defaultCountCol to id
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
+    /**
      * returns persistent filter identified by id
      * 
      * @param  string $_id

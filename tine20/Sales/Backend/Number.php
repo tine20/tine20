@@ -33,6 +33,13 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Sales_Model_Number';
     
     /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
+    /**
      * get next number identified by $_type (i.e. contract) and update db
      *
      * @param   string $_type

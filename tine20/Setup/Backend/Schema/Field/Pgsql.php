@@ -4,7 +4,7 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
 
@@ -14,6 +14,7 @@ class Setup_Backend_Schema_Field_Pgsql extends Setup_Backend_Schema_Field_Abstra
 
     public function __construct($_declaration)
     {
+        $this->unsigned = false; //not accepted by PostgreSQL
         $this->_setField($_declaration);
         
         parent::__construct($_declaration);
@@ -41,12 +42,7 @@ class Setup_Backend_Schema_Field_Pgsql extends Setup_Backend_Schema_Field_Abstra
                 case('int'):
                     $type = 'integer';
                     $default = intval($default);
-                    $matches = null;
-                    if (preg_match('/\((\d+)\)/', $_declaration['COLUMN_TYPE'], $matches)) {
-                        $length = $matches[1];
-                    } else {
-                        $length = $_declaration['NUMERIC_PRECISION'] + 1;
-                    }
+                    $length = null;
                     break;
 
                 case('decimal'):

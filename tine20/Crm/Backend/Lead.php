@@ -38,7 +38,14 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-        
+
+    /**
+     * default column(s) for count
+     *
+     * @var string
+     */
+    protected $_defaultCountCol = 'id';
+
     /**
      * getGroupCountForField
      * 
@@ -96,5 +103,5 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
         }
         
         return $select;
-    }    
+    }
 }

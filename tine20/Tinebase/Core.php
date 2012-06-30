@@ -111,7 +111,7 @@ class Tinebase_Core
      *
      */
     const PDO_MYSQL = 'Pdo_Mysql';
-    
+
     /**
      * minimal version of MySQL supported
      */
@@ -140,6 +140,11 @@ class Tinebase_Core
      *
      */
     const ORACLE = 'Oracle';
+    
+    /**
+     * minimal version of Oracle supported
+     */
+    const ORACLE_MINIMAL_VERSION = '9.0.0';
 
     /******************************* DISPATCH *********************************/
 

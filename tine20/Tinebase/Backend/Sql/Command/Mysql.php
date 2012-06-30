@@ -19,7 +19,7 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
 {
     /**
      * setAutocommit
-     * 
+     *
      * @param Zend_Db_Adapter_Abstract $adapter
      * @param boolean $on
      */
@@ -30,5 +30,79 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
         } else {
             $adapter->query('SET AUTOCOMMIT=0;');
         }
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param string $field
+     * @return string
+     */
+    public static function getAggregateFunction($adapter, $field)
+    {
+        return "GROUP_CONCAT( DISTINCT $field)";
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param string $field
+     * @param mixed $returnIfTrue
+     * @param mixed $returnIfFalse
+     */
+    public static function getIfIsNull($adapter, $field, $returnIfTrue, $returnIfFalse)
+    {
+        return "CASE WHEN $field IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END";
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param string $date
+     * @return string
+     */
+    public static function setDate($adapter, $date)
+    {
+        return "DATE({$date})";
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param string $value
+     * @return string
+     */
+    public static function setDateValue($adapter, $value)
+    {
+        return $value;
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @return mixed
+     */
+    public static function getFalseValue($adapter = null)
+    {
+        return 'FALSE';
+    }
+
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @return mixed
+     */
+    public static function getTrueValue($adapter = null)
+    {
+        return 'TRUE';
+    }
+
+    /**
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @return string
+     */
+    public static function setDatabaseJokerCharacters($adapter)
+    {
+        return array('%', '\_');
     }
 }

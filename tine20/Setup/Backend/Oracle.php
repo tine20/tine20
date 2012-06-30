@@ -134,7 +134,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     public function getIncrementTrigger($_tableName) 
     {
-        $statement = 'CREATE TRIGGER ' . $this->_db->quoteIdentifier($this->_getIncrementTriggerName($_tableName)) . '
+        $statement = 'CREATE OR REPLACE TRIGGER ' . $this->_db->quoteIdentifier($this->_getIncrementTriggerName($_tableName)) . '
             BEFORE INSERT ON "' .  SQL_TABLE_PREFIX . $_tableName . '"
             FOR EACH ROW
             BEGIN
@@ -430,7 +430,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     protected function _addDeclarationUnsigned(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field)
     {
         if (isset($_field->unsigned) && $_field->unsigned === true) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $_field has property unsgined set which is currently not supported by oracle adapter; unsigned property is ignored.');
+            //Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $_field has property unsgined set which is currently not supported by oracle adapter; unsigned property is ignored.');
         }
         return $_buffer;
     }

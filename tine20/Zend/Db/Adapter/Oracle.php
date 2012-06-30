@@ -103,6 +103,11 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected $_lobAsString = null;
 
     /**
+     * @var boolean
+     */
+    protected $_transactionOpen = null;
+
+    /**
      * Creates a connection resource.
      *
      * @return void
@@ -128,7 +133,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         $this->_connection = @$connectionFuncName(
                 $this->_config['username'],
                 $this->_config['password'],
-                $this->_config['dbname'],
+                $this->_config['host'].'/'.$this->_config['dbname'],
                 $this->_config['charset']);
 
         // check the connection
@@ -300,9 +305,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     {
         if ($tableName !== null) {
             $sequenceName = $tableName;
-            if ($primaryKey) {
-                $sequenceName .= "_$primaryKey";
-            }
+            $sequenceName = substr($sequenceName,0,22);
             $sequenceName .= '_seq';
             return $this->lastSequenceId($sequenceName);
         }
@@ -457,6 +460,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected function _beginTransaction()
     {
         $this->_setExecuteMode(OCI_DEFAULT);
+        $this->_transactionOpen = true;
     }
 
     /**
@@ -467,6 +471,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      */
     protected function _commit()
     {
+        $this->_transactionOpen = false;
+        
         if (!oci_commit($this->_connection)) {
             /**
              * @see Zend_Db_Adapter_Oracle_Exception
@@ -485,6 +491,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      */
     protected function _rollBack()
     {
+        $this->_transactionOpen = false;
+        
         if (!oci_rollback($this->_connection)) {
             /**
              * @see Zend_Db_Adapter_Oracle_Exception
@@ -604,6 +612,16 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function _getExecuteMode()
     {
         return $this->_execute_mode;
+    }
+
+    /**
+     * Identifies whether the adapter has an open transaction
+     *
+     * @return boolean
+     */
+    protected function _hasOpenTransaction()
+    {
+        return $this->_transactionOpen;
     }
 
     /**
