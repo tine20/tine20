@@ -206,6 +206,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
     
     initVIEW: function() {
         return new Ext.grid.GridView(Ext.apply({}, this.viewConfig, {
+            grid: this,
             forceFit: true,
             
             getPeriod: function() {
