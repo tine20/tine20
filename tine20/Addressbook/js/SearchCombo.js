@@ -59,7 +59,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     allowBlank: false,
     
     itemSelector: 'div.search-item',
-    minListWidth: 200,
+    minListWidth: 350,
     
     //private
     initComponent: function(){
