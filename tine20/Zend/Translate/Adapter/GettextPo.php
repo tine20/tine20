@@ -81,7 +81,10 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
             throw new Zend_Translate_Exception('Error opening translation file \'' . $filename . '\'.');
         }
         //Writes Header into _adapterInfo
-        while (($line = fgets($this->_file)) != "\n") {
+        while ($line = fgets($this->_file)) {
+            if ($line == "\n" || $line == "\r\n") {
+                break;
+             }
             if (strpos($line, '"')=== 0){
                 $header = $header . "\n" . substr($line, 1, -4);
             }
