@@ -31,6 +31,7 @@ class Setup_Server_Http implements Tinebase_Server_Interface
 
         $server = new Tinebase_Http_Server();
         $server->setClass('Setup_Frontend_Http', 'Setup');
+        $server->setClass('Tinebase_Frontend_Http', 'Tinebase'); // needed for fetching translation in DEVELOPMENT mode
         
         if (empty($_REQUEST['method'])) {
             $_REQUEST['method'] = 'Setup.mainScreen';
