@@ -1057,7 +1057,11 @@ class Setup_Controller
 
         $result = array();
         foreach ($configs as $config) {
-            $result[$config] = Tinebase_Config::getInstance()->get($config, 0);
+            try {
+                $result[$config] = Tinebase_Config::getInstance()->get($config, 0);
+            } catch (Exception $e) {
+                $result[$config] = 0;
+            }
         }
         
         return $result;
