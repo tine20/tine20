@@ -76,11 +76,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     private static $_instance = NULL;
     
     /**
-     * @var Tinebase_Model_User
-     */
-    protected $_currentAccount = NULL;
-    
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -90,7 +85,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
-        $this->_currentAccount  = Tinebase_Core::getUser();
     }
 
     /**
@@ -200,7 +194,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // send notifications
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($createdEvent, $this->_currentAccount, 'created');
+            $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
         }
         
         return $createdEvent;
@@ -437,13 +431,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-                        
+                $this->_inspectEvent($_record);
+               
                 if ($_checkBusyConflicts) {
                     // only do free/busy check if start/endtime changed  or attendee added or rrule changed
-                    if (   ! $event->dtstart->equals($_record->dtstart) || 
-                           ! $event->dtend->equals($_record->dtend) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 || 
-                           $event->rrule != $_record->rrule // attendee add
+                    if ($event->isRescheduled($_record) ||
+                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 // attendee add
                        ) {
                         
                         // ensure that all attendee are free
@@ -451,7 +444,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $this->_inspectEvent($_record);
                 parent::update($_record);
                 $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
@@ -476,7 +468,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         $this->sendNotifications($sendNotifications);
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         return $updatedEvent;
     }
@@ -615,6 +607,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
         
+        // only allow creation if recur instance if clone of base event
+        if ($baseEvent->last_modified_time != $_event->last_modified_time) {
+            throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
+        }
         // check if this is an exception to the first occurence
         if ($baseEvent->getId() == $_event->getId()) {
             if ($_allFollowing) {
@@ -840,7 +836,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 $_event->created_by = $baseEvent->created_by;
                 
-                $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction, $originalEvent);
+                $this->doSendNotifications($notificationEvent, Tinebase_Core::getUser(), $notificationAction, $originalEvent);
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
@@ -1090,6 +1086,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_record->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $ownAttendee ? array($ownAttendee) : array());
         }
         
+        if ($_record->is_all_day_event) {
+            // harmonize dtend of all day events
+            $_record->dtend->addSecond($_record->dtend->get('s') == 0 ? 59 : 0);
+            $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
+        }
         $_record->setRruleUntil();
     }
     
@@ -1109,15 +1110,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $exceptionIds = $this->getRecurExceptions($event)->getId();
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
-            }
-            
-            // deleted persistent recur instances must be added to exdate of the baseEvent
-            if (! empty($event->recurid)) {
-                try {
-                    $this->createRecurException($event, true);
-                } catch (Tinebase_Exception_NotFound $e) {
-                    // base event gone, do nothing
-                }
             }
         }
         
@@ -1177,7 +1169,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (    !$this->_doContainerACLChecks 
             // admin grant includes all others
-            ||  ($_record->container_id && $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
+            ||  ($_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
             return TRUE;
         }
 
@@ -1190,7 +1182,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 break;
             case 'create':
-                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
                 $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
@@ -1430,7 +1422,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // send notifications
         if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
             $updatedEvent = $this->get($event->getId());
-            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         
         return $updatedAttender;
@@ -1692,7 +1684,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        $this->doSendNotifications($event, $this->_currentAccount, 'alarm');
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm');
     }
     
     /**

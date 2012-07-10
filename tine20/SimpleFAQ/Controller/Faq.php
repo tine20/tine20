@@ -27,7 +27,6 @@ class SimpleFAQ_Controller_Faq extends Tinebase_Controller_Record_Abstract
         $this->_applicationName = 'SimpleFAQ';
         $this->_backend = new SimpleFAQ_Backend_Faq();
         $this->_modelName = 'SimpleFAQ_Model_Faq';
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_doContainerACLChecks = TRUE;
     }

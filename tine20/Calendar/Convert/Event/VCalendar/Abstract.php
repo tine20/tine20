@@ -327,8 +327,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // add alarms only if current user attends to this event
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
-        if ($ownAttendee && $event->alarms) {
-            
+        if ($ownAttendee && $ownAttendee->status != Calendar_Model_Attender::STATUS_DECLINED && $event->alarms) {
             
             if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
                 $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');

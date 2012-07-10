@@ -21,12 +21,10 @@ msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:73
 #, python-format
 msgid "%s's personal example records"
 msgstr "Osobní ukázkové záznamy uživatele %s"
@@ -110,41 +108,41 @@ msgstr ""
 msgid "ExampleApplication"
 msgstr "Ukázková aplikace"
 
-msgid "Example Application"
-msgstr "Ukázková aplikace"
+#~ msgid "Example Application"
+#~ msgstr "Ukázková aplikace"
 
-msgid "ExampleRecords"
-msgstr "Ukázkové záznamy"
+#~ msgid "ExampleRecords"
+#~ msgstr "Ukázkové záznamy"
 
-msgid "All ExampleRecords"
-msgstr "Všechny ukázkové záznamy"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Všechny ukázkové záznamy"
 
-msgid "Unit"
-msgstr "Jednotka"
+#~ msgid "Unit"
+#~ msgstr "Jednotka"
 
-msgid "Unit Price"
-msgstr "Jednotková cena"
+#~ msgid "Unit Price"
+#~ msgstr "Jednotková cena"
 
-msgid "Timesheets are billable"
-msgstr "Pracovní výkazy lze účtovat"
+#~ msgid "Timesheets are billable"
+#~ msgstr "Pracovní výkazy lze účtovat"
 
-msgid "closed"
-msgstr "uzavřený"
+#~ msgid "closed"
+#~ msgstr "uzavřený"
 
-msgid "open"
-msgstr "otevřený"
+#~ msgid "open"
+#~ msgstr "otevřený"
 
-msgid "Billed"
-msgstr "Účtovaný"
+#~ msgid "Billed"
+#~ msgstr "Účtovaný"
 
-msgid "not yet billed"
-msgstr "zatím neúčtovaný"
+#~ msgid "not yet billed"
+#~ msgstr "zatím neúčtovaný"
 
-msgid "to bill"
-msgstr "k účtování"
+#~ msgid "to bill"
+#~ msgstr "k účtování"
 
-msgid "billed"
-msgstr "účtovaný"
+#~ msgid "billed"
+#~ msgstr "účtovaný"
 
-msgid "Description"
-msgstr "Popis"
+#~ msgid "Description"
+#~ msgstr "Popis"

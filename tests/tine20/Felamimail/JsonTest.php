@@ -725,6 +725,53 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
         $this->assertTrue(! empty($sentMessage));
     }
+
+    /**
+     * test reply mail with long references header
+     * 
+     * @see 0006644: "At least one mail header line is too long"
+     */
+    public function testReplyMessageWithLongHeader()
+    {
+        $messageInSent = $this->_sendMessage($this->_account->sent_folder, array(
+            'references' => '<c95d8187-2c71-437e-adb8-5e1dcdbdc507@email.test.org>
+   <2601bbfa-566e-4490-a3db-aad005733d32@email.test.org>
+   <20120530154350.1854610131@ganymed.de>
+   <7e393ce1-d193-44fc-bf5f-30c61a271fe6@email.test.org>
+   <4FC8B49C.8040704@funk.de>
+   <dba2ad5c-6726-4171-8710-984847c010a1@email.test.org>
+   <20120601123551.5E98610131@ganymed.de>
+   <f1cc3195-8641-46e3-8f20-f60f3e16b107@email.test.org>
+   <20120619093658.37E4210131@ganymed.de>
+   <CA+6Rn2PX2Q3tOk2tCQfCjcaC8zYS5XZX327OoyJfUb+w87vCLQ@mail.net.com>
+   <20120619130652.03DD310131@ganymed.de>
+   <37616c6a-4c47-4b54-9ca6-56875bc9205d@email.test.org>
+   <20120620074843.42E2010131@ganymed.de>
+   <CA+6Rn2MAb2x0qeSfcaW6F=0S7LEQL442Sx2ha9RtwMs4B0esBg@mail.net.com>
+   <20120620092902.88C8C10131@ganymed.de>
+   <c95d8187-2c71-437e-adb8-5e1dcdbdc507@email.test.org>
+   <2601bbfa-566e-4490-a3db-aad005733d32@email.test.org>
+   <20120530154350.1854610131@ganymed.de>
+   <7e393ce1-d193-44fc-bf5f-30c61a271fe6@email.test.org>
+   <4FC8B49C.8040704@funk.de>
+   <dba2ad5c-6726-4171-8710-984847c010a1@email.test.org>
+   <20120601123551.5E98610131@ganymed.de>
+   <f1cc3195-8641-46e3-8f20-f60f3e16b107@email.test.org>
+   <20120619093658.37E4210131@ganymed.de>
+   <CA+6Rn2PX2Q3tOk2tCQfCjcaC8zYS5XZX327OoyJfUb+w87vCLQ@mail.net.com>
+   <20120619130652.03DD310131@ganymed.de>
+   <37616c6a-4c47-4b54-9ca6-56875bc9205d@email.test.org>
+   <20120620074843.42E2010131@ganymed.de>
+   <CA+6Rn2MAb2x0qeSfcaW6F=0S7LEQL442Sx2ha9RtwMs4B0esBg@mail.net.com>
+   <20120620092902.88C8C10131@ganymed.de>'
+        ));
+        $replyMessage = $this->_getReply($messageInSent);
+        $returned = $this->_json->saveMessage($replyMessage);
+        
+        $result = $this->_getMessages();
+        $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
+        $this->assertTrue(! empty($sentMessage));
+    }
     
     /**
      * test move
@@ -898,6 +945,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testRemoveRules
+     * 
+     * @see 0006490: can not delete single filter rule
+     */
+    public function testRemoveRules()
+    {
+        $this->testGetSetRules();
+        $this->_json->saveRules($this->_account->getId(), array());
+        
+        $result = $this->_json->getRules($this->_account->getId());
+        $this->assertEquals(0, $result['totalcount'], 'found rules: ' . print_r($result, TRUE));
+    }
+    
+    /**
      * get sieve rule data
      * 
      * @return array
@@ -1037,16 +1098,19 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * send message and return message array
      *
+     * @param string $folderName
+     * @param array $addtionalHeaders
      * @return array
      */
-    protected function _sendMessage($_folderName = 'INBOX')
+    protected function _sendMessage($folderName = 'INBOX', $addtionalHeaders = array())
     {
         $messageToSend = $this->_getMessageData();
+        $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         
         //sleep(10);
-        $result = $this->_getMessages($_folderName);
+        $result = $this->_getMessages($folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
         
         $this->assertTrue(! empty($message), 'Sent message not found.');

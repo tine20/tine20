@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_TransactionManagerTest::main');
-}
 
 class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -88,7 +84,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
      * tests transaction ids
      *
      */
-    public function testUniqeTransactionIds()
+    public function testUniqueTransactionIds()
     {
         $db = Zend_Registry::get('dbAdapter');
         
@@ -104,12 +100,11 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     
     /**
      * test transaction exception on non transactionable
-     * 
      */
     public function testNonTransactionable()
     {
         $date = Tinebase_DateTime::now();
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
         $this->_instance->startTransaction($date);
     }
     
@@ -145,8 +140,4 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals($transactionId, $column['Column1'], 'RollBack failed, data was inserted anyway');
         }
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_TransactionManagerTest::main') {
-    AllTests::main();
 }

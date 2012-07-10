@@ -87,6 +87,10 @@ Tine.Timetracker.Model.Timesheet.getFilterModel = function() {
         {label: app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},
         {label: app.i18n._('Billable'),     field: 'is_billable_combined', valueType: 'bool', defaultValue: true },
         {label: app.i18n._('Cleared'),      field: 'is_cleared_combined',  valueType: 'bool', defaultValue: false },
+        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'timetracker.timeaccount'}
     ];
@@ -157,8 +161,11 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: app.i18n._('Number'),       field: 'number'       },
         {label: app.i18n._('Title'),        field: 'title'        },
         {label: app.i18n._('Description'),  field: 'description', operators: ['contains']},
-        {label: app.i18n._('Created By'),   field: 'created_by',  valueType: 'user'},
         {label: app.i18n._('Status'),       field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {label: app.i18n._('Booking deadline'), field: 'deadline'},
         {filtertype: 'tinebase.tag', app: app}
     ];

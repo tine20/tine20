@@ -1,19 +1,19 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Admin\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:02+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:52+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Catalan\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
@@ -30,9 +30,7 @@ msgstr "gestiona comptes"
 
 #: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"afegeix i edita usuaris i grups, afegeix membres a un grup, canvia "
-"contrasenyes d'usuaris"
+msgstr "afegeix i edita usuaris i grups, afegeix membres a un grup, canvia contrasenyes d'usuaris"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -40,19 +38,15 @@ msgstr "gestiona aplicacions"
 
 #: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
-msgstr ""
-"habilita i inhabilita aplicacions, edita els paràmetres d'una aplicació"
+msgstr "habilita i inhabilita aplicacions, edita els paràmetres d'una aplicació"
 
 #: Acl/Rights.php:197
 msgid "manage roles"
 msgstr "gestiona rols"
 
 #: Acl/Rights.php:198
-msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"afegeix i edita rols, afegeix nous membres a un rol, associa permisos "
-"d'aplicació a un rol"
+msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgstr "afegeix i edita rols, afegeix nous membres a un rol, associa permisos d'aplicació a un rol"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -126,11 +120,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:199
+#: Controller/Container.php:198
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:200
+#: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -166,14 +160,14 @@ msgstr ""
 msgid "Session ID"
 msgstr "Identificador de sessió"
 
-#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+#: js/AccessLog.js:130 js/user/EditDialog.js:767 js/user/EditDialog.js:810
 msgid "Login Name"
 msgstr "Nom d'usuari d'inici de sessió"
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
-#: js/customfield/EditDialog.js:595 js/customfield/GridPanel.js:72
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:325
 msgid "Name"
 msgstr "Nom"
 
@@ -251,7 +245,7 @@ msgstr ""
 
 #: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
 #: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/customfield/GridPanel.js:74
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
@@ -278,11 +272,11 @@ msgstr "paràmetres"
 msgid "Search:"
 msgstr "Cerca:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:836
+#: js/Applications.js:226 js/user/EditDialog.js:840
 msgid "disabled"
 msgstr "inhabilitat"
 
-#: js/Applications.js:229 js/user/EditDialog.js:835
+#: js/Applications.js:229 js/user/EditDialog.js:839
 msgid "enabled"
 msgstr "habilitat"
 
@@ -298,11 +292,11 @@ msgstr "Es mostren les aplicacions {0} - {1} de {2}"
 msgid "No applications to display"
 msgstr "Cap aplicació a mostrar"
 
-#: js/Applications.js:277 js/customfield/EditDialog.js:625
+#: js/Applications.js:277 js/customfield/EditDialog.js:626
 msgid "Order"
 msgstr "Ordre"
 
-#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+#: js/Applications.js:279 js/user/EditDialog.js:832 js/user/GridPanel.js:176
 msgid "Status"
 msgstr "Estat"
 
@@ -317,7 +311,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/container/EditDialog.js:144 js/container/GridPanel.js:73
-#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
 #: js/customfield/GridPanel.js:73
 msgid "Type"
 msgstr ""
@@ -399,81 +393,81 @@ msgstr ""
 msgid "Given record class not found"
 msgstr ""
 
-#: js/customfield/EditDialog.js:464
+#: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr ""
 
-#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:695
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: js/customfield/EditDialog.js:503
+#: js/customfield/EditDialog.js:504
 msgid "Configure store"
 msgstr ""
 
-#: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
+#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:75
 msgid "Model"
 msgstr ""
 
-#: js/customfield/EditDialog.js:560
+#: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
 msgstr ""
 
-#: js/customfield/EditDialog.js:571
+#: js/customfield/EditDialog.js:572
 msgid "Text"
 msgstr ""
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:573
 msgid "Number"
 msgstr ""
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:574
 msgid "Date"
 msgstr ""
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:575
 msgid "DateTime"
 msgstr ""
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:576
 msgid "Time"
 msgstr ""
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:577
 msgid "Boolean"
 msgstr ""
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:578
 msgid "Search Combo"
 msgstr ""
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:579
 msgid "Key Field"
 msgstr ""
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:580
 msgid "Record"
 msgstr ""
 
-#: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
 msgstr ""
 
-#: js/customfield/EditDialog.js:607
+#: js/customfield/EditDialog.js:608
 msgid "Length"
 msgstr ""
 
-#: js/customfield/EditDialog.js:615
+#: js/customfield/EditDialog.js:616
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:621 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/customfield/EditDialog.js:648
+#: js/customfield/EditDialog.js:649
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
@@ -483,7 +477,7 @@ msgid "Confirm"
 msgstr "Confirma"
 
 #: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
+msgid "Restart application to apply new customfields?"
 msgstr ""
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
@@ -517,19 +511,19 @@ msgstr "Nom del grup"
 msgid "Description"
 msgstr "Descripció"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:877
 msgid "Visibility"
 msgstr "Visibilitat"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Display in addressbook"
 msgstr "Mostra a la llibreta d'adreces"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Hide from addressbook"
 msgstr "Amaga a la llibreta d'adreces"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:897
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -731,245 +725,243 @@ msgstr "Cap etiqueta a mostrar"
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/user/EditDialog.js:187
+#: js/user/EditDialog.js:191
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
 
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:688
+#: js/user/EditDialog.js:238 js/user/EditDialog.js:241
+#: js/user/EditDialog.js:692
 msgid "Passwords do not match!"
 msgstr "Les contrasenyes no coincideixen!"
 
-#: js/user/EditDialog.js:240
+#: js/user/EditDialog.js:244
 msgid "Passwords match!"
 msgstr ""
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+#: js/user/EditDialog.js:290 js/user/EditDialog.js:815
 msgid "Primary group"
 msgstr "Grup primari"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:367
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:377
+#: js/user/EditDialog.js:381
 msgid "Home Directory"
 msgstr "Directori \"home\""
 
-#: js/user/EditDialog.js:381
+#: js/user/EditDialog.js:385
 msgid "Login Shell"
 msgstr "intèrpret d'ordres"
 
-#: js/user/EditDialog.js:387
+#: js/user/EditDialog.js:391
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:401
+#: js/user/EditDialog.js:405
 msgid "Home Drive"
 msgstr "Unitat \"home\""
 
-#: js/user/EditDialog.js:406
+#: js/user/EditDialog.js:410
 msgid "Logon Time"
 msgstr "Hora d'inici de sessió"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
-#: js/user/EditDialog.js:926
+#: js/user/EditDialog.js:412 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:930
 msgid "never logged in"
 msgstr "no ha iniciat sessió mai"
 
-#: js/user/EditDialog.js:411
+#: js/user/EditDialog.js:415
 msgid "Home Path"
 msgstr "Camí \"home\""
 
-#: js/user/EditDialog.js:416
+#: js/user/EditDialog.js:420
 msgid "Logoff Time"
 msgstr "Hora de finalització de sessió"
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:422
 msgid "never logged off"
 msgstr "no ha finalitzat la sessió mai"
 
-#: js/user/EditDialog.js:421
+#: js/user/EditDialog.js:425
 msgid "Profile Path"
 msgstr "Camí del perfil"
 
-#: js/user/EditDialog.js:426
+#: js/user/EditDialog.js:430
 msgid "Password Last Set"
 msgstr "Contrasenya establerta per darrera vegada"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
-#: js/user/EditDialog.js:930
+#: js/user/EditDialog.js:432 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:934
 msgid "never"
 msgstr "mai"
 
-#: js/user/EditDialog.js:431
+#: js/user/EditDialog.js:435
 msgid "Logon Script"
 msgstr "Script d'inici de sessió"
 
-#: js/user/EditDialog.js:436
+#: js/user/EditDialog.js:440
 msgid "Password Can Change"
 msgstr "La contrasenya pot canviar"
 
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:442 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:452
 msgid "not set"
 msgstr "no establerta"
 
-#: js/user/EditDialog.js:441
+#: js/user/EditDialog.js:445
 msgid "Password Must Change"
 msgstr "La contrasenya s'ha de canviar"
 
-#: js/user/EditDialog.js:446
+#: js/user/EditDialog.js:450
 msgid "Kick Off Time"
 msgstr "Hora d'expulsió"
 
-#: js/user/EditDialog.js:466
+#: js/user/EditDialog.js:470
 msgid "IMAP Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
 msgid "Quota"
 msgstr "Quota"
 
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+#: js/user/EditDialog.js:490 js/user/EditDialog.js:528
 msgid "no quota set"
 msgstr ""
 
-#: js/user/EditDialog.js:496
+#: js/user/EditDialog.js:500
 msgid "Current Mailbox size"
 msgstr ""
 
-#: js/user/EditDialog.js:504
+#: js/user/EditDialog.js:508
 msgid "Sieve Quota (MB)"
 msgstr "Quota tamís (MB)"
 
-#: js/user/EditDialog.js:534
+#: js/user/EditDialog.js:538
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+#: js/user/EditDialog.js:547 js/user/EditDialog.js:909
 msgid "Information"
 msgstr "Informació"
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:561
 msgid "Last Login"
 msgstr "Darrer inici de sessió"
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:602
 msgid "Email Alias"
 msgstr "Correu àlies"
 
-#: js/user/EditDialog.js:604
+#: js/user/EditDialog.js:608
 msgid "Add an alias address..."
 msgstr "Afegeix una adreça àlies..."
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:621
 msgid "Email Forward"
 msgstr "Correu electrònic per a reenviaments"
 
-#: js/user/EditDialog.js:623
+#: js/user/EditDialog.js:627
 msgid "Add a forward address..."
 msgstr "Afegeix una adreça de reenviament..."
 
-#: js/user/EditDialog.js:635
+#: js/user/EditDialog.js:639
 msgid "Forward Only"
 msgstr "Reenvia només"
 
-#: js/user/EditDialog.js:655
+#: js/user/EditDialog.js:659
 msgid "Password confirmation"
 msgstr "Confirmació de contrasenya"
 
-#: js/user/EditDialog.js:672
+#: js/user/EditDialog.js:676
 msgid "Repeat password"
 msgstr "Repetiu la contrasenya"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:702
 msgid "Ok"
 msgstr "D'acord"
 
-#: js/user/EditDialog.js:733
+#: js/user/EditDialog.js:737
 msgid "Account"
 msgstr "Compte"
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:752
 msgid "First Name"
 msgstr "Nom"
 
-#: js/user/EditDialog.js:758
+#: js/user/EditDialog.js:762
 msgid "Last Name"
 msgstr "Cognom"
 
-#: js/user/EditDialog.js:768
+#: js/user/EditDialog.js:772
 msgid "Password"
 msgstr "Contrasenya"
 
-#: js/user/EditDialog.js:772
+#: js/user/EditDialog.js:776
 msgid "no password set"
 msgstr "no s'ha establert cap contrasenya"
 
-#: js/user/EditDialog.js:799
+#: js/user/EditDialog.js:803
 msgid "Emailaddress"
 msgstr "Adreça electrònica"
 
-#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+#: js/user/EditDialog.js:809 js/user/GridPanel.js:182
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:841
 msgid "expired"
 msgstr "caducat"
 
-#: js/user/EditDialog.js:838
+#: js/user/EditDialog.js:842
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:845
+#: js/user/EditDialog.js:849
 msgid "Invalid Status"
 msgstr ""
 
-#: js/user/EditDialog.js:846
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
+#: js/user/EditDialog.js:850
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
 msgstr ""
 
-#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:872 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Caduca"
 
-#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Darrer inici de sessió a"
 
-#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:926 js/user/EditDialog.js:930
 msgid "don't know"
 msgstr "no se sap"
 
-#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:928 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Darrer inici de sessió des de"
 
-#: js/user/EditDialog.js:928
+#: js/user/EditDialog.js:932
 msgid "Password set"
 msgstr "S'ha establert contrasenya"
 
-#: js/user/EditDialog.js:935
+#: js/user/EditDialog.js:939
 msgid "User groups"
 msgstr ""
 
-#: js/user/EditDialog.js:941
+#: js/user/EditDialog.js:945
 msgid "User roles"
 msgstr ""
 
-#: js/user/EditDialog.js:947
+#: js/user/EditDialog.js:951
 msgid "Fileserver"
 msgstr "Servidor de fitxers"
 
-#: js/user/EditDialog.js:953
+#: js/user/EditDialog.js:957
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:962
+#: js/user/EditDialog.js:966
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -1032,59 +1024,3 @@ msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Usuari de correu electrònic"
 msgstr[1] "Usuaris de correu electrònic"
-
-msgid "Quota (MB)"
-msgstr "Quota (MB)"
-
-msgid "Current Mail Size"
-msgstr "Mida actual del correu"
-
-msgid "Sieve Quota"
-msgstr "Quota tamís"
-
-msgid "Sieve Size"
-msgstr "Mida del tamís"
-
-msgid "Aliases"
-msgstr "Àlies"
-
-msgid "Forwards"
-msgstr "Reenviaments"
-
-msgid "Transfering {0}..."
-msgstr "Transferint {0}..."
-
-msgid "Loading Tag..."
-msgstr "Carregant etiqueta..."
-
-msgid "Please Wait"
-msgstr "Espereu"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr ""
-"Esteu segur que voleu eliminar les entrades del registre d'accessos "
-"seleccionades?"
-
-msgid "delete entry"
-msgstr "elimina entrada"
-
-msgid "select all"
-msgstr "elimina-ho tot"
-
-msgid "Display from:"
-msgstr "Mostra des de:"
-
-msgid "to:"
-msgstr "fins a:"
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Es mostren les entrades del registre d'accessos {0} - {1} de {2}"
-
-msgid "No access log entries to display"
-msgstr "Cap entrada del registre d'accessos a mostrar"
-
-msgid "Account ID"
-msgstr "Identificador de compte"
-
-msgid "Loading Role..."
-msgstr "Carregant el rol..."

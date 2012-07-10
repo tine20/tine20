@@ -75,7 +75,6 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() {
         $this->_backend         = new Tinebase_PersistentFilter_Backend_Sql();
-        $this->_currentAccount  = Tinebase_Core::getUser();
     }
 
     /**
@@ -186,9 +185,9 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     protected function _sanitizeAccountId($_record)
     {
-        if ((! $_record->account_id || $_record->account_id !== $this->_currentAccount->getId())
+        if ((! $_record->account_id || $_record->account_id !== Tinebase_Core::getUser()->getId())
             && ! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
-            $_record->account_id = $this->_currentAccount->getId();
+            $_record->account_id = Tinebase_Core::getUser()->getId();
         }
     }
     

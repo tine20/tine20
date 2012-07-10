@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 #   <mail@corneliusweiss.de>, 2012.
 msgid ""
@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 14:39+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -53,17 +53,17 @@ msgstr "Entwurf"
 msgid "Flagged"
 msgstr "Markiert"
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Betreff"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "Nachricht"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
 
@@ -71,7 +71,7 @@ msgstr "Abwesenheitsnotiz von %1$s"
 msgid "Signature"
 msgstr "Signatur"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
@@ -291,9 +291,7 @@ msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
 
 #: js/Felamimail.js:821
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
 
 #: js/Felamimail.js:850
@@ -321,7 +319,7 @@ msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
@@ -409,7 +407,7 @@ msgstr "Löschen"
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Druckvorschau"
@@ -442,7 +440,7 @@ msgstr "Absender"
 msgid "To"
 msgstr "An"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -462,15 +460,15 @@ msgstr "Weitergeleitet"
 msgid "Recent"
 msgstr "Neu"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr "Ihre Quota"
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr "{0} verfügbar (insgesamt: {1})"
 
@@ -499,9 +497,7 @@ msgid "Save Email Note"
 msgstr "E-Mailnotiz anlegen"
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr "Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
 
 #: js/MessageEditDialog.js:192
@@ -586,79 +582,79 @@ msgstr "Kopie"
 msgid "Bcc"
 msgstr "Blindkopie"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "E-Mail Konten"
 msgstr[1] "E-Mail-Konten"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr "Posteingang"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr "Entwürfe"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr "Unerwünschtes"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr "Mülleimer"
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Nachrichtenliste"
 msgstr[1] "Nachrichtenlisten"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Abwesenheitsnotiz"
 msgstr[1] "Abwesenheitsnotizen"
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regeln"
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flag"
 msgstr[1] "Flags"
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flag-Liste"
 msgstr[1] "Flag-Listen"
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr "Hier klicken um An/CC/BCC zu setzen"
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "An:"
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -918,9 +914,7 @@ msgid "Email Update Interval"
 msgstr "E-Mail Aktualisierungsintervall"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
 msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll. \"0\" heisst nie."
 
 #: Preference.php:114

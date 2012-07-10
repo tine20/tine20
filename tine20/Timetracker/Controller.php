@@ -31,7 +31,6 @@ class Timetracker_Controller extends Tinebase_Controller_Abstract
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

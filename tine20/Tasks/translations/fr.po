@@ -1,23 +1,20 @@
+#
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tasks\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:03+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-04-02 13:57+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: FRANCE\n"
-"X-Poedit-Language: French\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: ../../../tine20-src/\n"
-"X-Poedit-KeywordsList: _\n"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
@@ -40,9 +37,7 @@ msgid "Tasks status available"
 msgstr ""
 
 #: Config.php:40
-msgid ""
-"Possible tasks status. Please note that additional attendee status might "
-"impact other Tasks systems on export or syncronisation."
+msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:48
@@ -50,16 +45,14 @@ msgid "Task priorities available"
 msgstr ""
 
 #: Config.php:50
-msgid ""
-"Possible task priorities. Please note that additional priorities might "
-"impact other Tasks systems on export or syncronisation."
+msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
-#: Controller/Task.php:165
+#: Controller/Task.php:164
 msgid "Notification for Task "
 msgstr "Notification "
 
-#: Controller.php:96
+#: Controller.php:95
 #, python-format
 msgid "%s's personal tasks"
 msgstr "Tâches personnelles de %s"
@@ -110,7 +103,7 @@ msgid "Creation Time"
 msgstr "Date de création"
 
 #: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:66
+#: Setup/Update/Release5.php:70
 msgid "Completed"
 msgstr "Terminé"
 
@@ -206,51 +199,51 @@ msgstr "Téléphone"
 msgid "Email"
 msgstr "Courriel"
 
-#: Preference.php:25
+#: Preference.php:24
 msgid "All my tasks"
 msgstr "Toutes mes tâches"
 
-#: Preference.php:67
+#: Preference.php:66
 msgid "Default Favorite"
 msgstr "Favoris par défaut"
 
-#: Preference.php:68
+#: Preference.php:67
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Le favori par défaut qui est chargé au démarrage des Tâches"
 
-#: Preference.php:71
+#: Preference.php:70
 msgid "Default Task List"
 msgstr "Liste par défaut des Tâches"
 
-#: Preference.php:72
+#: Preference.php:71
 msgid "The default task list to create new tasks in."
 msgstr "La liste de tâches par défaut où créer les nouvelles tâches"
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:65
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:69
 msgid "No response"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:71
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Initialize.php:37 Setup/Update/Release5.php:68
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:72
 msgid "In process"
 msgstr ""
 
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:158
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:162
 msgid "low"
 msgstr ""
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:159
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:163
 msgid "normal"
 msgstr ""
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:160
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:164
 msgid "high"
 msgstr ""
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:161
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:165
 msgid "urgent"
 msgstr ""
 
@@ -285,21 +278,3 @@ msgstr ""
 #: Setup/Initialize.php:126
 msgid "Tasks without responsible"
 msgstr ""
-
-msgid "NEEDS-ACTION"
-msgstr "ACTION-REQUISE"
-
-msgid "COMPLETED"
-msgstr "TERMINE"
-
-msgid "IN-PROCESS"
-msgstr "EN-COURS"
-
-msgid "CANCELLED"
-msgstr "ANNULE"
-
-msgid "Failed"
-msgstr "Échoué"
-
-msgid "Could not save task."
-msgstr "Erreur de sauvegarde."

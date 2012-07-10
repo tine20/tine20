@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,6 +17,11 @@
  */
 abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_SqlInterface
 {
+    /**
+    * @var Zend_Db_Adapter
+    */
+    protected $_db = NULL;
+    
     /**
      * inspect data used to create user
      * 
@@ -36,8 +41,8 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
-        if (!isset($_newUserProperties->imapUser)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No imap properties found!');
+        if (! isset($_newUserProperties->imapUser) && ! isset($_newUserProperties->smtpUser)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No email properties found!');
             return;
         }
         
@@ -71,6 +76,11 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         return $_userName;
     }
     
+    /**
+     * set database
+     * 
+     * @param array $_config
+     */
     protected function _getDb($_config)
     {
         $tine20DbConfig = Tinebase_Core::getDb()->getConfig();
@@ -83,6 +93,16 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         } else {
             $this->_db = Zend_Db::factory('Pdo_Mysql', $_config);
         }
+    }
+    
+    /**
+     * get database object
+     * 
+     * @return Zend_Db_Adapter
+     */
+    public function getDb()
+    {
+        return $this->_db;
     }
     
     /**
@@ -128,7 +148,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     abstract protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
     
     /**
-     * check if user exists already in dovecot user table
+     * check if user exists already in plugin user table
      * 
      * @param Tinebase_Model_FullUser $_user
      */

@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
@@ -7,10 +7,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 14:09+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -75,12 +75,12 @@ msgid "Description"
 msgstr "Beschreibung"
 
 #: js/Models.js:88 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:391
+#: js/TimesheetGridPanel.js:393
 msgid "Billable"
 msgstr "Abrechenbar"
 
 #: js/Models.js:89 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:396
+#: js/TimesheetGridPanel.js:398
 msgid "Cleared"
 msgstr "Abgerechnet"
 
@@ -245,15 +245,15 @@ msgid "Tags"
 msgstr "Tags"
 
 #: js/TimeaccountGridPanel.js:116 js/TimesheetGridPanel.js:109
-#: js/TimesheetGridPanel.js:401
+#: js/TimesheetGridPanel.js:403
 msgid "Cleared in"
 msgstr "Abgerechnet in"
 
-#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:326
+#: js/TimeaccountGridPanel.js:152 js/TimesheetGridPanel.js:328
 msgid "Export as ODS"
 msgstr "Als ODS exportieren"
 
-#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:333
+#: js/TimeaccountGridPanel.js:159 js/TimesheetGridPanel.js:335
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
@@ -333,19 +333,19 @@ msgstr "Gesamtzeit abrechenbarer Stundenzettel"
 msgid "Detail"
 msgstr "Detail"
 
-#: js/TimesheetGridPanel.js:317
+#: js/TimesheetGridPanel.js:319
 msgid "Export Timesheets"
 msgstr "Stundenzettel exportieren"
 
-#: js/TimesheetGridPanel.js:340
+#: js/TimesheetGridPanel.js:342
 msgid "Export as ..."
 msgstr "Als ... exportieren"
 
-#: js/TimesheetGridPanel.js:383
+#: js/TimesheetGridPanel.js:385
 msgid "Mass Update"
 msgstr "Massenaktualisierung"
 
-#: js/TimesheetGridPanel.js:389
+#: js/TimesheetGridPanel.js:391
 msgid "Update field:"
 msgstr "Feld aktualisieren:"
 

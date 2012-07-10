@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,9 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_AllTests::main');
-}
 
 class Tinebase_User_AllTests
 {
@@ -37,8 +34,4 @@ class Tinebase_User_AllTests
         $suite->addTestSuite('Tinebase_User_EmailUser_AllTests');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_AllTests::main') {
-    Tinebase_User_AllTests::main();
 }

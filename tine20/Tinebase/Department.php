@@ -63,8 +63,7 @@ class Tinebase_Department extends Tinebase_Controller_Record_Abstract
     private function __construct() 
     {
         $this->_backend = new Tinebase_Department_Sql();
-        $this->_currentAccount = Tinebase_Core::getUser();
-    }    
+    }
     
     /**
      * holds the instance of the singleton

@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Tamás Faragó <>, 2012.
 msgid ""
@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-03 17:48+0000\n"
 "Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -53,17 +53,17 @@ msgstr "Piszkozat"
 msgid "Flagged"
 msgstr "Zászlóval jelölt"
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Tárgy"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "Üzenet"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr "Házon kívül válasz érkezett: %1$s"
 
@@ -71,7 +71,7 @@ msgstr "Házon kívül válasz érkezett: %1$s"
 msgid "Signature"
 msgstr "Aláírás"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Fiók"
@@ -291,9 +291,7 @@ msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Az email belépési adataid rosszak. Lépj kapcsolatba a rendszergazdával."
 
 #: js/Felamimail.js:821
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr "Az egyik mappádat egy másik kliens törölte vagy átnevezte. Kérlek frissítsd a mappa listát."
 
 #: js/Felamimail.js:850
@@ -321,7 +319,7 @@ msgid "Could not save script on Sieve server."
 msgstr "Nem menthető  script a Sieve szerveren."
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
@@ -409,7 +407,7 @@ msgstr "Törlés"
 msgid "Add Account"
 msgstr "Fiók hozzáadása"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Nyomtatási nézet"
@@ -442,7 +440,7 @@ msgstr "Küldő"
 msgid "To"
 msgstr "Címzett"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Elküldött"
 
@@ -462,15 +460,15 @@ msgstr "Továbbított"
 msgid "Recent"
 msgstr "Legújabb"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr "Kvótád"
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr "{0} elérhető (összesen: {1})"
 
@@ -499,9 +497,7 @@ msgid "Save Email Note"
 msgstr "Email Megjegyzésként mentése"
 
 #: js/MessageEditDialog.js:174
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr "Aktiváld ezt a kapcsoló gombot, hogy az üzenet szövegét megjegyzésként mellékelje a címzett(ek) kapcsolatá(ai)hoz."
 
 #: js/MessageEditDialog.js:192
@@ -586,79 +582,79 @@ msgstr "Másolat"
 msgid "Bcc"
 msgstr "Titkos másolat"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "Email fiókok"
 msgstr[1] "Email fiókok"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr "BEJÖVŐ ÜZENTEK"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr "Piszkozatok"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr "Sablonok"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr "Szemét"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr "Törölt elemek"
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "adat lista"
 msgstr[1] "adat listák"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Szabadság"
 msgstr[1] "Szabadságok"
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Szabály"
 msgstr[1] "Szabályok"
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Zászló"
 msgstr[1] "Zászlók"
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Zászló lista"
 msgstr[1] "Zászló listák"
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr "Kattints ide a Címzett/Másolat/Titkos Másolat beállításához."
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "Címzett:"
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "Másolat:"
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "Titkos másolat:"
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr "Eltávolítás"
 
@@ -918,9 +914,7 @@ msgid "Email Update Interval"
 msgstr "Email frissítés intervalluma"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
 msgstr "Milyen gyakran keressen a Felamimail új emaileket (percben). \"0\" sohát jelent."
 
 #: Preference.php:114

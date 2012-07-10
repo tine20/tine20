@@ -46,7 +46,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
     /**
      * generate export
      * 
-     * @return string filename
+     * @return PHPExcel
      */
     public function generate()
     {

@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -42,6 +42,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'model'             => '',
         'shared_tags'       => 'create', //'onlyexisting',
         'autotags'          => array(),
+        'encodingTo'        => 'UTF-8',
     );
     
     /**
@@ -169,6 +170,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
         
+        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
+            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add convert stream filter: ' . $filter);
+            stream_filter_append($_resource, $filter);
+        }
+        
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
             
@@ -208,11 +216,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     
                     // just add autotags to record (if id is available)
                     if ($recordToImport->getId()) {
-                        $this->_addAutoTags($recordToImport);
-                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToImport);
+                        $record = call_user_func(array($this->_controller, 'get'), $recordToImport->getId());
+                        $this->_addAutoTags($record);
+                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
                     }
                 }
-                    
             } catch (Exception $e) {
                 $this->_handleImportException($e, $recordIndex, $recordToImport);
             }
@@ -296,10 +304,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $data = $_data;
         }
 
-        foreach ($data as $key => $value) {
-            $data[$key] = $this->_encode($value);
-        }
-                
         return $data;
     }
     
@@ -335,30 +339,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         return $data;
-    }
-    
-    /**
-     * encode values
-     * 
-     * @param string|array $_value
-     * @return string|array
-     */
-    protected function _encode($_value)
-    {
-        if (! isset($this->_options['encoding']) || ! isset($this->_options['encodingTo']) || $this->_options['encoding'] === $this->_options['encodingTo']) {
-            return $_value;
-        }
-        
-        if (is_array($_value)) {
-            $result = array();
-            foreach ($_value as $singleValue) {
-                $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
-            }
-        } else {
-            $result = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $_value);
-        }
-        
-        return $result;
     }
 
     /**
@@ -562,6 +542,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Trying to add ' . count($autotags) . ' autotag(s) to record.');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($autotags, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
         
         $tags = ($_record->tags instanceof Tinebase_Record_RecordSet) ? $_record->tags : new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($autotags as $tagData) {

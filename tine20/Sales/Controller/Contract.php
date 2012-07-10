@@ -27,7 +27,6 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Contract();
         $this->_modelName = 'Sales_Model_Contract';
-        $this->_currentAccount = Tinebase_Core::getUser();
     }    
     
     /**
@@ -78,7 +77,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
         
         // add number
         $numberBackend = new Sales_Backend_Number();
-        $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, $this->_currentAccount->getId());
+        $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, Tinebase_Core::getUser()->getId());
         $_record->number = $number->number;
         
         return parent::create($_record);

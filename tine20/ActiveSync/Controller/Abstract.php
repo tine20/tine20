@@ -165,7 +165,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
     public function getAllFolders()
     {
         // device supports multiple folders ?
-        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone'))) {
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook'))) {
         
             // get the folders the user has access to
             $allowedFolders = $this->_getSyncableFolders();

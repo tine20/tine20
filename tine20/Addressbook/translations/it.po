@@ -38,9 +38,7 @@ msgid "Contact duplicate check fields"
 msgstr ""
 
 #: Config.php:47
-msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Config.php:59
@@ -48,9 +46,7 @@ msgid "Contact salutations available"
 msgstr ""
 
 #: Config.php:61
-msgid ""
-"Possible contact salutations. Please note that additional values might "
-"impact other Addressbook systems on export or syncronisation."
+msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
 #: Config.php:69
@@ -61,7 +57,11 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller.php:97
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
@@ -171,11 +171,11 @@ msgstr ""
 msgid "Contact import from Google address book"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr ""
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
@@ -196,9 +196,7 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 #: js/Addressbook.js:22
@@ -249,7 +247,7 @@ msgstr ""
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
 #: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
 msgstr ""
 
@@ -648,11 +646,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
 msgid "Mr"
 msgstr ""
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
 msgid "Ms"
 msgstr ""
 

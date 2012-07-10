@@ -1,0 +1,17 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Mustermann;Max
+FN:Max Mustermann
+BDAY:1999-04-24
+ORG:Musterfrima
+TITLE:CEO
+TEL;TYPE=WORK,VOICE:04012345
+TEL;TYPE=HOME,VOICE:04054321
+ADR;TYPE=WORK:;;Musterstraße 1;Hamburg;;22767;Deutschland
+LABEL;TYPE=WORK:Musterstraße 1 \Hamburg, 22767 \Deutschland
+ADR;TYPE=HOME:;;Musterstraße 2;Hamburg;;22767;Deutschland
+LABEL;TYPE=HOME:Musterstraße 2 \Hamburg, 22767 \Deutschland
+EMAIL;TYPE=PREF,INTERNET:max@muster.de
+URL;WORK;PREF:http://www.example.com/
+REV:2008-04-24T19:52:43Z
+END:VCARD

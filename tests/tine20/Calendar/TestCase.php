@@ -133,9 +133,9 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      *
      * @return Calendar_Model_Event
      */
-    protected function _getEvent()
+    protected function _getEvent($_now=FALSE)
     {
-        return new Calendar_Model_Event(array(
+        $event = new Calendar_Model_Event(array(
             'summary'     => 'Wakeup',
             'dtstart'     => '2009-03-25 06:00:00',
             'dtend'       => '2009-03-25 06:15:00',
@@ -150,6 +150,13 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             Tinebase_Model_Grants::GRANT_DELETE  => true,
         ));
+        
+        if ($_now) {
+            $event->dtstart = Tinebase_DateTime::now();
+            $event->dtend = Tinebase_DateTime::now()->addMinute(15);
+        }
+        
+        return $event;
     }
 
     /**

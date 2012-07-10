@@ -123,8 +123,16 @@
      */
     public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
     {
+        // we only send notifications to attendee
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             return;
+        }
+        
+        // skip notifications to past events
+        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend )) {
+            if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
+                return;
+            }
         }
         
         // lets resolve attendee once as batch to fill cache
@@ -134,7 +142,9 @@
         switch ($_action) {
             case 'alarm':
                 foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
+                    if ($attender->status != Calendar_Model_Attender::STATUS_DECLINED) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
+                    }
                 }
                 break;
             case 'created':

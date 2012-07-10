@@ -33,7 +33,6 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
     }
 

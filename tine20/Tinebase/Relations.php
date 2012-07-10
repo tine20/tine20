@@ -95,17 +95,17 @@ class Tinebase_Relations
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
         
+        // break relations
+        foreach ($toDel as $relationId) {
+            $this->_backend->breakRelation($relationId);
+        }
+
         // add new relations
         foreach ($toAdd as $idx) {
             if(empty($relations[$idx]->related_id)) {
                 $this->_setAppRecord($relations[$idx]);
             }
             $this->_addRelation($relations[$idx]);
-        }
-        
-        // break relations
-        foreach ($toDel as $relationId) {
-            $this->_backend->breakRelation($relationId);
         }
         
         // update relations
@@ -239,9 +239,13 @@ class Tinebase_Relations
      */
     protected function _setAppRecord($_relation)
     {
+        if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
+            throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
+        }
+        
         $appController = Tinebase_Core::getApplicationInstance($_relation->related_model);
         
-        if (!$_relation->related_record->getId()) {
+        if (! $_relation->related_record->getId()) {
             $method = 'create';
         } else {
             $method = 'update';
@@ -304,9 +308,14 @@ class Tinebase_Relations
             } else {
                 try {
                     $appController = Tinebase_Core::getApplicationInstance($modelName);
-                    $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                    if (method_exists($appController, $getMultipleMethod)) {
+                        $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                    } else {
+                        throw Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
+                    }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
-                    // remove relations, user has no permission
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                        . ' Removing relations from result. Got exception: ' . $tea);
                     $_relations->removeRecords($relations);
                     continue;
                 }

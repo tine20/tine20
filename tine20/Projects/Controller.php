@@ -28,7 +28,6 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
      */
     private function __construct() {
         $this->_applicationName = 'Projects';
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**

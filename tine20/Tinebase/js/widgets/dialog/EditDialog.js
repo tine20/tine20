@@ -121,6 +121,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @property loadMask {Ext.LoadMask}
      */
     
+    /**
+     * If set, these fields are readOnly (when called dependent to related record)
+     * json-encoded Array of Object
+     * @type String
+     */
+    fixedFields: null,
+
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -220,8 +227,36 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.items = this.getFormItems();
         
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
+        // set fields readOnly if set
+        this.fixFields();
     },
-    
+
+    /**
+     * fix fields (used for preselecting form fields when called in dependency to another record)
+     * @return {Boolean}
+     */
+    fixFields: function() {
+        if(this.fixedFields) {
+            if(!this.rendered) {
+                this.fixFields.defer(100, this);
+                return false;
+            }
+            Ext.each(Ext.decode(this.fixedFields), function(prefill) {
+                var field = this.getForm().findField(prefill.key);
+                if(Ext.isFunction(this.recordClass.getField(prefill.key).type)) {
+                    var foreignRecordClass = this.recordClass.getField(prefill.key).type;
+                    var record = new foreignRecordClass(prefill.value);
+                    field.selectedRecord = record;
+                    field.setValue(prefill.value);
+                    field.fireEvent('select');
+                } else {
+                    field.setValue(prefill.value);
+                }
+                field.disable();
+            }, this);
+        }
+    },
+
     /**
      * init actions
      */

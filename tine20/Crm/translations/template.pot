@@ -37,126 +37,126 @@ msgstr ""
 msgid "Create or update shared leads favorites"
 msgstr ""
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:176
 msgid "State"
 msgstr ""
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:158 js/Contact.js:252
+#: Controller/Lead.php:177 js/AddToLeadPanel.js:158 js/Contact.js:252
 msgid "Role"
 msgstr ""
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:178
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:442
+#: Controller/Lead.php:179 Export/Pdf.php:93 js/LeadEditDialog.js:442
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr ""
 
-#: Controller/Lead.php:181
+#: Controller/Lead.php:180
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:273
+#: Controller/Lead.php:181 Export/Pdf.php:96 js/LeadEditDialog.js:273
 msgid "End"
 msgstr ""
 
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/GridPanel.js:130
+#: Controller/Lead.php:182 Export/Pdf.php:87 js/GridPanel.js:130
 #: js/Model.js:107
 msgid "Turnover"
 msgstr ""
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/GridPanel.js:129
+#: Controller/Lead.php:183 Export/Pdf.php:90 js/GridPanel.js:129
 #: js/LeadEditDialog.js:266 js/Model.js:106
 msgid "Probability"
 msgstr ""
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:184
 msgid "Folder"
 msgstr ""
 
-#: Controller/Lead.php:186
+#: Controller/Lead.php:185
 msgid "Updated by"
 msgstr ""
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:186
 msgid "Updated Fields:"
 msgstr ""
 
-#: Controller/Lead.php:188
+#: Controller/Lead.php:187
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr ""
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:193
 #, python-format
 msgid "Lead %s has been changed"
 msgstr ""
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:195
 #, python-format
 msgid "Lead %s has been created"
 msgstr ""
 
-#: Controller.php:112
+#: Controller.php:111
 #, python-format
 msgid "%s's personal leads"
 msgstr ""
 
-#: Controller.php:153 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: Controller.php:152 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
 #: js/GridPanel.js:127 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:488
 msgid "Customer"
 msgstr ""
 
-#: Controller.php:154 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: Controller.php:153 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 #: js/GridPanel.js:126 js/LeadGridDetailsPanel.js:45
 #: js/LeadGridDetailsPanel.js:471
 msgid "Partner"
 msgstr ""
 
-#: Controller.php:155
+#: Controller.php:154
 msgid "Reseller"
 msgstr ""
 
-#: Controller.php:158
+#: Controller.php:157
 msgid "open"
 msgstr ""
 
-#: Controller.php:159
+#: Controller.php:158
 msgid "contacted"
 msgstr ""
 
-#: Controller.php:160
+#: Controller.php:159
 msgid "waiting for feedback"
 msgstr ""
 
-#: Controller.php:161
+#: Controller.php:160
 msgid "quote sent"
 msgstr ""
 
-#: Controller.php:162
+#: Controller.php:161
 msgid "accepted"
 msgstr ""
 
-#: Controller.php:163
+#: Controller.php:162
 msgid "lost"
 msgstr ""
 
-#: Controller.php:166
+#: Controller.php:165
 msgid "Market"
 msgstr ""
 
-#: Controller.php:167 Export/Pdf.php:219
+#: Controller.php:166 Export/Pdf.php:219
 msgid "Email"
 msgstr ""
 
-#: Controller.php:168 Export/Pdf.php:218
+#: Controller.php:167 Export/Pdf.php:218
 msgid "Telephone"
 msgstr ""
 
-#: Controller.php:169
+#: Controller.php:168
 msgid "Website"
 msgstr ""
 

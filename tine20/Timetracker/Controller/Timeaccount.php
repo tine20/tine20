@@ -27,7 +27,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timeaccount();
         $this->_modelName = 'Timetracker_Model_Timeaccount';
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
     }
@@ -80,7 +79,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
         ));
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => $this->_currentAccount->getId(),
+            'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             Timetracker_Model_TimeaccountGrants::BOOK_OWN           => TRUE,
             Timetracker_Model_TimeaccountGrants::VIEW_ALL           => TRUE,

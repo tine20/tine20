@@ -747,6 +747,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptionBeforeDstBoundary = clone $recurSet[1]; // 28. 
         $persistentExceptionBeforeDstBoundary = $this->_controller->createRecurException($exceptionBeforeDstBoundary);
         
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
         $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
         
@@ -1029,9 +1031,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      *
      * @return Calendar_Model_Event
      */
-    protected function _getEvent()
+    protected function _getEvent($_now=FALSE)
     {
-        return new Calendar_Model_Event(array(
+        $event = new Calendar_Model_Event(array(
             'summary'     => 'Mittagspause',
             'dtstart'     => '2009-04-06 13:00:00',
             'dtend'       => '2009-04-06 13:30:00',
@@ -1040,6 +1042,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'container_id' => $this->_testCalendar->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,
         ));
+        
+        if ($_now) {
+            $event->dtstart = Tinebase_DateTime::now();
+            $event->dtend = Tinebase_DateTime::now()->addMinute(15);
+        }
+        
+        return $event;
     }
     
     /**

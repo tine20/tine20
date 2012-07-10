@@ -158,6 +158,7 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * @param {Object} records
      */
     updateAction: function(action, grants, records) {
-        action.setDisabled(this.getMailAddresses(this.getContactGridPanel().grid.getSelectionModel().getSelections()).length == 0);
+        var sm = this.getContactGridPanel().grid.getSelectionModel();
+        action.setDisabled(sm.isFilterSelect ? true : this.getMailAddresses(sm.getSelections()).length == 0);
     }
 });

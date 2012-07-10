@@ -30,7 +30,6 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
             'modelName' => $this->_modelName, 
             'tableName' => 'sales_products',
         ));
-        $this->_currentAccount          = Tinebase_Core::getUser();
         $this->_doContainerACLChecks    = FALSE;
     }    
     

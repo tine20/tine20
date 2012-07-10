@@ -27,7 +27,6 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Re
         $this->_applicationName = 'ExampleApplication';
         $this->_backend = new ExampleApplication_Backend_ExampleRecord();
         $this->_modelName = 'ExampleApplication_Model_ExampleRecord';
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;

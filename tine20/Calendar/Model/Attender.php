@@ -273,10 +273,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
-        // collect emails of new attendees
+        // collect emails of new attendees (skipping if no email present)
         $emailsOfNewAttendees = array();
         foreach ($_emails as $newAttendee) {
-            $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
+            if ($newAttendee['email']) {
+                $emailsOfNewAttendees[$newAttendee['email']] = $newAttendee;
+            }
         }
         
         // attendees to remove
@@ -311,17 +313,29 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
-                // does the email address exist?
+                // does a contact with this email address exist?
                 if ($contact = self::resolveEmailToContact($newAttendee, false)) {
                     $attendeeId = $contact->getId();
                     
+                }
+                
+                // does a resouce with this email address exist?
+                if ( ! $attendeeId) {
+                    $resources = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+                        array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
+                    )));
+                    
+                    if(count($resources) > 0) {
+                        $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+                        $attendeeId = $resources->getFirstRecord()->getId();
+                    }
+                }
                 // does a list with this name exist?
-                } else if (
+                if ( ! $attendeeId &&
                     isset($smtpConfig['primarydomain']) && 
                     preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain']) . '$/', $newAttendee['email'], $matches)
                 ) {
                     $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
-                        array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
                         array('field' => 'name', 'operator' => 'equals', 'value' => $matches['localName']),
                         array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
                     )));
@@ -333,9 +347,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
                         $attendeeId = $lists->getFirstRecord()->group_id;
                     }
-                    
-                // autocreate a contact if allowed
-                } else {
+                } 
+                
+                if (! $attendeeId) {
+                    // autocreate a contact if allowed
                     $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
                     if ($contact) {
                         $attendeeId = $contact->getId();
@@ -343,7 +358,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
             } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
-                    array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
                     array('field' => 'name', 'operator' => 'equals', 'value' => $newAttendee['displayName']),
                     array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
                 )));
@@ -395,7 +409,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
     }
     
-    /**
+   /**
     * check if contact with given email exists in addressbook and creates it if not
     *
     * @param  array $_attenderData array with email, firstname and lastname (if available)
@@ -411,11 +425,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
             array('condition' => 'OR', 'filters' => array(
                 array('field' => 'email',      'operator'  => 'equals', 'value' => $_attenderData['email']),
                 array('field' => 'email_home', 'operator'  => 'equals', 'value' => $_attenderData['email'])
             )),
+        )), new Tinebase_Model_Pagination(array(
+            'sort'    => 'type', // prefere user over contact
+            'dir'     => 'DESC',
+            'limit'   => 1
         )));
         
         if (count($contacts) > 0) {
@@ -459,6 +476,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             return;
         }
         $_attendee->addIndices(array('user_type'));
+        
+        // flatten user_ids (not groups for group/list handling bellow)
+        foreach($_attendee as $attendee) {
+            if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Abstract) {
+                $attendee->user_id = $attendee->user_id->getId();
+            }
+        }
         
         $groupAttendee = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         

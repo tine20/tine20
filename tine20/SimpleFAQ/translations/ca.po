@@ -17,39 +17,39 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:109
+#: Controller.php:108
 #, python-format
 msgid "%s's personal FAQs"
 msgstr ""
 
-#: Controller.php:148
+#: Controller.php:147
 msgid "Draft"
 msgstr ""
 
-#: Controller.php:149
+#: Controller.php:148
 msgid "released"
 msgstr ""
 
-#: Controller.php:150
+#: Controller.php:149
 msgid "obsolete"
 msgstr ""
 
-#: Controller.php:153
+#: Controller.php:152
 msgid "Internal"
 msgstr ""
 
-#: Controller.php:154
+#: Controller.php:153
 msgid "Public"
 msgstr ""
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
 #: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
 #: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -60,7 +60,7 @@ msgstr[1] ""
 msgid "Defaults"
 msgstr ""
 
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
 #: js/FaqGridPanel.js:120
 msgid "Question"
 msgstr ""
@@ -69,7 +69,7 @@ msgstr ""
 msgid "Enter a question..."
 msgstr ""
 
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:127
 msgid "Answer"
 msgstr ""
@@ -86,23 +86,23 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
 msgstr ""
 
-#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
+#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
 msgid "Tags"
 msgstr ""
 
-#: js/FaqGridDetailsPanel.js:195
+#: js/FaqGridDetailsPanel.js:189
 msgid "Creation Time"
 msgstr ""
 
-#: js/FaqGridDetailsPanel.js:200
+#: js/FaqGridDetailsPanel.js:194
 msgid "Created By"
 msgstr ""
 
-#: js/FaqGridDetailsPanel.js:232
+#: js/FaqGridDetailsPanel.js:226
 msgid "No answer yet"
 msgstr ""
 

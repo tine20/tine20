@@ -32,7 +32,6 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     private function __construct() 
     {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -85,7 +84,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 . ' Moved ' . $iterateResult['totalcount'] . ' message(s).');
             
             // @todo return all results?
-            $result = array_pop($iterateResult['results']);
+            $result = (! empty($iterateResult['results'])) ? array_pop($iterateResult['results']) : new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
             $messages = $this->_convertToRecordSet($_messages, TRUE);
             $result = $this->processMoveIteration($messages, $targetFolder);
@@ -236,7 +235,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      */
     protected function _moveMessagesToAnotherAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname . ' in account ' . $_targetFolder->account_id
         );
         

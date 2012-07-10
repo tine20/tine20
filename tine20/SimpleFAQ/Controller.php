@@ -36,7 +36,6 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
      */
     private function  __construct()
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'SimpleFAQ';
     }
 
@@ -121,6 +120,16 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
         return $container;
     }
 
+    /**
+     * delete all personal user folders and the contacts associated with these folders
+     *
+     * @param Tinebase_Model_User $_account the accountd object
+     * @todo implement and write test
+     */
+    public function deletePersonalFolder($_account)
+    {
+    }
+    
     /**
      * Returns settings for SimpleFAQ app
      * - result is cached

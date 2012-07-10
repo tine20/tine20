@@ -272,7 +272,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         switch ($_field) {
             case 'transp':
-                return $_value ? $_translation->_('Yes') : $_translation->_('No');
+                return $_value && $_value == Calendar_Model_Event::TRANSP_TRANSP ? $_translation->_('No') : $_translation->_('Yes');
             case 'organizer':
                 $organizer = $this->resolveOrganizer();
                 return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
@@ -363,6 +363,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->rrule_until = $rrule->until;
             }
         }
+        
+        if ($this->rrule_until && $this->rrule_until < $this->dtstart) {
+            throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
+        }
     }
     
     /**
@@ -381,7 +385,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'id', 
             'dtstart', 
             'dtend',
-            'is_all_day_event',
             'transp',
             'seq',
             'uid',
@@ -495,7 +498,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function isRescheduled($_event)
     {
         return $this->dtstart != $_event->dtstart
-            || $this->dtend != $_event->dtend
+            || (! $this->is_all_day_event && $this->dtend != $_event->dtend)
             || $this->rrule != $_event->rrule;
     }
     

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weisse@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_ImageHelperTest::main();
-}
 
 /**
  * Test class for Tinebase_ImageHelper
@@ -88,7 +84,7 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
     public function testGetImageInfoFromBlobException()
     {
         $rwongBlob = file_get_contents(__FILE__);
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
         Tinebase_ImageHelper::getImageInfoFromBlob($rwongBlob);
     }
     

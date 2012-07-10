@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -40,6 +40,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected $_testCalendar;
     
+   /**
+    * email test class
+    *
+    * @var Felamimail_Controller_MessageTest
+    */
+    protected $_emailTestClass;
+    
     /**
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
@@ -60,11 +67,26 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        
+        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->_emailTestClass->tearDown();
+        }
+    }
+    
+    /**
      * testInvitation
      */
     public function testInvitation()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         
         self::flushMailer();
@@ -98,7 +120,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateChangeAttendee()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -124,7 +146,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateReschedule()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -143,7 +165,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateDetails()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -162,7 +184,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testUpdateAttendeeStatus()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         $persistentEvent = $this->_eventController->create($event);
         
@@ -196,7 +218,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testOrganizerNotificationSend()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         $persistentEvent = $this->_eventController->create($event);
@@ -214,7 +236,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testNotificationToNonAccounts()
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         
@@ -262,6 +284,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
+    /**
+     * testRecuringExceptions
+     */
     public function testRecuringExceptions()
     {
         $from = new Tinebase_DateTime('2012-03-01 00:00:00');
@@ -289,12 +314,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         // update instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[5]);
+        $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[5]->summary = 'exceptional summary';
         $this->_eventController->createRecurException($recurSet[5], FALSE, FALSE); //2012-03-20
         $this->_assertMail('jmcblack', 'update');
         
         // reschedule instance
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[6]);
+        $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[6]->dtstart->addHour(2);
         $recurSet[6]->dtend->addHour(2);
         $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
@@ -304,6 +333,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // @TODO check RANGE in ics
         // @TODO add RANGE text to message
         self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[16]);
+        $recurSet[16]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_eventController->createRecurException($recurSet[16], TRUE, TRUE); //2012-03-31
         $this->_assertMail('jmcblack', 'cancel');
         
@@ -314,6 +345,96 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
     }
     
+    public function testAlarm()
+    {
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        Calendar_Model_Attender::getOwnAttender($persistentEvent->attendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        
+        // hack to get declined attendee
+        $this->_eventController->sendNotifications(FALSE);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->sendNotifications(TRUE);
+        
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever', 'Alarm');
+        $this->assertEquals(1, count(self::getMessages()));
+    }
+    
+    public function testSkipPastAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever');
+    }
+    
+    /**
+     * testParallelAlarmTrigger
+     * 
+     * @see 0004878: improve asyncJob fencing
+     */
+    public function testParallelAlarmTrigger()
+    {
+        $this->_testNeedsTransaction();
+        
+        try {
+            $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+            $this->_emailTestClass->setup();
+        } catch (Exception $e) {
+            $this->markTestIncomplete('email not available.');
+        }
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        $this->_getAlarmMails(TRUE);
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        try {
+            Tinebase_AsyncJobTest::triggerAsyncEvents();
+        } catch (Exception $e) {
+            // something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this
+            $this->markTestIncomplete($e->getMessage());
+        }
+        
+        $result = $this->_getAlarmMails(TRUE);
+        $this->assertEquals(1, count($result), 'expected exactly 1 alarm mail, got: ' . print_r($result->toArray(), TRUE));
+    }
+    
+    /**
+     * testRecuringAlarm
+     */
     public function testRecuringAlarm()
     {
         $event = $this->_getEvent();
@@ -397,7 +518,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime is not adjusted');
     }
     
-    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    /**
+     * test alarm inspection from 24.03.2012 -> 25.03.2012
+     */
     public function testAdoptAlarmDSTBoundary()
     {
         $event = $this->_getEvent();
@@ -428,7 +551,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals('2012-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
     }
     
-    // test alarm inspection from 24.03.2012 -> 25.03.2012
+    /**
+     * test alarm inspection from 24.03.2012 -> 25.03.2012
+     */
     public function testAdoptAlarmDSTBoundaryWithSkipping()
     {
         $event = new Calendar_Model_Event(array(
@@ -451,6 +576,38 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->adoptAlarmTime($event, $alarm, 'instance');
         
         $this->assertEquals('2012-04-02 06:30:00', $alarm->alarm_time->toString());
+    }
+    
+    /**
+     * get test alarm emails
+     * 
+     * @param boolean $deleteThem
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getAlarmMails($deleteThem = FALSE)
+    {
+        // search and assert alarm mail
+        $folder = $this->_emailTestClass->getFolder('INBOX');
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
+        $i = 0;
+        while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
+            $i++;
+        }
+        $account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'folder_id',  'operator' => 'equals',     'value' => $folder->getId()),
+            array('field' => 'account_id', 'operator' => 'equals',     'value' => $account->getId()),
+            array('field' => 'subject',    'operator' => 'startswith', 'value' => 'Alarm for event "Wakeup" at'),
+        ));
+        
+        $result = Felamimail_Controller_Message::getInstance()->search($filter);
+        
+        if ($deleteThem) {
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, Felamimail_Model_Folder::FOLDER_TRASH);
+        }
+        
+        return $result;
     }
     
     public static function getMessages()

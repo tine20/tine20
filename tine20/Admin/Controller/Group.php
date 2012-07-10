@@ -39,7 +39,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Admin';
     }
 
@@ -115,7 +114,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $_groupIds = $_groupIds->getArrayOfIds();
         }
         
-        if(count($_groupIds) === 0) {
+        if (count($_groupIds) === 0) {
             throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
         }
         
@@ -136,7 +135,12 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         }
         
         foreach ($removeGroupMemberships as $groupId) {
-            $this->removeGroupMember($groupId, $userId);
+            try {
+                $this->removeGroupMember($groupId, $userId);
+            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not remove group member from group ' . $groupId . ': ' . $tern);
+            }
         }
         
         return Tinebase_Group::getInstance()->getGroupMemberships($userId);

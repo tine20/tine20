@@ -11,6 +11,7 @@
 http://www.macupdate.com/info.php/id/9312
 with all fields enabled</description>
     <encoding>MAC-CENTRALEUROPE</encoding>
+    <example>Addressbook/Import/examples/adb_mac_import.csv</example>
     <extension>csv</extension>
     <label>Contact CSV import from mac address book</label>
     <!-- _("Contact CSV import from mac address book") -->
@@ -57,7 +58,7 @@ with all fields enabled</description>
         </field>
         <field>
             <source>Arbeitsadresse Land</source>
-            <destination></destination>
+            <destination>adr_one_countryname</destination>
         </field>
         <field>
             <source>Privatadresse Strasse</source>
@@ -77,7 +78,7 @@ with all fields enabled</description>
         </field>
         <field>
             <source>Privatadresse Land</source>
-            <destination>adr_two_postalcode</destination>
+            <destination>adr_two_countryname</destination>
         </field>
         <field>
             <source>Andere Adr. Strasse</source>
@@ -160,7 +161,7 @@ with all fields enabled</description>
             <destination></destination>
         </field>
         <field>
-            <source>Arbeit MSNr</source>
+            <source>Arbeit MSN</source>
             <destination></destination>
         </field>
         <field>

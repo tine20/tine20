@@ -31,7 +31,6 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount        = Tinebase_Core::getUser();
         $this->_applicationName       = 'Admin';
         $this->_modelName             = 'Tinebase_Model_CustomField_Config';
         $this->_doContainerACLChecks  = FALSE;

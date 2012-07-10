@@ -143,6 +143,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
     protected function _saveRules()
     {
         if (empty($this->_rules)) {
+            $this->_rulesBackend->deleteByProperty($this->_accountId, 'account_id');
             return;
         }
         

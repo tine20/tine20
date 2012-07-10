@@ -32,7 +32,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     private function __construct() 
     {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
-        $this->_currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -426,6 +425,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             if (! empty($_message->headers) && is_array($_message->headers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
                 foreach ($_message->headers as $key => $value) {
+                    if (strlen(trim($value)) > 998) {
+                        $value = substr($value, 0, 997);
+                    }
                     $_mail->addHeader($key, $value);
                 }
             }
@@ -456,6 +458,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $references = $originalHeaders['in-reply-to'] . ' ';
         }
         $references .= $originalHeaders['message-id'];
+        
+        while (strlen(trim($references)) > 998) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' Very long references header, need to cut some chars off.');
+            $pos = strpos($references, ' ');
+            $references = substr($references, (($pos !== FALSE) ? $pos : 80));
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $references);
         $mail->addHeader('References', $references);
     }
     

@@ -79,11 +79,6 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
         foreach($this->_modelNames as $fullModelName => $modelName) {
             $createFunctionName = 'Create' . $modelName;
             $record = new $fullModelName($this->$_minimalDatas[$modelName]);
-            
-            //$currentAccount = $this->_currentAccount = Zend_Registry::get('currentAccount');
-            //$personalContainer = $this->_controller->createPersonalFolder($currentAccount);
-            //$record->container_id = $personalContainer->getId();
-            
             $persitentRecord = $this->_controller->$createFunctionName($record);
         }
     }
