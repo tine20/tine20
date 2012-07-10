@@ -331,7 +331,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
         }
         
-        $this->_setPluginsPassword($userId, $_password);
+        $this->_setPluginsPassword($userId, $_password, $_encrypt);
     }
     
     /**
@@ -339,13 +339,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * @param string $userId
      * @param string $password
+     * @param bool   $encrypt encrypt password
      * @throws Tinebase_Exception_Backend
      */
-    protected function _setPluginsPassword($userId, $password)
+    protected function _setPluginsPassword($userId, $password, $encrypt = TRUE)
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {
-                $plugin->inspectSetPassword($userId, $_password, $_encrypt);
+                $plugin->inspectSetPassword($userId, $password, $encrypt);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change plugin password: ' . $e);
                 throw new Tinebase_Exception_Backend($e->getMessage());
