@@ -893,7 +893,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->getVacation($this->_account->getId());
 
         $this->assertEquals($this->_account->email, $result['addresses'][0]);
-        unset($result['addresses']);
         
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         if (preg_match('/dbmail/i', $sieveBackend->getImplementation())) {
@@ -901,7 +900,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $vacationData['subject'] = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
         }
         
-        $this->assertEquals($vacationData, $result);
+        foreach (array('reason', 'enabled', 'subject', 'from', 'days') as $field) {
+            $this->assertEquals($vacationData[$field], $result[$field], 'vacation data mismatch: ' . $field);
+        }
     }
     
     /**
@@ -1089,17 +1090,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetVacationMessage()
     {
         $template = $this->testGetVacationTemplates();
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $result = $this->_json->getVacationMessage(array(
             'start_date' => '2012-04-18',
             'end_date'   => '2012-04-20',
             'contact_ids' => array(
                 Tinebase_User::getInstance()->getFullUserByLoginName('pwulf')->contact_id,
-                Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->contact_id,
+                $sclever->contact_id,
             ),
             'template_id' => $template['id'],
         ));
         
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (sclever@tine20.org).<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (sclever@tine20.org) instead.<br />", $result['message']);
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (".
+            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (".
+            $sclever->accountEmailAddress . ") instead.<br />", $result['message']);
     }
     
     /**
