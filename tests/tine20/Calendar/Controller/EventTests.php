@@ -570,6 +570,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(0, count($pwulf), 'invalid test condition, pwulf should not be member or admin group');
         
         Admin_Controller_Group::getInstance()->addGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         // assert pwulf is in
         $pwulf = $loadedEvent->attendee
@@ -579,6 +583,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         
         Admin_Controller_Group::getInstance()->removeGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         // assert pwulf is missing
         $pwulf = $loadedEvent->attendee
@@ -590,6 +598,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $group = Admin_Controller_Group::getInstance()->get($defaultAdminGroup->getId());
         $group->members = array_merge(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
         Admin_Controller_Group::getInstance()->update($group);
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
         
         // assert pwulf is in
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
@@ -600,7 +611,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $group->members = array_diff(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
         Admin_Controller_Group::getInstance()->update($group);
-        
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
         // assert pwulf is missing
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $pwulf = $loadedEvent->attendee
@@ -648,6 +661,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
         
         // check if this user was added to event
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
@@ -658,6 +674,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // cleanup user
         Admin_Controller_User::getInstance()->delete($newUser->getId());
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
         
         // check if user was removed from event
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
@@ -666,6 +685,91 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_id', $newUser->contact_id);
         $this->assertEquals(0, count($user), 'added user is attender of event, but should be');
     }
+    
+    public function testAttendeeGroupMembersRecurringAddUser()
+    {
+        try {
+            // clenup if exists
+            $cleanupUser = Tinebase_User::getInstance()->getFullUserByLoginName('testAttendeeGroupMembersAddUser');
+            Tinebase_User::getInstance()->deleteUser($cleanupUser);
+        } catch (Exception $e) {
+            // do nothing
+        }
+        
+        
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        
+        // create event and invite admin group
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_id'   => $defaultGroup->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ));
+        $persistentEvent = $this->_controller->create($event);
+        
+        // create a new user
+        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'testAttendeeGroupMembersAddUser',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => $defaultGroup->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
+        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+        )), new Tinebase_Model_Pagination(array()));
+        
+        $oldSeries = $events->filter('rrule_until', '/.+/', TRUE)->getFirstRecord();
+        $newSeries = $events->filter('rrule_until', '/^$/', TRUE)->getFirstRecord();
+        
+        $this->assertEquals(2, $events->count(), 'recur event must be splitted');
+        // check if this user was added to event
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
+        $user = $oldSeries->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(0, count($user), 'added user is attender of old event, but should not be');
+        $user = $newSeries->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(1, count($user), 'added user is not attender of new event, but should be');
+        
+        // cleanup user
+        Admin_Controller_User::getInstance()->delete($newUser->getId());
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
+        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+        )), new Tinebase_Model_Pagination(array()));
+        
+        $oldSeries = $events->filter('rrule_until', '/.+/', TRUE)->getFirstRecord();
+        $newSeries = $events->filter('rrule_until', '/^$/', TRUE)->getFirstRecord();
+        
+        $this->assertEquals(2, $events->count(), 'recur event must be splitted');
+        // check if this user was added to event
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
+        $user = $oldSeries->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(0, count($user), 'added user is attender of old event, but should not be');
+        $user = $newSeries->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(0, count($user), 'added user is attender of new event, but should not be');
+    }
+    
     
     public function testRruleUntil()
     {
