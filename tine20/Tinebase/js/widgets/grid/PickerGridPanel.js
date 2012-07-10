@@ -177,16 +177,23 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
 
         if (this.enableTbar) {
-            this.tbar = new Ext.Toolbar({
-                items: [
-                    this.getSearchCombo()
-                ],
-                listeners: {
-                    scope: this,
-                    resize: this.onTbarResize
-                }
-            });
+            this.initTbar();
         }
+    },
+    
+    /**
+     * init top toolbar
+     */
+    initTbar: function() {
+        this.tbar = new Ext.Toolbar({
+            items: [
+                this.getSearchCombo()
+            ],
+            listeners: {
+                scope: this,
+                resize: this.onTbarResize
+            }
+        });
     },
     
     onTbarResize: function(tbar) {

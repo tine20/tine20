@@ -167,8 +167,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * update user
      *
-     * @param  Tinebase_Model_FullUser     $_user                 the user
-     * @param  string                     $_password           the new password
+     * @param  Tinebase_Model_FullUser    $_user            the user
+     * @param  string                     $_password        the new password
      * @param  string                     $_passwordRepeat  the new password again
      * 
      * @return Tinebase_Model_FullUser

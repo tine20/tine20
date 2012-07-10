@@ -42,6 +42,7 @@ class Courses_Setup_Update_Release5 extends Setup_Update_Abstract
     }
     
     /*
+    /**
     * update to 5.2
     * - internet column now is a textfield / keyfield
     * 
@@ -75,9 +76,8 @@ class Courses_Setup_Update_Release5 extends Setup_Update_Abstract
 
     /**
     * update to 6.0
-    *
     */
-    public function update_2
+    public function update_2()
     {
         $this->setApplicationVersion('Courses', '6.0');
     }
