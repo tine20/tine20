@@ -416,7 +416,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
-                handler: this.onEditInNewWindow.createDelegate(this, ["add", {dtStart: dtStart, is_all_day_event: datetime && datetime.is_all_day_event}]),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", null, {dtStart: dtStart, is_all_day_event: datetime && datetime.is_all_day_event}]),
                 iconCls: 'action_add'
             };
             
@@ -463,7 +463,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     checkPastEvent: function(event, checkBusyConflicts, actionType) {
-        
         var start = event.get('dtstart').getTime();
         var morning = new Date().clearTime().getTime();
 
@@ -856,9 +855,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Object} default properties for new items
      * @param {String} event   edit given event instead of selected event
      */
-    onEditInNewWindow: function (action, defaults, event) {
+    onEditInNewWindow: function (action, event, defaults) {
         if(!event) event = null;
-
+        // needed for addToEventPanel
+        if(Ext.isObject(action)) {
+            action = action.actionType;
+        }
+        
         if (action === 'edit' && ! event) {
             var panel = this.getCalendarPanel(this.activeView);
             var selection = panel.getSelectionModel().getSelectedEvents();
@@ -1122,7 +1125,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 view.fireEvent('dblclick', view, event);
                             } else {
                                 // add or edit?
-                                this.onEditInNewWindow(null, null, event);
+                                this.onEditInNewWindow(null, event);
                             }
                             
                             this.conflictConfirmWin.close();

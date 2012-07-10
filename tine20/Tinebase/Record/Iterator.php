@@ -157,7 +157,7 @@ class Tinebase_Record_Iterator
                 return new Tinebase_Record_RecordSet($this->_filter->getModelName());
             }
         }
-        
+
         $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
 
         // get records by filter (ensure acl)

@@ -138,8 +138,13 @@ abstract class Felamimail_Sieve_Backend_Abstract
         
         if (! empty($this->_vacation) && $this->_vacation->isEnabled() === true) {
             $require[] = '"vacation"';
-        }
             
+            if ($this->_vacation->useDates()) {
+                $require[] = '"date"';
+                $require[] = '"relational"';
+            }
+        }
+        
         return $require;
     }
 

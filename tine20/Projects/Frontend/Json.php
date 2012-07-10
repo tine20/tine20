@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  */
 
 /**
@@ -54,7 +54,7 @@ class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchProjects($filter, $paging)
     {
         return $this->_search($filter, $paging, $this->_controller, 'Projects_Model_ProjectFilter', TRUE);
-    }     
+    }
     
     /**
      * Return a single record
@@ -81,17 +81,17 @@ class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return string
      */
     public function deleteProjects($ids)
     {
         return $this->_delete($ids, $this->_controller);
-    }    
+    }
 
     /**
      * Returns registry data
-     * 
+     *
      * @return array
      */
     public function getRegistryData()

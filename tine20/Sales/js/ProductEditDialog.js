@@ -45,15 +45,6 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     initComponent: function() {
-        this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
-                Crm_Model_Lead: {
-                    recordClass: Tine.Crm.Model.Lead,
-                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
-                }
-            } : {}
-        });
-        
         Tine.Sales.ProductEditDialog.superclass.initComponent.call(this);
     },
     
@@ -63,9 +54,6 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function() {
         Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
-        
-        // update tabpanels
-        this.linkPanel.onRecordLoad(this.record);
     },
     
     /**
@@ -156,7 +144,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }), this.linkPanel
+            })
             ]
         };
     }

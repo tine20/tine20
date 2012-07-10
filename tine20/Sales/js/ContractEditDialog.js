@@ -43,6 +43,22 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Sales.Model.Contract,
     recordProxy: Tine.Sales.contractBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    /**
+     * if true, number will be readOnly and will be generated automatically
+     * @type {Boolean} autoGenerateNumber
+     */
+    autoGenerateNumber: null,
+    /**
+     * how should the number be validated text/integer possible
+     * @type {String} validateNumber
+     */
+    validateNumber: null,
+    
+    initComponent: function() {
+        this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
+        this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
+        Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
+    },
     
     /**
      * reqests all data needed in this dialog
@@ -62,6 +78,27 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * called on multiple edit
+     * @return {Boolean}
+     */
+    isMultipleValid: function() {
+        return true;
+    },
+    
+    /**
+     * extra validation for the number field, calls parent
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var valid = Tine.Sales.ContractEditDialog.superclass.isValid.call(this);
+        var isValid = this.autoGenerateNumber ? true : (this.validateNumber == 'integer') ? Ext.isNumber(Ext.num(this.getForm().findField('number').getValue())) : true;
+        if(!isValid) {
+            this.getForm().findField('number').markInvalid(this.app.i18n._('Please use a decimal number here!'));
+        }
+        return isValid && valid;
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -69,6 +106,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
+            layoutOnTabChange: true,
             border: false,
             plain:true,
             activeTab: 0,
@@ -91,17 +129,69 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: .333
                     },
                     items: [[{
-                        columnWidth: 1,
+                        columnWidth: .25,
+                        fieldLabel: this.app.i18n._('Number'),
+                        name: 'number',
+                        multiEditable: false,
+                        readOnly: this.autoGenerateNumber,
+                        allowBlank: this.autoGenerateNumber
+                    },{
+                        columnWidth: .75,
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
                         allowBlank: false
                     }], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        xtype: 'textarea',
-                        height: 200
+                            columnWidth: .5,
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Contact Customer'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'CUSTOMER',
+                            relationDegree: 'sibling',
+                            modelUnique: true
+                        }, {
+                            columnWidth: .5,
+                            editDialog: this,
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Contact Responsible'),
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'RESPONSIBLE',
+                            relationDegree: 'sibling',
+                            modelUnique: true
+                        }/*, {
+                            name: 'customer',
+                            fieldLabel: this.app.i18n._('Company')
+                        }*/],[
+                        
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    app: 'Sales',
+                                    keyFieldName: 'contractStatus',
+                                    fieldLabel: this.app.i18n._('Status'),
+                                    name: 'status'
+                                }),
+                                
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    app: 'Sales',
+                                    keyFieldName: 'contractCleared',
+                                    fieldLabel: this.app.i18n._('Cleared'),
+                                    name: 'cleared'
+                                }),
+                        {
+                            fieldLabel: this.app.i18n._('Cleared in'),
+                            name: 'cleared_in',
+                            xtype: 'textfield'
+                        }
+                    ], [{
+                            columnWidth: 1,
+                            fieldLabel: this.app.i18n._('Description'),
+                            emptyText: this.app.i18n._('Enter description...'),
+                            name: 'description',
+                            xtype: 'textarea',
+                            height: 200
                     }]] 
                 }, {
                     // activities and tags

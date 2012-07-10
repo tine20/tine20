@@ -377,7 +377,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             disabled: true,
             translationObject: this.i18nEditActionText ? this.app.i18n : Tine.Tinebase.translation,
             actionType: 'edit',
-            handler: this.onEditInNewWindow,
+            handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'edit'}]),
             iconCls: 'action_edit',
             scope: this,
             allowMultiple: this.multipleEdit
@@ -389,7 +389,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             text: String.format(_('Copy {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'copy',
-            handler: this.onEditInNewWindow,
+            handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'copy'}]),
             iconCls: 'action_editcopy',
             scope: this
         });
@@ -398,7 +398,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
-            handler: this.onEditInNewWindow,
+            handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
             iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
             scope: this
         });
@@ -741,9 +741,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         // save scroller -> will be applied onLoad
-        if (options.preserveScroller) {
-            options.preserveScroller = this.grid.getView().scroller.dom.scrollTop;
-        }
+        if (options.preserveScroller && this.grid.getView().scroller && this.grid.getView().scroller.dom) options.preserveScroller = this.grid.getView().scroller.dom.scrollTop;
 
         // apply removeStrategy
         if (! options.removeStrategy || options.removeStrategy === 'default') {
@@ -1297,7 +1295,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             grid.view.focusRow(row);
         }
     },
+    
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if(!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
 
+        this.getContextMenu().showAt(e.getXY());
+        // reset preview update
+        this.updateOnSelectionChange = true;
+    },
+    
     /**
      * row doubleclick handler
      * 
@@ -1331,40 +1343,41 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
-     * generic edit in new window handler
+     * Opens the required EditDialog
+     * @param {Object} actionButton
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Array} addRelations
+     * @return {Boolean}
      */
-    onEditInNewWindow: function(button, event) {
-        var record;
-        if (button.actionType == 'edit' || button.actionType == 'copy') {
-            if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
-                // if edit action is disabled or not available, we also don't open a new window
-                return false;
+    onEditInNewWindow: function(button, record, addRelations) {
+        if(!record) {
+            if (button.actionType == 'edit' || button.actionType == 'copy') {
+                if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
+                    // if edit action is disabled or not available, we also don't open a new window
+                    return false;
+                }
+                var selectedRows = this.grid.getSelectionModel().getSelections();
+                record = selectedRows[0];
+            } else {
+                record = new this.recordClass(this.recordClass.getDefaultData(), 0);
             }
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            var selectedRecords = [];
-
-            Ext.each(selectedRows,function(el){
-                selectedRecords.push(el.data);
-            });
-
-            record = selectedRows[0];
-        } else {
-            record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
-
+        
         var totalcount = this.selectionModel.getCount(),
             useMultiple = ((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isArray(button.fixedFields)) ? Ext.encode(button.fixedFields) : null;
 
         if (useMultiple) {
+            var selectedRecords = [];
             Ext.each(this.selectionModel.getSelections(), function(record) {
                 selectedRecords.push(record.data);
             }, this );
         }
 
-        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
-            config = null,
+        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
+        
+        var config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 /* multi edit stuff: NOTE: due to cross window restrictions, we can only pass strings here  */
@@ -1375,14 +1388,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 totalRecordCount: totalcount,
                 /* end multi edit stuff */
                 fixedFields: fixedFields,
+                addRelations: Ext.encode(addRelations),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,fixedFields,copyRecord')
+            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,fixedFields,copyRecord,addRelations')
         );
+        return true;
     },
 
     onUpdateMultipleRecords: function() {
@@ -1551,8 +1566,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 failure: function (exception) {
                     this.refreshAfterDelete(recordIds);
                     this.loadGridData();
-                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-                }
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);                }
             };
 
             if (sm.isFilterSelect && this.filterSelectionDelete) {

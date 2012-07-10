@@ -14,13 +14,6 @@ Ext.ns('Tine.widgets.grid');
  * @class       Tine.widgets.grid.QuickaddGridPanel
  * @extends     Ext.ux.grid.QuickaddGridPanel
  * 
- * <p>Grid Details Panel</p>
- * <p>
- * Details Panel with toolbar menu
- * <pre>
- * TODO         add ctx menu
- * </pre></p>
- * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -55,6 +48,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.initGrid();
         this.initActions();
         
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         if (! this.store) {
             // create basic store
             this.store = new Ext.data.Store({
@@ -80,7 +74,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.plugins = this.plugins || [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         
-        this.sm = new Ext.grid.RowSelectionModel({multiSelect:true});
+        this.sm = new Ext.grid.RowSelectionModel();
         this.sm.on('selectionchange', function(sm) {
             var rowCount = sm.getCount();
             this.deleteAction.setDisabled(rowCount == 0);
@@ -103,8 +97,6 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         
         if (this.useBBar) {
             this.bbar = [this.deleteAction];
-        } else {
-            this.tbar = [this.deleteAction];
         }
     },
     
@@ -130,8 +122,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         } else {
             initialData = recordData;
         }
-        var newRecord = new this.recordClass(initialData);
+        var newRecord = new this.recordClass(initialData, Ext.id());
         this.store.insert(0 , [newRecord]);
+        
         return true;
     },
     
@@ -143,6 +136,36 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);
         }
+    },
+    
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if(!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
+
+        this.getContextMenu().showAt(e.getXY());
+        // reset preview update
+        this.updateOnSelectionChange = true;
+    },
+    
+    getContextMenu: function() {
+        if (! this.contextMenu) {
+            var items = [this.deleteAction];
+            
+            this.contextMenu = new Ext.menu.Menu({
+                items: items/*,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu'
+                }]*/
+            });
+        }
+        
+        return this.contextMenu;
     },
     
     /**

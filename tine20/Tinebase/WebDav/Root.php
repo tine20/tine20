@@ -17,6 +17,8 @@
  *
  * @package     Tinebase
  * @subpackage  WebDAV
+ * 
+ * @todo this should look for webdav frontend in installed apps
  */
 class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
 {
@@ -34,9 +36,9 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
             $carddavChildren[] = new Addressbook_Frontend_CardDAV();
         }
         
-        foreach(array('Addressbook', 'Calendar', 'Filemanager') as $application) {
-            if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
-                $applicationClass = $application . '_Frontend_WebDAV';
+        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager') as $application) {
+            $applicationClass = $application . '_Frontend_WebDAV';
+            if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && @class_exists($applicationClass)) {
                 $webdavChildren[] = new $applicationClass($application);
             }
         }

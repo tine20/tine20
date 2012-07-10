@@ -329,6 +329,42 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    /**
+     * tests for the costcenter controller
+     */
+    public function testCostCenterController()
+    {
+        $cc = $this->_getCostCenter();
+        $ccRet = Sales_Controller_CostCenter::getInstance()->create($cc);
+        
+        $this->assertEquals($cc->id, $ccRet->id);
+        $this->assertEquals($cc->number, $ccRet->number);
+        $this->assertEquals($cc->remark, $ccRet->remark);
+
+        // check uniquity
+        $cc1 = $this->_getCostCenter();
+        try {
+            Sales_Controller_CostCenter::getInstance()->create($cc1);
+        } catch (Zend_Db_Statement_Exception $e) {
+        }
+        $this->assertEquals($e->getCode(), 0);
+        $this->assertEquals($e->getMessage(), "SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'wks-14' for key 'number'");
+    }
+    
+    /**
+     * get contract
+     *
+     * @return Sales_Model_CostCenter
+     */
+    protected function _getCostCenter()
+    {
+        $cc = new Sales_Model_CostCenter(array(
+            'id'      => Tinebase_Record_Abstract::generateUID(),
+            'number'  => 'wks-14',
+            'remark'  => 'blabla'
+        ), TRUE);
+        return $cc;
+    }
     
     /**
      * try to add a contract

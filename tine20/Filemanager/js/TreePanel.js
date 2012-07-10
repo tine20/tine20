@@ -244,6 +244,12 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         attr.leaf = false;
         
+        // use name as ids to make pathfilter work
+        if (attr.path && attr.created_by) {
+            var keys = attr.path.split('/');
+            attr.id = keys.pop();
+        }
+        
         if(attr.name && typeof attr.name == 'object') {
             Ext.apply(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),

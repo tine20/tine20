@@ -1,0 +1,363 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - HumanResources\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: Acl/Rights.php:93
+msgid "edit private employee data"
+msgstr ""
+
+#: Acl/Rights.php:94
+msgid "Edit birthday, account data and other private information of employee records"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Sickness"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:49
+msgid "Requested"
+msgstr ""
+
+#: Setup/Initialize.php:50
+msgid "In process"
+msgstr ""
+
+#: Setup/Initialize.php:51
+msgid "Accepted"
+msgstr ""
+
+#: Setup/Initialize.php:52
+msgid "Declined"
+msgstr ""
+
+#: Config.php:42
+msgid "Freetime Type"
+msgstr ""
+
+#: Config.php:44
+msgid "Possible free time definitions."
+msgstr ""
+
+#: Config.php:52
+msgid "Freetime Status"
+msgstr ""
+
+#: Config.php:54
+msgid "Possible free time status definitions."
+msgstr ""
+
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:148
+#: js/FreeDayGridPanel.js:113 js/Models.js:57 js/EmployeeEditDialog.js:130
+#: js/EmployeeEditDialog.js:143
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/FreeTimeGridPanel.js:147 js/FreeDayGridPanel.js:112
+#: js/EmployeeGridPanel.js:94
+msgid "Tags"
+msgstr ""
+
+#: js/FreeTimeGridPanel.js:149 js/FreeDayGridPanel.js:114 js/Models.js:318
+#: js/FreeTimeEditDialog.js:179
+msgid "Type"
+msgstr ""
+
+#: js/FreeTimeGridPanel.js:150 js/Models.js:326 js/FreeTimeEditDialog.js:187
+msgid "Status"
+msgstr ""
+
+#: js/FreeTimeGridPanel.js:151 js/FreeDayGridPanel.js:115
+msgid "Date Start"
+msgstr ""
+
+#: js/FreeTimeGridPanel.js:152 js/FreeDayGridPanel.js:116 js/Models.js:332
+#: js/FreeTimeEditDialog.js:208
+msgid "Remark"
+msgstr ""
+
+#: js/ContractGridPanel.js:58 js/Models.js:210
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/ContractGridPanel.js:104 js/AdminPanel.js:159
+msgid "Calendar"
+msgstr ""
+
+#: js/ContractGridPanel.js:105 js/AdminPanel.js:160
+msgid "Calendars"
+msgstr ""
+
+#: js/ContractGridPanel.js:124
+msgid "Working Time Model"
+msgstr ""
+
+#: js/ContractGridPanel.js:127
+msgid "Vacation Days"
+msgstr ""
+
+#: js/ContractGridPanel.js:129
+msgid "Cost Centre"
+msgstr ""
+
+#: js/ContractGridPanel.js:132
+msgid "Start Date"
+msgstr ""
+
+#: js/ContractGridPanel.js:135
+msgid "End Date"
+msgstr ""
+
+#: js/ContractGridPanel.js:138
+msgid "Feast Calendar"
+msgstr ""
+
+#: js/ContractGridPanel.js:177 js/ContractGridPanel.js:189
+msgid "undefined"
+msgstr ""
+
+#: js/AdminPanel.js:61
+msgid "Cancel"
+msgstr ""
+
+#: js/AdminPanel.js:69
+msgid "OK"
+msgstr ""
+
+#: js/AdminPanel.js:90
+msgid "Loading..."
+msgstr ""
+
+#: js/ExceptionHandler.js:47
+msgid "No contract could be found."
+msgstr ""
+
+#: js/ExceptionHandler.js:48
+msgid "Please create a contract for this employee!"
+msgstr ""
+
+#: js/Models.js:61
+msgid "Employees"
+msgid_plural "Employees"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:95 js/Models.js:171 js/Models.js:244 js/Models.js:316
+msgid "Quick search"
+msgstr ""
+
+#: js/Models.js:96
+msgid "Employee name"
+msgstr ""
+
+#: js/Models.js:98 js/Models.js:333
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Models.js:99 js/Models.js:334
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Models.js:100 js/Models.js:335
+msgid "Creation Time"
+msgstr ""
+
+#: js/Models.js:101 js/Models.js:336
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:133
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:137
+msgid "Working Times"
+msgid_plural "Working Times"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:206 js/FreeTimeEditDialog.js:124
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:281 js/EmployeeEditDialog.js:113
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:368
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:371
+msgid "Free Days"
+msgid_plural "Free Days"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/EmployeeEditDialog.js:149 js/EmployeeGridPanel.js:97
+msgid "Number"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:159
+msgid "Account"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:178
+msgid "Apply contact data on form"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:204 js/EmployeeGridPanel.js:104
+msgid "Full Name"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:213
+msgid "Personal Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:223
+msgid "Country"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:226
+msgid "Locality"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:229
+msgid "Postalcode"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:232
+msgid "Region"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:235
+msgid "Street"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:238
+msgid "Street2"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:241
+msgid "E-Mail"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:244
+msgid "Telephone Number"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:247
+msgid "Cell Phone Number"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:251
+msgid "Birthday"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:255 js/EmployeeGridPanel.js:110
+msgid "Employment begin"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:260 js/EmployeeGridPanel.js:117
+msgid "Employment end"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:268
+msgid "Internal Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:280 js/EmployeeGridPanel.js:124
+msgid "Supervisor"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:291
+msgid "Banking Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:300
+msgid "Account Holder"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:303
+msgid "Account Number"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:306
+msgid "Bank Name"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:309
+msgid "Code Number"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:330 js/FreeTimeEditDialog.js:237
+msgid "Description"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:344 js/FreeTimeEditDialog.js:251
+msgid "Enter description"
+msgstr ""
+
+#: js/DatePicker.js:42
+msgid "WK"
+msgstr ""
+
+#: js/DatePicker.js:63
+msgid "Loading calendar data..."
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:114
+msgid "The Employee"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:150 js/FreeTimeEditDialog.js:162
+msgid "FreeTime"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:194
+msgid "First Day Length"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:201
+msgid "Last Day Length"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:220
+msgid "Select Days"
+msgstr ""

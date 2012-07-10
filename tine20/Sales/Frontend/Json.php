@@ -33,6 +33,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var Sales_Controller_Product
      */
     protected $_productController = NULL;
+    
+    /**
+     * @see Tinebase_Frontend_Json_Abstract
+     */
+    protected $_relatableModels = array('Sales_Model_Contract');
 
     /**
      * the constructor
@@ -60,12 +65,28 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $sharedContainer = Sales_Controller_Contract::getSharedContractsContainer();
         $sharedContainer->resolveGrantsAndPath();
-
+        
         return array(
             'defaultContainer' => $sharedContainer->toArray()
         );
     }
-
+    
+    /**
+     * Sets the config for Sales
+     * @param array $config
+     */
+    public function setConfig($config) {
+        return Sales_Controller::getInstance()->setConfig($config);
+    }
+    
+    /**
+     * Get Config for Sales
+     * @return array
+     */
+    public function getConfig() {
+        return Sales_Controller::getInstance()->getConfig();
+    }
+    
     /*************************** contracts functions *****************************/
 
     /**
@@ -158,5 +179,17 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteProducts($ids)
     {
         return $this->_delete($ids, $this->_productController);
+    }
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchCostCenters($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_CostCenter::getInstance(), 'Sales_Model_CostCenterFilter');
     }
 }

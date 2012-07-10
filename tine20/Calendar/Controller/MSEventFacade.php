@@ -154,6 +154,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 array('field' => 'id', 'operator' => 'in', 'value' => $eventIds)
             )), NULL, FALSE, FALSE, $_action);
             
+            
             $events = $this->_toiTIP($events);
         }
         
@@ -237,6 +238,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
         }
         
+        $this->_fromiTIP($_event, new Calendar_Model_Event(array(), TRUE));
+        
         $exceptions = $_event->exdate;
         $_event->exdate = NULL;
         
@@ -266,6 +269,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
         }
+        $currentOriginEvent = $this->_eventController->get($_event->getId());
+        $this->_fromiTIP($_event, $currentOriginEvent);
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $exceptions->addIndices(array('is_deleted'));
@@ -394,10 +399,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function getAlarms($_record)
     {
-        $events = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_record));
-        if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
-            $_record->exdate->addIndices(array('is_deleted'));
-            $events->merge($_record->exdate->filter('is_deleted', 0));
+        $events = $_record instanceof Tinebase_Record_RecordSet ? $_record : new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_record));
+        
+        foreach($events as $event) {
+            if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+//                 $event->exdate->addIndices(array('is_deleted'));
+                $events->merge($event->exdate->filter('is_deleted', 0));
+            }
         }
         
         $this->_eventController->getAlarms($events);
@@ -471,21 +479,101 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         // get exdates
-        if ($_event->rrule) {
+        if ($_event->getId() && $_event->rrule) {
             $_event->exdate = $this->_eventController->getRecurExceptions($_event, TRUE);
+            $this->getAlarms($_event);
+            
+            // mark any exdates as deleted if the CU does not attend and is not organizer
+            foreach ($_event->exdate as $exdate) {
+                if ($_event->organizer != $this->_calendarUser->user_id) {
+                    $CUAttendee = Calendar_Model_Attender::getAttendee($exdate->attendee, $this->_calendarUser);
+                    if ($exdate->is_deleted == false && ! $CUAttendee) {
+                        $exdate->is_deleted = true;
+                    }
+                }
+                
+                $this->_toiTIP($exdate);
+            }
         }
         
-        // mark any exdates as deleted if the CU does not attend and is not organizer
-        if ($_event->exdate instanceof Tinebase_Record_RecordSet && $_event->organizer != $this->_calendarUser->user_id) {
-            foreach ($_event->exdate as $exdate) {
-                $CUAttendee = Calendar_Model_Attender::getAttendee($exdate->attendee, $this->_calendarUser);
-                if ($exdate->is_deleted == false && ! $CUAttendee) {
-                    $exdate->is_deleted = true;
+        // get alarms for baseEvents w.o. exdate
+        if (! $_event->isRecurException() && ! $_event->exdate) {
+            $this->getAlarms($_event);
+        }
+        
+        $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
+        $isOrganizer = $_event->isOrganizer($this->_calendarUser);
+        
+        // apply perspective
+        if ($CUAttendee && !$isOrganizer) {
+            $_event->transp = $CUAttendee->transp ? $CUAttendee->transp : $_event->transp;
+        }
+        
+        if ($_event->alarms instanceof Tinebase_Record_RecordSet) {
+            foreach($_event->alarms as $alarm) {
+                if (! Calendar_Model_Attender::isAlarmForAttendee($this->_calendarUser, $alarm, $_event)) {
+                    $_event->alarms->removeRecord($alarm);
                 }
             }
         }
         
         return $_event;
+    }
+    
+    /**
+     * converts an iTIP event to a tine20 event
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_currentEvent (not iTIP!)
+     */
+    protected function _fromiTIP($_event, $_currentEvent)
+    {
+        if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach ($_event->exdate as $exdate) {
+                $currExdate = $_currentEvent->exdate instanceof Tinebase_Record_RecordSet ? $_currentEvent->exdate->filter('recurid', $exdate->recurid) : NULL;
+                
+                $this->_toiTIP($exdate, $currExdate ? $currExdate : $_currentEvent);
+            }
+        }
+        
+        $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
+        $isOrganizer = $_event->isOrganizer($this->_calendarUser);
+        // remove perspective
+        if ($CUAttendee && !$isOrganizer) {
+            $CUAttendee->transp = $_event->transp;
+            $_event->transp = $_currentEvent->transp ? $_currentEvent->transp : $_event->transp;
+            
+        }
+        $_currentEvent->alarms  = $_currentEvent->alarms instanceof Tinebase_Record_RecordSet ? $_currentEvent->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $_event->alarms  = $_event->alarms instanceof Tinebase_Record_RecordSet ? $_event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
+//         print_r($_currentEvent->alarms->toArray());
+//         print_r($_event->alarms->toArray());
+//         Tinebase_Core::getLogger()->ERR(print_r($_event->alarms->toArray(), TRUE));
+        
+        // apply changes to original alarms
+        foreach($_currentEvent->alarms as $currentAlarm) {
+            if (Calendar_Model_Attender::isAlarmForAttendee($this->_calendarUser, $currentAlarm)) {
+                $alarmUpdate = Calendar_Controller_Alarm::getMatchingAlarm($_event->alarms, $currentAlarm);
+                
+                if ($alarmUpdate) {
+                    // we could map the alarm => no change required
+                    $_event->alarms->removeRecord($alarmUpdate);
+                } else {
+                    // alarm is to be skiped/deleted
+                    if (! $currentAlarm->getOption('attendee')) {
+                        Calendar_Controller_Alarm::skipAlarm($currentAlarm, $this->_calendarUser);
+                    } else {
+                        $_currentEvent->alarms->removeRecord($currentAlarm);
+                    }
+                }
+            }
+        }
+        
+        if (! $isOrganizer) {
+            $_event->alarms->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($this->_calendarUser));
+        }
+        $_event->alarms->merge($_currentEvent->alarms);
     }
     
     /**

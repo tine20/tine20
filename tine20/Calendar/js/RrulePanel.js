@@ -119,13 +119,20 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.activeRuleCard = this[freq + 'card'];
     },
     
+    /**
+     * disable contents not panel
+     */
+    setDisabled: function(v) {
+        this.items.each(function(item) {
+            item.setDisabled(v);
+        }, this);
+    },
+    
     onRecordLoad: function(record) {
         this.record = record;
         
         if (! this.record.get('editGrant') || this.record.isRecurException()) {
-            this.items.each(function(item) {
-                item.setDisabled(true);
-            }, this);
+            this.setDisabled(true);
         }
         
         this.rrule = this.record.get('rrule');

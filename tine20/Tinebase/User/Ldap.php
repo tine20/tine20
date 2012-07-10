@@ -169,12 +169,24 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         foreach ($this->_plugins as $plugin) {
             if ($plugin instanceof Tinebase_User_Plugin_LdapInterface) {
-                $plugin->setLdap($this->_ldap);
-                $this->_ldapPlugins[] = $plugin;
+                $this->registerLdapPlugin($plugin);
             }
         }
     }
 
+    /**
+     * register ldap plugin
+     * 
+     * @param Tinebase_User_Plugin_LdapInterface $plugin
+     */
+    public function registerLdapPlugin(Tinebase_User_Plugin_LdapInterface $plugin)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . get_class($plugin) . ' LDAP plugin.');
+        
+        $plugin->setLdap($this->_ldap);
+        $this->_ldapPlugins[] = $plugin;
+    }
+    
     /**
      * get list of users
      *
@@ -188,9 +200,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function getUsersFromSyncBackend($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {
-        $filter = Zend_Ldap_Filter::andFilter(
-            Zend_Ldap_Filter::string($this->_userBaseFilter)
-        );
+        $filter = $this->_getBaseFilter();
 
         if (!empty($_filter)) {
             $filter = $filter->addFilter(Zend_Ldap_Filter::orFilter(
@@ -227,20 +237,69 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         return $result;
 
         // @todo implement limit, start, dir and status
-        $select = $this->_getUserSelectObject()
-            ->limit($_limit, $_start);
+//         $select = $this->_getUserSelectObject()
+//             ->limit($_limit, $_start);
 
-        if ($_sort !== NULL) {
-            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
-        }
+//         if ($_sort !== NULL) {
+//             $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+//         }
 
-        // return only active users, when searching for simple users
-        if ($_accountClass == 'Tinebase_Model_User') {
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
-        }
-
+//         // return only active users, when searching for simple users
+//         if ($_accountClass == 'Tinebase_Model_User') {
+//             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
+//         }
     }
     
+    /**
+     * returns user base filter
+     * 
+     * @return Zend_Ldap_Filter_And
+     */
+    protected function _getBaseFilter()
+    {
+        return Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_userBaseFilter)
+        );
+    }
+    
+    /**
+     * search for user attributes
+     * 
+     * @param array $attributes
+     * @return array
+     * 
+     * @todo allow multi value attributes
+     * @todo generalize this for usage in other Tinebase_User_Ldap fns?
+     */
+    public function getUserAttributes($attributes)
+    {
+        $ldapCollection = $this->_ldap->search(
+            $this->_getBaseFilter(),
+            $this->_baseDn,
+            $this->_userSearchScope,
+            $attributes
+        );
+        
+        $result = array();
+        foreach ($ldapCollection as $data) {
+            $row = array('dn' => $data['dn']);
+            foreach ($attributes as $key) {
+                $lowerKey = strtolower($key);
+                if (isset($data[$lowerKey]) && isset($data[$lowerKey][0])) {
+                    $row[$key] = $data[$lowerKey][0];
+                }
+            }
+            $result[] = $row;
+        }
+        
+        return (array)$result;
+    }
+    
+    /**
+     * fetch LDAP backend 
+     * 
+     * @return Tinebase_Ldap
+     */
     public function getLdap()
     {
         return $this->_ldap;
@@ -264,7 +323,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $user = $this->_ldap2User($ldapEntry, $_accountClass);
         
         // append data from ldap plugins
-        foreach ($this->_ldapPlugins as $plugin) {
+        foreach ($this->_ldapPlugins as $class => $plugin) {
             $plugin->inspectGetUserByProperty($user, $ldapEntry);
         }
         

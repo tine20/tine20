@@ -58,6 +58,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
+    
 
     /**
      * try to add a contract
@@ -88,6 +89,106 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertGreaterThan(0, $contractData['number']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']);
+    }
+
+    /**
+     * Tests multiple update with relations
+     */
+    public function testUpdateMultipleWithRelations()
+    {
+        $contract1 = $this->_getContract();
+        $contract2 = $this->_getContract();
+
+        $contact1 = new Addressbook_Model_Contact(array(
+           'n_given' => 'peter', 'n_family' => 'wolf',
+        ));
+        
+        $contact2 = clone $contact1;
+        $contact2->n_given = 'bob';
+
+        $contact3 = clone $contact1;
+        $contact3->n_given = 'laura';
+
+        $contact4 = clone $contact1;
+        $contact4->n_given = 'lisa';
+
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create($contact1, false);
+        $contact2 = Addressbook_Controller_Contact::getInstance()->create($contact2, false);
+        $contact3 = Addressbook_Controller_Contact::getInstance()->create($contact3, false);
+        $contact4 = Addressbook_Controller_Contact::getInstance()->create($contact4, false);
+        
+        $relationData = array(array(
+            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
+            'related_model' => 'Addressbook_Model_Contact',
+            'related_backend' => 'Sql',
+            'related_id' => $contact2->getId(),
+            'type' => 'PARTNER'
+        ));
+        
+        $contract1 = Sales_Controller_Contract::getInstance()->create($contract1);
+        $contract2 = Sales_Controller_Contract::getInstance()->create($contract2);
+        
+        // add contact2 as customer relation to contract2
+        Tinebase_Relations::getInstance()->setRelations('Sales_Model_Contract', 'Sql', $contract2->getId(), $relationData);
+
+        $ids = array($contract1->id, $contract2->id);
+
+        $json = new Tinebase_Frontend_Json();
+        // add Responsible contact1 to both contracts
+        $response = $json->updateMultipleRecords('Sales', 'Contract',
+            array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact1->getId())),
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+        );
+
+        $this->assertEquals(count($response['results']), 2);
+        
+        $contract1re = $this->_instance->getContract($contract1->getId());
+        $contract2re = $this->_instance->getContract($contract2->getId());
+
+        $this->assertEquals(count($contract1re['relations']), 1);
+        $this->assertEquals(count($contract2re['relations']), 2);
+
+        $this->assertEquals($contract1re['relations'][0]['related_id'], $contact1->getId());
+        
+        if($contract2re['relations'][1]['related_id'] == $contact1->getId()) {
+            $this->assertEquals($contract2re['relations'][1]['related_id'], $contact1->getId());
+            $this->assertEquals($contract2re['relations'][0]['related_id'], $contact2->getId());
+        } else {
+            $this->assertEquals($contract2re['relations'][1]['related_id'], $contact2->getId());
+            $this->assertEquals($contract2re['relations'][0]['related_id'], $contact1->getId());
+        }
+        
+
+        // update customer to contact3 and add responsible contact4
+        $response = $json->updateMultipleRecords('Sales', 'Contract',
+            array(
+                array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact3->getId()),
+                array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId())
+                ),
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+        );
+        $this->assertEquals(count($response['results']), 2);
+        
+        $contract1re = $this->_instance->getContract($contract1->getId());
+        $contract2re = $this->_instance->getContract($contract2->getId());
+        
+        $this->assertEquals(count($contract1re['relations']), 2);
+        $this->assertEquals(count($contract2re['relations']), 3);
+        
+        // remove customer
+        $response = $json->updateMultipleRecords('Sales', 'Contract',
+            array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => '')),
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+        );
+        
+        $this->assertEquals(count($response['results']), 2);
+        
+        $contract1res = $this->_instance->getContract($contract1->getId());
+        $contract2res = $this->_instance->getContract($contract2->getId());
+        
+        $this->assertEquals(count($contract1res['relations']), 1);
+        $this->assertEquals(count($contract2res['relations']), 2);
     }
 
     /**
@@ -122,10 +223,12 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // check
         $this->assertEquals($contractData['id'], $contractUpdated['id']);
         $this->assertGreaterThan(0, count($contractUpdated['relations']));
-        $this->assertEquals('Addressbook_Model_Contact', $contractUpdated['relations'][0]['related_model']);
-        $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_CUSTOMER, $contractUpdated['relations'][0]['type']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractUpdated['relations'][1]['related_id']);
-        $this->assertEquals(Sales_Model_Contract::RELATION_TYPE_ACCOUNT, $contractUpdated['relations'][1]['type']);
+        $this->assertEquals(2, count($contractUpdated['relations']));
+
+        // cleanup
+        $this->_instance->deleteContracts($contractData['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][0]['related_id']);
+        Addressbook_Controller_Contact::getInstance()->delete($contractUpdated['relations'][1]['related_id']);
     }
 
     /**
@@ -290,14 +393,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
             array(
                 'type'              => Sales_Model_Contract::RELATION_TYPE_CUSTOMER,
                 'related_record'    => array(
-                    'org_name'         => 'phpunit erp test company',
+                    'org_name'         => 'phpunit erp test customer',
                     'container_id'  => $personalContainer[0]->getId(),
                 )
             ),
             array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_ACCOUNT,
-                'related_id'        => $currentUser->getId(),
-                'related_record'    => $currentUser->toArray()
+                'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
+                'related_record'    => array(
+                    'org_name'         => 'phpunit erp test responsible',
+                    'container_id'  => $personalContainer[0]->getId(),
+                )
             ),
         );
     }

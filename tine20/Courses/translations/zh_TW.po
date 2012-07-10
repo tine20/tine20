@@ -17,107 +17,96 @@ msgstr ""
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
+#: Config.php:61 js/Models.js:72 js/CourseEditDialog.js:226
+msgid "Internet Access"
 msgstr ""
 
-#: Controller/Course.php:115
-msgid "Teacher"
+#: Config.php:63
+msgid "Internet access options."
 msgstr ""
 
-#: Controller/Course.php:116
-msgid "Teacher Account"
+#: Config.php:70 Config.php:72
+msgid "Internet Access Group (ON)"
 msgstr ""
 
-#: Frontend/Json.php:254 js/CourseEditDialog.js:141 js/Models.js:41
+#: Config.php:78 Config.php:80
+msgid "Internet Access Group (FILTERED)"
+msgstr ""
+
+#: Config.php:86 Config.php:88
+msgid "Students Group"
+msgstr ""
+
+#: Config.php:94 Config.php:96
+msgid "Students Import Definition"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:86
+msgid "Please enter your credentials"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/CourseGridPanel.js:48 js/Models.js:70
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:54
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:99
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:100
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:41 js/CourseEditDialog.js:186 Controller/Course.php:122
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
-
-#: js/CourseEditDialog.js:31
-msgid "Import course members"
-msgstr ""
-
-#: js/CourseEditDialog.js:157
-msgid "Course Name"
-msgstr ""
-
-#: js/CourseEditDialog.js:164
-msgid "Course / School Type"
-msgstr ""
-
-#: js/CourseEditDialog.js:175
-msgid "Description"
-msgstr ""
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:85
-msgid "Internet Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:190 js/CourseGridPanel.js:93
-msgid "Fileserver Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:222
-msgid "Members"
-msgstr ""
-
-#: js/CourseEditDialog.js:248
-msgid "Login"
-msgstr ""
-
-#: js/CourseEditDialog.js:252
-msgid "unknown"
-msgstr ""
-
-#: js/CourseEditDialog.js:257
-msgid "Reset Password"
-msgstr ""
-
-#: js/CourseEditDialog.js:275
-msgid "Set new password"
-msgstr ""
-
-#: js/CourseEditDialog.js:275
-msgid "Please enter the new password:"
-msgstr ""
-
-#: js/CourseGridPanel.js:48
-msgid "Quick search"
-msgstr ""
-
-#: js/CourseGridPanel.js:70
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:76
-msgid "Type"
-msgstr ""
-
-#: js/CourseGridPanel.js:124
-msgid "Internet Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:135
-msgid "Internet Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:146
-msgid "Fileserver Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:157
-msgid "Fileserver Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:217
-msgid "Failed"
-msgstr ""
-
-#: js/CourseGridPanel.js:218
-msgid "Some error occured while trying to update the courses."
-msgstr ""
 
 #: js/Models.js:45
 msgid "record list"
@@ -125,21 +114,68 @@ msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:74
+#: js/Models.js:69
+msgid "Quick search"
+msgstr ""
+
+#: js/Models.js:107
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Courses"
+#: js/CourseEditDialog.js:104
+msgid "Add new member to course"
+msgstr ""
+
+#: js/CourseEditDialog.js:202
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:209
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:220
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:236
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:268
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:295
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:299
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:304
+msgid "Reset Password"
+msgstr ""
+
+#: Controller/Course.php:219
+msgid "teacher"
+msgstr ""
+
+#: Controller/Course.php:227
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:228
+msgid "Teacher Account"
 msgstr ""

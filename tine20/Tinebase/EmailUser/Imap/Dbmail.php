@@ -204,12 +204,13 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      * 
      * @param  string  $_userId
      * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      */
-    public function inspectSetPassword($_userId, $_password)
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
         $values = array(
             $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
-            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password, false) 
+            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $_password, false) : $_password
         );
         
         if($this->_hasTine20Userid === true) {

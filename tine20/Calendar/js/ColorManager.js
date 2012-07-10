@@ -179,12 +179,17 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
             color = null,
             schema = null;
         
-        if (typeof event.get != 'function') {
+        if (! Ext.isFunction(event.get)) {
             // tree comes with containers only
             container = event;
         } else {
-            // always show displayContainer
-            container = event.getDisplayContainer();
+            
+            container = event.get('container_id');
+            
+            // take displayContainer if user has no access to origin
+            if (Ext.isPrimitive(container)) {
+                container = event.getDisplayContainer();
+            }
         }
         
         color = String(container.color).replace('#', '');

@@ -50,7 +50,7 @@ Ext.namespace('Tine.Tasks');
      */
     windowNamePrefix: 'TasksEditWindow_',
     appName: 'Tasks',
-    recordClass: Tine.Tasks.Task,
+    recordClass: Tine.Tasks.Model.Task,
     recordProxy: Tine.Tasks.JsonBackend,
     showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
@@ -60,15 +60,6 @@ Ext.namespace('Tine.Tasks');
      */
     initComponent: function() {
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
-        this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
-                Crm_Model_Lead: {
-                    recordClass: Tine.Crm.Model.Lead,
-                    dlgOpener: Tine.Crm.LeadEditDialog.openWindow
-                }
-            } : {}
-        });
-        
         Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);
     },
     
@@ -88,7 +79,6 @@ Ext.namespace('Tine.Tasks');
         
         // update tabpanels
         this.alarmPanel.onRecordLoad(this.record);
-        this.linkPanel.onRecordLoad(this.record);
     },
     
     /**
@@ -135,9 +125,9 @@ Ext.namespace('Tine.Tasks');
         
         var dueField = this.getForm().findField('due'),
             dueDate = dueField.getValue(),
-            alarmValue = parseInt(this.alarmPanel.alarmCombo.getValue(), 10);
+            alarms = this.alarmPanel.alarmGrid.getFromStoreAsArray();
             
-        if (Ext.isNumber(alarmValue) && ! Ext.isDate(dueDate)) {
+        if (! Ext.isEmpty(alarms) && ! Ext.isDate(dueDate)) {
             dueField.markInvalid(this.app.i18n._('You have to supply a due date, because an alarm ist set!'));
             
             isValid = false;
@@ -259,8 +249,7 @@ Ext.namespace('Tine.Tasks');
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            }), this.alarmPanel, 
-                this.linkPanel
+            }), this.alarmPanel
             ]
         };
     }

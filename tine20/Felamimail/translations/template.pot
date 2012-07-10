@@ -638,23 +638,23 @@ msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:203
 msgid "Click here to set To/CC/BCC."
 msgstr ""
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:207 js/RecipientGrid.js:231
 msgid "To:"
 msgstr ""
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:210 js/RecipientGrid.js:232
 msgid "Cc:"
 msgstr ""
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:213 js/RecipientGrid.js:233
 msgid "Bcc:"
 msgstr ""
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:336
 msgid "Remove"
 msgstr ""
 

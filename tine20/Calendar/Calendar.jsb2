@@ -92,7 +92,7 @@
           "path": "js/"
         },
         {
-          "text": "CalendarSelectWidget.js",
+          "text": "PerspectiveCombo.js",
           "path": "js/"
         },
         {
@@ -137,6 +137,10 @@
         },
         {
           "text": "AddToEventPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "calendarRenderer.js",
           "path": "js/"
         }
       ]

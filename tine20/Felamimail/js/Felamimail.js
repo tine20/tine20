@@ -542,15 +542,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
-        
-        var currentTitle = document.title,
-            unreadString = (this.unreadcountInDefaultInbox != 0) ? '(' + this.unreadcountInDefaultInbox + ') ' : '';
-            
-        if (currentTitle.match(/^\([0-9]+\) /)) {
-            document.title = document.title.replace(/^\([0-9]+\) /, unreadString);
-        } else {
-            document.title = unreadString + currentTitle;
-        }
+        // NOTE: falls back to "old" solution for old browsers automatically
+        Tinycon.setBubble(this.unreadcountInDefaultInbox);
     },
     
     /**

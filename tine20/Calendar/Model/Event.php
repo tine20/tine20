@@ -42,6 +42,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const CLASS_PRIVATE        = 'PRIVATE';
     //const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
     
+    const STATUS_CONFIRMED     = 'CONFIRMED';
+    const STATUS_TENTATIVE     = 'TENTATIVE';
+    const STATUS_CANCELED      = 'CANCELED';
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -90,7 +94,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'location'             => array('allowEmpty' => true          ),
         'organizer'            => array('allowEmpty' => true,         ),
         'priority'             => array('allowEmpty' => true, 'Int'   ),
-        'status_id'            => array('allowEmpty' => true          ),
+        'status'            => array(
+            'allowEmpty' => true,
+            array('InArray', array(self::STATUS_CONFIRMED, self::STATUS_TENTATIVE, self::STATUS_CANCELED))
+        ),
         'summary'              => array('allowEmpty' => true          ),
         'url'                  => array('allowEmpty' => true          ),
         'uid'                  => array('allowEmpty' => true          ),
@@ -242,7 +249,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'location':          return $t->_('Location');
             case 'organizer':         return $t->_('Organizer');
             case 'priority':          return $t->_('Priority');
-            case 'status_id':         return $t->_('Status');
+            case 'status':            return $t->_('Status');
             case 'summary':           return $t->_('Summary');
             case 'url':               return $t->_('Url');
             case 'rrule':             return $t->_('Recurrance rule');
@@ -274,7 +281,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'transp':
                 return $_value && $_value == Calendar_Model_Event::TRANSP_TRANSP ? $_translation->_('No') : $_translation->_('Yes');
             case 'organizer':
-                $organizer = $this->resolveOrganizer();
+                if (! $_value instanceof Addressbook_Model_Contact) {
+                    $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE)->getFirstRecord();
+                }
                 return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
             default:
                 return $_value;
@@ -430,8 +439,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['priority'] = NULL;
         }
         
-        if (empty($_data['status_id'])) {
-            $_data['status_id'] = NULL;
+        if (empty($_data['status'])) {
+            $_data['status'] = self::STATUS_CONFIRMED;
         }
         
         if (isset($_data['container_id']) && is_array($_data['container_id'])) {
@@ -514,5 +523,22 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         return $this->organizer;
+    }
+    
+    /**
+     * checks if given attendee is organizer of this event
+     * 
+     * @param Calendar_Model_Attendee $_attendee
+     */
+    public function isOrganizer($_attendee=NULL)
+    {
+        $organizerContactId = NULL;
+        if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+            $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        } else {
+            $organizerContactId = Tinebase_Core::getUser()->contact_id;
+        }
+        
+        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
     }
 }

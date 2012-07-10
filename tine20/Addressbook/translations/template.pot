@@ -245,7 +245,7 @@ msgstr ""
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
 #: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
 msgstr ""
 
@@ -644,11 +644,11 @@ msgstr ""
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
 msgid "Mr"
 msgstr ""
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
 msgid "Ms"
 msgstr ""
 

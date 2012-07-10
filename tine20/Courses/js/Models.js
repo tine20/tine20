@@ -54,6 +54,39 @@ Tine.Courses.Model.Course.getDefaultData = function() {
 };
 
 /**
+ * get filtermodel of course model
+ * 
+ * @namespace Tine.Courses.Model
+ * @static
+ * @return {Array} filterModel definition
+ * 
+ * TODO only add internet access filter if internet_group config is available
+ */ 
+Tine.Courses.Model.Course.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Courses');
+    
+    return [
+        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {label: app.i18n._('Name'),   field: 'name'},
+        {
+            label: app.i18n._('Internet Access'),
+            field: 'internet',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'internetAccess', 
+            defaultOperator: 'in'
+        },
+        {filtertype: 'foreignrecord', 
+            app: app,
+            foreignRecordClass: Tine.Tinebase.Model.Department,
+            ownField: 'type',
+            operators: ['equals']
+        }
+    ];
+};
+
+
+/**
  * @type {Array}
  * Coursetype model fields
  */

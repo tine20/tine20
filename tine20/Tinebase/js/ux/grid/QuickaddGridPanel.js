@@ -93,7 +93,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // init handlers
         this.quickaddHandlers = {
             scope: this,
-            blur: function(){
+            blur: function(field){
                 this.doBlur.defer(250, this);
             },
             specialkey: function(f, e){
@@ -245,7 +245,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var newRowEl = Ext.get(Ext.DomQuery.selectNode('tr[class=new-row]', this.getView().mainHd.dom));
         
         var columns = this.getCols();
-        for (var column, td, i=columns.length -1; i>=0; i--) {
+        for (var column, tdEl, i=columns.length -1; i>=0; i--) {
             column = columns[i];
             var tdEl = this.getQuickAddWrap(column).parent();
             

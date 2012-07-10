@@ -4,8 +4,8 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -28,6 +28,7 @@ class Courses_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses All Tests');
         $suite->addTestSuite('Courses_JsonTest');
+        $suite->addTestSuite('Courses_CliTest');
         return $suite;
     }
 }

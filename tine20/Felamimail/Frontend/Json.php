@@ -513,6 +513,56 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_multipleRecordsToJson($records);
     }
 
+    /**
+     * get available vacation message templates
+     * 
+     * @return array
+     * 
+     * @todo perhaps we should use the node controller for the search and move it to tinebase
+     */
+    public function getVacationMessageTemplates()
+    {
+        try {
+            $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
+            $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer);
+            $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
+            $filter = new Tinebase_Model_Tree_Node_Filter(array(
+                array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
+            ));
+            
+            $templates = Tinebase_FileSystem::getInstance()->searchNodes($filter);
+            $result = $this->_multipleRecordsToJson($templates, $filter);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not get vacation template files: ' . $e);
+            $result = array();
+        }
+        
+        return array(
+            'totalcount' => count($result),
+            'results'    => $result,
+        );
+    }
+    
+    /**
+     * get vacation message defined by template / do substitutions for dates and representative 
+     * 
+     * @param array $vacationData
+     * @return array
+     */
+    public function getVacationMessage($vacationData)
+    {
+        $record = new Felamimail_Model_Sieve_Vacation(array(), TRUE);
+        $record->setFromJsonInUsersTimezone($vacationData);
+        
+        $message = Felamimail_Controller_Sieve::getInstance()->getVacationMessage($record);
+        $htmlMessage = Felamimail_Message::convertFromTextToHTML($message);
+        
+        return array(
+            'message' => $htmlMessage
+        );
+    }
+    
     /***************************** other funcs *******************************/
     
     /**
@@ -556,6 +606,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         unset($defaults['smtp']['password']);
         
         $result['defaults'] = $defaults;
+        
+        $result['vacationTemplates'] = $this->getVacationMessageTemplates();
         
         return $result;
     }

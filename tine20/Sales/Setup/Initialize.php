@@ -64,4 +64,47 @@ class Sales_Setup_Initialize extends Setup_Initialize
         ))
         ));
     }
+    
+    /**
+     * init key fields
+     */
+    protected function _initializeKeyFields()
+    {
+        // create status config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config', 
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+        
+        $salesStatusConfig = array(
+            'name'    => Sales_Config::CONTRACT_STATUS,
+            'records' => array(
+                array('id' => 'OPEN', 'value' => 'open', 'icon' => 'images/oxygen/16x16/places/folder-green.png', 'system' => true),
+                array('id' => 'CLOSED', 'value' => 'closed',  'icon' => 'images/oxygen/16x16/places/folder-red.png', 'system' => true),
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::CONTRACT_STATUS,
+            'value'             => json_encode($salesStatusConfig),
+        )));
+
+        $salesClearedConfig = array(
+            'name'    => Sales_Config::CONTRACT_CLEARED,
+            'records' => array(
+                array('id' => 'TO_CLEAR',        'value' => 'to clear',        'icon' => 'images/oxygen/16x16/actions/dialog-warning.png', 'system' => true),
+                array('id' => 'NOT_YET_CLEARED', 'value' => 'not yet cleared', 'icon' => 'images/oxygen/16x16/actions/edit-delete.png', 'system' => true),
+                array('id' => 'CLEARED',         'value' => 'cleared',         'icon' => 'images/oxygen/16x16/actions/dialog-ok-apply.png', 'system' => true),
+                
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::CONTRACT_CLEARED,
+            'value'             => json_encode($salesClearedConfig),
+        )));
+    }
 }

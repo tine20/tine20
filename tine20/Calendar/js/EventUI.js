@@ -209,6 +209,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             this.extraCls = 'cal-daysviewpanel-event-editgrant';
         }
         
+        this.extraCls += ' cal-status-' + this.event.get('status');
+        
         // 00:00 in users timezone is a spechial case where the user expects
         // something like 24:00 and not 00:00
         if (this.dtEnd.format('H:i') == '00:00') {
@@ -381,6 +383,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             var eventEl = view.templates.event.append(view.getDateColumnEl(currColNum), {
                 id: domId,
                 summary: height >= 24 ? this.event.get('summary') : '',
+                tagsHtml: height >= 24 ? Tine.Tinebase.common.tagsRenderer(this.event.get('tags')) : '',
                 startTime: (height >= 24 && top <= scrollerHeight-24) ? this.dtStart.format('H:i') : this.dtStart.format('H:i') + ' ' +  this.event.get('summary'),
                 extraCls: extraCls,
                 color: this.colorSet.color,

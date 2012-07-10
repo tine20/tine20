@@ -4,9 +4,10 @@
  * @package     Tine
  * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * TODO         add general local + modal dialog (can be used here, in Tine.Courses.AddMemberDialog and ...)
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');

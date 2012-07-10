@@ -1,0 +1,40 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     HumanResources
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+ 
+.HumanResourcesEmployee, .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/system-users.png) !important;
+}
+
+.x-btn-medium .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/system-users.png) !important;
+}
+.x-btn-large .HumanResourcesIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
+}
+
+.applyContactData {
+        height:14px!important;
+        width: 14px!important;
+        background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
+}
+
+.HumanResourcesFreeTime {
+    background-image:url(../../images/oxygen/16x16/actions/book2.png) !important;
+}
+.x-btn-medium .HumanResourcesFreeTime {
+    background-image:url(../../images/oxygen/22x22/actions/book2.png) !important;
+}
+.x-btn-large .HumanResourcesFreeTime {
+    background-image:url(../../images/oxygen/32x32/actions/book2.png) !important;
+}
+
+.HumanResources .x-date-picker {
+    border-color: #B5B8C8!important;
+}

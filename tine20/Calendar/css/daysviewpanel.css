@@ -16,14 +16,14 @@
 
 .cal-daysviewpanel-header-offset {
     position: relative;
-    margin-left:45px;
-    margin-right:15px;
     /*right:0;*/
     top:0;
 }
 
 .cal-daysviewpanel-daysheader {
     height: 24px;
+    margin-left:45px;
+    margin-right:15px;
     cursor:default;
     padding:1px 0 0;
 }
@@ -52,8 +52,14 @@
     height: 23px;
 }
 
+.cal-daysviewpanel-wholedayheader-scroller {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .cal-daysviewpanel-wholedayheader {
     position: relative;
+    margin-left:45px;
 }
 /********************************* Body *********************************/
 .cal-daysviewpanel-body-inner {
@@ -381,6 +387,12 @@
     top: 13px;
     padding: 0px 4px;
     white-space: normal;
+}
+
+.cal-daysviewpanel-event-tags {
+    position: absolute;
+    right: 1px;
+    bottom: 4px;
 }
 
 .cal-daysviewpanel-event-active {

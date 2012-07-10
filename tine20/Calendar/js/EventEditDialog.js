@@ -71,71 +71,113 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     layout: 'hfit',
                     border: false,
                     items: [{
-                        xtype: 'fieldset',
-                        layout: 'hfit',
-                        autoHeight:true,
-                        title: this.app.i18n.n_('Event', 'Events', 1),
+                        layout: 'hbox',
                         items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'side',
-                            labelWidth: 100,
-                            formDefaults: {
-                                xtype:'textfield',
-                                anchor: '100%',
-                                labelSeparator: '',
-                                columnWidth: .6
-                            },
-                            items: [[{
-                                columnWidth: 1,
-                                fieldLabel: this.app.i18n._('Summary'),
-                                name: 'summary',
-                                listeners: {render: function(field){field.focus(false, 250);}},
-                                allowBlank: false,
-                                requiredGrant: 'editGrant',
-                                maxLength: 255
-                            }], [{
-                                columnWidth: 1,
-                                fieldLabel: this.app.i18n._('Location'),
-                                name: 'location',
-                                requiredGrant: 'editGrant',
-                                maxLength: 255
-                            }], [{
-                                xtype: 'datetimefield',
-                                fieldLabel: this.app.i18n._('Start Time'),
-                                listeners: {scope: this, change: this.onDtStartChange},
-                                name: 'dtstart',
-                                requiredGrant: 'editGrant'
-                            }, {
-                                columnWidth: .4,
-                                xtype: 'combo',
-                                hideLabel: true,
-                                readOnly: true,
-                                hideTrigger: true,
-                                disabled: true,
-                                name: 'originator_tz',
-                                requiredGrant: 'editGrant'
-                            }], [{
-                                xtype: 'datetimefield',
-                                fieldLabel: this.app.i18n._('End Time'),
-                                listeners: {scope: this, change: this.onDtEndChange},
-                                name: 'dtend',
-                                requiredGrant: 'editGrant'
-                            }, {
-                                columnWidth: .17,
-                                xtype: 'checkbox',
-                                hideLabel: true,
-                                boxLabel: this.app.i18n._('whole day'),
-                                listeners: {scope: this, check: this.onAllDayChange},
-                                name: 'is_all_day_event',
-                                requiredGrant: 'editGrant'
-                            }, {
-                                columnWidth: .23,
+                            margins: '5',
+                            width: 100,
+                            xtype: 'label',
+                            text: this.app.i18n._('Summary')
+                        }, {
+                            flex: 1,
+                            xtype:'textfield',
+                            name: 'summary',
+                            listeners: {render: function(field){field.focus(false, 250);}},
+                            allowBlank: false,
+                            requiredGrant: 'editGrant',
+                            maxLength: 255
+                        }]
+                    }, {
+                        layout: 'hbox',
+                        items: [{
+                            margins: '5',
+                            width: 100,
+                            xtype: 'label',
+                            text: this.app.i18n._('View')
+                        }, Ext.apply(this.perspectiveCombo, {
+                            flex: 1
+                        })]
+                    }, {
+                        layout: 'hbox',
+                        height: 115,
+                        layoutConfig: {
+                            align : 'stretch',
+                            pack  : 'start'
+                        },
+                        items: [{
+                            flex: 1,
+                            xtype: 'fieldset',
+                            layout: 'hfit',
+                            margins: '0 5 0 0',
+                            title: this.app.i18n._('Details'),
+                            items: [{
+                                xtype: 'columnform',
+                                labelAlign: 'side',
+                                labelWidth: 100,
+                                formDefaults: {
+                                    xtype:'textfield',
+                                    anchor: '100%',
+                                    labelSeparator: '',
+                                    columnWidth: .7
+                                },
+                                items: [[{
+                                    columnWidth: 1,
+                                    fieldLabel: this.app.i18n._('Location'),
+                                    name: 'location',
+                                    requiredGrant: 'editGrant',
+                                    maxLength: 255
+                                }], [{
+                                    xtype: 'datetimefield',
+                                    fieldLabel: this.app.i18n._('Start Time'),
+                                    listeners: {scope: this, change: this.onDtStartChange},
+                                    name: 'dtstart',
+                                    requiredGrant: 'editGrant'
+                                }, {
+                                    columnWidth: .17,
+                                    xtype: 'checkbox',
+                                    hideLabel: true,
+                                    boxLabel: this.app.i18n._('whole day'),
+                                    listeners: {scope: this, check: this.onAllDayChange},
+                                    name: 'is_all_day_event',
+                                    requiredGrant: 'editGrant'
+                                }], [{
+                                    xtype: 'datetimefield',
+                                    fieldLabel: this.app.i18n._('End Time'),
+                                    listeners: {scope: this, change: this.onDtEndChange},
+                                    name: 'dtend',
+                                    requiredGrant: 'editGrant'
+                                }, {
+                                    columnWidth: .3,
+                                    xtype: 'combo',
+                                    hideLabel: true,
+                                    readOnly: true,
+                                    hideTrigger: true,
+                                    disabled: true,
+                                    name: 'originator_tz',
+                                    requiredGrant: 'editGrant'
+                                }], [ new Tine.widgets.container.selectionComboBox({
+                                    columnWidth: 1,
+                                    id: this.app.appName + 'EditDialogContainerSelector',
+                                    fieldLabel: _('Saved in'),
+                                    //width: 300,
+                                    //listWidth: 300,
+                                    name: this.recordClass.getMeta('containerProperty'),
+                                    recordClass: this.recordClass,
+                                    containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
+                                    containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
+                                    appName: this.app.appName,
+                                    requiredGrant: this.evalGrants ? 'addGrant' : false
+                                })]]
+                            }]
+                        }, {
+                            width: 130,
+                            xtype: 'fieldset',
+                            title: this.app.i18n._('Status'),
+                            items: [{
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('non-blocking'),
                                 name: 'transp',
                                 requiredGrant: 'editGrant',
-                                //id: 'mycheckid',
                                 getValue: function() {
                                     var bool = Ext.form.Checkbox.prototype.getValue.call(this);
                                     return bool ? 'TRANSPARENT' : 'OPAQUE';
@@ -144,17 +186,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     var bool = (value == 'TRANSPARENT' || value === true);
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
-                            }]]
-                        }]
-                    },{
-                        xtype: 'fieldset',
-                        layout: 'hfit',
-                        autoHeight:true,
-                        title: Tine.Tinebase.translation._hidden('Saved in'),
-                        items: [{
-                            layout: 'column',
-                            items: [Ext.apply(this.CalendarSelectWidget, {columnWidth: .77}), {
-                                columnWidth: .23,
+                            }, Ext.apply(this.perspectiveCombo.getAttendeeTranspField(), {
+                                hideLabel: true
+                            }), {
+                                xtype: 'checkbox',
+                                hideLabel: true,
+                                boxLabel: this.app.i18n._('Tentative'),
+                                name: 'status',
+                                requiredGrant: 'editGrant',
+                                getValue: function() {
+                                    var bool = Ext.form.Checkbox.prototype.getValue.call(this);
+                                    return bool ? 'TENTATIVE' : 'CONFIRMED';
+                                },
+                                setValue: function(value) {
+                                    var bool = (value == 'TENTATIVE' || value === true);
+                                    return Ext.form.Checkbox.prototype.setValue.call(this, bool);
+                                }
+                            }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('Private'),
@@ -168,7 +216,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     var bool = (value == 'PRIVATE' || value === true);
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
-                            }]
+                            }, Ext.apply(this.perspectiveCombo.getAttendeeStatusField(), {
+                                width: 115,
+                                hideLabel: true
+                            })]
                         }]
                     }, {
                         xtype: 'tabpanel',
@@ -241,12 +292,41 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         if(this.attendee) this.attendee = Ext.decode(this.attendee);
         
-        this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({});
+        var organizerCombo;
+        this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
+            bbar: [{
+                xtype: 'label',
+                html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;"
+            }, organizerCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                width: 300,
+                name: 'organizer',
+                userOnly: true
+            })]
+        });
+        
+        // auto location
+        this.attendeeGridPanel.on('afteredit', function(o) {
+            if (o.field == 'user_id'
+                && o.record.get('user_type') == 'resource'
+                && o.record.get('user_id').is_location
+                && !this.getForm().findField('location').getValue()
+            ) {
+                this.getForm().findField('location').setValue(
+                    this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
+                );
+            }
+        }, this);
+        
+        this.on('render', function() {this.getForm().add(organizerCombo);}, this);
+        
         this.rrulePanel = new Tine.Calendar.RrulePanel({});
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
-        this.CalendarSelectWidget = new Tine.Calendar.CalendarSelectWidget(this);
+        // a combo with all attendee + origin/organizer
+        this.perspectiveCombo = new Tine.Calendar.PerspectiveCombo({
+            editDialog: this
+        });
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
@@ -308,7 +388,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.attendeeGridPanel.onRecordLoad(this.record, this.attendee);
             this.rrulePanel.onRecordLoad(this.record);
             this.alarmPanel.onRecordLoad(this.record);
-            this.CalendarSelectWidget.onRecordLoad(this.record);
             
             // apply grants
             if (! this.record.get('editGrant')) {
@@ -318,6 +397,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }, this);
             }
+            
+            Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
+            this.perspectiveCombo.loadPerspective();
+            return;
         }
         
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
@@ -328,7 +411,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.onRecordUpdate(this.record);
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
-        this.CalendarSelectWidget.onRecordUpdate(this.record);
+        this.perspectiveCombo.updatePerspective();
     },
     
     setTabHeight: function() {

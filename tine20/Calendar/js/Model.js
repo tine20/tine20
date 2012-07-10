@@ -25,7 +25,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'location' },
     { name: 'organizer' },
     { name: 'priority' },
-    { name: 'status_id' },
+    { name: 'status' },
     { name: 'summary' },
     { name: 'url' },
     { name: 'uid' },
@@ -134,19 +134,8 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * returns attender record of current account if exists, else false
      */
     getMyAttenderRecord: function() {
-        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         var attendeeStore = this.getAttendeeStore();
-        var myRecord = false;
-        
-        attendeeStore.each(function(attender) {
-            var userAccountId = attender.getUserAccountId();
-            if (userAccountId == currentAccountId) {
-                myRecord = attender;
-                return false;
-            }
-        }, this);
-        
-        return myRecord;
+        return Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
     }
 });
 
@@ -167,7 +156,8 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
         container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
-        attender = Tine.Tinebase.registry.get('currentAccount');
+        attender = Tine.Tinebase.registry.get('currentAccount'),
+        prefs = app.getRegistry().get('preferences');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
@@ -189,6 +179,10 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
             })
         ]
     };
+    
+    if (prefs.get('defaultalarmenabled')) {
+        data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
+    }
     
     return data;
 };
@@ -356,7 +350,10 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'quantity'},
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'status_authkey'},
-    {name: 'displaycontainer_id'}
+    {name: 'displaycontainer_id'},
+    {name: 'alarm_ack_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'alarm_snooze_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'transp'}
 ], {
     appName: 'Calendar',
     modelName: 'Attender',
@@ -491,12 +488,50 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     });
     
     Ext.each(attendeeData, function(attender) {
-        var record = new Tine.Calendar.Model.Attender(attender, attender.id);
-        attendeeStore.addSorted(record);
+        if (attender) {
+            var record = new Tine.Calendar.Model.Attender(attender, attender.id);
+            attendeeStore.addSorted(record);
+        }
     });
     
     return attendeeStore;
 };
+
+/**
+ * returns attender record of current account if exists, else false
+ * @static
+ */
+Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord = function(attendeeStore) {
+        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+        var myRecord = false;
+        
+        attendeeStore.each(function(attender) {
+            var userAccountId = attender.getUserAccountId();
+            if (userAccountId == currentAccountId) {
+                myRecord = attender;
+                return false;
+            }
+        }, this);
+        
+        return myRecord;
+    }
+    
+/**
+ * returns attendee record of given attendee if exists, else false
+ * @static
+ */
+Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(attendeeStore, attendee) {
+    var attendeeRecord = false;
+    
+    attendeeStore.each(function(r) {
+        if (r.get('user_type') == attendee.get('user_type') && r.getUserId() == attendee.getUserId()) {
+            attendeeRecord = r;
+            return false;
+        }
+    }, this);
+    
+    return attendeeRecord;
+}
 
 /**
  * @namespace Tine.Calendar.Model

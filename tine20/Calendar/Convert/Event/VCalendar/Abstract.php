@@ -258,6 +258,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vevent->add($dtstart);
         $vevent->add($dtend);
         
+        // auto status for deleted events
+        if ($event->is_deleted) {
+            $event->status = Calendar_Model_Event::STATUS_CANCELED;
+        }
+        
         // event organizer
         if (!empty($event->organizer)) {
             $organizerContact = Addressbook_Controller_Contact::getInstance()->getMultiple(array($event->organizer), TRUE)->getFirstRecord();
@@ -274,6 +279,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         $optionalProperties = array(
             'class',
+            'status',
             'description',
             'geo',
             'location',
@@ -325,22 +331,21 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
-        // add alarms only if current user attends to this event
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
-        if ($ownAttendee && $ownAttendee->status != Calendar_Model_Attender::STATUS_DECLINED && $event->alarms) {
-            
-            if ($ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
-                $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
-                $xMozLastAck->setDateTime($ownAttendee->alarm_ack_time, Sabre_VObject_Element_DateTime::UTC);
-                $vevent->add($xMozLastAck);
-            }
-            
-            if ($ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
-                $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
-                $xMozSnoozeTime->setDateTime($ownAttendee->alarm_snooze_time, Sabre_VObject_Element_DateTime::UTC);
-                $vevent->add($xMozSnoozeTime);
-            }
-            
+        
+        if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
+            $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
+            $xMozLastAck->setDateTime($ownAttendee->alarm_ack_time, Sabre_VObject_Element_DateTime::UTC);
+            $vevent->add($xMozLastAck);
+        }
+        
+        if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
+            $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
+            $xMozSnoozeTime->setDateTime($ownAttendee->alarm_snooze_time, Sabre_VObject_Element_DateTime::UTC);
+            $vevent->add($xMozSnoozeTime);
+        }
+        
+        if ($event->alarms instanceof Tinebase_Record_RecordSet) {
             foreach($event->alarms as $alarm) {
                 $valarm = new Sabre_VObject_Component('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
@@ -664,6 +669,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         $event->class = Calendar_Model_Event::CLASS_PUBLIC;
                     }
                     
+                    break;
+                    
+                case 'STATUS':
+                    if (in_array($property->value, array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
+                        $event->status = $property->value;
+                    } else {
+                        $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
+                    }
                     break;
                     
                 case 'DTEND':

@@ -53,6 +53,51 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
 
     /**
+     * Returns all relatable models for this app
+     * @return array
+     */
+    public function getRelatableModels()
+    {
+        $ret = array();
+        
+        if(property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
+            $i=0;
+            foreach($this->_relatableModels as $model) {
+                $cItems = $model::getRelatableConfig();
+                $ownModel = explode('_Model_', $model);
+                $ownModel = $ownModel[1];
+                foreach($cItems as $cItem) {
+                    $cItem['ownModel'] = $ownModel;
+                    $ret[$this->_applicationName][$i] = $cItem;
+                    $ret[$cItem['relatedApp']][$i] = array('reverted' => true, 'ownModel' => $cItem['relatedModel'], 'relatedModel' => $cItem['ownModel'], 'relatedApp' => $this->_applicationName);
+                    // KeyfieldConfigs
+                    if(array_key_exists('keyfieldConfig', $cItem)) {
+                        $ret[$cItem['relatedApp']][$i]['keyfieldConfig'] = $cItem['keyfieldConfig'];
+                        if($cItem['keyfieldConfig']['from']) $ret[$cItem['relatedApp']][$i]['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
+                    }
+                    $j=0;
+                    if(array_key_exists('config', $cItem)) {
+                        foreach($cItem['config'] as $conf) {
+                            $max = explode(':',$conf['max']);
+                            $ret[$this->_applicationName][$i]['config'][$j]['max'] = $max[0];
+                            $ret[$cItem['relatedApp']][$i]['config'][$j] = $conf;
+                            $ret[$cItem['relatedApp']][$i]['config'][$j]['max'] = $max[1];
+                            if($conf['degree'] == 'sibling') {
+                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'];
+                            } else {
+                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
+                            }
+                            $j++;
+                        }
+                    }
+                    $i++;
+                }
+            }
+        }
+        return $ret;
+    }
+    
+    /**
     * resolve containers, tags and users
     *
     * @param Tinebase_Record_RecordSet $_records
@@ -110,8 +155,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * Search for records matching given arguments
      *
-     * @param string                              $_filter json encoded
-     * @param string                              $_paging json encoded
+     * @param string|array                        $_filter json encoded / array
+     * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
      * @param bool                                $_getRelations
