@@ -228,6 +228,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     protected $_devicesWithWrongBusyStatusDefault = array(
         'samsunggti9100', // Samsung Galaxy S-2
         'samsunggtn7000', // Samsung Galaxy Note 
+        'samsunggti9300', // Samsung Galaxy S-3
     );
     
     /**
