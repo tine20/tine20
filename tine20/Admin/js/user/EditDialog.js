@@ -595,8 +595,28 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
+        var smtpConfig = Tine.Felamimail.registry.get('defaults').smtp;
+        var domains = smtpConfig.secondarydomains.length ? smtpConfig.secondarydomains.split(',') : [];
+        if (smtpConfig.primarydomain.length) {
+            domains.push(smtpConfig.primarydomain);
+        }
+        var app = this.app;
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
-            Ext.apply(commonConfig, {
+            Ext.apply({
+                onNewentry: function(value) {
+                    var domain = value.email.split('@')[1];
+                    if(domains.indexOf(domain) > -1) {
+                        Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
+                    } else {
+                        Ext.MessageBox.show({
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING,
+                            title: app.i18n._('Domain not allowed'),
+                            msg: String.format(app.i18n._('The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already.'), '<b>' + domain + '</b>', '<b>' + value.email + '</b>')
+                        });
+                        return false;
+                    }
+                },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Alias'), 
@@ -608,14 +628,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         emptyText: this.app.i18n.gettext('Add an alias address...'),
                         vtype: 'email'
                     }),
-                    editor: new Ext.form.TextField({allowBlank: false}) 
+                    editor: new Ext.form.TextField({allowBlank: false})
                 }])
-            })
+            }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
-            Ext.apply(commonConfig, {
+            Ext.apply({
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Forward'), 
@@ -629,17 +649,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }),
                     editor: new Ext.form.TextField({allowBlank: false}) 
                 }])
-            })
+            }, commonConfig)
         );
         this.forwardsGrid.render(document.body);
         
         return [
             [this.aliasesGrid, this.forwardsGrid],
-            [{
+            [{hidden: true},
+             {
                 fieldLabel: this.app.i18n.gettext('Forward Only'),
                 name: 'emailForwardOnly',
                 xtype: 'checkbox',
-                columnWidth: 0.666,
                 readOnly: false
             }]
         ];
@@ -971,7 +991,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: 0.333,
+                    columnWidth: 0.5,
                     readOnly: true
                 },
                 items: this.initSmtp()
