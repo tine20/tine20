@@ -799,7 +799,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * 
      * @param array $_accountIds
      */
-    public function deleteUsers(array $_accountIds) {
+    public function deleteUsers(array $_accountIds)
+    {
         foreach ( $_accountIds as $accountId ) {
             $this->deleteUser($accountId);
         }
@@ -807,11 +808,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     
     /**
      * Delete all users returned by {@see getUsers()} using {@see deleteUsers()}
+     * 
      * @return void
      */
     public function deleteAllUsers()
     {
-        $users = $this->getUsers();
+        // need to fetch FullUser because otherwise we would get only enabled accounts :/
+        $users = $this->getUsers(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
         foreach ( $users as $user ) {
             $this->deleteUser($user);
