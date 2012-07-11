@@ -69,16 +69,16 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 
             case 'Admin_Event_UpdateGroup':
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
-                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->group->getId());
+                Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->group->getId());
                 break;
             case 'Admin_Event_AddGroupMember':
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
-                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
+                Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->groupId);
                 break;
                 
             case 'Admin_Event_RemoveGroupMember':
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
-                Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
+                Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->groupId);
                 break;
                 
             case 'Tinebase_Event_Container_BeforeCreate':
@@ -179,5 +179,16 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     public function sendEventNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
     {
         Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($_event, $_updater, $_action, $_oldEvent);
+    }
+    
+    /**
+     * update group events
+     * 
+     * @param string $_groupId
+     * @return void
+     */
+    public function onUpdateGroup($_groupId)
+    {
+        Calendar_Controller_Event::getInstance()->onUpdateGroup($_groupId);
     }
 }

@@ -743,7 +743,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $baseEvent->rrule = (string) $rrule;
             $baseEvent->exdate = $pastExdates;
             
-            $updatedBaseEvent = $this->update($baseEvent, FALSE);
+            // NOTE: we don't want implicit attendee updates
+            //$updatedBaseEvent = $this->update($baseEvent, FALSE);
+            $this->_inspectEvent($baseEvent);
+            $updatedBaseEvent = parent::update($baseEvent);
             
             if ($_deleteInstance == TRUE) {
                 // delete all future persistent events
@@ -1615,25 +1618,43 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function onUpdateGroup($_groupId)
     {
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
+        
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
                 'user_id'   => $_groupId
             )),
-            array('field' => 'dtstart', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG))
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'until' => Tinebase_DateTime::now()->addYear(100)->get(Tinebase_Record_Abstract::ISO8601LONG))
+            )
         ));
-        
-        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
-        
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $events);
         
         foreach($events as $event) {
-            Calendar_Model_Attender::resolveGroupMembers($event->attendee);
-            $this->update($event);
+            try {
+                if (! $event->rrule) {
+                    // update non recurring futrue events
+                    Calendar_Model_Attender::resolveGroupMembers($event->attendee);
+                    $this->update($event);
+                } else {
+                    // update thisandfuture for recurring events
+                    $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $this->getRecurExceptions($event), Tinebase_DateTime::now());
+                    Calendar_Model_Attender::resolveGroupMembers($nextOccurrence->attendee);
+                    
+                    if ($nextOccurrence->dtstart != $event->dtstart) {
+                        $this->createRecurException($nextOccurrence, FALSE, TRUE);
+                    } else {
+                        $this->update($nextOccurrence);
+                    }
+                }
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " could not update attendee");
+            }
         }
         
-         $this->doContainerACLChecks($doContainerACLChecks);
+        $this->doContainerACLChecks($doContainerACLChecks);
     }
     
     /****************************** alarm functions ************************/
