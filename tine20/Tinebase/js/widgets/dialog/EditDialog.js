@@ -84,7 +84,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     /**
      * @cfg {Boolean} doDuplicateCheck
-     * do duplicate check when saveing record (mode remote only)
+     * do duplicate check when saving record (mode remote only)
      */
     doDuplicateCheck: true,
     
@@ -107,8 +107,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     disableOnEditMultiple: null,
     
     selectedRecords: null,
+    
+    /**
+     * dialog is currently saving data
+     * @type Boolean
+     */
+    saving: false,
+    
+    /**
+     * selection filter for multiple edit
+     * @type {String} (json-encoded Array)
+     */
     selectionFilter: null,
-        
     
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
@@ -275,6 +285,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             requiredGrant: this.editGrant,
             text: _('Apply'),
             minWidth: 70,
+            ref: '../btnApplyChanges',
             scope: this,
             handler: this.onApplyChanges,
             iconCls: 'action_applyChanges'
@@ -533,6 +544,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic apply changes handler
      */
     onApplyChanges: function(button, event, closeWindow) {
+        if (this.saving) return;
+        this.saving = true;
+        
         // we need to sync record before validating to let (sub) panels have 
         // current data of other panels
         this.onRecordUpdate();
@@ -564,6 +578,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             this.purgeListeners();
                             this.window.close();
                         }
+                        this.saving = false;
                     },
                     failure: this.onRequestFailed,
                     timeout: 300000 // 5 minutes
@@ -581,9 +596,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     this.purgeListeners();
                     this.window.close();
                 }
+                this.saving = false;
             }
         } else {
             Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            this.saving = false;
         }
     },
     
@@ -677,6 +694,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
+        this.saving = false;
+        
         if (exception.code == 629) {
             this.onDuplicateException.apply(this, arguments);
         } else {
