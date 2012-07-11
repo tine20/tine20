@@ -463,10 +463,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         if(!empty($data->organizer)) {
             try {
-                $contact = Addressbook_Controller_Contact::getInstance()->get($data->organizer);
+                $contact = $data->resolveOrganizer();
                 
                 $_domParrent->appendChild(new DOMElement('OrganizerName', $contact->n_fileas, 'uri:Calendar'));
-                $_domParrent->appendChild(new DOMElement('OrganizerEmail', $contact->email, 'uri:Calendar'));
+                $_domParrent->appendChild(new DOMElement('OrganizerEmail', $contact->getPreferedEmailAddress(), 'uri:Calendar'));
             } catch (Tinebase_Exception_AccessDenied $e) {
                 // set the current account as organizer
                 // if organizer is not set, you can not edit the event on the Motorola Milestone

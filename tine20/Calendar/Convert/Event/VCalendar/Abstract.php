@@ -265,7 +265,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // event organizer
         if (!empty($event->organizer)) {
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->getMultiple(array($event->organizer), TRUE)->getFirstRecord();
+            $organizerContact = $event->resolveOrganizer();
 
             if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
                 $organizer = new Sabre_VObject_Property('ORGANIZER', 'mailto:' . $organizerContact->email);
