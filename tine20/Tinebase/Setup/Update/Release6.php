@@ -23,4 +23,18 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '6.1');
     }
+    
+    /**
+     * update to 6.2
+     *  - apply 5.11 if nessesary
+     */
+    public function update_1()
+    {
+        if ($this->getTableVersion('alarm') < 3) {
+            $update = new Tinebase_Setup_Update_Release5($this->_backend);
+            $update->update_10();
+        }
+        
+        $this->setApplicationVersion('Tinebase', '6.2');
+    }
 }
