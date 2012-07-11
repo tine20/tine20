@@ -119,7 +119,7 @@ abstract class Tinebase_Config_Abstract
         if (Tinebase_Core::getDb() && $config = $this->_loadConfig($name)) {
             $decodedConfigData = json_decode($config->value, TRUE);
             // @todo JSON encode all config data via update script!
-            return $this->_rawToConfig($decodedConfigData ? $decodedConfigData : $config->value, $name);
+            return $this->_rawToConfig(($decodedConfigData || is_array($decodedConfigData)) ? $decodedConfigData : $config->value, $name);
         }
         
         return $default;
