@@ -208,9 +208,18 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      */
     public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
+        if (! $_encrypt && preg_match('/\{(.*)\}(.*)/', $_password, $matches)) {
+            // if password should not be encrypted but already contains encryption type, we separate pw and type 
+            $scheme = $matches[1];
+            $password = $matches[2];
+        } else {
+            $scheme = $this->_config['emailScheme'];
+            $password = ($_encrypt) ? Hash_Password::generate($scheme, $_password, false) : $_password;
+        }
+        
         $values = array(
-            $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
-            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $_password, false) : $_password
+            $this->_propertyMapping['emailScheme']   => $scheme,
+            $this->_propertyMapping['emailPassword'] => $password,
         );
         
         if($this->_hasTine20Userid === true) {
@@ -224,9 +233,6 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
                 $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID'])    . ' = ?', $this->_convertToInt($this->_config['emailGID']))
             );
         }
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($values, TRUE));
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         $this->_db->update($this->_userTable, $values, $where);
     }
