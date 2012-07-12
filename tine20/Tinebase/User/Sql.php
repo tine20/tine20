@@ -371,7 +371,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $failedTests = array();
         
         $policy = array(
-            Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x20-\x7E]*/',
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => NULL,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
@@ -405,8 +405,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _testPolicy($password, $configKey, $regex = NULL)
     {
-        if ($configKey === Tinebase_Config::PASSWORD_POLICY_ONLYASCII && $regex !== NULL) {
-            return (preg_match($regex, $password, $matches)) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
+        if ($configKey === Tinebase_Config::PASSWORD_POLICY_ONLYASCII && Tinebase_Config::getInstance()->get($configKey, 0) && $regex !== NULL) {
+            $nonAsciiFound = preg_match($regex, $password, $matches);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($matches, TRUE));
+            
+            return ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
         }
         
         $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
