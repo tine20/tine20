@@ -773,7 +773,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         id: 'accountPassword',
                         name: 'accountPassword',
                         inputType: 'password',
-                        emptyText: this.app.i18n.gettext('no password set'),
                         columnWidth: 0.5,
                         passwordsMatch: true,
                         enableKeyEvents: true,
