@@ -1,13 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  ActiveSync
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id:AirSync.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
  */
 
 /**
@@ -50,6 +49,17 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage18 extends Syncroton_Wbxml_Dtd_Acti
         'PhoneNumber'               => 0x1c,
         'UserInformation'           => 0x1d,
         'EmailAddresses'            => 0x1e,
-        'SmtpAddress'               => 0x1f
+        'SmtpAddress'               => 0x1f,
+        'UserAgent'                 => 0x20,
+        'EnableOutboundSMS'         => 0x21,
+        'MobileOperator'            => 0x22,
+        'PrimarySmtpAddress'        => 0x23,
+        'Accounts'                  => 0x24,
+        'Account'                   => 0x25,
+        'AccountId'                 => 0x26,
+        'AccountName'               => 0x27,
+        'UserDisplayName'           => 0x28,
+        'SendDisabled'              => 0x29,
+        'RightsManagementInformation' => 0x2b,
     );
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  Wbxml

@@ -1,13 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  ActiveSync
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id:AirSync.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
  */
 
 /**
@@ -40,6 +39,14 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage10 extends Syncroton_Wbxml_Dtd_Acti
         'RecipientCount'          => 0x12,
         'MaxCertificates'         => 0x13,
         'MaxAmbiguousRecipients'  => 0x14,
-        'CertificateCount'        => 0x15
+        'CertificateCount'        => 0x15,
+        'Availability'            => 0x16,
+        'StartTime'               => 0x17,
+        'EndTime'                 => 0x18,
+        'MergedFreeBusy'          => 0x19,
+        'Picture'                 => 0x1a,
+        'MaxSize'                 => 0x1b,
+        'Data'                    => 0x1c,
+        'MaxPictures'             => 0x1d
     );
 }

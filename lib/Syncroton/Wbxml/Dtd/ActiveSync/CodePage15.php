@@ -1,13 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  ActiveSync
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id:AirSync.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
  */
 
 /**
@@ -46,6 +45,12 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage15 extends Syncroton_Wbxml_Dtd_Acti
         'LessThan'          => 0x1a,
         'GreaterThan'       => 0x1b,
         'Schema'            => 0x1c,
-        'Supported'         => 0x1d
+        'Supported'         => 0x1d,
+        'UserName'          => 0x1e,
+        'Password'          => 0x1f,
+        'ConversationId'    => 0x20,
+        'Picture'           => 0x21,
+        'MaxSize'           => 0x22,
+        'MaxPictures'       => 0x23
     );
 }
