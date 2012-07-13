@@ -140,11 +140,21 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.on('afteredit', this.onAfterRowEdit, this);
 
         Tine.widgets.relation.GenericPickerGridPanel.superclass.initComponent.call(this);
+        
         this.selModel.on('selectionchange', function(sm) {
             this.actionEditInNewWindow.setDisabled(sm.getCount() != 1);
         }, this);
-
     },
+    
+    /**
+     * updates the title ot the tab
+     * @param {Integer} count
+     */
+    updateTitle: function(count) {
+        count = Ext.isNumber(count) ? count : this.store.getCount();
+        this.setTitle((count > 0) ?  _('Relations') + ' (' + count + ')' : _('Relations'));
+    },
+    
     /**
      * creates the toolbar
      */
@@ -563,6 +573,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 }
             }, this);
         }, this);
+        this.updateTitle();
     },
 
     /**
@@ -574,8 +585,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         if(this.store) {
             this.store.on('add', this.onAdd, this);
         }
-
+        
         if (record.get('relations') && record.get('relations').length > 0) {
+            this.updateTitle(record.get('relations').length);
             var relationRecords = [];
             Ext.each(record.get('relations'), function(relation) {
                 relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
@@ -586,6 +598,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         // add other listeners after population
         if(this.store) {
             this.store.on('update', this.onUpdate, this);
+            this.store.on('add', this.updateTitle, this);
             this.store.on('remove', function(store, records, index) {
                 Ext.each(records, function(record) {
                     Ext.each(this.editDialog.relationPickers, function(picker) {
@@ -594,6 +607,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                         }
                     }, this);
                 }, this);
+                this.updateTitle();
             }, this);
         }
 
