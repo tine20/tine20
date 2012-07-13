@@ -31,6 +31,12 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
     }
     
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Projects_Model_Project';
+    
+    /**
      * don't clone. Use the singleton.
      *
      */

@@ -784,22 +784,34 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
-        
         $this->checkSystemContainer($_containerId);
         
-        if($_ignoreAcl !== TRUE) {
-
-            if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
+        $tm = Tinebase_TransactionManager::getInstance();   
+        $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
+        
+        $deletedContainer = NULL;
+        
+        try {
+            if($_ignoreAcl !== TRUE) {
+                if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                    throw new Tinebase_Exception_AccessDenied('Permission to delete container denied.');
+                }
+                
+                if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
+                    throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
+                }
             }
+            $this->deleteContainerContents($container);
+            $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
             
-            if($container->type !== Tinebase_Model_Container::TYPE_PERSONAL and $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
-                throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
-            }
+        } catch (Exception $e) {
+            $tm->rollBack();
+            throw $e;
         }
         
-        $this->_setRecordMetaDataAndUpdate($container, 'delete');
+        $tm->commitTransaction($myTransactionId);
         
+        return $deletedContainer;
         /*
         // move all contained objects to next available personal container and try again to delete container
         $app = Tinebase_Application::getApplicationById($container->application_id);
@@ -821,6 +833,35 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
         );
         */
+    }
+    
+    /**
+     * set records belonging to the given container deleted
+     * @param Tinebase_Model_Container $container
+     */
+    public function deleteContainerContents($container)
+    {
+        // set records belonging to this container to deleted
+        $model = $container->model;
+        if($model) {
+            $controller = Tinebase_Core::getApplicationInstance($model);
+            if($controller) {
+                $filterName = $model . 'Filter';
+                $filter = new $filterName(array(
+                    array(
+                        'field'    => 'container_id',
+                        'operator' => 'equals',
+                        'value'    => intval($container->id)
+                    ),
+                    array(
+                        'field'    => 'is_deleted',
+                        'operator' => 'equals',
+                        'value'    => 0
+                    )),
+                    'AND');
+                $controller::getInstance()->deleteByFilter($filter);
+            }
+        }
     }
     
     /**
@@ -1423,17 +1464,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $name
      * @param string $idConfig save id in config if given
      * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @param string $modelName the model the container contains
      * @return Tinebase_Model_Container
      */
-    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL)
+    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL, $modelName = NULL)
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
+        $controller = Tinebase_Core::getApplicationInstance($application->name);
+        $model = $modelName ? $modelName : $controller->getDefaultModel();
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => 'Sql',
             'application_id'    => $application->getId(),
+            'model'             => $model
         ));
         $groupsBackend = Tinebase_Group::getInstance();
         $grants = ($grants) ? $grants : new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(

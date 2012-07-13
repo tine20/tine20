@@ -26,6 +26,12 @@ class Sales_Controller extends Tinebase_Controller_Abstract
     private function __construct() {
         $this->_applicationName = 'Sales';
     }
+
+    /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Sales_Model_Contract';
     
     /**
      * don't clone. Use the singleton.

@@ -23,6 +23,12 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     private static $_instance = NULL;
 
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Calendar_Model_Event';
+    
+    /**
      * don't clone. Use the singleton.
      *
      */

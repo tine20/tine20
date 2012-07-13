@@ -597,6 +597,50 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
+     * test deleting container and the containing events
+     * #6704: events do not disappear when shared calendar got deleted
+     * https://forge.tine20.org/mantisbt/view.php?id=6704
+     */
+    public function testDeleteContainerAndEvents()
+    {
+        $fe = new Tinebase_Frontend_Json_Container();
+        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, '');
+        // test if model is set automatically
+        $this->assertEquals($container['model'], 'Calendar_Model_Event');
+        
+        $date = new Tinebase_DateTime();
+        $event = new Calendar_Model_Event(array(
+            'dtstart' => $date,
+            'dtend'    => $date->subHour(1),
+            'summary' => 'bla bla',
+            'class'    => 'PUBLIC',
+            'transp'    => 'OPAQUE',
+            'container_id' => $container['id']
+            ));
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $this->assertEquals($container['id'], $event->container_id);
+        
+        $fe->deleteContainer($container['id']);
+        
+        $e = new Exception('dummy');
+        
+        $cb = new Calendar_Backend_Sql();
+        $deletedEvent = $cb->get($event->getId(), true);
+        // record should be deleted
+        $this->assertEquals($deletedEvent->is_deleted, 1);
+        
+        try {
+            Calendar_Controller_Event::getInstance()->get($event->getId(), $container['id']);
+            $this->fail('The expected exception was not thrown');
+        } catch (Tinebase_Exception_NotFound $e) {
+            // ok;
+        }
+        // record should not be found
+        $this->assertEquals($e->getMessage(), 'Calendar_Model_Event record with id '.$event->getId().' not found!');
+        
+    }
+    
+    /**
      * compare expected event data with test event
      *
      * @param array $expectedEventData

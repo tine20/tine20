@@ -32,6 +32,12 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
     );
     
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Crm_Model_Lead';
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

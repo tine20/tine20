@@ -71,16 +71,24 @@ class Tinebase_Frontend_Json_Container
      * @param   string $application
      * @param   string $containerName
      * @param   string $containerType
+     * @param   string $modelName
      * @return  array new container
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function addContainer($application, $name, $containerType)
+    public function addContainer($application, $name, $containerType, $modelName = '')
     {
+        if (empty($modelName)) {
+            $modelName = Tinebase_Core::getApplicationInstance($application)->getDefaultModel();
+        } else {
+            $modelName = strstr($modelName, '_Model_') ? $modelName : $application . '_Model_' . $modelName;
+        }
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,
             'type'              => $containerType,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'model'             => $modelName
         ));
         
         if($newContainer->type !== Tinebase_Model_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Model_Container::TYPE_SHARED) {

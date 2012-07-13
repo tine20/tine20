@@ -37,4 +37,50 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '6.2');
     }
+    
+    /**
+     * update to 6.3
+     *  - create container-field model (the containing model)
+     *  - assign models to existing apps
+     */
+    public function update_2()
+    {
+        // create definition col
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>model</name>
+                <type>text</type>
+                <length>64</length>
+            </field>');
+        
+        $this->_backend->addCol('container', $declaration);
+        
+        $modelsToSet = array(
+                'Calendar'    => 'Calendar_Model_Event',
+                'Addressbook' => 'Addressbook_Model_Contact',
+                'Courses'     => 'Courses_Model_Course',
+                'Crm'         => 'Crm_Model_Lead',
+                'Tasks'       => 'Tasks_Model_Task',
+                'Sales'       => 'Sales_Model_Contract',
+                'Projects'    => 'Projects_Model_Project',
+                'SimpleFAQ'   => 'SimpleFAQ_Model_FAQ'
+                );
+        
+        foreach($modelsToSet as $app => $model) {
+            $application = Tinebase_Application::getInstance()->getApplicationByName($app);
+            $filter = new Tinebase_Model_ContainerFilter(array(array(
+                    'field' => 'application_id',
+                    'operator' => 'equals',
+                    'value' => $application->getId()
+                    )), 'AND');
+            
+            $records = Tinebase_Container::getInstance()->search($filter);
+            foreach($records as $record) {
+                $record->model = $model;
+                Tinebase_Container::getInstance()->update($record);
+            }
+        }
+        $this->setTableVersion('container', 6);
+        $this->setApplicationVersion('Tinebase', '6.3');
+    }
 }

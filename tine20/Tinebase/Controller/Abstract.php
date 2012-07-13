@@ -25,6 +25,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_defaultsSettings = array();
     
+    
+    /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = NULL;
+    
     /**
      * application name (is needed in checkRight())
      *
@@ -147,6 +154,15 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             Zend_Json::encode($_settings), 
             $this->_applicationName
         );
+    }
+    
+    /**
+     * returns the default model of this application
+     * @return string
+     */
+    public static function getDefaultModel()
+    {
+        return static::$_defaultModel;
     }
     
     /**

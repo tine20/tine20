@@ -28,6 +28,12 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
     private static $_instance = NULL;
 
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Addressbook_Model_Contact';
+    
+    /**
      * constructor (get current user)
      */
     private function __construct() {

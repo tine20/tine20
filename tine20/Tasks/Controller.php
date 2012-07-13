@@ -30,6 +30,13 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_Con
         $this->_applicationName = 'Tasks';
     }
     
+
+    /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Tasks_Model_Task';
+    
     /**
      * don't clone. Use the singleton.
      *

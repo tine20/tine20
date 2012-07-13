@@ -97,14 +97,15 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      */
     getFormItems: function () {
+        var userApplications = Tine.Tinebase.registry.get('userApplications');
         this.appStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             fields: Tine.Admin.Model.Application
         });
         this.appStore.loadData({
-            results:    Tine.Tinebase.registry.get('userApplications'),
-            totalcount: Tine.Tinebase.registry.get('userApplications').length
+            results: userApplications,
+            totalcount: userApplications.length
         });
         
         return {
@@ -119,7 +120,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 autoHeight: true,
                 items: [[{
-                    columnWidth: 0.3,
+                    columnWidth: 0.225,
                     fieldLabel: this.app.i18n._('Name'), 
                     name: 'name',
                     allowBlank: false,
@@ -128,7 +129,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     readOnly: this.record.id != 0,
                     store: this.appStore,
-                    columnWidth: 0.3,
+                    columnWidth: 0.225,
                     name: 'application_id',
                     displayField: 'name',
                     valueField: 'id',
@@ -137,9 +138,20 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     anchor: '100%',
                     allowBlank: false,
                     forceSelection: true
+                }, 
+                    // TODO: in master we can fill a combo using app.registry.get('models'), 
+                    //        but at the moment this is just a ro textfield, and we have no 
+                    //        apps with more than one model having containers
+                {
+                    readOnly: 1,
+                    columnWidth: 0.225,
+                    name: 'model',
+                    fieldLabel: this.app.i18n._('Model'),
+                    anchor: '100%',
+                    allowBlank: true
                 }, {
                     xtype: 'combo',
-                    columnWidth: 0.3,
+                    columnWidth: 0.225,
                     name: 'type',
                     fieldLabel: this.app.i18n._('Type'),
                     store: [['personal', this.app.i18n._('personal')], ['shared', this.app.i18n._('shared')]],
@@ -168,7 +180,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     autoHeight: true,
                     name: 'note'
                 }
-               ]            
+               ]
         };
     }
 });

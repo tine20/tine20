@@ -28,6 +28,12 @@ class Courses_Controller extends Tinebase_Controller_Event
     private static $_instance = NULL;
 
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Courses_Model_Course';
+    
+    /**
      * constructor (get current user)
      */
     private function __construct() {

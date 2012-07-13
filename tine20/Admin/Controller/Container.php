@@ -216,15 +216,15 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
-        Tinebase_Container::getInstance()->checkSystemContainer($_ids);
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
         
-        $deletedRecords = parent::delete($_ids);
+        foreach($_ids as $id) {
+            $containers->addRecord(Tinebase_Container::getInstance()->deleteContainer($id));
+        }
         
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
-        
-        return $deletedRecords;
+        return $containers;
     }
-    
+
     /**
      * set multiple container grants
      * 

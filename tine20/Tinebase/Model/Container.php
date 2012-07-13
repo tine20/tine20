@@ -83,6 +83,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'account_grants'    => array('allowEmpty' => true), // non persistent
         'owner_id'          => array('allowEmpty' => true), // non persistent + only set for personal folders
         'path'              => array('allowEmpty' => true), // non persistent
+        'model'             => array('allowEmpty' => true),
         
     // only gets updated in increaseContentSequence() + readonly in normal record context
         'content_seq'       => array('allowEmpty' => true),

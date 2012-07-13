@@ -837,6 +837,44 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test create container
+     */
+    public function testCreateContainerAndDeleteContents()
+    {
+        $container = $this->_json->saveContainer(array(
+            "type" => Tinebase_Model_Container::TYPE_SHARED,
+            "backend" => "Sql",
+            "name" => "asdfgsadfg",
+            "color" => "#008080",
+            "application_id" => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            "model" => "",
+            "note" => ""
+        ));
+        // check if the model was set
+        $this->assertEquals($container['model'], 'Addressbook_Model_Contact');
+        $contact = new Addressbook_Model_Contact(array('n_given' => 'max', 'n_family' => 'musterman', 'container_id' => $container['id']));
+        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        
+        $this->_json->deleteContainers(array($container['id']));
+        
+        $cb = new Addressbook_Backend_Sql();
+        $del = $cb->get($contact->getId(), true);
+        // record should be deleted
+        $this->assertEquals($del->is_deleted, 1);
+        
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($contact->getId(), $container['id']);
+            $this->fail('The expected exception was not thrown');
+        } catch (Tinebase_Exception_NotFound $e) {
+            // ok;
+        }
+        // record should not be found
+        $this->assertEquals($e->getMessage(), 'Addressbook_Model_Contact record with id = ' . $contact->getId().' not found!');
+        
+        
+    }
+    
+    /**
      * saves and returns container
      * 
      * @param string $_type

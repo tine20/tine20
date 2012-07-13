@@ -28,7 +28,13 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
         'faqstatus_id'  => 1,
         'faqtype_id'    => 2,
     );
-
+    
+    /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'SimpleFAQ_Model_FAQ';
+    
     /**
      * the constructor
      *
