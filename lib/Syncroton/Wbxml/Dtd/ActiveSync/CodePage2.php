@@ -1,13 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  ActiveSync
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id:AirSync.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
  */
 
 /**
@@ -62,25 +61,26 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage2 extends Syncroton_Wbxml_Dtd_Activ
         'Recurrence'            => 0x28,
         'Recurrence_Type'       => 0x29,
         'Recurrence_Until'      => 0x2a,
-        'Recurrence_Occurrences' => 0x2b,
-        'Recurrence_Interval'   => 0x2c,
-        'Recurrence_DayOfWeek'  => 0x2d,
-        'Recurrence_DayOfMonth' => 0x2e,
-        'Recurrence_WeekOfMonth' => 0x2f,
-        'Recurrence_MonthOfYear' => 0x30,
-        'StartTime'             => 0x31,
-        'Sensitivity'           => 0x32,
-        'TimeZone'              => 0x33,
-        'GlobalObjId'           => 0x34,
-        'ThreadTopic'           => 0x35,
-        'MIMEData'              => 0x36,
-        'MIMETruncated'         => 0x37,
-        'MIMESize'              => 0x38,
-        'InternetCPID'          => 0x39,
-        'Flag'                  => 0x3a,
-        'FlagStatus'            => 0x3b,
-        'ContentClass'          => 0x3c,
-        'FlagType'              => 0x3d,
-        'CompleteTime'          => 0x3e
+        'Recurrence_Occurrences'  => 0x2b,
+        'Recurrence_Interval'     => 0x2c,
+        'Recurrence_DayOfWeek'    => 0x2d,
+        'Recurrence_DayOfMonth'   => 0x2e,
+        'Recurrence_WeekOfMonth'  => 0x2f,
+        'Recurrence_MonthOfYear'  => 0x30,
+        'StartTime'               => 0x31,
+        'Sensitivity'             => 0x32,
+        'TimeZone'                => 0x33,
+        'GlobalObjId'             => 0x34,
+        'ThreadTopic'             => 0x35,
+        'MIMEData'                => 0x36,
+        'MIMETruncated'           => 0x37,
+        'MIMESize'                => 0x38,
+        'InternetCPID'            => 0x39,
+        'Flag'                    => 0x3a,
+        'FlagStatus'              => 0x3b,
+        'ContentClass'            => 0x3c,
+        'FlagType'                => 0x3d,
+        'CompleteTime'            => 0x3e,
+        'DisallowNewTimeProposal' => 0x3f
     );
 }

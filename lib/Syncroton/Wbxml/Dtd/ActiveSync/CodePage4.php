@@ -1,13 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Wbxml
  * @subpackage  ActiveSync
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id:AirSync.php 4968 2008-10-17 09:09:33Z l.kneschke@metaways.de $
  */
 
 /**
@@ -61,6 +60,15 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage4 extends Syncroton_Wbxml_Dtd_Activ
         'StartTime'               => 0x27,
         'UID'                     => 0x28,
         'AttendeeStatus'          => 0x29,
-        'AttendeeType'            => 0x2a
+        'AttendeeType'            => 0x2a,
+        'DisallowNewTimeProposal' => 0x33,
+        'ResponseRequested'       => 0x34,
+        'AppointmentReplyTime'    => 0x35,
+        'ResponseType'            => 0x36,
+        'CalendarType'            => 0x37,
+        'IsLeapMonth'             => 0x38,
+        'FirstDayOfWeek'          => 0x39,
+        'OnlineMeetingConfLink'   => 0x3a,
+        'OnlineMeetingExternalLink' => 0x3b
     );
 }
