@@ -1123,7 +1123,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            $where = $this->_getContainerAclTable()->getAdapter()->quoteInto('container_id = ?', $containerId);
+            $where = $this->_getContainerAclTable()->getAdapter()->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
             $this->_getContainerAclTable()->delete($where);
             
             foreach ($_grants as $recordGrants) {

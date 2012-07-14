@@ -120,7 +120,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $members = array();
 
             $select = $this->groupMembersTable->select();
-            $select->where('group_id = ?', $groupId);
+            $select->where($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
 
             $rows = $this->groupMembersTable->fetchAll($select);
             
@@ -530,7 +530,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $select->where($this->_db->quoteIdentifier($this->_tableName. '.name') . ' LIKE ?', '%' . $_filter . '%');
         }
         if($_sort !== NULL) {
-            $select->order("$_sort $_dir");
+            $select->order($this->_tableName . '.' . $_sort . ' ' . $_dir);
         }
         if($_start !== NULL) {
             $select->limit($_limit, $_start);

@@ -162,7 +162,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function searchNotesCount(Tinebase_Model_NoteFilter $_filter)
     {
         $select = $this->_db->select()
-            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(id)'));
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'));
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
         //$_filter->appendFilterSql($select);
@@ -180,7 +180,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function getNote($_noteId)
     {
-        $row = $this->_notesTable->fetchRow($this->_db->quoteInto('id = ?', $_noteId));
+        $row = $this->_notesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteId));
         
         if (!$row) {
             throw new Tinebase_Exception_NotFound('Note not found.');
@@ -507,7 +507,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function getNoteTypeByName($_name)
     {
-        $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto('name = ?', $_name));
+        $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
         
         if (!$row) {
             throw new Tinebase_Exception_NotFound('Note type not found.');
@@ -556,7 +556,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function deleteNoteType($_noteTypeId)
     {
-        $this->_noteTypesTable->delete($this->_db->quoteInto('id = ?', $_noteTypeId));
+        $this->_noteTypesTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteTypeId));
     }
     
 }
