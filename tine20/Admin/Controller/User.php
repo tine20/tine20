@@ -210,6 +210,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
+        $event->oldAccount = $oldUser;
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
