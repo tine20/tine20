@@ -24,7 +24,12 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         } catch (Zend_Db_Statement_Exception $zdse) {
             // do nothing (fk not found)
         }
-        $this->_backend->dropIndex('tasks', 'status_id');
+    
+        try {
+            $this->_backend->dropIndex('tasks', 'status_id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // do nothing (fk not found)
+        }
         
         // need to replace all NULL values first
         $this->_db->update(SQL_TABLE_PREFIX . 'tasks', array(
