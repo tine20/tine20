@@ -332,7 +332,7 @@ Ext.namespace('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Account} account
      */
     addSignature: function(account) {
-        if (this.draftOrTemplate) {
+        if (this.draftOrTemplate || ! account) {
             return;
         }
 

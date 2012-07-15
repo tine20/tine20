@@ -718,7 +718,7 @@ Tine.Felamimail.loadFlagsStore = function(reload) {
  * @return {String}
  */
 Tine.Felamimail.getSignature = function(id) {
-        
+    
     var result = '',
         app = Tine.Tinebase.appMgr.get('Felamimail'),
         activeAccount = app.getMainScreen().getTreePanel().getActiveAccount();
@@ -733,7 +733,7 @@ Tine.Felamimail.getSignature = function(id) {
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
         // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-        result = '<br><br><span id="felamimail-body-signature">--<br>' + signature + '</span>';
+        result = '<br><br><span id="felamimail-body-signature">-- <br>' + signature + '</span>';
     }
     
     return result;
