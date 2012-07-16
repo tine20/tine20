@@ -37,7 +37,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {bool}
      * enable top toolbar (with search combo)
      */
-    enableTbar: false,
+    enableTbar: true,
     
     /**
      * store to hold records
