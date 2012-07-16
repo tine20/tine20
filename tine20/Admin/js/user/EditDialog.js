@@ -98,10 +98,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.storeGroups.loadData(this.record.get('groups'));
             this.storeRoles.loadData(this.record.get('accountRoles'));
         }
-        // add to store default primary group
-        else {
-            this.storeGroups.add(new Tine.Admin.Model.Group(this.record.get('accountPrimaryGroup')));
-        }
         
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
