@@ -179,6 +179,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $oldUser = $this->_userBackend->getUserByProperty('accountId', $_user, 'Tinebase_Model_FullUser');
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -206,7 +208,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             throw $e;
         }
-            
+        
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -234,6 +236,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // avoid forging accountId, gets created in backend
         unset($_user->accountId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());

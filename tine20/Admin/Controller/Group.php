@@ -265,7 +265,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $user  = Tinebase_User::getInstance()->getUserById($_userId);
             
             if (!empty($user->contact_id) && !empty($group->list_id)) {
+                $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
                 Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id);
+                Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
             }
         }
         
@@ -294,7 +296,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             
             if (!empty($user->contact_id) && !empty($group->list_id)) {
                 try {
+                    $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
                     Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id);
+                    Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' catched exception: ' . get_class($tenf));
