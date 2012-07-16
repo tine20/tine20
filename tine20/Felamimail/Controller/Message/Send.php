@@ -459,7 +459,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
         $references .= $originalHeaders['message-id'];
         
-        while (strlen(trim($references)) > 998) {
+        while (strlen($references) > 998) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                 . ' Very long references header, need to cut some chars off.');
             $pos = strpos($references, ' ');
