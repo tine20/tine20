@@ -1052,7 +1052,6 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_checkRight('delete');
 
             foreach ($records as $record) {
-                $this->_checkGrant($record, 'delete');
                 $this->_deleteRecord($record);
             }
 
@@ -1106,7 +1105,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param array $_ids
      * @return array of ids to actually delete
      */
-    protected function _inspectDelete(array $_ids) {
+    protected function _inspectDelete(array $_ids)
+    {
         return $_ids;
     }
 
