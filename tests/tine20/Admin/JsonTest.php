@@ -227,6 +227,36 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testUpdateUserRemoveGroup
+     * 
+     * @see 0006762: user still in admin role when admin group is removed
+     */
+    public function testUpdateUserRemoveGroup()
+    {
+        $account = $this->testSaveAccount();
+        $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
+        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
+        
+        $adminGroupId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['groups'] = array($account['accountPrimaryGroup'], $adminGroupId);
+        $account['container_id'] = $account['container_id']['id'];
+        $account = $this->_json->saveUser($account);
+        
+        $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
+        $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        $this->assertEquals(array($adminRole->getId()), $roles);
+
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['groups'] = array($account['accountPrimaryGroup']);
+        $account['container_id'] = $account['container_id']['id'];
+        $account = $this->_json->saveUser($account);
+        
+        $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
+        $this->assertEquals(array(), $roles);
+    }
+    
+    /**
      * try to delete accounts 
      */
     public function testDeleteAccounts()

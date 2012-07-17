@@ -374,11 +374,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $account = Admin_Controller_User::getInstance()->update($account, $password, $password);
         }
         
-        // after user update or creation add user to selected roles
-        if (isset($recordData['accountRoles']) && $recordData['accountRoles']) {
-            Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
-        }
-        
         $result = $this->_recordToJson($account);
         
         // add primary group to account for the group selection combo box
