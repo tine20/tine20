@@ -18,7 +18,7 @@ class Courses_Setup_Update_Release6 extends Setup_Update_Abstract
     public function update_0()
     {
         if ($this->getTableVersion('courses') != 5) {
-            $release5 = new Courses_Setup_Update_Release5();
+            $release5 = new Courses_Setup_Update_Release5($this->_backend);
             $release5->update_1();
         }
         
