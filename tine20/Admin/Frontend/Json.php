@@ -360,15 +360,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         if ($account->getId() == NULL) {
-            if(!Tinebase_User_Registration::getInstance()->checkUniqueUsername($account->accountLoginName)) {
-                $result = array(
-                    'errors'            => 'invalid username',
-                    'errorMessage'      => 'Username already used.',
-                    'status'            => 'failure'
-                );
-                return $result;
-            }
-            
             $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         } else {
             $account = Admin_Controller_User::getInstance()->update($account, $password, $password);

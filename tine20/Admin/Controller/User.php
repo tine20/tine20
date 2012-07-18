@@ -179,6 +179,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $oldUser = $this->_userBackend->getUserByProperty('accountId', $_user, 'Tinebase_Model_FullUser');
         
+        if ($oldUser->accountLoginName !== $_user->accountLoginName) {
+            $this->_checkLoginNameExistance($_user);
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
         
         try {
@@ -239,6 +243,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
         
+        $this->_checkLoginNameExistance($_user);
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -272,6 +278,26 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         return $user;
+    }
+    
+    /**
+     * look for user with the same login name
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @return boolean
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkLoginNameExistance(Tinebase_Model_FullUser $user)
+    {
+        try {
+            $existing = Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+            if ($user->getId() === NULL || $existing->getId() !== $user->getId()) {
+                throw new Tinebase_Exception_SystemGeneric('Login name already exists. Please choose another one.');
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        }
+        
+        return TRUE;
     }
     
     /**

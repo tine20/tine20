@@ -189,6 +189,39 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         return $account;
     }
+
+    /**
+     * try to create an account with existing login name 
+     * 
+     * @return array
+     * 
+     * @see 0006770: check if username already exists when creating new user / changing username
+     */
+    public function testSaveAccountWithExistingName()
+    {
+        $accountData = $this->objects['user']->toArray();
+        unset($accountData['accountId']);
+        
+        try {
+            $account = $this->_json->saveUser($accountData);
+            $this->fail('Creating an account with existing login name should throw exception: ' . print_r($account, TRUE));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+        
+        $this->assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
+        
+        $accountData = $this->objects['user']->toArray();
+        $accountData['accountId'] = $this->objects['user']->getId();
+        $accountData['accountLoginName'] = Tinebase_Core::getUser()->accountLoginName;
+        
+        try {
+            $account = $this->_json->saveUser($accountData);
+            $this->fail('Updating an account with existing login name should throw exception: ' . print_r($account, TRUE));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+        
+        $this->assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
+    }
     
     /**
      * try to save a hidden account
