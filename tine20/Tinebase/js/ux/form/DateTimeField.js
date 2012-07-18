@@ -25,6 +25,16 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     timeEditable: true,
     markedInvalid: false,
     
+    /**
+     * @cfg {Object} config to be applied to date field 
+     */
+    dateConf: null,
+    
+    /**
+     * @cfg {Object} config to be applied to time field 
+     */
+    timeConf: null,
+    
     /*
      * @cfg {String} Default Time in the form HH:MM, if null current time is used
      */
@@ -131,7 +141,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
         var dateField = (this.allowBlank) ? Ext.ux.form.ClearableDateField : Ext.form.DateField;
         
-        this.dateField = new dateField({
+        this.dateField = new dateField(Ext.apply({
             lazyRender: false,
             renderTo: this.el,
             readOnly: this.readOnly,
@@ -147,9 +157,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
                 focus: this.onDateFocus,
                 blur: this.onDateBlur
             }
-        });
+        }, this.dateConf || {}));
         
-        this.timeField = new Ext.form.TimeField({
+        this.timeField = new Ext.form.TimeField(Ext.apply({
             lazyRender: false,
             increment: this.increment,
             renderTo: this.el,
@@ -167,7 +177,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
                 focus: this.onDateFocus,
                 blur: this.onDateBlur
             }
-        });
+        }, this.timeConf || {}));
         
     },
     
@@ -227,6 +237,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         if (what !== 'date' && this.timeField) {
             this.timeField.setDisabled(bool);
         }
+        
+        Ext.ux.form.DateTimeField.superclass.setDisabled.call(this, bool);
     },
     
     setReadOnly: function (bool, what) {
@@ -237,6 +249,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         if (what !== 'date' && this.timeField) {
             this.timeField.setReadOnly(bool);
         }
+        
+        Ext.ux.form.DateTimeField.superclass.setReadOnly.call(this, bool);
     },
     
     setRawValue: Ext.EmptyFn,
