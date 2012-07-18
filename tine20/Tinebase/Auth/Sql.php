@@ -162,11 +162,16 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      */
     protected function _authenticateValidateResult($resultIdentity)
     {
-        $passwordHash = substr($resultIdentity[$this->_credentialColumn], 0, 1) === '{' 
-            ? $resultIdentity[$this->_credentialColumn] 
-            : '{PLAIN-MD5}' . $resultIdentity[$this->_credentialColumn];
+        if (empty($resultIdentity[$this->_credentialColumn])) {
+            $validatedPw = ($this->_credential === '');
+        } else {
+            $passwordHash = substr($resultIdentity[$this->_credentialColumn], 0, 1) === '{' 
+                ? $resultIdentity[$this->_credentialColumn] 
+                : '{PLAIN-MD5}' . $resultIdentity[$this->_credentialColumn];
+            $validatedPw = Hash_Password::validate($passwordHash, $this->_credential);
+        }
         
-        if (Hash_Password::validate($passwordHash, $this->_credential) !== true) {
+        if ($validatedPw !== TRUE) {
             $this->_authenticateResultInfo['code'] = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
             $this->_authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
             return $this->_authenticateCreateAuthResult();

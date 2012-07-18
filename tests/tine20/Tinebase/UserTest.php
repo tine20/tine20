@@ -151,6 +151,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      * 
      * @see 0003008: add password policies
      * @see 0003978: Option to only allow US-ASCII Charsets (for passwords)
+     * @see 0006774: fix empty password handling
      */
     public function testPasswordPolicy()
     {
@@ -176,6 +177,14 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
             $this->assertContains('Password failed to match the following policy requirements: '.
                 'pwPolicyOnlyASCII|pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers', $tppv->getMessage());
+        }
+
+        try {
+            Tinebase_User::getInstance()->setPassword($sclever, '');
+            $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation');
+        } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
+            $this->assertContains('Password failed to match the following policy requirements: '.
+                'pwPolicyMinLength', $tppv->getMessage());
         }
     }
 }

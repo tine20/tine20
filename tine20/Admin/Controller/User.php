@@ -245,6 +245,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $this->_checkLoginNameExistance($_user);
         
+        if ($_password != $_passwordRepeat) {
+            throw new Admin_Exception("Passwords don't match.");
+        } else if (empty($_password)) {
+            $_password = '';
+            $_passwordRepeat = '';
+        }
+        Tinebase_User::getInstance()->checkPasswordPolicy($_password);
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -273,9 +281,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         ));
         Tinebase_Event::fireEvent($event);
         
-        if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($user, $_password, $_passwordRepeat);
-        }
+        $this->setAccountPassword($user, $_password, $_passwordRepeat);
 
         return $user;
     }
