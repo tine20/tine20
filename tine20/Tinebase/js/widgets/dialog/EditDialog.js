@@ -360,7 +360,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     initContainerSelector: function() {
         if (this.showContainerSelector) {
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
-                id: this.app.appName + 'EditDialogContainerSelector',
+                id: this.app.appName + 'EditDialogContainerSelector-' + Ext.id(),
                 fieldLabel: _('Saved in'),
                 width: 300,
                 listWidth: 300,
