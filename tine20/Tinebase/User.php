@@ -375,7 +375,7 @@ class Tinebase_User
      * 
      * @todo make use of dbmail plugin configurable (should be false by default)
      */
-    public static function syncUser($username, $options)
+    public static function syncUser($username, $options = array())
     {
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;

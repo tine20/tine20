@@ -196,7 +196,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
         $mailboxString = ($_mailboxString !== NULL) ? $_mailboxString : $this->_getUserMailbox($_user->accountLoginName);
         
-        $limit = $_user->imapUser->emailMailQuota > 0 ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
+        $limit = (isset($_user->imapUser) && $_user->imapUser->emailMailQuota) > 0 ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
         $imap->setQuota($mailboxString, 'STORAGE', $limit);
     }
     
