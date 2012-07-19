@@ -21,7 +21,7 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData
     {
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
         
-        foreach (Syncroton_Data_AData::$entries[get_class($this)][$_collectionData["collectionId"]][$_serverId] as $key => $value) {
+        foreach (Syncroton_Data_AData::$entries[get_class($this)][$_collectionData->collectionId][$_serverId] as $key => $value) {
             // don't add empty values
             if($value === null || $value == '') {
                 continue;

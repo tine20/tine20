@@ -22,6 +22,7 @@ class Syncroton_AllTests
         $suite->addTestSuite('Syncroton_Backend_AllTests');
         $suite->addTestSuite('Syncroton_Command_AllTests');
         $suite->addTestSuite('Syncroton_Data_AllTests');
+        $suite->addTestSuite('Syncroton_Model_AllTests');
         $suite->addTestSuite('Syncroton_Wbxml_AllTests');
         
         return $suite;

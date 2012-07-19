@@ -43,8 +43,8 @@ class Syncroton_Server
         }
         
         $this->_userId  = $userId;
-        $this->_request = $request !== null ? $request : new Zend_Controller_Request_Http();
-        $this->_body    = $body    !== null ? $body    : fopen('php://input', 'r');
+        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
         $this->_deviceBackend = Syncroton_Registry::getDeviceBackend();
         
@@ -67,7 +67,7 @@ class Syncroton_Server
             case 'GET':
                 echo "It works!<br>Your userid is: {$this->_userId} and your IP address is: {$_SERVER['REMOTE_ADDR']}.";
                 break;
-        }       
+        }
     }
     
     /**
@@ -83,38 +83,26 @@ class Syncroton_Server
     
     protected function _handlePost()
     {
-        if(count($_GET) == 1) {
-            $arrayKeys = array_keys($_GET);
-            $requestParameters = $this->_decodeRequestParameters($arrayKeys[0]);
-        } else {
-            $requestParameters = $this->_getRequestParameters();
-        }
+        $requestParameters = $this->_getRequestParameters($this->_request);
         
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' REQUEST ' . print_r($requestParameters, true));
         
-        $userAgent = $this->_request->getServer('HTTP_USER_AGENT', $requestParameters['deviceType']);
-        $policyKey = $this->_request->getServer('HTTP_X_MS_POLICYKEY');
-        
-        if ($this->_logger instanceof Zend_Log) 
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Agent: $userAgent  PolicyKey: $policyKey ASVersion: {$requestParameters['protocolVersion']} Command: {$requestParameters['command']}");
-        
         $className = 'Syncroton_Command_' . $requestParameters['command'];
         
         if(!class_exists($className)) {
-            throw new Syncroton_Exception_CommandNotFound('unsupported command ' . $requestParameters['command']);
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " command not supported: " . $requestParameters['command']);
+            
+            header("HTTP/1.1 501 not implemented");
+            
+            return;
         }
         
         // get user device
-        $device = $this->_getUserDevice(
-            $this->_userId, 
-            $requestParameters['deviceId'],
-            $requestParameters['deviceType'],
-            $userAgent,
-            $requestParameters['protocolVersion']
-        );
+        $device = $this->_getUserDevice($this->_userId, $requestParameters);
         
-        if ($this->_request->getServer('CONTENT_TYPE') == 'application/vnd.ms-sync.wbxml') {
+        if ($requestParameters['contentType'] == 'application/vnd.ms-sync.wbxml') {
             // decode wbxml request
             try {
                 $decoder = new Syncroton_Wbxml_Decoder($this->_body);
@@ -128,27 +116,31 @@ class Syncroton_Server
             $requestBody = $this->_body;
         }
         
+        if (PHP_SAPI !== 'cli') {
+            header("MS-Server-ActiveSync: 14.00.0536.000");
+        }
+
         try {
-            $command = new $className($requestBody, $device, $policyKey);
+            $command = new $className($requestBody, $device, $requestParameters['policyKey']);
         
             $command->handle();
-
-            if (PHP_SAPI !== 'cli') {
-                header("MS-Server-ActiveSync: 8.3");
-            }
         
             $response = $command->getResponse();
             
         } catch (Syncroton_Exception_PolicyKeyMissing $sepkm) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " X-MS-POLICYKEY missing (" . $_command. ')');
+            
             header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
+            
             return;
             
         } catch (Syncroton_Exception_ProvisioningNeeded $sepn) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
+            
             header("HTTP/1.1 449 Retry after sending a PROVISION command");
+            
             return;
             
         } catch (Exception $e) {
@@ -160,6 +152,7 @@ class Syncroton_Server
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
             
             header("HTTP/1.1 500 Internal server error");
+            
             return;
         }
         
@@ -171,8 +164,11 @@ class Syncroton_Server
         
             $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
             $encoder->encode($response);
-        
-            header("Content-Type: application/vnd.ms-sync.wbxml");
+
+            // avoid sending headers while running on cli (phpunit)
+            if (PHP_SAPI !== 'cli') {
+                header("Content-Type: application/vnd.ms-sync.wbxml");
+            }
         
             rewind($outputStream);
             fpassthru($outputStream);
@@ -184,14 +180,115 @@ class Syncroton_Server
      * 
      * @return array
      */
-    protected function _getRequestParameters()
+    protected function _getRequestParameters(Zend_Controller_Request_Http $request)
     {
-        $result = array(
-            'protocolVersion'  => $this->_request->getServer('HTTP_MS_ASPROTOCOLVERSION'),
-            'command'          => $this->_request->getParam('Cmd'),
-            'deviceId'         => $this->_request->getParam('DeviceId'),
-            'deviceType'       => $this->_request->getParam('DeviceType')
-        );
+        if(count($_GET) == 1) {
+            $arrayKeys = array_keys($_GET);
+            
+            $base64Decoded = base64_decode($arrayKeys[0]);
+            
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, base64_decode($arrayKeys[0]));
+            rewind($stream);
+
+            #fpassthru($stream);rewind($stream);
+            
+            $protocolVersion = ord(fread($stream, 1));
+            switch (ord(fread($stream, 1))) {
+                case 0:
+                    $command = 'Sync';
+                    break;
+                case 1:
+                    $command = 'SendMail';
+                    break;
+                case 2:
+                    $command = 'SmartForward';
+                    break;
+                case 3:
+                    $command = 'SmartReply';
+                    break;
+                case 4:
+                    $command = 'GetAttachment';
+                    break;
+                case 9:
+                    $command = 'FolderSync';
+                    break;
+                case 10:
+                    $command = 'FolderCreate';
+                    break;
+                case 11:
+                    $command = 'FolderDelete';
+                    break;
+                case 12:
+                    $command = 'FolderUpdate';
+                    break;
+                case 13:
+                    $command = 'MoveItems';
+                    break;
+                case 14:
+                    $command = 'GetItemEstimate';
+                    break;
+                case 15:
+                    $command = 'MeetingResponse';
+                    break;
+                case 16:
+                    $command = 'Search';
+                    break;
+                case 17:
+                    $command = 'Settings';
+                    break;
+                case 18:
+                    $command = 'Ping';
+                    break;
+                case 19:
+                    $command = 'ItemOperations';
+                    break;
+                case 20:
+                    $command = 'Provision';
+                    break;
+                case 21:
+                    $command = 'ResolveRecipients';
+                    break;
+                case 22:
+                    $command = 'ValidateCert';
+                    break;
+            }
+            
+            $locale = fread($stream, 2);
+            
+            $deviceIdLength = ord(fread($stream, 1));
+            if ($deviceIdLength > 0) {
+                $deviceId = fread($stream, $deviceIdLength);
+            } 
+            
+            $policyKeyLength = ord(fread($stream, 1));
+            if ($policyKeyLength > 0) {
+                $policyKey = fread($stream, 4);
+            }
+            
+            $deviceTypeLength = ord(fread($stream, 1));
+            $deviceType = fread($stream, $deviceTypeLength);
+            
+            // @todo parse command parameters 
+            
+            $result = array(
+                'protocolVersion' => $protocolVersion,
+                'command'         => $command,
+                'deviceId'        => $deviceId,
+                'deviceType'      => $deviceType
+            );
+        } else {
+            $result = array(
+                'protocolVersion'  => $request->getServer('HTTP_MS_ASPROTOCOLVERSION'),
+                'command'          => $request->getQuery('Cmd'),
+                'deviceId'         => $request->getQuery('DeviceId'),
+                'deviceType'       => $request->getQuery('DeviceType')
+            );
+        }
+        
+        $result['userAgent']   = $request->getServer('HTTP_USER_AGENT', $result['deviceType']);
+        $result['policyKey']   = $request->getServer('HTTP_X_MS_POLICYKEY');
+        $result['contentType'] = $request->getServer('CONTENT_TYPE');
         
         return $result;
     }
@@ -206,22 +303,23 @@ class Syncroton_Server
      * @param unknown_type $protocolVersion
      * @return Syncroton_Model_Device
      */
-    protected function _getUserDevice($ownerId, $deviceId, $deviceType, $userAgent, $protocolVersion)
+    protected function _getUserDevice($ownerId, $requestParameters)
     {
         try {
-            $device = $this->_deviceBackend->getUserDevice($ownerId, $deviceId);
+            $device = $this->_deviceBackend->getUserDevice($ownerId, $requestParameters['deviceId']);
         
-            $device->useragent = $userAgent;
-            $device->acsversion = $protocolVersion;
+            $device->useragent  = $requestParameters['userAgent'];
+            $device->acsversion = $requestParameters['protocolVersion'];
+            
             $device = $this->_deviceBackend->update($device);
         
         } catch (Syncroton_Exception_NotFound $senf) {
             $device = $this->_deviceBackend->create(new Syncroton_Model_Device(array(
                 'owner_id'   => $ownerId,
-                'deviceid'   => $deviceId,
-                'devicetype' => $deviceType,
-                'useragent'  => $userAgent,
-                'acsversion' => $protocolVersion
+                'deviceid'   => $requestParameters['deviceId'],
+                'devicetype' => $requestParameters['deviceType'],
+                'useragent'  => $requestParameters['userAgent'],
+                'acsversion' => $requestParameters['protocolVersion']
             )));
         }
         

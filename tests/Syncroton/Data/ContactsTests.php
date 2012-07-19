@@ -82,21 +82,24 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         );
         
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
-                
-    	$dataController->appendXML($testNode, array('collectionId' => 'addressbookFolderId'), 'contact1');
-    	#echo $testDoc->saveXML();
-    	
-    	$xpath = new DomXPath($testDoc);
-    	$xpath->registerNamespace('AirSync', 'uri:AirSync');
-    	$xpath->registerNamespace('Contacts', 'uri:Contacts');
-    	
-    	$nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Contacts:FirstName');
-    	$this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-    	$this->assertEquals('Lars', $nodes->item(0)->nodeValue, $testDoc->saveXML());
-    	 
-    	// offset birthday 12 hours + user TZ and namespace === uri:Contacts
-    	#$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDoc->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDoc->saveXML());
-    	#$this->assertEquals('1975-01-02T16:00:00.000Z', @$testDoc->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $collection = new Syncroton_Model_SyncCollection();
+        $collection->collectionId = 'addressbookFolderId';
+        
+        $dataController->appendXML($testNode, $collection, 'contact1');
+        #echo $testDoc->saveXML();
+        
+        $xpath = new DomXPath($testDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        $xpath->registerNamespace('Contacts', 'uri:Contacts');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Contacts:FirstName');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('Lars', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+         
+        // offset birthday 12 hours + user TZ and namespace === uri:Contacts
+        #$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDoc->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDoc->saveXML());
+        #$this->assertEquals('1975-01-02T16:00:00.000Z', @$testDoc->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDoc->saveXML());
     }
     
     /**
@@ -149,8 +152,11 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
-                
-        $dataController->appendXML($appData, array('collectionId' => 'addressbookFolderId'), 'contact1');
+        
+        $collection = new Syncroton_Model_SyncCollection();
+        $collection->collectionId = 'addressbookFolderId';
+        
+        $dataController->appendXML($appData, $collection, 'contact1');
         
         // no offset and namespace === uri:Contacts
         #$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDoc->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDoc->saveXML());
