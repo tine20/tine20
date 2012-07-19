@@ -45,15 +45,17 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        // create definition col
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>model</name>
-                <type>text</type>
-                <length>64</length>
-            </field>');
-        
-        $this->_backend->addCol('container', $declaration);
+        if(! $this->_backend->columnExists('model', 'container')) {
+            // create definition col
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>');
+            
+            $this->_backend->addCol('container', $declaration);
+        }
         
         $modelsToSet = array(
                 'Calendar'    => 'Calendar_Model_Event',
@@ -67,17 +69,19 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
                 );
         
         foreach($modelsToSet as $app => $model) {
-            $application = Tinebase_Application::getInstance()->getApplicationByName($app);
-            $filter = new Tinebase_Model_ContainerFilter(array(array(
-                    'field' => 'application_id',
-                    'operator' => 'equals',
-                    'value' => $application->getId()
-                    )), 'AND');
-            
-            $records = Tinebase_Container::getInstance()->search($filter);
-            foreach($records as $record) {
-                $record->model = $model;
-                Tinebase_Container::getInstance()->update($record);
+            if(Tinebase_Application::getInstance()->isInstalled($app)) {
+                $application = Tinebase_Application::getInstance()->getApplicationByName($app);
+                $filter = new Tinebase_Model_ContainerFilter(array(array(
+                        'field' => 'application_id',
+                        'operator' => 'equals',
+                        'value' => $application->getId()
+                        )), 'AND');
+                
+                $records = Tinebase_Container::getInstance()->search($filter);
+                foreach($records as $record) {
+                    $record->model = $model;
+                    Tinebase_Container::getInstance()->update($record);
+                }
             }
         }
         $this->setTableVersion('container', 6);
