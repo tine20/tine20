@@ -315,9 +315,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 columns: [
                     {id: 'related_model', dataIndex: 'related_model', header: _('Record'), editor: false, renderer: this.relatedModelRenderer.createDelegate(this), scope: this},
                     {id: 'related_record', dataIndex: 'related_record', header: _('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
-                    {id: 'remark', width: 220, dataIndex: 'remark', header: _('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 250},
+                    {id: 'remark', dataIndex: 'remark', header: _('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 120},
                     {id: 'own_degree', hidden: true, dataIndex: 'own_degree', header: _('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
-                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: _('Type'),  scope: this, width: 100, editor: true}
+                    {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: _('Type'),  scope: this, width: 120, editor: true},
+                    {id: 'creation_time', dataIndex: 'creation_time', editor: false, renderer: Tine.Tinebase.common.dateTimeRenderer, header: _('Creation Time'), width: 140}
                 ]
             });
         }
@@ -380,12 +381,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Record} value
      * @return {String}
      */
-    relatedRecordRenderer: function(value,value2,value3) {
-        var split = value3.data.related_model.split('_');
+    relatedRecordRenderer: function (recData, meta, relRec) {
+        var split = relRec.get('related_model').split('_');
         var recordClass = Tine[split[0]][split[1]][split[2]];
+        var record = new recordClass(recData);
         var result = '';
-        if (value) {
-            result = Ext.util.Format.htmlEncode(value[recordClass.getMeta('titleProperty')]);
+        if (recData) {
+            result = Ext.util.Format.htmlEncode(record.getTitle());
         }
         return result;
     },
@@ -593,6 +595,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
             }, this);
             this.store.add(relationRecords);
+            
+            // sort by creation time
+            this.store.sort('creation_time', 'DESC');
         }
 
         // add other listeners after population
