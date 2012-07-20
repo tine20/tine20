@@ -27,64 +27,42 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-#DEBHELPER#
+if [ -f /usr/share/debconf/confmodule ]; then
+   . /usr/share/debconf/confmodule
+fi
 
-. /usr/share/debconf/confmodule
 db_version 2.0
 
-if [ "$1" = "configure" ]; then
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    db_get tine20/webserver_type
+    webservers="$RET"
 
-    # setup webserver
-    webservers="apache2"
-    
     if [ "$webservers" != "" ]; then
 
         for webserver in $webservers; do
             webserver=${webserver%,}
-            
+
             # check if webserver is installed
             test -x /usr/sbin/$webserver || continue
     
             case "$webserver" in
                 apache2)
-                    if [ -d /etc/apache2/mods-enabled ]; then
-                        if [ ! -f /etc/apache2/mods-enabled/rewrite.load -a ! -h /etc/apache2/mods-enabled/rewrite.load ]; then
-                            /usr/sbin/a2enmod rewrite
-                        fi
-                        if [ ! -f /etc/apache2/mods-enabled/expires.load -a ! -h /etc/apache2/mods-enabled/expires.load ]; then
-                            /usr/sbin/a2enmod expires
-                        fi
-                        if [ -f /etc/apache2/mods-available/php5.load ]; then
-                            if [ ! -f /etc/apache2/mods-enabled/php5.load -a ! -h /etc/apache2/mods-enabled/php5.load ]; then
-                                /usr/sbin/a2enmod php5
-                            fi 
-                        fi
-                    fi
-
-                    # create vhost configuration links
-                    servers="apache2"
-                    linkdestination_apache="../../tine20/apache.conf"
-                    linkname="tine20"
-        
-                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
-                        . /usr/share/wwwconfig-common/confd-link.sh
-                    fi
+                    rm -f /etc/$webserver/conf.d/tine20
                     
                     # mark webserver for restart (used by restart.sh)
                     restart="$restart $webserver"
-                    
                     ;;
-                
             esac
-            
         done
-        
+    
         # restart webserver
         if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
             . /usr/share/wwwconfig-common/restart.sh
         fi
+        
     fi
-
 fi
+
+#DEBHELPER#
 
 exit 0
