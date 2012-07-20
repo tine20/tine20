@@ -29,12 +29,22 @@
 
 #DEBHELPER#
 
-. /usr/share/univention-lib/all.sh
+if [ "$1" = "purge" ]; then
+    
+    if [ -x /usr/bin/mysql ]; then
+        mysqlCmd="/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf"
+        
+        echo "DROP DATABASE IF EXISTS tine20;" | $mysqlCmd
+        echo "REVOKE ALL ON tine20.* FROM 'tine20'@'localhost';" | $mysqlCmd
+    fi
 
-# excecute join script
-call_joinscript 70tine204ucs.inst
-
-# restart listener
-#/etc/init.d/univention-directory-listener crestart
+    rm -f /etc/tine20/config.inc.php
+    if which ucf >/dev/null 2>&1; then
+        ucf --purge /etc/tine20/config.inc.php
+    fi
+ 
+    rm -rf /etc/tine20
+    
+fi
 
 exit 0

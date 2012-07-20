@@ -35,7 +35,8 @@ db_version 2.0
 if [ "$1" = "configure" ]; then
 
     # setup webserver
-    webservers="apache2"
+    db_get tine20/webserver_type
+    webservers="$RET"
     
     if [ "$webservers" != "" ]; then
 
@@ -68,6 +69,32 @@ if [ "$1" = "configure" ]; then
         
                     if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
                         . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    
+                    ;;
+                    
+                lighttpd)
+
+                    # create vhost configuration links
+                    servers="$webserver"
+                    linkdestination_lighttpd="../../tine20/lighttpd.conf"
+                    linkname="15-tine20.conf"
+        
+                    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                        . /usr/share/wwwconfig-common/confd-link.sh
+                    fi
+                    
+                    if [ -d /etc/$webserver/conf-available ]; then
+                        if [ ! -f /etc/$webserver/conf-enabled/10-expire.conf -a ! -h /etc/$webserver/conf-enabled/10-expire.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod expire
+                        fi
+
+                        if [ ! -f /etc/$webserver/conf-enabled/15-tine20.conf -a ! -h /etc/$webserver/conf-enabled/15-tine20.conf ]; then
+                            /usr/sbin/lighttpd-enable-mod tine20
+                        fi
                     fi
                     
                     # mark webserver for restart (used by restart.sh)

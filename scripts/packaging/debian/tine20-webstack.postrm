@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# Tine 2.0 for UCS
-#
 # Copyright 2012-2012 by Metaways Infosystems GmbH
 #
 # http://www.metaways.de/
@@ -29,19 +27,42 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-VERSION=1
+if [ -f /usr/share/debconf/confmodule ]; then
+   . /usr/share/debconf/confmodule
+fi
 
-. /usr/share/univention-join/joinscripthelper.lib
-. /usr/share/univention-lib/all.sh
+db_version 2.0
 
-joinscript_init
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    db_get tine20/webserver_type
+    webservers="$RET"
 
-eval "$(univention-config-registry shell)"
+    if [ "$webservers" != "" ]; then
 
-# call server password change script
-/usr/lib/univention-server/server_password_change.d/50univention-mail-server prechange
-/usr/lib/univention-server/server_password_change.d/50univention-mail-server postchange
+        for webserver in $webservers; do
+            webserver=${webserver%,}
 
-joinscript_save_current_version
+            # check if webserver is installed
+            test -x /usr/sbin/$webserver || continue
+    
+            case "$webserver" in
+                apache2)
+                    rm -f /etc/$webserver/conf.d/tine20
+                    
+                    # mark webserver for restart (used by restart.sh)
+                    restart="$restart $webserver"
+                    ;;
+            esac
+        done
+    
+        # restart webserver
+        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
+            . /usr/share/wwwconfig-common/restart.sh
+        fi
+        
+    fi
+fi
+
+#DEBHELPER#
 
 exit 0
