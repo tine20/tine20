@@ -571,7 +571,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return Array
      * 
      * TODO     add ctx menu
-     * TODO     make border work
      */
     initSmtp: function () {
         if (! Tine.Admin.registry.get('manageSmtpEmailUser')) {
@@ -596,19 +595,23 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (smtpConfig.primarydomain.length) {
             domains.push(smtpConfig.primarydomain);
         }
-        var app = this.app;
+        var app = this.app,
+            record = this.record;
+            
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
                     var domain = value.email.split('@')[1];
-                    if(domains.indexOf(domain) > -1) {
+                    if (domains.indexOf(domain) > -1) {
                         Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
                     } else {
                         Ext.MessageBox.show({
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,
                             title: app.i18n._('Domain not allowed'),
-                            msg: String.format(app.i18n._('The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already.'), '<b>' + domain + '</b>', '<b>' + value.email + '</b>')
+                            msg: String.format(app.i18n._('The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup.'
+                                + ' Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already.'),
+                                '<b>' + domain + '</b>', '<b>' + value.email + '</b>')
                         });
                         return false;
                     }
@@ -629,9 +632,24 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
+        
+        var aliasesStore = this.aliasesGrid.getStore();
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
+                onNewentry: function(value) {
+                    if (value.email === record.get('accountEmailAddress') || aliasesStore.find('email', value.email) !== -1) {
+                        Ext.MessageBox.show({
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING,
+                            title: app.i18n._('Forwarding to self'),
+                            msg: app.i18n._('You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases.')
+                        });
+                        return false;
+                    } else {
+                        Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
+                    }
+                },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email', 
                     header: this.app.i18n.gettext('Email Forward'), 
