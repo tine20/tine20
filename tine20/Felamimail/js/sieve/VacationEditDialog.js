@@ -344,7 +344,7 @@ Ext.namespace('Tine.Felamimail.sieve');
 Tine.Felamimail.sieve.VacationEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 640,
-        height: 480,
+        height: 550,
         name: Tine.Felamimail.sieve.VacationEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.sieve.VacationEditDialog',
         contentPanelConstructorConfig: config
