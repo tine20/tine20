@@ -12,6 +12,4 @@ Tinebase                 /usr/share/tine20
 Zend                     /usr/share/tine20
 LICENSE                  /usr/share/tine20
 PRIVACY                  /usr/share/tine20
-debian/etc/apache.conf   /etc/tine20
 debian/etc/php5.ini      /etc/tine20
-debian/etc/lighttpd.conf /etc/tine20
