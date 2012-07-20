@@ -151,6 +151,10 @@ ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arg
             // this may be overwritten depending on concrete window implementation
             config.contentPanelConstructorConfig.window = config;
             
+            // (re-) create auto apps on BrowserWindows
+            if(this.windowType == 'Browser') {
+                Tine.Tinebase.ApplicationStarter.init();
+            }
             // find the constructor in this context
             var parts = config.contentPanelConstructor.split('.'),
             ref = window;

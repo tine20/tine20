@@ -41,6 +41,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     appName: null,
     /**
+     * the modelName (filled by application starter)
+     * @type 
+     */
+    modelName: null,
+    /**
      * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
      */
@@ -53,7 +58,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @cfg {Bool} showContainerSelector
      * show container selector in bottom area
      */
-    showContainerSelector: false,
+    showContainerSelector: null,
     /**
      * @cfg {Bool} evalGrants
      * should grants of a grant-aware records be evaluated (defaults to true)
@@ -202,6 +207,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'save'
         );
         
+        if(! this.recordClass && this.modelName) {
+            this.recordClass = Tine[this.appName].Model[this.modelName];
+        }
+        
         if (this.recordClass) {
             this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
             this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
@@ -209,6 +218,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        
+        if(! this.windowNamePrefix) {
+            this.windowNamePrefix = this.modelName + 'EditWindow_';
+        }
+        
+        // if showContainerSelector is not explicitly set, make this dependend on the containerProperty of the handled recordClass
+        if(this.showContainerSelector === null) {
+            if(this.recordClass.getMeta('containerProperty')) {
+                this.showContainerSelector = true;
+            } else {
+                this.showContainerSelector = false;
+            }
         }
         
         Tine.log.debug('initComponent: appName: ', this.appName);

@@ -662,7 +662,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
     
     createFilterModel: function(config) {
-        if (config.isFilterModel) {
+        if (config && config.isFilterModel) {
             return config;
         }
         

@@ -78,13 +78,13 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.recordClass = Tine[this.app.appName].Model[this.contentType];
         
         Ext.each(this.contentTypes, function(ct) {
-            var recordClass = Tine[this.app.appName].Model[ct.model];
+            var modelName = ct.meta ? ct.meta.modelName : ct.model; 
+            var recordClass = Tine[this.app.appName].Model[modelName];
             // check requiredRight if any
             if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
-            
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
-                iconCls: this.app.appName + ct.model,
+                iconCls: this.app.appName + modelName,
                 text: recordClass.getRecordsName(),
                 leaf : true,
                 containerType: Tine.Tinebase.container.TYPE_SHARED,
@@ -92,14 +92,14 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             });
             
             child.on('click', function() {
-                        this.app.getMainScreen().activeContentType = ct.model;
+                        this.app.getMainScreen().activeContentType = modelName;
                         this.app.getMainScreen().show();
                     }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
                     
             if(ct.genericCtxActions) {
-                this['contextMenu' + ct.model] = Tine.widgets.tree.ContextMenu.getMenu({
+                this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
                     nodeName: this.app.i18n._hidden(recordClass.getMeta('recordsName')),
                     actions: ct.genericCtxActions,
                     scope: this,
@@ -110,7 +110,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             child.on('contextmenu', function(node, event) {
                 if(node.leaf) {
                     this.ctxNode = node;
-                    this['contextMenu' + ct.model].showAt(event.getXY());
+                    this['contextMenu' + modelName].showAt(event.getXY());
                 }
             }, this);
              }       

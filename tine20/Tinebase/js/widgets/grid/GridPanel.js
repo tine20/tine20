@@ -248,6 +248,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     deleteQueue: null,
 
     /**
+     * configuration object of model from application starter
+     * @type object
+     */
+    modelConfig: null,
+    
+    /**
      * @property selectionModel
      * @type Tine.widgets.grid.FilterSelectionModel
      */
@@ -276,9 +282,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.editBuffer = [];
         this.deleteQueue = [];
-
+        
+        // init generic filter toolbar
+        this.initGenericFilterToolbar();
+        
+        // init generic columnModel
+        this.initGenericColumnModel();
+        
         // init store
         this.initStore();
+        
         // init (ext) grid
         this.initGrid();
 
@@ -304,6 +317,63 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
+    /**
+     * initialises generic filter toolbar
+     * @private
+     */
+    initGenericFilterToolbar: function() {
+        if(this.modelConfig) {
+            var plugins = [];
+            if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
+                this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+                plugins.push(this.quickSearchFilterToolbarPlugin);
+            }
+            var modelName = this.recordClass.getMeta('modelName');
+            this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+                app: this.app,
+                recordClass: this.recordClass,
+                allowSaving: true,
+                filterModels: this.recordClass.getFilterModel(),
+                defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
+                plugins: plugins,
+                filters: []
+            });
+            this.plugins = this.plugins || [];
+            this.plugins.push(this.filterToolbar);
+        }
+    },
+
+    /**
+     * initializes the generic column model on auto bootstrap
+     */
+    initGenericColumnModel: function() {
+        var columns = [];
+        if(this.modelConfig) {
+            Ext.each(this.modelConfig.keys, function(key) {
+                // When no label exists, don't use in grid
+                if(this.modelConfig.fields[key].label) {
+                    var config = {
+                        id: key,
+                        dataIndex: key,
+                        header: this.app.i18n._(this.modelConfig.fields[key].label)
+                    }
+                    var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
+                    if(renderer) {
+                        config.renderer = renderer;
+                    }
+                    columns.push(config);
+                }
+            }, this);
+            this.gridConfig.cm = new Ext.grid.ColumnModel({ 
+                defaults: {
+                    sortable: true,
+                    resizable: true
+                },
+                columns: columns
+            });
+        }
+    },
+    
     /**
      * @private
      * 
@@ -371,6 +441,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'readGrant',
             requiredMultipleGrant: 'editGrant',
             requiredMultipleRight: this.multipleEditRequiredRight,
+            requiredMethod: this.app.name + '.get' + this.recordClass.getMeta('modelName'),
             text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
@@ -386,6 +457,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_editCopyInNewWindow = new Ext.Action({
             hidden: ! this.copyEditAction,
             requiredGrant: 'readGrant',
+            requiredMethod: this.app.name + '.get' + this.recordClass.getMeta('modelName'),
             text: String.format(_('Copy {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'copy',
@@ -396,6 +468,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
+            requiredMethod: this.app.name + '.save' + this.recordClass.getMeta('modelName'),
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
@@ -418,6 +491,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.initDeleteAction();
 
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
+//            requiredMethod: this.app.name + '.save' + this.recordClass.getMeta('modelName'),
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
             recordClass:    this.recordClass,
@@ -447,13 +521,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
         
         // add actions to updater
+        // disable actions if no editDialog
+        if(Tine[this.app.name].hasOwnProperty(this.recordClass.getMeta('modelName') + 'EditDialog')) {
+            this.actionUpdater.addActions([
+                this.action_addInNewWindow,
+                this.action_editInNewWindow,
+                this.action_editCopyInNewWindow
+            ]);
+        } else {
+            this.action_addInNewWindow.disable();
+            this.action_editInNewWindow.disable();
+        }
+        
         this.actionUpdater.addActions([
-            this.action_addInNewWindow,
-            this.action_editInNewWindow,
             this.action_deleteRecord,
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
-            this.action_editCopyInNewWindow,
             this.action_resolveDuplicates
         ]);
 
@@ -464,6 +547,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initDeleteAction: function() {
         // note: unprecise plural form here, but this is hard to change
         this.action_deleteRecord = new Ext.Action({
+            requiredMethod: this.app.name + '.delete' + this.recordClass.getMeta('modelName') + 's',
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
             singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),

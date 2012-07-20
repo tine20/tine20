@@ -52,8 +52,20 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
+        
+        // get recordClass if string is given
+        if(Ext.isString(this.recordClass)) {
+            var split = this.recordClass.split('.');
+            this.recordClass = Tine[split[0]].Model[split[1]];
+        }
+        
+        // get application if string is given
+        if(Ext.isString(this.app)) {
+            this.app = Tine[this.app];
+        }
+        
         Tine.widgets.container.FilterModel.superclass.initComponent.call(this);
-                
+        
         this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         

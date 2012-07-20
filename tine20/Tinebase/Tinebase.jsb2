@@ -94,6 +94,10 @@
           "path": "js/ux/"
         },
         {
+          "text": "ApplicationStarter.js",
+          "path": "js/"
+        },
+        {
           "text": "PopupWindow.js",
           "path": "js/ux/"
         },

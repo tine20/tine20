@@ -37,6 +37,18 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected $_resolveUserFields = array();
 
     /**
+     * All models of this application (needed for application starter)
+     * @var array
+     */
+    protected $_models = NULL;
+    
+    /**
+     * default model (needed for application starter -> defaultContentType)
+     * @var string
+     */
+    protected $_defaultModel = NULL;
+    
+    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -95,6 +107,45 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             }
         }
         return $ret;
+    }
+    
+    /**
+     * returns models for this application
+     */
+    public function getModels()
+    {
+        return $this->_models;
+    }
+    
+    /**
+     * returns model configurations for application starter
+     * @return array
+     */
+    public function getModelsConfiguration()
+    {
+        if($this->_models) {
+            foreach($this->_models as $model) {
+                $mn = $this->_applicationName . '_Model_' . $model;
+                $ret[$model] = $mn::getConfiguration(); 
+            }
+            return $ret;
+        }
+        return NULL;
+    }
+    
+    /**
+     * returns the default model
+     * @return NULL
+     */
+    public function getDefaultModel()
+    {
+        if($this->_defaultModel) {
+            return $this->_defaultModel;
+        }
+        if($this->_models) {
+            return $this->_models[0];
+        }
+        return null;
     }
     
     /**

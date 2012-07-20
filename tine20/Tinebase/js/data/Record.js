@@ -74,6 +74,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * untranslated name of container (plural)
      */
     containersName: 'containers',
+    /**
+     * default filter
+     * @type {string}
+     */
+    defaultFilter: null,
     
     cfExp: /^#(.+)/,
     

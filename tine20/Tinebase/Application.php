@@ -411,6 +411,15 @@ class Tinebase_Application
     }
     
     /**
+     * get models for an application
+     * @param string $_applicationId
+     */
+    public function getApplicationModels($_applicationId)
+    {
+        return $this->getApplicationById($_applicationId)->getModels();
+    }
+    
+    /**
      * remove table from application_tables table
      *
      * @param Tinebase_Model_Application|string $_applicationId the applicationId

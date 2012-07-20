@@ -146,6 +146,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected $_label = NULL;
     
+    /**
+     * default filter
+     * @var string
+     */
+    protected $_defaultFilter = 'query';
+    
     /******************************* properties ********************************/
     
     /**
@@ -179,6 +185,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
+        $this->_autoModeling();
+        
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
@@ -276,6 +284,43 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
         
         $this->addFilter($filter);
+    }
+    /**
+     * creates generic filters from the model definition
+     */
+    protected function _autoModeling()
+    {
+        // add modlog and other generic filters by model config
+        $mn = $this->_modelName;
+        if($mn) {
+            $metaInfo = $mn::getMeta();
+            if($metaInfo) {
+                if(array_key_exists('useModlog', $metaInfo) && $metaInfo['useModlog']) {
+                    $this->_filterModel = array_merge($this->_filterModel, array(
+                            'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+                            'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+                            'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
+                            'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+                            'is_deleted'           => array('filter' => 'Tinebase_Model_Filter_Bool')
+                    ));
+                }
+
+                if(array_key_exists('containerProperty', $metaInfo) && $metaInfo['containerProperty']) {
+                    $this->_filterModel = array_merge($this->_filterModel, array(
+                            $metaInfo['containerProperty'] => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => $this->_applicationName)),
+                    ));
+                }
+
+                if(array_key_exists('hasTags', $metaInfo) && $metaInfo['hasTags']) {
+                    $this->_filterModel = array_merge($this->_filterModel, array(
+                            'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+                                    'applicationName' => $this->_applicationName,
+                            ))));
+                }
+            }
+        }
     }
     
     /**
@@ -530,6 +575,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function getLabel()
     {
         return $this->_label;
+    }
+    
+    /**
+     * returns default filter
+     * @return string default filter
+     */
+    public function getDefaultFilter()
+    {
+        return $this->_defaultFilter;
     }
     
     /**

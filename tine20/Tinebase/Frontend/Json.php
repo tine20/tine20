@@ -627,7 +627,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name] = (array_key_exists($application->name, $registryData)) ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) : $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
-
+                    $registryData[$application->name]['models'] = $applicationJson->getModelsConfiguration();
+                    $registryData[$application->name]['defaultModel'] = $applicationJson->getDefaultModel();
                     foreach($applicationJson->getRelatableModels() as $app => $relModels) {
                         if (!array_key_exists($app, $registryData)) $registryData[$app] = array();
                         if (!array_key_exists('relatableModels', $registryData[$app])) $registryData[$app]['relatableModels'] = array();

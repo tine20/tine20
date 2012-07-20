@@ -101,13 +101,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
         var fpcn = this.getContentType() + this.favoritesPanelClassName;
         this.hasFavoritesPanel = Ext.isBoolean(this.hasFavoritesPanel) ? this.hasFavoritesPanel : !! Tine[this.app.appName][fpcn];
-        this.hasContentTypeTreePanel = Ext.isArray(this.contentTypes);
+        this.hasContentTypeTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         
         if (this.hasContainerTreePanel === null) {
             this.hasContainerTreePanel = true;
             if(this.contentTypes) {
                 Ext.each(this.contentTypes, function(ct) {
-                    if ((ct.model == this.contentType) && (ct.singularContainerMode)) {
+                    if (((ct.hasOwnProperty('model') && ct.model == this.contentType) || (ct.hasOwnProperty('meta') && ct.meta.modelName == this.contentType)) && (ct.singularContainerMode)) {
                         this.hasContainerTreePanel = false;
                         return false;
                     }
