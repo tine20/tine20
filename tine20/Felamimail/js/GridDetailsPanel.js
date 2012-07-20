@@ -234,7 +234,7 @@ Ext.ns('Tine.Felamimail');
                     '<b>' + this.i18n._('From') + ':</b>',
                     ' {[this.showFrom(values.from_email, values.from_name, "' + this.i18n._('Add') + '", "' 
                         + this.i18n._('Add contact to addressbook') + '")]}<br/>',
-                    '<b>' + this.i18n._('Date') + ':</b> {[Tine.Tinebase.common.dateTimeRenderer(values.received)]}',
+                    '<b>' + this.i18n._('Date') + ':</b> {[Tine.Tinebase.common.dateTimeRenderer(values.sent)]}',
                     '{[this.showRecipients(values.headers)]}',
                     '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
                 '</div>',
