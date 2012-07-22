@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Syncroton
  *
@@ -24,27 +23,13 @@ class Syncroton_Data_Calendar extends Syncroton_Data_AData
     
     }
     
-    public function createEntry($_folderId, SimpleXMLElement $_entry)
-    {
-        #$xmlData = $_entry->children('uri:Contacts');
-    
-        $id = sha1(mt_rand(). microtime());
-    
-        self::$entries[$id] = array(
-        #    	'FirstName' => (string)$xmlData->FirstName, 
-        #    	'LastName'  => (string)$xmlData->LastName
-        );
-    
-        return $id;
-    }
-    
     protected function _initData()
     {
         /**
         * used by unit tests only to simulated added folders
         */
         Syncroton_Data_AData::$folders[get_class($this)] = array(
-            	'calendarFolderId' => array(
+                'calendarFolderId' => array(
                     'folderId'    => 'calendarFolderId',
                     'parentId'    => null,
                     'displayName' => 'Default Contacts Folder',
@@ -56,8 +41,8 @@ class Syncroton_Data_Calendar extends Syncroton_Data_AData
          * used by unit tests only to simulated added folders
          */
         Syncroton_Data_AData::$entries[get_class($this)] = array(
-        		'calendarFolderId' => array(
-        	    )
+                'calendarFolderId' => array(
+                )
         );
     }
 }

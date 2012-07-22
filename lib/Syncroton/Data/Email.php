@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Syncroton
  *
@@ -44,21 +43,7 @@ class Syncroton_Data_Email extends Syncroton_Data_AData
         $node = $_domParrent->appendChild(new DOMElement('Subject', 'Subject of the email', 'uri:Email'));
     }
     
-    public function createEntry($_folderId, SimpleXMLElement $_entry)
-    {
-        #$xmlData = $_entry->children('uri:Contacts');
-    
-        $id = sha1(mt_rand(). microtime());
-    
-        self::$entries[$id] = array(
-        #    	'FirstName' => (string)$xmlData->FirstName, 
-        #    	'LastName'  => (string)$xmlData->LastName
-        );
-    
-        return $id;
-    }
-    
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
         // not used by email
     }

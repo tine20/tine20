@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Syncroton
  *
@@ -22,27 +21,13 @@ class Syncroton_Data_Tasks extends Syncroton_Data_AData
         $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
     }
     
-    public function createEntry($_folderId, SimpleXMLElement $_entry)
-    {
-        #$xmlData = $_entry->children('uri:Contacts');
-    
-        $id = sha1(mt_rand(). microtime());
-    
-        self::$entries[$id] = array(
-        #    	'FirstName' => (string)$xmlData->FirstName, 
-        #    	'LastName'  => (string)$xmlData->LastName
-        );
-    
-        return $id;
-    }
-    
     protected function _initData()
     {
         /**
         * used by unit tests only to simulated added folders
         */
         Syncroton_Data_AData::$folders[get_class($this)] = array(
-        	'tasksFolderId' => array(
+            'tasksFolderId' => array(
                 'folderId'    => 'tasksFolderId',
                 'parentId'    => null,
                 'displayName' => 'Default Tasks Folder',
@@ -54,16 +39,8 @@ class Syncroton_Data_Tasks extends Syncroton_Data_AData
          * used by unit tests only to simulated added folders
          */
         Syncroton_Data_AData::$entries[get_class($this)] = array(
-    		'tasksFolderId' => array(
-                'contact1' => array(
-                    	'FirstName' => 'Lars', 
-                    	'LastName'  => 'Kneschke'
-    	        ),
-                'contact2' => array(
-                	'FirstName' => 'Cornelius', 
-                	'LastName'  => 'Weiß'
-        	    )
-    	    )
+            'tasksFolderId' => array(
+            )
         );
     }
 }

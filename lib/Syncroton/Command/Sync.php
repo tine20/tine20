@@ -184,6 +184,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 'forceChange'      => array(),
                 'toBeFetched'      => array(),
             );
+            $dataClass = $dataClass = $dataController::MODEL;
             
             // handle incoming data
             if($collectionData->hasClientAdds()) {
@@ -200,7 +201,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . " adding entry as new");
                         
-                        $serverId = $dataController->createEntry($collectionData->collectionId, $add->ApplicationData);
+                        $serverId = $dataController->createEntry($collectionData->collectionId, new $dataClass($add->ApplicationData));
                         
                         $clientModifications['added'][$serverId] = array(
                             'clientId'     => (string)$add->ClientId,
@@ -237,7 +238,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     $serverId = (string)$change->ServerId;
                     
                     try {
-                        $dataController->updateEntry($collectionData->collectionId, $serverId, $change->ApplicationData);
+                        $dataController->updateEntry($collectionData->collectionId, $serverId, new $dataClass($change->ApplicationData));
                         $clientModifications['changed'][$serverId] = self::STATUS_SUCCESS;
                         
                     } catch (Syncroton_Exception_AccessDenied $e) {
@@ -477,7 +478,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         try {
                             $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
-                            $dataController->appendXML($applicationData, $collectionData, $serverId);
+                            
+                            $dataController
+                                ->getEntry($collectionData, $serverId)
+                                ->appendXML($applicationData);
                             
                             $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                             
@@ -537,8 +541,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                         
                         $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                        $dataController->appendXML($applicationData, $collectionData, $serverId);
 
+                        $dataController
+                            ->getEntry($collectionData, $serverId)
+                            ->appendXML($applicationData);
+                        
                         $commands->appendChild($add);
                         
                         $this->_totalCount++;
@@ -571,7 +578,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                         
                         $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                        $dataController->appendXML($applicationData, $collectionData, $serverId);
+                        
+                        $dataController
+                            ->getEntry($collectionData, $serverId)
+                            ->appendXML($applicationData);
+                        
 
                         $commands->appendChild($change);
                         

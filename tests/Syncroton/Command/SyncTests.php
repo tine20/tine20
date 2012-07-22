@@ -254,11 +254,11 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Contacts="uri:Contacts"><Collections>
                 <Collection>
                     <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-                    <Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
+                    <Commands><Add><ClientId>42</ClientId><ApplicationData><Contacts:FirstName>Lars</Contacts:FirstName></ApplicationData></Add></Commands>
                 </Collection>
             </Collections></Sync>'
         );
@@ -334,8 +334,8 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses');
         $this->assertEquals(0, $nodes->length, $syncDoc->saveXML());
         
-        $this->assertEquals('aaaadde', Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$serverId]['FirstName']);
-        $this->assertEquals('aaaaade', Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$serverId]['LastName']);
+        $this->assertEquals('aaaadde', Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$serverId]->FirstName);
+        $this->assertEquals('aaaaade', Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$serverId]->LastName);
     }
             
     public function testDeletingContactOnServer()
@@ -407,6 +407,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        $xpath->registerNamespace('Contacts', 'uri:Contacts');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -423,6 +424,10 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands/AirSync:Change/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals($serverId, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands/AirSync:Change/AirSync:ApplicationData/Contacts:FirstName');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals('Lars', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     public function testDeletingContactOnClient()

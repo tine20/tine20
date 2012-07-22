@@ -56,7 +56,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-    	$folders = $dataController->getAllFolders();
+        $folders = $dataController->getAllFolders();
                 
         $this->assertArrayNotHasKey("addressbook-root", $folders, "key addressbook-root found");
         $this->assertGreaterThanOrEqual(1, count($folders));
@@ -75,7 +75,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $testDoc->encoding     = 'utf-8';
         
         $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
-        $testNode = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
+        $applicationData = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
         $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_WEBOS)
@@ -86,7 +86,10 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $collection = new Syncroton_Model_SyncCollection();
         $collection->collectionId = 'addressbookFolderId';
         
-        $dataController->appendXML($testNode, $collection, 'contact1');
+        $dataController
+            ->getEntry($collection, 'contact1')
+            ->appendXML($applicationData);
+        
         #echo $testDoc->saveXML();
         
         $xpath = new DomXPath($testDoc);
@@ -111,9 +114,11 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_ANDROID)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
+        $dataClass = $dataController::MODEL;
         
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
-        $id = $dataController->createEntry('addressbookFolderId', $xml->Collections->Collection->Commands->Add->ApplicationData);
+        
+        $id = $dataController->createEntry('addressbookFolderId', new $dataClass($xml->Collections->Collection->Commands->Add->ApplicationData));
         
         $entry = Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$id];
         
@@ -122,8 +127,8 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         #$bday->setTimezone('UTC');        
         
         #$this->assertEquals($bday->toString(), $result->bday->toString());
-        $this->assertEquals('Fritzchen', $entry['FirstName']);
-        $this->assertEquals('Meinen',    $entry['LastName']);
+        $this->assertEquals('Fritzchen', $entry->FirstName);
+        $this->assertEquals('Meinen',    $entry->LastName);
     }
     
     /**
@@ -133,19 +138,19 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testAppendXmlIPhone()
     {
-		$imp                   = new DOMImplementation();
-		
+        $imp                   = new DOMImplementation();
+        
         $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
         $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
         $testDoc->formatOutput = true;
         $testDoc->encoding     = 'utf-8';
         $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         
-        $collections    = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'Collections'));
-        $collection     = $collections->appendChild($testDoc->createElementNS('uri:AirSync', 'Collection'));
-        $commands       = $collection->appendChild($testDoc->createElementNS('uri:AirSync', 'Commands'));
-        $add            = $commands->appendChild($testDoc->createElementNS('uri:AirSync', 'Add'));
-        $appData        = $add->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
+        $collections     = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'Collections'));
+        $collection      = $collections->appendChild($testDoc->createElementNS('uri:AirSync', 'Collection'));
+        $commands        = $collection->appendChild($testDoc->createElementNS('uri:AirSync', 'Commands'));
+        $add             = $commands->appendChild($testDoc->createElementNS('uri:AirSync', 'Add'));
+        $applicationData = $add->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
         $device = Syncroton_Registry::getDeviceBackend()->create(
@@ -156,7 +161,10 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $collection = new Syncroton_Model_SyncCollection();
         $collection->collectionId = 'addressbookFolderId';
         
-        $dataController->appendXML($appData, $collection, 'contact1');
+        $dataController
+            ->getEntry($collection, 'contact1')
+            ->appendXML($applicationData);
+        
         
         // no offset and namespace === uri:Contacts
         #$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDoc->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDoc->saveXML());
@@ -184,9 +192,9 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-    	$entries = $dataController->getServerEntries('addressbookFolderId', null);
-    	
-    	$this->assertContains('contact1', $entries);
+        $entries = $dataController->getServerEntries('addressbookFolderId', null);
+        
+        $this->assertContains('contact1', $entries);
     }
     
     /**

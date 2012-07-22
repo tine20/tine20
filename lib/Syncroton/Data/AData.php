@@ -53,6 +53,15 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return Syncroton_Data_AData::$folders[get_class($this)][$id];
     }
     
+    public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
+    {
+        $id = sha1(mt_rand(). microtime());
+    
+        Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$id] = $_entry;
+    
+        return $id;
+    }
+    
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->folderid : $_folderId;
@@ -106,6 +115,20 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::getEntry()
+     */
+    public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
+    {
+        if (!isset(Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId])) {
+            throw new OutOfBoundsException("entry $serverId not found in folder {$collection->collectionId}");
+        }
+        
+        return Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId];
+    }
+    
+    
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
         Syncroton_Data_AData::$entries[get_class($this)][$_dstFolderId][$_serverId] = Syncroton_Data_AData::$entries[get_class($this)][$_srcFolderId][$_serverId];
@@ -114,9 +137,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return $_serverId;
     }
     
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
+        Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$_serverId] = $_entry;
     }
+    
     
     abstract protected function _initData();
 }
