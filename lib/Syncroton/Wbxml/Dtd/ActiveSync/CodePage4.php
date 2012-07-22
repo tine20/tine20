@@ -22,7 +22,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage4 extends Syncroton_Wbxml_Dtd_Activ
     
     protected $_codePageName    = 'Calendar';
         
-    protected $_tags = array(     
+    protected $_tags = array(
         'Timezone'                => 0x05,
         'AllDayEvent'             => 0x06,
         'Attendees'               => 0x07,

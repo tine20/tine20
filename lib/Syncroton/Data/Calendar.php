@@ -16,13 +16,6 @@
 
 class Syncroton_Data_Calendar extends Syncroton_Data_AData
 {
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
-    {
-        // @todo is this correct?
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
-    
-    }
-    
     protected function _initData()
     {
         /**
