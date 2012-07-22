@@ -29,14 +29,15 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         }
     }
     
-    abstract public function appendXML(DOMElement $_domParrent);
+    #abstract public function appendXML(DOMElement $_domParrent);
         
     public function count()
     {
         return count($this->_elements);
     }
     
-    public function getIterator() {
+    public function getIterator() 
+    {
         return new ArrayIterator($this->_elements);
     }
     
