@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_CalendarEvent extends Syncroton_Model_AEntry
+class Syncroton_Model_Event extends Syncroton_Model_AEntry
 {
     /**
      * busy status constants
@@ -182,7 +182,7 @@ class Syncroton_Model_CalendarEvent extends Syncroton_Model_AEntry
                     $attendees = array();
                     
                     foreach ($xmlElement->Attendee as $attendee) {
-                        $attendees[] = new Syncroton_Model_CalendarAttendee($attendee);
+                        $attendees[] = new Syncroton_Model_EventAttendee($attendee);
                     }
                     
                     $this->$elementName = $attendees;
@@ -204,7 +204,7 @@ class Syncroton_Model_CalendarEvent extends Syncroton_Model_AEntry
                     $exceptions = array();
                     
                     foreach ($xmlElement->Exception as $exception) {
-                        $exceptions[] = new Syncroton_Model_CalendarException($exception);
+                        $exceptions[] = new Syncroton_Model_EventException($exception);
                     }
                     
                     $this->$elementName = $exceptions;
@@ -212,7 +212,7 @@ class Syncroton_Model_CalendarEvent extends Syncroton_Model_AEntry
                     break;
                     
                 case 'Recurrence':
-                    $this->$elementName = new Syncroton_Model_CalendarRecurrence($xmlElement);
+                    $this->$elementName = new Syncroton_Model_EventRecurrence($xmlElement);
                     
                     break;
                     

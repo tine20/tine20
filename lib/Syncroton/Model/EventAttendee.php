@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_CalendarAttendee extends Syncroton_Model_AEntry
+class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
 {
     /**
      * attendee status

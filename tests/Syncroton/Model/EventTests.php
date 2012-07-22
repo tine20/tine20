@@ -13,7 +13,7 @@
  * 
  * @package     Calendar
  */
-class Syncroton_Model_CalendarEventTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -94,7 +94,7 @@ class Syncroton_Model_CalendarEventTests extends PHPUnit_Framework_TestCase
     public function testParseSimpleXMLElement()
     {
         $xml = new SimpleXMLElement($this->_testXMLInput);
-        $event = new Syncroton_Model_CalendarEvent($xml->Collections->Collection->Commands->Change->ApplicationData);
+        $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
         
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
@@ -130,7 +130,7 @@ class Syncroton_Model_CalendarEventTests extends PHPUnit_Framework_TestCase
         
         $appData    = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         $xml = new SimpleXMLElement($this->_testXMLInput);
-        $event = new Syncroton_Model_CalendarEvent($xml->Collections->Collection->Commands->Change->ApplicationData);
+        $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
         
         $event->appendXML($appData);
         

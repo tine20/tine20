@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_CalendarRecurrence extends Syncroton_Model_AEntry
+class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
 {
     protected $_xmlBaseElement = 'Recurrence';
     
