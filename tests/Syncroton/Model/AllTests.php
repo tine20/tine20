@@ -19,9 +19,10 @@ class Syncroton_Model_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Syncroton all model tests');
         
-        $suite->addTestSuite('Syncroton_Model_EventTests');
         $suite->addTestSuite('Syncroton_Model_ContactTests');
+        $suite->addTestSuite('Syncroton_Model_EventTests');
         $suite->addTestSuite('Syncroton_Model_SyncCollectionTests');
+        $suite->addTestSuite('Syncroton_Model_TaskTests');
         
         return $suite;
     }

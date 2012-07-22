@@ -16,11 +16,6 @@
 
 class Syncroton_Data_Tasks extends Syncroton_Data_AData
 {
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
-    {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
-    }
-    
     protected function _initData()
     {
         /**

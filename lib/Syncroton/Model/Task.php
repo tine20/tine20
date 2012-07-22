@@ -20,37 +20,35 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
+class Syncroton_Model_Task extends Syncroton_Model_AEntry
 {
-    /**
-     * attendee status
-     */
-    const ATTENDEE_STATUS_UNKNOWN       = 0;
-    const ATTENDEE_STATUS_TENTATIVE     = 2;
-    const ATTENDEE_STATUS_ACCEPTED      = 3;
-    const ATTENDEE_STATUS_DECLINED      = 4;
-    const ATTENDEE_STATUS_NOTRESPONDED  = 5;
-    
-    /**
-     * attendee types
-     */
-    const ATTENDEE_TYPE_REQUIRED = 1;
-    const ATTENDEE_TYPE_OPTIONAL = 2;
-    const ATTENDEE_TYPE_RESOURCE = 3;
+    protected $_xmlBaseElement = 'ApplicationData';
     
     // @todo handle body
     protected $_properties = array(
-        'Calendar' => array(
-            'AttendeeStatus'          => array('type' => 'number'),
-            'AttendeeType'            => array('type' => 'number'),
-            'Email'                   => array('type' => 'string'),
-            'Name'                    => array('type' => 'string'),
+        'Tasks' => array(
+            //'Body'                    => 0x05,
+            //'BodySize'                => 0x06,
+            //'BodyTruncated'           => 0x07,
+            'Categories'              => array('type' => 'container'),
+            'Complete'                => array('type' => 'number'),
+            'DateCompleted'           => array('type' => 'datetime'),
+            'DueDate'                 => array('type' => 'datetime'),
+            'Importance'              => array('type' => 'number'),
+            'Recurrence'              => array('type' => 'container'),
+            'ReminderSet'             => array('type' => 'number'),
+            'ReminderTime'            => array('type' => 'datetime'),
+            'Sensitivity'             => array('type' => 'number'),
+            'StartDate'               => array('type' => 'datetime'),
+            'Subject'                 => array('type' => 'string'),
+            'UtcDueDate'              => array('type' => 'datetime'),
+            'UtcStartDate'            => array('type' => 'datetime'),
         )
     );
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
+        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -58,9 +56,9 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = $this->_properties['Calendar'][$elementName]; 
+            $elementProperties = $this->_properties['Tasks'][$elementName]; 
             
-            $nameSpace = 'uri:Calendar';
+            $nameSpace = 'uri:Tasks';
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -82,29 +80,10 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
                     
                     break;
 
-                case 'Children':
+                case 'Recurrence':
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
-                    foreach($value as $child) {
-                        $childElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Child');
-                        $childElement->appendChild($_domParrent->ownerDocument->createTextNode($child));
-                        
-                        $element->appendChild($childElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Picture':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if (is_resource($value)) {
-                        stream_filter_append($value, 'convert.base64-encode');
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(stream_get_contents($value)));
-                    } else {
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(base64_encode($value)));
-                    }
+                    $value->appendXML($element);
                     
                     $_domParrent->appendChild($element);
                     
@@ -131,7 +110,7 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
      */
     public function setFromSimpleXMLElement(SimpleXMLElement $properties)
     {
-        if ($properties->getName() !== 'Attendee') {
+        if ($properties->getName() !== $this->_xmlBaseElement) {
             throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
         }
         
@@ -147,16 +126,32 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
         return;
     }
     
-    protected function _parseCalendarNamespace(SimpleXMLElement $properties)
+    protected function _parseTasksNamespace(SimpleXMLElement $properties)
     {
         // fetch data from Contacts namespace
-        $children = $properties->children('uri:Calendar');
+        $children = $properties->children('uri:Tasks');
     
         foreach ($children as $elementName => $xmlElement) {
     
             switch ($elementName) {
+                case 'Categories':
+                    $categories = array();
+                    
+                    foreach ($xmlElement->$elementName as $category) {
+                        $categories[] = (string) $category;
+                    }
+                    
+                    $this->$elementName = $categories;
+                    
+                    break;
+                    
+                case 'Recurrence':
+                    $this->$elementName = new Syncroton_Model_TaskRecurrence($xmlElement);
+                    
+                    break;
+                    
                 default:
-                    $properties =  $this->_properties['Calendar'][$elementName];
+                    $properties =  $this->_properties['Tasks'][$elementName];
                     
                     switch ($properties['type']) {
                         case 'datetime':
@@ -179,7 +174,7 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
     
     public function &__get($name)
     {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
+        if (!array_key_exists($name, $this->_properties['Tasks'])) {
             throw new InvalidArgumentException("$name is no valid property of this object");
         }
         
@@ -188,11 +183,11 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
     
     public function __set($name, $value)
     {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
+        if (!array_key_exists($name, $this->_properties['Tasks'])) {
             throw new InvalidArgumentException("$name is no valid property of this object");
         }
         
-        $properties = $this->_properties['Calendar'][$name];
+        $properties = $this->_properties['Tasks'][$name];
         
         if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
             throw new InvalidArgumentException("value for $name must be an instance of DateTime");

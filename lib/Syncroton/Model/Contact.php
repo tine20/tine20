@@ -106,7 +106,7 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
-            if($value === null || $value == '' || (is_array($value) && empty($value))) {
+            if($value === null || $value === '' || (is_array($value) && empty($value))) {
                 continue;
             }
             
