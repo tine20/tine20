@@ -22,7 +22,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage22 extends Syncroton_Wbxml_Dtd_Acti
     
     protected $_codePageName    = 'Email2';
         
-    protected $_tags = array(     
+    protected $_tags = array(
         'UmCallerID'            => 0x05,
         'UmUserNotes'           => 0x06,
         'UmAttDuration'         => 0x07,

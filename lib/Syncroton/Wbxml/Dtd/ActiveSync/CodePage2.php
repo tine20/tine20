@@ -22,7 +22,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage2 extends Syncroton_Wbxml_Dtd_Activ
     
     protected $_codePageName    = 'Email';
         
-    protected $_tags = array(     
+    protected $_tags = array(
         'Attachment'            => 0x05,
         'Attachments'           => 0x06,
         'AttName'               => 0x07,
@@ -50,7 +50,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage2 extends Syncroton_Wbxml_Dtd_Activ
         'DTStamp'               => 0x1d,
         'EndTime'               => 0x1e,
         'InstanceType'          => 0x1f,
-        'IntDBusyStatus'        => 0x20,
+        'BusyStatus'            => 0x20,
         'Location'              => 0x21,
         'MeetingRequest'        => 0x22,
         'Organizer'             => 0x23,
@@ -59,14 +59,14 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage2 extends Syncroton_Wbxml_Dtd_Activ
         'ResponseRequested'     => 0x26,
         'Recurrences'           => 0x27,
         'Recurrence'            => 0x28,
-        'Recurrence_Type'       => 0x29,
-        'Recurrence_Until'      => 0x2a,
-        'Recurrence_Occurrences'  => 0x2b,
-        'Recurrence_Interval'     => 0x2c,
-        'Recurrence_DayOfWeek'    => 0x2d,
-        'Recurrence_DayOfMonth'   => 0x2e,
-        'Recurrence_WeekOfMonth'  => 0x2f,
-        'Recurrence_MonthOfYear'  => 0x30,
+        'Type'       => 0x29,
+        'Until'      => 0x2a,
+        'Occurrences'  => 0x2b,
+        'Interval'     => 0x2c,
+        'DayOfWeek'    => 0x2d,
+        'DayOfMonth'   => 0x2e,
+        'WeekOfMonth'  => 0x2f,
+        'MonthOfYear'  => 0x30,
         'StartTime'               => 0x31,
         'Sensitivity'             => 0x32,
         'TimeZone'                => 0x33,
