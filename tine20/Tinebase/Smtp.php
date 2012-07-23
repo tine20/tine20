@@ -133,10 +133,10 @@ class Tinebase_Smtp
     {
         $transport = $_transport instanceof Zend_Mail_Transport_Abstract ? $_transport : self::getDefaultTransport();
         
-        $_mail->setMessageId();
+        if (! $_mail->getMessageId()) {
+            $_mail->setMessageId();
+        }
         $_mail->addHeader('X-MailGenerator', 'Tine 2.0');
-        // don't reply to this mail, dear autoresponder ... :)
-        $_mail->addHeader('Precedence', 'bulk');
         
         $_mail->send($transport);
     }
