@@ -488,13 +488,12 @@ Tine.Tinebase.tineInit = {
                     // update window factory window type (required after login)
                     if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
                         var windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
-                        
-                        if (Tine.WindowFactory && Tine.WindowFactory.windowType !== windowType) {
-                            Tine.WindowFactory.windowType = windowType;
-                        }
                         // init ApplicationStarter on Ext window once
                         if(windowType == 'Ext') {
                             Tine.Tinebase.ApplicationStarter.init();
+                        }
+                        if (Tine.WindowFactory && Tine.WindowFactory.windowType !== windowType) {
+                            Tine.WindowFactory.windowType = windowType;
                         }
                     }
                     

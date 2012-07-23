@@ -26,13 +26,10 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
     
     /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
+     * the models handled by this frontend
      * @var array
      */
-    protected $_resolveUserFields = array(
-        'ExampleApplication_Model_ExampleRecord' => array('created_by', 'last_modified_by')
-    );
+    protected $_models = array('ExampleRecord');
     
     /**
      * the constructor

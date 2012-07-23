@@ -38,8 +38,4 @@ class ExampleApplication_Backend_ExampleRecord extends Tinebase_Backend_Sql_Abst
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-
-    /************************ overwritten functions *******************/  
-    
-    /************************ helper functions ************************/
 }

@@ -12,18 +12,6 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Model.js",
-          "path": "js/"
-        },
-        {
-          "text": "ExampleApplication.js",
-          "path": "js/"
-        },
-        {
-          "text": "ExampleRecordGridPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "ExampleRecordEditDialog.js",
           "path": "js/"
         }

@@ -54,6 +54,11 @@ Tine.Tinebase.ApplicationStarter = {
      * initializes the starter
      */
     init: function() {
+        // Wait until appmgr is initialized
+        if (!Tine.Tinebase.hasOwnProperty('appMgr')) {
+            this.init.defer(100, this);
+            return;
+        }
         if(!this.userApplications) {
             this.userApplications = Tine.Tinebase.registry.get('userApplications');
             this.createStructure(true)

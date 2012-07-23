@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.ExampleApplication');
 
@@ -28,45 +28,11 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     /**
      * @private
      */
-    windowNamePrefix: 'ExampleRecordEditWindow_',
     appName: 'ExampleApplication',
-    recordClass: Tine.ExampleApplication.Model.ExampleRecord,
-    recordProxy: Tine.ExampleApplication.recordBackend,
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: true,
-    showContainerSelector: true,
+    modelName: 'ExampleRecord',
     
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-    updateToolbars: function() {
-
-    },
-    
-    /**
-     * executed after record got updated from proxy
-     * 
-     * @private
-     */
-    onRecordLoad: function() {
-        // you can do something here
-
-        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordLoad.call(this);
-    },
-    
-    /**
-     * executed when record gets updated from form
-     * - add attachments to record here
-     * 
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.ExampleApplication.ExampleRecordEditDialog.superclass.onRecordUpdate.call(this);
-        
-        // you can do something here    
-    },
+    windowHeight: 470,
+    windowWidth: 800,
     
     /**
      * returns dialog
@@ -145,21 +111,3 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
         };
     }
 });
-
-/**
- * ExampleApplication Edit Popup
- * 
- * @param   {Object} config
- * @return  {Ext.ux.Window}
- */
-Tine.ExampleApplication.ExampleRecordEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
-        name: Tine.ExampleApplication.ExampleRecordEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.ExampleApplication.ExampleRecordEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};
