@@ -33,6 +33,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $this->_sendNotifications       = TRUE;
         $this->_purgeRecords            = FALSE;
         $this->_doRightChecks           = TRUE;
+        $this->_resolveCustomFields     = TRUE;
         
         $this->_backend                 = new Crm_Backend_Lead();
     }

@@ -54,6 +54,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'creation_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'metacrm_lead.id')),
         
     // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
