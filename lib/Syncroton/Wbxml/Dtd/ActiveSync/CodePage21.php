@@ -22,7 +22,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage21 extends Syncroton_Wbxml_Dtd_Acti
     
     protected $_codePageName    = 'ComposeMail';
         
-    protected $_tags = array(     
+    protected $_tags = array(
         'SendMail'        => 0x05,
         'SmartForward'    => 0x06,
         'SmartReply'      => 0x07,
