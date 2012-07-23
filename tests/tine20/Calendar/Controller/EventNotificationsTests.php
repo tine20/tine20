@@ -708,6 +708,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @param string $_personas
      * @param string $_assertString
      * @return void
+     * 
+     * @see #6800: add message-id to notification mails
      */
     protected function _assertMail($_personas, $_assertString = NULL)
     {
@@ -730,6 +732,10 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 $subject = $mailsForPersona[0]->getSubject();
                 $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
                 $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
+                
+                $headers = $mailsForPersona[0]->getHeaders();
+                $this->assertTrue(isset($headers['Message-Id']), 'message-id header not found');
+                $this->assertContains('@' . php_uname('n'), $headers['Message-Id'][0], 'hostname not in message-id');
             }
         }
     }
