@@ -148,6 +148,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         var keys = [];
         
+        // disable container selector
+        var field = this.editDialog.getForm().findField(this.editDialog.recordClass.getMeta('containerProperty'));
+        if(field) {
+            field.disable();
+        }
+        
         Ext.each(this.editDialog.recordClass.getFieldNames(), function(key) {
             var field = this.form.findField(key);
             if (!field) return true;
