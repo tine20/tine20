@@ -362,7 +362,7 @@ Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
     {name: 'related_id'},
     {name: 'type'},
     {name: 'remark'},
-    {name: 'related_record'}
+    {name: 'related_record', sortType: Tine.Tinebase.common.recordSortType}
 ], {
     appName: 'Tinebase',
     modelName: 'Relation',
