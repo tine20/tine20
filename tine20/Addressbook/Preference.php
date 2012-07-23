@@ -47,7 +47,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTADDRESSBOOK,
             self::DEFAULTPERSISTENTFILTER,
         );
-            
+        
         return $allPrefs;
     }
     

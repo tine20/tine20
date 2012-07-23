@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -107,21 +107,12 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Application_Json_Abstract
      *
      * @return  mixed array 'variable name' => 'data'
-     *
-     * @todo    add preference for default container_id
      */
     public function getRegistryData()
     {
         $settings = $this->getSettings();
         $defaults = $settings['defaults'];
-        
-        // get default container
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName)->toArray();
-        $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
-            Tinebase_Core::getUser(),
-            $defaultContainerArray['id']
-        )->toArray();
-        $defaults['container_id'] = $defaultContainerArray;
+        $defaults['container_id'] = $this->getDefaultContainer();
         
         $registryData = array(
             'leadtypes'     => array(
@@ -140,6 +131,22 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         
         return $registryData;
+    }
+    
+    /**
+     * get default container for leads
+     * 
+     * @return array
+     */
+    public function getDefaultContainer()
+    {
+        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST)->toArray();
+        $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
+            Tinebase_Core::getUser(),
+            $defaultContainerArray['id']
+        )->toArray();
+        
+        return $defaultContainerArray;
     }
     
     /**

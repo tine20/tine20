@@ -3,11 +3,10 @@
  * Tine 2.0
  * 
  * @package     Crm
+ * @subpackage  Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        add NOTIFICATION_LEVEL
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -15,15 +14,23 @@
  * backend for Crm preferences
  *
  * @package     Crm
+ * @subpackage  Preference
+ * 
+ * @todo add & implement NOTIFICATION_LEVEL
  */
 class Crm_Preference extends Tinebase_Preference_Abstract
 {
     /**************************** application preferences/settings *****************/
     
     /**
+     * default list all created leads are placed in
+     */
+    const DEFAULTLEADLIST = 'defaultLeadList';
+
+    /**
      * general notification level
      */
-    const NOTIFICATION_LEVEL = 'notificationLevel';
+    //const NOTIFICATION_LEVEL = 'notificationLevel';
 
     /**
      * have name of default favorite an a central palce
@@ -51,6 +58,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
+            self::DEFAULTLEADLIST,
             //self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::DEFAULTPERSISTENTFILTER,
@@ -69,6 +77,10 @@ class Crm_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(
+            self::DEFAULTLEADLIST  => array(
+                'label'         => $translate->_('Default Lead List'),
+                'description'   => $translate->_('The default list for new leads'),
+            ),
             /*
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
@@ -92,13 +104,18 @@ class Crm_Preference extends Tinebase_Preference_Abstract
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
+            case self::DEFAULTLEADLIST:
+                $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
+                break;
             /*
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
