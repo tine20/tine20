@@ -514,6 +514,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "FilterModelMultiSelect.js",
+          "path": "js/widgets/grid/"
+        },
+        {
             "text": "Manager.js",
             "path": "js/widgets/relation/"
         },
