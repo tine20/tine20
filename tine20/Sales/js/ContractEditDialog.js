@@ -111,6 +111,9 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plain:true,
             activeTab: 0,
             border: false,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
             items:[
                 {
                 title: this.app.i18n.n_('Contract', 'Contract', 1),

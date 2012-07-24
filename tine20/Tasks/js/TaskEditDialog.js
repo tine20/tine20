@@ -149,6 +149,9 @@ Ext.namespace('Tine.Tasks');
             plain:true,
             activeTab: 0,
             border: false,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
             items:[{
                 title: this.app.i18n.n_('Task', 'Tasks', 1),
                 autoScroll: true,

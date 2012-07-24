@@ -62,6 +62,9 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             border: false,
             plain:true,
             activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
             items:[{
                 title: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
                 autoScroll: true,
