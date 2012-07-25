@@ -222,7 +222,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      * get mailbox string for users aka user.loginname
      * 
      * @param  string  $_username  the imap account name
-     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      * @return string
      */
     protected function _getUserMailbox($_username)
@@ -232,7 +232,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $namespaces = $imap->getNamespace();
         
         if (!isset($namespaces['other'])) {
-            throw new Tinebase_Exception_InvalidArgument('other namespace not found');
+            throw new Tinebase_Exception_NotFound('other namespace not found');
         }
         
         $mailboxString = $namespaces['other']['name'] . $this->_appendDomain($_username);
@@ -256,13 +256,19 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      * check if user exists already in dovecot user table
      * 
      * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
+        try {
+            $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . " Mailbox of user " . $_user->accountLoginName . " not found: " . $tenf->getMessage());
+            return false;
+        }
+        
         $imap = $this->_getImapConnection();
-        
-        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
-        
         $mailboxes = $imap->listMailbox('', $mailboxString);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
