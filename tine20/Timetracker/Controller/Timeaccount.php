@@ -76,7 +76,8 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             'name'              => $containerName,
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            'model'             => 'Timetracker_Model_Timeaccount'
         ));
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),

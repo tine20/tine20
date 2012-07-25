@@ -297,12 +297,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if($metaInfo) {
                 if(array_key_exists('useModlog', $metaInfo) && $metaInfo['useModlog']) {
                     $this->_filterModel = array_merge($this->_filterModel, array(
+                            'deleted_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
                             'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
                             'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
                             'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
                             'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
                             'is_deleted'           => array('filter' => 'Tinebase_Model_Filter_Bool')
                     ));
                 }

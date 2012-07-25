@@ -60,6 +60,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact'
         )));
 
         $this->objects['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
@@ -616,5 +617,19 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_instance->setContainerColor($this->objects['initialContainer'], '#99CC00');
         $this->assertEquals('#99CC00', $result->color);
+    }
+    
+    /**
+     * testGetPersonalContainer
+     * @see https://gerrit.tine20.org/tine20/#/c/862
+     */
+    
+    public function testGetPersonalContainer()
+    {
+        $uid=Tinebase_Core::getUser()->getId();
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($uid, 'Addressbook_Model_Contact', $uid, Tinebase_Model_Grants::GRANT_READ);
+        $container = $containers->filter('name', 'tine20phpunit')->getFirstRecord();
+        $this->assertEquals($container->name, 'tine20phpunit');
+        $this->assertEquals($container->model, 'Addressbook_Model_Contact');
     }
 }

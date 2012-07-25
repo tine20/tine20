@@ -142,10 +142,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-    * resolve containers and tags
-    *
-    * @param Tinebase_Record_RecordSet $_records
-    */
+     * resolve containers and tags
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
     public static function resolveContainerTags(Tinebase_Record_RecordSet $_records)
     {
         if ($_records->getFirstRecord()->has('container_id')) {
@@ -412,12 +412,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
         $result = array();
-        
+
         if ($_records->getFirstRecord()) {
             $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
             $result = $converter->fromTine20RecordSet($_records);
         }
-        
+
         return $result;
     }
 }

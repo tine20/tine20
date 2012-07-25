@@ -30,7 +30,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_models = array('ExampleRecord');
-    
+
     /**
      * the constructor
      *
@@ -39,6 +39,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_applicationName = 'ExampleApplication';
         $this->_controller = ExampleApplication_Controller_ExampleRecord::getInstance();
+        parent::__construct();
     }
     
     /**
@@ -93,11 +94,10 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName)->toArray();
-        $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainerArray['id'])->toArray();
-        
+        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer('ExampleApplication_Model_ExampleRecord', NULL, 'defaultExampleRecordContainer')->toArray();
+        $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainerArray['id'])->toArray();#
         return array(
-            'defaultContainer' => $defaultContainerArray
+            'defaultExampleRecordContainer' => $defaultContainerArray
         );
     }
 }

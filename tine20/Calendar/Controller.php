@@ -111,7 +111,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
             'owner_id'          => $_account,
             'backend'           => 'Sql',
             'color'             => '#FF6600',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => static::$_defaultModel
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);

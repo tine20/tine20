@@ -161,6 +161,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => 'Sql',
                 'application_id'    => $appId,
+                'model'             => 'Sales_Model_Contract'
             ));
             $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, TRUE);
             

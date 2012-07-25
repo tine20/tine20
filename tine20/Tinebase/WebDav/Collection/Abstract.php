@@ -110,7 +110,8 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             'name'           => $name,
             'type'           => $containerType,
             'backend'        => 'sql',
-            'application_id' => $this->_getApplication()->getId()
+            'application_id' => $this->_getApplication()->getId(),
+            'model'          => 'Tinebase_Model_Node'
         )));
         
         return $container;

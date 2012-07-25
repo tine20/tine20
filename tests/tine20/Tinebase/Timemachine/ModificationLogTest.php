@@ -268,7 +268,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
             array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
-            array('field' => 'modification_time',   'operator' => 'within', 'value' => 'today'),
+            array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
         ));
         $result = $this->_modLogClass->undo($filter);
         $this->assertEquals(1, $result['totalcount']);

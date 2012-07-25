@@ -115,7 +115,8 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_accountId,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('SimpleFAQ')->getId()
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('SimpleFAQ')->getId(),
+            'model'             => static::$_defaultModel
         ));
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new personal folder for account id ' . $_accountId);

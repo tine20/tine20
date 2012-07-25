@@ -37,7 +37,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'containerProperty' => 'container_id',
         'containerName'     => 'example record list', // _('example record list')
         'containersName'    => 'example record lists', // _('example record lists')
-        'defaultFilter'     => 'name',
+        'defaultFilter'     => 'query',
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
@@ -56,7 +56,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         ),
         'name'   => array(
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            'label' => 'Name'    // _('Name')
+            'label' => 'Name',    // _('Name')
             ),
         'status' => array(
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

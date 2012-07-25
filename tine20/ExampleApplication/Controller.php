@@ -22,6 +22,12 @@
 class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
 {
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'ExampleApplication_Model_ExampleRecord';
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -74,7 +80,8 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_accountId,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId(),
+            'model'             => static::$_defaultModel
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);

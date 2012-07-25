@@ -347,15 +347,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * initializes the generic column model on auto bootstrap
      */
     initGenericColumnModel: function() {
-        var columns = [];
         if(this.modelConfig) {
+            var columns = [];
             Ext.each(this.modelConfig.keys, function(key) {
                 // When no label exists, don't use in grid
                 if(this.modelConfig.fields[key].label) {
                     var config = {
                         id: key,
                         dataIndex: key,
-                        header: this.app.i18n._(this.modelConfig.fields[key].label)
+                        header: this.app.i18n._(this.modelConfig.fields[key].label),
+                        hidden: this.modelConfig.fields[key].hidden 
                     }
                     var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
                     if(renderer) {

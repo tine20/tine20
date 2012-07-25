@@ -571,6 +571,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             'type'           => $_type,
             'backend'        => 'sql',
             'application_id' => $app->getId(),
+            'model'          => 'Tinebase_Model_Node'
         )));
         
         return $container;

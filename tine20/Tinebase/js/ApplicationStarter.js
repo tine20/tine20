@@ -38,6 +38,7 @@ Tine.Tinebase.ApplicationStarter = {
         'integer':  'int',
         'float':    'float'
     },
+    
     /**
      * maps php filters to value types of js filter
      * @type {Object}
@@ -46,8 +47,10 @@ Tine.Tinebase.ApplicationStarter = {
         'Tinebase_Model_Filter_Id': null,
         'Tinebase_Model_Filter_Text': 'string',
         'Tinebase_Model_Filter_Date': 'date',
+        'Tinebase_Model_Filter_DateTime': 'date',
         'Tinebase_Model_Filter_Bool': 'bool',
-        'Tinebase_Model_Filter_ForeignId': 'foreign'
+        'Tinebase_Model_Filter_ForeignId': 'foreign',
+        'Tinebase_Model_Filter_Int': 'number'
     },
     
     /**
@@ -66,23 +69,39 @@ Tine.Tinebase.ApplicationStarter = {
     },
     
     /**
-     * returns the record type
-     * @param {} type
-     * @param {} options
-     * @return {}
+     * returns the field
+     * @param {Object} fieldconfig
+     * @return {Object}
      */
-    getRecordType: function(type, options) {
-        switch (type) {
-            case 'custom':
-                var recordType = this.types[type];
-                break;
-            case 'foreign':
-                var recordType = options.app + '.' + options.model;
-                break;
-            default:
-                var recordType = this.types[type];
+    getField: function(fieldconfig, key) {
+        
+        // default type is string
+        var field = {name: key, type: 'string'};
+        
+        if(fieldconfig.type) {
+            // add pre defined type
+            field.type = this.types[fieldconfig.type];
+            switch (fieldconfig.type) {
+                case 'datetime':
+                    field.dateFormat = Date.patterns.ISO8601Long;
+                    break;
+                case 'date':
+                    field.dateFormat = Date.patterns.ISO8601Long;
+                    break;
+                case 'time':
+                    field.dateFormat = Date.patterns.ISO8601Time;
+                case 'foreign':
+                    field.type = fieldconfig.options.app + '.' + fieldconfig.options.model;
+                    break;
+            }
+            // allow overwriting date pattern in model
+            if (fieldconfig.hasOwnProperty('dateFormat')) {
+                field.dateFormat = fieldconfig.dateFormat;
+            }
         }
-        return recordType;
+        
+        // TODO: create field registry, add fields here
+        return field;
     },
     /**
      * returns the grid renderer
@@ -113,13 +132,32 @@ Tine.Tinebase.ApplicationStarter = {
                     }
                     break;
                 case 'user':
-                    gridRenderer = Tine.Tinebase.common.accountRenderer;
+                    gridRenderer = Tine.Tinebase.common.usernameRenderer;
                     break;
                 case 'keyfield': 
                     gridRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, config.name);
-                    break
-            }
-        }
+                    break;
+                case 'date':
+                    gridRenderer = Tine.Tinebase.common.dateRenderer;
+                    break;
+                case 'datetime':
+                    gridRenderer = Tine.Tinebase.common.dateTimeRenderer;
+                    break;
+                 case 'time':
+                    gridRenderer = Tine.Tinebase.common.timeRenderer;
+                    break;
+                case 'tag':
+                    gridRenderer = Tine.Tinebase.common.tagsRenderer;
+                    break;
+                case 'container':
+                    gridRenderer = Tine.Tinebase.common.containerRenderer;
+                    break;
+                 default:
+                    gridRenderer = function(value) {
+                        return Ext.util.Format.htmlEncode(value);
+                    }
+                }
+           }
         return gridRenderer;
     },
 
@@ -131,10 +169,15 @@ Tine.Tinebase.ApplicationStarter = {
      * @return {Object}
      */
     getFilter: function(key, filterconfig, fieldconfig, appName, modelName) {
-        // prepare filter
         // take field label if no filterlabel is defined
+        var label = (filterconfig && filterconfig.label) ? filterconfig.label : (fieldconfig && fieldconfig.label) ? fieldconfig.label : null;
+
+        if (! label && (key != 'query')) {
+            return null;
+        }
+        // prepare filter
         var filter = {
-            label: (filterconfig && filterconfig.label) ? filterconfig.label : (fieldconfig && fieldconfig.label) ? fieldconfig.label : '',
+            label: label,
             field: key
         };
 
@@ -164,6 +207,9 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'Tinebase_Model_Filter_Container':
                     filter = {filtertype: 'tine.widget.container.filtermodel', app: appName, recordClass: appName + '.' + modelName};
+                    break;
+                case 'Tinebase_Model_Filter_Query':
+                    filter = Ext.apply(filter, {label: _('Quick search'), operators: ['contains']});
                     break;
                 default:
                     if(this.filters[filterconfig.filter]) {  // use pre-defined default filter (this.filters)
@@ -213,7 +259,7 @@ Tine.Tinebase.ApplicationStarter = {
                     // iterate record fields
                     Ext.each(config.keys, function(key) {
                         // add field to model array
-                        rA.push({name: key, type: this.getRecordType(config.fields[key].type, config.fields[key].options)});
+                        rA.push(this.getField(config.fields[key], key));
                         // create default data
                         defaultData[key] = config.fields[key].standard ? config.fields[key].standard : null;
                         // if field config has label, create grid renderer
@@ -247,8 +293,9 @@ Tine.Tinebase.ApplicationStarter = {
                         }
                         Ext.iterate(config.filter, function(key, filter) {
                             // create Filter Model
-                            if (filter = this.getFilter(key, filter, config.fields[key], appName, model)) {
-                                filterModel.push(filter);
+                            var f = this.getFilter(key, filter, config.fields[key], appName, model);
+                            if (f) {
+                                filterModel.push(f);
                             }
                         }, this);
                     }
@@ -282,15 +329,36 @@ Tine.Tinebase.ApplicationStarter = {
                         });
                     }
                     
-                    // create default data function
-                    if(!Ext.isFunction(Tine[appName].Model[model].getDefaultData)) {
+                    // create default data
+                    if(config.meta) {
+                        // get default container if needed
+                        if(config.meta.containerProperty) {
+                            var defaultContainer = Tine[appName].registry.get('default' + model + 'Container');
+                            if (defaultContainer) {
+                                defaultData[config.meta.containerProperty] = defaultContainer;
+                            }
+                        }
+                        
+                        // add notes if needed
+                        if(config.meta.hasNotes) {
+                            defaultData['notes'] = [];
+                        }
+                        // add tags if needed
+                        if(config.meta.hasTags) {
+                            defaultData['tags'] = [];
+                        }
+                        // add customfields if needed
+                        if(config.meta.hasCustomFields) {
+                            defaultData['customfields'] = [];
+                        }
+                        // overwrite function
                         Tine[appName].Model[model].getDefaultData = function() {
                             if(!dd) var dd = Ext.decode(Ext.encode(defaultData));
                             return dd;
                         };
                         Tine[appName].Model[model].getDefaultData();
                     }
-
+                    
                     // create the filter model
                     if (!Ext.isFunction(Tine[appName].Model[model].getFilterModel)) {
                         Tine[appName].Model[model].getFilterModel = function() {
@@ -339,7 +407,7 @@ Tine.Tinebase.ApplicationStarter = {
                             };
                         }
                     }
-                    // create gridpanel
+                    // create Gridpanel
                     var gridPanelName = model + 'GridPanel';
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {
                         Tine[appName][gridPanelName] = Ext.extend(Tine.widgets.grid.GridPanel, {

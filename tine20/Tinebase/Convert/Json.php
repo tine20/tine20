@@ -101,8 +101,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (count($_records) == 0) {
             return array();
         }
-        
+
         Tinebase_Frontend_Json_Abstract::resolveContainerTags($_records);
+
         $this->_resolveMultipleIdFields($_records);
 
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));

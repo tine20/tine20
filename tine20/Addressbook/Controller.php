@@ -104,7 +104,8 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_account,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            'model'             => 'Addressbook_Model_Contact'
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);

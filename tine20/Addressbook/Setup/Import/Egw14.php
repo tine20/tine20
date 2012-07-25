@@ -85,7 +85,8 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                         'type' => Tinebase_Model_Container::TYPE_PERSONAL,      
                         'owner_id' => Tinebase_Core::getUser(),
                         'backend' => 'Sql',
-                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                        'model' => 'Addressbook_Model_Contact'
                     ));
                     $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
                 }
@@ -100,7 +101,8 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                         'name' => $sharedContactsContainerName,
                         'type' => Tinebase_Model_Container::TYPE_SHARED,      
                         'backend' => 'Sql',
-                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),                  
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                        'model' => 'Addressbook_Model_Contact'
                     ));
                     $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
                     Tinebase_Container::getInstance()->addGrants($container, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(

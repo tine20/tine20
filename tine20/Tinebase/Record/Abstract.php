@@ -672,11 +672,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 static::$_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
             if(static::_checkMetaProperty('hasTags')) {
-                static::$_fields['tags'] = array('label' => NULL, 'type' => 'tag', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+                static::$_fields['tags'] = array('label' => 'Tags', 'type' => 'tag', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
             
             if(static::_checkMetaProperty('containerProperty')) {
-                static::$_fields[static::$_meta['containerProperty']] = array('label' => 'Container', 'type' => 'container', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields[static::$_meta['containerProperty']] = array('label' => 'Container', 'hidden' => true, 'type' => 'container', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
             }
             
             if(static::_checkMetaProperty('useModlog')) {
@@ -684,9 +684,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 static::$_fields['creation_time']      = array('label' => 'Creation Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['last_modified_by']   = array('label' => 'Last Modified By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['last_modified_time'] = array('label' => 'Last Modification Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['deleted_by']         = array('label' => 'Deleted By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['deleted_time']       = array('label' => 'Deleted Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['is_deleted']         = array('label' => 'Is Deleted', 'type' => 'bool', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                // don't show deleted information
+                static::$_fields['deleted_by']         = array('label' => NULL, 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['is_deleted']         = array('label' => NULL, 'type' => 'bool', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
             }
         }
 
@@ -699,7 +700,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static function _checkMetaProperty($property)
     {
-        return array_key_exists($property, static::$_meta) && static::$_meta[$property];
+        if(static::$_meta) {
+            return array_key_exists($property, static::$_meta) && static::$_meta[$property];
+        }
+        return false;
     }
     
     /**
@@ -1173,6 +1177,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public static function getResolveForeignIdFields()
     {
+        if(static::_checkMetaProperty('useModlog')) {
+            $res = array('Tinebase_Model_User' => array('created_by', 'last_modified_by'));
+            if(is_array(static::$_resolveForeignIdFields)) {
+                return array_merge_recursive(static::$_resolveForeignIdFields, $res);
+            } else {
+                return $res;
+            }
+        }
         return static::$_resolveForeignIdFields;
     }
 }

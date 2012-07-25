@@ -87,7 +87,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             'name'              => $_record->name,
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            'model'             => 'Calendar_Model_Event'
         )), NULL, TRUE);
         
         // remove default admin

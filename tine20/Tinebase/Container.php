@@ -273,6 +273,41 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * resolves the $_recordClass argument for legacy handling: $_recordClass was before $_application
+     * in getDefaultContainer and getPersonalContainer
+     * @param string|Tinebase_Record_Interface $_recordClass
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _resolveRecordClassArgument($_recordClass)
+    {
+        $ret = array();
+        if(is_string($_recordClass)) {
+            $split = explode('_', $_recordClass);
+            switch(count($split)) {
+                case 1:
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using application name is deprecated. Please use the classname of the model or the class itself.');
+                    $ret['appName'] = $_recordClass;
+                    if(! $ret['recordClass'] = Tinebase_Core::getApplicationInstance($_recordClass)->getDefaultModel()) {
+                        throw new Tinebase_Exception_NotFound('A default model could not be found for application ' . $_recordClass);
+                    }
+                    break;
+                case 3: 
+                    $ret['appName'] = $split[0];
+                    $ret['recordClass'] = $_recordClass;
+                    break;
+                default: throw new Tinebase_Exception_InvalidArgument('Invalid value as recordClass given: ' . print_r($_recordClass, 1));
+            }
+        } elseif (in_array('Tinebase_Record_Interface', class_implements($_recordClass))) {
+            $ret['appName'] = $_recordClass->getApplication();
+            $ret['recordClass'] = get_class($_recordClass);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid value as recordClass given: ' . print_r($_recordClass, 1));
+        }
+        
+        return $ret;
+    }
+    
+    /**
      * set modified timestamp for container
      * 
      * @param int|Tinebase_Model_Container $container
@@ -474,19 +509,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * returns the personal container of a given account accessible by a another given account
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string                              $_application
+     * @param   string|Tinebase_Record_Interface    $_recordClass
      * @param   int|Tinebase_Model_User             $_owner
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL = false)
+    public function getPersonalContainer($_accountId, $_recordClass, $_owner, $_grant, $_ignoreACL = false)
     {
+        $meta = $this->_resolveRecordClassArgument($_recordClass);
+        
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $ownerId     = Tinebase_Model_User::convertUserIdToInt($_owner);
         $grant       = $_ignoreACL ? '*' : $_grant;
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($meta['appName']);
 
         $select = $this->_db->select()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
@@ -512,6 +549,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
         $this->addGrantsSql($select, $accountId, $grant, 'user');
         
+        if ($meta['recordClass']) {
+            $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
+        }
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -526,7 +566,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
 
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containersData, TRUE);
-        
+
         return $containers;
     }
     
@@ -579,22 +619,26 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
         $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
     }
-    
+
     /**
      * gets default container of given user for given app
-     *  - returns personal first container at the moment
+     *  - did and still does return personal first container by using the application name instead of the recordClass name
+     *  - allows now to use different models with default container in one application
      *
-     * @param   string                              $applicationName
+     * @param   string|Tinebase_Record_Interface    $recordClass
      * @param   string|Tinebase_Model_User          $accountId
      * @param   string                              $defaultContainerPreferenceName
      * @return  Tinebase_Model_Container
      * 
      * @todo get default container name from app/translations?
      */
-    public function getDefaultContainer($applicationName, $accountId = NULL, $defaultContainerPreferenceName = NULL)
+    public function getDefaultContainer($recordClass, $accountId = NULL, $defaultContainerPreferenceName = NULL)
     {
+        // legacy handling
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
         if ($defaultContainerPreferenceName !== NULL) {
-            $defaultContainerId = Tinebase_Core::getPreference($applicationName)->getValue($defaultContainerPreferenceName);
+            $defaultContainerId = Tinebase_Core::getPreference($meta['appName'])->getValue($defaultContainerPreferenceName);
             try {
                 $result = $this->getContainerById($defaultContainerId);
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -611,27 +655,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserById($accountId) : Tinebase_Core::getUser();
-        $result = $this->getPersonalContainer($account, $applicationName, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
+        $result = $this->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
         
         if ($result === NULL) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Creating new default container for ' . $account->accountFullName . ' in application ' . $applicationName);
+                . ' Creating new default container for ' . $account->accountFullName . ' in application ' . $meta['appName']);
             
-            $translation = Tinebase_Translation::getTranslation($applicationName);
+            $translation = Tinebase_Translation::getTranslation($meta['appName']);
             $result = $this->addContainer(new Tinebase_Model_Container(array(
                 'name'              => sprintf($translation->_("%s's personal container"), $account->accountFullName),
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'owner_id'          => $account->getId(),
                 'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId() 
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId() 
             )));
         }
         
         if ($defaultContainerPreferenceName !== NULL) {
             // save as new pref
-            Tinebase_Core::getPreference($applicationName)->setValue($defaultContainerPreferenceName, $result->getId());
+            Tinebase_Core::getPreference($meta['appName'])->setValue($defaultContainerPreferenceName, $result->getId());
         }
-        
+
         return $result;
     }
     

@@ -227,6 +227,12 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
             return $this->objects['container']['withSyncGrant'];
         }
         
+        switch ($this->_applicationName) {
+            case 'Calendar':    $recordClass = 'Calendar_Model_Event'; break;
+            case 'Addressbook': $recordClass = 'Addressbook_Model_Contact'; break;
+            case 'Tasks':       $recordClass = 'Tasks_Model_Task'; break;
+            default: throw new Exception('handle this model!');
+        }
         try {
             $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName(
                 $this->_applicationName, 
@@ -240,7 +246,8 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'owner_id'          => Tinebase_Core::getUser(),
                 'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+                'model'             => $recordClass
             ));
             $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
         }

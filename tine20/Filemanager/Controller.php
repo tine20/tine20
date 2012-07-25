@@ -21,6 +21,12 @@
 class Filemanager_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
 {
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Tinebase_Model_Tree_Node';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Filemamager_Controller
@@ -95,7 +101,8 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'            => $_account,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
+            'model'             => static::$_defaultModel
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);

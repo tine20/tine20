@@ -355,7 +355,6 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        
         var type, iconCls, displayName;
         
         if (accountObject.accountDisplayName) {
