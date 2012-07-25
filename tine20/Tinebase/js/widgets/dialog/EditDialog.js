@@ -224,15 +224,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.windowNamePrefix = this.modelName + 'EditWindow_';
         }
         
-        // if showContainerSelector is not explicitly set, make this dependend on the containerProperty of the handled recordClass
-        if(this.showContainerSelector === null) {
-            if (this.recordClass && this.recordClass.getMeta('containerProperty')) {
-                this.showContainerSelector = true;
-            } else {
-                this.showContainerSelector = false;
-            }
-        }
-        
         Tine.log.debug('initComponent: appName: ', this.appName);
         Tine.log.debug('initComponent: modelName: ', this.modelName);
         Tine.log.debug('initComponent: app: ', this.app);
