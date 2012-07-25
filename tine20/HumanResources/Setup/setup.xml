@@ -3,7 +3,7 @@
     <name>HumanResources</name>
     <version>0.2</version>
     <order>51</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <depends>
         <application>Sales</application>
     </depends>

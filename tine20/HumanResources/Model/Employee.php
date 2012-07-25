@@ -71,7 +71,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contracts'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'contracts'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         );
 
     /**
@@ -122,7 +122,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
     protected function _doPrivateCleanup()
     {
         // no private cleanup with admin rights
-        if (Tinebase_Core::getUser()->hasRight('HumanResources', 'admin') ||
+        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
+            Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN) ||
             Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
             return;
         } else {

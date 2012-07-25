@@ -27,7 +27,7 @@ class HumanResources_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 HumanResources All Tests');
-        $suite->addTestSuite('HumanResources_JsonTest');
+        $suite->addTestSuite('HumanResources_JsonTests');
         return $suite;
     }
 }
