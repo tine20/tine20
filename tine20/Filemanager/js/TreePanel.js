@@ -336,17 +336,24 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             return;
         }
         
+        Tine.log.debug('Tine.Filemanager.TreePanel::onContextMenu - context node:');
+        Tine.log.debug(node);
+        
         if (node.id == 'otherUsers' || (node.parentNode && node.parentNode.id == 'otherUsers')) {
             this.contextMenuOtherUserFolder.showAt(event.getXY());
         } else if (node.id == 'personal' || node.id == 'shared') {
             this.contextMenuRootFolder.showAt(event.getXY());
         } else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
-                || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
-            this.contextMenuContainerFolder.showAt(event.getXY());
+                || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))) {
+            if (typeof container.name == 'object') {
+                this.contextMenuContainerFolder.showAt(event.getXY());
+            } else {
+                this.contextMenuUserFolder.showAt(event.getXY());
+            }
         } else if (path.match(/^\/shared/)){
             this.contextMenuReloadFolder.showAt(event.getXY());
         } else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
-            if(typeof container.name == 'object') {
+            if (typeof container.name == 'object') {
                 this.contextMenuContainerFolder.showAt(event.getXY());
             } else {
                 this.contextMenuUserFolder.showAt(event.getXY());
