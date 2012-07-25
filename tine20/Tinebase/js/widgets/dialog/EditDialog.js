@@ -226,7 +226,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // if showContainerSelector is not explicitly set, make this dependend on the containerProperty of the handled recordClass
         if(this.showContainerSelector === null) {
-            if(this.recordClass.getMeta('containerProperty')) {
+            if (this.recordClass && this.recordClass.getMeta('containerProperty')) {
                 this.showContainerSelector = true;
             } else {
                 this.showContainerSelector = false;
