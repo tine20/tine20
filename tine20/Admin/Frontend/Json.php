@@ -477,10 +477,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($_items as $num => $item) {
             switch ($item[$prefix . 'type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                    $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
+                    try {
+                        $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $item[$prefix . 'name'] = 'Unknown user';
+                    }
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                    $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
+                    try {
+                        $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        $item[$prefix . 'name'] = 'Unknown group';
+                    }
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
                     $item[$prefix . 'name'] = 'Anyone';
