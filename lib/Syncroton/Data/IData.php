@@ -21,7 +21,11 @@ interface Syncroton_Data_IData
     
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry);
     
+    public function createFolder($_parentId, $_displayName, $_type);
+    
     public function deleteEntry($_folderId, $_serverId, $_collectionData);
+    
+    public function deleteFolder($_folderId);
     
     public function getAllFolders();
     
