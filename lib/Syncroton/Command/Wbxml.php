@@ -105,21 +105,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
      * @var Zend_Log
      */
     protected $_logger;
-        
-    const FILTERTYPE_ALL            = 0;
-    const FILTERTYPE_1DAY           = 1;
-    const FILTERTYPE_3DAYS          = 2;
-    const FILTERTYPE_1WEEK          = 3;
-    const FILTERTYPE_2WEEKS         = 4;
-    const FILTERTYPE_1MONTH         = 5;
-    const FILTERTYPE_3MONTHS        = 6;
-    const FILTERTYPE_6MONTHS        = 7;
-
-    const TRUNCATION_HEADERS        = 0;
-    const TRUNCATION_512B           = 1;
-    const TRUNCATION_1K             = 2;
-    const TRUNCATION_5K             = 4;
-    const TRUNCATION_ALL            = 9;
     
     /**
      * the constructor
