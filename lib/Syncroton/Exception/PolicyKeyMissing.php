@@ -10,11 +10,11 @@
  */
 
 /**
- * exception for invalid values passed to functions
+ * exception for data not found
  *
  * @package     Syncroton
  * @subpackage  Exception
  */
-class Syncroton_Exception_UnexpectedValue extends Syncroton_Exception
+class Syncroton_Exception_PolicyKeyMissing extends Syncroton_Exception
 {
 }

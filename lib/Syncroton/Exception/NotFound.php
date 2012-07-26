@@ -15,6 +15,6 @@
  * @package     Syncroton
  * @subpackage  Exception
  */
-class Syncroton_Exception_NotFound extends Exception
+class Syncroton_Exception_NotFound extends Syncroton_Exception
 {
 }
