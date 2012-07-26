@@ -52,10 +52,16 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetFoldersIPhone()
     {
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
-        
+                
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
         $folders = $dataController->getAllFolders();
@@ -154,10 +160,16 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $add             = $commands->appendChild($testDoc->createElementNS('uri:AirSync', 'Add'));
         $applicationData = $add->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
-        
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
+        
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
         $collection = new Syncroton_Model_SyncCollection();
@@ -189,9 +201,16 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetServerEntries()
     {
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $device = Syncroton_Registry::getDeviceBackend()->create(
-            Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
+                Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
+        
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
         $entries = $dataController->getServerEntries('addressbookFolderId', null);
@@ -204,6 +223,12 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
      */
     public function testGetChanged()
     {
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
@@ -219,9 +244,16 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
     
     public function testDeleteEntry()
     {
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_IPHONE)
         );
+        
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
         Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId']['foobar'] = array();

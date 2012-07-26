@@ -65,6 +65,12 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         
         $logger = new Zend_Log($writer);
         
+        try {
+            $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
+            Syncroton_Registry::getDeviceBackend()->delete($device);
+        } catch (Syncroton_Exception_NotFound $e) {
+            // do nothing => it's ok
+        }
         $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice()
         );
@@ -86,5 +92,6 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Syncroton_Registry::getTransactionManager()->rollBack();
+        Syncroton_Registry::getDatabase()->query('delete from syncroton_device');
     }
 }
