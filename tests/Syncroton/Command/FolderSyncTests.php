@@ -69,12 +69,13 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
     {
         $this->testGetFoldersSyncKey0();
         
-        Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['addressbookFolderId2'] = array(
-            'folderId'    => 'addressbookFolderId2',
-            'parentId'    => null,
-            'displayName' => 'User created Contacts Folder',
+        Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['addressbookFolderId2'] = new Syncroton_Model_Folder(array(
+            'id'          => sha1(mt_rand(). microtime()),
+            'folderid'    => 'addressbookFolderId2',
+            'parentid'    => null,
+            'displayname' => 'User created Contacts Folder',
             'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
-        );
+        ));
         
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>

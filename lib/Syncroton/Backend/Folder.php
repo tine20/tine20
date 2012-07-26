@@ -116,7 +116,9 @@ class Syncroton_Backend_Folder implements Syncroton_Backend_IFolder
         $deviceId = $_folder->device_id instanceof Syncroton_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
     
         $this->_db->update($this->_tablePrefix . 'folder', array(
-            'lastfiltertype'     => $_folder->lastfiltertype
+            'lastfiltertype' => $_folder->lastfiltertype,
+            'displayname'    => $_folder->displayname,
+            'parentid'       => $_folder->parentid
         ), array(
             'id = ?' => $_folder->id
         ));

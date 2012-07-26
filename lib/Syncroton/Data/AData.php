@@ -39,18 +39,16 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         $this->_initData();
     }
     
-    public function createFolder($_parentId, $_displayName, $_type)
+    public function createFolder(Syncroton_Model_IFolder $folder)
     {
-        $id = sha1(mt_rand(). microtime());
+        $folder->id = sha1(mt_rand(). microtime());
+        
+        // normaly generated on server backend
+        $folder->folderid = sha1(mt_rand(). microtime());
     
-        Syncroton_Data_AData::$folders[get_class($this)][$id] = array(
-            'folderId'    => $id,
-            'parentId'    => $_parentId,
-            'displayName' => $_displayName,
-            'type'        => $_type
-        );
+        Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid] = $folder;
     
-        return Syncroton_Data_AData::$folders[get_class($this)][$id];
+        return Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid];
     }
     
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
@@ -144,6 +142,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
         Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$_serverId] = $_entry;
+    }
+    
+    public function updateFolder(Syncroton_Model_IFolder $folder)
+    {
+        Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid] = $folder;
     }
     
     

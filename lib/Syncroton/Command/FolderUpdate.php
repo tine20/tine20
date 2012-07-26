@@ -41,8 +41,6 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
         $xml = simplexml_import_dom($this->_inputDom);
         
         $this->_syncKey     = (int)$xml->SyncKey;
-        $this->_parentId    = (string)$xml->ParentId;
-        $this->_displayName = (string)$xml->DisplayName;
         $this->_serverId    = (string)$xml->ServerId;
         
         if ($this->_logger instanceof Zend_Log) 
@@ -51,12 +49,15 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
         $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
         
         try {
-            $this->_folder = $this->_folderBackend->getFolder($this->_device, $this->_serverId);
+            $folder = $this->_folderBackend->getFolder($this->_device, $this->_serverId);
             
-            $dataController = Syncroton_Data_Factory::factory($this->_folder->class, $this->_device, $this->_syncTimeStamp);
+            $folder->displayname = (string)$xml->DisplayName;
+            $folder->parentid    = (string)$xml->ParentId;
             
-            $dataController->deleteFolder($this->_folder);
-            $this->_folderBackend->delete($this->_folder);
+            $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+            
+            $dataController->updateFolder($folder);
+            $this->_folderBackend->update($folder);
             
         } catch (Syncroton_Exception_NotFound $senf) {
             if ($this->_logger instanceof Zend_Log)

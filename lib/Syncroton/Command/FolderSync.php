@@ -151,10 +151,10 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
                         $adds[] = new Syncroton_Model_Folder(array(
                             'device_id'         => $this->_device,
                             'class'             => $class,
-                            'folderid'          => $serverFolders[$serverFolderId]['folderId'],
-                            'parentid'          => $serverFolders[$serverFolderId]['parentId'],
-                            'displayname'       => $serverFolders[$serverFolderId]['displayName'],
-                            'type'              => $serverFolders[$serverFolderId]['type'],
+                            'folderid'          => $serverFolders[$serverFolderId]->folderid,
+                            'parentid'          => $serverFolders[$serverFolderId]->parentid,
+                            'displayname'       => $serverFolders[$serverFolderId]->displayname,
+                            'type'              => $serverFolders[$serverFolderId]->type,
                             'creation_time'     => $this->_syncTimeStamp,
                             'lastfiltertype'    => null
                         ));

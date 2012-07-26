@@ -22,12 +22,13 @@ class Syncroton_Data_Tasks extends Syncroton_Data_AData
         * used by unit tests only to simulated added folders
         */
         Syncroton_Data_AData::$folders[get_class($this)] = array(
-            'tasksFolderId' => array(
-                'folderId'    => 'tasksFolderId',
-                'parentId'    => null,
-                'displayName' => 'Default Tasks Folder',
+            'tasksFolderId' => new Syncroton_Model_Folder(array(
+                'id'          => sha1(mt_rand(). microtime()),
+                'folderid'    => 'tasksFolderId',
+                'parentid'    => null,
+                'displayname' => 'Default Tasks Folder',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_TASK
-            )
+            ))
         );
         
         /**

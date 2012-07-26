@@ -21,7 +21,7 @@ interface Syncroton_Data_IData
     
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry);
     
-    public function createFolder($_parentId, $_displayName, $_type);
+    public function createFolder(Syncroton_Model_IFolder $folder);
     
     public function deleteEntry($_folderId, $_serverId, $_collectionData);
     
@@ -51,5 +51,7 @@ interface Syncroton_Data_IData
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId);
     
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry);
+    
+    public function updateFolder(Syncroton_Model_IFolder $folder);
 }
 

@@ -94,24 +94,21 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
             
             $dataController = Syncroton_Data_Factory::factory($this->_class, $this->_device, $this->_syncTimeStamp);
             
-            $folder = $dataController->createFolder($this->_parentId, $this->_displayName, $this->_type);
+            $folder = $dataController->createFolder(new Syncroton_Model_Folder(array(
+                'device_id'         => $this->_device,
+                'class'             => $this->_class,
+                'parentid'          => $this->_parentId,
+                'displayname'       => $this->_displayName,
+                'type'              => $this->_type,
+                'creation_time'     => $this->_syncTimeStamp,
+                'lastfiltertype'    => null
+            )));
             
             // create xml output
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',   Syncroton_Command_FolderSync::STATUS_SUCCESS));
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey',  $this->_syncState->counter));
-            $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder['folderId']));
+            $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
 
-            $folder = new Syncroton_Model_Folder(array(
-                'device_id'         => $this->_device,
-                'class'             => $this->_class,
-                'folderid'          => $folder['folderId'],
-            	'parentid'          => $folder['parentId'],
-            	'displayname'       => $folder['displayName'],
-            	'type'              => $folder['type'],
-                'creation_time'     => $this->_syncTimeStamp,
-                'lastfiltertype'    => null
-            ));
-            
             // store folder in state backend
             $this->_folderBackend->create($folder);            
             

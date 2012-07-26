@@ -51,7 +51,7 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderUpdate xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey><ParentId/><DisplayName>Test Folder</DisplayName><Type>13</Type></FolderUpdate>'
+            <FolderUpdate xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey><ParentId/><ServerId>calendarFolderId</ServerId><DisplayName>Test Folder Update</DisplayName><Type>13</Type></FolderUpdate>'
         );
         
         $folderUpdate = new Syncroton_Command_FolderUpdate($doc, $this->_device, null);
@@ -71,6 +71,10 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//FolderHierarchy:FolderUpdate/FolderHierarchy:SyncKey');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $this->assertArrayHasKey('calendarFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']);
+        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']['calendarFolderId']->displayname);
+        
     }
         
     /**
@@ -95,7 +99,7 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderUpdate xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey><ParentId/><DisplayName>Test Folder</DisplayName><Type>14</Type></FolderUpdate>'
+            <FolderUpdate xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey><ParentId/><ServerId>anotherAddressbookFolderId</ServerId><DisplayName>Test Folder Update</DisplayName><Type>14</Type></FolderUpdate>'
         );
         
         $folderUpdate = new Syncroton_Command_FolderUpdate($doc, $this->_device, null);
@@ -115,6 +119,9 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//FolderHierarchy:FolderUpdate/FolderHierarchy:SyncKey');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $this->assertArrayHasKey('anotherAddressbookFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']);
+        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['anotherAddressbookFolderId']->displayname);
     }
     
     /**
