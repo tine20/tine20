@@ -17,6 +17,10 @@ function getTestDatabase()
         unlink('/tmp/Syncroton_test.sq3');
     }
     
+    $sql = file_get_contents(dirname(__FILE__) . '/../docs/syncroton.sql');
+
+    $sql = explode(';', $sql);
+    
     // create in memory database by default 
     $params = array (
     	#'dbname' => '/tmp/Syncroton_test.sq3',
@@ -28,57 +32,36 @@ function getTestDatabase()
     // enable foreign keys
     #$db->query('PRAGMA read_uncommitted = true');
     
-    $db->query("CREATE TABLE IF NOT EXISTS `Syncroton_device` (
-        `id` varchar(40) NOT NULL,
-        `deviceid` varchar(64) NOT NULL,                                                                                                                                                                         
-        `devicetype` varchar(64) NOT NULL,
-        `policykey` varchar(64) DEFAULT NULL,
-        `owner_id` varchar(40) NOT NULL,
-        `useragent` varchar(255) DEFAULT NULL,
-        `policy_id` varchar(40) DEFAULT NULL,
-        `acsversion` varchar(40) DEFAULT NULL,
-        `pinglifetime` int(11) DEFAULT NULL,
-        `remotewipe` int(11) DEFAULT '0',
-        `pingfolder` longblob,
-        PRIMARY KEY (`id`)
-	)");
+    foreach ($sql as $sql_query) {
+        if (strlen($sql_query) > 10) {
+            // Convert mysql DDL to SQLite format
+            $start = strpos($sql_query, '(');
+            $end   = strrpos($sql_query, ')');
+            $cols  = substr($sql_query, $start, $end - $start);
+            $cols  = explode(',', $cols);
 
-    $db->query("CREATE TABLE IF NOT EXISTS `Syncroton_folder` (
-        `id` varchar(40) NOT NULL,
-        `device_id` varchar(40) NOT NULL,
-        `class` varchar(64) NOT NULL,
-        `folderid` varchar(254) NOT NULL,
-        `parentid` varchar(254) DEFAULT NULL,
-        `displayname` varchar(254) NOT NULL,
-        `type` int(11) NOT NULL,
-        `creation_time` datetime NOT NULL,
-        `lastfiltertype` int(11) DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE (`device_id`,`class`,`folderid`)
-	)");
-    
-    $db->query("CREATE TABLE `Syncroton_synckey` (
-    	`id` varchar(40) NOT NULL,
-      	`device_id` varchar(40) NOT NULL,
-      	`type` varchar(64) NOT NULL,
-      	`counter` int(11) NOT NULL DEFAULT '0',
-      	`lastsync` datetime NOT NULL,
-      	`pendingdata` longblob,
-      	PRIMARY KEY (`id`),
-      	UNIQUE (`device_id`,`type`,`counter`)
-    )");
-    
-    $db->query("CREATE TABLE `Syncroton_content` (
-        `id` varchar(40) NOT NULL,
-        `device_id` varchar(40) NOT NULL,
-        `folder_id` varchar(40) NOT NULL,
-        `contentid` varchar(64) NOT NULL,
-        `creation_time` datetime NOT NULL,
-        `creation_synckey` int(11) NOT NULL,
-        `is_deleted` int(11) DEFAULT '0',
-        PRIMARY KEY (`id`),
-        UNIQUE (`device_id`,`folder_id`,`contentid`)
-    )");
-    
+            foreach ($cols as $idx => $col) {
+                if (preg_match('/^KEY /', ltrim($col))) {
+                    unset($cols[$idx]);
+                    continue;
+                }
+
+                if (preg_match('/^CONSTRAINT /', ltrim($col))) {
+                    unset($cols[$idx]);
+                    continue;
+                }
+
+                $col = preg_replace('/UNIQUE KEY `[^`]+`/', 'UNIQUE', $col);
+                $col = preg_replace('/`\([0-9]+\)/', '`', $col);
+
+                $cols[$idx] = $col;
+            }
+
+            $sql_query = substr($sql_query, 0, $start) . "\n" . implode($cols, ',') . ")";
+
+            $db->query($sql_query);
+        }
+    }
+
     return $db;
 }
