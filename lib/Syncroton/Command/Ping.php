@@ -137,7 +137,8 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 
                 sleep(self::PING_TIMEOUT);
                 $secondsLeft = $intervalEnd - time();
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
             } while($secondsLeft > 0);
         }
         

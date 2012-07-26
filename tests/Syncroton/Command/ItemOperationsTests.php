@@ -1,17 +1,19 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
- * 
- * @package     Tests
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * Syncroton
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test class for FolderSync_Controller_Event
- * 
- * @package     Tests
+ * class to test <...>
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
  */
 class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
 {
@@ -50,7 +52,7 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
             <Fetch><Store>Mailbox</Store><AirSync:CollectionId>emailInboxFolderId</AirSync:CollectionId><AirSync:ServerId>email1</AirSync:ServerId></Fetch>
-    		</ItemOperations>'
+            </ItemOperations>'
         );
         
         $itemOperations = new Syncroton_Command_ItemOperations($doc, $this->_device, null);
@@ -74,7 +76,7 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//ItemOperations:ItemOperations/ItemOperations:Response/ItemOperations:Fetch/ItemOperations:Properties/Email:Subject');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals('Subject of the email', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals('Test Subject', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
 
         $this->assertEquals("uri:Email", $responseDoc->lookupNamespaceURI('Email'), $responseDoc->saveXML());
     }    
@@ -101,8 +103,8 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
-            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>email1-10</AirSyncBase:FileReference></Fetch>
-    		</ItemOperations>'
+            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>emailInboxFolderId-email1</AirSyncBase:FileReference></Fetch>
+            </ItemOperations>'
         );
         
         $itemOperations = new Syncroton_Command_ItemOperations($doc, $this->_device, null);

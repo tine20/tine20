@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Syncroton
  * @subpackage  Exception
@@ -10,7 +10,7 @@
  */
 
 /**
- * class documentation
+ * exception for invalid values passed to functions
  *
  * @package     Syncroton
  * @subpackage  Exception

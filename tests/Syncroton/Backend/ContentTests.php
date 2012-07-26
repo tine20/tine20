@@ -1,17 +1,19 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
- * 
- * @package     Backend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * Syncroton
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test class for Syncroton_Command_Sync
- * 
- * @package     Backend
+ * class to test <...>
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
  */
 class Syncroton_Backend_ContentTests extends PHPUnit_Framework_TestCase
 {

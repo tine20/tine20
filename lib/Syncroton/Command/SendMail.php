@@ -18,13 +18,6 @@
 class Syncroton_Command_SendMail
 {
     /**
-     * the incoming mail
-     *
-     * @var Zend_Mail_Message
-     */
-    protected $_incomingMessage;
-    
-    /**
      * save copy in sent folder
      *
      * @var boolean
@@ -32,23 +25,50 @@ class Syncroton_Command_SendMail
     protected $_saveInSent;
     
     /**
-     * 
-     * @var Felamimail_Model_Account
-     */
-    protected $_account;
-    
-    /**
      * @var resource
      */
     protected $_inputStream;
 
     /**
-     * @param resource $_inputStream
+     * informations about the currently device
+     *
+     * @var Syncroton_Model_Device
      */
-    public function __construct($_inputStream = null)
+    protected $_device;
+    
+    /**
+     * timestamp to use for all sync requests
+     *
+     * @var DateTime
+     */
+    protected $_syncTimeStamp;
+    
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
+    
+    /**
+     * the constructor
+     *
+     * @param  mixed                   $requestBody
+     * @param  Syncroton_Model_Device  $device
+     * @param  string                  $policyKey
+     */
+    public function __construct($requestBody, Syncroton_Model_IDevice $device, $policyKey)
     {
-        if (is_resource($_inputStream)) {
-            $this->_inputStream = $_inputStream;
+        if (!is_resource($requestBody)) {
+            throw new Syncroton_Exception_UnexpectedValue('$requestBody must be stream');
+        }
+        
+        $this->_inputStream = $requestBody;
+        
+        $this->_policyKey     = $policyKey;
+        $this->_device        = $device;
+        $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
+        
+        if (Syncroton_Registry::isRegistered('loggerBackend')) {
+            $this->_logger    = Syncroton_Registry::get('loggerBackend');
         }
     }
     
@@ -59,44 +79,26 @@ class Syncroton_Command_SendMail
      */
     public function handle()
     {
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
-        
-        try {
-            $this->_account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
-            throw new ActiveSync_Exception('no email account configured');
-        }
-        
-        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            throw new ActiveSync_Exception('no email address set for current user');
-        }
-        
         $this->_saveInSent = isset($_GET['SaveInSent']) && (bool)$_GET['SaveInSent'] == 'T';
         
-        if (!is_resource($this->_inputStream)) {
-            $this->_inputStream = fopen("php://input", 'r');
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+        if ($this->_logger instanceof Zend_Log)
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . (int)$this->_saveInSent);
+        
+        /**
+         * uncomment next lines to log email body
+         *
+        if ($this->_logger instanceof Zend_Log) {
             $debugStream = fopen("php://temp", 'r+');
             stream_copy_to_stream($this->_inputStream, $debugStream);
             rewind($debugStream);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
 
             // replace original stream wirh debug stream, as php://input can't be rewinded
             $this->_inputStream = $debugStream;
             rewind($this->_inputStream);
         }
-
-        $this->_incomingMessage = new Zend_Mail_Message(
-            array(
-                'file' => $this->_inputStream
-            )
-        );
-    }    
+        */
+    }
     
     /**
      * this function generates the response for the client
@@ -105,11 +107,8 @@ class Syncroton_Command_SendMail
      */
     public function getResponse()
     {
-        $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . (int)$this->_saveInSent);
-        
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
-    }    
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
+    
+        $dataController->sendEmail($this->_inputStream, $this->_saveInSent);        
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  * 
  * @package     Syncroton
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3

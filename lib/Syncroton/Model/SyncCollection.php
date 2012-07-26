@@ -26,10 +26,12 @@ class Syncroton_Model_SyncCollection
     
     protected $_xmlCollection;
     
-    public function __construct(SimpleXMLElement $xmlCollection = null)
+    public function __construct($properties = null)
     {
-        if ($xmlCollection instanceof SimpleXMLElement) {
-            $this->setFromSimpleXMLElement($xmlCollection);
+        if ($properties instanceof SimpleXMLElement) {
+            $this->setFromSimpleXMLElement($properties);
+        } elseif (is_array($properties)) {
+            $this->setFromArray($properties);
         }
     }
     
@@ -147,6 +149,20 @@ class Syncroton_Model_SyncCollection
         }
         
         return isset($this->_xmlCollection->Commands->Fetch);
+    }
+    
+    public function setFromArray(array $properties)
+    {
+        $this->_collection = array();
+    
+        foreach($properties as $key => $value) {
+            try {
+                $this->$key = $value; //echo __LINE__ . PHP_EOL;
+            } catch (InvalidArgumentException $iae) {
+                //ignore invalid properties
+                //echo __LINE__ . PHP_EOL;
+            }
+        }
     }
     
     /**

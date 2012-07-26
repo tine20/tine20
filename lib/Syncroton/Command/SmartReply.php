@@ -17,13 +17,6 @@
  */
 class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
 {
-    /**
-     * save copy in sent folder
-     *
-     * @var boolean
-     */
-    protected $_saveInSent;
-    
     protected $_itemId;
     
     protected $_collectionId;
@@ -42,10 +35,10 @@ class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
         $this->_collectionId    = $_GET['CollectionId'];
         $this->_itemId          = $_GET['ItemId'];
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId);
+        if ($this->_logger instanceof Zend_Log)
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId);
         
-    }    
+    }
     
     /**
      * this function generates the response for the client
@@ -54,10 +47,8 @@ class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
      */
     public function getResponse()
     {
-        $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($this->_itemId, null, 'text/plain');
-        
-        $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage, $replyBody);
-        
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
-    }    
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
+    
+        $dataController->replyEmail($this->_collectionId, $this->_itemId, $this->_inputStream, $this->_saveInSent);
+    }
 }

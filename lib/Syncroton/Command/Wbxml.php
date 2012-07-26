@@ -1,6 +1,6 @@
 <?php
 /**
- * Tine 2.0
+ * Syncroton
  *
  * @package     Syncroton
  * @subpackage  Command
@@ -16,7 +16,7 @@
  * @subpackage  Command
  */
  
-abstract class Syncroton_Command_Wbxml implements Syncroton_Command_Interface
+abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
 {
     /**
      * informations about the currently device
@@ -92,7 +92,7 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_Interface
     /**
      * timestamp to use for all sync requests
      *
-     * @var Tinebase_DateTime
+     * @var DateTime
      */
     protected $_syncTimeStamp;
     
@@ -100,6 +100,7 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_Interface
      * @var string
      */
     protected $_transactionId;
+    
     /**
      * @var Zend_Log
      */

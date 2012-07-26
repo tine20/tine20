@@ -107,7 +107,10 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                 
                 if (isset($fetch['collectionId'])) {
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
-                    $dataController->appendXML($properties, $fetch, $fetch['serverId']);
+                    #$dataController->appendXML($properties, $fetch, $fetch['serverId']);
+                    $dataController
+                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'])), $fetch['serverId'])
+                        ->appendXML($properties);
                     
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $fetch['collectionId']));
@@ -116,15 +119,18 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     
                 } elseif (isset($fetch['fileReference'])) {
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
-                    $dataController->appendFileReference($properties, $fetch['fileReference']);
+                    #$dataController->appendFileReference($properties, $fetch['fileReference']);
+                    $dataController
+                        ->getFileReference($fetch['fileReference'])
+                        ->appendXML($properties);
                     
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
                     $fetchTag->appendChild($properties);
                 }
-            } catch (Tinebase_Exception_NotFound $e) {
+            } catch (Syncroton_Exception_NotFound $e) {echo __LINE__;
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_ITEM_FAILED_CONVERSION));
-            } catch (Exception $e) {
+            } catch (Exception $e) {echo __LINE__; echo $e->getMessage(); echo $e->getTraceAsString();
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SERVER_ERROR));
             }
         }

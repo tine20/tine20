@@ -14,74 +14,100 @@
  * @package     Model
  */
 
-class Syncroton_Data_Email extends Syncroton_Data_AData
+class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Data_IDataEmail
 {
     /**
      * used by unit tests only to simulated added folders
      */
-    public static $eentries = array(
+    public static $entries = array(
     );
     
-    /**
-     * append email data to xml element
-     *
-     * @param DOMElement  $_domParrent   the parrent xml node
-     * @param string      $_folderId  the local folder id
-     */
-    public function appendFileReference(DOMElement $_domParrent, $_fileReference)
+    public function forwardEmail($collectionId, $itemId, $inputStream, $saveInSent)
     {
-        list($messageId, $partId) = explode('-', $_fileReference, 2);
-    
-        $_domParrent->appendChild(new DOMElement('ContentType', 'text/plain', 'uri:AirSyncBase'));
-        $_domParrent->appendChild(new DOMElement('Data', base64_encode('TestData'), 'uri:ItemOperations'));
+        // forward email
     }
     
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
+    public function getFileReference($fileReference)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email', 'uri:Email');
-        
-        $node = $_domParrent->appendChild(new DOMElement('Subject', 'Subject of the email', 'uri:Email'));
+        list($messageId, $partId) = explode('-', $fileReference, 2);
+    
+        // example code
+        //$file = $this->_imapBackend->getMessagePart($messageId, $partId);
+    
+        // example code
+        return new Syncroton_Model_FileReference(array(
+                'ContentType' => 'text/plain',
+                'Data'        => 'Lars'
+        ));
+    }
+    
+    public function replyEmail($collectionId, $itemId, $inputStream, $saveInSent)
+    {
+        // forward email
     }
     
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
         // not used by email
     }
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::sendEmail()
+     */
+    public function sendEmail($inputStream, $saveInSent)
+    {
+        // send email
+    }
+    
     protected function _initData()
     {
         /**
         * used by unit tests only to simulated added folders
         */
         Syncroton_Data_AData::$folders[get_class($this)] = array(
-                'emailInboxFolderId' => array(
-                    'folderId'    => 'emailInboxFolderId',
-                    'parentId'    => null,
-                    'displayName' => 'Inbox',
-                    'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_INBOX
-                ),
-                'emailSentFolderId' => array(
-                    'folderId'    => 'emailSentFolderId',
-                    'parentId'    => null,
-                    'displayName' => 'Sent',
-                    'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL
-                )
+            'emailInboxFolderId' => array(
+                'folderId'    => 'emailInboxFolderId',
+                'parentId'    => null,
+                'displayName' => 'Inbox',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_INBOX
+            ),
+            'emailSentFolderId' => array(
+                'folderId'    => 'emailSentFolderId',
+                'parentId'    => null,
+                'displayName' => 'Sent',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL
+            )
         );
         
         /**
          * used by unit tests only to simulated added folders
          */
         Syncroton_Data_AData::$entries[get_class($this)] = array(
-        		'emailInboxFolderId' => array(
-                    'email1' => array(
-                    	'FirstName' => 'Lars', 
-                    	'LastName'  => 'Kneschke'
-                	),
-                    'email2' => array(
-                    	'FirstName' => 'Cornelius', 
-                    	'LastName'  => 'Weiß'
-                    )
-                )
+            'emailInboxFolderId' => array(
+                'email1' => new Syncroton_Model_Email(array(
+                    'AccountId'    => 'FooBar',
+                    'Attachments'  => array(
+                        new Syncroton_Model_EmailAttachment(array(
+                            'FileReference' => '12345abcd',
+                            'UmAttOrder'    => 1
+                        ))
+                    ),
+                    'Categories'   => array('123', '456'),
+                    'Cc'           => 'l.kneschke@metaways.de',
+                    'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+                    'From'         => 'k.kneschke@metaways.de',
+                    'Subject'      => 'Test Subject',
+                    'To'           => 'j.kneschke@metaways.de',
+                    'Read'         => 1,
+                    'Body'         => new Syncroton_Model_EmailBody(array(
+                        'Type'              => Syncroton_Model_EmailBody::TYPE_PLAINTEXT, 
+                        'Data'              => 'Hello!', 
+                        'Truncated'         => true, 
+                        'EstimatedDataSize' => 600
+                    ))
+                )),
+            )
         );
     }
 }

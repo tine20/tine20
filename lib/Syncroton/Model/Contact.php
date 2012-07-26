@@ -2,7 +2,8 @@
 /**
  * Syncroton
  *
- * @package     Model
+ * @package     Syncroton
+ * @subpackage  Model
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
  * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -11,13 +12,15 @@
 /**
  * class to handle ActiveSync contact
  *
- * @package     Model
- * @property    string  class
- * @property    string  collectionId
- * @property    bool    deletesAsMoves
- * @property    bool    getChanges
- * @property    string  syncKey
- * @property    int     windowSize
+ * @package     Syncroton
+ * @subpackage  Model
+ * @property    string    Alias
+ * @property    DateTime  Anniversary
+ * @property    string    AssistantName
+ * @property    string    AssistantPhoneNumber
+ * @property    DateTime  Birthday
+ * @property    string    Business2PhoneNumber
+ * @property    string    BusinessAddressCity
  */
 
 class Syncroton_Model_Contact extends Syncroton_Model_AEntry
@@ -72,7 +75,7 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             'OtherAddressState'      => array('type' => 'string'),
             'OtherAddressStreet'     => array('type' => 'string'),
             'PagerNumber'            => array('type' => 'string'),
-            'Picture'                => array('type' => 'string'),
+            'Picture'                => array('type' => 'string', 'encoding' => 'base64'),
             'RadioPhoneNumber'       => array('type' => 'string'),
             'Rtf'                    => array('type' => 'string'),
             'Spouse'                 => array('type' => 'string'),
@@ -110,11 +113,9 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = (isset($this->_properties['Contacts'][$elementName])) ? 
-                $this->_properties['Contacts'][$elementName] : 
-                $this->_properties['Contacts2'][$elementName];
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
             
-            $nameSpace = isset($this->_properties['Contacts'][$elementName]) ? 'uri:Contacts' : 'uri:Contacts2';
+            $nameSpace = 'uri:' . $nameSpace;
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -150,26 +151,22 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                     
                     break;
 
-                case 'Picture':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if (is_resource($value)) {
-                        stream_filter_append($value, 'convert.base64-encode');
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(stream_get_contents($value)));
-                    } else {
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(base64_encode($value)));
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-                    
                 default:
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
                     if ($value instanceof DateTime) {
                         $value = $value->format("Ymd\THis\Z");
                     }
+                    
+                    if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
+                        if (is_resource($value)) {
+                            stream_filter_append($value, 'convert.base64-encode');
+                            $value = stream_get_contents($value);
+                        } else {
+                            $value = base64_encode($value);
+                        }
+                    }
+                        
                     $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
                     
                     $_domParrent->appendChild($element);

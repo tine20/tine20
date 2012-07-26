@@ -10,7 +10,7 @@
  */
 
 /**
- * class to handle ActiveSync FolderSync command
+ * class to handle ActiveSync Provision command
  *
  * @package     Syncroton
  * @subpackage  Command

@@ -37,6 +37,13 @@ interface Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId);
     
+    /**
+     * 
+     * @param unknown_type $fileReference
+     * @return Syncroton_Model_FileReference
+     */
+    public function getFileReference($fileReference);
+    
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId);
     
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry);

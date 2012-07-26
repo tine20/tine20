@@ -10,7 +10,7 @@
  */
 
 /**
- * class documentation
+ * class to handle ActiveSync GetAttachment command
  *
  * @package     Syncroton
  * @subpackage  Command
@@ -19,23 +19,39 @@
 class Syncroton_Command_GetAttachment
 {
     /**
+     * informations about the currently device
      *
-     * @var string
+     * @var Syncroton_Model_Device
      */
-    protected $_messageId;
+    protected $_device;
+    
+    /**
+     * timestamp to use for all sync requests
+     *
+     * @var DateTime
+     */
+    protected $_syncTimeStamp;
     
     /**
      *
      * @var string
      */
-    protected $_partId;
+    protected $_attachmentName;
     
     /**
-     * 
-     * @var Felamimail_Model_Account
+     * the constructor
+     *
+     * @param  mixed                   $requestBody
+     * @param  Syncroton_Model_Device  $device
+     * @param  string                  $policyKey
      */
-    protected $_account;
-        
+    public function __construct($requestBody, Syncroton_Model_IDevice $device, $policyKey)
+    {
+        $this->_policyKey     = $policyKey;
+        $this->_device        = $device;
+        $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
+    }
+    
     /**
      * process the XML file and add, change, delete or fetches data 
      *
@@ -43,19 +59,8 @@ class Syncroton_Command_GetAttachment
      */
     public function handle()
     {
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
-        
-        try {
-            $this->_account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
-            throw new ActiveSync_Exception('no email account configured');
-        }
-        
-        list($this->_messageId, $this->_partId) = explode('-', $_GET['AttachmentName'], 2);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " messageId: " . $this->_messageId . ' partId: ' . $this->_partId);
-    }    
+        $this->_attachmentName = $_GET['AttachmentName'];
+    }
     
     /**
      * this function generates the response for the client
@@ -64,8 +69,26 @@ class Syncroton_Command_GetAttachment
      */
     public function getResponse()
     {
-        $frontend = new Felamimail_Frontend_Http();
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
         
-        $frontend->downloadAttachment($this->_messageId, $this->_partId);
+        $attachment = $dataController->getFileReference($this->_attachmentName);
+        
+        // cache for 3600 seconds
+        $maxAge = 3600;
+        $now = new DateTime(null, new DateTimeZone('UTC'));
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', $now->modify("+{$maxAgesec}sec")->getTimestamp()) . " GMT");
+        
+        // overwrite Pragma header from session
+        header("Pragma: cache");
+        
+        #header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header("Content-Type: " . $attachment->ContentType);
+        
+        if (is_resource($attachment->Data)) {
+            fpassthru($attachment->Data);
+        } else {
+            echo $attachment->Data;
+        }
     }    
 }

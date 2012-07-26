@@ -2,7 +2,8 @@
 /**
  * Syncroton
  *
- * @package     Model
+ * @package     Syncroton
+ * @subpackage  Model
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
  * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -11,7 +12,8 @@
 /**
  * abstract class to handle ActiveSync entry
  *
- * @package     Model
+ * @package     Syncroton
+ * @subpackage  Model
  */
 
 abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, IteratorAggregate, Countable
@@ -47,9 +49,10 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         
         foreach($properties as $key => $value) {
             try {
-                $this->$key = $value;
+                $this->$key = $value; //echo __LINE__ . PHP_EOL;
             } catch (InvalidArgumentException $iae) {
                 //ignore invalid properties
+                echo __LINE__ . PHP_EOL; echo $iae->getMessage(); echo $iae->getTraceAsString();
             }
         }
     }
@@ -75,27 +78,32 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         return;
     }
     
+    protected function _getElementProperties($element)
+    {
+        foreach($this->_properties as $namespace => $namespaceProperties) {
+            if (array_key_exists($element, $namespaceProperties)) {
+                return array($namespace, $namespaceProperties[$element]);
+            }
+        }
+    
+        throw new InvalidArgumentException("$element is no valid property of this object");
+    }
+    
     public function &__get($name)
     {
-        if (!array_key_exists($name, $this->_properties['Contacts']) && !array_key_exists($name, $this->_properties['Contacts2'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
+        $this->_getElementProperties($name);
+    
         return $this->_elements[$name];
     }
     
     public function __set($name, $value)
     {
-        if (!array_key_exists($name, $this->_properties['Contacts']) && !array_key_exists($name, $this->_properties['Contacts2'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = isset($this->_properties['Contacts'][$name]) ? $this->_properties['Contacts'][$name] : $this->_properties['Contacts2'][$name];
-        
+        list ($namespace, $properties) = $this->_getElementProperties($name);
+    
         if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
             throw new InvalidArgumentException("value for $name must be an instance of DateTime");
         }
-        
+    
         $this->_elements[$name] = $value;
     }
     

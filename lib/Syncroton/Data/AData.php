@@ -115,6 +115,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
     
+    public function getFileReference($fileReference)
+    {
+        throw new Syncroton_Exception_NotFound('filereference not found');
+    }
+    
     /**
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::getEntry()
@@ -127,7 +132,6 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         
         return Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId];
     }
-    
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
