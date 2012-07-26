@@ -7,7 +7,7 @@
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  */
 
 /**
@@ -25,11 +25,20 @@ interface Syncroton_Backend_ISyncState
      * @return Syncroton_Model_ISyncState
      */
     public function create(Syncroton_Model_ISyncState $_syncState);
-    
+
+    /**
+     * always returns the latest syncstate
+     *
+     * @param  Syncroton_Model_IDevice|string  $_deviceId
+     * @param  Syncroton_Model_IFolder|string  $_folderId
+     * @return Syncroton_Model_SyncState
+     */
+    public function getSyncState($_deviceId, $_folderId);
+
     public function resetState($_deviceId, $_type);
-    
+
     public function update(Syncroton_Model_ISyncState $_syncState);
-    
+
     /**
      * get array of ids which got send to the client for a given class
      *
