@@ -36,7 +36,8 @@ CREATE TABLE `syncroton_synckey` (
   `counter` int(11) unsigned NOT NULL DEFAULT '0',
   `lastsync` datetime DEFAULT NULL,
   `pendingdata` longblob,
-  PRIMARY KEY (`device_id`,`type`,`counter`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `device_id--type--counter` (`device_id`,`type`,`counter`),
   CONSTRAINT `syncroton_synckey::device_id--syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
