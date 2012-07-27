@@ -63,7 +63,7 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         $writer = new Zend_Log_Writer_Stream('php://output');
         $writer->addFilter(new Zend_Log_Filter_Priority($this->_logPriority));
         
-        $logger = new Zend_Log($writer);
+        Syncroton_Registry::set('loggerBackend', new Zend_Log($writer));
         
         try {
             $device = Syncroton_Registry::getDeviceBackend()->getUserDevice('1234', 'iphone-abcd');
@@ -74,8 +74,6 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             Syncroton_Backend_DeviceTests::getTestDevice()
         );
-        
-        Syncroton_Registry::set('loggerBackend', $logger);
         
         Syncroton_Registry::setContactsDataClass('Syncroton_Data_Contacts');
         Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');

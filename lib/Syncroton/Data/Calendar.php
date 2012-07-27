@@ -16,6 +16,8 @@
 
 class Syncroton_Data_Calendar extends Syncroton_Data_AData
 {
+    const MODEL = 'Syncroton_Model_Event';
+    
     protected function _initData()
     {
         /**

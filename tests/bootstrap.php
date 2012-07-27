@@ -23,8 +23,8 @@ function getTestDatabase()
     
     // create in memory database by default 
     $params = array (
-    	#'dbname' => '/tmp/Syncroton_test.sq3',
-    	'dbname' => ':memory:'
+        #'dbname' => '/tmp/Syncroton_test.sq3',
+        'dbname' => ':memory:'
     );
     
     $db = Zend_Db::factory('PDO_SQLITE', $params);
@@ -62,6 +62,6 @@ function getTestDatabase()
             $db->query($sql_query);
         }
     }
-
+    
     return $db;
 }

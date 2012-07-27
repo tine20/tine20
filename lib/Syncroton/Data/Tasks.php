@@ -16,6 +16,8 @@
 
 class Syncroton_Data_Tasks extends Syncroton_Data_AData
 {
+    const MODEL = 'Syncroton_Model_Task';
+    
     protected function _initData()
     {
         /**
