@@ -433,8 +433,6 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
     {
         $serverId = $this->testAddingContactToServer();
         
-        #unset(Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$serverId]);
-        
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
         
         $entries = $dataController->getServerEntries('addressbookFolderId', null);
@@ -519,8 +517,11 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
      */
     public function testConcurringSyncRequest()
     {
-        $this->markTestSkipped('fix me');
         $this->testSyncOfContacts();
+        
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
+        
+        $entries = $dataController->getServerEntries('addressbookFolderId', null);
         
         // lets add one contact
         $doc = new DOMDocument();
@@ -538,7 +539,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
-        $count = count(Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']["addressbookFolderId"]);
+        $count = count($dataController->getServerEntries('addressbookFolderId', null));
         $folder = Syncroton_Registry::getFolderBackend()->getFolder($this->_device, 'addressbookFolderId');
         $syncState = Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device, $folder);
         $syncState->counter++;
@@ -552,7 +553,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         }
         
         $this->assertTrue($catchedException);
-        $this->assertGreaterThan(count(Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']["addressbookFolderId"]), $count);
+        $this->assertGreaterThan(count($dataController->getServerEntries('addressbookFolderId', null)), $count);
     }
             
 }

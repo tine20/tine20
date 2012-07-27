@@ -33,8 +33,6 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
      */
     public function testFetch()
     {
-        $this->markTestSkipped('fix me again');
-        
         // do initial sync first
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -49,11 +47,16 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $responseDoc = $folderSync->getResponse();
         
         
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
+        
+        $entries = $dataController->getServerEntries('emailInboxFolderId', null);
+        
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
-            <Fetch><Store>Mailbox</Store><AirSync:CollectionId>emailInboxFolderId</AirSync:CollectionId><AirSync:ServerId>email1</AirSync:ServerId></Fetch>
+            <Fetch><Store>Mailbox</Store><AirSync:CollectionId>emailInboxFolderId</AirSync:CollectionId><AirSync:ServerId>' . $entries[0] . '</AirSync:ServerId></Fetch>
             </ItemOperations>'
         );
         
