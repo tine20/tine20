@@ -45,8 +45,10 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData
         /**
          * used by unit tests only to simulated added folders
          */
-        if (!isset(Syncroton_Data_AData::$entries[get_class($this)])) {
-            Syncroton_Data_AData::$entries[get_class($this)] = array(
+        $entries = $this->getServerEntries('addressbookFolderId', 1);
+        
+        if (count($entries) == 0) {
+            $testData = array(
                 'addressbookFolderId' => array(
                     'contact1' => new Syncroton_Model_Contact(array(
                         'FirstName' => 'Lars', 
@@ -90,6 +92,10 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData
                     ))
                 )
             );
+            
+            foreach ($testData['addressbookFolderId'] as $data) {
+                $this->createEntry('addressbookFolderId', $data);
+            }
         }
     }
 }

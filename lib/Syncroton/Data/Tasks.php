@@ -36,10 +36,10 @@ class Syncroton_Data_Tasks extends Syncroton_Data_AData
         /**
          * used by unit tests only to simulated added folders
          */
-        Syncroton_Data_AData::$entries[get_class($this)] = array(
-            'tasksFolderId' => array(
-            )
-        );
+        #Syncroton_Data_AData::$entries[get_class($this)] = array(
+        #    'tasksFolderId' => array(
+        #    )
+        #);
     }
 }
 

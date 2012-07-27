@@ -52,6 +52,15 @@ CREATE TABLE IF NOT EXISTS `syncroton_content` (
   `is_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `device_id--folder_id--contentid` (`device_id`(40),`folder_id`(40),`contentid`(40)),
-  KEY `acsync_contents::device_id--acsync_device::id` (`device_id`),
-  CONSTRAINT `acsync_contents::device_id--acsync_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `syncroton_contents::device_id` (`device_id`),
+  CONSTRAINT `syncroton_contents::device_id--syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `syncroton_data` (
+  `id` varchar(40) NOT NULL,
+  `type` varchar(40) NOT NULL,
+  `folder_id` varchar(40) NOT NULL,
+  `data` longblob,
+  PRIMARY KEY (`id`)
+ );
+  

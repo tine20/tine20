@@ -91,11 +91,13 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
+        $allEntries = $dataController->getServerEntries('addressbookFolderId', null);
+        
         $collection = new Syncroton_Model_SyncCollection();
         $collection->collectionId = 'addressbookFolderId';
         
         $dataController
-            ->getEntry($collection, 'contact1')
+            ->getEntry($collection, $allEntries[0])
             ->appendXML($applicationData);
         
         #echo $testDoc->saveXML();
@@ -128,7 +130,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $id = $dataController->createEntry('addressbookFolderId', new $dataClass($xml->Collections->Collection->Commands->Add->ApplicationData));
         
-        $entry = Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId'][$id];
+        $entry = $dataController->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => 'addressbookFolderId')), $id);
         
         #$userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         #$bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
@@ -175,8 +177,10 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         $collection = new Syncroton_Model_SyncCollection();
         $collection->collectionId = 'addressbookFolderId';
         
+        $allEntries = $dataController->getServerEntries('addressbookFolderId', null);
+        
         $dataController
-            ->getEntry($collection, 'contact1')
+            ->getEntry($collection, $allEntries[0])
             ->appendXML($applicationData);
         
         
@@ -215,7 +219,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $entries = $dataController->getServerEntries('addressbookFolderId', null);
         
-        $this->assertContains('contact1', $entries);
+        $this->assertEquals(10, count($entries));
     }
     
     /**
@@ -256,12 +260,12 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
         
-        Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId']['foobar'] = array();
+        $entries = $dataController->getServerEntries('addressbookFolderId', null);
         
-        $this->assertArrayHasKey('foobar', Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']['addressbookFolderId']);
+        $dataController->deleteEntry('addressbookFolderId', $entries[0], array());
         
-        $dataController->deleteEntry('addressbookFolderId', 'foobar', array());
+        $newEntries = $dataController->getServerEntries('addressbookFolderId', null);
         
-        $this->assertArrayNotHasKey('foobar', Syncroton_Data_Contacts::$entries['Syncroton_Data_Contacts']['addressbookFolderId']);
+        $this->assertArrayNotHasKey($entries[0], $newEntries);
     }
 }

@@ -36,6 +36,9 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         $this->_device = $_device;
         $this->_timestamp = $_timeStamp;
         
+        $this->_db          = Syncroton_Registry::getDatabase();
+        $this->_tablePrefix = 'Syncroton_';
+        
         $this->_initData();
     }
     
@@ -55,16 +58,27 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     {
         $id = sha1(mt_rand(). microtime());
     
-        Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$id] = $_entry;
+        #Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$id] = $_entry;
+        
+        $this->_db->insert($this->_tablePrefix . 'data', array(
+            'id'        => $id,
+            'type'      => get_class($this),
+            'folder_id' => $_folderId,
+            'data'      => serialize($_entry)
+        ));
     
         return $id;
     }
     
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->folderid : $_folderId;
+        #$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->folderid : $_folderId;
         
-        unset(Syncroton_Data_AData::$entries[get_class($this)][$folderId][$_serverId]);
+        $result = $this->_db->delete($this->_tablePrefix . 'data', array('id = ?' => $_serverId));
+        
+        return (bool) $result;
+        
+        #unset(Syncroton_Data_AData::$entries[get_class($this)][$folderId][$_serverId]);
     }
     
     public function deleteFolder($_folderId)
@@ -98,7 +112,20 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
     
-        return array_keys(Syncroton_Data_AData::$entries[get_class($this)][$folderId]);
+        #return array_keys(Syncroton_Data_AData::$entries[get_class($this)][$folderId]);
+        
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . 'data', array('id'))
+            ->where('folder_id = ?', $_folderId);
+        
+        $ids = array();
+        
+        $stmt = $this->_db->query($select);
+        while ($id = $stmt->fetchColumn()) {
+            $ids[] = $id;
+        }
+        
+        return $ids;
     }
     
     public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
@@ -124,24 +151,48 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
-        if (!isset(Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId])) {
-            throw new OutOfBoundsException("entry $serverId not found in folder {$collection->collectionId}");
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . 'data', array('data'))
+            ->where('id = ?', $serverId);
+        
+        $stmt = $this->_db->query($select);
+        $entry = $stmt->fetchColumn();
+
+        if ($entry === false) {
+            throw new Syncroton_Exception_NotFound("entry $serverId not found in folder {$collection->collectionId}");
         }
         
-        return Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId];
+        return unserialize($entry);
+        
+        #if (!isset(Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId])) {
+        #    throw new OutOfBoundsException("entry $serverId not found in folder {$collection->collectionId}");
+        #}
+        
+        #return Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId];
+
+        
     }
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {
-        Syncroton_Data_AData::$entries[get_class($this)][$_dstFolderId][$_serverId] = Syncroton_Data_AData::$entries[get_class($this)][$_srcFolderId][$_serverId];
-        unset(Syncroton_Data_AData::$entries[get_class($this)][$_srcFolderId][$_serverId]);
+        $this->_db->update($this->_tablePrefix . 'data', array(
+            'folder_id' => $_dstFolderId,
+        ), array(
+            'id = ?' => $_serverId
+        ));
         
         return $_serverId;
     }
     
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
-        Syncroton_Data_AData::$entries[get_class($this)][$_folderId][$_serverId] = $_entry;
+        $this->_db->update($this->_tablePrefix . 'data', array(
+            'type'      => get_class($this),
+            'folder_id' => $_folderId,
+            'data'      => serialize($_entry)
+        ), array(
+            'id = ?' => $_serverId
+        ));
     }
     
     public function updateFolder(Syncroton_Model_IFolder $folder)

@@ -87,32 +87,41 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
         /**
          * used by unit tests only to simulated added folders
          */
-        Syncroton_Data_AData::$entries[get_class($this)] = array(
-            'emailInboxFolderId' => array(
-                'email1' => new Syncroton_Model_Email(array(
-                    'AccountId'    => 'FooBar',
-                    'Attachments'  => array(
-                        new Syncroton_Model_EmailAttachment(array(
-                            'FileReference' => '12345abcd',
-                            'UmAttOrder'    => 1
+        
+        $entries = $this->getServerEntries('emailInboxFolderId', 1);
+        
+        if (count($entries) == 0) {
+            $testData = array(
+                'emailInboxFolderId' => array(
+                    'email1' => new Syncroton_Model_Email(array(
+                        'AccountId'    => 'FooBar',
+                        'Attachments'  => array(
+                            new Syncroton_Model_EmailAttachment(array(
+                                'FileReference' => '12345abcd',
+                                'UmAttOrder'    => 1
+                            ))
+                        ),
+                        'Categories'   => array('123', '456'),
+                        'Cc'           => 'l.kneschke@metaways.de',
+                        'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+                        'From'         => 'k.kneschke@metaways.de',
+                        'Subject'      => 'Test Subject',
+                        'To'           => 'j.kneschke@metaways.de',
+                        'Read'         => 1,
+                        'Body'         => new Syncroton_Model_EmailBody(array(
+                            'Type'              => Syncroton_Model_EmailBody::TYPE_PLAINTEXT, 
+                            'Data'              => 'Hello!', 
+                            'Truncated'         => true, 
+                            'EstimatedDataSize' => 600
                         ))
-                    ),
-                    'Categories'   => array('123', '456'),
-                    'Cc'           => 'l.kneschke@metaways.de',
-                    'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
-                    'From'         => 'k.kneschke@metaways.de',
-                    'Subject'      => 'Test Subject',
-                    'To'           => 'j.kneschke@metaways.de',
-                    'Read'         => 1,
-                    'Body'         => new Syncroton_Model_EmailBody(array(
-                        'Type'              => Syncroton_Model_EmailBody::TYPE_PLAINTEXT, 
-                        'Data'              => 'Hello!', 
-                        'Truncated'         => true, 
-                        'EstimatedDataSize' => 600
-                    ))
-                )),
-            )
-        );
+                    )),
+                )
+            );
+            
+            foreach ($testData['emailInboxFolderId'] as $data) {
+                $this->createEntry('emailInboxFolderId', $data);
+            }
+        }
     }
 }
 

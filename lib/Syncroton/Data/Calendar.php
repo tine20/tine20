@@ -33,13 +33,13 @@ class Syncroton_Data_Calendar extends Syncroton_Data_AData
                 ))
         );
         
-        /**
-         * used by unit tests only to simulated added folders
-         */
-        Syncroton_Data_AData::$entries[get_class($this)] = array(
-                'calendarFolderId' => array(
-                )
-        );
+        #/**
+        # * used by unit tests only to simulated added folders
+        # */
+        #Syncroton_Data_AData::$entries[get_class($this)] = array(
+        #        'calendarFolderId' => array(
+        #        )
+        #);
     }
 }
 
