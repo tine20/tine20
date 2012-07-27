@@ -107,8 +107,7 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email', 'uri:Email');
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email2', 'uri:Email2');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -184,16 +183,15 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
         }
         
     }
-    
+
     /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
+     * (non-PHPdoc)
+     * @see Syncroton_Model_AEntry::setFromSimpleXMLElement()
      */
     public function setFromSimpleXMLElement(SimpleXMLElement $properties)
     {
-        // do nothing
+        // email sending is not handled via this class
         
         return;
-    }    
+    }
 }

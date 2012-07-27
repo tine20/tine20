@@ -46,7 +46,8 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
             <Contacts:Category>5678</Contacts:Category>
         </Contacts:Categories>
         <Contacts:Picture>cGljdHVyZQ==</Contacts:Picture>
-        <AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:EstimatedDataSize>0</AirSyncBase:EstimatedDataSize><AirSyncBase:Data></AirSyncBase:Data></AirSyncBase:Body></ApplicationData>
+        <AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>Rewdfyyh fddg</AirSyncBase:Data></AirSyncBase:Body>
+    </ApplicationData>
 </Add></Commands></Collection></Collections></Sync>';
     
     /**
@@ -71,13 +72,15 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         
         #foreach ($contact as $key => $value) {echo $key; var_dump($value);} 
         
-        $this->assertEquals(7, count($contact));
+        $this->assertEquals(8, count($contact));
         $this->assertEquals("Fritzchen",  $contact->FileAs);
         $this->assertEquals("Fritzchen",  $contact->FirstName);
         $this->assertEquals("Meinen",     $contact->LastName);
         $this->assertEquals("1969-12-31", $contact->Birthday->format('Y-m-d'));
         $this->assertEquals("The Boss",   $contact->ManagerName);
         $this->assertEquals("picture",    $contact->Picture);
+        $this->assertTrue($contact->Body instanceof Syncroton_Model_EmailBody);
+        $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $contact->Body->Type);
     }
     
     /**
@@ -117,9 +120,9 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('The Boss', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Contacts:Birthday');
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body/AirSyncBase:Type');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('19691231T000000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');

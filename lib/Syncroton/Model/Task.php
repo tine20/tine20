@@ -26,6 +26,9 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
     
     // @todo handle body
     protected $_properties = array(
+        'AirSyncBase' => array(
+            'Body'                   => array('type' => 'container')
+        ),
         'Tasks' => array(
             //'Body'                    => 0x05,
             //'BodySize'                => 0x06,
@@ -48,7 +51,7 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -56,9 +59,9 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = $this->_properties['Tasks'][$elementName]; 
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
             
-            $nameSpace = 'uri:Tasks';
+            $nameSpace = 'uri:' . $nameSpace;
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -66,6 +69,15 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
             }
             
             switch($elementName) {
+                case 'Body':
+                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+                    
+                    $value->appendXML($element);
+                    
+                    $_domParrent->appendChild($element);
+                    
+                    break;
+
                 case 'Categories':
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
@@ -103,29 +115,6 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
         
     }
     
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== $this->_xmlBaseElement) {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        foreach (array_keys($this->_properties) as $namespace) {
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
-        }
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
-    }
-    
     protected function _parseTasksNamespace(SimpleXMLElement $properties)
     {
         // fetch data from Contacts namespace
@@ -151,9 +140,9 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
                     break;
                     
                 default:
-                    $properties =  $this->_properties['Tasks'][$elementName];
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
                     
-                    switch ($properties['type']) {
+                    switch ($elementProperties['type']) {
                         case 'datetime':
                             $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
                             
@@ -170,29 +159,5 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
                     }
             }
         }
-    }
-    
-    public function &__get($name)
-    {
-        if (!array_key_exists($name, $this->_properties['Tasks'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        return $this->_elements[$name];
-    }
-    
-    public function __set($name, $value)
-    {
-        if (!array_key_exists($name, $this->_properties['Tasks'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = $this->_properties['Tasks'][$name];
-        
-        if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
-            throw new InvalidArgumentException("value for $name must be an instance of DateTime");
-        }
-        
-        $this->_elements[$name] = $value;
     }
 }

@@ -21,19 +21,23 @@
  * @property    DateTime  Birthday
  * @property    string    Business2PhoneNumber
  * @property    string    BusinessAddressCity
+ * @property    Syncroton_Model_EmailBody  Body
  */
 
 class Syncroton_Model_Contact extends Syncroton_Model_AEntry
 {
-    // @todo handle body
+    protected $_xmlBaseElement = 'ApplicationData';
+    
     protected $_properties = array(
+        'AirSyncBase' => array(
+            'Body'                   => array('type' => 'container')
+        ),
         'Contacts' => array(
             'Alias'                  => array('type' => 'string'),
             'Anniversary'            => array('type' => 'datetime'),
             'AssistantName'          => array('type' => 'string'),
             'AssistantPhoneNumber'   => array('type' => 'string'),
             'Birthday'               => array('type' => 'datetime'),
-            //'Body'                  => 0x09,
             //'BodySize'              => 0x0a,
             //'BodyTruncated'         => 0x0b,
             'Business2PhoneNumber'   => array('type' => 'string'),
@@ -103,10 +107,8 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts', 'uri:Contacts');
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts2', 'uri:Contacts2');
-        
-        
+        $this->_addXMLNamespaces($_domParrent);
+                
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
             if($value === null || $value === '' || (is_array($value) && empty($value))) {
@@ -123,6 +125,15 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             }
             
             switch($elementName) {
+                case 'Body':
+                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+                    
+                    $value->appendXML($element);
+                    
+                    $_domParrent->appendChild($element);
+                    
+                    break;
+
                 case 'Categories':
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
@@ -172,28 +183,6 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                     $_domParrent->appendChild($element);
             }
         }
-        
-    }
-    
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== 'ApplicationData') {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        $this->_parseContactsNamespace($properties);
-        $this->_parseContacts2Namespace($properties);
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
     }
     
     protected function _parseContactsNamespace(SimpleXMLElement $properties)
@@ -232,14 +221,22 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                     break;
                     
                 default:
-                    $properties = isset($this->_properties['Contacts'][$elementName]) ? 
-                        $this->_properties['Contacts'][$elementName] : 
-                        $this->_properties['Contacts2'][$elementName];
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
                     
-                    if ($properties['type'] == 'datetime') {
-                        $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                    } else {
-                        $this->$elementName = (string) $xmlElement;
+                    switch ($elementProperties['type']) {
+                        case 'datetime':
+                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
+                            
+                            break;
+                            
+                        case 'number':
+                            $this->$elementName = (int) $xmlElement;
+                            
+                            break;
+                        default:
+                            $this->$elementName = (string) $xmlElement;
+                            
+                            break;
                     }
             }
         }
@@ -257,29 +254,5 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                     $this->$elementName = (string) $xmlElement;
             }
         }
-    }
-    
-    public function &__get($name)
-    {
-        if (!array_key_exists($name, $this->_properties['Contacts']) && !array_key_exists($name, $this->_properties['Contacts2'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        return $this->_elements[$name];
-    }
-    
-    public function __set($name, $value)
-    {
-        if (!array_key_exists($name, $this->_properties['Contacts']) && !array_key_exists($name, $this->_properties['Contacts2'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = isset($this->_properties['Contacts'][$name]) ? $this->_properties['Contacts'][$name] : $this->_properties['Contacts2'][$name];
-        
-        if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
-            throw new InvalidArgumentException("value for $name must be an instance of DateTime");
-        }
-        
-        $this->_elements[$name] = $value;
-    }
+    }    
 }

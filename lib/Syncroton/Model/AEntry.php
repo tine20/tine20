@@ -58,26 +58,45 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     }
     
     /**
-     * 
+     * set properties from SimpleXMLElement object
+     *
      * @param SimpleXMLElement $xmlCollection
      * @throws InvalidArgumentException
      */
     public function setFromSimpleXMLElement(SimpleXMLElement $properties)
     {
-        if ($properties->getName() !== 'ApplicationData') {
+        if ($properties->getName() !== $this->_xmlBaseElement) {
             throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
         }
-        
+    
         $this->_elements = array();
-        
-        $this->_parseContactsNamespace($properties);
-        $this->_parseContacts2Namespace($properties);
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
+    
+        foreach (array_keys($this->_properties) as $namespace) {
+            $functionName = '_parse' . $namespace . 'Namespace';
+            $this->$functionName($properties);
+        }
+    
         return;
     }
     
+    /**
+     * add needed xml namespaces to DomDocument
+     * 
+     * @param unknown_type $_domParrent
+     */
+    protected function _addXMLNamespaces(DOMElement $_domParrent)
+    {
+        foreach($this->_properties as $namespace => $namespaceProperties) {
+            $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
+        }
+    }
+    
+    /**
+     * 
+     * @param unknown_type $element
+     * @throws InvalidArgumentException
+     * @return multitype:unknown
+     */
     protected function _getElementProperties($element)
     {
         foreach($this->_properties as $namespace => $namespaceProperties) {
@@ -87,6 +106,25 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         }
     
         throw new InvalidArgumentException("$element is no valid property of this object");
+    }
+    
+    protected function _parseAirSyncBaseNamespace(SimpleXMLElement $properties)
+    {
+        // fetch data from Contacts2 namespace
+        $children = $properties->children('uri:AirSyncBase');
+    
+        foreach ($children as $elementName => $xmlElement) {
+    
+            switch ($elementName) {
+                case 'Body':
+                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+    
+                    break;
+    
+                default:
+                    $this->$elementName = (string) $xmlElement;
+            }
+        }
     }
     
     public function &__get($name)

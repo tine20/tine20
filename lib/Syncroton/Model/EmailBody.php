@@ -9,15 +9,15 @@
  */
 
 /**
- * class to handle ActiveSync event
+ * class to handle AirSyncBase:Body
  *
- * @package     Model
- * @property    string  class
- * @property    string  collectionId
- * @property    bool    deletesAsMoves
- * @property    bool    getChanges
- * @property    string  syncKey
- * @property    int     windowSize
+ * @package    Model
+ * @property   int     EstimatedDataSize
+ * @property   string  Data
+ * @property   string  Part
+ * @property   string  Preview
+ * @property   bool    Truncated
+ * @property   string  Type
  */
 
 class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
@@ -43,7 +43,7 @@ class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase', 'uri:AirSyncBase');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -51,11 +51,9 @@ class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = (isset($this->_properties['AirSyncBase'][$elementName])) ?
-            $this->_properties['AirSyncBase'][$elementName] :
-            $this->_properties['Email2'][$elementName];
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
             
-            $nameSpace = isset($this->_properties['AirSyncBase'][$elementName]) ? 'uri:AirSyncBase' : 'uri:Email2';
+            $nameSpace = 'uri:' . $nameSpace;
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -125,9 +123,9 @@ class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
                     break;
                     
                 default:
-                    $properties =  $this->_properties['Email'][$elementName];
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
                     
-                    switch ($properties['type']) {
+                    switch ($elementProperties['type']) {
                         case 'datetime':
                             $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
                             

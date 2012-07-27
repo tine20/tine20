@@ -75,7 +75,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
         
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
-        $this->assertEquals(6, count($event));
+        $this->assertEquals(7, count($event));
         $this->assertEquals(1,  $event->Importance); 
         $this->assertEquals(0,  $event->Complete);
         $this->assertEquals(0,  $event->Sensitivity);

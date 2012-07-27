@@ -33,6 +33,9 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
     
     // @todo handle body
     protected $_properties = array(
+        'AirSyncBase' => array(
+            'Body'                   => array('type' => 'container')
+        ),
         'Calendar' => array(
             'AllDayEvent'             => array('type' => 'number'),
             'AppointmentReplyTime'    => array('type' => 'datetime'),
@@ -66,7 +69,7 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -95,6 +98,15 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
                     
                     $_domParrent->appendChild($element);
                     
+                    break;
+
+                case 'Body':
+                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+                
+                    $value->appendXML($element);
+                
+                    $_domParrent->appendChild($element);
+                
                     break;
                     
                 case 'Categories':
@@ -147,29 +159,6 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
         
     }
     
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== $this->_xmlBaseElement) {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        foreach (array_keys($this->_properties) as $namespace) {
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
-        }
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
-    }
-    
     protected function _parseCalendarNamespace(SimpleXMLElement $properties)
     {
         // fetch data from Contacts namespace
@@ -217,6 +206,41 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
                     break;
                     
                 default:
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
+                    
+                    switch ($elementProperties['type']) {
+                        case 'datetime':
+                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
+                            
+                            break;
+                            
+                        case 'number':
+                            $this->$elementName = (int) $xmlElement;
+                            
+                            break;
+                        default:
+                            $this->$elementName = (string) $xmlElement;
+                            
+                            break;
+                    }
+            }
+        }
+    }
+    
+    protected function _parseAirSyncBaseNamespace(SimpleXMLElement $properties)
+    {
+        // fetch data from AirSyncBase namespace
+        $children = $properties->children('uri:AirSyncBase');
+    
+        foreach ($children as $elementName => $xmlElement) {
+    
+            switch ($elementName) {
+                case 'Body':
+                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+    
+                    break;
+                    
+                default:
                     $properties =  $this->_properties['Calendar'][$elementName];
                     
                     switch ($properties['type']) {
@@ -236,29 +260,5 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
                     }
             }
         }
-    }
-    
-    public function &__get($name)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        return $this->_elements[$name];
-    }
-    
-    public function __set($name, $value)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = $this->_properties['Calendar'][$name];
-        
-        if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
-            throw new InvalidArgumentException("value for $name must be an instance of DateTime");
-        }
-        
-        $this->_elements[$name] = $value;
     }
 }
