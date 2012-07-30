@@ -236,7 +236,8 @@ Ext.namespace('Tine.Felamimail.sieve');
                 blurOnSelect: true,
                 name: 'contact_id1',
                 selectOnFocus: true,
-                forceSelection: false
+                forceSelection: false,
+                allowBlank: true
             }),
             new Tine.Addressbook.SearchCombo({
                 columnWidth: 0.5,
@@ -245,7 +246,8 @@ Ext.namespace('Tine.Felamimail.sieve');
                 blurOnSelect: true,
                 name: 'contact_id2',
                 selectOnFocus: true,
-                forceSelection: false
+                forceSelection: false,
+                allowBlank: true
             })
         ], [{
             fieldLabel: this.app.i18n._('Message Template'),
