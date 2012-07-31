@@ -27,15 +27,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'Addressbook';
     
     /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
-     * @var array
-     */
-    protected $_resolveUserFields = array(
-        'Addressbook_Model_Contact' => array('created_by', 'last_modified_by')
-    );
-
-    /**
      * resolve images
      * @param Tinebase_Record_RecordSet $_records
      */

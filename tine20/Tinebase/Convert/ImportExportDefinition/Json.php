@@ -89,16 +89,15 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      * converts Tinebase_Record_RecordSet to external format
      * 
      * @param  Tinebase_Record_RecordSet  $_records
-     * @param  array $_resolveUserFields
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_resolveUserFields = array())
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
     {
         foreach ($_records as $record) {
             $this->_convertOptions($record);
         }
         
-        $result = parent::fromTine20RecordSet($_records, $_resolveUserFields);
+        $result = parent::fromTine20RecordSet($_records);
         
         return $result;
     }

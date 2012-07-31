@@ -30,13 +30,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     const TOTALCOUNT_COUNTRESULT = 'countresult';
 
     /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
-     * @var array
-     */
-    protected $_resolveUserFields = array();
-
-    /**
      * All models of this application (needed for application starter)
      * @var array
      */
@@ -149,12 +142,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-    * resolve containers, tags and users
+    * resolve containers and tags
     *
     * @param Tinebase_Record_RecordSet $_records
-    * @param array $_resolveUserFields
     */
-    public static function resolveContainerTagsUsers(Tinebase_Record_RecordSet $_records, $_resolveUserFields = array())
+    public static function resolveContainerTags(Tinebase_Record_RecordSet $_records)
     {
         if ($_records->getFirstRecord()->has('container_id')) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
@@ -162,10 +154,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     
         if ($_records->getFirstRecord()->has('tags')) {
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        }
-    
-        if (array_key_exists($_records->getRecordClassName(), $_resolveUserFields)) {
-            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $_resolveUserFields[$_records->getRecordClassName()], TRUE);
         }
     }
     
@@ -427,7 +415,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         if ($_records->getFirstRecord()) {
             $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
-            $result = $converter->fromTine20RecordSet($_records, $this->_resolveUserFields);
+            $result = $converter->fromTine20RecordSet($_records);
         }
         
         return $result;

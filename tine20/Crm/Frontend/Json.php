@@ -24,16 +24,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var Crm_Controller_Lead
      */
     protected $_controller = NULL;
-    
-    /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
-     * @var array
-     */
-    protected $_resolveUserFields = array(
-        'Crm_Model_Lead' => array('created_by', 'last_modified_by')
-    );
-    
+        
     protected $_relatableModels = array('Crm_Model_Lead');
     
     /**

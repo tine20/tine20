@@ -25,15 +25,6 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
 
     /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
-     * @var array
-     */
-    protected $_resolveUserFields = array(
-        'SimpleFAQ_Model_Faq' => array('created_by', 'last_modified_by')
-    );
-
-    /**
      * the constructor
      *
      */

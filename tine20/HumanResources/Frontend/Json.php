@@ -26,15 +26,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
 
     /**
-     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
-     *
-     * @var array
-     */
-    protected $_resolveUserFields = array(
-        'HumanResources_Model_Employee' => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id')
-    );
-
-    /**
      * the constructor
      *
      */
@@ -200,8 +191,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
-                $_record['account_id'] = !empty($_record['account_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['account_id'])->toArray() : null;
-                $_record['supervisor_id'] = !empty($_record['supervisor_id']) ? Tinebase_User::getInstance()->getFullUserById($_record['supervisor_id'])->toArray() : null;
                 if ( Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
                     $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                     $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));

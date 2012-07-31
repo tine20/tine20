@@ -86,7 +86,10 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertEquals($project['description'], $projectData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectData['created_by'], 'Created by has not been set.');
+        
+        // created by should be resolved
+        $this->assertTrue(is_array($projectData['created_by']), 'Created by has not been resolved.');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectData['created_by']['accountId']);
         
         // cleanup
         $this->_json->deleteProjects($projectData['id']);
@@ -109,7 +112,10 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertEquals($project['description'], $projectData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectData['created_by']);
+        
+        // created by should be resolved
+        $this->assertTrue(is_array($projectData['created_by']), 'Created by has not been resolved.');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectData['created_by']['accountId']);
     }
 
     /**
@@ -129,7 +135,10 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         // check
         $this->assertEquals($projectData['id'], $projectUpdated['id']);
         $this->assertEquals($projectData['description'], $projectUpdated['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectUpdated['last_modified_by']);
+        
+        // last modified by should be resolved
+        $this->assertTrue(is_array($projectUpdated['last_modified_by']), 'Last modified by has not been resolved.');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectUpdated['last_modified_by']['accountId']);
     }
     
     /**
