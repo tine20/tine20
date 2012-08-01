@@ -8,7 +8,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
@@ -137,9 +137,10 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     public function import($_resource = NULL, $_clientRecordData = array())
     {
         $this->_initImportResult();
+        $this->_appendStreamFilters($_resource);
         
         $lines = array();
-        while($line=fgets($_resource)){
+        while ($line = fgets($_resource)) {
             $lines[] = str_replace("\n", "", $line);
         }
         

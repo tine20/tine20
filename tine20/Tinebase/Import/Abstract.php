@@ -142,6 +142,36 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
+     * append stream filter for correct linebreaks and encoding
+     * - iconv with TRANSLIT
+     * - replace linebreaks
+     * 
+     * @param resource $resource
+     */
+    protected function _appendStreamFilters($resource)
+    {
+        if (! $resource) {
+            return;
+        }
+
+        if (isset($this->_options['encoding']) && isset($this->_options['encodingTo'])) {
+            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo']. '//TRANSLIT';
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add convert stream filter: ' . $filter);
+            stream_filter_append($resource, $filter);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Adding streamfilter for correct linebreaks');
+        require_once 'StreamFilter/StringReplace.php';
+        $filter = stream_filter_append($resource, 'str.replace', STREAM_FILTER_READ, array(
+            'search'            => '/\r\n{0,1}/',
+            'replace'           => "\r\n",
+            'searchIsRegExp'    => TRUE
+        ));
+    }
+    
+    /**
      * init import result data
      */
     protected function _initImportResult()
@@ -169,13 +199,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _doImport($_resource = NULL, $_clientRecordData = array())
     {
         $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
-        
-        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
-            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Add convert stream filter: ' . $filter);
-            stream_filter_append($_resource, $filter);
-        }
+        $this->_appendStreamFilters($_resource);
         
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
