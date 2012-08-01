@@ -144,6 +144,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     
     /**
      * append stream filter for correct linebreaks and encoding
+     * - iconv with TRANSLIT
+     * - replace linebreaks
      * 
      * @param resource $resource
      */
@@ -153,8 +155,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             return;
         }
 
-        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
-            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
+        if (isset($this->_options['encoding']) && isset($this->_options['encodingTo'])) {
+            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo']. '//TRANSLIT';
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Add convert stream filter: ' . $filter);
             stream_filter_append($resource, $filter);
