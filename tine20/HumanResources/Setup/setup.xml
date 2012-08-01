@@ -131,6 +131,17 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>division_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>health_insurance</name>
+                    <type>text</type>
+                    <length>24</length>
+                </field>
+                <field>
                     <name>employment_end</name>
                     <type>datetime</type>
                 <notnull>false</notnull>
@@ -173,6 +184,17 @@
                     <field>
                         <name>id</name>
                     </field>
+                </index>
+                <index>
+                    <name>hr_employee::division_id--divisions::id</name>
+                    <field>
+                        <name>division_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>sales_divisions</table>
+                        <field>id</field>
+                    </reference>
                 </index>
                 <index>
                     <name>hr_employee::account_id--accounts::id</name>

@@ -113,7 +113,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     $contracts->addRecord($ec->create($contract));
                 }
             }
-
+                
             $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
             $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
@@ -123,5 +123,142 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $ec->delete($deleteContracts->id);
             $_record->contracts = $contracts->toArray();
         }
+    }
+    
+    /**
+     * delete linked objects (notes, relations, ...) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        // use textfilter for employee_id 
+        $eFilter = new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId()));
+        
+        // delete free times
+        $filter = new HumanResources_Model_FreeTimeFilter(array(
+            ), 'AND');
+        $filter->addFilter($eFilter);
+        
+        HumanResources_Controller_FreeTime::getInstance()->deleteByFilter($filter);
+        
+        // delete contracts
+        $filter = new HumanResources_Model_ContractFilter(array(
+            ), 'AND');
+        $filter->addFilter($eFilter);
+        
+        HumanResources_Controller_FreeTime::getInstance()->deleteByFilter($filter);
+        
+        parent::_deleteLinkedObjects($_record);
+    }
+    /**
+     * returns the highest employee number of all employees
+     * @return integer
+     */
+    public function getLastEmployeeNumber()
+    {
+        $filter = new HumanResources_Model_EmployeeFilter();
+        $pagination = new Tinebase_Model_Pagination(array("sort" => "number","dir" => "DESC"));
+        if($employee = $this->search($filter, $pagination)->getFirstRecord()) {
+            return (int) $employee->number;
+        } else {
+            return 0;
+        }
+    }
+
+    
+    /**
+     * transfers usre accounts to employee records
+     * @param boolean $_deletePrivateInfo should private information be removed from contacts
+     */
+    public function transferUserAccounts($_deletePrivateInfo = FALSE, $_feastCalendarId = NULL, $_workingTimeModelId = NULL, $_vacationDays = NULL, $cliCall = FALSE)
+    {
+        $lastNumber = $this->getLastEmployeeNumber();
+        if($_feastCalendarId && $_workingTimeModelId && $_vacationDays) {
+            $createContract = true;
+            try {
+                $feastCalendar = Tinebase_Container::getInstance()->get($_feastCalendarId);
+            } catch (Exception $e) {
+                if($cliCall) {
+                    die('The Calendar with the id ' . $_feastCalendarId . ' could not be found!' . chr(10));
+                } else {
+                    throw $e;
+                }
+            }
+            try {
+                $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($_workingTimeModelId);
+            } catch (Exception $e) {
+                if($cliCall) {
+                    die('The Working Time Model with the id ' . $_workingTimeModelId . ' could not be found!' . chr(10));
+                } else {
+                    throw $e;
+                }
+            }
+        } elseif ($_feastCalendarId || $_workingTimeModelId || $_vacationDays) {
+            die('You have to define the feast_calendar_id, the working_time_model_id and vacation_days to create a contract!' . chr(10));
+        }
+        
+        // get all active accounts
+        $filter = new Addressbook_Model_ContactFilter(array(
+                array('field' => 'type', 'operator' => 'equals', 'value' => 'user'),
+                array('field' => 'is_deleted', 'operator' => 'equals', 'value' => false)
+            ), 'AND'
+        );
+        
+        $filter->addFilter(new Addressbook_Model_ContactDisabledFilter(1));
+        $accounts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        $nextNumber = $lastNumber + 1;
+        
+        foreach($accounts as $account) {
+            $filter = new HumanResources_Model_EmployeeFilter(array(array(
+                'field' => 'account_id', 'operator' => 'equals', 'value' => $account->account_id
+            )), 'AND');
+            
+            // if not already exists
+            if(($lastNumber == 0) || ($this->search($filter)->count() === 0)) {
+                
+                $employee = new HumanResources_Model_Employee(array(
+                    'number'      => $nextNumber,
+                    'account_id'  => $account->account_id,
+                    'countryname' => $account->adr_two_countryname,
+                    'locality'    => $account->adr_two_locality,
+                    'postalcode'  => $account->adr_two_postalcode,
+                    'region'      => $account->adr_two_region,
+                    'street'      => $account->adr_two_street,
+                    'street2'     => $account->adr_two_street2,
+                    'email'       => $account->email_home,
+                    'tel_home'    => $account->tel_home,
+                    'tel_cell'    => $account->tel_cell_private,
+                    'n_fn'        => $account->n_fn,
+                ));
+                if($createContract) {
+                    $contract = array(
+                        'feast_calendar_id'  => $_feastCalendarId,
+                        'workingtime_id'     => $workingTimeModel->toArray(),
+                        'vacation_days'      => $_vacationDays,
+                        'cost_center_id'     => NULL,
+                    );
+                    $employee->contracts = array($contract);
+                }
+                $this->create($employee);
+                $nextNumber++;
+            }
+            
+            if($_deletePrivateInfo) {
+                $account->adr_two_countryname = NULL;
+                $account->adr_two_locality = NULL;
+                $account->adr_two_postalcode = NULL;
+                $account->adr_two_region = NULL;
+                $account->adr_two_street = NULL;
+                $account->adr_two_street2 = NULL;
+                $account->email_home = NULL;
+                $account->tel_home = NULL;
+                $account->tel_cell_private = NULL;
+                
+                Addressbook_Controller_Contact::getInstance()->update($account);
+            }
+            
+        }
+        
     }
 }

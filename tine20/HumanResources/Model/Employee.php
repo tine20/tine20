@@ -41,7 +41,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-    	'Tinebase_Model_User' => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id')
+        'Tinebase_Model_User'  => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id'),
+        'Sales_Model_Division' => array('division_id')
     );
 
     /**
@@ -50,7 +51,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'countryname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'locality'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -72,6 +73,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'employment_begin'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_end'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'supervisor_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'division_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'health_insurance'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -81,10 +84,11 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // relations (linked HumanResources_Model_Employee records) and other metadata
+        // relations
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
         'contracts'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         );
 
@@ -137,7 +141,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
     {
         // no private cleanup with admin rights
         if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
-            Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN) ||
             Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
             return;
         } else {

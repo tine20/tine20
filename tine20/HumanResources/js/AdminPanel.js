@@ -135,7 +135,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
     getFormItems: function() {
         
         var dfc = Tine.HumanResources.registry.get('config').defaultFeastCalendar;
-             console.warn(dfc);
+
         return {
             border: false,
             frame:  false,
@@ -162,7 +162,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
                             requiredGrant: 'readGrant',
                             hideTrigger2: true,
                             allowBlank: false,
-                            fieldLabel: dfc.definition.label,
+                            fieldLabel: this.app.i18n._(dfc.definition.label),
                             name: 'defaultFeastCalendar',
                             blurOnSelect: true
                         })

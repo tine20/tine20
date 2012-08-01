@@ -122,8 +122,22 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $_createdRecord->freedays = $this->_freedaysToCreate;
     }
 
+    /**
+     * delete linked objects (notes, relations, ...) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        $filter = new HumanResources_Model_FreeDayFilter(array(
+            ), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'equals', 'value' => $_record->getId())));
+        
+        HumanResources_Controller_FreeDay::getInstance()->deleteByFilter($filter);
+        parent::_deleteLinkedObjects($_record);
+    }
+    
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-        //         die(var_dump($_record->toArray()));
     }
 
 

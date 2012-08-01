@@ -148,6 +148,16 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 ['lastweek', this.app.i18n._('last week')]
                             ]
                         }, {
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Cost Center'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Sales.Model.CostCenter,
+                            relationType: 'COST_CENTER',
+                            relationDegree: 'sibling',
+                            modelUnique: true
+                        }, {
                             hideLabel: true,
                             boxLabel: this.app.i18n._('Timesheets are billable'),
                             name: 'is_billable',

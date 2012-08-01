@@ -144,7 +144,6 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
     },
     
     onBeforeEdit: function(o) {
-        console.warn(o);
     },
     
     /**

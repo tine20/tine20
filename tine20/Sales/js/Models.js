@@ -179,11 +179,39 @@ Tine.Sales.Model.CostCenter = Tine.Tinebase.data.Record.create(Tine.Sales.Model.
     appName: 'Sales',
     modelName: 'CostCenter',
     idProperty: 'id',
-    titleProperty: 'number',
+    titleProperty: 'remark',
     // ngettext('CostCenter', 'CostCenters', n);
-    recordName: 'CostCenter',
-    recordsName: 'CostCenters',
+    recordName: 'Cost Center',
+    recordsName: 'Cost Centers',
     // ngettext('All CostCenters', 'All CostCenters', n);
     containerName: 'All CostCenters',
     containersName: 'All CostCenters'
+});
+
+
+// DIVISION
+
+Tine.Sales.Model.DivisionArray = Tine.Tinebase.Model.genericFields.concat([
+    {name: 'id',            type: 'string'},
+    {name: 'title',         type: 'string'}
+]);
+
+/**
+ * @namespace Tine.Sales.Model
+ * @class Tine.Sales.Model.Division
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Division Record Definition
+ */ 
+Tine.Sales.Model.Division = Tine.Tinebase.data.Record.create(Tine.Sales.Model.DivisionArray, {
+    appName: 'Sales',
+    modelName: 'Division',
+    idProperty: 'id',
+    titleProperty: 'title',
+    // ngettext('Division', 'Divisions', n);
+    recordName: 'Division',
+    recordsName: 'Divisions',
+    // ngettext('record list', 'record lists', n);
+    containerName: 'All Divisions',
+    containersName: 'Divisions'
 });

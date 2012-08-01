@@ -164,7 +164,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array  $ids
      * @return string
      */
-    public function deleteFreeTime($ids)
+    public function deleteFreeTimes($ids)
     {
         return $this->_delete($ids, HumanResources_Controller_FreeTime::getInstance());
     }
@@ -201,7 +201,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
             case 'HumanResources_Model_FreeTime':
-                $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
+//                 $_record['employee_id'] = !empty($_record['employee_id']) ? HumanResources_Controller_Employee::getInstance()->get($_record['employee_id'])->toArray() : null;
                 $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
                 $filter->addFilter(new Tinebase_Model_Filter_Text('freetime_id', 'equals', $_record['id']));
                 $recs = HumanResources_Controller_FreeDay::getInstance()->search($filter);

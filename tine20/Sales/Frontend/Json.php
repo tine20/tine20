@@ -192,4 +192,18 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_CostCenter::getInstance(), 'Sales_Model_CostCenterFilter');
     }
+    
+    // division functions
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchDivisions($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_ContractFilter');
+    }
 }

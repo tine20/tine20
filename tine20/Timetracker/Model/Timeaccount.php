@@ -36,6 +36,16 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
     protected $_application = 'Timetracker';
 
     /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
+            array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Cost Center', 'max' => '1:0'), // _('Cost Center')
+            )
+        )
+    );
+    
+    /**
      * relation type: contract
      *
      */

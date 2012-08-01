@@ -102,30 +102,48 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }, {
                 id: 'n_fn',
                 header: this.app.i18n._("Full Name"),
-                width: 350,
+                width: 150,
                 sortable: true,
                 dataIndex: 'n_fn'
             }, {
                 id: 'employment_begin',
                 header: this.app.i18n._("Employment begin"),
-                width: 350,
+                width: 150,
                 sortable: true,
                 dataIndex: 'employment_begin',
                 renderer: Tine.Tinebase.common.dateRenderer
             }, {
                 id: 'employment_end',
                 header: this.app.i18n._("Employment end"),
-                width: 350,
+                width: 150,
                 sortable: true,
                 dataIndex: 'employment_end',
                 renderer: Tine.Tinebase.common.dateRenderer
             }, {
                 id: 'supervisor_id',
                 header: this.app.i18n._("Supervisor"),
-                width: 350,
+                width: 150,
                 sortable: true,
                 dataIndex: 'supervisor_id',
                 renderer: Tine.Tinebase.common.accountRenderer 
+            }, {
+                id: 'health_insurance',
+                header: this.app.i18n._("Health Insurance"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'health_insurance'
+            }, {
+                id: 'division_id',
+                header: this.app.i18n._("Division"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'division_id',
+                renderer: function(data) {
+                    if(data && data.title) {
+                        return Ext.util.Format.htmlEncode(data.title)
+                    }
+                    return '';
+                }
             }
             
             ].concat(this.getModlogColumns());

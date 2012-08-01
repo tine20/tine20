@@ -176,7 +176,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                    ref: '../../../../../../../contactButton',
                                    iconCls: 'applyContactData',
                                    tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Apply contact data on form')),
-                                   disabled: true,
+                                   disabled: (this.record && Ext.isObject(this.record.get('account_id'))) ? false : true,
                                    fieldLabel: '&nbsp;',
                                    listeners: {
                                         scope: this,
@@ -249,15 +249,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     xtype: 'extuxclearabledatefield',
                                     name: 'bday',
                                     fieldLabel: this.app.i18n._('Birthday')
-                                }, {
-                                    xtype: 'extuxclearabledatefield',
-                                    name: 'employment_begin',
-                                    fieldLabel: this.app.i18n._('Employment begin')
-                                }, {
-                                    xtype: 'extuxclearabledatefield',
-                                    name: 'employment_end',
-                                    allowBlank: true,
-                                    fieldLabel: this.app.i18n._('Employment end')
                                 }
                             ]]
                         }]
@@ -281,7 +272,25 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         useAccountRecord: true,
                                         userOnly: true,
                                         allowBlank: true
-                                })
+                                }),
+                                Tine.widgets.form.RecordPickerManager.get('Sales', 'Division', {
+                                        name: 'division_id',
+                                        fieldLabel: this.app.i18n._('Division'),
+                                        allowBlank: true
+                                }), {
+                                    name: 'health_insurance',
+                                    fieldLabel: this.app.i18n._('Health Insurance'),
+                                    allowBlank: true
+                                }], [{
+                                    xtype: 'extuxclearabledatefield',
+                                    name: 'employment_begin',
+                                    fieldLabel: this.app.i18n._('Employment begin')
+                                }, {
+                                    xtype: 'extuxclearabledatefield',
+                                    name: 'employment_end',
+                                    allowBlank: true,
+                                    fieldLabel: this.app.i18n._('Employment end')
+                                }
                             ]]
                         }]
                     }, {
@@ -358,14 +367,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         })
                     ]
                 }]
-            }, 
+            },
+            this.contractGridPanel,
+            this.freetimeGridPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-                }), 
-            this.contractGridPanel,
-            this.freetimeGridPanel
+                })
             ]
         };
     }

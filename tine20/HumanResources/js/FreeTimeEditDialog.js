@@ -111,7 +111,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getFormItems: function() {
         
         this.employeePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
-            fieldLabel: this.app.i18n._('The Employee'),
+            fieldLabel: this.app.i18n._('Employee'),
             name: 'employee_id',
             app: this
         });

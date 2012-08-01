@@ -33,6 +33,11 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_timeaccountController = NULL;
 
     /**
+     * @see Tinebase_Frontend_Json_Abstract
+     */
+    protected $_relatableModels = array('Sales_Model_Contract');
+
+    /**
      * the constructor
      *
      */

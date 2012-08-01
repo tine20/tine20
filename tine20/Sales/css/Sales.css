@@ -19,3 +19,7 @@
 .x-btn-large .SalesIconCls {
     background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
+
+.SalesCostCenter {
+    background-image:url("../images/16x16/costcenter.png") !important;
+}

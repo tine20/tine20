@@ -131,15 +131,6 @@
      * @param {Boolean} isFilterSelect
      */
     defaultUpdater: function(action, grants, records, isFilterSelect) {
-        // disable action if it is not callable
-        if(action.initialConfig.hasOwnProperty('requiredMethod')) {
-            var services = Tine.Tinebase.registry.get('serviceMap').services;
-            if(! services.hasOwnProperty(action.initialConfig.requiredMethod)) {
-                action.setDisabled(true);
-                return;
-            }
-        }
-        
         var nCondition = records.length != 0 && (records.length > 1 ? action.initialConfig.allowMultiple : true),
             mCondition = records && records.length > 1,
             grantCondition = (! this.evalGrants) || grants[action.initialConfig.requiredGrant];

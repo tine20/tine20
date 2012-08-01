@@ -12,6 +12,22 @@ Ext.namespace('Tine.HumanResources');
 
 /**
  * @namespace Tine.HumanResources
+ * @class Tine.HumanResources.Application
+ * @extends Tine.Tinebase.Application
+ */
+Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
+    hasMainScreen : true,
+    /**
+     * Get translated application title of this application
+     * @return {String}
+     */
+    getTitle : function() {
+        return this.i18n.gettext('Human Resources');
+    }
+});
+
+/**
+ * @namespace Tine.HumanResources
  * @class     Tine.HumanResources.MainScreen
  * @extends   Tine.widgets.MainScreen
  * @author    Alexander Stintzing <a.stintzing@metaways.de>

@@ -107,7 +107,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             iconCls: 'action_edit'
         });
         
-        this.title = _('Relations');
+        this.title =  Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
         this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         this.contextMenuItems = [this.actionEditInNewWindow];

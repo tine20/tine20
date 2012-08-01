@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>6.0</version>
+    <version>6.1</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -279,6 +279,31 @@
                     <unique>true</unique>
                     <field>
                         <name>number</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>sales_divisions</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>title</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
                     </field>
                 </index>
             </declaration>

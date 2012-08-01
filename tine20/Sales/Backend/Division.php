@@ -11,26 +11,26 @@
 
 
 /**
- * backend for CostCenters
+ * backend for Divisions
  *
  * @package     Sales
  * @subpackage  Backend
  */
-class Sales_Backend_CostCenter extends Tinebase_Backend_Sql_Abstract
+class Sales_Backend_Division extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'sales_cost_centers';
+    protected $_tableName = 'sales_divisions';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'Sales_Model_CostCenter';
+    protected $_modelName = 'Sales_Model_Division';
     
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()

@@ -42,5 +42,11 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'division_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
+            'options' => array(
+                'filtergroup'       => 'Sales_Model_DivisionFilter',
+                'controller'        => 'Sales_Controller_Division'
+            )
+        ),
     );
 }

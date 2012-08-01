@@ -158,7 +158,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                     frame:   false,
                     items: [
                         {
-                            fieldLabel: cng.definition.label,
+                            fieldLabel: this.app.i18n._(cng.definition.label),
                             name: 'contractNumberGeneration',
                             xtype: 'combo',
                             mode: 'local',
@@ -168,7 +168,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                             store: cng.definition.options
                         },
                         {
-                            fieldLabel: cnv.definition.label,
+                            fieldLabel: this.app.i18n._(cnv.definition.label),
                             name: 'contractNumberValidation',
                             xtype: 'combo',
                             mode: 'local',

@@ -6,7 +6,6 @@
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
 Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 
 // Employee model fields
@@ -31,6 +30,8 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'bank_name',           type: 'string'},
     {name: 'bank_code_number',    type: 'string'},
     {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account },
+    {name: 'division_id',         type: 'Sales.Division' },
+    {name: 'health_insurance',    type: 'string' },
 
     {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
@@ -39,7 +40,8 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'notes'},
     // relations with other objects
     { name: 'relations'},
-    { name: 'contracts'}
+    { name: 'contracts'},
+    { name: 'customfields'}
 ]);
 
 /**
@@ -99,7 +101,8 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
         { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
         { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
-        { label: _('Account'),                field: 'account_id',         valueType: 'user'}
+        { label: _('Account'),                field: 'account_id',         valueType: 'user'},
+        { filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Sales.Model.Division, ownField: 'division_id'}
     ];
 };
 
@@ -278,15 +281,12 @@ Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.Human
     appName: 'HumanResources',
     modelName: 'FreeTime',
     idProperty: 'id',
-    titleProperty: 'name',
+    titleProperty: 'remark',
     // ngettext('Free Time', 'Free Times', n);
     recordName: 'Free Time',
     recordsName: 'Free Times',
     containerName: 'Free Time',
-    containersName: 'Free Times',
-    getTitle: function() {
-        return this.get('name') ? this.get('name') : false;
-    }
+    containersName: 'Free Times'
 });
 
 /**
