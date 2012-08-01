@@ -52,7 +52,7 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 $this->$key = $value; //echo __LINE__ . PHP_EOL;
             } catch (InvalidArgumentException $iae) {
                 //ignore invalid properties
-                echo __LINE__ . PHP_EOL; echo $iae->getMessage(); echo $iae->getTraceAsString();
+                //echo __LINE__ . PHP_EOL; echo $iae->getMessage(); echo $iae->getTraceAsString();
             }
         }
     }
