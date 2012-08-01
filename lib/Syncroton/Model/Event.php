@@ -77,9 +77,9 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = $this->_properties['Calendar'][$elementName]; 
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
             
-            $nameSpace = 'uri:Calendar';
+            $nameSpace = 'uri:' . $nameSpace;
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -241,7 +241,7 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
                     break;
                     
                 default:
-                    $properties =  $this->_properties['Calendar'][$elementName];
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
                     
                     switch ($properties['type']) {
                         case 'datetime':

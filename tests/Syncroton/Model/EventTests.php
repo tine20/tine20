@@ -23,7 +23,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
     protected $objects = array();
     
     protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-        <Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar">
+        <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
             <Collections>
                 <Collection>
                     <Class>Calendar</Class>
@@ -71,6 +71,10 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
                                     </Calendar:Exception>
                                 </Calendar:Exceptions>
                                 <Calendar:Reminder>15</Calendar:Reminder>
+                                <AirSyncBase:Body>
+                                    <AirSyncBase:Data>lars</AirSyncBase:Data>
+                                    <AirSyncBase:Type>1</AirSyncBase:Type>
+                                </AirSyncBase:Body>
                             </ApplicationData>
                         </Change>
                     </Commands>
@@ -100,7 +104,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
-        $this->assertEquals(14, count($event));
+        $this->assertEquals(15, count($event));
         $this->assertEquals(0,  $event->AllDayEvent); 
         $this->assertEquals(2,  $event->BusyStatus);
         $this->assertEquals(0,  $event->Sensitivity);
@@ -133,6 +137,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $appData    = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
+        $event->Body = new Syncroton_Model_EmailBody(array('Data' => 'lars', 'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT));
         
         $event->appendXML($appData);
         
@@ -140,6 +145,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         
         $xpath = new DomXPath($testDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        $xpath->registerNamespace('AirSyncBase', 'uri:AirSyncBase');
         $xpath->registerNamespace('Calendar', 'uri:Calendar');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Subject');
@@ -153,6 +159,9 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception/Calendar:ExceptionStartTime');
         $this->assertEquals(2, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('20101125T130000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
