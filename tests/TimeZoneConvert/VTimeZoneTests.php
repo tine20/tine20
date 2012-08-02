@@ -70,6 +70,7 @@ EOT;
     
     /**
      * https://bugzilla.mozilla.org/show_bug.cgi?id=504299
+     * STANDARD BUG FIXED 20100927T020000 -> 20100927T020000
      */
     public static $customAsiaJerusalem = <<<EOT
 BEGIN:VTIMEZONE
@@ -80,7 +81,7 @@ TZOFFSETFROM:+0300
 TZOFFSETTO:+0200
 TZNAME:IST
 DTSTART:20081005T020000
-RDATE;VALUE=DATE-TIME:20081005T020000,20090927T020000,20100927T020000,20111002T020000,
+RDATE;VALUE=DATE-TIME:20081005T020000,20090927T020000,20100912T020000,20111002T020000,
 20120923T020000,20130908T020000,20140928T020000,20150920T020000,20161009T020000,
 20170924T020000,20180916T020000,20191006T020000,20200927T020000,20210912T020000,
 20221002T020000,20230924T020000,20241006T020000,20250928T020000,20260920T020000,
@@ -104,6 +105,69 @@ END:VTIMEZONE
 EOT;
     
     /**
+     * thunderbird starts most of its rrule 1970 (start of unix timestamp)
+     */
+    public static $thunderbirdEuropeBerlin = <<<EOT
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+EOT;
+    
+    public static $msexchange2007EuropeBerlin = <<<EOT
+BEGIN:VTIMEZONE
+TZID:W. Europe Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+EOT;
+    
+    public static $appleical5 = <<<EOT
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+DTSTART:19810329T020000
+TZNAME:CEST
+TZOFFSETTO:+0200
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+DTSTART:19961027T030000
+TZNAME:CET
+TZOFFSETTO:+0100
+END:STANDARD
+END:VTIMEZONE
+EOT;
+    
+    
+    /**
      * @var TimeZoneConvert_VTimeZone
      */
     public $uit;
@@ -113,15 +177,88 @@ EOT;
         $this->uit = new TimeZoneConvert_VTimeZone();
     }
     
-//     public function testRrule2Transition()
-//     {
-//         // Europe/Berlin Daylight
-//         $transition = $this->uit->rrule2Transition("FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU", "19810329T020000", '2012');
-//         $this->assertEquals('2012-03-25 02:00:00', $transition->format('Y-m-d H:i:s'));
-//     }
-    
-    public function testGetDateTimeIdentifier()
+    public function testGetTransitionRules()
     {
-        $this->uit->getDateTimeIdentifier(self::$rfc5545AmericaNewYork);
+         $transitionRules = $this->uit->getTransitionRules(self::$rfc5545AmericaNewYork);
+         
+         $this->assertEquals(7, count($transitionRules), '7 transitions rules should be found');
+         
+         $this->assertEquals(TRUE, $transitionRules[0]->isdst, 'first rule is dst');
+         $this->assertEquals(-4*60*60, $transitionRules[0]->offset, 'offset is 4 hours');
+         $this->assertEquals('EDT', $transitionRules[0]->abbr, 'abbr failed');
+         $this->assertEquals(4, $transitionRules[0]->month, 'month failed');
+         $this->assertEquals(0, $transitionRules[0]->wkday, 'wkday failed');
+         $this->assertEquals(-1, $transitionRules[0]->numwk, 'numwk failed');
+         $this->assertEquals(new DateTime('19670430T070000', new DateTimeZone('UTC')), $transitionRules[0]->from, 'from failed NOTE the offset!');
+         $this->assertEquals(new DateTime('19730429T070000', new DateTimeZone('UTC')), $transitionRules[0]->until, 'first rule until fails');
+         
+         $this->assertEquals(FALSE, $transitionRules[1]->isdst, 'second rule is non dst');
+         $this->assertEquals('EST', $transitionRules[1]->abbr, 'abbr failed');
+         $this->assertEquals(TRUE, $transitionRules[1]->isRecurringRule(), 'second rule is per rrule');
+         $this->assertEquals(new DateTime('20061029T060000', new DateTimeZone('UTC')), $transitionRules[1]->until, 'second rule until fails');
+         
+         $transitionDates = $transitionRules[2]->getTransitionDates();
+         $this->assertEquals(1, count($transitionDates), 'thrird rule should have one rdate transition');
+         $this->assertEquals(FALSE, $transitionRules[2]->isRecurringRule(), 'thrird rule has no rrule');
+         $this->assertEquals(new DateTime('19750223T070000', new DateTimeZone('UTC')), $transitionDates[0], 'thrird rule transitions date fails');
+        
+        
+        $transitionRules = $this->uit->getTransitionRules(self::$customAsiaJerusalem);
+        $this->assertEquals(2, count($transitionRules), '2 transitions rules should be found in $customAsiaJerusalem');
+        $transitionDates = $transitionRules[0]->getTransitionDates();
+        $this->assertEquals(30, count($transitionDates));
+        
+        $transitions = $this->uit->getTransitions($transitionRules);
+    }
+    
+    public function testGetTransitionsRfc5545AmericaNewYork()
+    {
+        $transitionRules = $this->uit->getTransitionRules(self::$rfc5545AmericaNewYork);
+        $transitions = $this->uit->getTransitions($transitionRules);
+        
+        $this->assertTrue(count($transitions) > 7, 'min. 7 transitions should be computed');
+        
+        $this->assertEquals(-84387600, $transitions[0]['ts']);
+        $this->assertEquals('1967-04-30T07:00:00+0000', $transitions[0]['date']);
+        $this->assertEquals(-14400, $transitions[0]['offset']);
+        $this->assertEquals(TRUE, $transitions[0]['isdst']);
+        $this->assertEquals('EDT', $transitions[0]['abbr']);
+    }
+    
+    public function testGetTransitionsThunderbirdEuropeBerlin()
+    {
+        $transitionRules = $this->uit->getTransitionRules(self::$thunderbirdEuropeBerlin);
+        $transitions = $this->uit->getTransitions($transitionRules);
+        
+        $this->assertEquals(2, count($transitions), '2 transitions should be found');
+    }
+    
+    public function testGetTransitionsAppleical5()
+    {
+        $transitionRules = $this->uit->getTransitionRules(self::$appleical5);
+        $transitions = $this->uit->getTransitions($transitionRules);
+        
+        $timezone = TimeZoneConvert_Transition::getMatchingTimezone($transitions);
+        
+        $this->assertTrue($timezone instanceof DateTimeZone, 'timezone not found');
+        $this->assertEquals('Arctic/Longyearbyen', $timezone->getName());
+    }
+    
+    public function testGetTransitionsMsexchange2007EuropeBerlin()
+    {
+        $transitionRules = $this->uit->getTransitionRules(self::$msexchange2007EuropeBerlin);
+        $transitions = $this->uit->getTransitions($transitionRules);
+        
+        $timezone = TimeZoneConvert_Transition::getMatchingTimezone($transitions);
+        
+        $this->assertTrue($timezone instanceof DateTimeZone, 'timezone not found');
+        $this->assertEquals('Africa/Ceuta', $timezone->getName());
+    }
+    
+    public function testGetTZIdentifierRfc5545AmericaNewYork()
+    {
+        $tzid = $this->uit->getTZIdentifier(self::$rfc5545AmericaNewYork);
+        
+        $this->assertEquals('America/New_York', $tzid);
     }
 }

@@ -24,7 +24,7 @@
  *       for 2015 could be BYDAY=3FR or BYDAY=-1FR.
  *       
  */
-class TimeZoneConvert_VTimeZone_Rrule
+class TimeZoneConvert_VTimeZone_Rrule extends TimeZoneConvert_Model
 {
     /**
      * weekdays
@@ -53,6 +53,7 @@ class TimeZoneConvert_VTimeZone_Rrule
     public $wkday = null;
     public $numwk = null;
     public $month = null;
+    public $until = null;
     
     protected static $_cache = array();
     
@@ -87,6 +88,10 @@ class TimeZoneConvert_VTimeZone_Rrule
                         if (! $rrule->numwk) {
                             throw new TimeZoneConvert_Exception('invalid BYDAY numwk');
                         }
+                        break;
+                    case 'until':
+                        $rrule->until = new DateTime($value);
+                        $rrule->until->setTimezone(new DateTimeZone('UTC'));
                         break;
                 }
             }

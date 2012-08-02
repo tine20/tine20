@@ -8,6 +8,9 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
+/**
+ * generic TimeZoneConvert Exception
+ */
 class TimeZoneConvert_Exception extends Exception
 {
     

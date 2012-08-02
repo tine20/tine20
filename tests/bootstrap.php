@@ -17,6 +17,5 @@ $paths = array(
 set_include_path(implode(PATH_SEPARATOR, $paths));
 
 spl_autoload_register(function($class) {
-    echo $class . "\n";
     require_once str_replace('_', '/', $class) . '.php';
 });

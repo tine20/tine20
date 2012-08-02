@@ -14,11 +14,8 @@
  * NOTE: we only support wkday/numwk for transistion description atm.
  *       The Olson timezone db uses >="day of month", but we
  *       don't need this atm.
- *       
- * @TODO add FROM/UNTIL properties?
- * @TODO add offset from/to properties?
  */
-class TimeZoneConvert_TransitionRule
+class TimeZoneConvert_TransitionRule extends TimeZoneConvert_Model
 {
     /**
      * month of transition 1-12
@@ -82,17 +79,41 @@ class TimeZoneConvert_TransitionRule
     public $isdst;
     
     /**
-     * construct new transition rule from data
+     * abbriviation of timezone
      * 
-     * @param array $data
+     * @var string
      */
-    public function __construct(array $data = array())
+    public $abbr;
+    
+    /**
+     * holds defined transistion dates
+     * @var array of DateTime
+     */
+    protected $_transitionDates = array();
+    
+    /**
+     * add a fixed/defined transition date
+     * 
+     * @param DateTime $dateTime
+     */
+    public function addTransitionDate(DateTime $dateTime)
     {
-        foreach($data as $key => $val) {
-            if (in_array($key, array('month', 'wkday', 'numwk', 'hour', 'minute', 'second', 'from', 'until', 'isdst', 'offset'))) {
-                $this->{$key} = $val;
-            }
+        $this->_transitionDates[] = $dateTime;
+    }
+    
+    /**
+     * returns clone of defined transition dates
+     * 
+     * @return array()
+     */
+    public function getTransitionDates()
+    {
+        $transitionDates = array();
+        foreach($this->_transitionDates as $date) {
+            $transitionDates[] = clone $date;
         }
+        
+        return $transitionDates;
     }
     
     /**
@@ -101,7 +122,7 @@ class TimeZoneConvert_TransitionRule
      * @param  int $year
      * @return DateTime
      */
-    public function getTransition($year)
+    public function computeTransition($year)
     {
         $transition = DateTime::createFromFormat('Y-m-d G:i:s', 
             "{$year}-{$this->month}-1 {$this->hour}:{$this->minute}:{$this->second}",
@@ -126,4 +147,11 @@ class TimeZoneConvert_TransitionRule
         return $transition;
     }
     
+    /**
+     * returns TRUE if given rule has an recurring rule
+     */
+    public function isRecurringRule()
+    {
+        return ! is_null($this->month);
+    }
 }

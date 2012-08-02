@@ -24,7 +24,7 @@ class TimeZoneConvert_TransitionRuleTests extends PHPUnit_Framework_TestCase
             'second'  => 0
         ));
         
-        $transition = $uit->getTransition('2011');
+        $transition = $uit->computeTransition('2011');
         $this->assertEquals('2011-10-30 03:00:00', $transition->format('Y-m-d H:i:s'));
     }
     
@@ -40,7 +40,7 @@ class TimeZoneConvert_TransitionRuleTests extends PHPUnit_Framework_TestCase
             'second'  => 0
         ));
         
-        $transition = $uit->getTransition('2012');
+        $transition = $uit->computeTransition('2012');
         $this->assertEquals('2012-03-25 02:00:00', $transition->format('Y-m-d H:i:s'));
     }
     
@@ -56,7 +56,7 @@ class TimeZoneConvert_TransitionRuleTests extends PHPUnit_Framework_TestCase
             'second'  => 0
         ));
         
-        $transition = $uit->getTransition('2011');
+        $transition = $uit->computeTransition('2011');
         $this->assertEquals('2011-11-06 02:00:00', $transition->format('Y-m-d H:i:s'));
     }
     
@@ -72,7 +72,7 @@ class TimeZoneConvert_TransitionRuleTests extends PHPUnit_Framework_TestCase
             'second'  => 0
         ));
         
-        $transition = $uit->getTransition('2012');
+        $transition = $uit->computeTransition('2012');
         $this->assertEquals('2012-03-11 02:00:00', $transition->format('Y-m-d H:i:s'));
     }
 }
