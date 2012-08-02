@@ -129,6 +129,7 @@ END:VTIMEZONE
 EOT;
     
     public static $msexchange2007EuropeBerlin = <<<EOT
+PRODID:Microsoft Exchange Server 2007
 BEGIN:VTIMEZONE
 TZID:W. Europe Standard Time
 BEGIN:STANDARD
@@ -142,6 +143,26 @@ DTSTART:16010101T020000
 TZOFFSETFROM:+0100
 TZOFFSETTO:+0200
 RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+END:VTIMEZONE
+EOT;
+    
+    public static $msexchangeCDO = <<<EOT
+PRODID:Microsoft CDO for Microsoft Exchange
+BEGIN:VTIMEZONE
+TZID:(GMT+01.00) Sarajevo/Warsaw/Zagreb
+X-MICROSOFT-CDO-TZID:2
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
 END:DAYLIGHT
 END:VTIMEZONE
 EOT;
@@ -166,6 +187,26 @@ END:STANDARD
 END:VTIMEZONE
 EOT;
     
+    public static $novellgroupwise8 = <<<EOT
+PRODID:-//Novell Inc//Groupwise 8.0.2
+BEGIN:VTIMEZONE
+TZID:(GMT+0100) Westeuropäische Normalzeit
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+DTSTART:20001028T020000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10
+TZNAME:Westeuropäische Normalzeit
+END:STANDARD
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+DTSTART:20000325T010000
+RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3
+TZNAME:Westeuropäische Sommerzeit
+END:DAYLIGHT
+END:VTIMEZONE
+EOT;
     
     /**
      * @var TimeZoneConvert_VTimeZone
@@ -255,10 +296,46 @@ EOT;
         $this->assertEquals('Africa/Ceuta', $timezone->getName());
     }
     
-    public function testGetTZIdentifierRfc5545AmericaNewYork()
+    public function testComputeTimezoneRfc5545AmericaNewYork()
     {
-        $tzid = $this->uit->getTZIdentifier(self::$rfc5545AmericaNewYork);
+        $timezone = $this->uit->computeTimezone(self::$rfc5545AmericaNewYork);
         
-        $this->assertEquals('America/New_York', $tzid);
+        $this->assertEquals('America/New_York', $timezone->getName());
     }
+    
+    public function testGetTZIdentifierAppleical5()
+    {
+        $tzid = $this->uit->getTZIdentifier(self::$appleical5);
+        
+        $this->assertEquals('Europe/Berlin', $tzid);
+    }
+    
+    public function testGetTZIdentifierMsexchange2007EuropeBerlin()
+    {
+        $tzid = $this->uit->getTZIdentifier(self::$msexchange2007EuropeBerlin);
+        
+        $this->assertEquals('Europe/Berlin', $tzid);
+    }
+    
+    public function testGetTZIdentifierMsexchangeCDOSarajevo()
+    {
+        $tzid = $this->uit->getTZIdentifier(self::$msexchangeCDO);
+        
+        $this->assertEquals('Europe/Lisbon', $tzid);
+    }
+    
+    public function testGetTZIdentifierThunderbirdEuropeBerlin()
+    {
+        $tzid = $this->uit->getTZIdentifier(str_replace('TZID:Europe/Berlin', 'TZID:SOMEUNKNOWNID', self::$thunderbirdEuropeBerlin));
+        
+        $this->assertEquals('Europe/Berlin', $tzid);
+    }
+    
+    public function testGetTZIdentifierNovellgroupwise8EuropeBerlin()
+    {
+        $tzid = $this->uit->getTZIdentifier(preg_replace('/PRODID:.*/', '', self::$novellgroupwise8), '-//Novell Inc//Groupwise 8.0.2');
+        
+        $this->assertEquals('Europe/Berlin', $tzid);
+    }
+    
 }

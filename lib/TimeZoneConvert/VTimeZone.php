@@ -23,14 +23,78 @@ class TimeZoneConvert_VTimeZone
      * @param  string         $prodId
      * @param  string         $expectedTimezone
      * @return string
-     * @throws TimeZoneConvert_Exception
      */
     public function getTZIdentifier($VTimeZone, $prodId='', $expectedTimezoneId=NULL)
     {
-        // @TODO cache by shasum prodid/vtimezone/expectedtimezoneid
-        // @TODO known prodid/vtimezone -> match
-        // @TODO well known tz name -> match
+        try {
+            // known prodid/vtimezone -> match
+            if ($timezone = TimeZoneConvert_VTimeZone_ChamberOfHorrors::getMatch($VTimeZone, $prodId)) {
+                return $timezone;
+            }
+            
+            // well known tz name -> match
+            if ($timezone = $this->matchByName($VTimeZone)) {
+                return $timezone;
+            }
+            
+            // compute timezone
+            $timezone = $this->computeTimezone($VTimeZone, $expectedTimezoneId=NULL);
+            return $timezone->getName();
+            
+        } catch (Exception $e) {
+            return NULL;
+        }
+    }
+    
+    /**
+     * tries to match a timezone by name from
+     *  TZID
+     *  X-LIC-LOCATION
+     *  X-MICROSOFT-CDO-TZID
+     *  
+     * @param string $VTimeZone
+     * @return string
+     */
+    public function matchByName($VTimeZone)
+    {
+        $phpTZIDs = DateTimeZone::listIdentifiers();
         
+        if (preg_match('/TZID:(.*)/', $VTimeZone, $tzid)) {
+            // php timezones
+            if (in_array($tzid[1], $phpTZIDs)) {
+                return $tzid[1];
+            }
+            
+            // known/m$ timezones
+            if (array_key_exists($tzid[1], TimeZoneConvert_KnownNamesMap::$map)) {
+                return TimeZoneConvert_KnownNamesMap::$map[$tzid[1]];
+            }
+        }
+        
+        // eventually an X-LIC-LOCATION is included
+        if (preg_match('/X-LIC-LOCATION:(.*)/', $VTimeZone, $tzid)) {
+            // php timezones
+            if (in_array($tzid[1], $phpTZIDs)) {
+                return $tzid[1];
+            }
+        }
+        
+        // X-MICROSOFT-CDO-TZID (Exchange)
+        if (preg_match('/X-MICROSOFT-CDO-TZID:(.*)/', $VTimeZone, $tzid)) {
+            if (array_key_exists($tzid[1], TimeZoneConvert_KnownNamesMap::$microsoftExchangeMap)) {
+                return TimeZoneConvert_KnownNamesMap::$microsoftExchangeMap[$tzid[1]];
+            }
+        }
+    }
+    
+    /**
+     * compute timezone from vtimezone
+     * 
+     * @param string $VTimeZone
+     * @throws TimeZoneConvert_Exception
+     */
+    public function computeTimezone($VTimeZone, $expectedTimezoneId=NULL)
+    {
         // get transition rules
         $transitionRules = $this->getTransitionRules($VTimeZone);
         
@@ -44,9 +108,8 @@ class TimeZoneConvert_VTimeZone
             throw new TimeZoneConvert_Exception('no timezone matched');
         }
         
-        return $timezone->getName();
+        return $timezone;
     }
-    
     /**
      * compute transitions from transition rules
      * 
