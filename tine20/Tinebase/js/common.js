@@ -177,20 +177,23 @@ Tine.Tinebase.common = {
      * @param {String} value
      * @param {Boolean} forceUnit
      * @param {Integer} decimals
+     * @þaram {Boolean} useDecimalValues
      */
-    byteFormatter: function(value, forceUnit, decimals) {
+    byteFormatter: function(value, forceUnit, decimals, useDecimalValues) {
         value = parseInt(value, 10);
         decimals = Ext.isNumber(decimals) ? decimals : 2;
-        var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        var suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            divisor = useDecimalValues ? 1000 : 1024;
+            
         if (forceUnit) {
             var i = suffix.indexOf(forceUnit);
             i = (i == -1) ? 0 : i;
         } else {
             for (var i=0,j; i<suffix.length; i++) {
-                if (value < Math.pow(1024, i)) break;
+                if (value < Math.pow(divisor, i)) break;
             }
         }
-        return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(1024,Math.max(1, i-1))), decimals)) + ' ' + suffix[i];
+        return ((i<=1) ? value : Ext.util.Format.round(value/(Math.pow(divisor, Math.max(1, i-1))), decimals)) + ' ' + suffix[i];
     },
     
     /**
