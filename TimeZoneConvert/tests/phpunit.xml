@@ -1,0 +1,10 @@
+<phpunit backupGlobals="false"
+         bootstrap="bootstrap.php"
+         colors="true">
+    
+    <filter>
+        <blacklist>
+            <directory suffix=".php">../tests</directory>
+        </blacklist>
+    </filter>
+</phpunit>
