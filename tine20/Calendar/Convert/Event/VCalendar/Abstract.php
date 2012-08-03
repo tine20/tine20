@@ -65,8 +65,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vcalendar->VERSION  = '2.0';
         $vcalendar->CALSCALE = 'GREGORIAN';
         
-        $vtimezone = $this->_convertDateTimezone($_record->originator_tz);
-        $vcalendar->add($vtimezone);
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($_record->originator_tz));
         
         $vevent = $this->_convertCalendarModelEvent($_record);
         $vcalendar->add($vevent);
@@ -93,60 +92,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
         
         return $vcalendar;
-    }
-    
-    /**
-     * convert DateTimezone to Sabre_VObject_Component('VTIMEZONE')
-     * 
-     * @param  string|DateTimeZone  $_timezone
-     * @return Sabre_VObject_Component
-     */
-    protected function _convertDateTimezone($_timezone)
-    {
-        $timezone = new DateTimeZone($_timezone);
-        
-        $vtimezone = new Sabre_VObject_Component('VTIMEZONE');
-        $vtimezone->add(new Sabre_VObject_Property('TZID', $timezone->getName()));
-        $vtimezone->add(new Sabre_VObject_Property('X-LIC-LOCATION', $timezone->getName()));
-        
-        list($standardTransition, $daylightTransition) = $transitions = $this->_getTransitionsForTimezoneAndYear($timezone, date('Y'));
-        
-        $dtstart = new Sabre_VObject_Element_DateTime('DTSTART');
-        $dtstart->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::LOCAL);
-        
-        if ($daylightTransition !== null) {
-            $offsetTo   = ($daylightTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($daylightTransition['offset']));
-            $offsetFrom = ($standardTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($standardTransition['offset']));
-            
-            $daylight  = new Sabre_VObject_Component('DAYLIGHT');
-            $daylight->add('TZOFFSETFROM', $offsetFrom);
-            $daylight->add('TZOFFSETTO',   $offsetTo);
-            $daylight->add('TZNAME',       $daylightTransition['abbr']);
-            $daylight->add($dtstart);
-            #$daylight->add('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3');
-            
-            $vtimezone->add($daylight);
-        }
-
-        if ($standardTransition !== null) {
-            $offsetTo   = ($standardTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($standardTransition['offset']));
-            if ($daylightTransition !== null) {
-                $offsetFrom = ($daylightTransition['offset'] < 0 ? '-' : '+') . strftime('%H%M', abs($daylightTransition['offset']));
-            } else {
-                $offsetFrom = $offsetTo;
-            }
-            
-            $standard  = new Sabre_VObject_Component('STANDARD');
-            $standard->add('TZOFFSETFROM', $offsetFrom);
-            $standard->add('TZOFFSETTO',   $offsetTo);
-            $standard->add('TZNAME',       $standardTransition['abbr']);
-            $standard->add($dtstart);
-            #$standard->add('RRULE', 'FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10');
-            
-            $vtimezone->add($standard);
-        }
-        
-        return $vtimezone;
     }
     
     /**
@@ -922,14 +867,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _convertToTinebaseDateTime(Sabre_VObject_Element_DateTime $dateTimeProperty, $_useUserTZ = FALSE)
     {
-        try {
-            $dateTime = $dateTimeProperty->getDateTime();
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Error: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))  Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            $dateTimeProperty['TZID'] = (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-            $dateTime = $dateTimeProperty->getDateTime();
-        }
+        $defaultTimezone = date_default_timezone_get();
+        date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $dateTime = $dateTimeProperty->getDateTime();
+        
+        // convert to Tinebase_DateTime
+        date_default_timezone_set($defaultTimezone);
+        
         $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
         $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         

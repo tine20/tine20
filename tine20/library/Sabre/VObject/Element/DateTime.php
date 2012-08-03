@@ -220,15 +220,25 @@ class Sabre_VObject_Element_DateTime extends Sabre_VObject_Property {
             if (isset($root->VTIMEZONE)) {
                 foreach($root->VTIMEZONE as $vtimezone) {
                     if (((string)$vtimezone->TZID) == $tzid) {
+                        $tz = TimeZoneConvert::fromVTimeZone($vtimezone->serialize(), $root->prodid->value);
+                        $tzid = $tz->getName();
+                    }
+                }
+            }
+            
+            /*
+            if (isset($root->VTIMEZONE)) {
+                foreach($root->VTIMEZONE as $vtimezone) {
+                    if (((string)$vtimezone->TZID) == $tzid) {
                         if (isset($vtimezone->{'X-LIC-LOCATION'})) {
                             $tzid = (string)$vtimezone->{'X-LIC-LOCATION'};
                         }
                     }
                 }
             }
-
-            $tz = new DateTimeZone($tzid);
+            */
             
+            $tz = new DateTimeZone($tzid);
         }
         $dt = new DateTime($dateStr, $tz);
         $dt->setTimeZone($tz);

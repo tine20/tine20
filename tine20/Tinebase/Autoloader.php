@@ -28,8 +28,9 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
         $topLevelDirectory = (($pos = strpos($class, '_')) !== false) ? substr($class, 0, $pos) : $class;
         
         switch ($topLevelDirectory) {
+            case 'TimeZoneConvert':
             case 'Syncope':
-                $file = 'Syncope/lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                $file = "$topLevelDirectory/lib/" . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
                 break;
                 
             case 'Wbxml':
@@ -99,7 +100,7 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
      */
     public static function initialize(Zend_Loader_Autoloader $_autoloader)
     {
-        $_autoloader->unshiftAutoloader(new self(), array('HTMLPurifier', 'Syncope', 'Wbxml'));
+        $_autoloader->unshiftAutoloader(new self(), array('HTMLPurifier', 'Syncope', 'Wbxml', 'TimeZoneConvert'));
         $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'qCal'), 'qCal');
         $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'idna_convert'), 'idna_convert');
     }
