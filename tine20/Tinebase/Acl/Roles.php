@@ -97,7 +97,6 @@ class Tinebase_Acl_Roles
      * @param   int $_accountId the numeric id of a user account
      * @param   int $_right the right to check for
      * @return  bool
-     * @throws  Tinebase_Exception_AccessDenied
      */
     public function hasRight($_application, $_accountId, $_right) 
     {
@@ -108,8 +107,12 @@ class Tinebase_Acl_Roles
         $roleMemberships = $this->getRoleMemberships($_accountId);
         
         if (empty($roleMemberships)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role memberships.');
-            return false;
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role/group memberships.');
+            if (is_object(Tinebase_Core::getUser()) && Tinebase_Core::getUser()->getId() === $_accountId) {
+                // @ŧodo throw exception in this case?
+                Zend_Session::destroy();
+            }
+            return FALSE;
         }
 
         $application = Tinebase_Application::getInstance()->getApplicationById($_application);
@@ -122,14 +125,14 @@ class Tinebase_Acl_Roles
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
-            $result = false;
+            $result = FALSE;
         } else {
-            $result = true;
+            $result = TRUE;
         }
         
         return $result;
     }
-
+    
     /**
      * returns list of applications the user is able to use
      *
