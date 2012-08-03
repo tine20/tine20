@@ -468,6 +468,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $password = $user->applyOptionsAndGeneratePassword($this->_getNewUserConfig($course));
         $newMember = $this->_userController->create($user, $password, $password);
         
+        // add to default group, too
+        $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newMember->getId());
+        
         return $newMember;
     }
 }

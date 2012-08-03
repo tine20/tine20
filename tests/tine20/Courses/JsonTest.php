@@ -288,6 +288,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testAddNewMember
+     * 
+     * @see 0006372: add new course member with a button
+     * @see 0006878: set primary group for manually added users
      */
     public function testAddNewMember()
     {
@@ -300,6 +303,22 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         ), $courseData);
         
         $this->assertEquals(2, count($result['results']));
+        
+        $id = NULL;
+        foreach ($result['results'] as $result) {
+            if ($result['name'] === 'hot, jams') {
+                $id = $result['id'];
+            }
+        }
+        $this->assertTrue($id !== NULL);
+        
+        $newUser = Tinebase_User::getInstance()->getFullUserById($id);
+        $this->assertEquals('hotja', $newUser->accountLoginName);
+        
+        $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
+        $this->assertEquals(2, count($newUserMemberships), 'new user should have 2 group memberships');
+        $this->assertTrue(in_array(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newUserMemberships),
+            'could not find default group in memberships: ' . print_r($newUserMemberships, TRUE));
     }
     
     /************ protected helper funcs *************/
