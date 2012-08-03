@@ -29,13 +29,6 @@ class Courses_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * help array with function names and param descriptions
      */
     protected $_help = array(
-        /*
-        'functionName' => array(
-            'description'   => 'function description',
-            'params'        => array()
-            )
-        ),
-        */
     );
     
     /**
@@ -58,10 +51,26 @@ class Courses_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $filter = new Courses_Model_CourseFilter(array(
             array('field' => 'internet', 'operator' => 'not', 'value' => 'FILTERED')
         ));
-        $data = array('internet' => 'FILTERED');
-        $result = Courses_Controller_Course::getInstance()->updateMultiple($filter, $data);
         
-        echo "Updated " . $result['totalcount'] . " Course(s)\n";
+        $count = 0;
+        
+        foreach (Courses_Controller_Course::getInstance()->search($filter) as $course) {
+            $course->internet = 'FILTERED';
+            
+            $group = Tinebase_Group::getInstance()->getGroupById($course->group_id);
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+            
+            try {
+                Courses_Controller_Course::getInstance()->saveCourseAndGroup($course, $group);
+                $count++;
+            } catch (Exception $e) {
+                echo 'Failed to update course: ' . $course->name . PHP_EOL;
+                echo $e . PHP_EOL;
+            }
+        }
+        
+        echo "Updated " . $count . " Course(s)\n";
+        
         return 0;
     }
 }

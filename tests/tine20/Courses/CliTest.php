@@ -31,6 +31,13 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_course = NULL;
+
+    /**
+     * filtered internet group
+     * 
+     * @var Tinebase_Model_Group::
+     */
+    protected $_internetFilteredGroup = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -65,7 +72,11 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
             'name'   => 'internetOn'
         )));
         Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_ON, $internetGroup->getId());
-        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, $internetGroup->getId());
+
+        $this->_internetFilteredGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'internetFiltered'
+        )));
+        Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, $this->_internetFilteredGroup->getId());
         
         $department = Tinebase_Department::getInstance()->create(new Tinebase_Model_Department(array(
             'name'  => Tinebase_Record_Abstract::generateUID()
@@ -92,6 +103,9 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
     
     /**
      * testResetCoursesInternetAccess
+     * 
+     * @see 0006370: add cli function for setting all courses to filtered internet
+     * @see 0006872: cli function for internet filter does not update memberships
      */
     public function testResetCoursesInternetAccess()
     {
@@ -105,5 +119,12 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
         $updatedCourse = Courses_Controller_Course::getInstance()->get($this->_course['id']);
         $this->assertEquals('FILTERED', $updatedCourse->internet);
         $this->assertEquals("Updated 1 Course(s)\n", $out);
+        
+        $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($updatedCourse->group_id);
+        $this->assertTrue(count($groupMembers) > 0);
+        
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($groupMembers[0]);
+        $this->assertTrue(in_array($this->_internetFilteredGroup->getId(), $groupMemberships),
+            'filtered internet group not found in group memberships: ' . print_r($groupMemberships, TRUE));
     }
 }
