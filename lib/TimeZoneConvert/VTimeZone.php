@@ -115,7 +115,7 @@ class TimeZoneConvert_VTimeZone
             $VTimeZone .= $this->transitionRuleToVTransitionRule($transitionRule, $offsetFrom);
         }
         
-        $VTimeZone .= 'END:VTIMEZONE';
+        $VTimeZone .= 'END:VTIMEZONE' . self::EOL;
         
         return $VTimeZone;
     }

@@ -342,6 +342,7 @@ EOT;
     {
         $VTimeZone = $this->uit->getVTimezone('Europe/Berlin');
         foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
+            if (! $line) continue;
              $this->assertTrue(strstr(self::$appleical5, $line) !== FALSE, "$line failed");
         }
     }
@@ -353,7 +354,7 @@ EOT;
         
         $VTimeZone = $this->uit->getVTimezone('Asia/Jerusalem', $from, $until);
         foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
-            if (strstr($line, 'TZNAME') !== FALSE) continue; // different TZNAME
+            if (! $line || strstr($line, 'TZNAME') !== FALSE) continue; // different TZNAME
              $this->assertTrue(strstr(self::$customAsiaJerusalem, $line) !== FALSE, "$line failed");
         }
         

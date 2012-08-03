@@ -41,6 +41,10 @@ class TimeZoneConvert
             if (! $timezone instanceof DateTimeZone && $expectedTimeZone) {
                 $timezone = new DateTimeZone($expectedTimeZone);
             }
+            
+            if (! $timezone instanceof DateTimeZone) {
+                throw new Exception('can not convert');
+            }
         } catch (Exception $e) {
             $timezone = date_create()->getTimezone();
         }
