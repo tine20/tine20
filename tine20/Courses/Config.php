@@ -53,6 +53,13 @@ class Courses_Config extends Tinebase_Config_Abstract
     const STUDENTS_IMPORT_DEFINITION = 'students_import_definition';
     
     /**
+    * students loginname prefix
+    *
+    * @var string
+    */
+    const STUDENT_LOGINNAME_PREFIX = 'student_loginname_prefix';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -96,6 +103,13 @@ class Courses_Config extends Tinebase_Config_Abstract
         //_('Students Import Definition')
             'description'           => 'Students Import Definition',
             'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::STUDENT_LOGINNAME_PREFIX => array(
+        //_('Students login name prefix')
+            'label'                 => 'Student login name prefix',
+            'description'           => 'Student login name prefix',
+            'type'                  => 'int',
             'clientRegistryInclude' => TRUE,
         ),
     );

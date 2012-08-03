@@ -139,6 +139,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
         
             $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
+
             // delete members which got removed from course
             $this->_userController->delete($deletedAccounts);
         }
@@ -345,6 +346,10 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             
             $tinebaseGroup->removeGroupMember($user->accountPrimaryGroup, $user);
             
+            if ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
+                $user->accountLoginName = $courseName . '-' . substr($user->accountLoginName, $position + 1);
+            }
+            
             $user->accountPrimaryGroup  = $course->group_id;
             $user->accountHomeDirectory = (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $courseName . '/' . $user->accountLoginName : '';
             
@@ -424,7 +429,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
         return array(
-            //'accountLoginNamePrefix'    => $course->name . '-',
+            'accountLoginNamePrefix'        => ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE)) ? $course->name . '-' : '',
             'group_id'                      => $course->group_id,
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
