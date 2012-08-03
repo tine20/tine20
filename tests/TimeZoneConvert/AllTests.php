@@ -22,6 +22,7 @@ class TimeZoneConvert_AllTests
         $suite->addTestSuite('TimeZoneConvert_TransitionRuleTests');
         $suite->addTestSuite('TimeZoneConvert_TransitionTests');
         $suite->addTestSuite('TimeZoneConvert_VTimeZoneTests');
+        $suite->addTestSuite('TimeZoneConvert_TimeZoneConvertTests');
         
         return $suite;
     }

@@ -11,6 +11,7 @@
 
 /**
  * convert vtimezone to php timezone
+ * http://tools.ietf.org/html/rfc5545#section-3.6.5
  * 
  */
 class TimeZoneConvert_VTimeZone
