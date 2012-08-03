@@ -102,6 +102,17 @@ class TimeZoneConvert_TransitionRule extends TimeZoneConvert_Model
     }
     
     /**
+     * removes all transition dates
+     * 
+     * @return $this
+     */
+    public function clearTransitionDates()
+    {
+        $this->_transitionDates = array();
+        return $this;
+    }
+    
+    /**
      * returns clone of defined transition dates
      * 
      * @return array()
@@ -122,7 +133,7 @@ class TimeZoneConvert_TransitionRule extends TimeZoneConvert_Model
      * @param  int $year
      * @return DateTime
      */
-    public function computeTransition($year)
+    public function computeTransitionDate($year)
     {
         $transition = DateTime::createFromFormat('Y-m-d G:i:s', 
             "{$year}-{$this->month}-1 {$this->hour}:{$this->minute}:{$this->second}",
@@ -153,5 +164,61 @@ class TimeZoneConvert_TransitionRule extends TimeZoneConvert_Model
     public function isRecurringRule()
     {
         return ! is_null($this->month);
+    }
+    
+    /**
+     * creates Transition Rule by Transition array 
+     * @see DateTimeZone::getTransitions()
+     * 
+     * @param TimeZoneConvert_Transition/array $transition
+     * @param TimeZoneConvert_TransitionRule $deduceRecurringRule
+     */
+    public static function createFromTransition(array $transition, $deduceRecurringRule=TRUE)
+    {
+        $date = new DateTime($transition['time'], new DateTimeZone('UTC'));
+        
+        $transitionRule = new self(array(
+             'isdst'  => $transition['isdst'],
+             'offset' => $transition['offset'],
+             'abbr'   => $transition['abbr'],
+             'from'   => clone $date,
+        ));
+        
+        if (! $deduceRecurringRule) {
+            $transitionRule->addTransitionDate($date);
+        } else {
+            $transitionRule->append(array(
+                'month'   => $date->format('n'),
+                'hour'    => $date->format('G'),
+                'minute'  => (int) $date->format('i'),
+                'second'  => (int) $date->format('s'),
+                'wkday'   => (int) $date->format('w'),
+                'numwk'   => self::getNumWk($date),
+            ));
+        }
+        
+        return $transitionRule;
+    }
+    
+    /**
+     * returns which occurence of its weekday the date is in its month
+     * 
+     * NOTE: first and secend occurence are referenced from beginning, others from end
+     * 
+     * @param  DateTime $date
+     * @return int 
+     */
+    public static function getNumWk($date)
+    {
+        $num = ceil($date->format('j') / 7);
+        
+        if ($num > 2) {
+            $tester = clone $date;
+            $tester->modify("last {$date->format('l')} of this month");
+            
+            $num = -1 * (1 + (($tester->format('j') - $date->format('j')) / 7));
+        }
+        
+        return $num;
     }
 }

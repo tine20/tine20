@@ -338,4 +338,24 @@ EOT;
         $this->assertEquals('Europe/Berlin', $tzid);
     }
     
+    public function testGetVTimezoneEuropeBerlin()
+    {
+        $VTimeZone = $this->uit->getVTimezone('Europe/Berlin');
+        foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
+             $this->assertTrue(strstr(self::$appleical5, $line) !== FALSE, "$line failed");
+        }
+    }
+    
+    public function testGetVTimezoneAsiaJerusalem()
+    {
+        $from = new DateTime('2008-06-01T00:00:00', new DateTimeZone('UTC'));
+        $until = new DateTime('2037-12-31T00:00:00', new DateTimeZone('UTC'));
+        
+        $VTimeZone = $this->uit->getVTimezone('Asia/Jerusalem', $from, $until);
+        foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
+            if (strstr($line, 'TZNAME') !== FALSE) continue; // different TZNAME
+             $this->assertTrue(strstr(self::$customAsiaJerusalem, $line) !== FALSE, "$line failed");
+        }
+        
+    }
 }

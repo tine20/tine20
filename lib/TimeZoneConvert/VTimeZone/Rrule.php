@@ -100,4 +100,37 @@ class TimeZoneConvert_VTimeZone_Rrule extends TimeZoneConvert_Model
         
         return clone self::$_cache[$rruleString];
     }
+    
+    /**
+     * create from given transition rule
+     * 
+     * @param  TimeZoneConvert_TransitionRule $transitionRule
+     * @return TimeZoneConvert_VTimeZone_Rrule
+     */
+    public static function createFromTransitionRule($transitionRule)
+    {
+        if (! $transitionRule->isRecurringRule()) {
+            throw new TimeZoneConvert_Exception('transition rule does not describe a rrule');
+        }
+        
+        $rrule = new self(array(
+            'wkday' => array_search($transitionRule->wkday, self::$WEEKDAY_DIGIT_MAP),
+            'numwk' => $transitionRule->numwk,
+            'month' => $transitionRule->month,
+            'until' => $transitionRule->until,
+        ));
+        
+        return $rrule;
+    }
+    
+    public function __toString()
+    {
+        $rruleString = "FREQ=YEARLY;BYMONTH={$this->month};BYDAY={$this->numwk}{$this->wkday}";
+        
+        if ($this->until) {
+            $rruleString .= ";UNTIL={$this->until->format('Ymd\THis\Z')}";
+        }
+        
+        return $rruleString;
+    }
 }

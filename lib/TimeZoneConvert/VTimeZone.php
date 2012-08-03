@@ -15,6 +15,7 @@
  */
 class TimeZoneConvert_VTimeZone
 {
+    const EOL = "\r\n";
     
     /**
      * gets php's DateTimeZone identifier from given VTIMEZONE and optional prodid
@@ -44,6 +45,78 @@ class TimeZoneConvert_VTimeZone
         } catch (Exception $e) {
             return NULL;
         }
+    }
+    
+    /**
+     * gets vtimezone string from php timezone identifier
+     * 
+     * @param string $tzid
+     */
+    public function getVTimezone($tzid, $from=NULL, $until=NULL)
+    {
+        $VTimeZone  = 'BEGIN:VTIMEZONE' . self::EOL;
+        $VTimeZone .= 'TZID:' . $tzid . self::EOL;
+        
+        $from = $from ?: date_create('now', new DateTimeZone('UTC'));
+        
+        $timezone = new DateTimeZone($tzid);
+        $transitions = TimeZoneConvert_Transition::getTransitions($timezone, $from, $until);
+        
+        $splitedTransitions = array(
+            'DAYLIGHT' => $transitions->filter('isdst', TRUE),
+            'STANDART' => $transitions->filter('isdst', FALSE),
+        );
+        
+        foreach($splitedTransitions as $component => $transitions) {
+            // check if rrule is OK: compute recurring rule and check all transitions
+            $useRrule = TRUE;
+            $transitionRule = TimeZoneConvert_TransitionRule::createFromTransition($transitions->getFirst());
+            foreach($transitions as $transition) {
+                $expectedTransitionDate = $transitionRule->computeTransitionDate(substr($transition['time'], 0, 4));
+                if ($expectedTransitionDate->format(DateTime::ISO8601) != $transition['time']) {
+                    $useRrule = FALSE;
+                    break;
+                }
+            }
+            
+            // insert via rrule
+            if ($useRrule) {
+                // try to find rrule start
+                $backTransitions = TimeZoneConvert_Transition::getTransitions($timezone, NULL, $transitionRule->from)
+                    ->filter('isdst', $transitionRule->isdst)
+                    ->sort('time', 'DESC');
+                
+                foreach ($backTransitions as $backTransition) {
+                    $expectedTransitionDate = $transitionRule->computeTransitionDate(substr($backTransition['time'], 0, 4));
+                    if ($expectedTransitionDate->format(DateTime::ISO8601) != $backTransition['time']) {
+                        break;
+                    }
+                    
+                    $transitionRule->from = $expectedTransitionDate;
+                }
+            }
+            
+            // insert rdates
+            else {
+                $transitionRule = TimeZoneConvert_TransitionRule::createFromTransition($transitions->getFirst(), FALSE);
+                $transitionRule->clearTransitionDates();
+                foreach($transitions as $transition) {
+                    $transitionRule->addTransitionDate(new DateTime('@' . $transition['ts']));
+                }
+            }
+            
+            // compute offsetFrom 
+            $offsetFromDate = clone $transitionRule->from;
+            $offsetFromDate->setTimezone($timezone);
+            $offsetFromDate->modify("-1 day");
+            $offsetFrom = $offsetFromDate->getOffset();
+            
+            $VTimeZone .= $this->transitionRuleToVTransitionRule($transitionRule, $offsetFrom);
+        }
+        
+        $VTimeZone .= 'END:VTIMEZONE';
+        
+        return $VTimeZone;
     }
     
     /**
@@ -128,18 +201,18 @@ class TimeZoneConvert_VTimeZone
                 // NOTE: buggy clients such as lightning always start 1970 (start of unix timestamp)
                 //       we can't take those transitions
                 if (! in_array($startYear, array('1970', '1601')) || count($transitionRules) != 2) {
-                    $transitionDates[] = $transitionRule->computeTransition($startYear);
+                    $transitionDates[] = $transitionRule->computeTransitionDate($startYear);
                     
 //                         for ($i=1;$i<20;$i++) {
-//                             $transitionDates[] = $transitionRule->computeTransition($startYear + $i);
+//                             $transitionDates[] = $transitionRule->computeTransitionDate($startYear + $i);
 //                         }
                 }
                 
                 $until = $transitionRule->until ? $transitionRule->until : new DateTime('now', new DateTimeZone('UTC'));
-                $transitionDates[] = $transitionRule->computeTransition($until->format('Y'));
+                $transitionDates[] = $transitionRule->computeTransitionDate($until->format('Y'));
 //                 if (! $transitionRule->until) {
 //                     for ($i=1;$i<10;$i++) {
-//                         $transitionDates[] = $transitionRule->computeTransition($until->format('Y') + $i);
+//                         $transitionDates[] = $transitionRule->computeTransitionDate($until->format('Y') + $i);
 //                     }
 //                 }
             } else {
@@ -255,5 +328,55 @@ class TimeZoneConvert_VTimeZone
             }
             
             return $transitionRule;
+    }
+    
+    /**
+     * assembles VTransitionRule
+     * 
+     * @param  TimeZoneConvert_TransitionRule  $transitionRule
+     * @param  int                             $offsetFrom
+     * @return string
+     */
+    public function transitionRuleToVTransitionRule($transitionRule, $offsetFrom)
+    {
+        $zone = $transitionRule->isdst ? 'DAYLIGHT' : 'STANDARD';
+        $dtstart = clone $transitionRule->from;
+        
+        $offsetFromSign = $offsetFrom >=0 ? '+' : '-';
+        $offsetFromString = $offsetFromSign .
+            str_pad(floor($offsetFrom/3600), 2, '0', STR_PAD_LEFT) .
+            str_pad(($offsetFrom%3600)/60, 2, '0', STR_PAD_LEFT);
+        
+        $offsetToSign = $transitionRule->offset >=0 ? '+' : '-';
+        $offsetToString = $offsetToSign .
+            str_pad(floor($transitionRule->offset/3600), 2, '0', STR_PAD_LEFT) .
+            str_pad(($transitionRule->offset%3600)/60, 2, '0', STR_PAD_LEFT);
+        
+        $dtstart = $dtstart->modify("$offsetFromSign $offsetFrom seconds");
+        
+        if ($transitionRule->isRecurringRule()) {
+            $rule = 'RRULE:' . TimeZoneConvert_VTimeZone_Rrule::createFromTransitionRule($transitionRule);
+        } else {
+            $rdates = $transitionRule->getTransitionDates();
+            $rdatesArray = array();
+            foreach($rdates as $rdate) {
+                $rdate = clone $rdate;
+                $rdate->modify("$offsetFromSign $offsetFrom seconds");
+                
+                $rdatesArray[] = $rdate->format('Ymd\THis');
+            }
+            
+            $rule = str_replace(' ', '', wordwrap('RDATE;VALUE=DATE-TIME:'. implode(', ', $rdatesArray), 90, self::EOL));
+        }
+        
+        $vTransitionRule  = "BEGIN:$zone" . self::EOL;
+        $vTransitionRule .= "TZOFFSETFROM:$offsetFromString" . self::EOL;
+        $vTransitionRule .= "$rule" . self::EOL;
+        $vTransitionRule .= "DTSTART:{$dtstart->format('Ymd\THis')}" . self::EOL;
+        $vTransitionRule .= "TZNAME:{$transitionRule->abbr}" . self::EOL;
+        $vTransitionRule .= "TZOFFSETTO:$offsetToString" . self::EOL;
+        $vTransitionRule .= "END:$zone" . self::EOL;
+        
+        return $vTransitionRule;
     }
 }

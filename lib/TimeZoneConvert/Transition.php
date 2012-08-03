@@ -81,9 +81,8 @@ class TimeZoneConvert_Transition extends TimeZoneConvert_Model
     {
         $transitionsTss = $transitions->ts;
         
-        $referenceTransitions = TimeZoneConvert_Set::create($timezone->getTransitions(min($transitionsTss), max($transitionsTss) + 1));
+        $referenceTransitions = self::getTransitions($timezone, min($transitionsTss), max($transitionsTss) + 1);
         $referenceTss = $referenceTransitions->ts;
-//         $referenceTss = TimeZoneConvert_Set::create($timezone->getTransitions())->ts;
         
         $matchingReferenceTransitions = array_intersect($referenceTss, $transitionsTss);
         
@@ -106,5 +105,29 @@ class TimeZoneConvert_Transition extends TimeZoneConvert_Model
         }
         
         return FALSE;
+    }
+    
+    /**
+     * returns set of refernece transitions
+     * 
+     * @param  string/DateTimeZone $tzid
+     * @param  DateTime $from
+     * @param  DateTime $until
+     * @return TimeZoneConvert_Set
+     */
+    public static function getTransitions($tzid, $from, $until)
+    {
+        $timezone = $tzid instanceof DateTimeZone ? $tzid : new DateTimeZone($tzid);
+        $beginTS = $from instanceof DateTime ? $from->getTimestamp() : $from;
+        $endTS = $until instanceof DateTime ? $until->getTimestamp() : $until;
+        
+        // NOTE: DateTimeZone::getTransitions first "transition" reflects $beginTS
+        //       so we make sure to not match a transition with it and throw it away
+        $transitions = $endTS ? $timezone->getTransitions(--$beginTS, $endTS) : $timezone->getTransitions(--$beginTS);
+        array_shift($transitions);
+        
+        $transitions = new TimeZoneConvert_Set($transitions);
+        
+        return $transitions;
     }
 }

@@ -69,6 +69,52 @@ class TimeZoneConvert_Set implements ArrayAccess, IteratorAggregate, Countable
     }
     
     /**
+     * get first model of this set
+     * 
+     * @return mixed
+     */
+    public function getFirst()
+    {
+        $keys = array_keys($this->_models);
+        return $this->_models[$keys[0]];
+    }
+    
+    /**
+     * returns new filtered set
+     * 
+     * @param  string $property
+     * @param  mixed  $value
+     * @return TimeZoneConvert_Set
+     */
+    public function filter($property, $value)
+    {
+        $filteredSet = new self;
+        foreach($this->_models as $offset => $model) {
+            if ($model[$property] == $value) {
+                $filteredSet->addModel($model);
+            }
+        }
+        
+        return $filteredSet;
+    }
+    
+    public function sort($property, $direction='ASC')
+    {
+        $map = $this->{$property};
+        $fn = $direction == 'ASC' ? 'asort' : 'arsort';
+        $fn($map);
+        
+        $sortedModels = array();
+        foreach($map as $key => $value) {
+            $sortedModels[$key] = $this->_models[$key];
+        }
+        
+        $this->_models = $sortedModels;
+        
+        return $this;
+    }
+    
+    /**
      * get array of data from this object
      * 
      * @return array
