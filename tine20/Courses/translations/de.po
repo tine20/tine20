@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-21 14:05+0100\n"
+"PO-Revision-Date: 2012-08-03 21:45+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
 "Language: de\n"
@@ -16,35 +16,47 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:61 js/Models.js:72 js/CourseEditDialog.js:227
+#: Config.php:68
+#: js/Models.js:72
+#: js/CourseEditDialog.js:227
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
-#: Config.php:63
+#: Config.php:70
 msgid "Internet access options."
 msgstr "Internet -Zugangsoptionen"
 
-#: Config.php:70 Config.php:72
+#: Config.php:77
+#: Config.php:79
 msgid "Internet Access Group (ON)"
 msgstr "Internet Zugangsgruppe (AN)"
 
-#: Config.php:78 Config.php:80
+#: Config.php:85
+#: Config.php:87
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Zugangsgruppe (GEFILTERT)"
 
-#: Config.php:86 Config.php:88
+#: Config.php:93
+#: Config.php:95
 msgid "Students Group"
 msgstr "Studentengruppe"
 
-#: Config.php:94 Config.php:96
+#: Config.php:101
+#: Config.php:103
 msgid "Students Import Definition"
 msgstr "Schülerimportdefinition"
+
+#: Config.php:109
+msgid "Students login name prefix"
+msgstr "Studenten-Loginnamen Prefix"
 
 #: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Klassen"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Setup/Update/Release5.php:30
+#: Setup/Initialize.php:35
+#: Preference.php:24
 #: Preference.php:60
 msgid "All courses"
 msgstr "Alle Klassen"
@@ -101,7 +113,8 @@ msgstr "Fehler"
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die genannten Fehler."
 
-#: js/CourseGridPanel.js:48 js/Models.js:70
+#: js/CourseGridPanel.js:48
+#: js/Models.js:70
 msgid "Name"
 msgstr "Name"
 
@@ -117,7 +130,9 @@ msgstr "Fehlgeschlagen"
 msgid "Some error occured while trying to update the courses."
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
-#: js/Models.js:41 js/CourseEditDialog.js:187 Controller/Course.php:121
+#: js/Models.js:41
+#: js/CourseEditDialog.js:187
+#: Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
@@ -179,13 +194,18 @@ msgstr "unbekannt"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-#: Controller/Course.php:246 Controller/Course.php:287
+#: Controller/Course.php:247
+#: Controller/Course.php:291
 msgid "Teacher"
 msgstr "Lehrer"
 
-#: Controller/Course.php:247
+#: Controller/Course.php:248
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
+
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Meine Klasse"
 
 #~ msgid "teacher"
 #~ msgstr "lehrer"
