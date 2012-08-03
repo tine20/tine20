@@ -268,6 +268,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         $password = $this->_config->get('teacher_password', $account->accountLoginName);
         $account = $this->_userController->create($account, $password, $password);
+        $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $account->getId());
+        
+        $this->_createDefaultFilterForTeacher($account, $course);
         
         return $account;
     }
@@ -287,6 +290,43 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         $loginname = $i18n->_('Teacher') . Courses_Config::getInstance()->get('teacher_login_name_delimiter', '-') . $course->name;
         return strtolower($loginname);
+    }
+    
+    /**
+     * create default favorite for teacher
+     * 
+     * @param Tinebase_Model_FullUser $account
+     * @param Courses_Model_Course $course
+     */
+    protected function _createDefaultFilterForTeacher($account, $course)
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $filter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'account_id'        => $account->getId(),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Courses')->getId(),
+            'model'             => 'Courses_Model_CourseFilter',
+            'name'              => "My course", // _("My course")
+            'description'       => "My course",
+            'filters'           => array(
+                array(
+                    'field'     => 'is_deleted',
+                    'operator'  => 'equals',
+                    'value'     => '0'
+                ),
+                array(
+                    'field'     => 'name',
+                    'operator'  => 'equals',
+                    'value'     => $course->name
+                ),
+            ),
+        )));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created default filter for teacher '
+            . $account->accountLoginName . ': ' . print_r($filter->toArray(), true));
+        
+        // set as default
+        $pref = new Courses_Preference();
+        $pref->setValueForUser(Courses_Preference::DEFAULTPERSISTENTFILTER, $filter->getId(), $account->getId(), TRUE);
     }
     
     /**

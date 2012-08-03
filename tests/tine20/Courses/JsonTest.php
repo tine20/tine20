@@ -120,7 +120,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         // checks
         $this->assertEquals($course['description'], $courseData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by']);
-                        
+        
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
     }
@@ -319,6 +319,23 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($newUserMemberships), 'new user should have 2 group memberships');
         $this->assertTrue(in_array(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newUserMemberships),
             'could not find default group in memberships: ' . print_r($newUserMemberships, TRUE));
+    }
+    
+    /**
+     * testTeacherDefaultFavorite
+     * 
+     * @see 0006876: create "my course" default favorite for new teachers
+     */
+    public function testTeacherDefaultFavorite()
+    {
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $teacher = Tinebase_User::getInstance()->getFullUserById($courseData['members'][0]['id']);
+        
+        $filter = Tinebase_PersistentFilter::getInstance()->getFilterById(
+            Tinebase_Core::getPreference('Courses')->getValueForUser(Courses_Preference::DEFAULTPERSISTENTFILTER, $teacher->getId())
+        );
+        $this->assertEquals(array(array('field' => 'name', 'operator' => 'equals', 'value' => $course['name'])), $filter->toArray());
     }
     
     /************ protected helper funcs *************/
