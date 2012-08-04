@@ -12,12 +12,12 @@
  * class to handle ActiveSync event
  *
  * @package     Model
- * @property    string  class
- * @property    string  collectionId
- * @property    bool    deletesAsMoves
- * @property    bool    getChanges
- * @property    string  syncKey
- * @property    int     windowSize
+ * @property    array    Attachments
+ * @property    string   ContentType
+ * @property    Syncroton_Model_EmailBody  Body
+ * @property    array    Cc
+ * @property    array    To
+ * @property    int      Read
  */
 
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
