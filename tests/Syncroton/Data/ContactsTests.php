@@ -124,7 +124,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
             Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_ANDROID)
         );
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
-        $dataClass = $dataController::MODEL;
+        $dataClass = 'Syncroton_Model_Contact';
         
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
         
