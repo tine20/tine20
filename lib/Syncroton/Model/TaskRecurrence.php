@@ -27,12 +27,12 @@ class Syncroton_Model_TaskRecurrence extends Syncroton_Model_AEntry
     /**
      * recur types
      */
-    const RECUR_TYPE_DAILY          = 0;     // Recurs daily.
-    const RECUR_TYPE_WEEKLY         = 1;     // Recurs weekly
-    const RECUR_TYPE_MONTHLY        = 2;     // Recurs monthly
-    const RECUR_TYPE_MONTHLY_DAYN   = 3;     // Recurs monthly on the nth day
-    const RECUR_TYPE_YEARLY         = 5;     // Recurs yearly
-    const RECUR_TYPE_YEARLY_DAYN    = 6;     // Recurs yearly on the nth day
+    const TYPE_DAILY          = 0;     // Recurs daily.
+    const TYPE_WEEKLY         = 1;     // Recurs weekly
+    const TYPE_MONTHLY        = 2;     // Recurs monthly
+    const TYPE_MONTHLY_DAYN   = 3;     // Recurs monthly on the nth day
+    const TYPE_YEARLY         = 5;     // Recurs yearly
+    const TYPE_YEARLY_DAYN    = 6;     // Recurs yearly on the nth day
     
     /**
      * day of week constants
