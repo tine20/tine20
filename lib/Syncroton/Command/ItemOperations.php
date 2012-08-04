@@ -106,26 +106,24 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                 $dataController = Syncroton_Data_Factory::factory($fetch['store'], $this->_device, $this->_syncTimeStamp);
                 
                 if (isset($fetch['collectionId'])) {
-                    $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
-                    #$dataController->appendXML($properties, $fetch, $fetch['serverId']);
-                    $dataController
-                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'])), $fetch['serverId'])
-                        ->appendXML($properties);
-                    
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $fetch['collectionId']));
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId',     $fetch['serverId']));
+                    
+                    $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
+                    $dataController
+                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'])), $fetch['serverId'])
+                        ->appendXML($properties);
                     $fetchTag->appendChild($properties);
                     
                 } elseif (isset($fetch['fileReference'])) {
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
+
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
-                    #$dataController->appendFileReference($properties, $fetch['fileReference']);
                     $dataController
                         ->getFileReference($fetch['fileReference'])
                         ->appendXML($properties);
-                    
-                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
-                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
                     $fetchTag->appendChild($properties);
                 }
             } catch (Syncroton_Exception_NotFound $e) {echo __LINE__;
