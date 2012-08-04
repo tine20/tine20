@@ -16,8 +16,6 @@
 
 class Syncroton_Data_Contacts extends Syncroton_Data_AData
 {
-    const MODEL = 'Syncroton_Model_Contact';
-    
     protected function _initData()
     {
         /**

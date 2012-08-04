@@ -16,8 +16,6 @@
 
 class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Data_IDataEmail
 {
-    const MODEL = 'Syncroton_Model_Email';
-    
     /**
      * used by unit tests only to simulated added folders
      */

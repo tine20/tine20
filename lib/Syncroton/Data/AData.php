@@ -112,8 +112,6 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     {
         $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
     
-        #return array_keys(Syncroton_Data_AData::$entries[get_class($this)][$folderId]);
-        
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'data', array('id'))
             ->where('folder_id = ?', $_folderId);
