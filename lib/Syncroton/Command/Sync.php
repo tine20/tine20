@@ -108,6 +108,14 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
+        #if ($this->_statusProvisioning = $this->_checkProvisioningNeeded() !== false) {
+        #    if (version_compare($this->_device->acsversion, '14.0', '<')) {
+        #       throw new Syncroton_Exception_ProvisioningNeeded();
+        #    } else {
+        #        return;
+        #    }
+        #}
+        
         // input xml
         $xml = simplexml_import_dom($this->_inputDom);
         
@@ -176,6 +184,33 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             
             $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class, $this->_device, $this->_syncTimeStamp);
             
+            switch($collectionData->folder->class) {
+                case Syncroton_Data_Factory::CLASS_CALENDAR:
+                    $dataClass = 'Syncroton_Model_Event';
+                    
+                    break;
+                    
+                case Syncroton_Data_Factory::CLASS_CONTACTS:
+                    $dataClass = 'Syncroton_Model_Contact';
+                    
+                    break;
+                    
+                case Syncroton_Data_Factory::CLASS_EMAIL:
+                    $dataClass = 'Syncroton_Model_Email';
+                    
+                    break;
+                    
+                case Syncroton_Data_Factory::CLASS_TASKS:
+                    $dataClass = 'Syncroton_Model_Task';
+                    
+                    break;
+                    
+                default:
+                    throw new Syncroton_Exception_UnexpectedValue('invalid class provided');
+                    
+                    break;
+            }
+            
             $clientModifications = array(
                 'added'            => array(),
                 'changed'          => array(),
@@ -184,7 +219,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 'forceChange'      => array(),
                 'toBeFetched'      => array(),
             );
-            $dataClass = $dataClass = $dataController::MODEL;
             
             // handle incoming data
             if($collectionData->hasClientAdds()) {
@@ -324,9 +358,16 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
      */
     public function getResponse()
     {
-        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
-        
         $sync = $this->_outputDom->documentElement;
+        
+        // provioning needed?
+        #if ($this->_statusProvisioning !== false) {
+        #    if ($this->_logger instanceof Zend_Log)
+        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisiong needed or remote wipe requested");
+        #    $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $this->_statusProvisioning));
+        # 
+        #    return $this->_outputDom;
+        #}
         
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
 
@@ -711,8 +752,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
             }
         }
-        
-        
         
         return $this->_outputDom;
     }
