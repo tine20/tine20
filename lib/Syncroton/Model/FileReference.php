@@ -37,8 +37,7 @@ class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
      */
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase', 'uri:AirSyncBase');
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:ItemOperations', 'uri:ItemOperations');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
