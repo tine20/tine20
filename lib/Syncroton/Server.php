@@ -133,14 +133,12 @@ class Syncroton_Server
             
             header("HTTP/1.1 400 header X-MS-POLICYKEY not found");
             
-            return;
-            
         } catch (Syncroton_Exception_ProvisioningNeeded $sepn) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
             
             header("HTTP/1.1 449 Retry after sending a PROVISION command");
-            
+               
             return;
             
         } catch (Exception $e) {
