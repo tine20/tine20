@@ -31,16 +31,38 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         }
     }
     
-    #abstract public function appendXML(DOMElement $_domParrent);
-        
+    /**
+     * (non-PHPdoc)
+     * @see Countable::count()
+     */    
     public function count()
     {
         return count($this->_elements);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see IteratorAggregate::getIterator()
+     */
     public function getIterator() 
     {
         return new ArrayIterator($this->_elements);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::getProperties()
+     */
+    public function getProperties()
+    {
+        $properties = array();
+        
+        foreach($this->_properties as $namespace => $namespaceProperties) {
+            $properties = array_merge($properties, array_keys($namespaceProperties));
+        }
+        
+        return $properties;
+        
     }
     
     public function setFromArray(array $properties)
