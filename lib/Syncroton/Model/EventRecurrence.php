@@ -12,12 +12,17 @@
  * class to handle ActiveSync event
  *
  * @package     Model
- * @property    string  class
- * @property    string  collectionId
- * @property    bool    deletesAsMoves
- * @property    bool    getChanges
- * @property    string  syncKey
- * @property    int     windowSize
+ * @property    int       CalendarType
+ * @property    int       DayOfMonth
+ * @property    int       DayOfWeek
+ * @property    int       FirstDayOfWeek
+ * @property    int       Interval
+ * @property    int       IsLeapMonth
+ * @property    int       MonthOfYear
+ * @property    int       Occurrences
+ * @property    int       Type
+ * @property    DateTime  Until
+ * @property    int       WeekOfMonth
  */
 
 class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
@@ -27,12 +32,12 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
     /**
      * recur types
      */
-    const RECUR_TYPE_DAILY          = 0;     // Recurs daily.
-    const RECUR_TYPE_WEEKLY         = 1;     // Recurs weekly
-    const RECUR_TYPE_MONTHLY        = 2;     // Recurs monthly
-    const RECUR_TYPE_MONTHLY_DAYN   = 3;     // Recurs monthly on the nth day
-    const RECUR_TYPE_YEARLY         = 5;     // Recurs yearly
-    const RECUR_TYPE_YEARLY_DAYN    = 6;     // Recurs yearly on the nth day
+    const TYPE_DAILY          = 0;     // Recurs daily.
+    const TYPE_WEEKLY         = 1;     // Recurs weekly
+    const TYPE_MONTHLY        = 2;     // Recurs monthly
+    const TYPE_MONTHLY_DAYN   = 3;     // Recurs monthly on the nth day
+    const TYPE_YEARLY         = 5;     // Recurs yearly
+    const TYPE_YEARLY_DAYN    = 6;     // Recurs yearly on the nth day
     
     /**
      * day of week constants
@@ -64,7 +69,7 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
     
     public function appendXML(DOMElement $_domParrent)
     {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
+        $this->_addXMLNamespaces($_domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -72,9 +77,9 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
                 continue;
             }
             
-            $elementProperties = $this->_properties['Calendar'][$elementName]; 
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
             
-            $nameSpace = 'uri:Calendar';
+            $nameSpace = 'uri:' . $nameSpace;
             
             // strip off any non printable control characters
             if (!ctype_print($value)) {
@@ -94,29 +99,6 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
             }
         }
         
-    }
-    
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== $this->_xmlBaseElement) {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        foreach (array_keys($this->_properties) as $namespace) {
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
-        }
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
     }
     
     protected function _parseCalendarNamespace(SimpleXMLElement $properties)
@@ -147,29 +129,5 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
                     }
             }
         }
-    }
-    
-    public function &__get($name)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        return $this->_elements[$name];
-    }
-    
-    public function __set($name, $value)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = $this->_properties['Calendar'][$name];
-        
-        if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
-            throw new InvalidArgumentException("value for $name must be an instance of DateTime");
-        }
-        
-        $this->_elements[$name] = $value;
     }
 }
