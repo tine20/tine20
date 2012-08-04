@@ -26,6 +26,13 @@ interface Syncroton_Model_IEntry
     
     public function appendXML(DOMElement $_domParrent);
     
+    /**
+     * return array of valid properties
+     *  
+     * @return array
+     */
+    public function getProperties();
+    
     public function setFromArray(array $properties);
     
     /**
