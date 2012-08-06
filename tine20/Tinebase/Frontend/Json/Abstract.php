@@ -281,8 +281,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
-        
+        $this->_longRunningRequest();
         $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
         
@@ -292,6 +291,23 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $result['exceptions']  = $this->_multipleRecordsToJson($result['exceptions']);
         
         return $result;
+    }
+    
+    /**
+     * prepare long running request
+     * - execution time
+     * - session write close
+     * 
+     * @param integer $executionTime
+     * @return integer old max execution time
+     */
+    protected function _longRunningRequest($executionTime = 0)
+    {
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
+        return $oldMaxExcecutionTime;
     }
 
     /**
@@ -355,7 +371,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         // extend execution time to 30 minutes
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
+        $this->_longRunningRequest(1800);
 
         $file = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
         $importResult = $importer->importFile($file->path, $_clientRecordData);
@@ -363,9 +379,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $importResult['results']    = $importResult['results']->toArray();
         $importResult['exceptions'] = $importResult['exceptions']->toArray();
         $importResult['status']     = 'success';
-
-        // reset max execution time to old value
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
 
         return $importResult;
     }
@@ -381,6 +394,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
+        
+        // extend execution time to 30 minutes
+        $this->_longRunningRequest(1800);
 
         $_controller->deleteByFilter($filter);
         return array(
