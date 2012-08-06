@@ -568,6 +568,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 $representativesArray[] = $representatives->getById($id);
             }
         }
+        try {
+            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            $ownContact = NULL;
+        }
 
         $search = array(
             '{startDate-en_US}',
@@ -580,6 +586,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             '{representation-email-2}',
             '{representation-tel_work-1}',
             '{representation-tel_work-2}',
+            '{owncontact-n_fn}',
             '{signature}',
         );
         $replace = array(
@@ -593,6 +600,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             (isset($representativesArray[1])) ? $representativesArray[1]->email : 'unknown email',
             (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : 'unknown phone',
             (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : 'unknown phone',
+            ($ownContact) ? $ownContact->n_fn : '',
             ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($vacation->signature) : '',
         );
         

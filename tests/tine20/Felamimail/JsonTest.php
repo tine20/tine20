@@ -1101,9 +1101,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'template_id' => $template['id'],
         ));
         
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (".
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (".
-            $sclever->accountEmailAddress . ") instead.<br />", $result['message']);
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (" .
+            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (" .
+            $sclever->accountEmailAddress . ") instead.<br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
     }
     
     /**
