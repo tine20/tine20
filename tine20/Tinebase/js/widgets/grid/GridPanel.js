@@ -442,7 +442,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'readGrant',
             requiredMultipleGrant: 'editGrant',
             requiredMultipleRight: this.multipleEditRequiredRight,
-            requiredMethod: this.app.name + '.get' + this.recordClass.getMeta('modelName'),
             text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
             pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
@@ -458,7 +457,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_editCopyInNewWindow = new Ext.Action({
             hidden: ! this.copyEditAction,
             requiredGrant: 'readGrant',
-            requiredMethod: this.app.name + '.get' + this.recordClass.getMeta('modelName'),
             text: String.format(_('Copy {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'copy',
@@ -469,7 +467,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
-            requiredMethod: this.app.name + '.save' + this.recordClass.getMeta('modelName'),
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
@@ -492,7 +489,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.initDeleteAction();
 
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
-//            requiredMethod: this.app.name + '.save' + this.recordClass.getMeta('modelName'),
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
             recordClass:    this.recordClass,
@@ -522,19 +518,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
         
         // add actions to updater
-        // disable actions if no editDialog
-        if(Tine[this.app.name].hasOwnProperty(this.recordClass.getMeta('modelName') + 'EditDialog')) {
-            this.actionUpdater.addActions([
-                this.action_addInNewWindow,
-                this.action_editInNewWindow,
-                this.action_editCopyInNewWindow
-            ]);
-        } else {
-            this.action_addInNewWindow.disable();
-            this.action_editInNewWindow.disable();
-        }
-        
         this.actionUpdater.addActions([
+            this.action_addInNewWindow,
+            this.action_editInNewWindow,
+            this.action_editCopyInNewWindow,
             this.action_deleteRecord,
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
@@ -548,7 +535,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initDeleteAction: function() {
         // note: unprecise plural form here, but this is hard to change
         this.action_deleteRecord = new Ext.Action({
-            requiredMethod: this.app.name + '.delete' + this.recordClass.getMeta('modelName') + 's',
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
             singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
