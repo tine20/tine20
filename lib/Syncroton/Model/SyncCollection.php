@@ -153,7 +153,12 @@ class Syncroton_Model_SyncCollection
     
     public function setFromArray(array $properties)
     {
-        $this->_collection = array();
+        $this->_collection = array('options' => array(
+            'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
+            'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
+            'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
+            'bodyPreferences' => array()
+        ));
     
         foreach($properties as $key => $value) {
             try {
@@ -186,6 +191,12 @@ class Syncroton_Model_SyncCollection
             'getChanges'       => isset($xmlCollection->GetChanges) ? true : false,
             'windowSize'       => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
             'class'            => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
+            'options'          => array(
+                'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
+                'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
+                'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
+                'bodyPreferences' => array()
+            ),
             
             'syncState'        => null,
             'folder'           => null
@@ -195,41 +206,36 @@ class Syncroton_Model_SyncCollection
             // @todo collected supported elements
         }
         
-        $this->_collection['filterType']      = Syncroton_Command_Sync::FILTER_NOTHING;
-        $this->_collection['mimeSupport']     = Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME;
-        $this->_collection['mimeTruncation']  = Syncroton_Command_Sync::TRUNCATE_NOTHING;
-        $this->_collection['bodyPreferences'] = array();
-        
         // process options
         if (isset($xmlCollection->Options)) {
             // optional parameters
             if (isset($xmlCollection->Options->FilterType)) {
-                $this->_collection['filterType'] = (int)$xmlCollection->Options->FilterType;
+                $this->_collection['options']['filterType'] = (int)$xmlCollection->Options->FilterType;
             }
             if (isset($xmlCollection->Options->MIMESupport)) {
-                $this->_collection['mimeSupport'] = (int)$xmlCollection->Options->MIMESupport;
+                $this->_collection['options']['mimeSupport'] = (int)$xmlCollection->Options->MIMESupport;
             }
             if (isset($xmlCollection->Options->MIMETruncation)) {
-                $this->_collection['mimeTruncation'] = (int)$xmlCollection->Options->MIMETruncation;
+                $this->_collection['options']['mimeTruncation'] = (int)$xmlCollection->Options->MIMETruncation;
             }
             if (isset($xmlCollection->Options->Class)) {
-                $this->_collection['class'] = (string)$xmlCollection->Options->Class;
+                $this->_collection['options']['class'] = (string)$xmlCollection->Options->Class;
             }
             
             // try to fetch element from AirSyncBase:BodyPreference
             $airSyncBase = $xmlCollection->Options->children('uri:AirSyncBase');
-        
+            
             if (isset($airSyncBase->BodyPreference)) {
-        
+                
                 foreach ($airSyncBase->BodyPreference as $bodyPreference) {
                     $type = (int) $bodyPreference->Type;
-                    $this->_collection['bodyPreferences'][$type] = array(
-                            'type' => $type
+                    $this->_collection['options']['bodyPreferences'][$type] = array(
+                        'type' => $type
                     );
-        
+                    
                     // optional
                     if (isset($bodyPreference->TruncationSize)) {
-                        $this->_collection['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
+                        $this->_collection['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
                     }
                 }
             }
