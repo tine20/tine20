@@ -421,11 +421,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
                         
                         $serverModifications = $collectionData->syncState->pendingdata;
+                        
                     } else {
                         // fetch entries added since last sync
                         $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData->folder);
-                        $allServerEntries = $dataController->getServerEntries($collectionData->collectionId, $collectionData->filterType);
-            
+                        $allServerEntries = $dataController->getServerEntries($collectionData->collectionId, $collectionData->options['filterType']);
+                        
                         // add entries
                         $serverDiff = array_diff($allServerEntries, $allClientEntries);
                         // add entries which produced problems during delete from client
@@ -743,7 +744,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 // store current filter type
                 try {
                     $folderState = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
-                    $folderState->lastfiltertype = $collectionData->filterType;
+                    $folderState->lastfiltertype = $collectionData->options['filterType'];
                     $this->_folderBackend->update($folderState);
                 } catch (Syncroton_Exception_NotFound $senf) {
                     // failed to get folderstate => should not happen but is also no problem in this state
