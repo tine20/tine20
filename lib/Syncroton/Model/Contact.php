@@ -166,7 +166,7 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
                     if ($value instanceof DateTime) {
-                        $value = $value->format("Ymd\THis\Z");
+                        $value = $value->format("Y-m-d\TH:i:s\Z");
                     }
                     
                     if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {

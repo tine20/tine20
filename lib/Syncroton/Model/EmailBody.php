@@ -65,7 +65,7 @@ class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
                     if ($value instanceof DateTime) {
-                        $value = $value->format("Ymd\THis\Z");
+                        $value = $value->format("Y-m-d\TH:i:s\Z");
                     }
                     $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
                     
