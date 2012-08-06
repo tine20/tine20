@@ -324,6 +324,19 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testAccountContactModlog
+     * 
+     * @see 0006688: contact of new user should have modlog information
+     */
+    public function testAccountContactModlog()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->objects['user']->getId());
+        
+        $this->assertTrue(! empty($contact->creation_time));
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contact->created_by);
+    }
+    
+    /**
      * try to get all groups
      *
      */
