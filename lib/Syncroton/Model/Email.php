@@ -184,15 +184,109 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
         }
         
     }
-
-    /**
-     * (non-PHPdoc)
-     * @see Syncroton_Model_AEntry::setFromSimpleXMLElement()
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
+    
+    protected function _parseAirSyncBaseNamespace(SimpleXMLElement $properties)
     {
-        // email sending is not handled via this class
-        
-        return;
+        // fetch data from AirSyncBase namespace
+        $children = $properties->children('uri:AirSyncBase');
+    
+        foreach ($children as $elementName => $xmlElement) {
+    
+            switch ($elementName) {
+                case 'Body':
+                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+    
+                    break;
+    
+                default:
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
+    
+                    switch ($properties['type']) {
+                        case 'datetime':
+                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
+    
+                            break;
+    
+                        case 'number':
+                            $this->$elementName = (int) $xmlElement;
+    
+                            break;
+                        default:
+                            $this->$elementName = (string) $xmlElement;
+    
+                            break;
+                    }
+            }
+        }
+    }
+    
+    protected function _parseEmailNamespace(SimpleXMLElement $properties)
+    {
+        // fetch data from AirSyncBase namespace
+        $children = $properties->children('uri:Email');
+    
+        foreach ($children as $elementName => $xmlElement) {
+    
+            switch ($elementName) {
+                case 'Body':
+                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+    
+                    break;
+    
+                default:
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
+    
+                    switch ($properties['type']) {
+                        case 'datetime':
+                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
+    
+                            break;
+    
+                        case 'number':
+                            $this->$elementName = (int) $xmlElement;
+    
+                            break;
+                        default:
+                            $this->$elementName = (string) $xmlElement;
+    
+                            break;
+                    }
+            }
+        }
+    }
+    
+    protected function _parseEmail2Namespace(SimpleXMLElement $properties)
+    {
+        // fetch data from AirSyncBase namespace
+        $children = $properties->children('uri:Email2');
+    
+        foreach ($children as $elementName => $xmlElement) {
+    
+            switch ($elementName) {
+                case 'Body':
+                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+    
+                    break;
+    
+                default:
+                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
+    
+                    switch ($properties['type']) {
+                        case 'datetime':
+                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
+    
+                            break;
+    
+                        case 'number':
+                            $this->$elementName = (int) $xmlElement;
+    
+                            break;
+                        default:
+                            $this->$elementName = (string) $xmlElement;
+    
+                            break;
+                    }
+            }
+        }
     }
 }

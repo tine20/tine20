@@ -17,6 +17,28 @@
  */
 class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
 {
+    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+        <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email">
+            <Collections>
+                <Collection>
+                    <SyncKey>17</SyncKey>
+                    <CollectionId>a130b7462fde72c7d6215ce32226e1794d631fa8</CollectionId>
+                    <DeletesAsMoves>1</DeletesAsMoves>
+                    <GetChanges/>
+                    <WindowSize>5</WindowSize>
+                    <Options><FilterType>5</FilterType><BodyPreference xmlns="uri:AirSyncBase"><Type>2</Type><TruncationSize>200000</TruncationSize></BodyPreference></Options>
+                    <Commands>
+                        <Change>
+                            <ServerId>193556ef7ce9ad9a6c3997b51b1c9e646c6cf373</ServerId>
+                            <ApplicationData>
+                                <Read xmlns="uri:Email">1</Read>
+                            </ApplicationData>
+                        </Change>
+                    </Commands>
+                </Collection>
+            </Collections>
+        </Sync>';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -27,6 +49,20 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
     {
         $suite  = new PHPUnit_Framework_TestSuite('Syncroton email model tests');
         PHPUnit_TextUI_TestRunner::run($suite);
+    }
+    
+    /**
+     * test add contact
+     */
+    public function testParseSimpleXMLElement()
+    {
+        $xml = new SimpleXMLElement($this->_testXMLInput);
+        $email = new Syncroton_Model_Email($xml->Collections->Collection->Commands->Change->ApplicationData);
+    
+        #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);}
+    
+        $this->assertEquals(1, count($email));
+        $this->assertEquals(1, $email->Read);
     }
     
     /**
