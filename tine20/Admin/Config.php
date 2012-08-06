@@ -18,10 +18,28 @@
 class Admin_Config extends Tinebase_Config_Abstract
 {
     /**
+     * Default IMAP user settings
+     * 
+     * @var string
+     */
+    const DEFAULT_IMAP_USER_SETTINGS = 'defaultImapUserSettings';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::DEFAULT_IMAP_USER_SETTINGS => array(
+                                   //_('Default IMAP user settings')
+            'label'                 => 'Default IMAP user settings',
+                                   //_('Default IMAP user settings')
+            'description'           => 'Default IMAP user settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+        ),
     );
     
     /**
