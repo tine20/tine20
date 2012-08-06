@@ -59,7 +59,7 @@ class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
                     $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
                     
                     if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s\Z");
+                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
                     }
                     
                     if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {

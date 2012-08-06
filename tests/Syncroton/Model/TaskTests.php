@@ -121,7 +121,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Tasks:DueDate');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('2010-11-28T23:59:00Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals('2010-11-28T23:59:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');

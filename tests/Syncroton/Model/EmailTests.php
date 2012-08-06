@@ -84,7 +84,7 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:DateReceived');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('2012-03-21T14:00:00Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals('2012-03-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Attachments/AirSyncBase:Attachment/AirSyncBase:FileReference');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
