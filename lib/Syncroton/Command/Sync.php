@@ -333,18 +333,22 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             // handle fetches, but only if not first sync
             if($collectionData->syncKey > 1 && $collectionData->hasClientFetches()) {
                 // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
-                // unfortunately the iPhone dont set GetChanges to 0 when fetching email body, but is confused when we send
-                // changes
+                // some prevoius versions of iOS did not set GetChanges to 0 for fetches. Let's enforce getChanges to false here.
                 $collectionData->getChanges = false;
                 
                 $fetches = $collectionData->getClientFetches();
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
+                
+                $toBeFecthed = array();
+                
                 foreach ($fetches as $fetch) {
                     $serverId = (string)$fetch->ServerId;
                     
-                    $collectionData->toBeFetched[$serverId] = $serverId;
+                    $toBeFetched[$serverId] = $serverId;
                 }
+                
+                $collectionData->toBeFetched = $toBeFetched;
             }
             
             $this->_collections[] = $collectionData;
