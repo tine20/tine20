@@ -29,6 +29,7 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
             'Attachments'             => array('type' => 'container'),
             'ContentType'             => array('type' => 'string'),
             'Body'                    => array('type' => 'container'),
+            'NativeBodyType'          => array('type' => 'number'),
         ),
         'Email' => array(
             'BusyStatus'              => array('type' => 'number'),
