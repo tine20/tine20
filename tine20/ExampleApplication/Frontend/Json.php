@@ -39,7 +39,6 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_applicationName = 'ExampleApplication';
         $this->_controller = ExampleApplication_Controller_ExampleRecord::getInstance();
-        parent::__construct();
     }
     
     /**
