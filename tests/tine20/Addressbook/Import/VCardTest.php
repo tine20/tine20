@@ -100,4 +100,22 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($importedContact !== NULL);
         $this->assertEquals('Hans Müller', $importedContact->n_fn, print_r($importedContact, TRUE));
     }
+
+    /**
+     * test import data #3
+     * 
+     * @see 0006852: always add iconv filter on import
+     */
+    public function testImportWithIconv()
+    {
+        $this->_filename = dirname(__FILE__) . '/files/HerrStephanLaunig.vcf';
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
+        
+        $result = $this->_instance->importFile($this->_filename);
+        
+        $importedContact = $result['results']->getFirstRecord();
+        $this->assertTrue($importedContact !== NULL);
+        $this->assertEquals('Stephan Läunig', $importedContact->n_fn, print_r($importedContact, TRUE));
+    }
 }
