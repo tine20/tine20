@@ -77,7 +77,7 @@ class Syncroton_Command_GetAttachment
         $maxAge = 3600;
         $now = new DateTime(null, new DateTimeZone('UTC'));
         header('Cache-Control: private, max-age=' . $maxAge);
-        header("Expires: " . gmdate('D, d M Y H:i:s', $now->modify("+{$maxAgesec}sec")->getTimestamp()) . " GMT");
+        header("Expires: " . gmdate('D, d M Y H:i:s', $now->modify("+{$maxAge} sec")->getTimestamp()) . " GMT");
         
         // overwrite Pragma header from session
         header("Pragma: cache");
@@ -90,5 +90,5 @@ class Syncroton_Command_GetAttachment
         } else {
             echo $attachment->Data;
         }
-    }    
+    }
 }
