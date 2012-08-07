@@ -1,7 +1,9 @@
 # TODO: strip out OpenLayers and require openlayers
 # TODO: add postxxx sections calling the setup.php as command line tool
+# FIXME: change selinux context to httpd_log_t for /var/log/tine20/tine20.log
+# FIXME: SELinux is preventing /usr/sbin/httpd from create access on the None zend_cache--a.
 
-# This package contains some bundled libraries, here is what is done with those:
+# This package contains some bundled libraries, here is what has to be done with those:
 # Ajam/         - not found in Fedora
 # ExtJS/        - not found in Fedora
 # GeoExt/       - not found in Fedora
@@ -21,23 +23,20 @@
 # StreamFilter/ - not found in Fedora
 # vcardphp/     - not found in Fedora
 # Wbxml/        - not found in Fedora
-# Zend/         - there is php-ZendFramework-1.11.11-1.fc16.noarch, will be
-#                 stripped out
+# Zend/         - there is php-ZendFramework, strip it out
 
-%global vyear 2011
-%global vmonth 05
-%global vmin 6
-%global upstreamversion %{vyear}-%{vmonth}-%{vmin}
-%global downstreamversion %{vyear}.%{vmonth}.%{vmin}
+%global vyear 2012
+%global vmonth 03
+%global vmin 5
 
 Name:           tine20
-Version:        %{downstreamversion}
-Release:        1%{?dist}
+Version:        %{vyear}.%{vmonth}.%{vmin}
+Release:        2%{?dist}
 Summary:        Open Source Groupware and CRM
 
 License:        AGPLv3, GPLv3, BSD, LGPLv2.1+, LGPLv2.1
 URL:            http://www.tine20.org/
-Source0:        http://www.tine20.org/downloads/%{upstreamversion}/tine20-allinone_%{upstreamversion}.tar.bz2
+Source0:        http://www.tine20.org/downloads/%{version}/tine20-allinone_%{version}.tar.bz2
 Source1:        tine20-httpd.conf
 Source2:        tine20-php.ini
 Source3:        tine20-config.inc.php
@@ -45,7 +44,7 @@ Source4:        tine20-logrotate.conf
 Source5:        tine20-README.fedora
 
 # The patch is to make some requirements compatible with packages (not) provided
-# in Fedora and thus, not implemented upstream 
+# in Fedora and thus, not implemented upstream
 Patch0:         0001-tine20-fix-requirements.patch
 
 BuildArch:      noarch
@@ -109,12 +108,12 @@ Requires:       tine20-base = %{version}
 This package contains the mail client module for Tine 2.0 called "Felamimail".
 
 
-#%package filemanager
-#Summary:        Tine 2.0 file manager module
-#Requires:       tine20-base = %{version}
-#
-#%description filemanager
-#This package contains the file manager module for Tine 2.0.
+%package filemanager
+Summary:        Tine 2.0 file manager module
+Requires:       tine20-base = %{version}
+
+%description filemanager
+This package contains the file manager module for Tine 2.0.
 
 
 %package sales
@@ -142,7 +141,7 @@ This package contains the time tracker module for Tine 2.0.
 
 
 %prep
-%setup -q -c -n %{name}-%{downstreamversion}
+%setup -q -c -n %{name}-%{version}
 cp -a %{SOURCE5} README.fedora
 
 %patch0
@@ -155,9 +154,9 @@ cp -a %{SOURCE5} README.fedora
 rm -rf $RPM_BUILD_ROOT
 
 
-# remove the bundled ZendFramework, the Fedora-shipped one is referenced from
-# tine20-httpd.conf which will be installed as /etc/httpd/conf.d/tine20.conf
-rm -rf library/Zend/
+## remove the bundled ZendFramework, the Fedora-shipped one is referenced from
+## tine20-httpd.conf which will be installed as /etc/httpd/conf.d/tine20.conf
+#rm -rf library/Zend/
 
 
 # installation of code to /usr/share/tine20
@@ -190,19 +189,21 @@ install -pm 644 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
 if [ "$1" -eq "1" ]; then
         export NEWPASS=$( dd if=/dev/urandom bs=20 count=1 2>/dev/null \
                                 | sha1sum | awk '{print $1}' )
-	sed -i "s/SETUP PASSWORD/$NEWPASS/" %{_sysconfdir}/%{name}/config.inc.php
+    sed -i "s/SETUP PASSWORD/$NEWPASS/" %{_sysconfdir}/%{name}/config.inc.php
 fi
 
 
 %files base
 %doc LICENSE PRIVACY README RELEASENOTES config.inc.php.dist README.fedora
 %dir %{_datadir}/%{name}/
+%{_datadir}/%{name}/ActiveSync/
 %{_datadir}/%{name}/Addressbook/
 %{_datadir}/%{name}/Admin/
 %{_datadir}/%{name}/images/
 %{_datadir}/%{name}/index.php
 %{_datadir}/%{name}/langHelper.php
 %{_datadir}/%{name}/library/
+%{_datadir}/%{name}/Projects/
 %{_datadir}/%{name}/Setup/
 %{_datadir}/%{name}/setup.php
 %{_datadir}/%{name}/styles/
@@ -239,8 +240,8 @@ fi
 %{_datadir}/%{name}/Felamimail/
 
 
-#%files filemanager
-#%{_datadir}/%{name}/Filemanager/
+%files filemanager
+%{_datadir}/%{name}/Filemanager/
 
 
 %files sales
@@ -256,6 +257,15 @@ fi
 
 
 %changelog
+* Thu Aug 02 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.03.5-2
+- re-enable the Tine 2.0 delivered Zend Framework
+  
+* Fri Jun 29 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.03.5-1
+- Update to new upstream release 2012.03.05
+
+* Tue Mar 13 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.03.1-1
+- Update to new upstream release 2012.03.01
+
 * Sat Feb 04 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2011.05.6-1
 - Update to new service release 2011.05.06
 - comment out the Filemanager subpackage, the module disappeared in 2011-05-06
