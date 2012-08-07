@@ -38,6 +38,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'model'             => '',
         'urlIsHome'            => 0,
         'mapNicknameToField'=> '',
+        'useStreamFilter'   => FALSE,
     );
     
     /**
@@ -137,7 +138,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     public function import($_resource = NULL, $_clientRecordData = array())
     {
         $this->_initImportResult();
-        $this->_appendStreamFilters($_resource);
         
         $lines = array();
         while ($line = fgets($_resource)) {

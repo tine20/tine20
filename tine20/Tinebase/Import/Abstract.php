@@ -43,6 +43,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'shared_tags'       => 'create', //'onlyexisting',
         'autotags'          => array(),
         'encodingTo'        => 'UTF-8',
+        'useStreamFilter'   => TRUE,
     );
     
     /**
@@ -143,20 +144,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * append stream filter for correct linebreaks and encoding
-     * - iconv with TRANSLIT
+     * append stream filter for correct linebreaks
+     * - iconv with IGNORE
      * - replace linebreaks
      * 
      * @param resource $resource
      */
     protected function _appendStreamFilters($resource)
     {
-        if (! $resource) {
+        if (! $resource || ! isset($this->_options['useStreamFilter']) || ! $this->_options['useStreamFilter']) {
             return;
         }
 
-        if (isset($this->_options['encoding']) && isset($this->_options['encodingTo'])) {
-            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo']. '//TRANSLIT';
+        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
+            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'] . '//IGNORE';
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Add convert stream filter: ' . $filter);
             stream_filter_append($resource, $filter);
@@ -326,8 +327,37 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } else {
             $data = $_data;
         }
+        
+        foreach ($data as $key => $value) { 
+            $data[$key] = $this->_convertEncoding($value);
+        }
 
         return $data;
+    }
+    
+    /**
+     * convert encoding
+     * NOTE: always do encoding with //IGNORE as we do not know the actual encoding in some cases
+     * 
+     * @param string|array $_value
+     * @return string|array
+     */
+    protected function _convertEncoding($_value)
+    {
+        if (! isset($this->_options['encoding']) || ! isset($this->_options['encodingTo']) || (isset($this->_options['useStreamFilter']) && $this->_options['useStreamFilter'])) {
+            return $_value;
+        }
+        
+        if (is_array($_value)) {
+            $result = array();
+            foreach ($_value as $singleValue) {
+                $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'] . '//IGNORE', $singleValue);
+            }
+        } else {
+            $result = @iconv($this->_options['encoding'], $this->_options['encodingTo'] . '//IGNORE', $_value);
+        }
+        
+        return $result;
     }
     
     /**
