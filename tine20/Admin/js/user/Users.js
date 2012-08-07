@@ -83,7 +83,8 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserAr
  */
 Tine.Admin.Model.User.getDefaultData = function () {
     var internalAddressbook = Tine.Admin.registry.get('defaultInternalAddressbook'),
-        emailUserDefaults = Tine.Admin.registry.get('config').defaultImapUserSettings ? Tine.Admin.registry.get('config').defaultImapUserSettings.value : '';
+        emailUserDefaults = (Tine.Admin.registry.get('config').defaultImapUserSettings && Tine.Admin.registry.get('config').defaultImapUserSettings.value)
+            ? Tine.Admin.registry.get('config').defaultImapUserSettings.value : '';
         
     return {
         sambaSAM: '',
