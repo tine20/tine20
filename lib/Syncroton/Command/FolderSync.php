@@ -73,7 +73,15 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        #if ($this->_statusProvisioning = $this->_checkProvisioningNeeded() !== false) {
+        #    if (version_compare($this->_device->acsversion, '14.0', '<')) {
+        #        throw new Syncroton_Exception_ProvisioningNeeded();
+        #    } else {
+        #        return;
+        #    }
+        #}
+        
+        $xml = simplexml_import_dom($this->_requestBody);
         $syncKey = (int)$xml->SyncKey;
         
         if ($this->_logger instanceof Zend_Log) 
@@ -107,108 +115,119 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
     {
         $folderSync = $this->_outputDom->documentElement;
         
+        // provioning needed?
+        #if ($this->_statusProvisioning !== false) {
+        #    if ($this->_logger instanceof Zend_Log) 
+        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisiong needed or remote wipe requested");
+        #    $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', $this->_statusProvisioning));
+        #    
+        #    return $this->_outputDom;
+        #}
+        
+        // invalid synckey provided
         if($this->_syncState === false) {
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
 
-        } else {
-            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
-            
-            $adds = array();
-            $deletes = array();
-            
-            foreach($this->_classes as $class) {
-                try {
-                    $dataController = Syncroton_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
-                } catch (Zend_Exception $ze) {
-                    // backend not defined
-                    if ($this->_logger instanceof Zend_Log)
-                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
-                    continue;
-                }
-                
-                // retrieve all folders available in data backend
-                $serverFolders = $dataController->getAllFolders();
-                // retrieve all folders sent to client
-                $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
-                
-                $serverFoldersIds = array_keys($serverFolders);
-                
-                // is this the first sync?
-                if($this->_syncState->counter == 0) {
-                    $clientFoldersIds = array();
-                } else {
-                    $clientFoldersIds = array_keys($clientFolders);
-                } 
-                               
-                // calculate added entries
-                $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
-                foreach($serverDiff as $serverFolderId) {
-                    if (isset($clientFolders[$serverFolderId])) {
-                        $adds[] = $clientFolders[$serverFolderId];
-                    } else {
-                        $adds[] = new Syncroton_Model_Folder(array(
-                            'device_id'         => $this->_device,
-                            'class'             => $class,
-                            'folderid'          => $serverFolders[$serverFolderId]->folderid,
-                            'parentid'          => $serverFolders[$serverFolderId]->parentid,
-                            'displayname'       => $serverFolders[$serverFolderId]->displayname,
-                            'type'              => $serverFolders[$serverFolderId]->type,
-                            'creation_time'     => $this->_syncTimeStamp,
-                            'lastfiltertype'    => null
-                        ));
-                    }
-                }
-                
-                // calculate deleted entries
-                $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
-                foreach($serverDiff as $serverFolderId) {
-                    $deletes[] = $clientFolders[$serverFolderId];
-                }
+            return $this->_outputDom;
+        }
+        
+        $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
+        
+        $adds = array();
+        $deletes = array();
+        
+        foreach($this->_classes as $class) {
+            try {
+                $dataController = Syncroton_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
+            } catch (Zend_Exception $ze) {
+                // backend not defined
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
+                continue;
             }
             
-            $count = count($adds) + /*count($changes) + */count($deletes);
-            if($count > 0) {
-                $this->_syncState->counter++;
-            }
+            // retrieve all folders available in data backend
+            $serverFolders = $dataController->getAllFolders();
+            // retrieve all folders sent to client
+            $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
             
-            // create xml output
-            $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $this->_syncState->counter));
+            $serverFoldersIds = array_keys($serverFolders);
             
-            $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
-            $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
-            
-            foreach($adds as $folder) {
-                
-                $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
-                $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
-                $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder->parentid));
-                
-                $displayName = $this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName');
-                $displayName->appendChild($this->_outputDom->createTextNode($folder->displayname));
-                $add->appendChild($displayName);
-                
-                $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
-                
-                // store folder in backend
-                if (empty($folder->id)) {
-                    $this->_folderBackend->create($folder);
-                }
-            }
-            
-            foreach($deletes as $folder) {
-                $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
-                $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
-                
-                $this->_folderBackend->delete($folder);
-            }
-            
-            if (empty($this->_syncState->id)) {
-                $this->_syncStateBackend->create($this->_syncState);
+            // is this the first sync?
+            if($this->_syncState->counter == 0) {
+                $clientFoldersIds = array();
             } else {
-                $this->_syncStateBackend->update($this->_syncState);
+                $clientFoldersIds = array_keys($clientFolders);
+            } 
+                           
+            // calculate added entries
+            $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
+            foreach($serverDiff as $serverFolderId) {
+                if (isset($clientFolders[$serverFolderId])) {
+                    $adds[] = $clientFolders[$serverFolderId];
+                } else {
+                    $adds[] = new Syncroton_Model_Folder(array(
+                        'device_id'         => $this->_device,
+                        'class'             => $class,
+                        'folderid'          => $serverFolders[$serverFolderId]->folderid,
+                        'parentid'          => $serverFolders[$serverFolderId]->parentid,
+                        'displayname'       => $serverFolders[$serverFolderId]->displayname,
+                        'type'              => $serverFolders[$serverFolderId]->type,
+                        'creation_time'     => $this->_syncTimeStamp,
+                        'lastfiltertype'    => null
+                    ));
+                }
             }
+            
+            // calculate deleted entries
+            $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
+            foreach($serverDiff as $serverFolderId) {
+                $deletes[] = $clientFolders[$serverFolderId];
+            }
+        }
+        
+        $count = count($adds) + /*count($changes) + */count($deletes);
+        if($count > 0) {
+            $this->_syncState->counter++;
+        }
+        
+        // create xml output
+        $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $this->_syncState->counter));
+        
+        $changes = $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Changes'));            
+        $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
+        
+        foreach($adds as $folder) {
+            
+            $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
+            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
+            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder->parentid));
+            
+            $displayName = $this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName');
+            $displayName->appendChild($this->_outputDom->createTextNode($folder->displayname));
+            $add->appendChild($displayName);
+            
+            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
+            
+            // store folder in backend
+            if (empty($folder->id)) {
+                $this->_folderBackend->create($folder);
+            }
+        }
+        
+        foreach($deletes as $folder) {
+            $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
+            $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
+            
+            $this->_folderBackend->delete($folder);
+        }
+        
+        if (empty($this->_syncState->id)) {
+            $this->_syncStateBackend->create($this->_syncState);
+        } else {
+            $this->_syncStateBackend->update($this->_syncState);
         }
         
         return $this->_outputDom;

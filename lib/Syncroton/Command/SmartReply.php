@@ -17,28 +17,8 @@
  */
 class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
 {
-    protected $_itemId;
-    
-    protected $_collectionId;
-        
-    /**
-     * process the XML file and add, change, delete or fetches data 
-     *
-     * @todo can we get rid of LIBXML_NOWARNING
-     * @todo we need to stored the initial data for folders and lifetime as the phone is sending them only when they change
-     * @return resource
-     */
-    public function handle()
-    {
-        parent::handle();
-        
-        $this->_collectionId    = $_GET['CollectionId'];
-        $this->_itemId          = $_GET['ItemId'];
-        
-        if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " collectionId: " . $this->_collectionId . " itemId: " . $this->_itemId);
-        
-    }
+    protected $_defaultNameSpace    = 'uri:ComposeMail';
+    protected $_documentElement     = 'SmartReply';
     
     /**
      * this function generates the response for the client

@@ -39,7 +39,7 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         if (isset($xml->Fetch)) {
             foreach ($xml->Fetch as $fetch) {

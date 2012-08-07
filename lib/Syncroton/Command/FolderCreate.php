@@ -43,7 +43,7 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         $this->_syncKey     = (int)$xml->SyncKey;
         $this->_parentId    = (string)$xml->ParentId;

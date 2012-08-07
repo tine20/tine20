@@ -40,7 +40,7 @@ class Syncroton_Command_Settings extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         if(isset($xml->DeviceInformation->Set)) {
             $this->_deviceInformationSet = true;

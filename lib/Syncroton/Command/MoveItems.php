@@ -37,7 +37,7 @@ class Syncroton_Command_MoveItems extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         foreach ($xml->Move as $move) {
             $this->_moves[] = array(

@@ -43,7 +43,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         $this->_policyType     = isset($xml->Policies->Policy->PolicyType) ? (string) $xml->Policies->Policy->PolicyType : null;
         $this->_sendPolicyKey  = isset($xml->Policies->Policy->PolicyKey)  ? (int) $xml->Policies->Policy->PolicyKey     : null;

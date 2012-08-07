@@ -121,7 +121,7 @@ class Syncroton_Server
         }
 
         try {
-            $command = new $className($requestBody, $device, $requestParameters['policyKey']);
+            $command = new $className($requestBody, $device, $requestParameters);
         
             $command->handle();
         

@@ -36,7 +36,7 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         $this->_store = array(
             'name' => (string) $xml->Store->Name

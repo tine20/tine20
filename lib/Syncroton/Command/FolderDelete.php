@@ -40,7 +40,7 @@ class Syncroton_Command_FolderDelete extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         $syncKey  = (int)$xml->SyncKey;
         $folderId = (string)$xml->ServerId;

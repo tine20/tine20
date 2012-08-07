@@ -36,7 +36,7 @@ class Syncroton_Command_GetItemEstimate extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             

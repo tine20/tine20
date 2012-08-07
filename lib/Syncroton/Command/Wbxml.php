@@ -61,7 +61,7 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
      *
      * @var DOMDocument
      */
-    protected $_inputDom;
+    protected $_requestBody;
         
     /**
      * the default namespace
@@ -78,9 +78,9 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     protected $_documentElement;
     
     /**
-     * @var string
+     * @var array
      */
-    protected $_policyKey;
+    protected $_requestParameters;
     
     /**
      * @var Syncroton_Model_SyncState
@@ -102,6 +102,11 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     protected $_transactionId;
     
     /**
+     * @var string
+     */
+    protected $_policyKey;
+    
+    /**
      * @var Zend_Log
      */
     protected $_logger;
@@ -109,14 +114,16 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     /**
      * the constructor
      *
-     * @param  mixed                    $_requestBody
-     * @param  Syncroton_Model_Device  $_device
-     * @param  string                   $_policyKey
+     * @param  mixed                   $requestBody
+     * @param  Syncroton_Model_Device  $device
+     * @param  array                   $requestParameters
      */
-    public function __construct($_requestBody, Syncroton_Model_IDevice $_device, $_policyKey)
+    public function __construct($requestBody, Syncroton_Model_IDevice $device, $requestParameters)
     {
-        $this->_policyKey = $_policyKey;
-        $this->_device    = $_device;
+        $this->_requestBody       = $requestBody;
+        $this->_device            = $device;
+        $this->_requestParameters = $requestParameters;
+        $this->_policyKey         = $requestParameters['policyKey'];
         
         $this->_deviceBackend       = Syncroton_Registry::getDeviceBackend();
         $this->_folderBackend       = Syncroton_Registry::getFolderBackend();
@@ -139,7 +146,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
             throw new Syncroton_Exception_ProvisioningNeeded();
         }
         
-        $this->_inputDom = $_requestBody;
         
         $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
         

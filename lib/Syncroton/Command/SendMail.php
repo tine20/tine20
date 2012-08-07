@@ -15,62 +15,15 @@
  * @package     Syncroton
  * @subpackage  Command
  */
-class Syncroton_Command_SendMail
+class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
 {
-    /**
-     * save copy in sent folder
-     *
-     * @var boolean
-     */
-    protected $_saveInSent;
+    protected $_defaultNameSpace    = 'uri:ComposeMail';
+    protected $_documentElement     = 'Sendmail';
     
-    /**
-     * @var resource
-     */
-    protected $_inputStream;
-
-    /**
-     * informations about the currently device
-     *
-     * @var Syncroton_Model_Device
-     */
-    protected $_device;
+    protected $_itemId;
     
-    /**
-     * timestamp to use for all sync requests
-     *
-     * @var DateTime
-     */
-    protected $_syncTimeStamp;
+    protected $_collectionId;
     
-    /**
-     * @var Zend_Log
-     */
-    protected $_logger;
-    
-    /**
-     * the constructor
-     *
-     * @param  mixed                   $requestBody
-     * @param  Syncroton_Model_Device  $device
-     * @param  string                  $policyKey
-     */
-    public function __construct($requestBody, Syncroton_Model_IDevice $device, $policyKey)
-    {
-        if (!is_resource($requestBody)) {
-            throw new Syncroton_Exception_UnexpectedValue('$requestBody must be stream');
-        }
-        
-        $this->_inputStream = $requestBody;
-        
-        $this->_policyKey     = $policyKey;
-        $this->_device        = $device;
-        $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
-        
-        if (Syncroton_Registry::isRegistered('loggerBackend')) {
-            $this->_logger    = Syncroton_Registry::get('loggerBackend');
-        }
-    }
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -79,25 +32,23 @@ class Syncroton_Command_SendMail
      */
     public function handle()
     {
-        $this->_saveInSent = isset($_GET['SaveInSent']) && (bool)$_GET['SaveInSent'] == 'T';
+        if ($this->_requestParameters['contentType'] == 'message/rfc822') {
+            $this->_saveInSent    = isset($_GET['SaveInSent']) && $_GET['SaveInSent'] == 'T';
+            $this->_collectionId  = isset($_GET['CollectionId']) ? $_GET['CollectionId'] : null;
+            $this->_itemId        = isset($_GET['ItemId'])       ? $_GET['ItemId']       : null;
+            $this->_inputStream   = $this->_requestBody;
+            
+        } else {
+            $xml = simplexml_import_dom($this->_requestBody);
+            
+            $this->_saveInSent    = isset($xml->SaveinSentItems);
+            $this->_collectionId  = isset($xml->FolderId) ? (string)$xml->FolderId : null;
+            $this->_itemId        = isset($xml->ItemId)   ? (string)$xml->ItemId   : null;
+            $this->_inputStream   = (string) $xml->Mime;
+        }
         
         if ($this->_logger instanceof Zend_Log)
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " saveInSent: " . (int)$this->_saveInSent);
-        
-        /**
-         * uncomment next lines to log email body
-         *
-        if ($this->_logger instanceof Zend_Log) {
-            $debugStream = fopen("php://temp", 'r+');
-            stream_copy_to_stream($this->_inputStream, $debugStream);
-            rewind($debugStream);
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
-
-            // replace original stream wirh debug stream, as php://input can't be rewinded
-            $this->_inputStream = $debugStream;
-            rewind($this->_inputStream);
-        }
-        */
     }
     
     /**

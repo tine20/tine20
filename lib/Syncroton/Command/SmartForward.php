@@ -17,6 +17,8 @@
  */
 class Syncroton_Command_SmartForward extends Syncroton_Command_SmartReply
 {
+    protected $_defaultNameSpace    = 'uri:ComposeMail';
+    protected $_documentElement     = 'SmartForward';
     /**
      * this function generates the response for the client
      * 

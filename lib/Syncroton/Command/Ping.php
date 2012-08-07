@@ -57,8 +57,8 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
         $status = self::STATUS_NO_CHANGES_FOUND;
 
         // the client does not send a wbxml document, if the Ping parameters did not change compared with the last request
-        if($this->_inputDom instanceof DOMDocument) {
-            $xml = simplexml_import_dom($this->_inputDom);
+        if($this->_requestBody instanceof DOMDocument) {
+            $xml = simplexml_import_dom($this->_requestBody);
             $xml->registerXPathNamespace('Ping', 'Ping');    
 
             if(isset($xml->HeartBeatInterval)) {

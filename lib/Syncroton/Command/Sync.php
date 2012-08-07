@@ -117,7 +117,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         #}
         
         // input xml
-        $xml = simplexml_import_dom($this->_inputDom);
+        $xml = simplexml_import_dom($this->_requestBody);
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $collectionData = new Syncroton_Model_SyncCollection($xmlCollection);
