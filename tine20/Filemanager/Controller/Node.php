@@ -397,6 +397,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
         
+        // we need to check the parent record existance before continuing with node creation
+        $parentPathRecord->validateExistance();
+        
         try {
             $this->_checkIfExists($path);
             $this->_checkPathACL($parentPathRecord, 'add');
@@ -505,7 +508,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $existsException = new Filemanager_Exception_NodeExists();
             $existsException->addExistingNodeInfo(($_node !== NULL) ? $_node : $this->_backend->stat($_path->statpath));
             throw $existsException;
-        }        
+        }
     }
         
     /**
