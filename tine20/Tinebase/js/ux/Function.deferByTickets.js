@@ -7,8 +7,9 @@ Ext.applyIf(Function.prototype, {
      * @autor       Cornelius Weiss <c.weiss@metaways.de>
      * @license     BSD, MIT and GPL
      *
+     *
 var sayHi = function(name){
-    alert('Hi, ' + name);
+alert('Hi, ' + name);
 }
 
 var ticketFn = sayHi.deferByTickets(this, ['Fred']);
@@ -18,8 +19,8 @@ var ticketFn1 = ticketFn();
 var ticketFn2 = ticketFn();
 
 // give tickets back
- ticketFn1();
- ticketFn2();
+ticketFn1();
+ticketFn2();
 
      * NOTE: the function gets never executed if not at least one ticket is taken and given back
      *
@@ -32,7 +33,7 @@ var ticketFn2 = ticketFn();
     deferByTickets: function(obj, args, appendArgs) {
         var fn = this.createDelegate(obj, args, appendArgs),
             waitTickets = [];
-
+        
         // run if all tickets are back
         var run = function() {
             if (Ext.isEmpty(waitTickets)) {

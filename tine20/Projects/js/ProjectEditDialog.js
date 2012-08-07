@@ -35,6 +35,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: true,
     hideRelationsPanel: true,
+    
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
@@ -45,15 +46,11 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * executed after record got updated from proxy
-     * 
      * @private
      */
-    onRecordLoad: function() {
-        // add selections to record
-        Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);
-        if (this.rendered) {
-            this.contactLinkPanel.onRecordLoad(this.record);
-        }
+    onAfterRecordLoad: function() {
+        Tine.Projects.ProjectEditDialog.superclass.onAfterRecordLoad.call(this);
+        this.contactLinkPanel.onRecordLoad(this.record);
     },
     
     /**

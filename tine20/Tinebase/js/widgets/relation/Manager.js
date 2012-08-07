@@ -24,14 +24,32 @@ Tine.widgets.relation.Manager = function() {
 
         /**
          * returns the relations config
-         * @param Tine.Tinebase.Application app
-         * @param Tine.Tinebase.data.Record recordClass
+         * @param {Tine.Tinebase.Application} app
+         * @param {Tine.Tinebase.data.Record} recordClass
+         * @param {Array} ignoreModels the php model names to ignore (they won't be returned)
          */
-        get: function(app, recordClass) {
+        get: function(app, recordClass, ignoreModels) {
             var key = app.name + recordClass.getMeta('modelName');
+            
             // create if not cached
-            if(items[key] === undefined) this.create(recordClass, key);
-            return items[key];
+            if(items[key] === undefined) {
+                this.create(recordClass, key);
+            }
+            
+            var allRelations = items[key];
+            var usedRelations = [];
+            // sort out ignored models
+            if (ignoreModels) {
+                Ext.each(allRelations, function(relation) {
+                    if(ignoreModels.indexOf(relation.relatedApp + '_Model_' + relation.relatedModel) == -1) {
+                        usedRelations.push(relation);
+                    }
+                }, this);
+            } else {
+                return allRelations;
+            }
+            
+            return usedRelations;
         },
 
         /**

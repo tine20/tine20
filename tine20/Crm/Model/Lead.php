@@ -115,7 +115,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
             array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
             array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
-            )
+            ),
+            'default' => array('type' => 'CUSTOMER', 'own_degree' => 'parent')
         )
     );
 
@@ -203,6 +204,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
                         'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
                         'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
+                        'related_model'          => (isset($relation['related_model'])) ? $relation['related_model'] : NULL,
+                        'related_backend'        => (isset($relation['related_backend'])) ? $relation['related_backend'] : Addressbook_Backend_Factory::SQL
                     );
                     
                     // set id from related record (if it didn't got set in javascript frontend)
@@ -233,7 +236,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                             $data['related_backend'] = 'Sql';
                             break;
                         default:
-                            throw new Crm_Exception_UnexpectedValue('Relation type ' . $relation['type'] . ' not supported.');
+                            // do nothing
                     }
     
                     // sanitize container id

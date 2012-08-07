@@ -637,7 +637,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         });
         
         // no support for multiple edit
-        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         
         Tine.widgets.activities.ActivitiesTabPanel.superclass.initComponent.call(this);
     }

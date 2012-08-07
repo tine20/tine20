@@ -56,7 +56,7 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
 
         this.initLinksDataView();
         this.items = [this.linksDataView];
-        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
+        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
        
         Tine.widgets.dialog.LinkPanel.superclass.initComponent.call(this);
     },

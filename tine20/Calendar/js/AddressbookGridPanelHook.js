@@ -96,39 +96,54 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
     onAddEvent: function(btn) {
         var ms = this.app.getMainScreen(),
             cp = ms.getCenterPanel(),
-            cont = this.getSelectionsAsArray(),
-            myAccount = Tine.Tinebase.registry.get('currentAccount'),
-            attendee = [];
+            filter = this.getFilter(ms);
         
-        attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-            user_type: 'user',
-            user_id: myAccount,
-            status: 'ACCEPTED'
-        }));
-        
-        Ext.each(cont, function(contact) {
-            // skip adding contact of current user twice
-            if (myAccount.accountId == contact.account_id) return true;
-            if(contact.account_id) {
-                var data = {user_id: contact}
-            } else {    // allow edit in attendeeGridPanel if no account or account belongs to current User
-                var data = {user_id: contact, status_authkey: 1}
-            }
-            
-            attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), data));
-            
-        });
-        
-        cp.onEditInNewWindow.call(cp, 'add', null, {attendee: attendee});
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray();
+        } else {
+            var addRelations = true;
+        }
+
+        cp.onEditInNewWindow.call(cp, 'add', null, [{
+            ptype: 'addrelations_edit_dialog', selectionFilter: filter, addRelations: addRelations, callingApp: 'Addressbook', callingModel: 'Contact'
+        }]);
     },
     
     /**
      * adds selected contacts to an existing event
      */
     onUpdateEvent: function() {
-        var cont = this.getSelectionsAsArray();
-        
-        var window = Tine.Calendar.AddToEventPanel.openWindow({attendee: cont});
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            filter = this.getFilter(ms),
+            sm = this.getContactGridPanel().selectionModel;
+            
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray(),
+                count = this.getSelectionsAsArray().length;
+        } else {
+            var addRelations = true,
+                count = sm.store.totalLength;
+        }
+
+        Tine.Calendar.AddToEventPanel.openWindow({
+            count: count, selectionFilter: filter, addRelations: addRelations
+        });
+    },
+    /**
+     * returns the current filter if is filter selection
+     * @param {Tine.widgets.MainScreen}
+     * @return {Object}
+     */
+    getFilter: function(ms) {
+        var sm = this.getContactGridPanel().selectionModel,
+            addRelations = this.getSelectionsAsArray(),
+            filter = null;
+            
+        if(sm.isFilterSelect) {
+            var filter = sm.getSelectionFilter();
+        }
+        return filter;
     },
     
     /**

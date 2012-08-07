@@ -31,22 +31,8 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
     var text = this.app.i18n.n_hidden(Tine.Crm.Model.Lead.prototype.recordName, Tine.Crm.Model.Lead.prototype.recordsName, 1);
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
-    this.newLeadAction = new Ext.Action({
-        actionType: 'new',
-        requiredGrant: 'readGrant',
-        allowMultiple: true,
-        text: text,
-        iconCls: this.app.getIconCls(),
-        scope: this,
-        handler: this.onNewLead,
-        listeners: {
-            scope: this,
-            render: this.onRender
-        }
-    });
-    
     this.addLeadAction = new Ext.Action({
-        actionType: 'add',
+        actionType: 'new',
         requiredGrant: 'readGrant',
         allowMultiple: true,
         text: text,
@@ -59,9 +45,23 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
         }
     });
     
+    this.updateLeadAction = new Ext.Action({
+        actionType: 'add',
+        requiredGrant: 'readGrant',
+        allowMultiple: true,
+        text: text,
+        iconCls: this.app.getIconCls(),
+        scope: this,
+        handler: this.onUpdateLead,
+        listeners: {
+            scope: this,
+            render: this.onRender
+        }
+    });
+    
     // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newLeadAction, 80);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addLeadAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.addLeadAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.updateLeadAction, 80);
 
 };
 
@@ -75,18 +75,18 @@ Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
     app: null,
     
     /**
-     * @property newLeadAction
-     * @type Tine.widgets.ActionUpdater
-     * @private
-     */
-    newLeadAction: null,
-
-    /**
      * @property addLeadAction
      * @type Tine.widgets.ActionUpdater
      * @private
      */
-    addLeadAction: null,    
+    addLeadAction: null,
+
+    /**
+     * @property updateLeadAction
+     * @type Tine.widgets.ActionUpdater
+     * @private
+     */
+    updateLeadAction: null,    
     
     /**
      * @property ContactGridPanel
@@ -107,49 +107,58 @@ Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
     },
     
     /**
-     * compose an email to selected contacts
+     * returns the current filter if is filter selection
+     * @param {Tine.widgets.MainScreen}
+     * @return {Object}
+     */
+    getFilter: function(ms) {
+        var sm = this.getContactGridPanel().selectionModel,
+            filter = null;
+            
+        if(sm.isFilterSelect) {
+            var filter = sm.getSelectionFilter();
+        }
+        return filter;
+    },
+    
+    /**
+     * create a lead with participants
      * 
      * @param {Button} btn 
      */
-    onNewLead: function(btn) {
-        var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
-            leadData = Tine.Crm.Model.Lead.getDefaultData();
+    onAddLead: function(btn) {
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            filter = this.getFilter(ms),
+            sm = this.getContactGridPanel().selectionModel;
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray();
+        } else {
+            var addRelations = true;
+        }
         
-        leadData.relations = [].concat(leadData.relations);
-        Ext.each(contacts, function(contact) {
-            leadData.relations.push({
-                type: 'CUSTOMER',
-                related_record: contact.data,
-                own_backend: "Sql",
-                own_degree: "sibling",
-                own_model: "Crm_Model_Lead",
-                related_backend: "sql",
-                related_id: contact.data.id, 
-                related_model: "Addressbook_Model_Contact"
-            });
-        }, this);
-        
-        
-        var window = Tine.Crm.LeadEditDialog.openWindow({
-            record: new Tine.Crm.Model.Lead(leadData, 0)
-        });
-        
-        window.on('close', function() {
-          var app = Tine.Tinebase.appMgr.get('Crm');
-             if(app) {
-                 var ms = app.getMainScreen();
-                 if(ms) {
-                     cp = ms.getCenterPanel();
-                     if(cp) cp.store.reload();
-                 }
-             }          
-        });
-        
+        cp.onEditInNewWindow.call(cp, 'add', null, [{
+            ptype: 'addrelations_edit_dialog', selectionFilter: filter, addRelations: addRelations, callingApp: 'Addressbook', callingModel: 'Contact'
+        }]);
     },
     
-    onAddLead: function(btn) {
-        var contacts = this.getSelectionsAsArray();
-        Tine.Crm.AddToLeadPanel.openWindow({addRecords: contacts});
+    onUpdateLead: function(btn) {
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            filter = this.getFilter(ms),
+            sm = this.getContactGridPanel().selectionModel;
+            
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray(),
+                count = this.getSelectionsAsArray().length;
+        } else {
+            var addRelations = true,
+                count = sm.store.totalLength;
+        }
+        
+        Tine.Crm.AddToLeadPanel.openWindow({
+            count: count, selectionFilter: filter, addRelations: addRelations, callingApp: 'Addressbook', callingModel: 'Contact'
+        });
     },
 
     /**
@@ -173,11 +182,11 @@ Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
         var actionUpdater = this.getContactGridPanel().actionUpdater,
             registeredActions = actionUpdater.actions;
             
+        if (registeredActions.indexOf(this.updateLeadAction) < 0) {
+            actionUpdater.addActions([this.updateLeadAction]);
+        }
         if (registeredActions.indexOf(this.addLeadAction) < 0) {
             actionUpdater.addActions([this.addLeadAction]);
-        }
-        if (registeredActions.indexOf(this.newLeadAction) < 0) {
-            actionUpdater.addActions([this.newLeadAction]);
         }        
     }
 

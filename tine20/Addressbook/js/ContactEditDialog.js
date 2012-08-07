@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,14 +37,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     getFormItems: function () {
         if (Tine.Tinebase.registry.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
-                listeners: {
-                    'add': this.addToDisableOnEditMultiple,
-                    scope: this
-                },
                 layout: 'fit',
                 title: this.app.i18n._('Map'),
                 disabled: (Ext.isEmpty(this.record.get('adr_one_lon')) || Ext.isEmpty(this.record.get('adr_one_lat'))) && (Ext.isEmpty(this.record.get('adr_two_lon')) || Ext.isEmpty(this.record.get('adr_two_lat')))
             });
+            
+            Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this.mapPanel);
+            
         } else {
             this.mapPanel = new Ext.Panel({
                 layout: 'fit',
@@ -354,7 +353,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 preventScrollbars: false,
                                 anchor: '100% 100%',
                                 emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'                           
+                                requiredGrant: 'editGrant'
                             }]
                         }),
                         new Tine.widgets.activities.ActivitiesPanel({

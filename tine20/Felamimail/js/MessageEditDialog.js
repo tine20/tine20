@@ -93,6 +93,23 @@ Ext.namespace('Tine.Felamimail');
     validationErrorMessage: '',
     
     /**
+     * array with e-mail-addresses used as recipients
+     * @type {Array}
+     */
+    mailAddresses: null,
+    /**
+     * json-encoded selection filter
+     * @type {String} selectionFilter
+     */
+    selectionFilter: null,
+    
+    /**
+     * holds default values for the record
+     * @type {Object}
+     */
+    recordDefaults: null,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -109,6 +126,12 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateToolbars: Ext.emptyFn,
+    
+    //private
+    initComponent: function() {
+         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
+         this.on('save', this.onSave, this);
+    },
     
     /**
      * init buttons
@@ -185,6 +208,7 @@ Ext.namespace('Tine.Felamimail');
             }]
         });
     },
+
     
     /**
      * @private
@@ -192,8 +216,17 @@ Ext.namespace('Tine.Felamimail');
     initRecord: function() {
         this.decodeMsgs();
         
+        this.recordDefaults = Tine.Felamimail.Model.Message.getDefaultData();
+        this.recordDefaults.body = Tine.Felamimail.getSignature();
+        
+        if (this.mailAddresses) {
+            this.recordDefaults.to = Ext.decode(this.mailAddresses);
+        } else if (this.selectionFilter) {
+            this.on('load', this.fetchRecordsOnLoad, this);
+        }
+        
         if (! this.record) {
-            this.record = new this.recordClass(Tine.Felamimail.Model.Message.getDefaultData(), 0);
+            this.record = new Tine.Felamimail.Model.Message(this.recordDefaults, 0);
         }
         
         this.initFrom();
@@ -660,8 +693,18 @@ Ext.namespace('Tine.Felamimail');
         if (this.record.get('note') && this.record.get('note') == '1') {
             this.button_saveEmailNote.toggle();
         }
+        var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
+            wrapTicket = ticketFn();
         
-        this.loadMask.hide();
+        this.fireEvent('load', this, this.record, ticketFn);
+        wrapTicket();
+    },
+
+    /**
+     * overwrite, just hide the loadMask
+     */
+    onAfterRecordLoad: function() {
+//        this.loadMask.hide();
     },
         
     /**
@@ -935,25 +978,24 @@ Ext.namespace('Tine.Felamimail');
      * 
      * TODO add note editing textfield here
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function(closeWindow) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges');
-        
         if (this.getForm().findField('subject').getValue() == '') {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
             Ext.MessageBox.confirm(
                 this.app.i18n._('Empty subject'),
                 this.app.i18n._('Do you really want to send a message with an empty subject?'),
                 function (button) {
-                    Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - button: ' + button);
+                    Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - button: ' + button);
                     if (button == 'yes') {
-                        Tine.Felamimail.MessageEditDialog.superclass.onApplyChanges.apply(this, arguments)
+                        this.doApplyChanges(closeWindow);
                     }
                 },
                 this
             );
         } else {
-            Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - call parent');
-            Tine.Felamimail.MessageEditDialog.superclass.onApplyChanges.apply(this, arguments)
+            Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - call parent');
+            this.doApplyChanges(closeWindow);
         }
         
         /*
@@ -999,6 +1041,33 @@ Ext.namespace('Tine.Felamimail');
      */
     getValidationErrorMessage: function() {
         return this.validationErrorMessage;
+    },
+    
+    /**
+     * fills the recipient grid with the records gotten from this.fetchRecordsOnLoad
+     * @param {Array} contacts
+     */
+    fillRecipientGrid: function(contacts) {
+        this.recipientGrid.addRecordsToStore(contacts, 'to');
+        this.recipientGrid.syncRecipientsToStore(['to']);
+    },
+    
+    /**
+     * fetches records to send an email to
+     */
+    fetchRecordsOnLoad: function(dialog, record, ticketFn) {
+        var interceptor = ticketFn(),
+            sf = Ext.decode(this.selectionFilter);
+            
+        Tine.log.debug('Fetching additional records...');
+        Tine.Addressbook.contactBackend.searchRecords(sf, null, {
+            scope: this,
+            success: function(result) {
+                this.fillRecipientGrid(result.records);
+                interceptor();
+            }
+        });
+        this.addressesLoaded = true;
     }
 });
 

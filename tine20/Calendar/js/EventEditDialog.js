@@ -24,7 +24,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     containerId: -1,
     
-    
     labelAlign: 'side',
     windowNamePrefix: 'EventEditWindow_',
     appName: 'Calendar',
@@ -38,12 +37,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     // note: we need up use new action updater here or generally in the widget!
     evalGrants: false,
     
-    
     onResize: function() {
         Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
         this.setTabHeight.defer(100, this);
     },
-    
     
     /**
      * returns dialog
@@ -291,9 +288,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     initComponent: function() {
-        
-        if(this.attendee) this.attendee = Ext.decode(this.attendee);
-        
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
             bbar: [{
@@ -388,31 +382,71 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
- 
-    onRecordLoad: function() {
-        // NOTE: it comes again and again till 
-        if (this.rendered) {
-            this.attendeeGridPanel.onRecordLoad(this.record, this.attendee);
-            this.rrulePanel.onRecordLoad(this.record);
-            this.alarmPanel.onRecordLoad(this.record);
-            
-            // apply grants
-            if (! this.record.get('editGrant')) {
-                this.getForm().items.each(function(f){
-                    if(f.isFormField && f.requiredGrant !== undefined){
-                        f.setDisabled(! this.record.get(f.requiredGrant));
+    /**
+     * handles attendee
+     */
+    handleRelations: function() {
+        if(this.record.data.hasOwnProperty('relations')) {
+            var addAttendee = [],
+                addRelationConfig = {};
+                
+            Ext.each(this.plugins, function(plugin) {
+                if(plugin.ptype == 'addrelations_edit_dialog') {
+                    addRelationConfig = plugin.relationConfig;
+                }
+            }, this);
+
+            Ext.each(this.record.data.relations, function(relation) {
+                var add = true;
+                Ext.each(this.record.data.attendee, function(attender) {
+                    if(attender.user_id.id == relation.related_record.id) {
+                        add = false;
+                        return false;
                     }
                 }, this);
-            }
-            
-            Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
-            this.perspectiveCombo.loadPerspective();
-            // disable container selection combo if user has no right to edit
-            this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);
-            return;
+                
+                if(add) {
+                    var att = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), addRelationConfig), 'new-' + Ext.id());
+                    att.set('user_id', relation.related_record);
+                    var attIsCurrentUser = (relation.related_record.account_id == Tine.Tinebase.registry.get('currentAccount').accountId);
+                    if (!relation.related_record.account_id || attIsCurrentUser) {
+                        att.set('status_authkey', 1);
+                        if(attIsCurrentUser) {
+                            att.set('status', 'ACCEPTED');
+                        }
+                    }
+                    addAttendee.push(att.data);
+                }
+            }, this);
+            var att = this.record.get('id') ? this.record.data.attendee.concat(addAttendee) : addAttendee;
+            this.record.set('attendee', att);
+            delete this.record.data.relations;
         }
+    },
+    
+    /**
+     * is called after all subpanels have been loaded
+     */
+    onAfterRecordLoad: function() {
+        this.handleRelations();
+        Tine.Calendar.EventEditDialog.superclass.onAfterRecordLoad.call(this);
         
-        Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
+        this.attendeeGridPanel.onRecordLoad(this.record);
+        this.rrulePanel.onRecordLoad(this.record);
+        this.alarmPanel.onRecordLoad(this.record);
+        
+        // apply grants
+        if (! this.record.get('editGrant')) {
+            this.getForm().items.each(function(f){
+                if(f.isFormField && f.requiredGrant !== undefined){
+                    f.setDisabled(! this.record.get(f.requiredGrant));
+                }
+            }, this);
+        }
+        this.perspectiveCombo.loadPerspective();
+        // disable container selection combo if user has no right to edit
+        this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);
+        
     },
     
     onRecordUpdate: function() {
@@ -421,8 +455,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
         this.perspectiveCombo.updatePerspective();
+
     },
-    
+
     setTabHeight: function() {
         var eventTab = this.items.first().items.first();
         var centerPanel = eventTab.items.first();
@@ -460,6 +495,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return true;
         }
         
+    },
+    /**
+     * is called from onApplyChanges
+     * @param {Boolean} closeWindow
+     */
+    doApplyChanges: function(closeWindow) {
+        this.onRecordUpdate();
+        if(this.isValid()) {
+            this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+            this.onAfterApplyChanges(closeWindow);
+        } else {
+            this.loadMask.hide();
+            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+        }
     }
 });
 

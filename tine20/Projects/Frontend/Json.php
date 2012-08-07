@@ -24,7 +24,8 @@ class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var Projects_Controller_Project
      */
     protected $_controller = NULL;
-        
+    
+    protected $_relatableModels = array('Projects_Model_Project');
     /**
      * the constructor
      *

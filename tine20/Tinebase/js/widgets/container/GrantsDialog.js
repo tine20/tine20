@@ -91,7 +91,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
     /**
      * @private
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function(closeWindow) {
         Ext.MessageBox.wait(_('Please wait'), _('Updating Grants'));
         
         var grants = [];
@@ -114,7 +114,6 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                     this.window.close();
                     return;
                 }
-                
                 var grants = Ext.util.JSON.decode(_result.responseText);
                 this.grantsStore.loadData(grants, false);
             },

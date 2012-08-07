@@ -20,7 +20,10 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel,
     // private
     appName: 'Calendar',
     recordClass: Tine.Calendar.Model.Event,
-
+    
+    callingApp: 'Addressbook',
+    callingModel: 'Contact',
+    
     /**
      * @see Tine.widgets.dialog.AddToRecordPanel::isValid()
      */
@@ -37,49 +40,16 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel,
     },
     
     /**
-     * @see Tine.widgets.dialog.AddToRecordPanel::getRecordConfig()
+     * @see Tine.widgets.dialog.AddToRecordPanel::getRelationConfig()
      */
-    getRecord: function() {
-        var recordId = this.searchBox.getValue(), 
-            record = this.searchBox.store.getById(recordId), 
-            ms = this.app.getMainScreen(),  
-            role = this.chooseRoleBox.getValue(), 
-            status = this.chooseStatusBox.getValue();
-
-        for (var index = 0; index < this.attendee.length; index++) {
-            this.attendee[index].role = role;
-            this.attendee[index].status = status;
+    getRelationConfig: function() {
+        var config = {
+            role: this.chooseRoleBox.getValue(),
+            status: this.chooseStatusBox.getValue()
         }
-        // existing attendee
-        var attendee = record.data.attendee;
-
-        if (this.attendee.length > 0) {
-            Ext.each(this.attendee, function(attender) {
-                var ret = true;
-                Ext.each(attendee, function(already) {
-                    if (already.user_id.id == attender.id) {
-                        ret = false;
-                        return false;
-                    }
-                }, this);
-
-                if (ret) {
-                    var att = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
-                    att.set('user_id', attender);
-                    if (!attender.account_id) {
-                        att.set('status', attender.status);
-                        att.set('status_authkey', 1);
-                    }
-                    att.set('role', attender.role);
-                    attendee.push(att.data);
-                }
-            }, this);
-            record.set('attendee', attendee);
-        }
-
-        return record;
+        return config;
     },
-
+    
     /**
      * @see Tine.widgets.dialog.AddToRecordPanel::getFormItems()
      */
@@ -136,7 +106,7 @@ Tine.Calendar.AddToEventPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel,
 Tine.Calendar.AddToEventPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : String.format(Tine.Tinebase.appMgr.get('Calendar').i18n._('Adding {0} Attendee to event'), config.attendee.length),
+        title : String.format(Tine.Tinebase.appMgr.get('Calendar').i18n._('Adding {0} Attendee to event'), config.count),
         width : 240,
         height : 250,
         contentPanelConstructor : 'Tine.Calendar.AddToEventPanel',

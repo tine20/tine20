@@ -3,7 +3,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Alexander Stintzing <alex@stintzing.net>
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -13,7 +13,7 @@ Ext.ns('Tine.widgets.editDialog');
 /**
  * @namespace   Tine.widgets.editDialog
  * @class       Tine.widgets.dialog.MultipleEditDialogPlugin
- * @author      Alexander Stintzing <alex@stintzing.net>
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  * @plugin for Tine.widgets.editDialog
  */
@@ -52,42 +52,86 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      * @type Array
      */
     handleFields: null,
+    /**
+     * if records are defined by a filterselection
+     * @type 
+     */
+    isFilterSelect: null,
+    
+    /**
+     * count of all handled records
+     * @type 
+     */
+    totalRecordCount: null,
+    
+    /**
+     * component registry to skip on multiple edit
+     * @type 
+     */
+    skipItems: [],
     
     /**
      * initializes the plugin
      */    
-    init : function(editDialog) {
-        this.interRecord = new editDialog.recordClass({});
-        this.editDialog = editDialog;
-        this.editDialog.evalGrants = false;
-        this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
-        this.form = this.editDialog.getForm();
-        // load in editDialog means rendered and loaded
-        this.editDialog.on('load', this.onAfterRender, this);
-        this.handleFields = [];
-        this.editDialog.initRecord = Ext.emptyFn;
+    init : function(ed) {
+        ed.mode = 'local';
+        ed.evalGrants = false;
+        ed.onRecordLoad = ed.onRecordLoad.createSequence(this.onAfterRender, this);
+        ed.onApplyChanges = ed.onApplyChanges.createInterceptor(this.onRecordUpdate, this);
+        ed.onRecordUpdate = Ext.emptyFn;
+        ed.initRecord = Ext.emptyFn;
+        ed.useMultiple = true;
         
-        this.editDialog.onApplyChanges = this.editDialog.onApplyChanges.createInterceptor(this.onRecordUpdate, this);
-        this.editDialog.onRecordUpdate = Ext.emptyFn;
-        if (this.editDialog.isMultipleValid) this.editDialog.isValid = this.editDialog.isMultipleValid;
-    },
+        ed.on('load', function(editDialog, record, ticketFn) {
+            this.loadInterceptor = ticketFn();
+        }, this);
+        
+        this.app = Tine.Tinebase.appMgr.get(ed.app);
+        this.form = ed.getForm();
+        this.handleFields = [];
+        this.interRecord = new ed.recordClass({});
 
+        if (ed.hasOwnProperty('isMultipleValid') && Ext.isFunction(ed.isMultipleValid)) {
+            ed.isValid = ed.isMultipleValid;
+        } else {
+            ed.isValid = function() {return true};
+        }
+
+        this.editDialog = ed;
+    },
+    /**
+     * method to register components which are disabled on multiple edit
+     * call this from the component to disable by: Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
+     * @param {} item
+     */
+    registerSkipItem: function(item) {
+        this.skipItems.push(item);
+    },
+    
+    /**
+     * waits until the dialog is rendered and fetches real records by the filter on filter selection
+     */
+    onRecordLoad : function() {
+        // fetch records from server on filterselection to get the exact difference
+        if (this.isFilterSelect && this.selectionFilter) {
+            this.fetchRecordsOnLoad();
+        } else {
+            var records = [];
+            Ext.each(this.selectedRecords, function(recordData, index) {
+                records.push(this.editDialog.recordProxy.recordReader({responseText: Ext.encode(recordData)}));
+            }, this);
+            this.onRecordPrepare(records);
+        }
+    },
+    
     /**
      * find out which fields have differences
      */
-    onRecordLoad : function() {
-
-        if(!this.editDialog.rendered) {
-            this.onRecordLoad.defer(100, this);
-            return;
-        }
-        
+    onRecordPrepare: function(records) {
         Ext.each(this.handleFields, function(field) {
             var refData = false;
             
-            Ext.each(this.editDialog.selectedRecords, function(recordData, index) {
-
-                var record = this.editDialog.recordProxy.recordReader({responseText: Ext.encode(recordData)});
+            Ext.each(records, function(record, index) {
                 if(field.type == 'relation') {
                     this.setFieldValue(field, false);
                 } else {
@@ -96,12 +140,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         refData = record.get(field.recordKey);
                     }
 
-                    if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData)) || this.editDialog.isFilterSelect) {
+                    if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData))) {
                         this.interRecord.set(field.recordKey, '');
                         this.setFieldValue(field, false);
                         return false;
                     } else {
-                        if (index == this.editDialog.selectedRecords.length - 1) {
+                        if (index == records.length - 1) {
                             this.interRecord.set(field.recordKey, refData);
                             this.setFieldValue(field, true);
                             return true;
@@ -119,7 +163,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.interRecord.dirty = false;
         this.interRecord.modified = {};
         
-        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.editDialog.totalRecordCount, this.editDialog.i18nRecordsName));
+        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.totalRecordCount, this.editDialog.i18nRecordsName));
 
         Tine.log.debug('loading of the following intermediate record completed:');
         Tine.log.debug(this.interRecord);
@@ -129,10 +173,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             Ext.each(this.editDialog.tbarItems, function(item) {
                 if(Ext.isFunction(item.setDisabled)) item.setDisabled(true);
                 item.multiEditable = false;
-                });
+            });
         }
         
-        this.editDialog.loadMask.hide();
+        this.loadInterceptor();
         return false;
     },
 
@@ -140,16 +184,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      * handle fields for multiedit
      */
     onAfterRender : function() {
-
-        Ext.each(this.editDialog.getDisableOnEditMultiple(), function(item) {
+        Ext.each(this.skipItems, function(item) {
             item.setDisabled(true);
-            item.multiEditable = false;
-        });
+        }, this);
 
         var keys = [];
         
         // disable container selector
-        var field = this.editDialog.getForm().findField(this.editDialog.recordClass.getMeta('containerProperty'));
+        var field = this.form.findField(this.editDialog.recordClass.getMeta('containerProperty'));
         if(field) {
             field.disable();
         }
@@ -290,8 +332,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 
         }, this);
         
+        this.editDialog.record = this.interRecord;
         this.onRecordLoad();
-        return false;
     },
     
     /**
@@ -406,7 +448,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return false;
 
         } else {
-            var filter = this.editDialog.selectionFilter;
+            var filter = this.selectionFilter;
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.editDialog.totalRecordCount),                
                 function(_btn) {
@@ -445,6 +487,22 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 }
             }, this);
          }
-        return false;
+         return false;
+    },
+    
+    /**
+     * fetch records from backend
+     */
+    fetchRecordsOnLoad: function() {
+        Tine.log.debug('Fetching additional records...');
+        this.editDialog.recordProxy.searchRecords(this.selectionFilter, null, {
+            scope: this,
+            success: function(result) {
+                this.onRecordPrepare.call(this, result.records);
+            }
+        });
     }
 };
+
+Ext.ComponentMgr.registerPlugin('multiple_edit_dialog', Tine.widgets.dialog.MultipleEditDialogPlugin);
+

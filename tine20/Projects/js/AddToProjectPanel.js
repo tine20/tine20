@@ -21,6 +21,8 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPane
     // private
     appName : 'Projects',
     recordClass: Tine.Projects.Model.Project,
+    callingApp: 'Addressbook',
+    callingModel: 'Contact',
     
     /**
      * @see Tine.widgets.dialog.AddToRecordPanel::isValid()
@@ -40,27 +42,15 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPane
         return valid;
     },
     
+    
     /**
-     * @see Tine.widgets.dialog.AddToRecordPanel::getRecordConfig()
+     * @see Tine.widgets.dialog.AddToRecordPanel::getRelationConfig()
      */
-    getAddToRecords: function() {
-        var relations = [];
-        
-        Ext.each(this.addRecords, function(contact) {
-            var rec = new Tine.Addressbook.Model.Contact(contact, contact.id);
-            var rel = new Tine.Tinebase.Model.Relation({
-                own_degree: 'sibling',
-                own_id: null,
-                own_model: 'Projects_Model_Project',
-                related_backend: 'Sql',
-                related_id: contact.id,
-                related_model: 'Addressbook_Model_Contact',
-                related_record: rec.data,
-                type: this.chooseRoleBox.getValue() ? this.chooseRoleBox.getValue() : 'COWORKER'
-            });
-            relations.push(rel.data);
-        },this);
-        return relations;
+    getRelationConfig: function() {
+        var config = {
+            type: this.chooseRoleBox.getValue() ? this.chooseRoleBox.getValue() : 'COWORKER'
+        };
+        return config;
     },
 
     /**
@@ -109,7 +99,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPane
 Tine.Projects.AddToProjectPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : String.format(Tine.Tinebase.appMgr.get('Projects').i18n._('Adding {0} Participants to project'), config.addRecords.length),
+        title : String.format(Tine.Tinebase.appMgr.get('Projects').i18n._('Adding {0} Participants to project'), config.count),
         width : 250,
         height : 150,
         contentPanelConstructor : 'Tine.Projects.AddToProjectPanel',

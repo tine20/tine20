@@ -128,7 +128,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * apply changes handler
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function(closeWindow) {
         var form = this.getForm();
         if (form.isValid()) {
             this.onRecordUpdate();

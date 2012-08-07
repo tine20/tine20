@@ -152,6 +152,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initStore: function() {
+        
+        if(!this.record) {
+            this.initStore.defer(200, this);
+            return false;
+        }
+        
         this.store = new Ext.data.SimpleStore({
             fields   : ['type', 'address']
         });

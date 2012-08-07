@@ -39,7 +39,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'VacationEditWindow_',
     appName: 'Felamimail',
-    loadRecord: false,
+//    loadRecord: false,
     mode: 'local',
     tbarItems: [],
     evalGrants: false,
@@ -105,7 +105,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * apply changes handler (get rules and send them to saveRules)
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function(closeWindow) {
         var rules = [];
         this.rulesGrid.store.each(function(record) {
             rules.push(record.data);

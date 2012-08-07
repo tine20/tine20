@@ -51,8 +51,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         });
         this.plugins.push(this.browsePlugin);
 
-        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
-
+        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.imageSrc = this.defaultImage;
         if (this.border === true) {

@@ -132,7 +132,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Ext.EventObject} event
      * @param {Boolean} closeWindow
      */
-    onApplyChanges: function (button, event, closeWindow) {
+    onApplyChanges: function () {
         if (this.fieldsWithStore.indexOf(this.fieldType) !== -1 && ! this[this.fieldType + 'Config']) {
             Ext.Msg.alert(_('Errors'), this.app.i18n._('Please configure store for this field type'));
             return;

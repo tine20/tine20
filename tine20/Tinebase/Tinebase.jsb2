@@ -394,6 +394,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "AddRelationsEditDialogPlugin.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "MultipleEditResultSummary.js",
           "path": "js/widgets/dialog/"
         },

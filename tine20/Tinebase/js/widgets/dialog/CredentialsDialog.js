@@ -52,7 +52,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                     scope: this,
                     specialkey: function(field, event) {
                         if (event.getKey() == event.ENTER) {
-                            this.onApplyChanges({}, event, true);
+                            this.onApplyChanges();
                         }
                     }
                 }
@@ -92,7 +92,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     /**
      * generic apply changes handler
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function() {
         var form = this.getForm();
         if(form.isValid()) {
             var values = form.getValues();
@@ -113,11 +113,8 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                     success: function(_result, _request){
                         this.loadMask.hide();
                         this.fireEvent('update', _result);
-                        
-                        if (closeWindow) {
-                            this.purgeListeners();
-                            this.window.close();
-                        }
+                        this.purgeListeners();
+                        this.window.close();
                     }
                 });
             } else {

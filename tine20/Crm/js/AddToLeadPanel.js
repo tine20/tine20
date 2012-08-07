@@ -20,7 +20,8 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
     // private
     appName : 'Crm',    
     recordClass: Tine.Crm.Model.Lead,
-    
+    callingApp: 'Addressbook',
+    callingModel: 'Contact',
     /**
      * @see Tine.widgets.dialog.AddToRecordPanel::isValid()
      */
@@ -39,27 +40,10 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
         return valid;
     },
     
-    /**
-     * @see Tine.widgets.dialog.AddToRecordPanel::getRecordConfig()
-     */
-    getAddToRecords: function() {
-        if(this.addRecords) {
-            var relations = [];
-            Ext.each(this.addRecords, function(contact) {
-                relations.push({
-                    own_backend: "Sql",
-                    own_degree: "sibling",
-                    own_id: this.searchBox.selectedRecord.get('id'),
-                    own_model: "Crm_Model_Lead",
-                    related_backend: "sql",
-                    related_id: contact.id, 
-                    related_model: "Addressbook_Model_Contact",
-                    type: this.chooseRoleBox.getValue().toUpperCase(),
-                    related_record: contact
-                });
-            }, this);
-        }
-        return relations;
+    getRelationConfig: function() {
+        return {
+            type: this.chooseRoleBox.getValue()
+            };
     },
     
     /**
@@ -106,7 +90,7 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
 Tine.Crm.AddToLeadPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
         modal: true,
-        title : String.format(Tine.Tinebase.appMgr.get('Crm').i18n._('Adding {0} Contacts to lead'), config.addRecords.length),
+        title : String.format(Tine.Tinebase.appMgr.get('Crm').i18n._('Adding {0} contacts to lead'), config.count),
         width : 250,
         height : 150,
         contentPanelConstructor : 'Tine.Crm.AddToLeadPanel',

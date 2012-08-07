@@ -35,8 +35,8 @@ Tine.Felamimail.GridPanelHook = function(config) {
         iconCls: this.app.getIconCls(),
         disabled: true,
         scope: this,
-        handler: this.onComposeEmail,
         actionUpdater: this.updateAction,
+        handler: this.onComposeEmail,
         listeners: {
             scope: this,
             render: this.onRender
@@ -164,15 +164,11 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      */
     onComposeEmail: function(btn) {
         var sm = this.getGridPanel().grid.getSelectionModel(),
-            mailAddresses = sm.isFilterSelect ? sm.getSelectionFilter() : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
-        
-        var defaults = Tine.Felamimail.Model.Message.getDefaultData();
-        defaults.body = Tine.Felamimail.getSignature();
-        defaults.to = mailAddresses;
-        
-        var record = new Tine.Felamimail.Model.Message(defaults, 0);
+            mailAddresses = sm.isFilterSelect ? null : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
+
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
-            record: record
+            selectionFilter: sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
+            mailAddresses: mailAddresses ? Ext.encode(mailAddresses) : null
         });
     },
 
@@ -198,6 +194,6 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      */
     updateAction: function(action, grants, records) {
         var sm = this.getGridPanel().grid.getSelectionModel();
-        action.setDisabled(sm.isFilterSelect ? true : this.getMailAddresses(sm.getSelections()).length == 0);
+        action.setDisabled(this.getMailAddresses(sm.getSelections()).length == 0);
     }
 });

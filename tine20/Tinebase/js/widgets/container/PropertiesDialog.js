@@ -126,7 +126,7 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
     /**
      * @private
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function() {
         this.purgeListeners();
         this.window.close();
     }

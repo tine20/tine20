@@ -318,8 +318,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             ]
         }];
         
-        this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
-        
+        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     

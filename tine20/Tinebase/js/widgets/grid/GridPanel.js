@@ -1436,12 +1436,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     /**
      * Opens the required EditDialog
-     * @param {Object} actionButton
-     * @param {Tine.Tinebase.data.Record} record
-     * @param {Array} addRelations
+     * @param {Object} actionButton the button the action was called from
+     * @param {Tine.Tinebase.data.Record} record the record to display/edit in the dialog
+     * @param {Array} plugins the plugins used for the edit dialog
      * @return {Boolean}
      */
-    onEditInNewWindow: function(button, record, addRelations) {
+    onEditInNewWindow: function(button, record, plugins) {
         if(!record) {
             if (button.actionType == 'edit' || button.actionType == 'copy') {
                 if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
@@ -1454,51 +1454,55 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 record = new this.recordClass(this.recordClass.getDefaultData(), 0);
             }
         }
+
+        // plugins to add to edit dialog
+        var plugins = plugins ? plugins : [];
         
         var totalcount = this.selectionModel.getCount(),
-            useMultiple = ((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit')),
             selectedRecords = [],
-            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isArray(button.fixedFields)) ? Ext.encode(button.fixedFields) : null;
-
-        if (useMultiple) {
-            var selectedRecords = [];
+            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isArray(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
+            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
+        
+        // add "multiple_edit_dialog" plugin to dialog, if required
+        if(((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
             Ext.each(this.selectionModel.getSelections(), function(record) {
                 selectedRecords.push(record.data);
             }, this );
+            
+            plugins.push({
+                ptype: 'multiple_edit_dialog', 
+                selectedRecords: selectedRecords,
+                selectionFilter: this.selectionModel.getSelectionFilter(),
+                isFilterSelect: this.selectionModel.isFilterSelect,
+                totalRecordCount: totalcount
+            });
         }
-
-        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
         
         var config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                /* multi edit stuff: NOTE: due to cross window restrictions, we can only pass strings here  */
-                useMultiple: useMultiple,
-                selectedRecords: Ext.encode(selectedRecords),
-                selectionFilter: Ext.encode(this.selectionModel.getSelectionFilter()),
-                isFilterSelect: this.selectionModel.isFilterSelect,
-                totalRecordCount: totalcount,
-                /* end multi edit stuff */
+                plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
-                addRelations: Ext.encode(addRelations),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'useMultiple,selectedRecords,selectionFilter,isFilterSelect,totalRecordCount,record,listeners,fixedFields,copyRecord,addRelations')
+            }, 'record,listeners,fixedFields,copyRecord,plugins')
         );
         return true;
     },
 
+    /**
+     * is called after multiple records have been updated
+     */
     onUpdateMultipleRecords: function() {
         this.store.reload();
     },
 
     /**
      * on update after edit
-     * 
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record, mode) {

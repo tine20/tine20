@@ -34,7 +34,7 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
         text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onAddProject,
+        handler: this.onUpdateProject,
         listeners: {
             scope: this,
             render: this.onRender
@@ -46,7 +46,7 @@ Tine.Projects.AddressbookGridPanelHook = function(config) {
         text: text,
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onNewProject,
+        handler: this.onAddProject,
         listeners: {
             scope: this,
             render: this.onRender
@@ -95,18 +95,59 @@ Ext.apply(Tine.Projects.AddressbookGridPanelHook.prototype, {
     /**
      * adds contacts to a new project
      */
-    onNewProject: function() {
+    onAddProject: function() {
         var ms = this.app.getMainScreen(),
-            cp = ms.getCenterPanel();
- 
-        Tine.Projects.ProjectEditDialog.openWindow({selectedRecords: Ext.encode(this.getSelectionsAsArray())});
+            cp = ms.getCenterPanel(),
+            filter = this.getFilter(ms),
+            sm = this.getContactGridPanel().selectionModel;
+            
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray();
+        } else {
+            var addRelations = true;
+        }
+        
+        cp.onEditInNewWindow.call(cp, 'add', null, [{
+            ptype: 'addrelations_edit_dialog', selectionFilter: filter, addRelations: addRelations, callingApp: 'Addressbook', callingModel: 'Contact'
+        }]);
     },
     
     /**
      * adds contacts to an existing project
      */
-    onAddProject: function() {
-        var window = Tine.Projects.AddToProjectPanel.openWindow({addRecords: this.getSelectionsAsArray()});
+    onUpdateProject: function() {
+        var ms = this.app.getMainScreen(),
+            cp = ms.getCenterPanel(),
+            filter = this.getFilter(ms),
+            sm = this.getContactGridPanel().selectionModel;
+        
+        if(!filter) {
+            var addRelations = this.getSelectionsAsArray(),
+                count = this.getSelectionsAsArray().length;
+        } else {
+            var addRelations = true,
+                count = sm.store.totalLength;
+        }
+
+        Tine.Projects.AddToProjectPanel.openWindow(
+            {count: count, selectionFilter: filter, addRelations: addRelations, callingApp: 'Addressbook', callingModel: 'Contact'}
+        );
+    },
+    
+    /**
+     * returns the current filter if is filter selection
+     * @param {Tine.widgets.MainScreen}
+     * @return {Object}
+     */
+    getFilter: function(ms) {
+        var sm = this.getContactGridPanel().selectionModel,
+            addRelations = this.getSelectionsAsArray(),
+            filter = null;
+            
+        if(sm.isFilterSelect) {
+            var filter = sm.getSelectionFilter();
+        }
+        return filter;
     },
     
     /**

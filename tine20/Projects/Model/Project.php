@@ -91,6 +91,8 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact',
-            'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'))
+            'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'),
+            'default' => array('type' => 'COWORKER', 'own_degree' => 'sibling')
+            )
         );
 }

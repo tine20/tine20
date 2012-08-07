@@ -54,7 +54,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     specialkey: function(field, event) {
                         if (event.getKey() == event.ENTER) {
-                            this.onApplyChanges({}, event, true);
+                            this.onApplyChanges();
                         }
                     }
                 }
@@ -96,7 +96,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * generic apply changes handler
      */
-    onApplyChanges: function(button, event, closeWindow) {
+    onApplyChanges: function() {
         this.onRecordUpdate();
         if (this.isValid()) {
             this.loadMask.show();

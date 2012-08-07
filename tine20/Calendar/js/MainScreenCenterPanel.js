@@ -418,7 +418,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
-                handler: this.onEditInNewWindow.createDelegate(this, ["add", null, {dtStart: dtStart, is_all_day_event: datetime && datetime.is_all_day_event}]),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", null, null, {dtStart: dtStart, is_all_day_event: datetime && datetime.is_all_day_event}]),
                 iconCls: 'action_add'
             };
             
@@ -854,10 +854,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * open event in new window
      * 
      * @param {String} action  add|edit
-     * @param {Object} default properties for new items
      * @param {String} event   edit given event instead of selected event
+     * @param {Object} addRelC has information about relations to create
+     * @param {Object} default properties for new items
      */
-    onEditInNewWindow: function (action, event, defaults) {
+    onEditInNewWindow: function (action, event, plugins, defaults) {
         if(!event) event = null;
         // needed for addToEventPanel
         if(Ext.isObject(action)) {
@@ -883,20 +884,23 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
             }
         }
-
+        
         Tine.Calendar.EventEditDialog.openWindow({
-            record: Ext.util.JSON.encode(event.data),
+            plugins: Ext.encode(plugins),
+            record: Ext.encode(event.data),
             recordId: event.data.id,
             listeners: {
                 scope: this,
                 update: function (eventJson) {
                     var updatedEvent = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                    
                     updatedEvent.dirty = true;
                     updatedEvent.modified = {};
                     event.phantom = (action === 'edit');
                     var panel = this.getCalendarPanel(this.activeView);
                     var store = panel.getStore();
                     event = store.getById(event.id);
+                    
                     if (event) store.replaceRecord(event, updatedEvent);
                     else store.add(updatedEvent);
                     

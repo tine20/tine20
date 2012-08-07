@@ -31,6 +31,36 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
      */
     recordClass: null,
     
+    /**
+     * the selection filter if is filter select
+     * @type {Object}
+     */
+    selectionFilter: null,
+    
+    /**
+     * count of records to add to
+     * @type {Integer}
+     */
+    count: null,
+    
+    /**
+     * the calling app
+     * @type {String}
+     */
+    callingApp: null,
+    
+    /**
+     * the calling model
+     * @type {String}
+     */
+    callingModel: null,
+    
+    /**
+     * the relations to add as Json Encoded array or bool on filterSelection
+     * @type {Boolean|String} 
+     */
+    addRelations: null,
+    
     // private
     app: null,
     layout : 'fit',
@@ -107,7 +137,7 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
             ctrl : true,
             fn : this.onUpdate,
             scope : this
-        } ]);
+        }]);
 
     },
     
@@ -133,19 +163,21 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
     getFormItems: Ext.emptyFn,
     
     /**
-     * returns the records, which should be added. must be overridden when editDialog runs in remote mode
-     * @return {Object} config for the record to edit
+     * returns the configuration for the relations to be created, must be overridden
+     * @return {Object}
      */
-    getAddToRecords: function() {
-        return null;
+    getRelationConfig: function() {
+        return {};
     },
     
     /**
-     * returns the configuration for the record. must be overridden when editDialog runs in local mode
+     * returns the selected record. may be overridden.
      * @return {Object} config for the record to edit
      */
     getRecord: function() {
-        return null;
+        var recordId = this.searchBox.getValue(), 
+            record = this.searchBox.store.getById(recordId);
+        return record;
     },
     
     /**
@@ -159,7 +191,14 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
                     var cp = ms.getCenterPanel();
                 }
             }
-            cp.onEditInNewWindow({actionType: 'edit'}, this.getRecord() ? this.getRecord() : this.searchBox.selectedRecord, this.getAddToRecords());
+            cp.onEditInNewWindow({actionType: 'edit'}, this.getRecord() ? this.getRecord() : this.searchBox.selectedRecord, [{
+                ptype:          'addrelations_edit_dialog',
+                selectionFilter: this.selectionFilter,
+                addRelations:    this.addRelations,
+                relationConfig:  this.getRelationConfig(),
+                callingApp:      this.callingApp,
+                callingModel:    this.callingModel
+            }]);
             this.onCancel();
         }
     }

@@ -107,7 +107,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             
         if(encode(current) == encode(value)) {
             return;
-        }        
+        }
         this.dirty = true;
         if(!this.modified){
             this.modified = {};
