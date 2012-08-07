@@ -273,14 +273,20 @@ class Syncroton_Server
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
                 'deviceId'        => $deviceId,
-                'deviceType'      => $deviceType
+                'deviceType'      => $deviceType,
+                'saveInSent'      => null,
+                'collectionId'    => null,
+                'itemId'          => null
             );
         } else {
             $result = array(
-                'protocolVersion'  => $request->getServer('HTTP_MS_ASPROTOCOLVERSION'),
-                'command'          => $request->getQuery('Cmd'),
-                'deviceId'         => $request->getQuery('DeviceId'),
-                'deviceType'       => $request->getQuery('DeviceType')
+                'protocolVersion' => $request->getServer('HTTP_MS_ASPROTOCOLVERSION'),
+                'command'         => $request->getQuery('Cmd'),
+                'deviceId'        => $request->getQuery('DeviceId'),
+                'deviceType'      => $request->getQuery('DeviceType'),
+                'saveInSent'      => $request->getQuery('SaveInSent'),
+                'collectionId'    => $request->getQuery('CollectionId'),
+                'itemId'          => $request->getQuery('ItemId')
             );
         }
         

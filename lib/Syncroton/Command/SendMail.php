@@ -19,11 +19,11 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
 {
     protected $_defaultNameSpace    = 'uri:ComposeMail';
     protected $_documentElement     = 'Sendmail';
-    
+
+    protected $_saveInSent;
     protected $_itemId;
-    
     protected $_collectionId;
-    
+    protected $_mime;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -33,18 +33,20 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
     public function handle()
     {
         if ($this->_requestParameters['contentType'] == 'message/rfc822') {
-            $this->_saveInSent    = isset($_GET['SaveInSent']) && $_GET['SaveInSent'] == 'T';
-            $this->_collectionId  = isset($_GET['CollectionId']) ? $_GET['CollectionId'] : null;
-            $this->_itemId        = isset($_GET['ItemId'])       ? $_GET['ItemId']       : null;
-            $this->_inputStream   = $this->_requestBody;
+            $this->_mime          = $this->_requestBody;
+            $this->_saveInSent    = $this->_requestParameters['SaveInSent'] == 'T';
+            
+            $this->_collectionId  = $this->_requestParameters['CollectionId'];
+            $this->_itemId        = $this->_requestParameters['ItemId'];
             
         } else {
             $xml = simplexml_import_dom($this->_requestBody);
             
+            $this->_mime          = (string) $xml->Mime;
             $this->_saveInSent    = isset($xml->SaveinSentItems);
+            
             $this->_collectionId  = isset($xml->FolderId) ? (string)$xml->FolderId : null;
             $this->_itemId        = isset($xml->ItemId)   ? (string)$xml->ItemId   : null;
-            $this->_inputStream   = (string) $xml->Mime;
         }
         
         if ($this->_logger instanceof Zend_Log)
@@ -60,6 +62,6 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
     {
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
     
-        $dataController->sendEmail($this->_inputStream, $this->_saveInSent);        
+        $dataController->sendEmail($this->_mime, $this->_saveInSent);        
     }
 }

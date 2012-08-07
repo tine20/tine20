@@ -28,6 +28,6 @@ class Syncroton_Command_SmartForward extends Syncroton_Command_SmartReply
     {
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
     
-        $dataController->forwardEmail($this->_collectionId, $this->_itemId, $this->_inputStream, $this->_saveInSent);
+        $dataController->forwardEmail($this->_collectionId, $this->_itemId, $this->_mime, $this->_saveInSent);
     }
 }
