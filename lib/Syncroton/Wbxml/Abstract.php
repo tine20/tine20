@@ -111,7 +111,7 @@ abstract class Syncroton_Wbxml_Abstract
      */
     public function getDPI($_uInt = 0)
     {
-        if(($dpi = constant('Syncroton_Wbxml_Abstract::DPI_' . $_uInt)) === NULL) {
+        if(($dpi = @constant('Syncroton_Wbxml_Abstract::DPI_' . $_uInt)) === NULL) {
             throw new Syncroton_Wbxml_Exception('unknown wellknown identifier: ' . $_uInt);
         }
 
