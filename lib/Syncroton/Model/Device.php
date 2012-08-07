@@ -20,6 +20,7 @@ class Syncroton_Model_Device implements Syncroton_Model_IDevice
     const TYPE_IPHONE          = 'iphone';
     const TYPE_WEBOS           = 'webos';
     const TYPE_ANDROID         = 'android';
+    const TYPE_ANDROID_40       = 'android40';
     const TYPE_SMASUNGGALAXYS2 = 'samsunggti9100'; // Samsung Galaxy S-3
     
     public function __construct(array $_data = array())
