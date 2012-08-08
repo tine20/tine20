@@ -133,20 +133,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
             $this->_logger          = Syncroton_Registry::get('loggerBackend');
         }
         
-        if ($this->_skipValidatePolicyKey !== true && $this->_policyKey === null) {
-            #throw new Syncroton_Exception_PolicyKeyMissing();
-        }
-        
-        if ($this->_skipValidatePolicyKey !== true && ($this->_policyKey === 0 || $this->_device->policykey != $this->_policyKey)) {
-            #throw new Syncroton_Exception_ProvisioningNeeded();
-        }
-        
-        // should we wipe the mobile phone?
-        if ($this->_skipValidatePolicyKey !== true && !empty($this->_policyKey) && $this->_device->remotewipe >= Syncroton_Command_Provision::REMOTEWIPE_REQUESTED) {
-            throw new Syncroton_Exception_ProvisioningNeeded();
-        }
-        
-        
         $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
         
         if ($this->_logger instanceof Zend_Log) 
@@ -163,5 +149,27 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         $this->_outputDom->formatOutput = false;
         $this->_outputDom->encoding     = 'utf-8';
         
-    }    
+        if ($this->_skipValidatePolicyKey == false && isset($this->_device->policykey) && $this->_policyKey === null) {
+            throw new Syncroton_Exception_PolicyKeyMissing();
+        }
+        
+        if ($this->_skipValidatePolicyKey == false && isset($this->_device->policykey) && ($this->_policyKey === 0 || $this->_device->policykey != $this->_policyKey)) {
+            $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 142));
+            
+            $sepn = new Syncroton_Exception_ProvisioningNeeded();
+            $sepn->domDocument = $this->_outputDom;
+            
+            throw $sepn;
+        }
+        
+        // should we wipe the mobile phone?
+        if ($this->_skipValidatePolicyKey == false && !empty($this->_policyKey) && $this->_device->remotewipe >= Syncroton_Command_Provision::REMOTEWIPE_REQUESTED) {
+            $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 140));
+            
+            $sepn = new Syncroton_Exception_ProvisioningNeeded();
+            $sepn->domDocument = $this->_outputDom;
+            
+            throw $sepn;
+        }
+    }
 }
