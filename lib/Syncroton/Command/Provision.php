@@ -61,6 +61,8 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
      */
     public function getResponse()
     {
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Settings', 'uri:Settings');
+        
         // should we wipe the device
         if ($this->_device->remotewipe >= self::REMOTEWIPE_REQUESTED) {
             $this->_sendRemoteWipe();
@@ -124,7 +126,10 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         $this->_device->policykey = $this->generatePolicyKey();
                 
         $provision = $sync = $this->_outputDom->documentElement;
+        $deviceInformation = $provision->appendChild($this->_outputDom->createElementNS('uri:Settings', 'DeviceInformation'));
+        $deviceInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', 1));
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
+        
         $policies = $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policies'));
         $policy = $policies->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policy'));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyType', $this->_policyType));
@@ -136,9 +141,10 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
             $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data'));
             $easProvisionDoc = $data->appendChild($this->_outputDom->createElementNS('uri:Provision', 'EASProvisionDoc'));
             $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'DevicePasswordEnabled', 1));
-            #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MinDevicePasswordLength', 4));
-            #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxDevicePasswordFailedAttempts', 4));
-            #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxInactivityTimeDeviceLock', 60));
+            #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'AlphanumericDevicePasswordRequired', 0));
+            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MinDevicePasswordLength', 4));
+            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxDevicePasswordFailedAttempts', 4));
+            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxInactivityTimeDeviceLock', 60));
         }
         
         $this->_deviceBackend->update($this->_device);
