@@ -24,7 +24,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var HumanResources_Controller_Employee
      */
     protected $_controller = NULL;
-
+    
     /**
      * the constructor
      *
@@ -191,13 +191,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
-                if ( Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+                if($_record->has('contracts')) {
                     $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
                     $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
                     $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
                     $_record['contracts'] = $this->_multipleRecordsToJson($recs);
-                } else {
-                    $_record['contracts'] = NULL;
                 }
                 break;
             case 'HumanResources_Model_FreeTime':

@@ -142,6 +142,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
     {
         // no private cleanup with admin rights
         if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
+            Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
             Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
             return;
         } else {

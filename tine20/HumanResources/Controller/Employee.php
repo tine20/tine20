@@ -19,7 +19,7 @@
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
 
-    protected $_duplicateCheckFields = array(array('account_id'));
+    protected $_duplicateCheckFields = array(array('account_id'), array('number'));
 
     /**
      * the constructor
@@ -65,9 +65,13 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
+        if(! $_record->has('contracts')) {
+            return;
+        }
+
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
-
+        
         foreach($_record->contracts as $contractArray) {
             if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
             if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
@@ -92,37 +96,38 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
-        $ec = HumanResources_Controller_Contract::getInstance();
-
         if(is_array($_record->account_id)) {
             $_record->account_id = $_record->account_id['accountId'];
         }
 
-        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE) ||
-            Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
-            foreach($_record->contracts as $contractArray) {
-                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
-                $contractArray['employee_id'] = $_oldRecord->getId();
-                $contract = new HumanResources_Model_Contract($contractArray);
-                if($contract->id) {
-                    $contracts->addRecord($ec->update($contract));
-                } else {
-                    $contracts->addRecord($ec->create($contract));
-                }
-            }
-                
-            $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
-            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
-            $deleteContracts = HumanResources_Controller_Contract::getInstance()->search($filter);
-            // update first date
-            $contracts->sort('start_date', 'DESC');
-            $ec->delete($deleteContracts->id);
-            $_record->contracts = $contracts->toArray();
+        if(! $_record->has('contracts')) {
+            return;
         }
+
+        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+        $ec = HumanResources_Controller_Contract::getInstance();
+
+        foreach($_record->contracts as $contractArray) {
+            if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+            if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+            if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+            $contractArray['employee_id'] = $_oldRecord->getId();
+            $contract = new HumanResources_Model_Contract($contractArray);
+            if($contract->id) {
+                $contracts->addRecord($ec->update($contract));
+            } else {
+                $contracts->addRecord($ec->create($contract));
+            }
+        }
+            
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
+        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
+        $deleteContracts = HumanResources_Controller_Contract::getInstance()->search($filter);
+        // update first date
+        $contracts->sort('start_date', 'DESC');
+        $ec->delete($deleteContracts->id);
+        $_record->contracts = $contracts->toArray();
     }
     
     /**
