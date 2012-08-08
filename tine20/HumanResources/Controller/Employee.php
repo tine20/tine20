@@ -185,6 +185,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     throw $e;
                 }
             }
+            
+            if($cliCall) {
+                echo 'Found Calendar ' . $feastCalendar->name . chr(10);
+            }
+            
             try {
                 $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($_workingTimeModelId);
             } catch (Exception $e) {
@@ -194,8 +199,18 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     throw $e;
                 }
             }
+            
+            if($cliCall) {
+                echo 'Found Working Time Model "' . $workingTimeModel->title . '"' . chr(10);
+            }
+            
         } elseif ($_feastCalendarId || $_workingTimeModelId || $_vacationDays) {
-            die('You have to define the feast_calendar_id, the working_time_model_id and vacation_days to create a contract!' . chr(10));
+            $msg = 'You have to define the feast_calendar_id, the working_time_model_id and vacation_days to create a contract!';
+            if($cliCall) {
+                die($msg . chr(10));
+            } else {
+                throw new Tinebase_Exception_InvalidArgument($msg);
+            }
         }
         
         // get all active accounts
@@ -208,6 +223,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $filter->addFilter(new Addressbook_Model_ContactDisabledFilter(1));
         $accounts = Addressbook_Controller_Contact::getInstance()->search($filter);
         $nextNumber = $lastNumber + 1;
+        
+        $countCreated = 0;
         
         foreach($accounts as $account) {
             $filter = new HumanResources_Model_EmployeeFilter(array(array(
@@ -240,8 +257,18 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     );
                     $employee->contracts = array($contract);
                 }
+                
+                $countCreated++;
+                
+                if($cliCall) {
+                    echo 'Creating Employee "'. $account->n_fn . '"' . chr(10);
+                }
                 $this->create($employee);
                 $nextNumber++;
+            } else {
+                if($cliCall) {
+                    echo 'Employee "'. $account->n_fn . '" already exists. Skipping...' . chr(10);
+                }
             }
             
             if($_deletePrivateInfo) {
@@ -254,11 +281,15 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 $account->email_home = NULL;
                 $account->tel_home = NULL;
                 $account->tel_cell_private = NULL;
-                
+                if($cliCall) {
+                    echo 'Removing private information of employee "'. $account->n_fn .'"' . chr(10);
+                }
                 Addressbook_Controller_Contact::getInstance()->update($account);
             }
-            
         }
-        
+        if($cliCall) {
+            echo 'Created ' . $countCreated . ' employees.' . chr(10);
+            echo 'Transfer OK' . chr(10);
+        }
     }
 }
