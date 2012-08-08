@@ -72,8 +72,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'bank_code_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_begin'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employment_end'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'supervisor_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'division_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'supervisor_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'division_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'health_insurance'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // modlog information
@@ -131,6 +131,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
         $this->_doPrivateCleanup();
+        $this->_filters['division_id'] = new Zend_Filter_Empty(NULL);
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 

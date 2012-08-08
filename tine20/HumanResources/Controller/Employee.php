@@ -233,7 +233,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 ));
                 if($createContract) {
                     $contract = array(
-                        'feast_calendar_id'  => $_feastCalendarId,
+                        'feast_calendar_id'  => $feastCalendar->toArray(),
                         'workingtime_id'     => $workingTimeModel->toArray(),
                         'vacation_days'      => $_vacationDays,
                         'cost_center_id'     => NULL,

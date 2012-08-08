@@ -134,6 +134,7 @@
                     <name>division_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <default>null</default>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -469,12 +470,14 @@
                     <name>workingtime_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <default>null</default>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>cost_center_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <default>null</default>
                     <notnull>false</notnull>
                 </field>
                 <field>
