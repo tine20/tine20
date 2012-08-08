@@ -1,0 +1,2 @@
+debian/etc/apache.conf   /etc/tine20
+debian/etc/lighttpd.conf /etc/tine20

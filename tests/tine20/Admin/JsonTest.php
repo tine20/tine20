@@ -152,7 +152,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
     }
-
+    
     /**
      * try to save group data
      */
@@ -162,9 +162,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
     }
-
+    
     /**
      * try to save an account
+     * 
+     * @return array
      */
     public function testSaveAccount()
     {
@@ -184,8 +186,43 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         // check password
         $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
         $this->assertTrue($authResult->isValid());
+        
+        return $account;
     }
 
+    /**
+     * try to create an account with existing login name 
+     * 
+     * @return array
+     * 
+     * @see 0006770: check if username already exists when creating new user / changing username
+     */
+    public function testSaveAccountWithExistingName()
+    {
+        $accountData = $this->objects['user']->toArray();
+        unset($accountData['accountId']);
+        
+        try {
+            $account = $this->_json->saveUser($accountData);
+            $this->fail('Creating an account with existing login name should throw exception: ' . print_r($account, TRUE));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+        
+        $this->assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
+        
+        $accountData = $this->objects['user']->toArray();
+        $accountData['accountId'] = $this->objects['user']->getId();
+        $accountData['accountLoginName'] = Tinebase_Core::getUser()->accountLoginName;
+        
+        try {
+            $account = $this->_json->saveUser($accountData);
+            $this->fail('Updating an account with existing login name should throw exception: ' . print_r($account, TRUE));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+        }
+        
+        $this->assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
+    }
+    
     /**
      * try to save a hidden account
      */
@@ -202,6 +239,55 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
         $this->assertEquals($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK], $account['container_id']['id']);
     }    
+    
+    /**
+     * testUpdateUserWithoutContainerACL
+     * 
+     * @see 0006254: edit/create user is not possible
+     */
+    public function testUpdateUserWithoutContainerACL()
+    {
+        $account = $this->testSaveAccount();
+        $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
+        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
+        
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['groups'] = array($account['accountPrimaryGroup'], Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId());
+        $account['container_id'] = $internalContainer->getId();
+        $account = $this->_json->saveUser($account);
+        
+        $this->assertEquals(2, $account['groups']['totalcount']);
+    }
+    
+    /**
+     * testUpdateUserRemoveGroup
+     * 
+     * @see 0006762: user still in admin role when admin group is removed
+     */
+    public function testUpdateUserRemoveGroup()
+    {
+        $account = $this->testSaveAccount();
+        $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
+        Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
+        
+        $adminGroupId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['groups'] = array($account['accountPrimaryGroup'], $adminGroupId);
+        $account['container_id'] = $account['container_id']['id'];
+        $account = $this->_json->saveUser($account);
+        
+        $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
+        $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        $this->assertEquals(array($adminRole->getId()), $roles);
+
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['groups'] = array($account['accountPrimaryGroup']);
+        $account['container_id'] = $account['container_id']['id'];
+        $account = $this->_json->saveUser($account);
+        
+        $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
+        $this->assertEquals(array(), $roles);
+    }
     
     /**
      * try to delete accounts 

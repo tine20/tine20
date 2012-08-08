@@ -10,8 +10,9 @@ Vcs-Browser: http://git.tine20.org/git/tine20/scripts/packaging/debian/
 
 Package: tine20
 Architecture: all
-Depends: ${misc:Depends}, tine20-tinebase, 
-    ${tine20:Modules}
+Depends: ${misc:Depends}, 
+ tine20-webstack (= ${binary:Version}),
+ mysql-server
 Description: webbased groupware and crm - metapackage
  Tine 2.0 is an open source project which combines groupware and CRM in one
  consistent interface. Tine 2.0 is web-based and optimises collaboration and
@@ -31,21 +32,28 @@ Description: webbased groupware and crm - metapackage
   * History
   * PDF export
 
+Package: tine20-webstack
+Architecture: all
+Depends: ${misc:Depends},
+ ${tine20:Modules},
+ wwwconfig-common, 
+ apache2 | lighttpd | nginx,
+ libapache2-mod-php5 | php5-fpm, 
+ php5-mysql | php5-mysqli, 
+ php5-mcrypt, 
+ php5-gd,
+ makepasswd
+Recommends: mysql-client
+Description: Tine 2.0 integration package for Univention Corporate Server
+ Integration package for installation and configuration of the Tine 2.0
+ groupware solution on Univention Corporate Server.
+
 Package: tine20-tinebase
 Architecture: all
 Depends: ${misc:Depends}, 
-    httpd, 
-    libapache2-mod-php5 | php5 | php5-cgi | php5-fpm, 
-    dbconfig-common, 
-    wwwconfig-common, 
-    php5-mysql | php5-mysqli, 
-    php5-mcrypt, 
-    php5-gd 
-Recommends: mysql-client, 
-    php5-ldap, 
-    apache2 | lighttpd | httpd
-Suggests: mysql-server, 
-    www-browser
+ makepasswd,
+ php5-cli
+Recommends: php5-ldap
 Description: webbased groupware and crm - core + addressbook module
  This packages contains the core librarys of Tine 2.0 and the addressbook module.
  Installing this package enables you to manage user accounts and contacts. Also
@@ -64,6 +72,13 @@ Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - calendar module
  This package contains the calendar module of Tine 2.0. Installing this package
  enables you to schedule events for your self and other Tine 2.0 users.
+
+Package: tine20-courses
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - courses module
+ This package contains the courses module of Tine 2.0. Installing this package
+ enables you to manage courses. Typically used by schools.
 
 Package: tine20-crm
 Architecture: all

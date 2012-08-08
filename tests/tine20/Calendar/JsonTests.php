@@ -243,6 +243,29 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
 
     /**
+     * testSearchEvents with organizer = me filter
+     * 
+     * @see #6716: default favorite "me" is not resolved properly
+     */
+    public function testSearchEventsWithOrganizerMeFilter()
+    {
+        $eventData = $this->testCreateEvent();
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $resultEventData = $searchResultData['results'][0];
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
+        
+        // check organizer filter resolving
+        $this->assertTrue(is_array($searchResultData['filter'][1]['value']), 'organizer should be resolved: ' . print_r($searchResultData['filter'][1], TRUE));
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $searchResultData['filter'][1]['value']['id']);
+    }
+    
+    /**
      * search event with alarm
      *
      */

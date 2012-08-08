@@ -179,6 +179,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $oldUser = $this->_userBackend->getUserByProperty('accountId', $_user, 'Tinebase_Model_FullUser');
         
+        if ($oldUser->accountLoginName !== $_user->accountLoginName) {
+            $this->_checkLoginNameExistance($_user);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -206,7 +212,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             throw $e;
         }
-            
+        
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -233,6 +239,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // avoid forging accountId, gets created in backend
         unset($_user->accountId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
+        
+        $this->_checkLoginNameExistance($_user);
+        
+        if ($_password != $_passwordRepeat) {
+            throw new Admin_Exception("Passwords don't match.");
+        } else if (empty($_password)) {
+            $_password = '';
+            $_passwordRepeat = '';
+        }
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -262,11 +279,29 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         ));
         Tinebase_Event::fireEvent($event);
         
-        if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($user, $_password, $_passwordRepeat);
-        }
+        $this->setAccountPassword($user, $_password, $_passwordRepeat);
 
         return $user;
+    }
+    
+    /**
+     * look for user with the same login name
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @return boolean
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkLoginNameExistance(Tinebase_Model_FullUser $user)
+    {
+        try {
+            $existing = Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+            if ($user->getId() === NULL || $existing->getId() !== $user->getId()) {
+                throw new Tinebase_Exception_SystemGeneric('Login name already exists. Please choose another one.');
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        }
+        
+        return TRUE;
     }
     
     /**

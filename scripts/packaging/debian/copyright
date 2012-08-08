@@ -4,7 +4,7 @@ Upstream-Contact: Lars Kneschke <l.kneschke@metaways.de>
 Source: http://www.tine20.org/download.html
 
 Files: *
-Copyright: Copyright (C) 2007-2011 Metaways Infosystems GmbH
+Copyright: Copyright 2007-2012 by Metaways Infosystems GmbH
 License: AGPL-3.0
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -19,7 +19,7 @@ License: AGPL-3.0
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Files: library/ExtJS/*
-Copyright: Copyright (c) 2006-2009, Ext JS, LLC
+Copyright: Copyright (C) 2006-2009, Ext JS, LLC
 License: GPL-3.0
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

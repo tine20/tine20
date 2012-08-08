@@ -1,0 +1,17 @@
+BEGIN:VCARD
+VERSION:3.0
+N:München;Falk;;;
+FN:München, Falk
+ADR;TYPE=HOME:;;Klippe 58;Bad Vilbel;;21255
+LABEL,TYPE=HOME:Klippe 58
+21255 Bad Vilbel
+TEL;TYPE=HOME,VOICE:12212/1212
+TEL;TYPE=HOME,FAX:
+TEL;TYPE=CELL,VOICE:0171-9394461
+ADR;TYPE=WORK:;;Platz der Republik 1;Düsseldorf;;40222
+LABEL,TYPE=WORK:Platz des Republik 1
+40222 Düsseldorf
+EMAIL;TYPE=PREF,INTERNET:falk.muenchoen@landtag.xyz.de
+URL;TYPE=HOME:http://falk-muenchoen.de
+TITLE:Landtagsabgeordneter
+END:VCARD

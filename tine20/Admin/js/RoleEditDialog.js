@@ -94,6 +94,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     roleMembers: roleMembers,
                     roleRights: roleRights
                 },
+                timeout: 300000, // 5 minutes
                 success: function (response) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.role.data));
                     Ext.MessageBox.hide();

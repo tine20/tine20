@@ -87,12 +87,6 @@ Ext.namespace('Tine.Felamimail');
     to: null,
     
     /**
-     * if sending
-     * @type Boolean
-     */
-    sending: false,
-    
-    /**
      * validation error message
      * @type String
      */
@@ -115,13 +109,6 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateToolbars: Ext.emptyFn,
-    
-    //private
-    initComponent: function() {
-         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
-         
-         this.on('save', this.onSave, this);
-    },
     
     /**
      * init buttons
@@ -252,7 +239,7 @@ Ext.namespace('Tine.Felamimail');
             
             if (! this.msgBody) {
                 var message = this.getMessageFromConfig();
-                          
+                
                 if (message) {
                     if (! message.bodyIsFetched()) {
                         // self callback when body needs to be fetched
@@ -299,7 +286,9 @@ Ext.namespace('Tine.Felamimail');
      * set message body for reply message
      */
     setMessageBodyReply: function() {
-        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
+        var date = (this.replyTo.get('sent')) 
+            ? this.replyTo.get('sent') 
+            : ((this.replyTo.get('received')) ? this.replyTo.get('received') : new Date());
         
         this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
             Tine.Tinebase.common.dateTimeRenderer(date), 
@@ -332,7 +321,7 @@ Ext.namespace('Tine.Felamimail');
      * @param {Tine.Felamimail.Model.Account} account
      */
     addSignature: function(account) {
-        if (this.draftOrTemplate) {
+        if (this.draftOrTemplate || ! account) {
             return;
         }
 
@@ -394,13 +383,6 @@ Ext.namespace('Tine.Felamimail');
                 this.subjectField.focus.defer(50, this.subjectField);
             }
         }, this);
-    },
-    
-    /**
-     * message is sending
-     */
-    onSave: function() {
-        this.sending = true;
     },
     
     /**
@@ -747,7 +729,7 @@ Ext.namespace('Tine.Felamimail');
             String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
                 + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
         );
-        this.sending = false;
+        this.saving = false;
         this.loadMask.hide();
     },
 

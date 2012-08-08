@@ -8,60 +8,11 @@ fi
 
 db_version 2.0
 
-# handle database removal
-if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then 
-    # currently we support mysql only
-    dbc_dbtypes="mysql"
-        
-    . /usr/share/dbconfig-common/dpkg/postrm 
-    dbc_go tine20 $@ 
-fi 
-
-if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
-    db_get tine20/webserver_type
-    webservers="$RET"
-
-    if [ "$webservers" != "" ]; then
-
-        for webserver in $webservers; do
-            webserver=${webserver%,}
-
-            # check if webserver is installed
-            test -x /usr/sbin/$webserver || continue
-    
-            case "$webserver" in
-                apache2)
-                    rm -f /etc/$webserver/conf.d/tine20
-                    
-                    # mark webserver for restart (used by restart.sh)
-                    restart="$restart $webserver"
-                    ;;
-            esac
-        done
-    
-        # restart webserver
-        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
-            . /usr/share/wwwconfig-common/restart.sh
-        fi
-        
-    fi
-fi
-
 if [ "$1" = "purge" ]; then
     
-    rm -f /etc/tine20/config.inc.php
-    if which ucf >/dev/null 2>&1; then
-        ucf --purge /etc/tine20/config.inc.php
-    fi
- 
     rm -rf /var/lib/tine20
     rm -rf /var/log/tine20
     
-fi
-
-if [ "$1" = "purge" ] && [ -e /usr/share/debconf/confmodule ]; then
-	. /usr/share/debconf/confmodule
-	db_purge
 fi
 
 #DEBHELPER#

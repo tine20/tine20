@@ -256,6 +256,35 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testSavePasswordSettings
+     * 
+     * @see 0003008: add password policies
+     */
+    public function testSavePasswordSettings()
+    {
+        $testAuthenticationData = $this->_json->loadAuthenticationData();
+
+        $configs = array(
+            'changepw' => TRUE,
+            'pwPolicyActive' => TRUE,
+            'pwPolicyMinLength' => 1,
+            'pwPolicyMinWordChars' => 1,
+        );
+        foreach ($configs as $config => $value) {
+            $testAuthenticationData['password'][$config] = $value;
+        }
+        $result = $this->_json->saveAuthentication($testAuthenticationData);
+        
+        $this->assertTrue($result['success'], 'saveAuthentication unsuccessful');
+        
+        $testAuthenticationData = $this->_json->loadAuthenticationData();
+        $this->assertTrue(isset($testAuthenticationData['password']), 'pw settings not found: ' . print_r($testAuthenticationData, TRUE));
+        foreach ($configs as $config => $expected) {
+            $this->assertEquals($expected, $testAuthenticationData['password'][$config], 'pw setting ' . $config . ' not found: ' . print_r($testAuthenticationData['password'], TRUE));
+        }
+    }
+    
+    /**
      * _uninstallAllApps helper
      */
     protected function _uninstallAllApps()

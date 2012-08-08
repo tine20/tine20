@@ -274,7 +274,7 @@ function potmerge($_verbose)
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $_verbose);
         $enHeader = file_get_contents("$translationPath/en.po");
         `cd "$translationPath"
-         msgen template.pot >> en.po $msgDebug`;
+         msgen template.pot > en.po $msgDebug`;
          
         foreach ($langs as $langCode) {
             $poFile = "$translationPath/$langCode.po";

@@ -8,7 +8,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
@@ -38,6 +38,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'model'             => '',
         'urlIsHome'            => 0,
         'mapNicknameToField'=> '',
+        'useStreamFilter'   => FALSE,
     );
     
     /**
@@ -139,7 +140,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $this->_initImportResult();
         
         $lines = array();
-        while($line=fgets($_resource)){
+        while ($line = fgets($_resource)) {
             $lines[] = str_replace("\n", "", $line);
         }
         
@@ -221,24 +222,22 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                 $types = $property->params['TYPE'];
                 
                 //post office box; the extended address; the street
-                   //address; the locality (e.g., city); the region (e.g., state or
+                //address; the locality (e.g., city); the region (e.g., state or
                 //province); the postal code; the country name
+                
                 $components = $property->getComponents();
-                if($types && in_array_case($types, 'home')){
-                    //post office box : $components[0];
-                    $data['adr_two_street2'] = $components[1];
-                    $data['adr_two_street'] = $components[2];
-                    $data['adr_two_locality'] = $components[3];
-                    $data['adr_two_region'] = $components[4];
-                    $data['adr_two_postalcode'] = $components[5];
-                    $data['adr_two_countryname'] = $components[6];
-                }else{
-                    $data['adr_one_street2'] = $components[1];
-                    $data['adr_one_street'] = $components[2];
-                    $data['adr_one_locality'] = $components[3];
-                    $data['adr_one_region'] = $components[4];
-                    $data['adr_one_postalcode'] = $components[5];
-                    $data['adr_one_countryname'] = $components[6];
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' Address components ' . print_r($components, TRUE));
+                
+                $mapping = array(NULL, 'street2', 'street', 'locality', 'region', 'postalcode', 'countryname');
+                $adrType = ($types && in_array_case($types, 'home')) ? 'two' : 'one';
+                foreach ($components as $index => $value) {
+                    if (! isset($mapping[$index]) || $mapping[$index] === NULL) {
+                        continue;
+                    }
+                    
+                    $data['adr_' . $adrType . '_' . $mapping[$index]] = $value;
                 }
             }
         }

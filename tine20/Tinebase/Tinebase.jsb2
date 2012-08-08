@@ -510,6 +510,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "FilterModelMultiSelect.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/widgets/grid/"
         },

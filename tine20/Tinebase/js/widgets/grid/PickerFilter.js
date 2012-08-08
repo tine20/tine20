@@ -213,7 +213,7 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     }
 });
 
-Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.grid.PickerFilter;
+Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.pickerfilter'] = Tine.widgets.grid.PickerFilter;
 
 /**
  * @namespace   Tine.widgets.grid
