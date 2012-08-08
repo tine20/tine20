@@ -45,8 +45,10 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
             $this->_mime          = (string) $xml->Mime;
             $this->_saveInSent    = isset($xml->SaveinSentItems);
             
-            $this->_collectionId  = isset($xml->FolderId) ? (string)$xml->FolderId : null;
-            $this->_itemId        = isset($xml->ItemId)   ? (string)$xml->ItemId   : null;
+            if (isset ($xml->Source)) {
+                $this->_collectionId  = (string)$xml->Source->FolderId;
+                $this->_itemId        = (string)$xml->Source->ItemId;
+            }
         }
         
         if ($this->_logger instanceof Zend_Log)
