@@ -17,4 +17,5 @@
  */
 class Syncroton_Exception_ProvisioningNeeded extends Syncroton_Exception
 {
+    public $domDocument;
 }
