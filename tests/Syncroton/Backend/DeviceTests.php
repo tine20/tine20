@@ -118,7 +118,7 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'android-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
-                    'policykey'  => 1,
+                    'policykey'  => null,
                     'policy_id'  => 1,
                     'owner_id'   => '1234',
                     'useragent'  => 'blabla',
@@ -131,7 +131,7 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'webos-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
-                    'policykey'  => 1,
+                    'policykey'  => null,
                     'policy_id'  => 1,
                     'owner_id'   => '1234',
                     'useragent'  => 'blabla',
@@ -145,7 +145,7 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'iphone-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_IPHONE,
-                    'policykey'  => 1,
+                    'policykey'  => null,
                     'policy_id'  => 1,
                     'owner_id'   => '1234',
                     'useragent'  => 'blabla',

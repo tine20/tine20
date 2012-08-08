@@ -595,5 +595,4 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $this->assertTrue($catchedException);
         $this->assertGreaterThan(count($dataController->getServerEntries('addressbookFolderId', null)), $count);
     }
-            
 }
