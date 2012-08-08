@@ -287,9 +287,8 @@ class Setup_Frontend_Cli
         $options = array('syncContactData' => TRUE);
         if ($_opts->dbmailldap) {
             $options['ldapplugins'] = array(
-                new Tinebase_EmailUser_Imap_LdapDbmailSchema(array(
-                    'backend' => 'ldap_imap',
-                ))
+                new Tinebase_EmailUser_Imap_LdapDbmailSchema(),
+                new Tinebase_EmailUser_Smtp_LdapDbmailSchema()
             );
         }
         Tinebase_User::syncUsers($options);
