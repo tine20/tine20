@@ -43,7 +43,7 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
             $xml = simplexml_import_dom($this->_requestBody);
             
             $this->_mime          = (string) $xml->Mime;
-            $this->_saveInSent    = isset($xml->SaveinSentItems);
+            $this->_saveInSent    = isset($xml->SaveInSentItems);
             
             if (isset ($xml->Source)) {
                 $this->_collectionId  = (string)$xml->Source->FolderId;
