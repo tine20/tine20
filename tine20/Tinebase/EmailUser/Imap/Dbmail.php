@@ -72,7 +72,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         'emailSieveSize'    => 'cursieve_size',
     
         // makes mapping data to _config easier
-        'emailScheme'        => 'encryption_type',
+        'emailScheme'       => 'encryption_type',
     );
     
     /**
@@ -435,6 +435,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
                 switch ($key) {
                     case 'emailPassword':
                         $rawData[$property] =  Hash_Password::generate($this->_config['emailScheme'], $value, false);
+                        $rawData[$this->_propertyMapping['emailScheme']]   = $this->_config['emailScheme'];
                         break;
                         
                     case 'emailUserId':
@@ -465,7 +466,6 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
             $rawData[$this->_propertyMapping['emailGID']]  = $this->_convertToInt($this->_config['emailGID']);
         }
         $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
-        $rawData[$this->_propertyMapping['emailScheme']]   = $this->_config['emailScheme'];
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, TRUE));
         
