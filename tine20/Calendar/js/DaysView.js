@@ -558,7 +558,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (event == this.activeEvent) {
             this.activeEvent = null;
         }
-        
+
+        if(this.editing) {
+            this.abortCreateEvent(event);
+        }
+
         if (event.ui) {
             event.ui.remove();
         }
@@ -706,7 +710,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (e && e.getKey() != e.ENTER) {
             return;
         }
-
+        
         // Validate Summary maxLength
         if (summary.length > field.maxLength) {
             field.markInvalid();
@@ -718,7 +722,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
 
         // Validate Summary minLength
-        if (!summary || summary.length < field.minLength) {
+        if (!summary || summary.match(/^\s{1,}$/) || summary.length < field.minLength) {
             field.markInvalid();
             this.validateMsg = Ext.Msg.alert(this.app.i18n._('Summary too Short'), field.minLengthText, function(){
                 field.focus();
