@@ -126,9 +126,11 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                         ->appendXML($properties);
                     $fetchTag->appendChild($properties);
                 }
-            } catch (Syncroton_Exception_NotFound $e) {echo __LINE__;
+            } catch (Syncroton_Exception_NotFound $e) {
+                //echo __LINE__;
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_ITEM_FAILED_CONVERSION));
-            } catch (Exception $e) {echo __LINE__; echo $e->getMessage(); echo $e->getTraceAsString();
+            } catch (Exception $e) {
+                //echo __LINE__; echo $e->getMessage(); echo $e->getTraceAsString();
                 $response->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SERVER_ERROR));
             }
         }
