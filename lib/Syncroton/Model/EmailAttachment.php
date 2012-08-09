@@ -27,10 +27,13 @@ class Syncroton_Model_EmailAttachment extends Syncroton_Model_AEntry
     // @todo handle body
     protected $_properties = array(
         'AirSyncBase' => array(
+            'ContentId'               => array('type' => 'string'),
+            'ContentLocation'         => array('type' => 'string'),
             'DisplayName'             => array('type' => 'string'),
-            'FileReference'           => array('type' => 'string'),
-            'Method'                  => array('type' => 'string'),
             'EstimatedDataSize'       => array('type' => 'string'),
+            'FileReference'           => array('type' => 'string'),
+            'IsInline'                => array('type' => 'number'),
+            'Method'                  => array('type' => 'string'),
         ),
         'Email2' => array(
             'UmAttDuration'         => array('type' => 'number'),
