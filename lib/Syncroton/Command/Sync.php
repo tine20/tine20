@@ -462,6 +462,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
                                 unset($serverModifications['changed'][$id]);
                             }
+                            // skip entry, make sure we don't sent entries already added by client in this request
+                            else if (isset($clientModifications['added'][$serverId]) && !isset($clientModifications['forceAdd'][$serverId])) {
+                                if ($this->_logger instanceof Zend_Log)
+                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped change for added entry: " . $serverId);
+                                unset($serverModifications['changed'][$id]);
+                            }
                         }
             
                         // entries comeing in scope are already in $serverModifications['added'] and do not need to
