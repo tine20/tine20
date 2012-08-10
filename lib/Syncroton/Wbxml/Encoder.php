@@ -236,7 +236,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
             
             $writenBytes = stream_copy_to_stream($subStream, $this->_stream);
             if($writenBytes !== $subStreamLength) {
-                echo "$writenBytes !== $subStreamLength\n";
+                //echo "$writenBytes !== $subStreamLength\n";
                 throw new Syncroton_Wbxml_Exception('blow');
             }
             fclose($subStream);

@@ -251,7 +251,7 @@ class Syncroton_Model_SyncCollection
         if (array_key_exists($name, $this->_collection)) {
             return $this->_collection[$name];
         }
-        echo $name . PHP_EOL;
+        //echo $name . PHP_EOL;
         return null; 
     }
     
