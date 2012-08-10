@@ -1,0 +1,4 @@
+"Name";"Vorname";"Eintrittsd";"Geburtsdat";"Geburtsort";"Geschlecht";"Ort";"PLZ"
+"Uffbass";"Umud";"02.08.2012";"01.12.1932";"Hamburg";"m�nnlich";"Hamburg";"12322"
+"Bernhard";"Bianca";"02.08.2012";"13.10.1933";"Hamburg";"m�nnlich";"Hamburg";"32123"
+"

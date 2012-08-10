@@ -242,6 +242,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($found, 'Member "Kućuk, Orkide" not found in result: ' . print_r($result['members'], TRUE));
         $this->assertEquals(25, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
     }
+
+    /**
+     * test for import of members (5) / json import
+     */
+    public function testImportMembersIntoCourse5()
+    {
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/tah2a.txt', $this->_getCourseImportDefinition3('iso-8859-1'), TRUE);
+        print_r($result);
+        $this->assertEquals(3, count($result['members']), 'import failed');
+    }
     
     /**
      * testGetCoursesPreferences
@@ -504,7 +514,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         return $definition;
     }
     
- /**
+ 	/**
      * returns course import definition
      * 
      * @return Tinebase_Model_ImportExportDefinition
@@ -540,6 +550,48 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             </config>')
             ));
         }
+        
+        return $definition;
+    }
+    
+    /**
+     * returns course import definition
+     * 
+     * @param string $encoding
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    protected function _getCourseImportDefinition3($encoding = 'UTF-8')
+    {
+        try {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('course_user_import_csv');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
+                    'name'              => 'course_user_import_csv',
+                    'type'              => 'import',
+                    'model'             => 'Tinebase_Model_FullUser',
+                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
+            <config>
+                <headline>1</headline>
+                <use_headline>0</use_headline>
+                <dryrun>0</dryrun>
+                <encoding>' . $encoding . '</encoding>
+                <delimiter>;</delimiter>
+                <mapping>
+                    <field>
+                        <source>Name</source>
+                        <destination>accountLastName</destination>
+                    </field>
+                    <field>
+                        <source>Vorname</source>
+                        <destination>accountFirstName</destination>
+                    </field>
+                </mapping>
+            </config>')
+            ));
+        }
+        
         
         return $definition;
     }
