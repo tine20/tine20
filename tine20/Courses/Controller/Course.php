@@ -499,13 +499,12 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new member for ' . $course->name);
-
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($course->toArray(), TRUE));
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($user->toArray(), TRUE));
         
         $password = $user->applyOptionsAndGeneratePassword($this->_getNewUserConfig($course));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($user->toArray(), TRUE));
         $newMember = $this->_userController->create($user, $password, $password);
         
         // add to default group, too

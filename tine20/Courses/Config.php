@@ -51,6 +51,13 @@ class Courses_Config extends Tinebase_Config_Abstract
     * @var string
     */
     const STUDENTS_IMPORT_DEFINITION = 'students_import_definition';
+
+    /**
+    * fields for samba settings of course members
+    *
+    * @var string
+    */
+    const SAMBA = 'samba';
     
     /**
     * students loginname prefix
@@ -112,6 +119,18 @@ class Courses_Config extends Tinebase_Config_Abstract
             'type'                  => 'int',
             'clientRegistryInclude' => TRUE,
         ),
+        self::SAMBA => array(
+                                   //_('Samba user settings')
+            'label'                 => 'Samba user settings',
+                                   //_('Samba user settings')
+            'description'           => 'Samba user settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        
     );
     
     /**

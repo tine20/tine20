@@ -72,6 +72,14 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             )));
             Courses_Config::getInstance()->set($configgroup, $this->_configGroups[$configgroup]->getId());
         }
+        
+        Courses_Config::getInstance()->set(Courses_Config::SAMBA, new Tinebase_Config_Struct(array(
+            'basehomepath' => '\\\\jo\\',
+            'homedrive' => 'X:',
+            'logonscript_postfix_teacher' => '-lehrer.cmd',
+            'logonscript_postfix_member' => '.cmd',
+            'baseprofilepath' => '\\\\jo\\profiles\\',
+        )));
     }
 
     /**
@@ -319,6 +327,29 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($newUserMemberships), 'new user should have 2 group memberships');
         $this->assertTrue(in_array(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newUserMemberships),
             'could not find default group in memberships: ' . print_r($newUserMemberships, TRUE));
+    }
+    
+    /**
+     * testApplySambaSettings
+     * 
+     * @see 0006910: new manual users have no samba settings
+     */
+    public function testApplySambaSettings()
+    {
+        $user = Tinebase_Core::getUser();
+        $config = Courses_Config::getInstance()->samba;
+        $profilePath = $config->baseprofilepath . 'school' . '\\' . 'coursexy' . '\\';
+        $user->applyOptionsAndGeneratePassword(array('samba' => array(
+            'homePath'      => $config->basehomepath,
+            'homeDrive'     => $config->homedrive,
+            'logonScript'   => 'coursexy' . $config->logonscript_postfix_member,
+            'profilePath'   => $profilePath,
+            'pwdCanChange'  => new Tinebase_DateTime('@1'),
+            'pwdMustChange' => new Tinebase_DateTime('@1')
+        )));
+
+        // check samba settings
+        $this->assertEquals($profilePath . $user->accountLoginName, $user->sambaSAM->profilePath);
     }
     
     /**

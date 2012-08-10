@@ -242,6 +242,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         unset($_user->accountId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
         
         $this->_checkLoginNameExistance($_user);
         

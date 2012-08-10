@@ -84,6 +84,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     public function applyOptionsAndGeneratePassword($options, $password = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($options, TRUE));
+        
         // create valid login name
         if (! isset($this->accountLoginName)) {
             $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
@@ -116,7 +119,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         }
         
         if (! empty($options['samba'])) {
-            $this->_addSambaSettings($options);
+            $this->_addSambaSettings($options['samba']);
         }
         
         // generate passwd (use accountLoginName or password from options or password from csv in this order)
