@@ -183,8 +183,13 @@ Tine.Tinebase.ApplicationStarter = {
 
         if (filterconfig) {
             // if js filter is defined in filterconfig.options, take this and return
-            if(filterconfig.hasOwnProperty('options') && filterconfig.options.hasOwnProperty('jsFilterType')) {
-                filter.valueType = filterconfig.options.jsFilterType;
+            if(filterconfig.hasOwnProperty('options') && (filterconfig.options.hasOwnProperty('jsFilterType') || filterconfig.options.hasOwnProperty('jsFilterValueType'))) {
+                if(filterconfig.options.jsFilterType) {
+                    filter.filtertype = filterconfig.options.jsFilterType;
+                }
+                if(filterconfig.options.jsFilterValueType) {
+                    filter.valueType = filterconfig.options.jsFilterValueType;
+                }
                 return filter;
             } 
             
