@@ -177,7 +177,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         Ext.each(keys, function(field) {
             var ff = field.formField;
-            if ((!(ff.isXType('textfield'))) && (!(ff.isXType('checkbox'))) || ff.multiEditable === false) {
+            if ((!(ff.isXType('textfield'))) && (!(ff.isXType('checkbox'))) && (!(ff.isXType('datetimefield'))) || ff.multiEditable === false) {
                 ff.setDisabled(true);
                 this.interRecord.set(field.recordKey, '');
                 return true;
@@ -191,7 +191,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 if(ff.isXType('tinerecordpickercombobox')) {
                     ff.disableClearer = true;
                     subLeft += 19;
-                } else if (ff.isXType('trigger')) {
+                } else if (ff.isXType('trigger') || ff.isXType('datetimefield')) {
                     subLeft += 17; 
                 }
                 var el = this.el.parent().select('.tinebase-editmultipledialog-clearer'), 
