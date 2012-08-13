@@ -106,7 +106,7 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:PolicyKey');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertTrue(!empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
 
         $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:Data/Provision:EASProvisionDoc/Provision:DevicePasswordEnabled');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
