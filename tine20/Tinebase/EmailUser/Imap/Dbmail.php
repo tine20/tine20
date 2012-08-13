@@ -277,9 +277,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      */
     protected function _removeNonDBValues(&$userdata)
     {
-        unset($imapSettings[$this->_propertyMapping['emailMailSize']]);
-        unset($imapSettings[$this->_propertyMapping['emailSieveSize']]);
-        unset($imapSettings[$this->_propertyMapping['emailLastLogin']]);
+        unset($userdata[$this->_propertyMapping['emailMailSize']]);
+        unset($userdata[$this->_propertyMapping['emailSieveSize']]);
+        unset($userdata[$this->_propertyMapping['emailLastLogin']]);
     }
     
     /**
