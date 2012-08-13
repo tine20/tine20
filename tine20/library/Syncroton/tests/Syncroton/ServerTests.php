@@ -1,0 +1,65 @@
+<?php
+/**
+ * Syncroton
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ */
+
+/**
+ * class to test <...>
+ *
+ * @package     Syncroton
+ * @subpackage  Tests
+ */
+class Syncroton_ServerTests extends Syncroton_Command_ATestCase
+{
+    #protected $_logPriority = Zend_Log::DEBUG;
+    
+    protected function setUp()
+    {
+        parent::setUp();
+        $_GET = array();
+    }
+    
+    public function testServer()
+    {
+        $_SERVER['REQUEST_METHOD']            = 'POST';
+        $_SERVER['HTTP_MS_ASPROTOCOLVERSION'] = '2.5';
+        $_SERVER['HTTP_USER_AGENT']           = 'Apple-iPhone/705.18';
+        
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1356</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?User=abc1234&DeviceId=Appl7R743U8YWH8&DeviceType=iPhone&Cmd=Sync'));
+        
+        $server = new Syncroton_Server('abc1234', $request, $doc);
+        
+        $server->handle();
+    }
+    
+    public function testBase64EncodedParameters()
+    {
+        $_SERVER['REQUEST_METHOD']            = 'POST';
+        $_SERVER['HTTP_MS_ASPROTOCOLVERSION'] = '14.1';
+        $_SERVER['HTTP_USER_AGENT']           = 'Apple-iPhone/705.18';
+        
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1356</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?jAAJBAp2MTQwRGV2aWNlAApTbWFydFBob25l'));
+        
+        $server = new Syncroton_Server('abc1234', $request, $doc);
+        
+        $server->handle();
+    }
+}

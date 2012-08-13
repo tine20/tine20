@@ -1,0 +1,6 @@
+# place this file as .htaccess into documentroot of your webserver
+
+RewriteEngine ON
+
+# ActiveSync
+RewriteRule ^Microsoft-Server-ActiveSync syncroton.php [L,QSA]
