@@ -58,6 +58,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     selectedRecord: null,
     
     /**
+     * sort by field
+     * 
+     * @type String 
+     */
+    sortBy: null,
+    
+    /**
      * @type string
      * @property lastStoreTransactionId
      */
@@ -108,7 +115,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     
     
     /**
-     * prepare paging
+     * prepare paging and sort
      * 
      * @param {Ext.data.Store} store
      * @param {Object} options
@@ -118,12 +125,18 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         this.lastStoreTransactionId = options.transactionId = Ext.id();
         
-        options.params.paging = {
+        var paging = {
+            // TODO do we need to set start & limit here?
             start: options.params.start,
             limit: options.params.limit,
-            sort: this.valueField,
+            sort: (this.sortBy) ? this.sortBy : this.valueField,
             dir: 'ASC'
         };
+        
+        Ext.applyIf(options.params, paging);
+        
+        // TODO is this needed?
+        options.params.paging = paging;
     },
     
     /**

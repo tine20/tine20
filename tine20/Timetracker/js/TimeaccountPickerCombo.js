@@ -29,6 +29,8 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
      */
     showClosedBtn: null,
     
+    sortBy: 'number',
+    
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
         this.recordClass = Tine.Timetracker.Model.Timeaccount;
@@ -74,7 +76,7 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
      */
     onBeforeLoad: function (store, options) {
         Tine.Timetracker.TimeaccountPickerCombo.superclass.onBeforeLoad.apply(this, arguments);
-        
+
         if (this.showClosedBtn) {
             Ext.each(store.baseParams.filter, function(filter, idx) {
                 if (filter.field == 'showClosed'){
@@ -83,7 +85,6 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
             }, this);
             store.baseParams.filter.push(this.showClosedBtn.getValue());
         }
-        
     }
 });
 
