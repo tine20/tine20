@@ -16,48 +16,13 @@
  * @package     Syncroton
  * @subpackage  Backend
  */
-class Syncroton_Backend_Content implements Syncroton_Backend_IContent
+class Syncroton_Backend_Content extends Syncroton_Backend_ABackend implements Syncroton_Backend_IContent
 {
-    /**
-     * the database adapter
-     *
-     * @var Zend_Db_Adapter_Abstract
-     */
-    protected $_db;
+    protected $_tableName = 'content';
     
-    protected $_tablePrefix;
+    protected $_modelClassName = 'Syncroton_Model_Content';
     
-    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'Syncroton_')
-    {
-        $this->_db          = $_db;
-        $this->_tablePrefix = $_tablePrefix;
-    }
-    
-    /**
-     * create new content state
-     *
-     * @param Syncroton_Model_IContent $_state
-     * @return Syncroton_Model_IContent
-     */
-    public function create(Syncroton_Model_IContent $_state)
-    {
-        $id = sha1(mt_rand(). microtime());
-        
-        $deviceId = $_state->device_id instanceof Syncroton_Model_IDevice ? $_state->device_id->id : $_state->device_id;
-        $folderId = $_state->folder_id instanceof Syncroton_Model_IFolder ? $_state->folder_id->id : $_state->folder_id;
-        
-        $this->_db->insert($this->_tablePrefix . 'content', array(
-            'id'               => $id, 
-            'device_id'        => $deviceId,
-            'folder_id'        => $folderId,
-            'contentid'        => $_state->contentid,
-            'creation_time'    => $_state->creation_time->format('Y-m-d H:i:s'),
-            'creation_synckey' => $_state->creation_synckey,
-            'is_deleted'       => isset($_state->is_deleted) ? (int)!!$_state->is_deleted : 0
-        ));
-        
-        return $this->get($id);
-    }
+    protected $_modelInterfaceName = 'Syncroton_Model_IContent';
     
     /**
      * mark state as deleted. The state gets removed finally, 
@@ -65,9 +30,9 @@ class Syncroton_Backend_Content implements Syncroton_Backend_IContent
      * 
      * @param Syncroton_Model_IContent|string $_id
      */
-    public function delete($_id)
+    public function delete($id)
     {
-        $id = $_id instanceof Syncroton_Model_IContent ? $_id->id : $_id;
+        $id = $id instanceof $this->_modelInterfaceName ? $id->id : $id;
         
         $this->_db->update($this->_tablePrefix . 'content', array(
             'is_deleted' => 1
@@ -78,73 +43,45 @@ class Syncroton_Backend_Content implements Syncroton_Backend_IContent
     }
     
     /**
-     * @param string  $_id
-     * @throws Syncroton_Exception_NotFound
-     * @return Syncroton_Model_IContent
-     */
-    public function get($_id)
-    {
-        $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'content')
-            ->where('id = ?', $_id);
-    
-        $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncroton_Model_Content');
-        
-        if (! $state instanceof Syncroton_Model_IContent) {
-            throw new Syncroton_Exception_NotFound('id not found');
-        }
-        
-        if (!empty($state->creation_time)) {
-            $state->creation_time = new DateTime($state->creation_time, new DateTimeZone('utc'));
-        }
-    
-        return $state;
-    }
-    
-    /**
-     * @param Syncroton_Model_IDevice|string $_deviceId
-     * @param Syncroton_Model_IFolder|string $_folderId
+     * @param Syncroton_Model_IDevice|string $deviceId
+     * @param Syncroton_Model_IFolder|string $folderId
      * @param string $_contentId
      * @return Syncroton_Model_IContent
      */
-    public function getContentState($_deviceId, $_folderId, $_contentId)
+    public function getContentState($deviceId, $folderId, $contentId)
     {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
+        $folderId = $folderId instanceof Syncroton_Model_IFolder ? $folderId->id : $folderId;
     
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'content')
             ->where($this->_db->quoteIdentifier('device_id')  . ' = ?', $deviceId)
             ->where($this->_db->quoteIdentifier('folder_id')  . ' = ?', $folderId)
-            ->where($this->_db->quoteIdentifier('contentid')  . ' = ?', $_contentId)
+            ->where($this->_db->quoteIdentifier('contentid')  . ' = ?', $contentId)
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
     
         $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncroton_Model_Content');
+        $data = $stmt->fetch();
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
         
-        if (! $state instanceof Syncroton_Model_IContent) {
+        if ($data === false) {
             throw new Syncroton_Exception_NotFound('id not found');
         }
         
-        if (!empty($state->creation_time)) {
-            $state->creation_time = new DateTime($state->creation_time, new DateTimeZone('utc'));
-        }
-    
-        return $state;
+        return $this->_getObject($data);        
     }
     
     /**
      * get array of ids which got send to the client for a given class
      *
-     * @param Syncroton_Model_IDevice|string $_deviceId
-     * @param Syncroton_Model_IFolder|string $_folderId
+     * @param Syncroton_Model_IDevice|string $deviceId
+     * @param Syncroton_Model_IFolder|string $folderId
      * @return array
      */
-    public function getFolderState($_deviceId, $_folderId)
+    public function getFolderState($deviceId, $folderId)
     {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
+        $folderId = $folderId instanceof Syncroton_Model_IFolder ? $folderId->id : $folderId;
                 
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'content', 'contentid')
@@ -161,13 +98,13 @@ class Syncroton_Backend_Content implements Syncroton_Backend_IContent
     /**
      * reset list of stored id
      *
-     * @param Syncroton_Model_IDevice|string $_deviceId
-     * @param Syncroton_Model_IFolder|string $_folderId
+     * @param Syncroton_Model_IDevice|string $deviceId
+     * @param Syncroton_Model_IFolder|string $folderId
      */
-    public function resetState($_deviceId, $_folderId)
+    public function resetState($deviceId, $folderId)
     {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->id : $_folderId;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
+        $folderId = $folderId instanceof Syncroton_Model_IFolder ? $folderId->id : $folderId;
          
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId),

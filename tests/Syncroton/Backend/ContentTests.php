@@ -107,7 +107,7 @@ class Syncroton_Backend_ContentTests extends PHPUnit_Framework_TestCase
         
         $content = $this->_contentBackend->create($content);
         
-        $this->assertTrue($content->creation_time instanceof DateTime);
+        $this->assertTrue($content->creationTime instanceof DateTime);
         
         return $content;
     }
@@ -124,8 +124,8 @@ class Syncroton_Backend_ContentTests extends PHPUnit_Framework_TestCase
         $content = $this->_contentBackend->get($content->id);
         
         $this->assertTrue($content instanceof Syncroton_Model_IContent);
-        $this->assertEquals(1, $content->is_deleted);
-        $this->assertTrue($content->creation_time instanceof DateTime);
+        $this->assertEquals(1, $content->isDeleted);
+        $this->assertTrue($content->creationTime instanceof DateTime);
     }  
 
     public function testGetFolderState()
@@ -164,10 +164,10 @@ class Syncroton_Backend_ContentTests extends PHPUnit_Framework_TestCase
     public static function getTestContent(Syncroton_Model_IDevice $_device, Syncroton_Model_IFolder $_folder)
     {
         return new Syncroton_Model_Content(array(
-            'device_id'        => $_device,
-            'folder_id'        => $_folder,
+            'deviceId'        => $_device,
+            'folderId'        => $_folder,
             'contentid'        => 'abc1234',
-            'creation_time'    => new DateTime(null, new DateTimeZone('utc')),
+            'creationTime'    => new DateTime(null, new DateTimeZone('utc')),
             'creation_synckey' => 1
         ));
     }

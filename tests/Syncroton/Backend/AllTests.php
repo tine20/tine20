@@ -29,6 +29,7 @@ class Syncroton_Backend_AllTests
         $suite->addTestSuite('Syncroton_Backend_ContentTests');
         $suite->addTestSuite('Syncroton_Backend_DeviceTests');
         $suite->addTestSuite('Syncroton_Backend_FolderTests');
+        $suite->addTestSuite('Syncroton_Backend_PolicyTests');
         $suite->addTestSuite('Syncroton_Backend_SyncStateTests');
         
         return $suite;

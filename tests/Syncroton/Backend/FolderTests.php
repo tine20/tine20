@@ -86,7 +86,7 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
         
         $folder = $this->_folderBackend->create($folder);
                 
-        $this->assertTrue($folder->creation_time instanceof DateTime);
+        $this->assertTrue($folder->creationTime instanceof DateTime);
         $this->assertFalse(empty($folder->displayname));
         
         return $folder;
@@ -119,9 +119,9 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
     {
         $folder = $this->testCreate();
         
-        $folder = $this->_folderBackend->getFolder($folder->device_id, $folder->folderid);
+        $folder = $this->_folderBackend->getFolder($folder->deviceId, $folder->folderid);
         
-        $this->assertTrue($folder->creation_time instanceof DateTime);
+        $this->assertTrue($folder->creationTime instanceof DateTime);
     }
     
     public function testGetFolderState()

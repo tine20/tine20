@@ -73,7 +73,9 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
         
         $device = $this->_deviceBackend->create($newDevice);
         
-        #var_dump($device);
+        //var_dump($device);
+        
+        $this->assertEquals($newDevice->ownerId, $device->ownerId);
         
         return $device;
     }
@@ -119,8 +121,8 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'deviceid'   => 'android-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
                     'policykey'  => null,
-                    'policy_id'  => 1,
-                    'owner_id'   => '1234',
+                    'policyId'   => null,
+                    'ownerId'    => '1234',
                     'useragent'  => 'blabla',
                     'acsversion' => '12.0',
                     'remotewipe' => 0
@@ -132,8 +134,8 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'deviceid'   => 'webos-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
                     'policykey'  => null,
-                    'policy_id'  => 1,
-                    'owner_id'   => '1234',
+                    'policyId'   => null,
+                    'ownerId'    => '1234',
                     'useragent'  => 'blabla',
                     'acsversion' => '12.0',
                     'remotewipe' => 0
@@ -146,8 +148,8 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'deviceid'   => 'iphone-abcd',
                     'devicetype' => Syncroton_Model_Device::TYPE_IPHONE,
                     'policykey'  => null,
-                    'policy_id'  => 1,
-                    'owner_id'   => '1234',
+                    'policyId'   => null,
+                    'ownerId'    => '1234',
                     'useragent'  => 'blabla',
                     'acsversion' => '2.5',
                     'remotewipe' => 0

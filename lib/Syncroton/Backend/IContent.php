@@ -16,24 +16,8 @@
  * @package     Syncroton
  * @subpackage  Backend
  */
-interface Syncroton_Backend_IContent
+interface Syncroton_Backend_IContent extends Syncroton_Backend_IBackend
 {
-    /**
-     * create new content state
-     *
-     * @param Syncroton_Model_IContent $_contentState
-     * @return Syncroton_Model_IContent
-     */
-    public function create(Syncroton_Model_IContent $_contentState);
-
-    /**
-     * mark state as deleted. The state gets removed finally, 
-     * when the synckey gets validated during next sync.
-     *
-     * @param Syncroton_Model_IContent|string $_id
-     */
-    public function delete($_id);
-
     /**
      * @param Syncroton_Model_IDevice|string $_deviceId
      * @param Syncroton_Model_IFolder|string $_folderId

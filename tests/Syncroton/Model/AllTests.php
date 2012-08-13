@@ -30,6 +30,7 @@ class Syncroton_Model_AllTests
         $suite->addTestSuite('Syncroton_Model_EmailTests');
         $suite->addTestSuite('Syncroton_Model_EventTests');
         $suite->addTestSuite('Syncroton_Model_FileReferenceTests');
+        $suite->addTestSuite('Syncroton_Model_PolicyTests');
         $suite->addTestSuite('Syncroton_Model_SyncCollectionTests');
         $suite->addTestSuite('Syncroton_Model_TaskTests');
         
