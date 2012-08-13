@@ -24,7 +24,7 @@ interface Syncroton_Backend_ISyncState extends Syncroton_Backend_IBackend
      * @param  Syncroton_Model_IDevice  $model
      * @param  boolean                  $keepPreviousSyncState
      */
-    public function create($model, $keepPreviousSyncState = true);
+    #public function create($model, $keepPreviousSyncState = true);
 
     /**
      * always returns the latest syncstate
