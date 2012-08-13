@@ -699,7 +699,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getDecodeFilter($_charset = self::DEFAULT_FALLBACK_CHARSET)
     {
-        $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+        if (in_array(strtolower($_charset), array('iso-8859-1', 'windows-1252', 'iso-8859-15')) && extension_loaded('mbstring')) {
+            require_once 'StreamFilter/ConvertMbstring.php';
+            $filter = 'convert.mbstring';
+        } else {
+            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
         
