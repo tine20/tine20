@@ -249,7 +249,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportMembersIntoCourse5()
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/tah2a.txt', $this->_getCourseImportDefinition3('iso-8859-1'), TRUE);
-        print_r($result);
         $this->assertEquals(3, count($result['members']), 'import failed');
     }
     
