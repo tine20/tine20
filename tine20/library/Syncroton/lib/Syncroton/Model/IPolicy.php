@@ -16,7 +16,7 @@
  * @property    string   id
  * @property    string   deviceid
  * @property    string   devicetype
- * @property    string   policykey
+ * @property    string   policyKey
  * @property    string   policyId
  * @property    string   ownerId
  * @property    string   acsversion
@@ -26,14 +26,7 @@
  * @property    string   useragent
  */
 
-interface Syncroton_Model_IDevice
+interface Syncroton_Model_IPolicy
 {
-    /**
-     * Returns major firmware version of this device
-     *
-     * @return int/string
-     */
-    public function getMajorVersion();
-    
 }
 

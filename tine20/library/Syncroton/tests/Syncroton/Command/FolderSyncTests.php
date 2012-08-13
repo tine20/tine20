@@ -150,28 +150,4 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
         
         $this->assertEquals($clientFolders1["addressbookFolderId"], $clientFolders2["addressbookFolderId"]);
     }
-    
-    public function testProvisioning()
-    {
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-                <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-                <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        $this->_device->policykey = 7;
-        try {
-            $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, array('policyKey' => 5));
-        } catch (Syncroton_Exception_ProvisioningNeeded $sepn) {
-            $responseDoc = $sepn->domDocument;
-        }
-        
-        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
-        
-        $xpath = new DomXPath($responseDoc);
-        $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
-        
-        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Status');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(142, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
-    }
 }

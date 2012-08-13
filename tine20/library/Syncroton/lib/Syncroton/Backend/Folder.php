@@ -16,169 +16,72 @@
  * @package     Syncroton
  * @subpackage  Backend
  */
-class Syncroton_Backend_Folder implements Syncroton_Backend_IFolder
+class Syncroton_Backend_Folder extends Syncroton_Backend_ABackend implements Syncroton_Backend_IFolder
 {
+    protected $_tableName = 'folder';
+    
+    protected $_modelClassName = 'Syncroton_Model_Folder';
+    
+    protected $_modelInterfaceName = 'Syncroton_Model_IFolder';
+    
     /**
-     * the database adapter
-     *
-     * @var Zend_Db_Adapter_Abstract
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_IFolder::getFolder()
      */
-    protected $_db;
-    
-    protected $_tablePrefix;
-    
-    public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'Syncroton_')
+    public function getFolder($deviceId, $folderId)
     {
-        $this->_db = $_db;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
         
-        $this->_tablePrefix = $_tablePrefix;
-    }
-    
-    /**
-     * create new folder state
-     *
-     * @param Syncroton_Model_IFolder $_folder
-     * @return Syncroton_Model_IFolder
-     */
-    public function create(Syncroton_Model_IFolder $_folder)
-    {
-        $id = sha1(mt_rand(). microtime());
-        $deviceId = $_folder->device_id instanceof Syncroton_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
-    
-        $this->_db->insert($this->_tablePrefix . 'folder', array(
-            'id'             => $id, 
-            'device_id'      => $deviceId,
-            'class'          => $_folder->class,
-            'folderid'       => $_folder->folderid instanceof Syncroton_Model_IFolder ? $_folder->folderid->id : $_folder->folderid,
-            'parentid'       => $_folder->parentid,
-            'displayname'    => $_folder->displayname,
-            'type'           => $_folder->type,
-            'creation_time'  => $_folder->creation_time->format('Y-m-d H:i:s'),
-            'lastfiltertype' => $_folder->lastfiltertype
-        ));
-        
-        return $this->get($id);
-    }
-    
-    public function delete($_id)
-    {
-        $id = $_id instanceof Syncroton_Model_IFolder ? $_id->id : $_id;
-    
-        $result = $this->_db->delete($this->_tablePrefix . 'folder', array('id = ?' => $id));
-    
-        return (bool) $result;
-    }
-    
-    /**
-     * @param string  $_id
-     * @throws Syncroton_Exception_NotFound
-     * @return Syncroton_Model_IFolder
-     */
-    public function get($_id)
-    {
         $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folder')
-            ->where('id = ?', $_id);
-    
-        $stmt = $this->_db->query($select);
-        $state = $stmt->fetchObject('Syncroton_Model_Folder');
+            ->from($this->_tablePrefix . $this->_tableName)
+            ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
+            ->where($this->_db->quoteIdentifier('folderid')  . ' = ?', $folderId);
         
-        if (! $state instanceof Syncroton_Model_IFolder) {
+        $stmt = $this->_db->query($select);
+        $data = $stmt->fetch();
+        
+        if ($data === false) {
             throw new Syncroton_Exception_NotFound('id not found');
         }
         
-        if (!empty($state->creation_time)) {
-            $state->creation_time = new DateTime($state->creation_time, new DateTimeZone('utc'));
-        }
-    
-        return $state;
+        return $this->_getObject($data);
     }
     
     /**
-     * delete all stored folderId's for given device
-     *
-     * @param Syncroton_Model_Device|string $_deviceId
-     * @param string $_class
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_IFolder::getFolderState()
      */
-    public function resetState($_deviceId)
+    public function getFolderState($deviceId, $class)
     {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
-         
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-        );
-        
-        $this->_db->delete($this->_tablePrefix . 'folder', $where);
-    }
-    
-    public function update(Syncroton_Model_IFolder $_folder)
-    {
-        $deviceId = $_folder->device_id instanceof Syncroton_Model_IDevice ? $_folder->device_id->id : $_folder->device_id;
-    
-        $this->_db->update($this->_tablePrefix . 'folder', array(
-            'lastfiltertype' => $_folder->lastfiltertype,
-            'displayname'    => $_folder->displayname,
-            'parentid'       => $_folder->parentid
-        ), array(
-            'id = ?' => $_folder->id
-        ));
-    
-        return $this->get($_folder->id);
-    }
-    
-    /**
-     * get array of ids which got send to the client for a given class
-     *
-     * @param Syncroton_Model_Device|string $_deviceId
-     * @param string $_class
-     * @return array
-     */
-    public function getFolderState($_deviceId, $_class)
-    {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
         
         $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folder')
+            ->from($this->_tablePrefix . $this->_tableName)
             ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-            ->where($this->_db->quoteIdentifier('class') . ' = ?', $_class);
+            ->where($this->_db->quoteIdentifier('class')     . ' = ?', $class);
         
         $result = array();
         
         $stmt = $this->_db->query($select);
-        while ($row = $stmt->fetchObject("Syncroton_Model_Folder")) {
-            $result[$row->folderid] = $row; 
+        while ($data = $stmt->fetch()) {
+            $result[$data['folderid']] = $this->_getObject($data); 
         }
         
         return $result;
     }
     
     /**
-     * get folder indentified by $_folderId
-     *
-     * @param  Syncroton_Model_Device|string  $_deviceId
-     * @param  string                       $_folderId
-     * @return Syncroton_Model_IFolder
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_IFolder::resetState()
      */
-    public function getFolder($_deviceId, $_folderId)
+    public function resetState($deviceId)
     {
-        $deviceId = $_deviceId instanceof Syncroton_Model_IDevice ? $_deviceId->id : $_deviceId;
+        $deviceId = $deviceId instanceof Syncroton_Model_IDevice ? $deviceId->id : $deviceId;
+         
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
+        );
         
-        $select = $this->_db->select()
-            ->from($this->_tablePrefix . 'folder')
-            ->where($this->_db->quoteIdentifier('device_id') . ' = ?', $deviceId)
-            ->where($this->_db->quoteIdentifier('folderid') . ' = ?', $_folderId);
-        
-        $stmt = $this->_db->query($select);
-        $folder = $stmt->fetchObject('Syncroton_Model_Folder');
-        
-        if (! $folder instanceof Syncroton_Model_IFolder) {
-            throw new Syncroton_Exception_NotFound('folder not found');
-        }
-        
-        if (!empty($folder->creation_time)) {
-            $folder->creation_time = new DateTime($folder->creation_time, new DateTimeZone('utc'));
-        }
-        
-        return $folder;
+        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
 }

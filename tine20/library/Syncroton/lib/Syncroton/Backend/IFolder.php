@@ -16,43 +16,30 @@
  * @package     Syncroton
  * @subpackage  Backend
  */
-interface Syncroton_Backend_IFolder
+interface Syncroton_Backend_IFolder extends Syncroton_Backend_IBackend
 {
     /**
-     * @param Syncroton_Model_IFolder $_folder
-     * @return Syncroton_Model_IFolder
-     */
-    public function create(Syncroton_Model_IFolder $_folder);
-    
-    public function delete($_id);
-    
-    public function get($_id);
-    
-    /**
-     * get folder indentified by $_folderId
+     * get folder indentified by $folderId
      *
-     * @param  Syncroton_Model_Device|string  $_deviceId
-     * @param  string                       $_folderId
+     * @param  Syncroton_Model_Device|string  $deviceId
+     * @param  string                         $folderId
      * @return Syncroton_Model_IFolder
      */
-    public function getFolder($_deviceId, $_folderId);
+    public function getFolder($deviceId, $folderId);
     
     /**
      * get array of ids which got send to the client for a given class
      *
-     * @param Syncroton_Model_Device $_deviceId
-     * @param string $_class
+     * @param  Syncroton_Model_Device|string  $deviceId
+     * @param  string                         $class
      * @return array
      */
-    public function getFolderState($_deviceId, $_class);
+    public function getFolderState($deviceId, $class);
     
     /**
      * delete all stored folderId's for given device
      *
-     * @param Syncroton_Model_Device $_deviceId
-     * @param string $_class
+     * @param  Syncroton_Model_Device|string  $deviceId
      */
-    public function resetState($_deviceId);
-    
-    public function update(Syncroton_Model_IFolder $_folder);
+    public function resetState($deviceId);
 }

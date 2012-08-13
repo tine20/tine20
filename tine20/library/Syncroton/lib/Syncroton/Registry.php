@@ -40,6 +40,7 @@ class Syncroton_Registry extends ArrayObject
     const CONTENTSTATEBACKEND = 'contentstatebackend';
     const DEVICEBACKEND       = 'devicebackend';
     const FOLDERBACKEND       = 'folderbackend';
+    const POLICYBACKEND       = 'policybackend';
     const SYNCSTATEBACKEND    = 'syncstatebackend';
     
     /**
@@ -234,6 +235,23 @@ class Syncroton_Registry extends ArrayObject
         }
         
         return self::get(self::FOLDERBACKEND);
+    }
+
+    /**
+     * returns policy backend
+     * 
+     * creates Syncroton_Backend_Policy on the fly if not set before via
+     * Syncroton_Registry::set(self::POLICYBACKEND, $backend);
+     * 
+     * @return Syncroton_Backend_ISyncState
+     */
+    public static function getPolicyBackend()
+    {
+        if (!self::isRegistered(self::POLICYBACKEND)) {
+            self::set(self::POLICYBACKEND, new Syncroton_Backend_Policy(self::getDatabase()));
+        }
+        
+        return self::get(self::POLICYBACKEND);
     }
 
     /**

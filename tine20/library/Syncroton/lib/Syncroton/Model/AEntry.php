@@ -126,7 +126,7 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 return array($namespace, $namespaceProperties[$element]);
             }
         }
-    
+        
         throw new InvalidArgumentException("$element is no valid property of this object");
     }
     

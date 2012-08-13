@@ -50,6 +50,12 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     protected $_contentStateBackend;
     
     /**
+     * 
+     * @var Syncroton_Backend_IPolicy
+     */
+    protected $_policyBackend;
+    
+    /**
      * the domDocument containing the xml response from the server
      *
      * @var DOMDocument
@@ -129,6 +135,7 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         $this->_folderBackend       = Syncroton_Registry::getFolderBackend();
         $this->_syncStateBackend    = Syncroton_Registry::getSyncStateBackend();
         $this->_contentStateBackend = Syncroton_Registry::getContentStateBackend();
+        $this->_policyBackend       = Syncroton_Registry::getPolicyBackend();
         if (Syncroton_Registry::isRegistered('loggerBackend')) {
             $this->_logger          = Syncroton_Registry::get('loggerBackend');
         }
@@ -149,27 +156,33 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         $this->_outputDom->formatOutput = false;
         $this->_outputDom->encoding     = 'utf-8';
         
-        if ($this->_skipValidatePolicyKey == false && isset($this->_device->policykey) && $this->_policyKey === null) {
-            throw new Syncroton_Exception_PolicyKeyMissing();
-        }
-        
-        if ($this->_skipValidatePolicyKey == false && isset($this->_device->policykey) && ($this->_policyKey === 0 || $this->_device->policykey != $this->_policyKey)) {
-            $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 142));
-            
-            $sepn = new Syncroton_Exception_ProvisioningNeeded();
-            $sepn->domDocument = $this->_outputDom;
-            
-            throw $sepn;
-        }
-        
-        // should we wipe the mobile phone?
-        if ($this->_skipValidatePolicyKey == false && !empty($this->_policyKey) && $this->_device->remotewipe >= Syncroton_Command_Provision::REMOTEWIPE_REQUESTED) {
-            $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 140));
-            
-            $sepn = new Syncroton_Exception_ProvisioningNeeded();
-            $sepn->domDocument = $this->_outputDom;
-            
-            throw $sepn;
+        if ($this->_skipValidatePolicyKey != true) {
+            if (!empty($this->_device->policyId)) {
+                if ($this->_policyKey === null) {
+                    throw new Syncroton_Exception_PolicyKeyMissing();
+                } 
+                
+                $policy = $this->_policyBackend->get($this->_device->policyId);
+                
+                if($policy->policyKey != $this->_policyKey) {
+                    $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 142));
+                    
+                    $sepn = new Syncroton_Exception_ProvisioningNeeded();
+                    $sepn->domDocument = $this->_outputDom;
+                    
+                    throw $sepn;
+                }
+                
+                // should we wipe the mobile phone?
+                if ($this->_device->remotewipe >= Syncroton_Command_Provision::REMOTEWIPE_REQUESTED) {
+                    $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 140));
+                    
+                    $sepn = new Syncroton_Exception_ProvisioningNeeded();
+                    $sepn->domDocument = $this->_outputDom;
+                    
+                    throw $sepn;
+                }
+            }
         }
     }
 }

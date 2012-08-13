@@ -72,7 +72,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
             
             if($this->_sendPolicyKey === NULL) {
                 $this->_sendPolicy();
-            } else {
+            } elseif ($this->_sendPolicyKey == $this->_device->policykey) {
                 $this->_acknowledgePolicy();
             }       
         } 
@@ -98,31 +98,6 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' send policy to device');
         
-        $policyData = '<wap-provisioningdoc>
-            <characteristic type="SecurityPolicy">
-                <parm name="4131" value="0"/>
-                <parm name="4133" value="0"/>
-            </characteristic>
-            <characteristic type="Registry">
-                <characteristic type="HKLM\Comm\Security\Policy\LASSD\AE\{50C13377-C66D-400C-889E-C316FC4AB374}">
-                    <parm name="AEFrequencyType" value="1"/>
-                    <parm name="AEFrequencyValue" value="3"/>
-                </characteristic>
-                <characteristic type="HKLM\Comm\Security\Policy\LASSD">
-                    <parm name="DeviceWipeThreshold" value="6"/>
-                </characteristic>
-                <characteristic type="HKLM\Comm\Security\Policy\LASSD">
-                    <parm name="CodewordFrequency" value="3"/>
-                </characteristic>
-                <characteristic type="HKLM\Comm\Security\Policy\LASSD\LAP\lap_pw">
-                    <parm name="MinimumPasswordLength" value="5"/>
-                </characteristic>
-                <characteristic type="HKLM\Comm\Security\Policy\LASSD\LAP\lap_pw">
-                    <parm name="PasswordComplexity" value="2"/>
-                </characteristic>
-            </characteristic>
-        </wap-provisioningdoc>';
-        
         $this->_device->policykey = $this->generatePolicyKey();
                 
         $provision = $sync = $this->_outputDom->documentElement;
@@ -136,15 +111,13 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
         if ($this->_policyType == self::POLICYTYPE_XML) {
-            $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data', $policyData));
+            $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data'));
         } else {
             $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data'));
             $easProvisionDoc = $data->appendChild($this->_outputDom->createElementNS('uri:Provision', 'EASProvisionDoc'));
-            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'DevicePasswordEnabled', 1));
-            #$easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'AlphanumericDevicePasswordRequired', 0));
-            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MinDevicePasswordLength', 4));
-            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxDevicePasswordFailedAttempts', 4));
-            $easProvisionDoc->appendChild($this->_outputDom->createElementNS('uri:Provision', 'MaxInactivityTimeDeviceLock', 60));
+            $this->_policyBackend
+                ->get($this->_device->policyId)
+                ->appendXML($easProvisionDoc);
         }
         
         $this->_deviceBackend->update($this->_device);
@@ -168,7 +141,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' acknowledge policy');
         
-        $this->_device->policykey = $this->generatePolicyKey();
+        $policykey = $this->_policyBackend->get($this->_device->policyId)->policyKey;
         
         $provision = $sync = $this->_outputDom->documentElement;
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
@@ -176,15 +149,17 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         $policy = $policies->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policy'));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyType', $this->_policyType));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
-        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
+        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $policykey));
 
+        $this->_device->policykey = null;
         $this->_deviceBackend->update($this->_device);
     }
-    
+
+    /**
+     * generate a random string used as PolicyKey
+     */
     public static function generatePolicyKey()
     {
-        $policyKey = mt_rand(1, mt_getrandmax());
-        
-        return $policyKey;
+        return sha1(mt_rand(). microtime());
     }
 }
