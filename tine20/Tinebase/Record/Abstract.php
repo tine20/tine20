@@ -877,11 +877,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function offsetGet($_offset)
     {
-        if (! $this->offsetExists($_offset)) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('Key ' . $_offset . ' does not exist.');
-        }
-        
-        return $this->_properties[$_offset];
+        return $this->__get($_offset);
     }
     
     /**
