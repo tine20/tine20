@@ -245,11 +245,26 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test for import of members (5) / json import
+     * 
+     * @see 0006942: group memberships and login shell missing for new users
      */
     public function testImportMembersIntoCourse5()
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/tah2a.txt', $this->_getCourseImportDefinition3('iso-8859-1'), TRUE);
         $this->assertEquals(3, count($result['members']), 'import failed');
+        
+        // check group memberships
+        $userId = NULL;
+        foreach ($result['members'] as $result) {
+            if ($result['name'] === 'Uffbass, Umud') {
+                $userId = $result['id'];
+            }
+        }
+        $this->assertTrue($userId !== NULL);
+        
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
+        $this->assertEquals(3, count($groupMemberships), 'new user should have 3 group memberships');
+        $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
     }
     
     /**
@@ -278,7 +293,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         // create new course with internet access
         $course = $this->_getCourseData();
-        $course['internet'] = 'ON';
         $courseData = $this->_json->saveCourse($course);
         $userId = $courseData['members'][0]['id'];
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
@@ -333,9 +347,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hotja', $newUser->accountLoginName);
         
         $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
-        $this->assertEquals(2, count($newUserMemberships), 'new user should have 2 group memberships');
+        $this->assertEquals(3, count($newUserMemberships), 'new user should have 3 group memberships');
         $this->assertTrue(in_array(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newUserMemberships),
             'could not find default group in memberships: ' . print_r($newUserMemberships, TRUE));
+        $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $newUserMemberships),
+            $id . ' not member of the internet group ' . print_r($newUserMemberships, TRUE));
     }
     
     /**
@@ -391,6 +407,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'name'          => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
             'type'          => $this->_department->getId(),
+            'internet'      => 'ON',
         );
     }
         

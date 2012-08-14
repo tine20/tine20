@@ -23,6 +23,7 @@
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
  * @property    string                  accountLoginName    account login name
+ * @property    string                  accountLoginShell   account login shell
  * @property    string                  accountPrimaryGroup primary group id
  * @property    string                  container_id        
  * @property    array                   groups              list of group memberships
@@ -120,6 +121,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         
         if (! empty($options['samba'])) {
             $this->_addSambaSettings($options['samba']);
+        }
+        
+        if (isset($options['accountLoginShell'])) {
+            $this->accountLoginShell = $options['accountLoginShell'];
         }
         
         // generate passwd (use accountLoginName or password from options or password from csv in this order)

@@ -452,8 +452,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $importer = Admin_Import_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
         $result = $importer->importFile($tempFile->path);
         
-        // @todo is this needed here?
-        $this->_addToStudentGroup($this->_groupController->getGroupMembers($course->group_id));
+        $groupMembers = $this->_groupController->getGroupMembers($course->group_id);
+        $this->_manageAccessGroups($groupMembers, $course->internet);
+        $this->_addToStudentGroup($groupMembers);
         
         return $result;
     }
@@ -475,6 +476,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
             'password'                      => strtolower($course->name),
             'course'                        => $course,
+            'accountLoginShell'             => '/bin/false',
             'samba'                         => (isset($this->_config->samba)) ? array(
                 'homePath'      => $this->_config->samba->basehomepath,
                 'homeDrive'     => $this->_config->samba->homedrive,
@@ -507,8 +509,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             . ' ' . print_r($user->toArray(), TRUE));
         $newMember = $this->_userController->create($user, $password, $password);
         
-        // add to default group, too
+        // add to default group and manage access group for user
         $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newMember->getId());
+        $this->_manageAccessGroups(array($newMember->getId()), $course->internet);
         
         return $newMember;
     }
