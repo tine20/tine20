@@ -77,7 +77,7 @@ Tine.widgets.grid.RendererManager = function() {
             var renderer = null,
                 recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 fieldDefinition = recordClass ? recordClass.getField(fieldName) : null,
-                fieldType = fieldDefinition ? fieldDefinition.type.type : 'auto';
+                fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
                 
             switch(fieldType) {
                 case 'date':
