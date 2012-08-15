@@ -265,6 +265,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
         $this->assertEquals(3, count($groupMemberships), 'new user should have 3 group memberships');
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
+        
+        $user = Tinebase_User::getInstance()->getFullUserById($userId);
+        $this->assertEquals('/bin/false', $user->accountLoginShell);
     }
     
     /**
@@ -345,6 +348,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         $newUser = Tinebase_User::getInstance()->getFullUserById($id);
         $this->assertEquals('hotja', $newUser->accountLoginName);
+        $this->assertEquals('/bin/false', $newUser->accountLoginShell);
         
         $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
         $this->assertEquals(3, count($newUserMemberships), 'new user should have 3 group memberships');

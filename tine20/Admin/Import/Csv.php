@@ -31,6 +31,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         'accountHomeDirectoryPrefix'    => '',
         'accountEmailDomain'            => '',
         'samba'                         => '',
+        'accountLoginShell'             => '',
         'userNameSchema'                => 1,
     );
     

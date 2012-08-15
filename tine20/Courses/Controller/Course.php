@@ -494,6 +494,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * @param Courses_Model_Course $course
      * @param Tinebase_Model_FullUser $user
      * @return Tinebase_Model_FullUser
+     * 
+     * @todo use importMembers() here to avoid duplication
      */
     public function createNewMember(Courses_Model_Course $course, Tinebase_Model_FullUser $user)
     {
