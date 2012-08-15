@@ -460,34 +460,48 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $_domParrent->appendChild(new DOMElement('DtStamp', $data->creation_time->format('Ymd\THis') . 'Z', 'uri:Calendar'));
         $_domParrent->appendChild(new DOMElement('UID', $data->uid, 'uri:Calendar'));
         
-        if(!empty($data->organizer)) {
-            try {
-                $contact = $data->resolveOrganizer();
-                
-                $_domParrent->appendChild(new DOMElement('OrganizerName', $contact->n_fileas, 'uri:Calendar'));
-                $_domParrent->appendChild(new DOMElement('OrganizerEmail', $contact->getPreferedEmailAddress(), 'uri:Calendar'));
-            } catch (Tinebase_Exception_AccessDenied $e) {
-                // set the current account as organizer
-                // if organizer is not set, you can not edit the event on the Motorola Milestone
-                $_domParrent->appendChild(new DOMElement('OrganizerName', Tinebase_Core::getUser()->accountFullName, 'uri:Calendar'));
-                if(isset(Tinebase_Core::getUser()->accountEmailAddress)) {
-                    $_domParrent->appendChild(new DOMElement('OrganizerEmail', Tinebase_Core::getUser()->accountEmailAddress, 'uri:Calendar'));
-                }
-            }
-        } else {
-            // set the current account as organizer
-            // if organizer is not set, you can not edit the event on the Motorola Milestone
-            $_domParrent->appendChild(new DOMElement('OrganizerName', Tinebase_Core::getUser()->accountFullName, 'uri:Calendar'));
-            if(isset(Tinebase_Core::getUser()->accountEmailAddress)) {
-                $_domParrent->appendChild(new DOMElement('OrganizerEmail', Tinebase_Core::getUser()->accountEmailAddress, 'uri:Calendar'));
-            }
-        }
+        $this->_appendOrganizer($_domParrent, $data);
         
         if (isset($data->tags) && count($data->tags) > 0) {
             $categories = $_domParrent->appendChild(new DOMElement('Categories', null, 'uri:Calendar'));
             foreach ($data->tags as $tag) {
                 $categories->appendChild(new DOMElement('Category', $tag, 'uri:Calendar'));
             }
+        }
+    }
+    
+    /**
+     * append organizer name and email
+     * 
+     * @param DOMElement $domParent
+     * @param Calendar_Model_Event $event
+     */
+    protected function _appendOrganizer(DOMElement $domParent, Calendar_Model_Event $event)
+    {
+        if(! empty($event->organizer)) {
+            try {
+                $organizer = $event->resolveOrganizer();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $tead);
+                $organizer = NULL;
+            }
+        } else {
+            $organizer = NULL;
+        }
+        
+        if ($organizer instanceof Addressbook_Model_Contact) {
+            $organizerName = $organizer->n_fileas;
+            $organizerEmail = $organizer->getPreferedEmailAddress();
+        } else {
+            // set the current account as organizer
+            // if organizer is not set, you can not edit the event on the Motorola Milestone
+            $organizerName = Tinebase_Core::getUser()->accountFullName;
+            $organizerEmail = Tinebase_Core::getUser()->accountEmailAddress;
+        }
+        
+        $domParent->appendChild(new DOMElement('OrganizerName', $organizerName, 'uri:Calendar'));
+        if ($organizerEmail) {
+            $domParent->appendChild(new DOMElement('OrganizerEmail', $organizerEmail, 'uri:Calendar'));
         }
     }
     
