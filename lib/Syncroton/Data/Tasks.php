@@ -24,9 +24,9 @@ class Syncroton_Data_Tasks extends Syncroton_Data_AData
         Syncroton_Data_AData::$folders[get_class($this)] = array(
             'tasksFolderId' => new Syncroton_Model_Folder(array(
                 'id'          => sha1(mt_rand(). microtime()),
-                'folderid'    => 'tasksFolderId',
-                'parentid'    => null,
-                'displayname' => 'Default Tasks Folder',
+                'serverId'    => 'tasksFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Default Tasks Folder',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_TASK
             ))
         );

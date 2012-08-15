@@ -108,14 +108,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        #if ($this->_statusProvisioning = $this->_checkProvisioningNeeded() !== false) {
-        #    if (version_compare($this->_device->acsversion, '14.0', '<')) {
-        #       throw new Syncroton_Exception_ProvisioningNeeded();
-        #    } else {
-        #        return;
-        #    }
-        #}
-        
         // input xml
         $xml = simplexml_import_dom($this->_requestBody);
         
@@ -134,8 +126,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 // to avoid a syncloop for the iPhone
                 if ($collectionData->syncKey > 0) {
                     $collectionData->folder    = new Syncroton_Model_Folder(array(
-                        'device_id' => $this->_device,
-                        'folderid'  => $collectionData->collectionId
+                        'deviceId' => $this->_device,
+                        'serverId'  => $collectionData->collectionId
                     ));
                 }
                 

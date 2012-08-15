@@ -55,7 +55,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
     {
         $intervalStart = time();
         $status = self::STATUS_NO_CHANGES_FOUND;
-
+        
         // the client does not send a wbxml document, if the Ping parameters did not change compared with the last request
         if($this->_requestBody instanceof DOMDocument) {
             $xml = simplexml_import_dom($this->_requestBody);
@@ -113,7 +113,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder->folderid);
+                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder->serverId);
                         
                         $foundChanges = true;
                     }
@@ -151,9 +151,9 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
             $folders = $ping->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folders'));
             
             foreach($this->_foldersWithChanges as $changedFolder) {
-                $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder->folderid));
+                $folder = $folders->appendChild($this->_outputDom->createElementNS('uri:Ping', 'Folder', $changedFolder->serverId));
                 if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder->folderid);
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder->serverId);
             }
         }                
     }

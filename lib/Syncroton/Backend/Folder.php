@@ -84,4 +84,53 @@ class Syncroton_Backend_Folder extends Syncroton_Backend_ABackend implements Syn
         
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_ABackend::_fromCamelCase()
+     */
+    protected function _fromCamelCase($string)
+    {
+        switch ($string) {
+            case 'displayName':
+            case 'parentId':
+                return strtolower($string);
+                break;
+                
+            case 'serverId':
+                return 'folderid';
+                break;
+                
+            default:
+                return parent::_fromCamelCase($string);
+                
+                break;
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_ABackend::_toCamelCase()
+     */
+    protected function _toCamelCase($string, $ucFirst = true)
+    {
+        switch ($string) {
+            case 'displayname':
+                return 'displayName';
+                break;
+                
+            case 'parentid':
+                return 'parentId';
+                break;
+                
+            case 'folderid':
+                return 'serverId';
+                break;
+            
+            default:
+                return parent::_toCamelCase($string, $ucFirst);
+                
+                break;
+        }
+    }
 }

@@ -73,7 +73,7 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $this->assertArrayHasKey('calendarFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']);
-        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']['calendarFolderId']->displayname);
+        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']['calendarFolderId']->displayName);
         
     }
         
@@ -121,7 +121,7 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $this->assertArrayHasKey('anotherAddressbookFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']);
-        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['anotherAddressbookFolderId']->displayname);
+        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['anotherAddressbookFolderId']->displayName);
     }
     
     /**

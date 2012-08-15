@@ -24,7 +24,6 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
     
-    // @todo handle body
     protected $_properties = array(
         'AirSyncBase' => array(
             'Body'                   => array('type' => 'container')

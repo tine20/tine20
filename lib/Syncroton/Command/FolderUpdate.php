@@ -20,17 +20,11 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
     protected $_defaultNameSpace    = 'uri:FolderHierarchy';
     protected $_documentElement     = 'FolderUpdate';
     
-    protected $_classes             = array('Contacts', 'Tasks', 'Email');
-    
     /**
-     * synckey sent from client
-     *
-     * @var string
+     * 
+     * @var Syncroton_Model_Folder
      */
-    protected $_syncKey;
-    protected $_parentId;
-    protected $_displayName;
-    protected $_serverId;
+    protected $_folderUpdate;
     
     /**
      * parse FolderUpdate request
@@ -40,23 +34,34 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
     {
         $xml = simplexml_import_dom($this->_requestBody);
         
-        $this->_syncKey     = (int)$xml->SyncKey;
-        $this->_serverId    = (string)$xml->ServerId;
+        $syncKey = (int)$xml->SyncKey;
         
         if ($this->_logger instanceof Zend_Log) 
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey parentId $this->_parentId name $this->_displayName");
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
 
-        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
+        if (!($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
+            
+            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
+            
+            return;
+        }
+        
+        $folderUpdate = new Syncroton_Model_Folder($xml);
+        
+        if ($this->_logger instanceof Zend_Log)
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " parentId: {$folderUpdate->parentId} displayName: {$folderUpdate->displayName}");
         
         try {
-            $folder = $this->_folderBackend->getFolder($this->_device, $this->_serverId);
+            $folder = $this->_folderBackend->getFolder($this->_device, $folderUpdate->serverId);
             
-            $folder->displayname = (string)$xml->DisplayName;
-            $folder->parentid    = (string)$xml->ParentId;
+            $folder->displayName = $folderUpdate->displayName;
+            $folder->parentId    = $folderUpdate->parentId;
             
             $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
             
+            // update folder in data backend
             $dataController->updateFolder($folder);
+            // update folder status in Syncroton backend
             $this->_folderBackend->update($folder);
             
         } catch (Syncroton_Exception_NotFound $senf) {
@@ -74,18 +79,21 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
     {
         $folderUpdate = $this->_outputDom->documentElement;
         
-        if($this->_syncState == false) {
+        if (!$this->_syncState instanceof Syncroton_Model_SyncState) {
             if ($this->_logger instanceof Zend_Log) 
-                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
-            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " invalid synckey provided. FolderSync 0 needed.");
+            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',  Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
+            
         } else {
             $this->_syncState->counter++;
+            $this->_syncState->lastsync = $this->_syncTimeStamp;
             
+            // store folder in state backend
+            $this->_syncStateBackend->update($this->_syncState);
+                        
             // create xml output
             $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',  Syncroton_Command_FolderSync::STATUS_SUCCESS));
             $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $this->_syncState->counter));
-            
-            $this->_syncStateBackend->update($this->_syncState);
         }
         
         return $this->_outputDom;

@@ -53,7 +53,7 @@ class Syncroton_Data_Factory
                 break;
                 
             default:
-                throw new InvalidArgumentException('invalid class type provided');
+                throw new Syncroton_Exception_UnexpectedValue('invalid class type provided');
                 breeak;
         }
         

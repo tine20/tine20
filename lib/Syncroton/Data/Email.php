@@ -68,16 +68,16 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
         Syncroton_Data_AData::$folders[get_class($this)] = array(
             'emailInboxFolderId' => new Syncroton_Model_Folder(array(
                 'id'          => sha1(mt_rand(). microtime()),
-                'folderid'    => 'emailInboxFolderId',
-                'parentid'    => null,
-                'displayname' => 'Inbox',
+                'serverId'    => 'emailInboxFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Inbox',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_INBOX
             )),
             'emailSentFolderId' => new Syncroton_Model_Folder(array(
                 'id'          => sha1(mt_rand(). microtime()),
-                'folderid'    => 'emailSentFolderId',
-                'parentid'    => null,
-                'displayname' => 'Sent',
+                'serverId'    => 'emailSentFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Sent',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL
             ))
         );
