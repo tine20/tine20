@@ -22,6 +22,7 @@ class Syncroton_Data_Factory
     const CLASS_EMAIL    = 'Email';
     const CLASS_TASKS    = 'Tasks';
     const STORE_EMAIL    = 'Mailbox';
+    const STORE_GAL      = 'GAL';
     
     protected static $_classMap = array();
     
@@ -51,7 +52,11 @@ class Syncroton_Data_Factory
             case self::CLASS_TASKS:
                 $className = Syncroton_Registry::get(Syncroton_Registry::TASKS_DATA_CLASS);
                 break;
-                
+
+            case self::STORE_GAL:
+                $className = Syncroton_Registry::get(Syncroton_Registry::GAL_DATA_CLASS);
+                break;
+
             default:
                 throw new Syncroton_Exception_UnexpectedValue('invalid class type provided');
                 breeak;
@@ -59,7 +64,12 @@ class Syncroton_Data_Factory
         
         $class = new $className($_device, $_timeStamp);
         
-        if (! $class instanceof Syncroton_Data_IData) {
+        if ($_classFactory == STORE_EMAIL || $_classFactory == STORE_GAL) {
+            if (! $class instanceof Syncroton_Data_IDataSearch) {
+                throw new RuntimeException('class must be instanceof Syncroton_Data_IDataSearch');
+            }
+        }
+        else if (! $class instanceof Syncroton_Data_IData) {
             throw new RuntimeException('class must be instanceof Syncroton_Data_IData');
         }
                     

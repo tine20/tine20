@@ -33,6 +33,7 @@ class Syncroton_Registry extends ArrayObject
     const CONTACTS_DATA_CLASS = 'contacts_data_class';
     const EMAIL_DATA_CLASS    = 'email_data_class';
     const TASKS_DATA_CLASS    = 'tasks_data_class';
+    const GAL_DATA_CLASS      = 'gal_data_class';
     
     const DATABASE            = 'database';
     const TRANSACTIONMANAGER  = 'transactionmanager';
@@ -329,7 +330,16 @@ class Syncroton_Registry extends ArrayObject
     
         self::set(self::TASKS_DATA_CLASS, $className);
     }
-    
+
+    public static function setGALDataClass($className)
+    {
+        if (!class_exists($className)) {
+            throw new InvalidArgumentException('invalid $_className provided');
+        }
+
+        self::set(self::GAL_DATA_CLASS, $className);
+    }
+
     public static function setTransactionManager($manager)
     {
         self::set(self::TRANSACTIONMANAGER, $manager);
