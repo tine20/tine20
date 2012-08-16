@@ -29,37 +29,35 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
     
     protected $_controllerName = 'ActiveSync_Controller_Tasks';
     
-    protected $_specialFolderName = 'tasks-root';
-    
-    protected $_class = Syncope_Data_Factory::CLASS_TASKS;
-    
-    protected $_testXML = '';
-    
-/*    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
-</Contacts:Body></ApplicationData></Add></Commands></Collection></Collections></Sync>';
-    
-    protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
-  */
+    protected $_class = Syncroton_Data_Factory::CLASS_TASKS;
     
     /**
      * xml input
      * 
      * @var string
      */
-    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>8</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>2048</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>0</Conflict></Options><Commands><Change><ClientId>1</ClientId><ApplicationData><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>test beschreibung zeile 1&#13;
+    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+    <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks">
+        <Collections>
+            <Collection>
+                <Class>Tasks</Class>
+                <SyncKey>17</SyncKey>
+                <CollectionId>tasks-root</CollectionId>
+                <DeletesAsMoves/>
+                <GetChanges/>
+                <WindowSize>50</WindowSize>
+                <Options><FilterType>8</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>2048</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>0</Conflict></Options>
+                <Commands>
+                    <Change>
+                        <ClientId>1</ClientId>
+                        <ApplicationData><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>test beschreibung zeile 1&#13;
 Zeile 2&#13;
-Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe</Tasks:Subject><Tasks:Importance>1</Tasks:Importance><Tasks:UtcDueDate>2010-11-28T22:59:00.000Z</Tasks:UtcDueDate><Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate><Tasks:Complete>0</Tasks:Complete><Tasks:Sensitivity>0</Tasks:Sensitivity></ApplicationData></Change></Commands></Collection></Collections></Sync>';
-    
-    /**
-     * xml output
-     * 
-     * @var string
-     */
-    protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
+Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe</Tasks:Subject><Tasks:Importance>1</Tasks:Importance><Tasks:UtcDueDate>2010-11-28T22:59:00.000Z</Tasks:UtcDueDate><Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate><Tasks:Complete>0</Tasks:Complete><Tasks:Sensitivity>0</Tasks:Sensitivity></ApplicationData>
+                    </Change>
+                </Commands>
+            </Collection>
+        </Collections>
+    </Sync>';
     
     /**
      * Runs the test methods of this class.
@@ -73,237 +71,50 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    /**
-    * (non-PHPdoc)
-    * @see ActiveSync/ActiveSync_TestCase::setUp()
-    */
-    protected function setUp()
+    public function testCreateEntry($syncrotonFolder = null)
     {
-        parent::setUp();
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
         
-        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice(Syncope_Model_Device::TYPE_IPHONE);
-        $iphone->owner_id   = $this->_testUser->getId();
-        $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
-    }
-    
-    /**
-     * validate getFolders for IPhones
-     */
-    public function testGetFoldersIPhone()
-    {
-        $this->markTestSkipped("IPhone support no tasks synchronisation");
-    }
-    
-    /**
-     * test xml generation for sync to client
-     * 
-     * @see (test of priority/Importance) 0006016: Missing mapping of task severity int/string / http://forge.tine20.org/mantisbt/view.php?id=6016
-     */
-    public function testAppendXml()
-    {
-        $dom     = $this->_getOutputDOMDocument();
-        $appData = $dom->getElementsByTagNameNS('uri:AirSync', 'ApplicationData')->item(0);
-
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
-        $task = Tasks_TestCase::getTestRecord();
-        $task->description = "Hello\r\nTask\nLars";
-        $task = Tasks_Controller_Task::getInstance()->create($task);
+        $xml = new SimpleXMLElement($this->_testXMLInput);
+        $syncrotonTask = new Syncroton_Model_Task($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        $this->objects['tasks']['appendxml'] = $task;
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonTask);
         
-        $controller->appendXML($appData, null, $task, array());
+        $syncrotonTask = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
+        $this->assertEquals("Testaufgabe auf mfe", $syncrotonTask->Subject);
+        $this->assertEquals(1,                     $syncrotonTask->Importance);
         
-        // namespace === uri:Calendar
-        $dueDate = $task->due->format("Y-m-d\TH:i:s") . '.000Z';
-        $this->assertEquals($dueDate, @$dom->getElementsByTagNameNS('uri:Tasks', 'DueDate')->item(0)->nodeValue, $dom->saveXML());
-        $this->assertEquals(1, @$dom->getElementsByTagNameNS('uri:Tasks', 'Importance')->item(0)->nodeValue, $dom->saveXML());
-        $this->assertEquals("Hello\r\nTask\r\nLars", @$dom->getElementsByTagNameNS('uri:AirSyncBase', 'Data')->item(0)->nodeValue, $dom->saveXML());
+        //Body
+        $this->assertTrue($syncrotonTask->Body instanceof Syncroton_Model_EmailBody);
+        #$this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $syncrotonTask->Body->Data);
         
-        // try to encode XML until we have wbxml tests
-        $outputStream = fopen("php://temp", 'r+');
-        $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
-        $encoder->encode($dom);
         
-        #rewind($outputStream);
-        #fpassthru($outputStream);
-    }
-    
-    /**
-     * test convert from XML to Tine 2.0 model
-     * 
-     * @see (test of priority) 0006016: Missing mapping of task severity int/string / https://forge.tine20.org/mantisbt/view.php?id=6016
-     * @see (test of organizer) 0006074: auto add current user as responsible for tasks / https://forge.tine20.org/mantisbt/view.php?id=6074
-     */
-    public function testConvertToTine20Model()
-    {
-        $xml = simplexml_import_dom($this->_getInputDOMDocument());
-        
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
-        
-        $task = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
-        $this->assertEquals('Testaufgabe auf mfe', $task->summary);
-        $this->assertEquals(0,                     $task->percent);
-        $this->assertEquals("test beschreibung zeile 1\nZeile 2\nZeile 3", $task->description);
-        $this->assertEquals(Tasks_Model_Priority::NORMAL, $task->priority);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $task->organizer);
-    }
-    
-    /**
-     * test search tasks
-     * 
-     * @todo finish test!
-     */
-    public function testSearch()
-    {
-        $this->markTestIncomplete();
-        
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
-
-        $xml = simplexml_import_dom($this->_getInputDOMDocument());
-        
-        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        $this->objects['tasks'][] = $record;
-        
-        $task = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
-        #var_dump($task->toArray());
-        
-        $this->assertEquals(1                    , count($task));
-        $this->assertEquals('Testaufgabe auf mfe', $task[0]->summary);
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync_TestCase::_validateGetServerEntries()
-     */
-    protected function _validateGetServerEntries($_recordId)
-    {
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
-        $records = $controller->getServerEntries($this->_specialFolderName, Syncope_Command_Sync::FILTER_NOTHING);
-        
-        $this->assertContains($_recordId, $records);
-        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function _testGetServerEntries()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $entries = $controller->getServerEntries('addressbook-root', null);
-        
-        $this->assertContains($this->objects['contact']->getId(), $entries);
-        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function _testSyncableFolder()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $entries = $controller->getServerEntries($this->objects['containerWithSyncGrant']->getId(), null);
-        
-        $this->assertContains($this->objects['contact']->getId(), $entries);
-        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function _testUnSyncableFolder()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $entries = $controller->getServerEntries($this->objects['containerWithoutSyncGrant']->getId(), null);
-        
-        $this->assertNotContains($this->objects['contact']->getId(), $entries);
-        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
-    /**
-     * test getChanged entries
-     */
-    public function _testGetChanged()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        Addressbook_Controller_Contact::getInstance()->update($this->objects['contact']);
-        Addressbook_Controller_Contact::getInstance()->update($this->objects['unSyncableContact']);
-        
-        $entries = $controller->getChanged('addressbook-root', Tinebase_DateTime::now()->subMinute(1));
-        #var_dump($entries);
-        $this->assertContains($this->objects['contact']->getId(), $entries);
-        $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
-    /**
-     * test search contacts
-     * 
-     */
-    public function _testSearch()
-    {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
-
-        // search for non existing contact
-        $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);
-        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
-        
-        $this->assertEquals(count($existing), 0);
-        
-        // search for existing contact
-        $xml = new SimpleXMLElement($this->_exampleXMLExisting);
-        $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
-        
-        $this->assertEquals(count($existing), 1);
-    }
-    
-   /**
-    * test supported folders
-    */
-    public function testGetAllFolders()
-    {
-        $controller = new ActiveSync_Controller_Tasks($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $syncable   = $this->_getContainerWithSyncGrant();
-        $unsyncable = $this->_getContainerWithoutSyncGrant();
-        $supportedFolders = $controller->getAllFolders();
-
-        $this->assertTrue(isset($supportedFolders[$syncable->getId()]));
-        $this->assertFalse(isset($supportedFolders[$unsyncable->getId()]));
+        return array($serverId, $syncrotonTask);
     }
 
-   /**
-    * test server entries
-    * 
-    * @see #5894: Tasks sync is broken (http://forge.tine20.org/mantisbt/view.php?id=5894)
-    */
-    public function testGetServerEntries()
+    public function testUpdateEntry($syncrotonFolder = null)
     {
-        $controller = new ActiveSync_Controller_Tasks($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
         
-        $syncable   = $this->_getContainerWithSyncGrant();
-        Tasks_Controller_Task::getInstance()->create(new Tasks_Model_Task(array(
-            'container_id' => $syncable->getId(),
-            'summary'      => 'sync test task',
-            'status'       => 'NEEDS-ACTION',
-        )));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
-        $entries = $controller->getServerEntries($syncable->getId(), Syncope_Command_Sync::FILTER_INCOMPLETE);
+        list($serverId, $syncrotonTask) = $this->testCreateEntry($syncrotonFolder);
         
-        $this->assertEquals(1, count($entries));
+        $syncrotonTask->Subject = $syncrotonTask->Subject . 'Update';
+        
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonTask);
+        
+        $syncrotonTask = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        $this->assertEquals("Testaufgabe auf mfeUpdate", $syncrotonTask->Subject);
+        
+        return array($serverId, $syncrotonTask);
     }
 }

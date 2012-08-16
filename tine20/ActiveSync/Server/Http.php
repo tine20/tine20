@@ -3,12 +3,9 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
- *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
- *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
@@ -101,11 +98,12 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         
         $this->_initializeRegistry();
         
-        $syncFrontend = new Syncope_Server(Tinebase_Core::getUser()->accountId, $this->_request);
+        $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $this->_request);
         
         $syncFrontend->handle();
         
-        Tinebase_Controller::getInstance()->logout($this->_request->getClientIp());
+        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Handle logout');
+        #Tinebase_Controller::getInstance()->logout($this->_request->getClientIp());
     }
     
     /**
@@ -144,26 +142,27 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
      */
     protected function _initializeRegistry()
     {
-        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
-        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
         
-        Syncope_Registry::set('deviceBackend',       new Syncope_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncope_Registry::set('folderStateBackend',  new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncope_Registry::set('syncStateBackend',    new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncope_Registry::set('contentStateBackend', new Syncope_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
+        Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
         
         if (Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN) === true) {
-            Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
+            Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         }
         if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN) === true) {
-            Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+            Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
         }
         if (Tinebase_Core::getUser()->hasRight('Felamimail', Tinebase_Acl_Rights::RUN) === true) {
-            Syncope_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+            Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
         }
         if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN) === true) {
-            Syncope_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+            Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
         }
     }
 }

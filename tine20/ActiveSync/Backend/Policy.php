@@ -12,19 +12,19 @@
  * backend device class
  * @package     ActiveSync
  */
-class ActiveSync_Backend_Device extends Tinebase_Backend_Sql_Abstract
+class ActiveSync_Backend_Policy extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'acsync_device';
+    protected $_tableName = 'acsync_policy';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'ActiveSync_Model_Device';
+    protected $_modelName = 'ActiveSync_Model_Policy';
 }

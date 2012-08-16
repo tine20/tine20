@@ -79,12 +79,26 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('IMAP backend not configured');
         }
         $this->_testUser    = Tinebase_Core::getUser();
-        $this->_domDocument = $this->_getOutputDOMDocument();
         
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
+        $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->objects['devices'] = array();
+        
+        Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set('loggerBackend',                         Tinebase_Core::getLogger());
+        
+        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
+        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        
     }
 
     /**
@@ -99,40 +113,34 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
             $this->_emailTestClass->tearDown();
         }
         
-        foreach($this->objects['devices'] as $device) {
-            ActiveSync_Controller_Device::getInstance()->delete($device);
-        }
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
      * validate fetching email by filereference(hashid-partid)
      */
-    public function testAppendFileReference()
+    public function testGetFileReference()
     {
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $fileReference = $message->getId() . '-2';
         
-        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
-        $controller->appendFileReference($properties, $fileReference);
-        $this->_domDocument->documentElement->appendChild($properties);
+        $syncrotonFileReference = $controller->getFileReference($fileReference);
         
-        #$this->_domDocument->formatOutput = true;
-        #echo $this->_domDocument->saveXML();
-
-        $this->assertEquals('text/plain', @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'ContentType')->item(0)->nodeValue, $this->_domDocument->saveXML());
-        $this->assertTrue(3000 < strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
+        $this->assertEquals('text/plain', $syncrotonFileReference->ContentType);
+        $this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->Data)));
     }
     
     /**
      * test invalid chars
      */
-    public function testInvalidBodyChars()
+    public function _testInvalidBodyChars()
     {
         //invalid_body_chars.eml
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
         
@@ -146,28 +154,94 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $xml), $xml);
     }
+    
     /**
      * validate fetching email by filereference(hashid-partid)
      */
-    public function testAppendXML()
+    public function testToSyncrotonModel()
     {
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_WEBOS));
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $options = array('collectionId' => $message->folder_id);
-        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
-        $controller->appendXML($properties, $options, $message->getId());
-        $this->_domDocument->documentElement->appendChild($properties);
+        $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
         
-        $this->_domDocument->formatOutput = true;
-        #echo $this->_domDocument->saveXML();
-
-        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', @$this->_domDocument->getElementsByTagNameNS('uri:Email', 'Subject')->item(0)->nodeValue, $this->_domDocument->saveXML());
-        // size of the attachment
-        $this->assertEquals(2787, @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'EstimatedDataSize')->item(0)->nodeValue, $this->_domDocument->saveXML());
+        #foreach ($syncrotonEmail as $key => $value) {echo "$key => "; var_dump($value);}
+        
+        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $syncrotonEmail->Subject);
         // size of the body
-        $this->assertEquals(9606, @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'EstimatedDataSize')->item(1)->nodeValue, $this->_domDocument->saveXML());
+        $this->assertEquals(9606, $syncrotonEmail->Body->EstimatedDataSize);
+        // size of the attachment
+        $this->assertEquals(2787, $syncrotonEmail->Attachments[0]->EstimatedDataSize);
+    }
+    
+    /**
+     * validate fetching email by filereference(hashid-partid)
+     */
+    public function testToSyncrotonModelTruncated()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
+        
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4, 'truncationSize' => 2000))));
+        
+        #foreach ($syncrotonEmail->Body as $key => $value) {echo "$key => "; var_dump($value);}
+        
+        $this->assertEquals(1, $syncrotonEmail->Body->Truncated);
+        $this->assertEquals(2000, strlen($syncrotonEmail->Body->Data));
+    }
+    
+    public function testSendEmail()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        #$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
+        
+        $controller->sendEmail($email, true);
+        
+        // check if mail is in INBOX of test account
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'text/plain';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
+        
+        // check duplicate headers
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertEquals(1, count($completeMessage->headers['mime-version']));
+        $this->assertEquals(1, count($completeMessage->headers['content-type']));
+    }
+    
+    public function testForwardEmail()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
+                        
+        $controller->forwardEmail(array('collectionId' => 'foobar', 'itemdId' => $message->getId()), $email, true, false);
+        
+        // check if mail is in INBOX of test account
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'text/plain';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        
+        $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
+        $this->assertEquals(1, $message->has_attachment);
+        
+        // check duplicate headers
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertEquals(1, count($completeMessage->headers['mime-version']));
+        $this->assertEquals(1, count($completeMessage->headers['content-type']));
     }
     
     /**
@@ -175,11 +249,12 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testGetAllFolders()
     {
-        $controller = $this->_getController($this->_getDevice(Syncope_Model_Device::TYPE_IPHONE));
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
         $folders = $controller->getAllFolders();
         
         $this->assertGreaterThanOrEqual(1, count($folders));
+        $this->assertTrue(array_pop($folders) instanceof Syncroton_Model_Folder);
     }
         
     /**
@@ -194,8 +269,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
             return $this->objects['devices'][$_deviceType];
         }
         
-        $this->objects['devices'][$_deviceType] = ActiveSync_Controller_Device::getInstance()->create(
-            ActiveSync_Backend_DeviceTests::getTestDevice($_deviceType)
+        $this->objects['devices'][$_deviceType] = Syncroton_Registry::getDeviceBackend()->create(
+            ActiveSync_TestCase::getTestDevice($_deviceType)
         );
 
         return $this->objects['devices'][$_deviceType];
@@ -206,7 +281,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      * 
      * @param ActiveSync_Model_Device $_device
      */
-    protected function _getController(ActiveSync_Model_Device $_device)
+    protected function _getController(Syncroton_Model_IDevice $_device)
     {
         if ($this->_controller === null) {
             $this->_controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
@@ -219,14 +294,14 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      * 
      * @return DOMDocument
      */
-    protected function _getOutputDOMDocument()
-    {
-        $dom = new DOMDocument();
-        $dom->formatOutput = false;
-        $dom->encoding     = 'utf-8';
-        $dom->loadXML($this->_testXMLOutput);
-        #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
-        
-        return $dom;
-    }
+    #protected function _getOutputDOMDocument()
+    #{
+    #    $dom = new DOMDocument();
+    #    $dom->formatOutput = false;
+    #    $dom->encoding     = 'utf-8';
+    #    $dom->loadXML($this->_testXMLOutput);
+    #    #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
+    #    
+    #    return $dom;
+    #}
 }

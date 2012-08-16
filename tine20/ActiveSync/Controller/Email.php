@@ -4,10 +4,7 @@
  *
  * @package     ActiveSync
  * @subpackage  Controller
- * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
- *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
- *              United States of America is excluded from the scope of this license.
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
@@ -18,10 +15,10 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
-class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract 
+class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataEmail
 {
     protected $_mapping = array(
-        #'Body'              => 'body',
+        'Body'              => 'body',
         'Cc'                => 'cc',
         'DateReceived'      => 'received',
         'From'              => 'from_email',
@@ -30,17 +27,19 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         'To'                => 'to'
     );
     
+    protected $_debugEmail = false;
+    
     /**
      * available filters
      * 
      * @var array
      */
     protected $_filterArray = array(
-        Syncope_Command_Sync::FILTER_1_DAY_BACK,
-        Syncope_Command_Sync::FILTER_3_DAYS_BACK,
-        Syncope_Command_Sync::FILTER_1_WEEK_BACK,
-        Syncope_Command_Sync::FILTER_2_WEEKS_BACK,
-        Syncope_Command_Sync::FILTER_1_MONTH_BACK,
+        Syncroton_Command_Sync::FILTER_1_DAY_BACK,
+        Syncroton_Command_Sync::FILTER_3_DAYS_BACK,
+        Syncroton_Command_Sync::FILTER_1_WEEK_BACK,
+        Syncroton_Command_Sync::FILTER_2_WEEKS_BACK,
+        Syncroton_Command_Sync::FILTER_1_MONTH_BACK,
     );
     
     /**
@@ -66,21 +65,21 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_defaultFolderType   = Syncope_Command_FolderSync::FOLDERTYPE_INBOX;
+    protected $_defaultFolderType   = Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
     
     /**
      * type of user created folders
      *
      * @var int
      */
-    protected $_folderType          = Syncope_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
+    protected $_folderType          = Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
     
     /**
      * name of property which defines the filterid for different content classes
      * 
      * @var string
      */
-    protected $_filterProperty = 'emailfilter_id';
+    protected $_filterProperty = 'emailfilterId';
             
     /**
      * field to sort search results by
@@ -94,6 +93,71 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      */
     protected $_contentController;
     
+    # $source, $inputStream, $saveInSent, $replaceMime
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::forwardEmail()
+     */
+    public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime)
+    {
+        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        
+        try {
+            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " no email account configured");
+            
+            throw new Syncroton_Exception('no email account configured');
+        }
+        
+        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            throw new Syncroton_Exception('no email address set for current user');
+        }
+        
+        if (! is_resource($inputStream)) {
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, $inputStream);
+            $inputStream = $stream;
+            rewind($inputStream);
+        }
+        
+         if ($this->_debugEmail == true) {
+             $debugStream = fopen("php://temp", 'r+');
+             stream_copy_to_stream($inputStream, $debugStream);
+             rewind($debugStream);
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                 __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+        
+             //replace original stream wirh debug stream, as php://input can't be rewinded
+             $inputStream = $debugStream;
+             rewind($inputStream);
+         }
+        
+        $incomingMessage = new Zend_Mail_Message(
+            array(
+                'file' => $inputStream
+            )
+        );
+        
+        $messageId = is_array($source) ? $source['itemdId'] : $source;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
+        
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage);
+        
+        if ($replaceMime === false) {
+            $rfc822 = Felamimail_Controller_Message::getInstance()->getMessagePart($messageId);
+            $rfc822->type = Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
+            $rfc822->filename = 'forwarded email.eml';
+            $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
+            $mail->addAttachment($rfc822);
+        }
+        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent);        
+    }
+    
     /**
      * get all entries changed between to dates
      *
@@ -102,14 +166,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
     {
         $filter = $this->_getContentFilter(0);
-        $this->_addContainerFilter($filter, $_folderId);
+        
+        $this->_addContainerFilter($filter, $folderId);
 
         $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
+        // @todo filter also for create_timestamo??
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'timestamp',
             'after',
@@ -124,179 +190,285 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             ));
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($filter->toArray(), true));
-        
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
         
         return $result;
     }
     
     /**
-     * append email data to xml element
-     *
-     * @param DOMElement  $_domParrent   the parrent xml node
-     * @param string      $_folderId  the local folder id
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::getFileReference()
      */
-    public function appendFileReference(DOMElement $_domParrent, $_fileReference)
+    public function getFileReference($fileReference)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append fileReference " . $_fileReference/* . ' options ' . print_r($_collectionData, true)*/);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
         
-        list($messageId, $partId) = explode('-', $_fileReference, 2);
+        list($messageId, $partId) = explode('-', $fileReference, 2);
         
-        $file = $this->_contentController->getMessagePart($messageId, $partId);
+        $part = $this->_contentController->getMessagePart($messageId, $partId);
         
-        $_domParrent->appendChild(new DOMElement('ContentType', $file->type, 'uri:AirSyncBase'));
-        $_domParrent->appendChild(new DOMElement('Data', base64_encode($file->getDecodedContent()), 'uri:ItemOperations'));
+        $syncrotonFileReference = new Syncroton_Model_FileReference(array(
+            'ContentType' => $part->type,
+            'Data'        => $part->getDecodedStream()
+        ));
+        
+        return $syncrotonFileReference;
     }
     
     /**
-     * append email data to xml element
-     *
-     * @param DOMElement  $_domParrent   the parrent xml node
-     * @param string      $_folderId  the local folder id
-     * @param string      $_serverId  the local entry id
-     * @param boolean     $_withBody  retrieve body of entry
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::replyEmail()
      */
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
+    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_collectionData, true)*/);
+        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
         
-        $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
+        try {
+            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " no email account configured");
+            
+            throw new Syncroton_Exception('no email account configured');
+        }
         
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
+        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            throw new Syncroton_Exception('no email address set for current user');
+        }
         
-        foreach ($this->_mapping as $key => $value) {
-            if(!empty($data->$value) || $data->$value == '0') {
-                $nodeContent = null;
-                
-                switch($value) {
-                    case 'received':
-                        if($data->$value instanceof DateTime) {
-                            $nodeContent = $data->$value->toString('Y-m-d\TH:i:s') . '.000Z';
-                        }
-                        break;
-                        
-                    case 'from_email':
-                        $nodeContent = $this->_createEmailAddress($data->from_name, $data->from_email);
-                        break;
-                        
-                    case 'to':
-                    case 'cc':
-                        $nodeContent = implode(', ', $data->$value);
-                        
-                        break;
-                    default:
-                        $nodeContent = $data->$value;
-                        break;
-                }
-                
-                // skip empty elements
-                if($nodeContent === null || $nodeContent == '') {
-                    //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Value for $key is empty. Skip element.");
-                    continue;
-                }
-                
-                // strip off any non printable control characters
-                if (!ctype_print($nodeContent)) {
-                    $nodeContent = $this->removeControlChars($nodeContent);
-                }
-                
-                $node = $_domParrent->ownerDocument->createElementNS('uri:Email', $key);
-                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
-                
-                $_domParrent->appendChild($node);
+        if (! is_resource($inputStream)) {
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, $inputStream);
+            $inputStream = $stream;
+            rewind($inputStream);
+        }
+        
+        if ($this->_debugEmail == true) {
+             $debugStream = fopen("php://temp", 'r+');
+             stream_copy_to_stream($inputStream, $debugStream);
+             rewind($debugStream);
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                 __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+        
+             //replace original stream wirh debug stream, as php://input can't be rewinded
+             $inputStream = $debugStream;
+             rewind($inputStream);
+        }
+        
+        $incomingMessage = new Zend_Mail_Message(
+            array(
+                'file' => $inputStream
+            )
+        );
+        
+        if ($replaceMime === false) {
+            $messageId = is_array($source) ? $source['itemdId'] : $source;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
+            
+            $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($messageId, null, 'text/plain');
+        } else {
+            $replyBody = null;
+        }
+        
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+    }
+    
+    public function sendEmail($inputStream, $saveInSent)
+    {
+        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        
+        try {
+            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+        } catch (Tinebase_Exception_NotFound $ten) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " no email account configured");
+            
+            throw new Syncroton_Exception('no email account configured');
+        }
+        
+        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            throw new Syncroton_Exception('no email address set for current user');
+        }
+        
+        if (! is_resource($inputStream)) {
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, $inputStream);
+            $inputStream = $stream;
+            rewind($inputStream);
+        }
+        
+        if ($this->_debugEmail == true) {
+             $debugStream = fopen("php://temp", 'r+');
+             stream_copy_to_stream($inputStream, $debugStream);
+             rewind($debugStream);
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                 __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
+        
+             //replace original stream wirh debug stream, as php://input can't be rewinded
+             $inputStream = $debugStream;
+             rewind($inputStream);
+        }
+        
+        $incomingMessage = new Zend_Mail_Message(
+            array(
+                'file' => $inputStream
+            )
+        );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " saveInSent: " . $saveInSent);
+        
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage);
+        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
+     */
+    public function toSyncrotonModel($entry, array $options = array())
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . " email data " . print_r($entry->toArray(), true));
+        
+        $syncrotonEmail = new Syncroton_Model_Email();
+        
+        foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
+            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
+                continue;
+            }
+        
+            switch($tine20Property) {
+                case 'from_email':
+                    $syncrotonEmail->$syncrotonProperty = $this->_createEmailAddress($entry->from_name, $entry->from_email);
+                    
+                    break;
+                    
+                case 'to':
+                case 'cc':
+                    $syncrotonEmail->$syncrotonProperty = implode(', ', $entry->$tine20Property);
+                    
+                    break;
+                    
+                default:
+                    $syncrotonEmail->$syncrotonProperty = $entry->$tine20Property;
+                    break;
             }
         }
+        
+        $syncrotonEmail->Body = $this->_getSyncrotonBody($entry, $options);
+        $syncrotonEmail->NativeBodyType = $syncrotonEmail->Body->Type;
+        if ($syncrotonEmail->Body->Type == Syncroton_Command_Sync::BODY_TYPE_MIME) {
+            $syncrotonEmail->MessageClass = 'IPM.Note.SMIME';
+        } else {
+            $syncrotonEmail->MessageClass = 'IPM.Note';
+        }
+        
+        $syncrotonEmail->ContentClass = 'urn:content-classes:message';
         
         // read flag
-        if (in_array('\Seen', $data->flags)) {
-            $_domParrent->appendChild(new DOMElement('Read', 1, 'uri:Email'));
-        } else {
-            $_domParrent->appendChild(new DOMElement('Read', 0, 'uri:Email'));
-        }
+        $syncrotonEmail->Read = in_array('\Seen', $entry->flags) ? 1 : 0;
         
         // attachments?
-        if ($data->has_attachment == true) {
-            $attachments = $this->_contentController->getAttachments($data);
+        if ($entry->has_attachment == true) {
+            $syncrotonAttachments = array();
             
+            $attachments = $this->_contentController->getAttachments($entry);
+
             if (count($attachments) > 0) {
-                $tagAttachments = $_domParrent->appendChild(new DOMElement('Attachments', null, 'uri:AirSyncBase'));
-                
                 foreach ($attachments as $attachment) {
-                    $tagAttachment = $tagAttachments->appendChild(new DOMElement('Attachment', null, 'uri:AirSyncBase'));
-                    $filenameNode = $tagAttachment->appendChild(new DOMElement('DisplayName', null, 'uri:AirSyncBase'));
-                    $filenameNode->appendChild(new DOMText($this->removeControlChars(trim($attachment['filename']))));
+                    $syncrotonAttachment = new Syncroton_Model_EmailAttachment();
                     
-                    $tagAttachment->appendChild(new DOMElement('FileReference', $data->getId() . '-' . $attachment['partId'], 'uri:AirSyncBase'));
-                    $tagAttachment->appendChild(new DOMElement('Method', 1, 'uri:AirSyncBase'));
-                    $tagAttachment->appendChild(new DOMElement('EstimatedDataSize', $this->removeControlChars($attachment['size']), 'uri:AirSyncBase'));
+                    $syncrotonAttachment->DisplayName       = trim($attachment['filename']);
+                    $syncrotonAttachment->FileReference     = $entry->getId() . '-' . $attachment['partId'];
+                    $syncrotonAttachment->Method            = 1;
+                    $syncrotonAttachment->EstimatedDataSize = $attachment['size'];
+                    
+                    $syncrotonAttachments[] = $syncrotonAttachment;
                 }
             }
+            
+            $syncrotonEmail->Attachments = $syncrotonAttachments;
         }
+        
+        return $syncrotonEmail;
+    }
+    
+    /**
+     * 
+     * @param Felamimail_Model_Message $entry
+     * @param array $options
+     * @return void|Syncroton_Model_EmailBody
+     */
+    protected function _getSyncrotonBody(Felamimail_Model_Message $entry, $options)
+    {
+        //var_dump($options);
         
         // get truncation
         $truncateAt = null;
         
-        if (isset($_collectionData['mimeSupport']) && $_collectionData['mimeSupport'] == 2 && (version_compare($this->_device->acsversion, '12.0', '<=') || isset($_collectionData['bodyPreferences'][4]))) {
-            if (isset($_collectionData['bodyPreferences'][4]) && isset($_collectionData['bodyPreferences'][4]['truncationSize'])) {
-                $truncateAt = $_collectionData['bodyPreferences'][4]['truncationSize'];
-            }
-            $airSyncBaseType = 4;
-        } elseif (isset($_collectionData['bodyPreferences'][2])) {
-            if (isset($_collectionData['bodyPreferences'][2]['truncationSize'])) {
-                $truncateAt = $_collectionData['bodyPreferences'][2]['truncationSize'];
-            }
-            $airSyncBaseType = 2;
-        } else {
-            if (isset($_collectionData['bodyPreferences'][1]) && isset($_collectionData['bodyPreferences'][1]['truncationSize'])) {
-                $truncateAt = $_collectionData['bodyPreferences'][1]['truncationSize'];
-            }
-            $airSyncBaseType = 1;
-        }
-        
-        if (isset($_collectionData['mimeTruncation']) && $_collectionData['mimeTruncation'] < 8) {
-            switch($_collectionData['mimeTruncation']) {
-                case Syncope_Command_Sync::TRUNCATE_ALL:
-                    $truncateAt = 0;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_4096:
-                    $truncateAt = 4096;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_5120:
-                    $truncateAt = 5120;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_7168:
-                    $truncateAt = 7168;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_10240:
-                    $truncateAt = 10240;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_20480:
-                    $truncateAt = 20480;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_51200:
-                    $truncateAt = 51200;
-                    break;
-                case Syncope_Command_Sync::TRUNCATE_102400:
-                    $truncateAt = 102400;
-                    break;
-            }
-        }
-        
-        if ($airSyncBaseType == 4) {
-            // getMessagePart will return Zend_Mime_Part
-            $messageBody = $this->_contentController->getMessagePart($_serverId);
-            $messageBody = stream_get_contents($messageBody->getRawStream());
+        if ($options['mimeSupport'] == Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME) {
+            $airSyncBaseType = Syncroton_Command_Sync::BODY_TYPE_MIME;
             
-            if (version_compare($this->_device->acsversion, '12.0', '<')) {
-                // if the email contains non 7bit ascii characters we can't transfer them via MIMEData xml and we need to fall back to plain text
-                if (preg_match('/(?:[^\x00-\x7F])/', $messageBody)) {
-                    $airSyncBaseType = 1;
-                    $messageBody     = $this->_contentController->getMessageBody($_serverId, null, Zend_Mime::TYPE_TEXT, NULL, true);
+            if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_MIME]['truncationSize'])) {
+                $truncateAt = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_MIME]['truncationSize'];
+            } elseif (isset($options['mimeTruncation']) && $options['mimeTruncation'] < Syncroton_Command_Sync::TRUNCATE_NOTHING) {
+                switch($options['mimeTruncation']) {
+                    case Syncroton_Command_Sync::TRUNCATE_ALL:
+                        $truncateAt = 0;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_4096:
+                        $truncateAt = 4096;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_5120:
+                        $truncateAt = 5120;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_7168:
+                        $truncateAt = 7168;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_10240:
+                        $truncateAt = 10240;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_20480:
+                        $truncateAt = 20480;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_51200:
+                        $truncateAt = 51200;
+                        break;
+                    case Syncroton_Command_Sync::TRUNCATE_102400:
+                        $truncateAt = 102400;
+                        break;
                 }
             }
+            
+        } elseif (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML])) {
+            $airSyncBaseType = Syncroton_Command_Sync::BODY_TYPE_HTML;
+            
+            if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['truncationSize'])) {
+                $truncateAt = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['truncationSize'];
+            }
+            
         } else {
-            $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
+            $airSyncBaseType = Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT;
+            
+            if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['truncationSize'])) {
+                $truncateAt = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['truncationSize'];
+            }
+        }
+        
+        if ($airSyncBaseType == Syncroton_Command_Sync::BODY_TYPE_MIME) {
+            // getMessagePart will return Zend_Mime_Part
+            $messageBody = $this->_contentController->getMessagePart($entry);
+            $messageBody = stream_get_contents($messageBody->getRawStream());
+            
+        } else {
+            $messageBody = $this->_contentController->getMessageBody($entry, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
         }
         
         
@@ -307,66 +479,23 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $isTruncacted = 0;
         }
         
+        // strip out any non utf-8 characters
+        $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
+        
+        $synrotonBody = new Syncroton_Model_EmailBody(array(
+            'Type'              => $airSyncBaseType,
+            'EstimatedDataSize' => $entry->size,
+        ));
+        
         if (strlen($messageBody) > 0) {
-            // remove control chars
-            $messageBody = $this->removeControlChars($messageBody);
-            
-            // strip out any non utf-8 characters
-            $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
-            
-            if (version_compare($this->_device->acsversion, '12.0', '>=')) {
-                $body = $_domParrent->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
-                $body->appendChild(new DOMElement('Type', $airSyncBaseType, 'uri:AirSyncBase'));
-                $body->appendChild(new DOMElement('Truncated', $isTruncacted, 'uri:AirSyncBase'));
-                $body->appendChild(new DOMElement('EstimatedDataSize', $data->size, 'uri:AirSyncBase'));
-                
-                $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
-                $dataTag->appendChild(new DOMText($messageBody));
-                
-                $_domParrent->appendChild(new DOMElement('NativeBodyType', $airSyncBaseType, 'uri:AirSyncBase'));
-            } else {
-                if ($airSyncBaseType == 4) {
-                    $_domParrent->appendChild(new DOMElement('MIMETruncated', $isTruncacted, 'uri:Email'));
-                    
-                    $body = $_domParrent->appendChild(new DOMElement('MIMEData', null, 'uri:Email'));
-                    $body->appendChild(new DOMText($messageBody));
-                    
-                } else {
-                    $_domParrent->appendChild(new DOMElement('BodyTruncated', $isTruncacted, 'uri:Email'));
-                    
-                    $body = $_domParrent->appendChild(new DOMElement('Body', null, 'uri:Email'));
-                    $body->appendChild(new DOMText($messageBody));
-                }
-            }
+            $synrotonBody->Data = $messageBody;
         }
         
-        if ($airSyncBaseType == 4) {
-            $_domParrent->appendChild(new DOMElement('MessageClass', 'IPM.Note.SMIME', 'uri:Email'));
-        } else {
-            $_domParrent->appendChild(new DOMElement('MessageClass', 'IPM.Note', 'uri:Email'));
+        if ($isTruncacted === 1) {
+            $synrotonBody->Truncated = 1;
         }
-        $_domParrent->appendChild(new DOMElement('ContentClass', 'urn:content-classes:message', 'uri:Email'));
         
-        return;
-        /*
-        foreach($message->getHeaders() as $headerName => $headerValue) {
-            switch($headerName) {
-                case 'importance':
-                    switch (strtolower($headerValue)) {
-                        case 'low':
-                            $_domParrent->appendChild($_xmlDocument->createElementNS('uri:Email', 'Importance', 0));
-                            break;
-                        
-                        case 'high':
-                            $_domParrent->appendChild($_xmlDocument->createElementNS('uri:Email', 'Importance', 2));
-                            break;
-                            
-                    }
-                    
-                    break;
-            }
-        }
-        */
+        return $synrotonBody;
     }
     
     /**
@@ -383,7 +512,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $folder  = Felamimail_Controller_Folder::getInstance()->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
-        if ($_collectionData['deletesAsMoves'] === true && !empty($account->trash_folder)) {
+        if ($_collectionData->deletesAsMoves === true && !empty($account->trash_folder)) {
             // move message to trash folder
             $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
             Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder);
@@ -396,36 +525,32 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * update existing entry
-     *
-     * @param  string  $_folderId
-     * @param  string  $_serverId
-     * @param SimpleXMLElement $_data
-     * @return Tinebase_Record_Abstract
-     * @throws Syncope_Exception_NotFound
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::updateEntry()
      */
-    public function updateEntry($_folderId, $_serverId, SimpleXMLElement $_entry)
+    public function updateEntry($folderId, $serverId, Syncroton_Model_IEntry $entry)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_serverId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
         
-        $xmlData = $_entry->children('uri:Email');
-        
-        if(isset($xmlData->Read)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_folderId Id: $_serverId set read flag: $xmlData->Read");
-            if((int)$xmlData->Read === 1) {
-                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_serverId, Zend_Mail_Storage::FLAG_SEEN);
+        if(isset($entry->Read)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId set read flag: $entry->Read");
+            
+            if($entry->Read == 1) {
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($serverId, Zend_Mail_Storage::FLAG_SEEN);
             } else {
-                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($_serverId, Zend_Mail_Storage::FLAG_SEEN);
+                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($serverId, Zend_Mail_Storage::FLAG_SEEN);
             }
             
             try {
-                $message = $this->_contentController->get($_serverId);
+                $message = $this->_contentController->get($serverId);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . $tenf);
-                throw new Syncope_Exception_NotFound($tenf->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+                throw new Syncroton_Exception_NotFound($tenf->getMessage());
             }
+            
             $message->timestamp = $this->_syncTimeStamp;
             $this->_contentController->update($message);
         }
@@ -434,12 +559,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * convert email from xml to Felamimail_Model_Message
-     *
-     * @param  SimpleXMLElement  $_data
-     * @param  mixed             $_entry
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::toTineModel()
      */
-    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
         // does nothing => you can't add emails via ActiveSync
     }
@@ -462,26 +585,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_ContactFilter
      */
-    protected function _toTineFilterArray(SimpleXMLElement $_data)
-    {
-        $xmlData = $_data->children('Email');
-        
-        $filterArray = array();
-        
-        foreach($this->_mapping as $fieldName => $value) {
-            if(isset($xmlData->$fieldName)) {
-                $filterArray[] = array(
-                    'field'     => $value,
-                    'operator'  => 'equals',
-                    'value'     => (string)$xmlData->$fieldName
-                );
-            }
-        }
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
-        
-        return $filterArray;
-    }
+    #protected function _toTineFilterArray(SimpleXMLElement $_data)
+    #{
+    #    $xmlData = $_data->children('Email');
+    #    
+    #    $filterArray = array();
+    #    
+    #    foreach($this->_mapping as $fieldName => $value) {
+    #        if(isset($xmlData->$fieldName)) {
+    #            $filterArray[] = array(
+    #                'field'     => $value,
+    #                'operator'  => 'equals',
+    #                'value'     => (string)$xmlData->$fieldName
+    #            );
+    #        }
+    #    }
+    #    
+    #    #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
+    #    
+    #    return $filterArray;
+    #}
     
     /**
      * return list of supported folders for this backend
@@ -540,32 +663,37 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 $parentId = 0;
             }
             
-            $result[$folder->getId()] = array(
-                'folderId'      => $folder->getId(),
+            $result[$folder->getId()] = new Syncroton_Model_Folder(array(
+                'serverId'      => $folder->getId(),
                 'parentId'      => $parentId,
                 'displayName'   => $folder->localname,
                 'type'          => $this->_getFolderType($folder->localname)
-            );
+            ));
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+        #    __METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
         
         return $result;
     }
     
-    public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::moveItem()
+     */
+    public function moveItem($srcFolderId, $serverId, $dstFolderId)
     {
         $filter = new Felamimail_Model_MessageFilter(array(
             array(
                 'field'     => 'id',
                 'operator'  => 'equals',
-                'value'     => $_serverId
+                'value'     => $serverId
             )
         ));
         
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $_dstFolderId);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $dstFolderId);
         
-        return $_serverId;
+        return $serverId;
     }
     
     /**
@@ -595,13 +723,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     protected function _getFolderType($_folderName)
     {
         if(strtoupper($_folderName) == 'INBOX') {
-            return Syncope_Command_FolderSync::FOLDERTYPE_INBOX;
+            return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
         } elseif (strtoupper($_folderName) == 'TRASH') {
-            return Syncope_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
+            return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
         } elseif (strtoupper($_folderName) == 'SENT') {
-            return Syncope_Command_FolderSync::FOLDERTYPE_SENTMAIL;
+            return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
         } else {
-            return Syncope_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
+            return Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
         }
     }
     
@@ -611,7 +739,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param string $_folderId
      * @return string
      */
-    public function getFolder($_folderId)
+    private function getFolder($_folderId)
     {
         $folders = $this->getSupportedFolders();
         
@@ -623,10 +751,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * return contentfilter array
-     * 
-     * @param  int $_filterType
-     * @return Tinebase_Model_Filter_FilterGroup
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::_getContentFilter()
      */
     protected function _getContentFilter($_filterType)
     {
@@ -636,19 +762,19 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $today = Tinebase_DateTime::now()->setTime(0,0,0);
                 
             switch($_filterType) {
-                case Syncope_Command_Sync::FILTER_1_DAY_BACK:
+                case Syncroton_Command_Sync::FILTER_1_DAY_BACK:
                     $received = $today->subDay(1);
                     break;
-                case Syncope_Command_Sync::FILTER_3_DAYS_BACK:
+                case Syncroton_Command_Sync::FILTER_3_DAYS_BACK:
                     $received = $today->subDay(3);
                     break;
-                case Syncope_Command_Sync::FILTER_1_WEEK_BACK:
+                case Syncroton_Command_Sync::FILTER_1_WEEK_BACK:
                     $received = $today->subWeek(1);
                     break;
-                case Syncope_Command_Sync::FILTER_2_WEEKS_BACK:
+                case Syncroton_Command_Sync::FILTER_2_WEEKS_BACK:
                     $received = $today->subWeek(2);
                     break;
-                case Syncope_Command_Sync::FILTER_1_MONTH_BACK:
+                case Syncroton_Command_Sync::FILTER_1_MONTH_BACK:
                     $received = $today->subMonth(2);
                     break;
             }
@@ -660,6 +786,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         return $filter;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::_addContainerFilter()
+     */
     protected function _addContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         // custom filter gets added when created
@@ -674,7 +804,5 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             'equals', 
             $_containerId
         ));
-
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter " . print_r($_filter->toArray(), true));
     }
 }

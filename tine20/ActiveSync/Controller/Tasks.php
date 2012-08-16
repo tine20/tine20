@@ -4,11 +4,8 @@
  *
  * @package     ActiveSync
  * @subpackage  Controller
- * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
- *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
- *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -26,7 +23,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_filterArray = array(
-        Syncope_Command_Sync::FILTER_INCOMPLETE
+        Syncroton_Command_Sync::FILTER_INCOMPLETE
     );
     
     /**
@@ -35,11 +32,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_mapping = array(
-        #'Body'              => 'body',
-        #'BodySize'          => 'bodysize',
-        #'BodyTruncated'     => 'bodytruncated',
-        #'Categories'        => 'categories',
-        #'Category'          => 'category',
+        'Body'              => 'description',
+        'Categories'        => 'tags',
         'Complete'          => 'completed',
         #'DateCompleted'     => 'datecompleted',
         #'DueDate'           => 'duedate',
@@ -85,7 +79,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_defaultFolderType   = Syncope_Command_FolderSync::FOLDERTYPE_TASK;
+    protected $_defaultFolderType   = Syncroton_Command_FolderSync::FOLDERTYPE_TASK;
     
     /**
      * default container for new entries
@@ -99,171 +93,155 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      *
      * @var int
      */
-    protected $_folderType          = Syncope_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
+    protected $_folderType          = Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED;
     
     /**
      * name of property which defines the filterid for different content classes
      * 
      * @var string
      */
-    protected $_filterProperty = 'tasksfilter_id';
+    protected $_filterProperty = 'tasksfilterId';
     
     /**
-     * append task data to xml element
-     *
-     * @param DOMElement  $_domParrent   the parrent xml node
-     * @param string      $_folderId  the local folder id
-     * @param string      $_serverId  the local entry id
-     * @param boolean     $_withBody  retrieve body of entry
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
      */
-    public function appendXML(DOMElement $_domParrent, $_collectionData, $_serverId)
+    public function toSyncrotonModel($entry, array $options = array())
     {
-        $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . " task data " . print_r($data->toArray(), TRUE));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " task data " . print_r($data->toArray(), TRUE));
+        $syncrotonTask = new Syncroton_Model_Task();
         
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks', 'uri:Tasks');
+        foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
+            // skip empty values
+            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
+                continue;
+            }
         
-        foreach ($this->_mapping as $key => $value) {
-            if(!empty($data->$value) || $data->$value == '0') {
-                $nodeContent = NULL;
-                
-                switch($value) {
-                    case 'completed':
-                        continue 2;
-                        break;
-                        
-                    case 'due':
-                        if($data->$value instanceof DateTime) {
-                            $_domParrent->appendChild(new DOMElement($key, $data->$value->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
-                            $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_domParrent->appendChild(new DOMElement('DueDate', $data->$value->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
-                        }
-                        break;
-                        
-                    case 'priority':
-                        $prioMapping = array_flip(Tasks_Model_Priority::getMapping());
-                        $priority = (isset($prioMapping[$data->$value])) ? $prioMapping[$data->$value] : 2;
-                        // ActiveSync does not support URGENT (3) priority
-                        $nodeContent = ($priority <= 2) ? $priority : 2;
-                        break;
-                        
-                    default:
-                        $nodeContent = $data->$value;
-                        break;
-                }
-                
-                // skip empty elements
-                if($nodeContent === NULL || $nodeContent == '') {
+            switch($tine20Property) {
+                case 'completed':
                     continue;
-                }
+                    break;
+                    
+                case 'description':
+                    $syncrotonTask->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
+                        'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
+                        'Data' => $entry->$tine20Property
+                    ));
                 
-                // strip off any non printable control characters
-                if (!ctype_print($nodeContent)) {
-                    $nodeContent = $this->removeControlChars($nodeContent);
-                }
+                    break;
                 
-                $node = $_domParrent->ownerDocument->createElementNS('uri:Tasks', $key);
-                $node->appendChild($_domParrent->ownerDocument->createTextNode($nodeContent));
-                
-                $_domParrent->appendChild($node);
+                case 'due':
+                    if($entry->$tine20Property instanceof DateTime) {
+                        $syncrotonTask->$syncrotonProperty = $entry->$tine20Property;
+                        
+                        $dueDateTime = clone $entry->$tine20Property;
+                        $dueDateTime->setTimezone(Tinebase_Core::get('userTimeZone'));
+                        $syncrotonTask->DueDate = $dueDateTime;
+                    }
+                    
+                    break;
+                    
+                case 'priority':
+                    $prioMapping = array_flip(Tasks_Model_Priority::getMapping());
+                    $priority = isset($prioMapping[$entry->$tine20Property]) ? $prioMapping[$entry->$tine20Property] : 2;
+                    
+                    // ActiveSync does not support URGENT (3) priority
+                    $syncrotonTask->$syncrotonProperty = ($priority <= 2) ? $priority : 2;
+                    
+                    break;
+                    
+                // @todo validate tags are working
+                case 'tags':
+                    $syncrotonTask->$syncrotonProperty = (array) $entry->$tine20Property;
+                    
+                    break;
+                    
+                default:
+                    $syncrotonTask->$syncrotonProperty = $entry->$tine20Property;
+                    
+                    break;
             }
         }
 
-        // body aka description
-        if (!empty($data->description) && version_compare($this->_device->acsversion, '12.0', '>=')) {
-            $body = $_domParrent->appendChild(new DOMElement('Body', NULL, 'uri:AirSyncBase'));
-            
-            $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
-            
-            $dataTag = $body->appendChild(new DOMElement('Data', NULL, 'uri:AirSyncBase'));
-            $dataTag->appendChild(new DOMText(preg_replace("/(\r\n?|\n)/", "\r\n", $data->description)));
-        }
-        
         // Completed is required
-        if ($data->completed instanceof DateTime) {
-            $_domParrent->appendChild(new DOMElement('Complete', 1, 'uri:Tasks'));
-            $_domParrent->appendChild(new DOMElement('DateCompleted', $data->completed->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
+        if ($entry->completed instanceof DateTime) {
+            $syncrotonTask->Complete = 1;
+            $syncrotonTask->DateCompleted = $entry->completed;
         } else {
-            $_domParrent->appendChild(new DOMElement('Complete', 0, 'uri:Tasks'));
+            $syncrotonTask->Complete = 0;
         }
         
-        if (isset($data->tags) && count($data->tags) > 0) {
-            $categories = $_domParrent->appendChild(new DOMElement('Categories', NULL, 'uri:Tasks'));
-            foreach ($data->tags as $tag) {
-                $categories->appendChild(new DOMElement('Category', $tag, 'uri:Tasks'));
-            }
-        }
-        
+        return $syncrotonTask;
     }
         
     /**
-     * convert contact from xml to Tasks_Model_Task
-     *
-     * @param SimpleXMLElement $_data
-     * @param Tasks_Model_Task $_entry
-     * @return Tasks_Model_Task
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::toTineModel()
      */
-    public function toTineModel(SimpleXMLElement $_data, $_entry = NULL)
+    public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
-        if ($_entry instanceof Tasks_Model_Task) {
-            $task = $_entry;
+        if($entry instanceof Tasks_Model_Task) {
+            $task = $entry;
         } else {
             $task = new Tasks_Model_Task(array(
                 'organizer' => Tinebase_Core::getUser()->getId()
             ), TRUE);
-        }
-        
-        $xmlData = $_data->children('uri:Tasks');
+        }        
 
-        foreach($this->_mapping as $fieldName => $value) {
-            switch($value) {
+        foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
+            if (!isset($data->$syncrotonProperty)) {
+                $task->$tine20Property = null;
+            
+                continue;
+            }
+            
+            switch($tine20Property) {
                 case 'completed':
-                    if ((int)$xmlData->$fieldName === 1) {
+                    if ($data->$syncrotonProperty === 1) {
                         $task->status = 'COMPLETED';
-                        $task->completed = (string)$xmlData->DateCompleted;
+                        $task->$tine20Property = $data->DateCompleted;
                     } else {
                         $task->status = 'IN-PROCESS';
-                        $task->completed = NULL;
+                        $task->$tine20Property = NULL;
                     }
+                    
                     break;
-                case 'due':
-                    if (isset($xmlData->$fieldName)) {
-                        $task->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
+                    
+                case 'description':
+                    // @todo check $data->$fieldName->Type and convert to/from HTML if needed
+                    if ($data->$syncrotonProperty instanceof Syncroton_Model_EmailBody) {
+                        $task->$tine20Property = preg_replace("/(\r\n?|\n)/", "\r\n", $data->$syncrotonProperty->Data);
                     } else {
-                        $task->$value = NULL;
+                        $event->$tine20Property = null;
                     }
+                
                     break;
+                    
                 case 'priority':
                     $prioMapping = Tasks_Model_Priority::getMapping();
-                    $task->$value = (isset($xmlData->$fieldName) && isset($prioMapping[(int)$xmlData->$fieldName]))
-                        ? $prioMapping[(int)$xmlData->$fieldName]
+                    $task->$tine20Property = (isset($data->$syncrotonProperty) && isset($prioMapping[$data->$syncrotonProperty]))
+                        ? $prioMapping[$data->$syncrotonProperty]
                         : Tasks_Model_Priority::NORMAL;
                     break;
                     
                 default:
-                    if(isset($xmlData->$fieldName)) {
-                        $task->$value = (string)$xmlData->$fieldName;
+                    if ($data->$syncrotonProperty instanceof DateTime) {
+                        $task->$tine20Property = new Tinebase_DateTime($data->$syncrotonProperty);
                     } else {
-                        $task->$value = NULL;
+                        $task->$tine20Property = $data->$syncrotonProperty;
                     }
+                    
                     break;
             }
         }
-        
-        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
-            $airSyncBase = $_data->children('uri:AirSyncBase');
-            
-            if (isset($airSyncBase->Body) && isset($airSyncBase->Body->Data)) {
-                $task->description = preg_replace("/(\r\n?|\n)/", "\r\n", (string)$airSyncBase->Body->Data);
-            }
-        }
-        
+
         // task should be valid now
         $task->isValid();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), TRUE));
         
         return $task;
     }
@@ -274,7 +252,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return array
      */
-    protected function _toTineFilterArray(SimpleXMLElement $_data)
+    /*protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
         $xmlData = $_data->children('uri:Tasks');
         
@@ -301,7 +279,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, TRUE));
         
         return $filterArray;
-    }
+    }*/
     
     /**
      * return contentfilter array
@@ -314,17 +292,18 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         $filter = parent::_getContentFilter($_filterType);
         
         // no persistent filter set -> add default filter
-        if ($filter->isEmpty()) {
-            $defaultFilter = $filter->createFilter('container_id', 'equals', array(
-                'path' => '/personal/' . Tinebase_Core::getUser()->getId()
-            ));
-            
-            $filter->addFilter($defaultFilter);
-        }
+        // @todo what is this good for? I think should be handled in _addContainerFilter. LK
+        #if ($filter->isEmpty()) {
+        #    $defaultFilter = $filter->createFilter('container_id', 'equals', array(
+        #        'path' => '/personal/' . Tinebase_Core::getUser()->getId()
+        #    ));
+        #    
+        #    $filter->addFilter($defaultFilter);
+        #}
         
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
-                case Syncope_Command_Sync::FILTER_INCOMPLETE:
+                case Syncroton_Command_Sync::FILTER_INCOMPLETE:
                     $filter->removeFilter('status');
                     $openStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->filter('is_open', 1);
                     

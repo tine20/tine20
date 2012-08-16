@@ -4,11 +4,8 @@
  *
  * @package     ActiveSync
  * @subpackage  Controller
- * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
- *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
- *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
- *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -125,19 +122,19 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
         $filterId = empty($_filterId) ? null : $_filterId;
         
         switch($_class) {
-            case Syncope_Data_Factory::CLASS_CALENDAR:
+            case Syncroton_Data_Factory::CLASS_CALENDAR:
                 $device->calendarfilter_id = $filterId;
                 break;
                 
-            case Syncope_Data_Factory::CLASS_CONTACTS:
+            case Syncroton_Data_Factory::CLASS_CONTACTS:
                 $device->contactsfilter_id = $filterId;
                 break;
                 
-            case Syncope_Data_Factory::CLASS_EMAIL:
+            case Syncroton_Data_Factory::CLASS_EMAIL:
                 $device->emailfilter_id = $filterId;
                 break;
                 
-            case Syncope_Data_Factory::CLASS_TASKS:
+            case Syncroton_Data_Factory::CLASS_TASKS:
                 $device->tasksfilter_id = $filterId;
                 break;
                 

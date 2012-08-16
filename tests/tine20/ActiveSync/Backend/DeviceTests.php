@@ -102,25 +102,38 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
     public static function getTestDevice($_type = null)
     {
         switch($_type) {
-            case Syncope_Model_Device::TYPE_ANDROID:
+            case Syncroton_Model_Device::TYPE_ANDROID:
                 $device = new ActiveSync_Model_Device(array(
                     'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
                     'devicetype' => $_type,
                     'owner_id'   => Tinebase_Core::getUser()->getId(),
-                    'policy_id'  => 1,
-                    'useragent'  => 'blabla',
+                    'policy_id'  => null,
+                    'useragent'  => 'Android/4.1-EAS-1.3',
                     'policykey'  => 1,
-                    'acsversion' => '12.0',
+                    'acsversion' => '12.1',
                     'remotewipe' => 0
                 ));
                 break;
             
-            case Syncope_Model_Device::TYPE_WEBOS:
+            case Syncroton_Model_Device::TYPE_ANDROID_40:
+                $device = new ActiveSync_Model_Device(array(
+                    'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
+                    'devicetype' => Syncroton_Model_Device::TYPE_ANDROID,
+                    'owner_id'   => Tinebase_Core::getUser()->getId(),
+                    'policy_id'  => null,
+                    'useragent'  => 'Android/4.1-EAS-1.3',
+                    'policykey'  => 1,
+                    'acsversion' => '14.1',
+                    'remotewipe' => 0
+                ));
+                break;
+            
+            case Syncroton_Model_Device::TYPE_WEBOS:
                 $device = new ActiveSync_Model_Device(array(
                     'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
                     'devicetype' => $_type,
                     'owner_id'   => Tinebase_Core::getUser()->getId(),
-                    'policy_id'  => 1,
+                    'policy_id'  => null,
                     'useragent'  => 'blabla',
                     'policykey'  => 1,
                     'acsversion' => '12.0',
@@ -128,29 +141,29 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                 ));
                 break;
                 
-            case 'SamsungGalaxyS2':
+            case Syncroton_Model_Device::TYPE_SMASUNGGALAXYS2:
                 $device = new ActiveSync_Model_Device(array(
                     'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
                     'devicetype' => 'SAMSUNGGTI9100',
                     'owner_id'   => Tinebase_Core::getUser()->getId(),
-                    'policy_id'  => 1,
+                    'policy_id'  => null,
                     'useragent'  => 'SAMSUNG-GT-I9100/100.20304',
                     'policykey'  => 1,
-                    'acsversion' => '12.0',
+                    'acsversion' => '12.1',
                     'remotewipe' => 0
                 ));
                 break;
                 
-            case Syncope_Model_Device::TYPE_IPHONE:
+            case Syncroton_Model_Device::TYPE_IPHONE:
             default:
                 $device = new ActiveSync_Model_Device(array(
                     'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
-                    'devicetype' => Syncope_Model_Device::TYPE_IPHONE,
+                    'devicetype' => Syncroton_Model_Device::TYPE_IPHONE,
                     'owner_id'   => Tinebase_Core::getUser()->getId(),
-                    'policy_id'  => 1,
+                    'policy_id'  => null,
                     'useragent'  => 'blabla',
                     'policykey'  => 1,
-                    'acsversion' => '2.5',
+                    'acsversion' => '12.1',
                     'remotewipe' => 0
                 ));
                 break;

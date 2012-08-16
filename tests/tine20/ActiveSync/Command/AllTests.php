@@ -28,10 +28,7 @@ class ActiveSync_Command_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync All Command Tests');
         
-        $suite->addTestSuite('ActiveSync_Command_FolderSyncTests');
         $suite->addTestSuite('ActiveSync_Command_PingTests');
-        $suite->addTestSuite('ActiveSync_Command_ProvisionTests');
-        $suite->addTestSuite('ActiveSync_Command_SendMailTests');
         $suite->addTestSuite('ActiveSync_Command_SyncTests');
         
         return $suite;

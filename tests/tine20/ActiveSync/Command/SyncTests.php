@@ -14,7 +14,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Syncope_Command_Sync
+ * Test class for Syncroton_Command_Sync
  * 
  * @package     ActiveSync
  */
@@ -31,17 +31,17 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
     protected $_deviceBackend;
     
     /**
-     * @var Syncope_Backend_Folder
+     * @var Syncroton_Backend_Folder
      */
     protected $_folderBackend;
 
     /**
-     * @var Syncope_Backend_SyncState
+     * @var Syncroton_Backend_SyncState
      */
     protected $_syncStateBackend;
     
     /**
-     * @var Syncope_Backend_IContent
+     * @var Syncroton_Backend_IContent
      */
     protected $_contentStateBackend;
     
@@ -64,29 +64,26 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
-        Syncope_Registry::setDatabase(Tinebase_Core::getDb());
-        Syncope_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
         
-        $this->_deviceBackend       = new Syncope_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
-        $this->_folderBackend       = new Syncope_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
-        $this->_syncStateBackend    = new Syncope_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
-        $this->_contentStateBackend = new Syncope_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_');
+        $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
-        $this->_device = $this->_deviceBackend->create(
-            ActiveSync_Backend_DeviceTests::getTestDevice()
+        Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
+        Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        
+        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
+        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        
+        $this->_device = Syncroton_Registry::getDeviceBackend()->create(
+            ActiveSync_TestCase::getTestDevice()
         );
-        
-        Syncope_Registry::set('deviceBackend',       $this->_deviceBackend);
-        Syncope_Registry::set('folderStateBackend',  $this->_folderBackend);
-        Syncope_Registry::set('syncStateBackend',    $this->_syncStateBackend);
-        Syncope_Registry::set('contentStateBackend', $this->_contentStateBackend);
-        Syncope_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
-
-        Syncope_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-        Syncope_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
-        Syncope_Registry::setEmailDataClass('ActiveSync_Controller_Email');
-        Syncope_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
     }
 
     /**
@@ -118,7 +115,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
         );
-        $folderSync = new Syncope_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
         $folderSync->getResponse();
         
@@ -130,7 +127,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -150,7 +147,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         
         // now do the first sync
@@ -160,7 +157,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -180,11 +177,11 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        #$this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        #$this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
     }
@@ -217,15 +214,15 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         // decode to wbxml and back again to test the wbxml en-/decoder
         $xmlStream = fopen("php://temp", 'r+');
         
-        $encoder = new Wbxml_Encoder($xmlStream, 'UTF-8', 3);
+        $encoder = new Syncroton_Wbxml_Encoder($xmlStream, 'UTF-8', 3);
         $encoder->encode($doc);
         
         rewind($xmlStream);
         
-        $decoder = new Wbxml_Decoder($xmlStream);
+        $decoder = new Syncroton_Wbxml_Decoder($xmlStream);
         $doc = $decoder->decode();
         #$doc->formatOutput = true; echo $doc->saveXML();
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -245,7 +242,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -253,7 +250,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Add/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
     /**
@@ -296,7 +293,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
         );
-        $folderSync = new Syncope_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
         $folderSync->getResponse();
         
@@ -308,7 +305,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Calendar</Class><SyncKey>0</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -328,7 +325,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         
         // now do the first sync
@@ -338,7 +335,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Calendar</Class><SyncKey>1</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -358,7 +355,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -387,7 +384,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $folders = $emailController->getAllFolders();
         
         foreach ($folders as $folder) {
-            if (strtoupper($folder['displayName']) == 'INBOX') {
+            if (strtoupper($folder->displayName) == 'INBOX') {
                 break;
             }
         }
@@ -398,7 +395,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
         );
-        $folderSync = new Syncope_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
         $syncDoc = $folderSync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
@@ -407,10 +404,10 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Email</Class><SyncKey>0</SyncKey><CollectionId>' . $folder['folderId'] . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Email</Class><SyncKey>0</SyncKey><CollectionId>' . $folder->serverId . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -430,17 +427,17 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         
         // now do the first sync
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Calendar</Class><SyncKey>1</SyncKey><CollectionId>' . $folder['folderId'] . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Email</Class><SyncKey>1</SyncKey><CollectionId>' . $folder->serverId . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
         );
         
-        $sync = new Syncope_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
@@ -460,7 +457,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncope_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
