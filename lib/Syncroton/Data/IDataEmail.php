@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Syncroton
  *
@@ -10,7 +9,7 @@
  */
 
 /**
- * class to handle ActiveSync Sync command
+ * intace for email backend
  *
  * @package     Model
  */
@@ -27,21 +26,19 @@ interface Syncroton_Data_IDataEmail
     /**
      * forward an email
      * 
-     * @param  string  $collectionId
-     * @param  string  $itemId
-     * @param  string  $inputStream
-     * @param  string  $saveInSent
+     * @param  string|array  $source       is either a string(LongId) or an arrey with following properties collectionId, itemId and instanceId
+     * @param  string        $inputStream
+     * @param  string        $saveInSent
      */
-    public function forwardEmail($collectionId, $itemId, $inputStream, $saveInSent);
+    public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime);
 
     /**
      * reply to an email
      * 
-     * @param  string  $collectionId
-     * @param  string  $itemId
-     * @param  string  $inputStream
-     * @param  string  $saveInSent
+     * @param  string|array  $source       is either a string(LongId) or an arrey with following properties collectionId, itemId and instanceId
+     * @param  string        $inputStream
+     * @param  string        $saveInSent
      */
-    public function replyEmail($collectionId, $itemId, $inputStream, $saveInSent);
+    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime);
 }
 

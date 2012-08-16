@@ -22,7 +22,11 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
     public static $entries = array(
     );
     
-    public function forwardEmail($collectionId, $itemId, $inputStream, $saveInSent)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::forwardEmail()
+     */
+    public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
         // forward email
     }
@@ -36,12 +40,16 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
     
         // example code
         return new Syncroton_Model_FileReference(array(
-                'ContentType' => 'text/plain',
-                'Data'        => 'Lars'
+            'ContentType' => 'text/plain',
+            'Data'        => 'Lars'
         ));
     }
     
-    public function replyEmail($collectionId, $itemId, $inputStream, $saveInSent)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::replyEmail()
+     */
+    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
         // forward email
     }
