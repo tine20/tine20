@@ -28,11 +28,11 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * @var array
      */
     protected $_options = array(
-        'encoding'          => 'UTF-8',
+        'encoding'          => 'auto',
         'encodingTo'        => 'UTF-8',
         'dryrun'            => FALSE,
         'dryrunCount'       => 20,
-        'dryrunLimit'       => 0,       
+        'dryrunLimit'       => 0,
         'duplicateCount'    => 0,
         'createMethod'      => 'create',
         'model'             => '',

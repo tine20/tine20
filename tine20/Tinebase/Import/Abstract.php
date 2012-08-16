@@ -42,6 +42,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'model'             => '',
         'shared_tags'       => 'create', //'onlyexisting',
         'autotags'          => array(),
+        'encoding'          => 'auto',
         'encodingTo'        => 'UTF-8',
         'useStreamFilter'   => TRUE,
     );
@@ -155,8 +156,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             return;
         }
 
-        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
+        if (! isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto' && extension_loaded('mbstring')) {
+            require_once 'StreamFilter/ConvertMbstring.php';
+            $filter = 'convert.mbstring';
+        } else if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
             $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'] . '//IGNORE';
+        } else {
+            $filter = NULL;
+        }
+            
+        if ($filter !== NULL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Add convert stream filter: ' . $filter);
             stream_filter_append($resource, $filter);
@@ -345,19 +354,46 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _convertEncoding($_value)
     {
-        if (! isset($this->_options['encoding']) || ! isset($this->_options['encodingTo']) || (isset($this->_options['useStreamFilter']) && $this->_options['useStreamFilter'])) {
+        if (empty($_value) || (! isset($this->_options['encodingTo']) || (isset($this->_options['useStreamFilter']) && $this->_options['useStreamFilter']))) {
             return $_value;
         }
         
         if (is_array($_value)) {
             $result = array();
             foreach ($_value as $singleValue) {
-                $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'] . '//IGNORE', $singleValue);
+                $result[] = $this->_doConvert($singleValue);
             }
         } else {
-            $result = @iconv($this->_options['encoding'], $this->_options['encodingTo'] . '//IGNORE', $_value);
+            $result = $this->_doConvert($_value);
         }
         
+        return $result;
+    }
+    
+    /**
+     * convert string with iconv or mb_convert_encoding
+     * 
+     * @param string $string
+     * @return string
+     */
+    protected function _doConvert($string)
+    {
+        if ((! isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto') && extension_loaded('mbstring')) {
+            $encoding = mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
+            if ($encoding !== FALSE) {
+                $encodingFn = 'mb_convert_encoding';
+                $result = @mb_convert_encoding($string, $this->_options['encodingTo'], $encoding);
+            }
+        } else if (isset($this->_options['encoding'])) {
+            $encoding = $this->_options['encoding'];
+            $encodingFn = 'iconv';
+            $result = @iconv($encoding, $this->_options['encodingTo'] . '//TRANSLIT', $string);
+        } else {
+            return $string;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Encoded ' . $string . ' from ' . $encoding . ' to ' . $this->_options['encodingTo'] . ' using ' . $encodingFn . ' . => ' . $result);
         return $result;
     }
     
