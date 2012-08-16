@@ -14,12 +14,12 @@
  *
  * @package     Model
  * @property    string   id
- * @property    string   device_id
+ * @property    string   deviceId
  * @property    string   class
- * @property    string   folderid
- * @property    string   parentid
- * @property    string   displayname
- * @property    string   creation_time
+ * @property    string   serverId
+ * @property    string   parentId
+ * @property    string   displayName
+ * @property    string   creationTime
  * @property    string   lastfiltertype
  */
 

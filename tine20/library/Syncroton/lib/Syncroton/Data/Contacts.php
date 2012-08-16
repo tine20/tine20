@@ -25,16 +25,16 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData
             Syncroton_Data_AData::$folders[get_class($this)] = array(
                 'addressbookFolderId' => new Syncroton_Model_Folder(array(
                     'id'          => sha1(mt_rand(). microtime()),
-                    'folderid'    => 'addressbookFolderId',
-                    'parentid'    => null,
-                    'displayname' => 'Default Contacts Folder',
+                    'serverId'    => 'addressbookFolderId',
+                    'parentId'    => 0,
+                    'displayName' => 'Default Contacts Folder',
                     'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT
                 )),
                 'anotherAddressbookFolderId' => new Syncroton_Model_Folder(array(
                     'id'          => sha1(mt_rand(). microtime()),
-                    'folderid'    => 'anotherAddressbookFolderId',
-                    'parentid'    => null,
-                    'displayname' => 'Another Contacts Folder',
+                    'serverId'    => 'anotherAddressbookFolderId',
+                    'parentId'    => 0,
+                    'displayName' => 'Another Contacts Folder',
                     'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
                 ))
             );

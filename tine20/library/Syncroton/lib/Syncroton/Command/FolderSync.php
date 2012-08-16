@@ -73,21 +73,13 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
      */
     public function handle()
     {
-        #if ($this->_statusProvisioning = $this->_checkProvisioningNeeded() !== false) {
-        #    if (version_compare($this->_device->acsversion, '14.0', '<')) {
-        #        throw new Syncroton_Exception_ProvisioningNeeded();
-        #    } else {
-        #        return;
-        #    }
-        #}
-        
         $xml = simplexml_import_dom($this->_requestBody);
         $syncKey = (int)$xml->SyncKey;
         
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
         
-        if ($syncKey == 0) {
+        if ($syncKey === 0) {
             $this->_syncState = new Syncroton_Model_SyncState(array(
                 'device_id' => $this->_device,
                 'counter'   => 0,
@@ -97,12 +89,12 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             
             // reset state of foldersync
             $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
-        } else {
-            if (($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
-                $this->_syncState->lastsync = $this->_syncTimeStamp;
-            } else  {
-                $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
-            }
+            
+            return;
+        } 
+        
+        if (!($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
+            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
         }
     }
     
@@ -115,19 +107,10 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
     {
         $folderSync = $this->_outputDom->documentElement;
         
-        // provioning needed?
-        #if ($this->_statusProvisioning !== false) {
-        #    if ($this->_logger instanceof Zend_Log) 
-        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisiong needed or remote wipe requested");
-        #    $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', $this->_statusProvisioning));
-        #    
-        #    return $this->_outputDom;
-        #}
-        
         // invalid synckey provided
-        if($this->_syncState === false) {
+        if (!$this->_syncState instanceof Syncroton_Model_SyncState) {
             if ($this->_logger instanceof Zend_Log) 
-                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey provided");
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " invalid synckey provided. FolderSync 0 needed.");
             $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_INVALID_SYNC_KEY));
 
             return $this->_outputDom;
@@ -141,7 +124,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
         foreach($this->_classes as $class) {
             try {
                 $dataController = Syncroton_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
-            } catch (Zend_Exception $ze) {
+            } catch (Exception $e) {
                 // backend not defined
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
@@ -150,6 +133,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             
             // retrieve all folders available in data backend
             $serverFolders = $dataController->getAllFolders();
+            
             // retrieve all folders sent to client
             $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
             
@@ -161,24 +145,22 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             } else {
                 $clientFoldersIds = array_keys($clientFolders);
             } 
-                           
+            
             // calculate added entries
             $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
             foreach($serverDiff as $serverFolderId) {
+                // have we created a folderObject in syncroton_folder before?
                 if (isset($clientFolders[$serverFolderId])) {
-                    $adds[] = $clientFolders[$serverFolderId];
+                    $add = $clientFolders[$serverFolderId];
                 } else {
-                    $adds[] = new Syncroton_Model_Folder(array(
-                        'device_id'         => $this->_device,
-                        'class'             => $class,
-                        'folderid'          => $serverFolders[$serverFolderId]->folderid,
-                        'parentid'          => $serverFolders[$serverFolderId]->parentid,
-                        'displayname'       => $serverFolders[$serverFolderId]->displayname,
-                        'type'              => $serverFolders[$serverFolderId]->type,
-                        'creation_time'     => $this->_syncTimeStamp,
-                        'lastfiltertype'    => null
-                    ));
+                    $add = $serverFolders[$serverFolderId];
+                    $add->creationTime = $this->_syncTimeStamp;
+                    $add->deviceId     = $this->_device;
+                    unset($add->id);
                 }
+                $add->class = $class;
+                
+                $adds[] = $add;
             }
             
             // calculate deleted entries
@@ -191,6 +173,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
         $count = count($adds) + /*count($changes) + */count($deletes);
         if($count > 0) {
             $this->_syncState->counter++;
+            $this->_syncState->lastsync = $this->_syncTimeStamp;
         }
         
         // create xml output
@@ -200,17 +183,10 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
         $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Count', $count));
         
         foreach($adds as $folder) {
-            
             $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
-            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
-            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ParentId', $folder->parentid));
             
-            $displayName = $this->_outputDom->createElementNS('uri:FolderHierarchy', 'DisplayName');
-            $displayName->appendChild($this->_outputDom->createTextNode($folder->displayname));
-            $add->appendChild($displayName);
-            
-            $add->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Type', $folder->type));
-            
+            $folder->appendXML($add);
+
             // store folder in backend
             if (empty($folder->id)) {
                 $this->_folderBackend->create($folder);
@@ -219,7 +195,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
         
         foreach($deletes as $folder) {
             $delete = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Delete'));
-            $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
+            $delete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->serverId));
             
             $this->_folderBackend->delete($folder);
         }

@@ -114,6 +114,47 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
     }
     
     /**
+     * test get policy with setting device information
+     */
+    public function testGetPolicyWithSeetings()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Provision xmlns="uri:Provision" xmlns:Settings="uri:Settings">
+                <DeviceInformation xmlns="uri:Settings"><Set><Model>sdk</Model><OS>Android 4.1</OS><UserAgent>Android/4.1-EAS-1.3</UserAgent></Set></DeviceInformation>
+                <Policies><Policy><PolicyType>MS-EAS-Provisioning-WBXML</PolicyType></Policy></Policies>
+            </Provision>'
+        );
+        
+        $provision = new Syncroton_Command_Provision($doc, $this->_device, $this->_device->policykey);
+        
+        $provision->handle();
+        
+        $responseDoc = $provision->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('Provision', 'uri:Provision');
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_FolderSync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:PolicyType');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Provision::POLICYTYPE_WBXML, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:PolicyKey');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertTrue(!empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
+
+        $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:Data/Provision:EASProvisionDoc/Provision:DevicePasswordEnabled');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+    
+    /**
      * test xml generation for IPhone
      * @todo validate new PolicyKey
      */

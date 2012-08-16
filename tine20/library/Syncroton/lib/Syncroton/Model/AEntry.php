@@ -18,6 +18,8 @@
 
 abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, IteratorAggregate, Countable
 {
+    protected $_xmlBaseElement;
+    
     protected $_elements = array();
     
     protected $_properties = array();
@@ -87,13 +89,16 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
      */
     public function setFromSimpleXMLElement(SimpleXMLElement $properties)
     {
-        if ($properties->getName() !== $this->_xmlBaseElement) {
+        if (!in_array($properties->getName(), (array) $this->_xmlBaseElement)) {
             throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
         }
     
         $this->_elements = array();
     
         foreach (array_keys($this->_properties) as $namespace) {
+            if ($namespace == 'Internal') {
+                continue;
+            }
             $functionName = '_parse' . $namespace . 'Namespace';
             $this->$functionName($properties);
         }

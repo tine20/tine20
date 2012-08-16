@@ -21,9 +21,8 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
     protected $_documentElement     = 'Sendmail';
 
     protected $_saveInSent;
-    protected $_itemId;
-    protected $_collectionId;
-    protected $_mime;
+    protected $_source;
+    protected $_replaceMime = false;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -34,20 +33,28 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
     {
         if ($this->_requestParameters['contentType'] == 'message/rfc822') {
             $this->_mime          = $this->_requestBody;
-            $this->_saveInSent    = $this->_requestParameters['SaveInSent'] == 'T';
+            $this->_saveInSent    = $this->_requestParameters['saveInSent'] == 'T';
             
-            $this->_collectionId  = $this->_requestParameters['CollectionId'];
-            $this->_itemId        = $this->_requestParameters['ItemId'];
+            $this->_collectionId  = $this->_requestParameters['collectionId'];
+            $this->_itemId        = $this->_requestParameters['itemId'];
             
         } else {
             $xml = simplexml_import_dom($this->_requestBody);
             
             $this->_mime          = (string) $xml->Mime;
             $this->_saveInSent    = isset($xml->SaveInSentItems);
+            $this->_replaceMime   = isset($xml->ReplaceMime);
             
             if (isset ($xml->Source)) {
-                $this->_collectionId  = (string)$xml->Source->FolderId;
-                $this->_itemId        = (string)$xml->Source->ItemId;
+                if ($xml->Source->LongId) {
+                    $this->_source = $xml->Source->LongId;
+                } else {
+                    $this->_source = array(
+                        'collectionId' => (string)$xml->Source->FolderId,
+                        'itemId'       => (string)$xml->Source->ItemId,
+                        'instanceId'   => isset($xml->Source->InstanceId) ? (string)$xml->Source->InstanceId : null
+                    );
+                }
             }
         }
         

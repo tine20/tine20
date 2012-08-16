@@ -24,9 +24,9 @@ class Syncroton_Data_Calendar extends Syncroton_Data_AData
         Syncroton_Data_AData::$folders[get_class($this)] = array(
                 'calendarFolderId' => new Syncroton_Model_Folder(array(
                     'id'          => sha1(mt_rand(). microtime()),
-                    'folderid'    => 'calendarFolderId',
-                    'parentid'    => null,
-                    'displayname' => 'Default Contacts Folder',
+                    'serverId'    => 'calendarFolderId',
+                    'parentId'    => 0,
+                    'displayName' => 'Default Contacts Folder',
                     'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR
                 ))
         );

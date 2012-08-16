@@ -22,7 +22,11 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
     public static $entries = array(
     );
     
-    public function forwardEmail($collectionId, $itemId, $inputStream, $saveInSent)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::forwardEmail()
+     */
+    public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
         // forward email
     }
@@ -36,12 +40,16 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
     
         // example code
         return new Syncroton_Model_FileReference(array(
-                'ContentType' => 'text/plain',
-                'Data'        => 'Lars'
+            'ContentType' => 'text/plain',
+            'Data'        => 'Lars'
         ));
     }
     
-    public function replyEmail($collectionId, $itemId, $inputStream, $saveInSent)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::replyEmail()
+     */
+    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
         // forward email
     }
@@ -68,16 +76,16 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
         Syncroton_Data_AData::$folders[get_class($this)] = array(
             'emailInboxFolderId' => new Syncroton_Model_Folder(array(
                 'id'          => sha1(mt_rand(). microtime()),
-                'folderid'    => 'emailInboxFolderId',
-                'parentid'    => null,
-                'displayname' => 'Inbox',
+                'serverId'    => 'emailInboxFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Inbox',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_INBOX
             )),
             'emailSentFolderId' => new Syncroton_Model_Folder(array(
                 'id'          => sha1(mt_rand(). microtime()),
-                'folderid'    => 'emailSentFolderId',
-                'parentid'    => null,
-                'displayname' => 'Sent',
+                'serverId'    => 'emailSentFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Sent',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL
             ))
         );

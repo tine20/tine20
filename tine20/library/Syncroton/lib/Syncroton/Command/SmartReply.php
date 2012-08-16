@@ -29,6 +29,6 @@ class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
     {
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
     
-        $dataController->replyEmail($this->_collectionId, $this->_itemId, $this->_mime, $this->_saveInSent);
+        $dataController->replyEmail($this->_source, $this->_mime, $this->_saveInSent, $this->_replaceMime);
     }
 }

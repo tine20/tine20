@@ -35,6 +35,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
     
     protected $_policyType;
     protected $_sendPolicyKey;
+    protected $_deviceInformationSet = false;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -53,6 +54,12 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
             $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
+        // try to fetch element from Settings namespace
+        $settings = $xml->children('uri:Settings');
+        if (isset($settings->DeviceInformation) && isset($settings->DeviceInformation->Set)) {
+            // @todo update device informations
+            $this->_deviceInformationSet = true;
+        }
     }
     
     /**
@@ -101,8 +108,10 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         $this->_device->policykey = $this->generatePolicyKey();
                 
         $provision = $sync = $this->_outputDom->documentElement;
-        $deviceInformation = $provision->appendChild($this->_outputDom->createElementNS('uri:Settings', 'DeviceInformation'));
-        $deviceInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', 1));
+        if ($this->_deviceInformationSet === true) {
+            $deviceInformation = $provision->appendChild($this->_outputDom->createElementNS('uri:Settings', 'DeviceInformation'));
+            $deviceInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', 1));
+        }
         $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
         
         $policies = $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policies'));

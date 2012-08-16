@@ -71,9 +71,9 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
         
         Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['addressbookFolderId2'] = new Syncroton_Model_Folder(array(
             'id'          => sha1(mt_rand(). microtime()),
-            'folderid'    => 'addressbookFolderId2',
-            'parentid'    => null,
-            'displayname' => 'User created Contacts Folder',
+            'serverId'    => 'addressbookFolderId2',
+            'parentId'    => 0,
+            'displayName' => 'User created Contacts Folder',
             'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
         ));
         

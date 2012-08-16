@@ -87,7 +87,7 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $folder = $this->_folderBackend->create($folder);
                 
         $this->assertTrue($folder->creationTime instanceof DateTime);
-        $this->assertFalse(empty($folder->displayname));
+        $this->assertFalse(empty($folder->displayName));
         
         return $folder;
     }
@@ -119,7 +119,7 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
     {
         $folder = $this->testCreate();
         
-        $folder = $this->_folderBackend->getFolder($folder->deviceId, $folder->folderid);
+        $folder = $this->_folderBackend->getFolder($folder->deviceId, $folder->serverId);
         
         $this->assertTrue($folder->creationTime instanceof DateTime);
     }
@@ -130,14 +130,14 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
         $folder1 = $this->testCreate($folder);
         
         $folder = self::getTestFolder($this->_device);
-        $folder->folderid = '1234567891';
+        $folder->serverId = '1234567891';
         $folder2 = $this->testCreate($folder);
         
-        $folders = $this->_folderBackend->getFolderState($folder->device_id, Syncroton_Data_Factory::CLASS_CONTACTS);
+        $folders = $this->_folderBackend->getFolderState($folder->deviceId, Syncroton_Data_Factory::CLASS_CONTACTS);
         
         $this->assertEquals(2, count($folders));
-        $this->assertArrayHasKey($folder1->folderid, $folders);
-        $this->assertArrayHasKey($folder2->folderid, $folders);
+        $this->assertArrayHasKey($folder1->serverId, $folders);
+        $this->assertArrayHasKey($folder2->serverId, $folders);
     }
     
     public function testGetExceptionNotFound()
@@ -154,13 +154,13 @@ class Syncroton_Backend_FolderTests extends PHPUnit_Framework_TestCase
     public static function getTestFolder(Syncroton_Model_IDevice $_device)
     {
         return new Syncroton_Model_Folder(array(
-            'device_id'         => $_device,
+            'deviceId'         => $_device,
             'class'             => Syncroton_Data_Factory::CLASS_CONTACTS,
-            'folderid'          => sha1(mt_rand(). microtime()),
-            'parentid'          => null,
-            'displayname'       => 'test contact folder',
+            'serverId'          => sha1(mt_rand(). microtime()),
+            'parentId'          => null,
+            'displayName'       => 'test contact folder',
             'type'              => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-            'creation_time'     => new DateTime(null, new DateTimeZone('utc')),
+            'creationTime'     => new DateTime(null, new DateTimeZone('utc')),
             'lastfiltertype'    => null
         ));
     }

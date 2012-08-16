@@ -47,11 +47,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         $folder->id = sha1(mt_rand(). microtime());
         
         // normaly generated on server backend
-        $folder->folderid = sha1(mt_rand(). microtime());
+        $folder->serverId = sha1(mt_rand(). microtime());
     
-        Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid] = $folder;
+        Syncroton_Data_AData::$folders[get_class($this)][$folder->serverId] = $folder;
     
-        return Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid];
+        return Syncroton_Data_AData::$folders[get_class($this)][$folder->serverId];
     }
     
     public function createEntry($_folderId, Syncroton_Model_IEntry $_entry)
@@ -72,7 +72,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        #$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->folderid : $_folderId;
+        #$folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
         
         $result = $this->_db->delete($this->_tablePrefix . 'data', array('id = ?' => $_serverId));
         
@@ -83,7 +83,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     
     public function deleteFolder($_folderId)
     {
-        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->folderid : $_folderId;
+        $folderId = $_folderId instanceof Syncroton_Model_IFolder ? $_folderId->serverId : $_folderId;
     
         unset(Syncroton_Data_AData::$folders[get_class($this)][$folderId]);
         unset(Syncroton_Data_AData::$entries[get_class($this)][$folderId]);
@@ -129,11 +129,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
-        $allServerEntries = $this->getServerEntries($folder->folderid, $folder->lastfiltertype);
+        $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
         
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries     = $this->getChangedEntries($folder->folderid, $syncState->lastsync);
+        $changedEntries     = $this->getChangedEntries($folder->serverId, $syncState->lastsync);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
@@ -195,7 +195,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {
-        Syncroton_Data_AData::$folders[get_class($this)][$folder->folderid] = $folder;
+        Syncroton_Data_AData::$folders[get_class($this)][$folder->serverId] = $folder;
     }
     
     

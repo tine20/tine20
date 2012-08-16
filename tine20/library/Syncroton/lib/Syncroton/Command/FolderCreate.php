@@ -28,14 +28,10 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
     );
     
     /**
-     * synckey sent from client
-     *
-     * @var string
+     * 
+     * @var Syncroton_Model_Folder
      */
-    protected $_syncKey;
-    protected $_parentId;
-    protected $_displayName;
-    protected $_type;
+    protected $_folder;
     
     /**
      * parse FolderCreate request
@@ -45,29 +41,38 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
     {
         $xml = simplexml_import_dom($this->_requestBody);
         
-        $this->_syncKey     = (int)$xml->SyncKey;
-        $this->_parentId    = (string)$xml->ParentId;
-        $this->_displayName = (string)$xml->DisplayName;
-        $this->_type        = (int)$xml->Type;
-        
+        $syncKey = (int)$xml->SyncKey;
+
         if ($this->_logger instanceof Zend_Log) 
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $this->_syncKey");        
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
         
-        switch((int)$xml->Type) {
+        if (!($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
+        
+            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
+        
+            return;
+        }
+        
+        $folder   = new Syncroton_Model_Folder($xml);
+        
+        if ($this->_logger instanceof Zend_Log)
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " parentId: {$folder->parentId} displayName: {$folder->displayName}");
+        
+        switch($folder->type) {
             case Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED:
-                $this->_class = Syncroton_Data_Factory::CLASS_CALENDAR;
+                $folder->class = Syncroton_Data_Factory::CLASS_CALENDAR;
                 break;
                 
             case Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED:
-                $this->_class = Syncroton_Data_Factory::CLASS_CONTACTS;
+                $folder->class = Syncroton_Data_Factory::CLASS_CONTACTS;
                 break;
                 
             case Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED:
-                $this->_class = Syncroton_Data_Factory::CLASS_EMAIL;
+                $folder->class = Syncroton_Data_Factory::CLASS_EMAIL;
                 break;
                 
             case Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED:
-                $this->_class = Syncroton_Data_Factory::CLASS_TASKS;
+                $folder->class = Syncroton_Data_Factory::CLASS_TASKS;
                 break;
                 
             default:
@@ -75,7 +80,14 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
                 break;
         }
         
-        $this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $this->_syncKey);
+        $folder->deviceId     = $this->_device;
+        $folder->creationTime = $this->_syncTimeStamp;
+        
+        $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+        
+        $this->_folder = $dataController->createFolder($folder);
+        
+        $this->_folderBackend->create($this->_folder);
     }
     
     /**
@@ -85,34 +97,22 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
     {
         $folderCreate = $this->_outputDom->documentElement;
         
-        if($this->_syncState == false) {
+        if (!$this->_syncState instanceof Syncroton_Model_SyncState) {
             if ($this->_logger instanceof Zend_Log) 
-                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " INVALID synckey");
+                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " invalid synckey provided. FolderSync 0 needed.");
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
+            
         } else {
             $this->_syncState->counter++;
+            $this->_syncState->lastsync = $this->_syncTimeStamp;
             
-            $dataController = Syncroton_Data_Factory::factory($this->_class, $this->_device, $this->_syncTimeStamp);
-            
-            $folder = $dataController->createFolder(new Syncroton_Model_Folder(array(
-                'device_id'         => $this->_device,
-                'class'             => $this->_class,
-                'parentid'          => $this->_parentId,
-                'displayname'       => $this->_displayName,
-                'type'              => $this->_type,
-                'creation_time'     => $this->_syncTimeStamp,
-                'lastfiltertype'    => null
-            )));
+            // store folder in state backend
+            $this->_syncStateBackend->update($this->_syncState);
             
             // create xml output
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',   Syncroton_Command_FolderSync::STATUS_SUCCESS));
             $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey',  $this->_syncState->counter));
-            $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $folder->folderid));
-
-            // store folder in state backend
-            $this->_folderBackend->create($folder);            
-            
-            $this->_syncStateBackend->update($this->_syncState);
+            $folderCreate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'ServerId', $this->_folder->serverId));
         }
         
         return $this->_outputDom;
