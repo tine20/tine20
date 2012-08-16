@@ -62,7 +62,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'delimiter'         => ',',
             'enclosure'         => '"',
             'escape'            => '\\',
-            'encoding'          => 'UTF-8',
             'encodingTo'        => 'UTF-8',
             'mapping'           => '',
             'headline'          => 0,

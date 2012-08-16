@@ -125,11 +125,21 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     public function testImportWithIconv2()
     {
-        // file is iso-8859-1 encoded
-        $this->_filename = dirname(__FILE__) . '/files/HerrFalkMünchen.vcf';
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
         $definition->plugin_options = preg_replace('/<\/urlIsHome>/',
             "</urlIsHome>\n<encoding>iso-8859-1</encoding>", $definition->plugin_options);
+        $this->_importFalk($definition);
+    }
+    
+    /**
+     * import helper for HerrFalkMünchen.vcf
+     * 
+     * @param Tinebase_Model_ImportExportDefinition $definition
+     */
+    protected function _importFalk(Tinebase_Model_ImportExportDefinition $definition)
+    {
+        // file is iso-8859-1 encoded
+        $this->_filename = dirname(__FILE__) . '/files/HerrFalkMünchen.vcf';
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
         
         $result = $this->_instance->importFile($this->_filename);
@@ -137,7 +147,18 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $importedContact = $result['results']->getFirstRecord();
         
         $this->assertTrue($importedContact !== NULL);
-        $this->assertEquals('Falk München', $importedContact->n_fn, print_r($importedContact, TRUE));
-        $this->assertEquals('Düsseldorf', $importedContact->adr_one_locality, print_r($importedContact, TRUE));
+        $this->assertEquals('Falk München', $importedContact->n_fn, print_r($importedContact->toArray(), TRUE));
+        $this->assertEquals('Düsseldorf', $importedContact->adr_one_locality, print_r($importedContact->toArray(), TRUE));
+    }
+
+    /**
+     * test import data #5
+     * 
+     * @see 0006936: detect import file encoding
+     */
+    public function testImportDetectEncoding()
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_importFalk($definition);
     }
 }
