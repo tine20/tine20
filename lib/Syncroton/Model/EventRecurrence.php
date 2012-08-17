@@ -49,8 +49,9 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
     const RECUR_DOW_THURSDAY    = 16;
     const RECUR_DOW_FRIDAY      = 32;
     const RECUR_DOW_SATURDAY    = 64;
-        
-    // @todo handle body
+    
+    protected $_dateTimeFormat = "Ymd\THis\Z";
+    
     protected $_properties = array(
         'Calendar' => array(
             'CalendarType'            => array('type' => 'number'),
@@ -66,40 +67,6 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
             'WeekOfMonth'             => array('type' => 'number'),
         )
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            $nameSpace = 'uri:' . $nameSpace;
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Ymd\THis\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
     
     protected function _parseCalendarNamespace(SimpleXMLElement $properties)
     {

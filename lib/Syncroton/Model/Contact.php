@@ -49,9 +49,9 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             'BusinessFaxNumber'      => array('type' => 'string'),
             'BusinessPhoneNumber'    => array('type' => 'string'),
             'CarPhoneNumber'         => array('type' => 'string'),
-            'Categories'             => array('type' => 'container'),
+            'Categories'             => array('type' => 'container', 'childName' => 'Category'),
             //'Category'              => array('type' => 'string'),
-            'Children'               => array('type' => 'container'),
+            'Children'               => array('type' => 'container', 'childName' => 'Child'),
             //'Child'                 => array('type' => 'string'),
             'CompanyName'            => array('type' => 'string'),
             'Department'             => array('type' => 'string'),
@@ -104,86 +104,6 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             'NickName'               => array('type' => 'string'),
         )
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-                
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            $nameSpace = 'uri:' . $nameSpace;
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                case 'Body':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    $value->appendXML($element);
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Categories':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $category) {
-                        $categoryElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Category');
-                        $categoryElement->appendChild($_domParrent->ownerDocument->createTextNode($category));
-                        
-                        $element->appendChild($categoryElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Children':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $child) {
-                        $childElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Child');
-                        $childElement->appendChild($_domParrent->ownerDocument->createTextNode($child));
-                        
-                        $element->appendChild($childElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    
-                    if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
-                        if (is_resource($value)) {
-                            stream_filter_append($value, 'convert.base64-encode');
-                            $value = stream_get_contents($value);
-                        } else {
-                            $value = base64_encode($value);
-                        }
-                    }
-                        
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-    }
     
     protected function _parseContactsNamespace(SimpleXMLElement $properties)
     {

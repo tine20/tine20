@@ -30,56 +30,6 @@ class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
     );
         
     /**
-     * append email data to xml element
-     *
-     * @param DOMElement  $_domParrent   the parrent xml node
-     * @param string      $_folderId  the local folder id
-     */
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            $nameSpace = 'uri:' . $nameSpace;
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    
-                    if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
-                        if (is_resource($value)) {
-                            stream_filter_append($value, 'convert.base64-encode');
-                            $value = stream_get_contents($value);
-                        } else {
-                            $value = base64_encode($value);
-                        }
-                    }
-                        
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
-    
-    /**
      * 
      * @param SimpleXMLElement $xmlCollection
      * @throws InvalidArgumentException

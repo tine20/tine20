@@ -38,7 +38,6 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
     const ATTENDEE_TYPE_OPTIONAL = 2;
     const ATTENDEE_TYPE_RESOURCE = 3;
     
-    // @todo handle body
     protected $_properties = array(
         'Calendar' => array(
             'AttendeeStatus'          => array('type' => 'number'),
@@ -47,82 +46,6 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
             'Name'                    => array('type' => 'string'),
         )
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar', 'uri:Calendar');
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            $elementProperties = $this->_properties['Calendar'][$elementName]; 
-            
-            $nameSpace = 'uri:Calendar';
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                case 'Categories':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $category) {
-                        $categoryElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Category');
-                        $categoryElement->appendChild($_domParrent->ownerDocument->createTextNode($category));
-                        
-                        $element->appendChild($categoryElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Children':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $child) {
-                        $childElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Child');
-                        $childElement->appendChild($_domParrent->ownerDocument->createTextNode($child));
-                        
-                        $element->appendChild($childElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Picture':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if (is_resource($value)) {
-                        stream_filter_append($value, 'convert.base64-encode');
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(stream_get_contents($value)));
-                    } else {
-                        $element->appendChild($_domParrent->ownerDocument->createTextNode(base64_encode($value)));
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-                    
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Ymd\THis\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
     
     /**
      * 

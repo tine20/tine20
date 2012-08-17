@@ -29,10 +29,7 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
             'Body'                   => array('type' => 'container')
         ),
         'Tasks' => array(
-            //'Body'                    => 0x05,
-            //'BodySize'                => 0x06,
-            //'BodyTruncated'           => 0x07,
-            'Categories'              => array('type' => 'container'),
+            'Categories'              => array('type' => 'container', 'childName' => 'Category'),
             'Complete'                => array('type' => 'number'),
             'DateCompleted'           => array('type' => 'datetime'),
             'DueDate'                 => array('type' => 'datetime'),
@@ -47,72 +44,6 @@ class Syncroton_Model_Task extends Syncroton_Model_AEntry
             'UtcStartDate'            => array('type' => 'datetime'),
         )
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            $nameSpace = 'uri:' . $nameSpace;
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                case 'Body':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    $value->appendXML($element);
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Categories':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $category) {
-                        $categoryElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Category');
-                        $categoryElement->appendChild($_domParrent->ownerDocument->createTextNode($category));
-                        
-                        $element->appendChild($categoryElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Recurrence':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    $value->appendXML($element);
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-                    
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
     
     protected function _parseTasksNamespace(SimpleXMLElement $properties)
     {

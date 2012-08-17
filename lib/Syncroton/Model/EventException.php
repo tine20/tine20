@@ -24,7 +24,8 @@ class Syncroton_Model_EventException extends Syncroton_Model_Event
 {    
     protected $_xmlBaseElement = 'Exception';
     
-    // @todo handle body
+    protected $_dateTimeFormat = "Ymd\THis\Z";
+    
     protected $_properties = array(
         'Calendar' => array(
             'AllDayEvent'             => array('type' => 'number'),
