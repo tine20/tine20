@@ -62,7 +62,7 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 #$value = $this->removeControlChars($value);
             }
             
-            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
             
             if (is_array($value)) {
                 foreach($value as $subValue) {

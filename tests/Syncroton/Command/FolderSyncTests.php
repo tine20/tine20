@@ -45,7 +45,7 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
         $folderSync->handle();
         
         $responseDoc = $folderSync->getResponse();
-        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
@@ -60,6 +60,11 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
 
         $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Add');
         $this->assertGreaterThanOrEqual(1, $nodes->length, $responseDoc->saveXML());
+        
+        $outputStream = fopen("php://temp", 'r+');
+        
+        $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
+        $encoder->encode($responseDoc);
     }
     
     /**

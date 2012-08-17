@@ -71,51 +71,5 @@ class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton
             'unapprovedInROMApplicationList'       => array('type' => 'container', 'childName' => 'ApplicationName')
         )
     );
-    
-    /**
-     * (non-PHPdoc)
-     * @see Syncroton_Model_IEntry::appendXML()
-     */
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-    
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-    
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-    
-            if ($nameSpace == 'Internal') {
-                continue;
-            }
-    
-            $nameSpace = 'uri:' . $nameSpace;
-    
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-    
-            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
-    
-            if (is_array($value)) {
-                foreach($value as $subValue) {
-                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementProperties['childName']));
-    
-                    $this->_appendXMLElement($subElement, array(), $subValue);
-    
-                    $element->appendChild($subElement);
-                }
-            } else {
-                $this->_appendXMLElement($element, $elementProperties, $value);
-            }
-    
-            $_domParrent->appendChild($element);
-        }
-    }
-    
 }
 
