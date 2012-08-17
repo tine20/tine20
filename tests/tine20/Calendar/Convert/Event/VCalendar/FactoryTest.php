@@ -115,6 +115,17 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
     }            
     
     /**
+     * test factory with useragent string from MacOS X Mountain Lion
+     */
+    public function testUserAgentMacOSXMountainLion()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('Mac OS X/10.8 (12A269) CalendarAgent/47');
+        
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
+        $this->assertEquals('47', $version);
+    }            
+    
+    /**
      * test factory with useragent string from thunderbird 
      */
     public function testUserAgentThunderbird()
