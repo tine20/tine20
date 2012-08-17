@@ -557,7 +557,6 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     /**
      * update message cache of given folder for given execution time and sets the client_access_time
      * 
-     * 
      * @param   {String} folderId
      * @param   {Number} executionTime (seconds)
      * @return  {Number} Ext.Ajax transaction id
@@ -580,7 +579,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
         
         // give 5 times more before timeout
         options.timeout = executionTime * 5000;
-                
+        
         return this.doXHTTPRequest(options);
     },
     

@@ -55,6 +55,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     movingOrDeleting: false,
     
+    manualRefresh: false,
+    
     /**
      * @private model cfg
      */
@@ -631,12 +633,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
         // refresh is explicit
         this.editBuffer = [];
-            
+        this.manualRefresh = true;
+        
         if (folder) {
             refresh.disable();
-            Tine.log.info('user forced mail check for folder "' + folder.get('localname') + '"');
+            Tine.log.info('User forced mail check for folder "' + folder.get('localname') + '"');
             this.app.checkMails(folder, function() {
                 refresh.enable();
+                this.manualRefresh = false;
             });
         } else {
             this.filterToolbar.onFilterChange();
@@ -651,7 +655,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var tree = this.app.getMainScreen().getTreePanel(),
             node = tree ? tree.getSelectionModel().getSelectedNode() : null,
             folder = node ? this.app.getFolderStore().getById(node.id) : null;
-            
+        
         return folder;
     },
     
