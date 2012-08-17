@@ -84,11 +84,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     protected $_modifications = array();
 
     /**
-     * total count of items in all collections
+     * the global WindowSize
      *
      * @var integer
      */
-    protected $_totalCount;
+    protected $_globalWindowSize;
     
     /**
      * there are more entries than WindowSize available
@@ -110,6 +110,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     {
         // input xml
         $xml = simplexml_import_dom($this->_requestBody);
+        
+        $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $collectionData = new Syncroton_Model_SyncCollection($xmlCollection);
@@ -356,18 +358,14 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     {
         $sync = $this->_outputDom->documentElement;
         
-        // provioning needed?
-        #if ($this->_statusProvisioning !== false) {
-        #    if ($this->_logger instanceof Zend_Log)
-        #        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisiong needed or remote wipe requested");
-        #    $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', $this->_statusProvisioning));
-        # 
-        #    return $this->_outputDom;
-        #}
-        
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
 
+        $totalChanges = 0;
+        
         foreach($this->_collections as $collectionData) {
+            $moreAvailable     = false;
+            $collectionChanges = 0;
+            
             // invalid collectionid provided
             if (! ($collectionData->folder instanceof Syncroton_Model_IFolder)) {
                 $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
@@ -407,8 +405,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     'changed' => array(),
                     'deleted' => array(),
                 );
-                
-                $moreAvailable = false;
                 
                 if($collectionData->getChanges === true) {
                     // continue sync session?
@@ -542,13 +538,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     $collection->appendChild($responses);
                 }
                 
-                if ((count($serverModifications['added']) + count($serverModifications['changed']) + count($serverModifications['deleted'])) > $collectionData->windowSize ) {
-                    $moreAvailable = true;
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
-                }
-                
                 $commands = $this->_outputDom->createElementNS('uri:AirSync', 'Commands');
-                
                 
                 /**
                  * process entries added on server side
@@ -556,7 +546,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $newContentStates = array();
                 
                 foreach($serverModifications['added'] as $id => $serverId) {
-                    if($this->_totalCount === $collectionData->windowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -592,7 +582,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         $commands->appendChild($add);
                         
-                        $this->_totalCount++;
+                        $collectionChanges++;
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
@@ -613,10 +603,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                  * process entries changed on server side
                  */
                 foreach($serverModifications['changed'] as $id => $serverId) {
-                    if($this->_totalCount === $collectionData->windowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
                         break;
                     }
-
+                    
                     try {
                         $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
                         $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
@@ -630,7 +620,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
 
                         $commands->appendChild($change);
                         
-                        $this->_totalCount++;
+                        $collectionChanges++;
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
@@ -645,10 +635,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $deletedContentStates = array();
                 
                 foreach($serverModifications['deleted'] as $id => $serverId) {
-                    if($this->_totalCount === $collectionData->windowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
                         break;
                     }
-                                                
+                    
                     try {
                         // check if we have sent this entry to the phone
                         $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData->folder, $serverId);
@@ -660,21 +650,30 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         $commands->appendChild($delete);
                         
-                        $this->_totalCount++;
+                        $collectionChanges++;
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                     }
                     
-                    unset($serverModifications['deleted'][$id]);    
+                    unset($serverModifications['deleted'][$id]);
                 }
                 
                 if ($commands->hasChildNodes() === true) {
+                    
+                    $countOfPendingChanges = (count($serverModifications['added']) + count($serverModifications['changed']) + count($serverModifications['deleted'])); 
+                    if ($countOfPendingChanges > 0) {
+                        $moreAvailable = true;
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
+                    }
+                
                     $collection->appendChild($commands);
                 }
                 
+                $totalChanges += $collectionChanges;
+                
                 if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData->syncState->counter);                
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData->syncState->counter);
             }
             
             if (isset($collectionData->syncState) && $collectionData->syncState instanceof Syncroton_Model_ISyncState && 
