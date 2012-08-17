@@ -37,8 +37,18 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Search xmlns="uri:Search"><Store><Name>14</Name></Store></Search>'
-        );
+            <Search xmlns="uri:Search">
+                <Store>
+                    <Name>GAL</Name>
+                    <Query>Lars</Query>
+                    <Options>
+                        <Range>0-1</Range>
+                        <RebuildResults/>
+                        <DeepTraversal/>
+                    </Options>
+                </Store>
+            </Search>
+        ');
         
         $search = new Syncroton_Command_Search($doc, $this->_device, null);
         

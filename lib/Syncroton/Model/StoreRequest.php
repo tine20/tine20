@@ -80,8 +80,7 @@ class Syncroton_Model_StoreRequest
             if (isset($xmlStore->Query)) {
                 $this->_store['query'] = (string) $xmlStore->Query;
             }
-        }
-        else if (isset($xmlStore->Query)) {
+        } elseif (isset($xmlStore->Query)) {
             if (isset($xmlStore->Query->And)) {
                 if (isset($xmlStore->Query->And->FreeText)) {
                     $this->_store['query']['and']['freetext'] = (string) $xmlStore->Query->And->FreeText;
@@ -115,8 +114,7 @@ class Syncroton_Model_StoreRequest
                 foreach ($airSync as $name => $value) {
                     if ($name == 'Class') {
                         $this->_store['query']['and']['classes'][] = (string) $value;
-                    }
-                    else if ($name == 'CollectionId') {
+                    } elseif ($name == 'CollectionId') {
                         $this->_store['query']['and']['collections'][] = (string) $value;
                     }
                 }
@@ -164,8 +162,7 @@ class Syncroton_Model_StoreRequest
 
             if (!empty($xmlStore->Options->Range)) {
                 $this->_store['options']['range'] = (string) $xmlStore->Options->Range;
-            }
-            else {
+            } else {
                 switch ($this->_store['name']) {
                 case 'DocumentLibrary':
                 case 'Document Library': //?

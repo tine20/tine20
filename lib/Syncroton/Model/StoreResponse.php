@@ -33,7 +33,7 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
     const STATUS_ACCESSBLOCKED    = 13;
     const STATUS_CREDENTIALSREQUIRED = 14;
 
-    protected $_xmlBaseElement = 'ApplicationData';
+    protected $_xmlBaseElement = 'Store';
 
     protected $_properties = array(
         'Search' => array(

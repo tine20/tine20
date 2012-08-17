@@ -64,12 +64,7 @@ class Syncroton_Data_Factory
         
         $class = new $className($_device, $_timeStamp);
         
-        if ($_classFactory == STORE_EMAIL || $_classFactory == STORE_GAL) {
-            if (! $class instanceof Syncroton_Data_IDataSearch) {
-                throw new RuntimeException('class must be instanceof Syncroton_Data_IDataSearch');
-            }
-        }
-        else if (! $class instanceof Syncroton_Data_IData) {
+        if (! $class instanceof Syncroton_Data_IData) {
             throw new RuntimeException('class must be instanceof Syncroton_Data_IData');
         }
                     

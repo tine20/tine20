@@ -16,7 +16,7 @@
  */
 class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AEntry
 {
-    protected $_xmlBaseElement = 'ApplicationData';
+    protected $_xmlBaseElement = 'Result';
 
     protected $_properties = array(
         'AirSync' => array(
@@ -28,33 +28,4 @@ class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AEntry
             'Properties' => array('type' => 'container'),
         )
     );
-
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-
-        foreach ($this->_elements as $elementName => $value) {
-            // skip empty values
-            if ($value === null || $value === '') {
-                continue;
-            }
-
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-
-            $nameSpace = 'uri:' . $nameSpace;
-
-            switch ($elementName) {
-                case 'Properties':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    $value->appendXML($element);
-                    $_domParrent->appendChild($element);
-                    break;
-
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    $_domParrent->appendChild($element);
-            }
-        }
-    }
 }

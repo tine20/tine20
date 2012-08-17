@@ -50,51 +50,52 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
      */
     public function getResponse()
     {
+        $dataController = Syncroton_Data_Factory::factory($this->_store->name, $this->_device, new DateTime());
+        
+        if (! $dataController instanceof Syncroton_Data_IDataSearch) {
+            throw new RuntimeException('class must be instanceof Syncroton_Data_IDataSearch');
+        }
+        
         $storeResponse = new Syncroton_Model_StoreResponse(array(
            'Status' => self::STATUS_SUCCESS,
         ));
+        
+        try {
+            $options = $this->_store->options;
+            
+            // Search
+            $results = $dataController->search($this->_store->query, $options);
 
-        if ($this->_store->name == Syncroton_Data_Factory::STORE_GAL || $this->_store->name == Syncroton_Data_Factory::STORE_EMAIL) {
-            $timestamp      = new DateTime();
-            $dataController = Syncroton_Data_Factory::factory($this->_store->name, $this->_device, $timestamp);
+            // Calculate requested range
+            $start = $options['range'][0];
+            $limit = $options['range'][1] + 1;
+            $total = count($results);
+            $storeResponse->Total = $total;
 
-            try {
-                $options = $this->_store->options;
-                // Search
-                $results = $dataController->search($this->_store->query, $options);
-
-                // Calculate requested range
-                $start = $options['range'][0];
-                $limit = $options['range'][1] + 1;
-                $total = count($results);
-                $storeResponse->Total = $total;
-
-                if ($total) {
-                    if ($start > $total) {
-                        $start = $total;
-                    }
-                    if ($limit > $total) {
-                        $limit = max($start+1, $total);
-                    }
-
-                    if ($start > 0 || $limit < $total) {
-                        $results = array_slice($results, $start, $limit-$start);
-                    }
-
-                    $storeResponse->Range = array($start, $start + count($results) - 1);
+            if ($total) {
+                if ($start > $total) {
+                    $start = $total;
+                }
+                if ($limit > $total) {
+                    $limit = max($start+1, $total);
                 }
 
-                foreach ($results as $result) {
-                    if (empty($result->Properties)) {
-                        $result->Properties = $dataController->getSearchEntry($result->LongId, $this->_store->options);
-                    }
-
-                    $storeResponse->Result[] = $result;
+                if ($start > 0 || $limit < $total) {
+                    $results = array_slice($results, $start, $limit-$start);
                 }
+
+                $storeResponse->Range = array($start, $start + count($results) - 1);
             }
-            catch (Exception $e) {
-                $storeResponse->Status = self::STATUS_SERVER_ERROR;
+
+            foreach ($results as $result) {
+                if (empty($result->Properties)) {
+                    $result->Properties = $dataController->getSearchEntry($result->LongId, $this->_store->options);
+                }
+
+                $storeResponse->Result[] = $result;
             }
+        } catch (Exception $e) {
+            $storeResponse->Status = self::STATUS_SERVER_ERROR;
         }
 
         $search = $this->_outputDom->documentElement;
