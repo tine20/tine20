@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -414,10 +414,17 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     onBackgroundRequestFail: function(exception) {
         var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
-        var accountId   = currentRequestFolder.get('account_id'),
-            account     = accountId ? this.getAccountStore().getById(accountId): null,
-            imapStatus  = account ? account.get('imap_status') : null;
-            
+        var accountId     = currentRequestFolder.get('account_id'),
+            account       = accountId ? this.getAccountStore().getById(accountId): null,
+            imapStatus    = account ? account.get('imap_status') : null,
+            grid          = this.getMainScreen().getCenterPanel(),
+            manualRefresh = grid && grid.manualRefresh;
+        
+        if (manualRefresh) {
+            grid.manualRefresh = false;
+            grid.pagingToolbar.refresh.enable();
+        }
+        
         if (exception.code == 913) {
             // folder not found -> remove folder from store and tree panel
             var treePanel = this.getMainScreen().getTreePanel(),
@@ -426,7 +433,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 node.remove();
             }
             this.getFolderStore().remove(currentRequestFolder);
-        } else if (account) {
+        } else if (account && (manualRefresh ||
+            //  do not show exclamation mark for timeouts and connection losses
+            (exception.code !== 520 && exception.code !== 510))
+        ) {
             account.setLastIMAPException(exception);
             
             this.getFolderStore().each(function(folder) {
@@ -441,7 +451,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
         }
         
-        Tine.log.info('Background update failed (' + exception.message + ') for folder ' + currentRequestFolder.get('globalname') 
+        Tine.log.info((manualRefresh ? 'Manual' : 'Background') + ' update failed (' + exception.message
+            + ') for folder ' + currentRequestFolder.get('globalname') 
             + ' -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
         Tine.log.debug(exception);
         this.checkMailsDelayedTask.delay(this.updateInterval);
