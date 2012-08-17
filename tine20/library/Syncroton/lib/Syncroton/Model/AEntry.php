@@ -24,12 +24,59 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     
     protected $_properties = array();
     
+    protected $_dateTimeFormat = "Y-m-d\TH:i:s.000\Z";
+    
     public function __construct($properties = null)
     {
         if ($properties instanceof SimpleXMLElement) {
             $this->setFromSimpleXMLElement($properties);
         } elseif (is_array($properties)) {
             $this->setFromArray($properties);
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::appendXML()
+     */
+    public function appendXML(DOMElement $_domParrent)
+    {
+        $this->_addXMLNamespaces($_domParrent);
+        
+        foreach($this->_elements as $elementName => $value) {
+            // skip empty values
+            if($value === null || $value === '' || (is_array($value) && empty($value))) {
+                continue;
+            }
+            
+            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
+            
+            if ($nameSpace == 'Internal') {
+                continue;
+            }
+            
+            $nameSpace = 'uri:' . $nameSpace;
+            
+            // strip off any non printable control characters
+            if (!ctype_print($value)) {
+                #$value = $this->removeControlChars($value);
+            }
+            
+            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+            
+            if (is_array($value)) {
+                foreach($value as $subValue) {
+                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementProperties['childName']);
+                    
+                    $this->_appendXMLElement($subElement, array(), $subValue);
+                    
+                    $element->appendChild($subElement);
+                }
+            } else {
+                $this->_appendXMLElement($element, $elementProperties, $value);
+            }
+            
+            $_domParrent->appendChild($element);
         }
     }
     
@@ -115,6 +162,27 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     {
         foreach($this->_properties as $namespace => $namespaceProperties) {
             $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
+        }
+    }
+    
+    protected function _appendXMLElement($element, $elementProperties, $value)
+    {
+        if ($value instanceof Syncroton_Model_IEntry) {
+            $value->appendXML($element);
+        } else {
+            if ($value instanceof DateTime) {
+                $value = $value->format($this->_dateTimeFormat);
+                
+            } elseif (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
+                if (is_resource($value)) {
+                    stream_filter_append($value, 'convert.base64-encode');
+                    $value = stream_get_contents($value);
+                } else {
+                    $value = base64_encode($value);
+                }
+            }
+            
+            $element->appendChild($element->ownerDocument->createTextNode($value));
         }
     }
     

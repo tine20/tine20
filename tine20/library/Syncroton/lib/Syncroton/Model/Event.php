@@ -29,9 +29,10 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
     const BUSY_STATUS_TENATTIVE = 1;
     const BUSY_STATUS_BUSY      = 2;
     
+    protected $_dateTimeFormat = "Ymd\THis\Z";
+    
     protected $_xmlBaseElement = 'ApplicationData';
     
-    // @todo handle body
     protected $_properties = array(
         'AirSyncBase' => array(
             'Body'                   => array('type' => 'container')
@@ -39,15 +40,15 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
         'Calendar' => array(
             'AllDayEvent'             => array('type' => 'number'),
             'AppointmentReplyTime'    => array('type' => 'datetime'),
-            'Attendees'               => array('type' => 'container'),
+            'Attendees'               => array('type' => 'container', 'childName' => 'Attendee'),
             //'Body'                    => 0x0b,
             //'BodyTruncated'           => 0x0c,
             'BusyStatus'              => array('type' => 'number'),
-            'Categories'              => array('type' => 'container'),
+            'Categories'              => array('type' => 'container', 'childName' => 'Category'),
             'DisallowNewTimeProposal' => array('type' => 'number'),
             'DtStamp'                 => array('type' => 'datetime'),
             'EndTime'                 => array('type' => 'datetime'),
-            'Exceptions'              => array('type' => 'container'),
+            'Exceptions'              => array('type' => 'container', 'childName' => 'Exception'),
             'Location'                => array('type' => 'string'),
             'MeetingStatus'           => array('type' => 'number'),
             'OnlineMeetingConfLink'   => array('type' => 'string'),
@@ -66,98 +67,6 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
             'UID'                     => array('type' => 'string'),
         )
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            $nameSpace = 'uri:' . $nameSpace;
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                case 'Attendees':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach ($value as $attendee) {
-                        $attendeeElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Attendee');
-                        $attendee->appendXML($attendeeElement);
-                        $element->appendChild($attendeeElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Body':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                
-                    $value->appendXML($element);
-                
-                    $_domParrent->appendChild($element);
-                
-                    break;
-                    
-                case 'Categories':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $category) {
-                        $categoryElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Category');
-                        $categoryElement->appendChild($_domParrent->ownerDocument->createTextNode($category));
-                        
-                        $element->appendChild($categoryElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Exceptions':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach ($value as $exception) {
-                        $exceptionElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Exception');
-                        $exception->appendXML($exceptionElement);
-                        $element->appendChild($exceptionElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                                        
-                    break;
-
-                case 'Recurrence':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    $value->appendXML($element);
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-                    
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Ymd\THis\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
     
     protected function _parseCalendarNamespace(SimpleXMLElement $properties)
     {

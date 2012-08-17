@@ -79,6 +79,7 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         Syncroton_Registry::setCalendarDataClass('Syncroton_Data_Calendar');
         Syncroton_Registry::setEmailDataClass('Syncroton_Data_Email');
         Syncroton_Registry::setTasksDataClass('Syncroton_Data_Tasks');
+        Syncroton_Registry::setGALDataClass('Syncroton_Data_Contacts');
     }
 
     /**

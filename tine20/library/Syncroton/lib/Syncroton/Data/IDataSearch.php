@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * Syncroton
+ *
+ * @package     Model
+ * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012 Kolab SYstems AG (http://www.kolabsys.com)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Aleksander Machniak <machniak@kolabsys.com>
+ */
+
+/**
+ * class to handle ActiveSync Search command
+ *
+ * @package     Model
+ */
+interface Syncroton_Data_IDataSearch
+{
+    /**
+     * Returns properties of search entry
+     *
+     * @param string $longId  Entry identifier
+     * @param array  $options Search options
+     *
+     * @return Syncroton_Model_IEntry
+     */
+    public function getSearchEntry($longId, $options);
+
+    /**
+     * Search command handler
+     *
+     * @param array $query   Search query parameters
+     * @param array $options Search options
+     *
+     * @return array List of Syncroton_Model_StoreResponseResult
+     */
+    public function search($query, $options);
+}

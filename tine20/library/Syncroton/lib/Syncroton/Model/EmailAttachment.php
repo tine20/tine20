@@ -19,12 +19,10 @@
  * @property    string  syncKey
  * @property    int     windowSize
  */
-
 class Syncroton_Model_EmailAttachment extends Syncroton_Model_AEntry
 {
     protected $_xmlBaseElement = 'Attachment';
     
-    // @todo handle body
     protected $_properties = array(
         'AirSyncBase' => array(
             'ContentId'               => array('type' => 'string'),
@@ -40,89 +38,6 @@ class Syncroton_Model_EmailAttachment extends Syncroton_Model_AEntry
             'UmAttOrder'            => array('type' => 'number'),
         ),
     );
-    
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase', 'uri:AirSyncBase');
-        $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email2', 'uri:Email2');
-        
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-            
-            $elementProperties = (isset($this->_properties['AirSyncBase'][$elementName])) ?
-            $this->_properties['AirSyncBase'][$elementName] :
-            $this->_properties['Email2'][$elementName];
-            
-            $nameSpace = isset($this->_properties['AirSyncBase'][$elementName]) ? 'uri:AirSyncBase' : 'uri:Email2';
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
-            switch($elementName) {
-                case 'Categories':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    foreach($value as $category) {
-                        $categoryElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Category');
-                        $categoryElement->appendChild($_domParrent->ownerDocument->createTextNode($category));
-                        
-                        $element->appendChild($categoryElement);
-                    }
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-
-                case 'Recurrence':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    $value->appendXML($element);
-                    
-                    $_domParrent->appendChild($element);
-                    
-                    break;
-                    
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-                    
-                    $_domParrent->appendChild($element);
-            }
-        }
-        
-    }
-    
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== $this->_xmlBaseElement) {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        foreach (array_keys($this->_properties) as $namespace) {
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
-        }
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
-    }
     
     protected function _parseAirSyncBaseNamespace(SimpleXMLElement $properties)
     {

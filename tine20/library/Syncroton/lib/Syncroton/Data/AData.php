@@ -161,14 +161,6 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         }
         
         return unserialize($entry);
-        
-        #if (!isset(Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId])) {
-        #    throw new OutOfBoundsException("entry $serverId not found in folder {$collection->collectionId}");
-        #}
-        
-        #return Syncroton_Data_AData::$entries[get_class($this)][$collection->collectionId][$serverId];
-
-        
     }
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)

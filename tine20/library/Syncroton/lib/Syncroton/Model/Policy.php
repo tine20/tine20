@@ -46,7 +46,7 @@ class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton
             'allowUnsignedInstallationPackages'    => array('type' => 'number'),
             'allowWifi'                            => array('type' => 'number'),
             'alphanumericDevicePasswordRequired'   => array('type' => 'number'),
-            'approvedApplicationList'              => array('type' => 'container'),
+            'approvedApplicationList'              => array('type' => 'container', 'childName' => 'Hash'),
             'attachmentsEnabled'                   => array('type' => 'number'),
             'devicePasswordEnabled'                => array('type' => 'number'),
             'devicePasswordExpiration'             => array('type' => 'number'),
@@ -68,14 +68,18 @@ class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton
             'requireSignedSMIMEAlgorithm'          => array('type' => 'number'),
             'requireSignedSMIMEMessages'           => array('type' => 'number'),
             'requireStorageCardEncryption'         => array('type' => 'number'),
-            'unapprovedInROMApplicationList'       => array('type' => 'container')
+            'unapprovedInROMApplicationList'       => array('type' => 'container', 'childName' => 'ApplicationName')
         )
     );
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::appendXML()
+     */
     public function appendXML(DOMElement $_domParrent)
     {
         $this->_addXMLNamespaces($_domParrent);
-        
+    
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
             if($value === null || $value === '' || (is_array($value) && empty($value))) {
@@ -83,7 +87,7 @@ class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton
             }
     
             list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
+    
             if ($nameSpace == 'Internal') {
                 continue;
             }
@@ -95,46 +99,23 @@ class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton
                 #$value = $this->removeControlChars($value);
             }
     
-            switch($elementName) {
-                case 'approvedApplicationList':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
+            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
     
-                    foreach($value as $hash) {
-                        $hashElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Hash');
-                        $hashElement->appendChild($_domParrent->ownerDocument->createTextNode($hash));
+            if (is_array($value)) {
+                foreach($value as $subValue) {
+                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementProperties['childName']));
     
-                        $element->appendChild($hashElement);
-                    }
+                    $this->_appendXMLElement($subElement, array(), $subValue);
     
-                    $_domParrent->appendChild($element);
-    
-                    break;
-    
-                case 'unapprovedInROMApplicationList':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
-    
-                    foreach($value as $applications) {
-                        $hashElement = $_domParrent->ownerDocument->createElementNS($nameSpace, 'ApplicationName');
-                        $hashElement->appendChild($_domParrent->ownerDocument->createTextNode($hash));
-    
-                        $element->appendChild($hashElement);
-                    }
-    
-                    $_domParrent->appendChild($element);
-    
-                    break;
-    
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
-    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-    
-                    $_domParrent->appendChild($element);
+                    $element->appendChild($subElement);
+                }
+            } else {
+                $this->_appendXMLElement($element, $elementProperties, $value);
             }
+    
+            $_domParrent->appendChild($element);
         }
     }
+    
 }
 

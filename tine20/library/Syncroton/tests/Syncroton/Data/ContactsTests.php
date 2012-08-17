@@ -117,13 +117,11 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
     
     /**
      * test add contact
+     * @return Syncroton_Model_Contact
      */
     public function testAddContact()
     {
-        $device = Syncroton_Registry::getDeviceBackend()->create(
-            Syncroton_Backend_DeviceTests::getTestDevice(Syncroton_Model_Device::TYPE_ANDROID)
-        );
-        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $device, new DateTime(null, new DateTimeZone('UTC')));
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
         $dataClass = 'Syncroton_Model_Contact';
         
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
@@ -139,6 +137,25 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         #$this->assertEquals($bday->toString(), $result->bday->toString());
         $this->assertEquals('Fritzchen', $entry->FirstName);
         $this->assertEquals('Meinen',    $entry->LastName);
+        
+        return $entry;
+    }
+    
+    /**
+     * test search contacts
+     */
+    public function testSearchContacts()
+    {
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
+        
+        $entry = $this->testAddContact();
+        
+        $searchResult = $dataController->search($entry->FirstName, array());
+        
+        #var_dump($searchResult);
+        
+        $this->assertEquals(1, count($searchResult));
+        $this->assertTrue($searchResult[0] instanceof Syncroton_Model_StoreResponseResult);
     }
     
     /**

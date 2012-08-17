@@ -37,8 +37,18 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Search xmlns="uri:Search"><Store><Name>14</Name></Store></Search>'
-        );
+            <Search xmlns="uri:Search">
+                <Store>
+                    <Name>GAL</Name>
+                    <Query>Lars</Query>
+                    <Options>
+                        <Range>0-1</Range>
+                        <RebuildResults/>
+                        <DeepTraversal/>
+                    </Options>
+                </Store>
+            </Search>
+        ');
         
         $search = new Syncroton_Command_Search($doc, $this->_device, null);
         
@@ -53,5 +63,13 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//Search:Search/Search:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(Syncroton_Command_Search::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Search:Search/Search:Response/Search:Store/Search:Total');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(5, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Search:Search/Search:Response/Search:Store/Search:Result');
+        $this->assertEquals(2, $nodes->length, $responseDoc->saveXML());
+        #$this->assertEquals(Syncroton_Command_Search::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }    
 }

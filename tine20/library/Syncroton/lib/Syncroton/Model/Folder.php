@@ -35,44 +35,6 @@ class Syncroton_Model_Folder extends Syncroton_Model_AEntry implements Syncroton
         ),
     );
     
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-    
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-    
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-            
-            if ($nameSpace == 'Internal') {
-                continue;
-            }
-            
-            $nameSpace = 'uri:' . $nameSpace;
-    
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-    
-            switch($elementName) {
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
-    
-                    if ($value instanceof DateTime) {
-                        $value = $value->format("Y-m-d\TH:i:s.000\Z");
-                    }
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-    
-                    $_domParrent->appendChild($element);
-            }
-        }
-    
-    }
-    
     protected function _parseFolderHierarchyNamespace(SimpleXMLElement $properties)
     {
         // fetch data from Contacts namespace
