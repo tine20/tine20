@@ -637,7 +637,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, TRUE));
         
-        $select = $this->_db->select();
+        $select = $this->getAdapter()->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
         
         if (!$_getDeleted && $this->_modlogActive) {
@@ -1199,9 +1199,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * get db adapter
      *
      * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_Backend_Database
      */
     public function getAdapter()
     {
+        if (! $this->_db instanceof Zend_Db_Adapter_Abstract) {
+            throw new Tinebase_Exception_Backend_Database('Could not fetch database adapter');
+        }
+        
         return $this->_db;
     }
 }
