@@ -124,6 +124,31 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($found);
     }
+
+    /**
+     * test import umlaut
+     * 
+     * @see 0006936: detect import file encoding
+     */
+    public function testImportUmlaut()
+    {
+        $myContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $myContact->org_name = 'Übel leckerer Äppler';
+        Addressbook_Controller_Contact::getInstance()->update($myContact);
+        
+        $result = $this->testImportDuplicates();
+        
+        $found = FALSE;
+        foreach ($result['exceptions'] as $exception) {
+            $record = $exception['exception']['clientRecord'];
+            if ($record['n_fn'] === Tinebase_Core::getUser()->accountFullName) {
+                $found = TRUE;
+                $this->assertEquals($myContact->org_name, $record['org_name']);
+            }
+        }
+        
+        $this->assertTrue($found);
+    }
     
     /**
      * import google contacts

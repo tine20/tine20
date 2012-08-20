@@ -423,6 +423,22 @@ Tine.Tinebase.common = {
             return user_id;
         }
     },
+
+    /**
+     * sorts records
+     * 
+     * @param {Object} record
+     * @return {String}
+     */
+    recordSortType: function(record) {
+        if (record && Ext.isFunction(record.getTitle)) {
+            return record.getTitle();
+        } else if (record && record.id) {
+            return record.id;
+        } else {
+            return record;
+        }
+    },
     
     /**
      * check whether given value can be interpreted as true

@@ -8,6 +8,7 @@
 nbproject
 tine20/config.inc.php
 tests/tine20/phpunitconfig.inc.php
+tests/setup/phpunitconfig.inc.php
 tine20/*/*/*FAT*
 tine20/*/js/*-lang-*
 tine20/Tinebase/js/Locale/build/*.js

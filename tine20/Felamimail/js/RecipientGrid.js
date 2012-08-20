@@ -320,13 +320,13 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },        
     
     /**
-     * start editing (check if message compose dlg is sending first)
+     * start editing (check if message compose dlg is saving/sending first)
      * 
      * @param {} row
      * @param {} col
      */
     startEditing: function(row, col) {
-        if (! this.composeDlg || ! this.composeDlg.sending) {
+        if (! this.composeDlg || ! this.composeDlg.saving) {
             Tine.Felamimail.RecipientGrid.superclass.startEditing.apply(this, arguments);
         }
     },

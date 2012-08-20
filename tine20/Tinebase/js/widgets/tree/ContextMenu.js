@@ -436,11 +436,10 @@ Tine.widgets.tree.ContextMenu = {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode,
                 grantsContainer;
-            if(node.attributes.container) {
-                grantsContainer = node.attributes.container;
-            }
-            else if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
+            if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
                 grantsContainer = node.attributes.nodeRecord.data.name;
+            } else if(node.attributes.container) {
+                grantsContainer = node.attributes.container;
             }
             
             var window = Tine.widgets.container.GrantsDialog.openWindow({
@@ -459,14 +458,12 @@ Tine.widgets.tree.ContextMenu = {
      */
     manageProperties: function() {
         if (this.scope.ctxNode) {
-            var node = this.scope.ctxNode;
-            
-            var grantsContainer;
-            if(node.attributes.container) {
-                grantsContainer = node.attributes.container;
-            }
-            else if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
+            var node = this.scope.ctxNode,
+                grantsContainer;
+            if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
                 grantsContainer = node.attributes.nodeRecord.data.name;
+            } else if(node.attributes.container) {
+                grantsContainer = node.attributes.container;
             }
             
             var window = Tine.widgets.container.PropertiesDialog.openWindow({

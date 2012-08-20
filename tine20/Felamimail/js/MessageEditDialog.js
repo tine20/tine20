@@ -87,12 +87,6 @@ Ext.namespace('Tine.Felamimail');
     to: null,
     
     /**
-     * if sending
-     * @type Boolean
-     */
-    sending: false,
-    
-    /**
      * validation error message
      * @type String
      */
@@ -115,13 +109,6 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateToolbars: Ext.emptyFn,
-    
-    //private
-    initComponent: function() {
-         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
-         
-         this.on('save', this.onSave, this);
-    },
     
     /**
      * init buttons
@@ -252,7 +239,7 @@ Ext.namespace('Tine.Felamimail');
             
             if (! this.msgBody) {
                 var message = this.getMessageFromConfig();
-                          
+                
                 if (message) {
                     if (! message.bodyIsFetched()) {
                         // self callback when body needs to be fetched
@@ -396,13 +383,6 @@ Ext.namespace('Tine.Felamimail');
                 this.subjectField.focus.defer(50, this.subjectField);
             }
         }, this);
-    },
-    
-    /**
-     * message is sending
-     */
-    onSave: function() {
-        this.sending = true;
     },
     
     /**
@@ -749,7 +729,7 @@ Ext.namespace('Tine.Felamimail');
             String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
                 + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
         );
-        this.sending = false;
+        this.saving = false;
         this.loadMask.hide();
     },
 

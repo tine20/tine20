@@ -1,0 +1,82 @@
+#!/bin/sh
+#
+# Copyright 2012-2012 by Metaways Infosystems GmbH
+#
+# http://www.metaways.de/
+#
+# All rights reserved.
+#
+# The source code of this program is made available
+# under the terms of the GNU Affero General Public License version 3
+# (GNU AGPL V3) as published by the Free Software Foundation.
+#
+# Binary versions of this program provided by Univention to you as
+# well as other copyrighted, protected or trademarked materials like
+# Logos, graphics, fonts, specific documentations and configurations,
+# cryptographic keys etc. are subject to a license agreement between
+# you and Univention and not subject to the GNU AGPL V3.
+#
+# In the case you use this program under the terms of the GNU AGPL V3,
+# the program is provided in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License with the Debian GNU/Linux or Univention distribution in file
+# /usr/share/common-licenses/AGPL-3; if not, see
+# <http://www.gnu.org/licenses/>.
+
+#DEBHELPER#
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+if [ "$1" = "configure" ]; then
+
+    # create database if needed
+    mysqlPasswordFile="/etc/tine20/mysql.secret"
+    
+    if [ ! -e "$mysqlPasswordFile" ]; then
+        touch      "$mysqlPasswordFile"
+        chmod 0600 "$mysqlPasswordFile"
+        chown 0:0  "$mysqlPasswordFile"
+        
+        password=$(makepasswd --minchars=15 --maxchars=20)
+        echo "$password" > "$mysqlPasswordFile"
+    
+        mysqlCmd="mysql --defaults-file=/etc/mysql/debian.cnf"
+        
+        echo "CREATE DATABASE IF NOT EXISTS tine20;" | $mysqlCmd
+        echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '$password';" | $mysqlCmd
+    fi
+    
+    # create config.inc.php if needed
+    tine20ConfigFile="/etc/tine20/config.inc.php"
+    
+    if [ ! -e "$tine20ConfigFile" ] ; then
+        cp /usr/share/doc/tine20-tinebase/examples/config.inc.php.dist "$tine20ConfigFile"
+        chmod 0640       "$tine20ConfigFile"
+        chown 0:www-data "$tine20ConfigFile"
+
+        db_get tine20/setupuser
+        setupuser="$RET"
+        db_reset tine20/setupuser || true
+        
+        db_get tine20/setuppasswd
+        setuppassword="$RET"
+        db_reset tine20/setuppasswd || true
+        
+        mysqlpassword=$(cat "$mysqlPasswordFile")
+
+        sed -i -e "s/_DBC_DBSERVER_/localhost/g"       "$tine20ConfigFile"
+        sed -i -e "s/_DBC_DBNAME_/tine20/g"            "$tine20ConfigFile"
+        sed -i -e "s/_DBC_DBUSER_/tine20/g"            "$tine20ConfigFile"
+        sed -i -e "s/_DBC_DBPASS_/$mysqlpassword/g"    "$tine20ConfigFile"
+        sed -i -e "s/_SETUPUSERNAME_/$setupuser/g"     "$tine20ConfigFile"
+        sed -i -e "s/_SETUPPASSWORD_/$setuppassword/g" "$tine20ConfigFile"
+    fi
+    
+fi
+
+exit 0

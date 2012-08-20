@@ -41,13 +41,13 @@ def handler(bc,changes):
     try:
         db_password = open(db_password_file,'r').readline().strip()
     except IOError, e:
-        db_password = none
+        db_password = None
     
     try:
         f = open('/etc/tine20/config.inc.php', 'r')
     except IOError, e:
         print e
-        sys.exit(1)
+        return
         
     newlines = []
     line = f.readline()
@@ -83,7 +83,7 @@ def handler(bc,changes):
         f = open('/etc/tine20/config.inc.php', 'w')
     except IOError, e:
         print e
-        sys.exit(1)
+        return
         
     f.truncate();
     f.writelines(newlines)

@@ -363,6 +363,19 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * create container with bad name
+     * 
+     * @see 0006524: Access Problems via Webdav
+     */
+    public function testCreateContainerNodeWithBadName()
+    {
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+    }
+
+    /**
      * create container in shared folder
      * 
      * @return array created node

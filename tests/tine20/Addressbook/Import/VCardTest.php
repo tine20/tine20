@@ -73,9 +73,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => TRUE));
         
         $result = $this->_instance->importFile($this->_filename);
-        //print_r($result['results']->getFirstRecord()->toArray());
         
-        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
+        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import all contacts.');
         $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
         $this->assertEquals('+49732121258035', $result['results']->getFirstRecord()->tel_home, 'n_fileas not found');
         $this->assertEquals('mitbewohner', $result['results']->getFirstRecord()->note, 'note not found');
@@ -99,5 +98,67 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $importedContact = $result['results']->getFirstRecord();
         $this->assertTrue($importedContact !== NULL);
         $this->assertEquals('Hans Müller', $importedContact->n_fn, print_r($importedContact, TRUE));
+    }
+
+    /**
+     * test import data #3
+     * 
+     * @see 0006852: always add iconv filter on import
+     */
+    public function testImportWithIconv()
+    {
+        $this->_filename = dirname(__FILE__) . '/files/HerrStephanLaunig.vcf';
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
+        
+        $result = $this->_instance->importFile($this->_filename);
+        
+        $importedContact = $result['results']->getFirstRecord();
+        $this->assertTrue($importedContact !== NULL);
+        $this->assertEquals('Stephan Läunig', $importedContact->n_fn, print_r($importedContact, TRUE));
+    }
+
+    /**
+     * test import data #4
+     * 
+     * @see 0006852: always add iconv filter on import
+     */
+    public function testImportWithIconv2()
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $definition->plugin_options = preg_replace('/<\/urlIsHome>/',
+            "</urlIsHome>\n<encoding>iso-8859-1</encoding>", $definition->plugin_options);
+        $this->_importFalk($definition);
+    }
+    
+    /**
+     * import helper for HerrFalkMünchen.vcf
+     * 
+     * @param Tinebase_Model_ImportExportDefinition $definition
+     */
+    protected function _importFalk(Tinebase_Model_ImportExportDefinition $definition)
+    {
+        // file is iso-8859-1 encoded
+        $this->_filename = dirname(__FILE__) . '/files/HerrFalkMünchen.vcf';
+        $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
+        
+        $result = $this->_instance->importFile($this->_filename);
+        
+        $importedContact = $result['results']->getFirstRecord();
+        
+        $this->assertTrue($importedContact !== NULL);
+        $this->assertEquals('Falk München', $importedContact->n_fn, print_r($importedContact->toArray(), TRUE));
+        $this->assertEquals('Düsseldorf', $importedContact->adr_one_locality, print_r($importedContact->toArray(), TRUE));
+    }
+
+    /**
+     * test import data #5
+     * 
+     * @see 0006936: detect import file encoding
+     */
+    public function testImportDetectEncoding()
+    {
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_importFalk($definition);
     }
 }

@@ -83,7 +83,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'streamwrapperpath' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'user'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'user'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'parentrecord'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
@@ -182,8 +182,12 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * 
      * @param string $_path
      */
-    protected function _parsePath($_path)
+    protected function _parsePath($_path = NULL)
     {
+        if ($_path === NULL) {
+            $_path = $this->flatpath;
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Parsing path: ' . $_path);
         
@@ -206,10 +210,13 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getPathParts($_path)
+    protected function _getPathParts($_path = NULL)
     {
+        if ($_path === NULL) {
+            $_path = $this->flatpath;
+        }
         if (! is_string($_path)) {
-            throw new Tinebase_Exception_InvalidArgument('Path needs to be an array!');
+            throw new Tinebase_Exception_InvalidArgument('Path needs to be a string!');
         }
         $pathParts = explode('/', trim($_path, '/'));
         if (count($pathParts) < 1) {
@@ -324,8 +331,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         }
         
         return $result;
-    }    
-        
+    }
+    
     /**
      * do path replacements (container name => container id, account name => account id)
      * 
@@ -436,5 +443,27 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         $this->statpath             = $this->_getStatPath();
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
+    }
+
+    /**
+     * validate node/container existance
+     * 
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function validateExistance()
+    {
+        if (! $this->containerType || ! $this->statpath) {
+            $this->_parsePath();
+        }
+        
+        $pathParts = $this->_getPathParts();
+        if (! $this->container) {
+            $containerPart = ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL) ? 5 : 4;
+            if (count($pathParts) >= $containerPart) {
+                throw new Tinebase_Exception_NotFound('Container not found');
+            }
+        } else if (! Tinebase_FileSystem::getInstance()->fileExists($this->statpath)) {
+             throw new Tinebase_Exception_NotFound('Node not found');
+        }
     }
 }

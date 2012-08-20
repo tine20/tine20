@@ -85,8 +85,11 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      */
     public function inspectStatus($_status, array &$_ldapData)
     {
-        $acctFlags = '[U          ]';
-        $acctFlags[2] = $_status == 'disabled' ? 'D' : ' ';
+        $acctFlags = (isset($_ldapData['sambaacctflags']) && !empty($_ldapData['sambaacctflags'])) ? $_ldapData['sambaacctflags'] : '[U          ]';
+        $acctFlags[2] = ($_status === 'disabled') ? 'D' : ' ';
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Setting samba account flags to ' . $acctFlags);
         
         $_ldapData['sambaacctflags'] = $acctFlags;
     }
@@ -245,11 +248,11 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
             $_ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $uidNumer + 1000);
         }
         
-        $_ldapData['sambaacctflags']    = !empty($_ldapEntry['sambaacctflags']) ? $_ldapEntry['sambaacctflags'][0] : '[U          ]';
+        $_ldapData['sambaacctflags'] = (isset($_ldapEntry['sambaacctflags']) && !empty($_ldapEntry['sambaacctflags'])) ? $_ldapEntry['sambaacctflags'][0] : NULL;
+        $this->inspectStatus($_user->accountStatus, $_ldapData);
         if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
             $_ldapData['sambaacctflags'][1] = !empty($_user->sambaSAM->acctFlags) ? $_user->sambaSAM->acctFlags[1] : 'U';
         }
-        $_ldapData['sambaacctflags'][2] = ($_user->accountStatus != 'enabled') ? 'D' : ' ';
         
         try {
             $_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);

@@ -77,6 +77,9 @@ class TestServer
         iconv_set_encoding("internal_encoding", "UTF-8");
         
         Zend_Registry::set('locale', new Zend_Locale($config->locale));
+        
+        // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
+        Zend_Session::$_unitTestEnabled = TRUE;
     }
     
     /**

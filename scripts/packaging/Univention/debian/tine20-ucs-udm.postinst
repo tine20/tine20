@@ -31,10 +31,24 @@
 
 . /usr/share/univention-lib/all.sh
 
+# set ucr default values
+ucr set \
+    tine20/cfg/server/mysql_host?'localhost' \
+    tine20/cfg/server/mysql_port?'3306' \
+    tine20/cfg/server/mysql_user?'tine20' \
+    tine20/cfg/server/mysql_password?'@&@/etc/tine20/mysql.secret@&@' \
+    tine20/cfg/server/mysql_database?'tine20' \
+    tine20/cfg/directory/cache?"/var/lib/tine20/cache" \
+    tine20/cfg/directory/files?"/var/lib/tine20/files" \
+    tine20/cfg/directory/sessions?"/var/lib/tine20/sessions" \
+    tine20/cfg/directory/tmp?"/var/lib/tine20/tmp"
+
 # excecute join script
-call_joinscript 70tine204ucs.inst
+call_joinscript 70tine20-ucs-udm.inst
 
 # restart listener
-#/etc/init.d/univention-directory-listener crestart
+if [ -x /etc/init.d/univention-directory-listener ]; then
+    /etc/init.d/univention-directory-listener crestart
+fi
 
 exit 0

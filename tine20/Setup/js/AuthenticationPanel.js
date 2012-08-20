@@ -451,13 +451,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             name: 'accounts_Sql_defaultAdminGroupName',
                             fieldLabel: this.app.i18n._('Default admin group name')
                             //allowEmpty: false
-                        }, 
-                        Ext.applyIf({
-                            name: 'accounts_Sql_changepw',
-                            fieldLabel: this.app.i18n._('User can change password'),
-                            store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],                            
-                            value: '0'
-                        }, commonComboConfig)]
+                        }]
                     }, {
                         id: this.accountsStorageIdPrefix + 'Ldap',
                         layout: 'form',
@@ -546,13 +540,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         }, {
                             name: 'accounts_Ldap_defaultAdminGroupName',
                             fieldLabel: this.app.i18n._('Default admin group name')
-                        }, 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_changepw',
-                            fieldLabel: this.app.i18n._('Allow user to change her password?'),
-                            store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
-                            value: '0'
-                        }, commonComboConfig),
+                        },
                         Ext.applyIf({
                             name: 'accounts_Ldap_readonly',
                             fieldLabel: this.app.i18n._('Readonly access'),
@@ -562,6 +550,57 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     }]
             } ]
           }, {
+            xtype: 'fieldset',
+            collapsible: false,
+            autoHeight: true,
+            title: this.app.i18n._('Password Settings'),
+            defaults: {
+                width: 300,
+                xtype: 'uxspinner',
+                tabIndex: this.getTabIndex,
+                strategy: {
+                    xtype: 'number',
+                    minValue: 0,
+                    maxValue: 64
+                },
+                value: 0
+            },
+            items: [
+            Ext.applyIf({
+                name: 'password_changepw',
+                fieldLabel: this.app.i18n._('User can change password'),
+                store: [[1, this.app.i18n._('Yes')], [0, this.app.i18n._('No')]],
+                value: 1
+            }, commonComboConfig),
+            Ext.applyIf({
+                name: 'password_pwPolicyActive',
+                fieldLabel: this.app.i18n._('Enable password policy'),
+                store: [[1, this.app.i18n._('Yes')], [0, this.app.i18n._('No')]],
+                value: 0
+            }, commonComboConfig),
+            Ext.applyIf({
+                name: 'password_pwPolicyOnlyASCII',
+                fieldLabel: this.app.i18n._('Only ASCII'),
+                store: [[1, this.app.i18n._('Yes')], [0, this.app.i18n._('No')]],
+                value: 0
+            }, commonComboConfig), {
+                name: 'password_pwPolicyMinLength',
+                fieldLabel: this.app.i18n._('Minimum length')
+            }, {
+                name: 'password_pwPolicyMinWordChars',
+                fieldLabel: this.app.i18n._('Minimum word chars')
+            }, {
+                name: 'password_pwPolicyMinUppercaseChars',
+                fieldLabel: this.app.i18n._('Minimum uppercase chars')
+            }, {
+                name: 'password_pwPolicyMinSpecialChars',
+                fieldLabel: this.app.i18n._('Minimum special chars')
+            }, {
+                name: 'password_pwPolicyMinNumbers',
+                fieldLabel: this.app.i18n._('Minimum numbers')
+            }
+            ]
+        }, {
             xtype: 'fieldset',
             collapsible: false,
             autoHeight: true,

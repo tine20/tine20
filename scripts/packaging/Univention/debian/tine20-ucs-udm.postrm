@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# Tine 2.0 for UCS
-#
 # Copyright 2012-2012 by Metaways Infosystems GmbH
 #
 # http://www.metaways.de/
@@ -29,19 +27,34 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-VERSION=1
+#DEBHELPER#
 
-. /usr/share/univention-join/joinscripthelper.lib
 . /usr/share/univention-lib/all.sh
 
-joinscript_init
+if [ "$1" = "purge" ]; then
 
-eval "$(univention-config-registry shell)"
+    eval "$(ucr --shell dump)"
+    
+    # unset Tine 2.0 ucr values
+    ucr unset \
+        tine20/cfg/server/mysql_host \
+        tine20/cfg/server/mysql_port \
+        tine20/cfg/server/mysql_user \
+        tine20/cfg/server/mysql_password \
+        tine20/cfg/server/mysql_database \
+        tine20/cfg/directory/cache \
+        tine20/cfg/directory/files \
+        tine20/cfg/directory/sessions \
+        tine20/cfg/directory/tmp
+    
+    # remove LDAP objects
+    udm users/user remove --dn="uid=tine20,cn=tine20,$ldap_base"; \
+    udm container/cn remove --dn="cn=tine20,$ldap_base"; \
+    
+    # remove Tine 2.0's join status
+    sed -i '/tine20-ucs-udm/ d' /var/univention-join/status || true
+fi
 
-# call server password change script
-/usr/lib/univention-server/server_password_change.d/50univention-mail-server prechange
-/usr/lib/univention-server/server_password_change.d/50univention-mail-server postchange
-
-joinscript_save_current_version
+#DEBHELPER#
 
 exit 0

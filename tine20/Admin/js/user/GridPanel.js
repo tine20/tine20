@@ -237,7 +237,8 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * reset password
      * 
-     * @todo add checkbox for must change pw
+     * TODO add checkbox for must change pw
+     * TODO add pw repeat (see user edit dialog)
      */
     resetPasswordHandler: function(_button, _event) {
         Ext.MessageBox.prompt(this.app.i18n._('Set new password'), this.app.i18n._('Please enter the new password:'), function(_button, _text) {
@@ -258,6 +259,8 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             if(result.success === true) {
                                 this.grid.getStore().reload();
                             }
+                        } else {
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(_response);
                         }
                     }
                 });
