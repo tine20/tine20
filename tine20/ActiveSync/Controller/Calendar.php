@@ -928,14 +928,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $filter = parent::_getContentFilter($_filterType);
         
         // no persistent filter set -> add default filter
-        // @todo what is this good for? I think should be handled in _addContainerFilter. LK
-        #if ($filter->isEmpty()) {
-        #    $defaultFilter = $filter->createFilter('container_id', 'equals', array(
-        #        'path' => '/personal/' . Tinebase_Core::getUser()->getId()
-        #    ));
-        #    
-        #    $filter->addFilter($defaultFilter);
-        #}
+        // NOTE: we use attender+status as devices always show declined events
+        if ($filter->isEmpty()) {
+            $attendeeFilter = $filter->createFilter('attender', 'equals', array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => Tinebase_Core::getUser()->contact_id,
+            ));
+            $statusFilter = $filter->createFilter('attender_status', 'notin', array(
+                Calendar_Model_Attender::STATUS_DECLINED
+            ));
+            $filter->addFilter($attendeeFilter);
+            $filter->addFilter($statusFilter);
+        }
         
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
