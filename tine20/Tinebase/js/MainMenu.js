@@ -155,7 +155,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_edit',
             disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
             handler: function() {
-                window.webkitNotifications.requestPermission();
+                window.webkitNotifications.requestPermission(Ext.emptyFn);
             },
             scope: this
         });
