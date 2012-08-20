@@ -45,7 +45,7 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
         $folderSync->handle();
         
         $responseDoc = $folderSync->getResponse();
-        $responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
