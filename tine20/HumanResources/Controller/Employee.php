@@ -171,9 +171,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         }
     }
 
-    
     /**
-     * transfers usre accounts to employee records
+     * transfers user accounts to employee records
+     * 
      * @param boolean $_deletePrivateInfo should private information be removed from contacts
      */
     public function transferUserAccounts($_deletePrivateInfo = FALSE, $_feastCalendarId = NULL, $_workingTimeModelId = NULL, $_vacationDays = NULL, $cliCall = FALSE)
@@ -231,7 +231,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         $countCreated = 0;
         
-        foreach($accounts as $account) {
+        foreach ($accounts as $account) {
             $filter = new HumanResources_Model_EmployeeFilter(array(array(
                 'field' => 'account_id', 'operator' => 'equals', 'value' => $account->account_id
             )), 'AND');
@@ -286,6 +286,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 $account->email_home = NULL;
                 $account->tel_home = NULL;
                 $account->tel_cell_private = NULL;
+                // do not remove contact image
+                $account->jpegphoto = NULL;
+                
                 if($cliCall) {
                     echo 'Removing private information of employee "'. $account->n_fn .'"' . chr(10);
                 }
