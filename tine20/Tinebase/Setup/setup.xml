@@ -3045,6 +3045,8 @@
                 <field>
                     <name>islink</name>
                     <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
                 </field>
                 <index>
                     <name>id</name>

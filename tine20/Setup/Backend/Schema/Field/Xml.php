@@ -84,6 +84,14 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
             $this->default = NULL;
         } else {
             switch ($this->type) {
+                case 'boolean':
+                    if ($_declaration->default != 'true') {
+                        $this->default = 0;
+                    } else {
+                        $this->default = 1;
+                    }
+                    break;
+                
                 case 'integer':
                     $this->default = (int) $_declaration->default;
                     break;
@@ -111,14 +119,9 @@ class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
         //special type handling
         switch ($this->type) {
             case 'boolean':
-                //boolean always gets a default value, even if no default value is specified in schema
-                if (!isset($_declaration->default) || $_declaration->default != 'true') {
-                    $this->default = 0;
-                } else {
-                    $this->default = 1;
-                }
                 $this->unsigned = true;
                 break;
+                
             case 'integer':
                 if ($_declaration->autoincrement) {
                     $this->notnull = true;
