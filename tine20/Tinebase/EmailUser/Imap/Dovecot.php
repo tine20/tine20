@@ -258,6 +258,50 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
     }
     
     /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param  array|string|Zend_Db_Expr  $_cols        columns to get, * per default
+     * @param  boolean                    $_getDeleted  get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     * SELECT dovecot_users.*, dovecot_quotas.mail_quota, dovecot_quotas.mail_size, dovecot_quotas.sieve_quota, dovecot_quotas.sieve_size
+     * FROM dovecot_users 
+     * LEFT JOIN dovecot_quotas
+     * ON (dovecot_users.username=dovecot_quotas.username)
+     * WHERE dovecot_users.userid = $_userId
+     * LIMIT 1
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = $this->_db->select()
+        
+            ->from(array($this->_userTable))
+
+            // Left Join Quotas Table
+            ->joinLeft(
+                array($this->_quotasTable), // table
+                '(' . $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .  ' = ' . // ON (left)
+                    $this->_db->quoteIdentifier($this->_quotasTable . '.' . $this->_propertyMapping['emailUsername']) . ')', // ON (right)
+                array( // Select
+                    $this->_propertyMapping['emailMailSize']  => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailSize'], // emailMailSize
+                    $this->_propertyMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveSize'] // emailSieveSize
+                ) 
+            )
+            
+            // Only want 1 user (shouldn't be more than 1 anyway)
+            ->limit(1);
+        
+        // append domain if set or domain IS NULL
+        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+        } else {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
+        }
+        
+        return $select;
+    }
+    
+    /**
      * converts raw data from adapter into a single record / do mapping
      *
      * @param  array                    $_data
