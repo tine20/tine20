@@ -92,8 +92,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * the constructor
      */
-    public function __construct(array $_options = array()) {
-        if(array_key_exists('plugins', $_options)) {
+    public function __construct(array $_options = array())
+    {
+        if (array_key_exists('plugins', $_options)) {
             foreach ($_options['plugins'] as $plugin) {
                 $this->registerPlugin($plugin);
             }
@@ -385,7 +386,11 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
     {
-        $this->_plugins[get_class($_plugin)] = $_plugin;
+        $className = get_class($_plugin);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . $className . ' plugin.');
+        
+        $this->_plugins[$className] = $_plugin;
     }
     
     /**

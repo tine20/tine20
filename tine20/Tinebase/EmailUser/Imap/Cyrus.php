@@ -138,8 +138,9 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      * 
      * @param  string  $_userId
      * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
      */
-    public function inspectSetPassword($_userId, $_password)
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
         // nothing to be done for cyrus imap server
     }
