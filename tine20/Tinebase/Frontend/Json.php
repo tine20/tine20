@@ -578,10 +578,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 try {
                     $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
                 } catch (Addressbook_Exception_NotFound $aenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' User not found in Addressbook: ' . $user->accountDisplayName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
                 }
             }
 
+            try {
+                $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " Failed to fetch persistent filters. Exception: \n". $tenf);
+                $persistentFilters = array();
+            }
+            
             $registryData += array(
                 'currentAccount'    => $user->toArray(),
                 'userContact'       => $userContactArray,
@@ -594,7 +603,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'mustchangepw'      => $user->mustChangePassword(),
                 'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-                'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters(),
+                'persistentFilters' => $persistentFilters,
             );
         }
 

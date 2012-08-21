@@ -94,18 +94,22 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                 $masterFiles[] = $dirname . str_replace('_', '/', $class) . '.php';
             }
         
-            $cache = new Zend_Cache_Frontend_File(array(
-                    'master_files'              => $masterFiles,
-                    'lifetime'                  => null,
-                    'automatic_serialization'   => true, // turn that off for more speed
-                    'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
-                    'write_control'             => false, // don't read cache entry after it got written
-                    'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                    'logger'                    => Tinebase_Core::getLogger(),
-            ));
-            $cache->setBackend(Tinebase_Core::getCache()->getBackend());
-        
-            $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes));
+            try {
+                $cache = new Zend_Cache_Frontend_File(array(
+                        'master_files'              => $masterFiles,
+                        'lifetime'                  => null,
+                        'automatic_serialization'   => true, // turn that off for more speed
+                        'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
+                        'write_control'             => false, // don't read cache entry after it got written
+                        'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                        'logger'                    => Tinebase_Core::getLogger(),
+                ));
+                $cache->setBackend(Tinebase_Core::getCache()->getBackend());
+                $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes));
+            } catch (Zend_Cache_Exception $zce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " Failed to create cache. Exception: \n". $zce);
+            }
         }
         
         if (isset($cache) && $cache->test($cacheId)) {
