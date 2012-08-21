@@ -43,6 +43,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync
     const CODEPAGE_COMPOSEEMAIL      = 21;
     const CODEPAGE_EMAIL2            = 22;
     const CODEPAGE_NOTES             = 23;
+    const CODEPAGE_RIGHTSMANAGEMENT  = 24;
     
     /**
      * variable to hold currently active codepage

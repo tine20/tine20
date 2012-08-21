@@ -188,7 +188,7 @@ class Syncroton_Model_SyncCollection
             'collectionId'     => (string)$xmlCollection->CollectionId,
             'deletesAsMoves'   => isset($xmlCollection->DeletesAsMoves)   && (string)$xmlCollection->DeletesAsMoves   === '0' ? false : true,
             'conversationMode' => isset($xmlCollection->ConversationMode) && (string)$xmlCollection->ConversationMode === '0' ? false : true,
-            'getChanges'       => isset($xmlCollection->GetChanges) ? true : false,
+            'getChanges'       => isset($xmlCollection->GetChanges) && (string) $xmlCollection->GetChanges === '0' ? false : true,
             'windowSize'       => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
             'class'            => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
             'options'          => array(
