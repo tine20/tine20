@@ -14,6 +14,7 @@
  * @package     Model
  * @property    array    Attachments
  * @property    string   ContentType
+ * @property    Syncroton_Model_EmailFlag  Flag
  * @property    Syncroton_Model_EmailBody  Body
  * @property    array    Cc
  * @property    array    To
@@ -45,7 +46,6 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
             'DTStamp'                 => array('type' => 'datetime'),
             'EndTime'                 => array('type' => 'datetime'),
             'Flag'                    => array('type' => 'container'),
-            'FlagType'                => array('type' => 'string'),
             'From'                    => array('type' => 'string'),
             'GlobalObjId'             => array('type' => 'string'),
             'Importance'              => array('type' => 'number'),
@@ -140,7 +140,11 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
                     $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
     
                     break;
-    
+
+                case 'Flag':
+                    $this->$elementName = new Syncroton_Model_EmailFlag($xmlElement);
+                    break;
+
                 default:
                     list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
     

@@ -18,7 +18,7 @@
 class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
 {
     protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-        <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email">
+        <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email" xmlns:Tasks="uri:Tasks">
             <Collections>
                 <Collection>
                     <SyncKey>17</SyncKey>
@@ -32,6 +32,15 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
                             <ServerId>193556ef7ce9ad9a6c3997b51b1c9e646c6cf373</ServerId>
                             <ApplicationData>
                                 <Read xmlns="uri:Email">1</Read>
+                                <Flag xmlns="uri:Email">
+                                    <Status xmlns="uri:Email">2</Status>
+                                    <FlagType xmlns="uri:Email">for Follow Up</FlagType>
+                                    <StartDate xmlns="uri:Tasks">2009-02-24T08:00:00.000Z</StartDate>
+                                    <UtcStartDate xmlns="uri:Tasks">2009-02-24T08:00:00.000Z</UtcStartDate>
+                                    <DueDate xmlns="uri:Tasks">2009-02-25T12:00:00.000Z</DueDate>
+                                    <UtcDueDate xmlns="uri:Tasks">2009-02-25T12:00:00.000Z</UtcDueDate>
+                                    <ReminderSet xmlns="uri:Tasks">0</ReminderSet>
+                                </Flag>
                             </ApplicationData>
                         </Change>
                     </Commands>
@@ -61,8 +70,16 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
     
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);}
     
-        $this->assertEquals(1, count($email));
+        $this->assertEquals(2, count($email));
         $this->assertEquals(1, $email->Read);
+        $this->assertTrue($email->Flag instanceof Syncroton_Model_EmailFlag);
+        
+        // validate flags        
+        $this->assertEquals('0', $email->Flag->ReminderSet);
+        $this->assertEquals('20090224T080000Z', $email->Flag->StartDate->format("Ymd\THis\Z"), 'StartDate');
+        $this->assertEquals('20090224T080000Z', $email->Flag->UtcStartDate->format("Ymd\THis\Z"), 'UtcStartDate');
+        $this->assertEquals('20090225T120000Z', $email->Flag->DueDate->format("Ymd\THis\Z"), 'DueDate');
+        $this->assertEquals('20090225T120000Z', $email->Flag->UtcDueDate->format("Ymd\THis\Z"), 'UtcDueDate');
     }
     
     /**
@@ -92,6 +109,10 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
             'Categories'   => array('123', '456'),
             'Cc'           => 'l.kneschke@metaways.de',
             'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+            'Flag'         => new Syncroton_Model_EmailFlag(array(
+                'Status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
+                'ReminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
+            )),
             'From'         => 'k.kneschke@metaways.de',
             'Subject'      => 'Test Subject',
             'To'           => 'j.kneschke@metaways.de',
@@ -113,6 +134,7 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $xpath->registerNamespace('AirSyncBase', 'uri:AirSyncBase');
         $xpath->registerNamespace('Email', 'uri:Email');
         $xpath->registerNamespace('Email2', 'uri:Email2');
+        $xpath->registerNamespace('Tasks', 'uri:Tasks');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:AccountId');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
@@ -133,6 +155,10 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body/AirSyncBase:Type');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals(Syncroton_Model_EmailBody::TYPE_HTML, $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('2012-04-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
