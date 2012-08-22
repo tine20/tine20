@@ -927,6 +927,13 @@ abstract class Tinebase_Controller_Record_Abstract
         if (count((array)$ids) != count($records)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
+        
+        if (empty($records)) {
+            return $records;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Deleting ' . count($records) . ' records ...');
 
         try {
             $db = $this->_backend->getAdapter();
@@ -945,7 +952,6 @@ abstract class Tinebase_Controller_Record_Abstract
                     $this->doSendNotifications($record, Tinebase_Core::getUser(), 'deleted');
                 }
             }
-
 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -971,14 +977,12 @@ abstract class Tinebase_Controller_Record_Abstract
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
 
         $ids = $this->search($_filter, NULL, FALSE, TRUE);
-
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
-
+        $deletedRecords = $this->delete($ids);
+        
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
 
-        return $this->delete($ids);
+        return $deletedRecords;
     }
 
     /**
