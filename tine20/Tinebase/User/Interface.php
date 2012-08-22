@@ -45,11 +45,11 @@ interface Tinebase_User_Interface
      * get user by property
      *
      * @param   string  $_property
-     * @param   string  $_accountId
+     * @param   string  $_value
      * @param   string  $_accountClass  type of model to return
      * @return  Tinebase_Model_User user
      */
-    public function getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User');
+    public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User');
     
     /**
      * register plugins
