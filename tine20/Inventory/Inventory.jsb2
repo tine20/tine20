@@ -12,18 +12,6 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Model.js",
-          "path": "js/"
-        },
-        {
-          "text": "Inventory.js",
-          "path": "js/"
-        },
-        {
-          "text": "InventoryItemGridPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "InventoryItemEditDialog.js",
           "path": "js/"
         }

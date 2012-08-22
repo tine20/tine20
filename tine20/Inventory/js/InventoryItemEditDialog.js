@@ -29,21 +29,18 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     windowNamePrefix: 'InventoryItemEditWindow_',
+    
     appName: 'Inventory',
-    recordClass: Tine.Inventory.Model.InventoryItem,
-    recordProxy: Tine.Inventory.recordBackend,
+    modelName: 'InventoryItem',
+    
+    windowHeight: 470,
+    windowWidth: 800,
+
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
     showContainerSelector: true,
     
-    /**
-     * overwrite update toolbars function (we don t have record grants yet)
-     * @private
-     */
-    updateToolbars: function() {
-
-    },
     
     /**
      * executed after record got updated from proxy
@@ -52,7 +49,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onRecordLoad: function() {
     // you can do something here
-
         Tine.Inventory.InventoryItemEditDialog.superclass.onRecordLoad.call(this);
     },
     

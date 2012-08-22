@@ -26,6 +26,12 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
     
     /**
+     * the models handled by this frontend
+     * @var array
+     */
+    protected $_models = array('InventoryItem');
+    
+    /**
      * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
      *
      * @var array

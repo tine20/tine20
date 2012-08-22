@@ -81,7 +81,8 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_accountId,
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId() 
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
+            'model'             => static::$_defaultModel
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);

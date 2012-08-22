@@ -40,43 +40,111 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    // @todo add more fields
-        'inventory_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'location'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'add_time'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'total_number'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'active_number'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    protected static $_meta = array(
+        'id'                    => 'id',
+        'name'                  => 'name',
+        'type'                  => 'type',
+        'container_id'          => 'container_id',
+
+        'recordName'            => 'inventory record', // _('inventory record')
+        'recordsName'           => 'inventory records', // _('inventory records')
+        'containerProperty'     => 'container_id',
+        'containerName'         => 'inventory record list', // _('inventory record list')
+        'containersName'        => 'inventory record lists', // _('inventory record lists')
+
     // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'created_by'            => 'created_by',
+        'creation_time'         => 'creation_time',
+        'last_modified_by'      => 'last_modified_by',
+        'last_modified_time'    => 'last_modified_time',
+        'is_deleted'            => 'is_deleted',
+        'deleted_time'          => 'deleted_time',
+        'deleted_by'            => 'deleted_by',
     // relations (linked Inventory_Model_InventoryItem records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'hasRelations'      => true,
+        'hasCustomFields'   => true,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'useModlog'         => true
     );
 
     /**
-     * name of fields containing datetime or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-        'add_time'
-    );
+     * fields for auto start
+     * @var array
+     */
+    protected static $_fields = array(
+            'id'                => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'name'              => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                    'label'      => NULL,
+            ),
+            'type'              => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                    'label'      => NULL,
+            ),
+            'container_id'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                    'label'      => NULL
+            ),
+            'inventory_id'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'description'       => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+                   
+            ),
+            'location'          => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
+                    'label'      => NULL
+            ),
+            'add_time'          => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                    'label'      => NULL
+            ),
+            'total_number'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+                    
+            ),
+            'active_number'     => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            // modlog information
+            'created_by'        => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'creation_time'     => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'last_modified_by'  => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'last_modified_time'=> array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),    
+            'is_deleted'        => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'deleted_time'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            ),
+            'deleted_by'        => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => NULL
+            )
+     );
     
     /**
      * overwrite constructor to add more filters
@@ -88,68 +156,13 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        // do something here if you like (add default empty values, ...)
-        
+    
+        foreach (array("total_number", "active_number") AS $val)
+        {
+            $this->_filters[$val] = new Zend_Filter_Empty(NULL);
+        }
+        print_r($this->_filters,true);
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase/Record/Tinebase_Record_Abstract::isValid()
-     */
-    public function isValid($_throwExceptionOnInvalidData = false)
-    {
-        //$isValid = parent::isValid($_throwExceptionOnInvalidData);
-        
-        $isValid = (int) $this->active_number > (int) $this->total_number;
-        
-        if ($isValid && $_throwExceptionOnInvalidData) {
-            $e = new Tinebase_Exception_Record_Validation('active number must be equal or less than total number');
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
-               print_r($this->_validationErrors,true). $e);
-            throw $e;
-        }
-        return $isValid;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase/Record/Tinebase_Record_Abstract::setFromArray()
-     */
-    /*
-    public function setFromArray(array $_data)
-    {
-    
-        if (isset($_data['total_number']) && ! is_int($_data['total_number'])) {
-            unset($_data['total_number']);
-        }
-        
-        if (isset($_data['active_number']) && ! is_int($_data['active_number'])) {
-            unset($_data['active_number']);
-        }
-        
-        return parent::setFromArray($_data);
-    }
-    */
-    /**
-     * fills a record from json data
-     *
-     * @param string $_data json encoded data
-     * @return void
-     */
-    public function setFromJson($_data)
-    {
-    
-        if (isset($_data['total_number']) && ! is_int($_data['total_number'])) {
-            unset($_data['total_number']);
-        }
-        
-        if (isset($_data['active_number']) && ! is_int($_data['active_number'])) {
-            unset($_data['active_number']);
-        }
-        
-       return parent::setFromJson($_data);
-        
-        // do something here if you like
-    }
 }
