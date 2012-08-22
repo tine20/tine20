@@ -49,4 +49,19 @@ class Sales_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '6.1');
     }
+
+    /**
+     * update from 6.1 -> 6.2
+     * - add cost_centers table (if not installed already)
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        if ($this->_backend->tableVersionQuery('sales_cost_centers') === FALSE) {
+            $release5 = new Sales_Setup_Update_Release5($this->_backend);
+            $release5->update_5();
+        }
+        $this->setApplicationVersion('Sales', '6.2');
+    }
 }

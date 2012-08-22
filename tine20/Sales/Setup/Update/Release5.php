@@ -286,7 +286,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         </table>
         ';
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
-        $this->_backend->createTable($table);
+        $this->_backend->createTable($table, 'Sales', 'sales_cost_centers');
         $this->setApplicationVersion('Sales', '5.6');
     }
 
