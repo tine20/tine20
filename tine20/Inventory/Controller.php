@@ -21,8 +21,15 @@
  */
 class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
 {
+
     /**
-     * the constructor
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Inventory_Model_InventoryItem';
+    
+    /**
+     * the constructor 
      *
      * don't use the constructor. use the singleton 
      */
