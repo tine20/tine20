@@ -104,7 +104,11 @@ class Tinebase_Acl_Roles
             return FALSE;
         }
         
-        $roleMemberships = $this->getRoleMemberships($_accountId);
+        try {
+            $roleMemberships = $this->getRoleMemberships($_accountId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $roleMemberships = array();
+        }
         
         if (empty($roleMemberships)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role/group memberships.');
@@ -456,7 +460,7 @@ class Tinebase_Acl_Roles
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        if(empty($groupMemberships)) {
+        if (empty($groupMemberships)) {
             throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
         }
         
