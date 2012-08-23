@@ -86,12 +86,12 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         $syncrotonTask = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $this->assertEquals("Testaufgabe auf mfe", $syncrotonTask->Subject);
-        $this->assertEquals(1,                     $syncrotonTask->Importance);
+        $this->assertEquals("Testaufgabe auf mfe", $syncrotonTask->subject);
+        $this->assertEquals(1,                     $syncrotonTask->importance);
         
         //Body
-        $this->assertTrue($syncrotonTask->Body instanceof Syncroton_Model_EmailBody);
-        #$this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $syncrotonTask->Body->Data);
+        $this->assertTrue($syncrotonTask->body instanceof Syncroton_Model_EmailBody);
+        #$this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $syncrotonTask->body->Data);
         
         
         return array($serverId, $syncrotonTask);
@@ -107,13 +107,13 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         list($serverId, $syncrotonTask) = $this->testCreateEntry($syncrotonFolder);
         
-        $syncrotonTask->Subject = $syncrotonTask->Subject . 'Update';
+        $syncrotonTask->subject = $syncrotonTask->subject . 'Update';
         
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonTask);
         
         $syncrotonTask = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $this->assertEquals("Testaufgabe auf mfeUpdate", $syncrotonTask->Subject);
+        $this->assertEquals("Testaufgabe auf mfeUpdate", $syncrotonTask->subject);
         
         return array($serverId, $syncrotonTask);
     }

@@ -32,13 +32,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @var array
      */
     protected $_mapping = array(
-        'Body'              => 'description',
-        'Categories'        => 'tags',
-        'Complete'          => 'completed',
+        'body'              => 'description',
+        'categories'        => 'tags',
+        'complete'          => 'completed',
         #'DateCompleted'     => 'datecompleted',
         #'DueDate'           => 'duedate',
-        'UtcDueDate'        => 'due',
-        'Importance'        => 'priority',
+        'utcDueDate'        => 'due',
+        'importance'        => 'priority',
         #'Recurrence'        => 'recurrence',
         #'Type'              => 'type',
         #'Start'             => 'start',
@@ -56,7 +56,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         #'Sensitivity'       => 'sensitivity',
         #'StartDate'         => 'startdate',
         #'UtcStartDate'      => 'utcstartdate',
-        'Subject'           => 'summary',
+        'subject'           => 'summary',
         #'Rtf'               => 'rtf'
     );
     
@@ -109,7 +109,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     public function toSyncrotonModel($entry, array $options = array())
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . " task data " . print_r($data->toArray(), TRUE));
+            __METHOD__ . '::' . __LINE__ . " task data " . print_r($entry->toArray(), TRUE));
         
         $syncrotonTask = new Syncroton_Model_Task();
         
@@ -126,8 +126,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     
                 case 'description':
                     $syncrotonTask->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
-                        'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
-                        'Data' => $entry->$tine20Property
+                        'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
+                        'data' => $entry->$tine20Property
                     ));
                 
                     break;
@@ -138,7 +138,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         
                         $dueDateTime = clone $entry->$tine20Property;
                         $dueDateTime->setTimezone(Tinebase_Core::get('userTimeZone'));
-                        $syncrotonTask->DueDate = $dueDateTime;
+                        $syncrotonTask->dueDate = $dueDateTime;
                     }
                     
                     break;
@@ -167,10 +167,10 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
 
         // Completed is required
         if ($entry->completed instanceof DateTime) {
-            $syncrotonTask->Complete = 1;
-            $syncrotonTask->DateCompleted = $entry->completed;
+            $syncrotonTask->complete = 1;
+            $syncrotonTask->dateCompleted = $entry->completed;
         } else {
-            $syncrotonTask->Complete = 0;
+            $syncrotonTask->complete = 0;
         }
         
         return $syncrotonTask;
@@ -212,7 +212,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 case 'description':
                     // @todo check $data->$fieldName->Type and convert to/from HTML if needed
                     if ($data->$syncrotonProperty instanceof Syncroton_Model_EmailBody) {
-                        $task->$tine20Property = preg_replace("/(\r\n?|\n)/", "\r\n", $data->$syncrotonProperty->Data);
+                        $task->$tine20Property = preg_replace("/(\r\n?|\n)/", "\r\n", $data->$syncrotonProperty->data);
                     } else {
                         $event->$tine20Property = null;
                     }

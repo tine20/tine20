@@ -18,13 +18,13 @@
 class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataEmail
 {
     protected $_mapping = array(
-        'Body'              => 'body',
-        'Cc'                => 'cc',
-        'DateReceived'      => 'received',
-        'From'              => 'from_email',
+        'body'              => 'body',
+        'cc'                => 'cc',
+        'dateReceived'      => 'received',
+        'from'              => 'from_email',
         #'Sender'            => 'sender',
-        'Subject'           => 'subject',
-        'To'                => 'to'
+        'subject'           => 'subject',
+        'to'                => 'to'
     );
     
     protected $_debugEmail = false;
@@ -209,8 +209,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
         $syncrotonFileReference = new Syncroton_Model_FileReference(array(
-            'ContentType' => $part->type,
-            'Data'        => $part->getDecodedStream()
+            'contentType' => $part->type,
+            'data'        => $part->getDecodedStream()
         ));
         
         return $syncrotonFileReference;
@@ -362,18 +362,18 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             }
         }
         
-        $syncrotonEmail->Body = $this->_getSyncrotonBody($entry, $options);
-        $syncrotonEmail->NativeBodyType = $syncrotonEmail->Body->Type;
-        if ($syncrotonEmail->Body->Type == Syncroton_Command_Sync::BODY_TYPE_MIME) {
-            $syncrotonEmail->MessageClass = 'IPM.Note.SMIME';
+        $syncrotonEmail->body = $this->_getSyncrotonBody($entry, $options);
+        $syncrotonEmail->nativeBodyType = $syncrotonEmail->body->type;
+        if ($syncrotonEmail->body->type == Syncroton_Command_Sync::BODY_TYPE_MIME) {
+            $syncrotonEmail->messageClass = 'IPM.Note.SMIME';
         } else {
-            $syncrotonEmail->MessageClass = 'IPM.Note';
+            $syncrotonEmail->messageClass = 'IPM.Note';
         }
         
-        $syncrotonEmail->ContentClass = 'urn:content-classes:message';
+        $syncrotonEmail->contentClass = 'urn:content-classes:message';
         
         // read flag
-        $syncrotonEmail->Read = in_array('\Seen', $entry->flags) ? 1 : 0;
+        $syncrotonEmail->read = in_array('\Seen', $entry->flags) ? 1 : 0;
         
         // attachments?
         if ($entry->has_attachment == true) {
@@ -383,18 +383,18 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
 
             if (count($attachments) > 0) {
                 foreach ($attachments as $attachment) {
-                    $syncrotonAttachment = new Syncroton_Model_EmailAttachment();
-                    
-                    $syncrotonAttachment->DisplayName       = trim($attachment['filename']);
-                    $syncrotonAttachment->FileReference     = $entry->getId() . '-' . $attachment['partId'];
-                    $syncrotonAttachment->Method            = 1;
-                    $syncrotonAttachment->EstimatedDataSize = $attachment['size'];
+                    $syncrotonAttachment = new Syncroton_Model_EmailAttachment(array(
+                        'displayName'       => trim($attachment['filename']),
+                        'fileReference'     => $entry->getId() . '-' . $attachment['partId'],
+                        'method'            => 1,
+                        'estimatedDataSize' => $attachment['size']
+                    ));
                     
                     $syncrotonAttachments[] = $syncrotonAttachment;
                 }
             }
             
-            $syncrotonEmail->Attachments = $syncrotonAttachments;
+            $syncrotonEmail->attachments = $syncrotonAttachments;
         }
         
         return $syncrotonEmail;
@@ -483,16 +483,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $messageBody  = @iconv('utf-8', 'utf-8//IGNORE', $messageBody);
         
         $synrotonBody = new Syncroton_Model_EmailBody(array(
-            'Type'              => $airSyncBaseType,
-            'EstimatedDataSize' => $entry->size,
+            'type'              => $airSyncBaseType,
+            'estimatedDataSize' => $entry->size,
         ));
         
         if (strlen($messageBody) > 0) {
-            $synrotonBody->Data = $messageBody;
+            $synrotonBody->data = $messageBody;
         }
         
         if ($isTruncacted === 1) {
-            $synrotonBody->Truncated = 1;
+            $synrotonBody->truncated = 1;
         }
         
         return $synrotonBody;
@@ -533,11 +533,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
         
-        if(isset($entry->Read)) {
+        if(isset($entry->read)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId set read flag: $entry->Read");
+                __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId set read flag: $entry->read");
             
-            if($entry->Read == 1) {
+            if($entry->read == 1) {
                 Felamimail_Controller_Message_Flags::getInstance()->addFlags($serverId, Zend_Mail_Storage::FLAG_SEEN);
             } else {
                 Felamimail_Controller_Message_Flags::getInstance()->clearFlags($serverId, Zend_Mail_Storage::FLAG_SEEN);

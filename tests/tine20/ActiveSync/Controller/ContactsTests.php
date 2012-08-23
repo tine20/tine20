@@ -59,6 +59,10 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
                         <Contacts:WebPage>fb://some.dumb.fb.url</Contacts:WebPage>
                         <Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber>
                         <Contacts:Body>&#13;</Contacts:Body>
+                        <Contacts:Categories>
+                            <Contacts:Category>1234</Contacts:Category>
+                            <Contacts:Category>5678</Contacts:Category>
+                        </Contacts:Categories>
                     </ApplicationData>
                 </Add>
             </Commands>
@@ -123,9 +127,9 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $this->assertEquals('asdf',         $syncrotonContact->FirstName);
-        $this->assertEquals('asdfasdfaasd', $syncrotonContact->LastName);
-        $this->assertEquals(NULL,           $syncrotonContact->WebPage, 'facebook url should be removed');
+        $this->assertEquals('asdf',         $syncrotonContact->firstName);
+        $this->assertEquals('asdfasdfaasd', $syncrotonContact->lastName);
+        $this->assertEquals(NULL,           $syncrotonContact->webPage, 'facebook url should be removed');
         
         return array($serverId, $syncrotonContact);
     }
@@ -140,15 +144,15 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         
         list($serverId, $syncrotonContact) = $this->testCreateEntry($syncrotonFolder);
         
-        $syncrotonContact->LastName = 'MiniMe';
+        $syncrotonContact->lastName = 'MiniMe';
         
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonContact);
         
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $this->assertEquals('asdf',   $syncrotonContact->FirstName);
-        $this->assertEquals('MiniMe', $syncrotonContact->LastName);
-        $this->assertEquals(NULL,     $syncrotonContact->WebPage, 'facebook url should be removed');
+        $this->assertEquals('asdf',   $syncrotonContact->firstName);
+        $this->assertEquals('MiniMe', $syncrotonContact->lastName);
+        $this->assertEquals(NULL,     $syncrotonContact->webPage, 'facebook url should be removed');
         
         return array($serverId, $syncrotonContact);
     }

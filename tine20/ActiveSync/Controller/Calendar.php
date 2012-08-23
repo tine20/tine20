@@ -105,24 +105,24 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected $_mapping = array(
         //'Timezone'          => 'timezone',
-        'AllDayEvent'       => 'is_all_day_event',
+        'allDayEvent'       => 'is_all_day_event',
         //'BusyStatus'        => 'transp',
         //'OrganizerName'     => 'organizer',
         //'OrganizerEmail'    => 'organizer',
         //'DtStamp'           => 'last_modified_time',  // not used outside from Tine 2.0
-        'EndTime'           => 'dtend',
-        'Location'          => 'location',
-        'Reminder'          => 'alarms',
+        'endTime'           => 'dtend',
+        'location'          => 'location',
+        'reminder'          => 'alarms',
         //'Sensitivity'       => 'class',
-        'Subject'           => 'summary',
-        'Body'              => 'description',
-        'StartTime'         => 'dtstart',
+        'subject'           => 'summary',
+        'body'              => 'description',
+        'startTime'         => 'dtstart',
         //'UID'               => 'uid',             // not used outside from Tine 2.0
         //'MeetingStatus'     => 'status_id',
-        'Attendees'         => 'attendee',
-        'Categories'        => 'tags',
-        'Recurrence'        => 'rrule',
-        'Exceptions'        => 'exdate',
+        'attendees'         => 'attendee',
+        'categories'        => 'tags',
+        'recurrence'        => 'rrule',
+        'exceptions'        => 'exdate',
     );
     
     /**
@@ -227,14 +227,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                     foreach($entry->$tine20Property as $attenderObject) {
                         $attendee = new Syncroton_Model_EventAttendee();
-                        $attendee->Name = $attenderObject->getName();
-                        $attendee->Email = $attenderObject->getEmail();
+                        $attendee->name = $attenderObject->getName();
+                        $attendee->email = $attenderObject->getEmail();
                         
                         $acsType = array_search($attenderObject->role, $this->_attendeeTypeMapping);
-                        $attendee->AttendeeType = $acsType ? $acsType : Syncroton_Model_EventAttendee::ATTENDEE_TYPE_REQUIRED;
+                        $attendee->attendeeType = $acsType ? $acsType : Syncroton_Model_EventAttendee::ATTENDEE_TYPE_REQUIRED;
             
                         $acsStatus = array_search($attenderObject->status, $this->_attendeeStatusMapping);
-                        $attendee->AttendeeStatus = $acsStatus ? $acsStatus : Syncroton_Model_EventAttendee::ATTENDEE_STATUS_UNKNOWN;
+                        $attendee->attendeeStatus = $acsStatus ? $acsStatus : Syncroton_Model_EventAttendee::ATTENDEE_STATUS_UNKNOWN;
                         
                         $attendees[] = $attendee;
                     }
@@ -243,15 +243,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                     // set own status
                     if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($entry->attendee)) !== null && ($busyType = array_search($ownAttendee->status, $this->_busyStatusMapping)) !== false) {
-                        $syncrotonEvent->BusyStatus = $busyType;
+                        $syncrotonEvent->busyStatus = $busyType;
                     }
                     
                     break;
                     
                 case 'description':
                     $syncrotonEvent->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
-                        'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
-                        'Data' => $entry->$tine20Property
+                        'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
+                        'data' => $entry->$tine20Property
                     ));
                 
                     break;
@@ -287,8 +287,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         foreach ($entry->exdate as $exdate) {
                             $exception = new Syncroton_Model_EventException();
                     
-                            $exception->Deleted            = (int)$exdate->is_deleted;
-                            $exception->ExceptionStartTime = $exdate->getOriginalDtStart();
+                            $exception->deleted            = (int)$exdate->is_deleted;
+                            $exception->exceptionStartTime = $exdate->getOriginalDtStart();
                     
                             if ((int)$exdate->is_deleted === 0) {
                                 $exceptionSyncrotonEvent = $this->toSyncrotonModel($exdate);
@@ -319,58 +319,58 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     // required fields
                     switch($rrule->freq) {
                         case Calendar_Model_Rrule::FREQ_DAILY:
-                            $recurrence->Type = Syncroton_Model_EventRecurrence::TYPE_DAILY;
+                            $recurrence->type = Syncroton_Model_EventRecurrence::TYPE_DAILY;
                             
                             break;
                     
                         case Calendar_Model_Rrule::FREQ_WEEKLY:
-                            $recurrence->Type      = Syncroton_Model_EventRecurrence::TYPE_WEEKLY;
-                            $recurrence->DayOfWeek = $this->_convertDayToBitMask($rrule->byday);
+                            $recurrence->type      = Syncroton_Model_EventRecurrence::TYPE_WEEKLY;
+                            $recurrence->dayOfWeek = $this->_convertDayToBitMask($rrule->byday);
                             
                             break;
                     
                         case Calendar_Model_Rrule::FREQ_MONTHLY:
                             if(!empty($rrule->bymonthday)) {
-                                $recurrence->Type       = Syncroton_Model_EventRecurrence::TYPE_MONTHLY;
-                                $recurrence->DayOfMonth = $rrule->bymonthday;
+                                $recurrence->type       = Syncroton_Model_EventRecurrence::TYPE_MONTHLY;
+                                $recurrence->dayOfMonth = $rrule->bymonthday;
                             } else {
                                 $weekOfMonth = (int) substr($rrule->byday, 0, -2);
                                 $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth;
                                 $dayOfWeek   = substr($rrule->byday, -2);
                     
-                                $recurrence->Type        = Syncroton_Model_EventRecurrence::TYPE_MONTHLY_DAYN;
-                                $recurrence->WeekOfMonth = $weekOfMonth;
-                                $recurrence->DayOfWeek   = $this->_convertDayToBitMask($dayOfWeek);
+                                $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_MONTHLY_DAYN;
+                                $recurrence->weekOfMonth = $weekOfMonth;
+                                $recurrence->dayOfWeek   = $this->_convertDayToBitMask($dayOfWeek);
                             }
                             
                             break;
                     
                         case Calendar_Model_Rrule::FREQ_YEARLY:
                             if(!empty($rrule->bymonthday)) {
-                                $recurrence->Type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY;
-                                $recurrence->DayOfMonth  = $rrule->bymonthday;
-                                $recurrence->MonthOfYear = $rrule->bymonth;
+                                $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY;
+                                $recurrence->dayOfMonth  = $rrule->bymonthday;
+                                $recurrence->monthOfYear = $rrule->bymonth;
                             } else {
                                 $weekOfMonth = (int) substr($rrule->byday, 0, -2);
                                 $weekOfMonth = ($weekOfMonth == -1) ? 5 : $weekOfMonth;
                                 $dayOfWeek   = substr($rrule->byday, -2);
                     
-                                $recurrence->Type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY_DAYN;
-                                $recurrence->WeekOfMonth = $weekOfMonth;
-                                $recurrence->DayOfWeek   = $this->_convertDayToBitMask($dayOfWeek);
-                                $recurrence->MonthOfYear = $rrule->bymonth;
+                                $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY_DAYN;
+                                $recurrence->weekOfMonth = $weekOfMonth;
+                                $recurrence->dayOfWeek   = $this->_convertDayToBitMask($dayOfWeek);
+                                $recurrence->monthOfYear = $rrule->bymonth;
                             }
                             
                             break;
                     }
                     
                     // required field
-                    $recurrence->Interval = $rrule->interval ? $rrule->interval : 1;
+                    $recurrence->interval = $rrule->interval ? $rrule->interval : 1;
                     
                     if($rrule->count) {
-                        $recurrence->Occurrences = $rrule->count;
+                        $recurrence->occurrences = $rrule->count;
                     } else if($rrule->until instanceof DateTime) {
-                        $recurrence->Until = $rrule->until;
+                        $recurrence->until = $rrule->until;
                     }
                     
                     $syncrotonEvent->$syncrotonProperty = $recurrence;
@@ -395,12 +395,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $syncrotonEvent->Timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        $syncrotonEvent->MeetingStatus = 1;
-        $syncrotonEvent->Sensitivity = 0;
-        $syncrotonEvent->DtStamp = $entry->creation_time;
-        $syncrotonEvent->UID = $entry->uid;
+        $syncrotonEvent->meetingStatus = 1;
+        $syncrotonEvent->sensitivity = 0;
+        $syncrotonEvent->dtStamp = $entry->creation_time;
+        $syncrotonEvent->uID = $entry->uid;
         
         $this->_addOrganizer($syncrotonEvent, $entry);
         
@@ -527,22 +527,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                     foreach($data->$syncrotonProperty as $attendee) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->Email);
+                            __METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->email);
                 
-                        if(isset($attendee->AttendeeType) && array_key_exists($attendee->AttendeeType, $this->_attendeeTypeMapping)) {
-                            $role = $this->_attendeeTypeMapping[$attendee->AttendeeType];
+                        if(isset($attendee->attendeeType) && array_key_exists($attendee->attendeeType, $this->_attendeeTypeMapping)) {
+                            $role = $this->_attendeeTypeMapping[$attendee->attendeeType];
                         } else {
                             $role = Calendar_Model_Attender::ROLE_REQUIRED;
                         }
                 
                         // AttendeeStatus send only on repsonse
                 
-                        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $attendee->Name, $matches)) {
+                        if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $attendee->name, $matches)) {
                             $firstName = $matches['firstName'];
                             $lastName  = $matches['lastNameName'];
                         } else {
                             $firstName = null;
-                            $lastName  = $attendee->Name;
+                            $lastName  = $attendee->name;
                         }
                 
                         // @todo handle resources
@@ -552,7 +552,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                             'lastName'  => $lastName,
                             #'partStat'  => $status,
                             'role'      => $role,
-                            'email'     => $attendee->Email
+                            'email'     => $attendee->email
                         );
                     }
                     
@@ -565,13 +565,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 
                     foreach ($data->$syncrotonProperty as $exception) {
-                        if ($exception->Deleted === 0) {
+                        if ($exception->deleted === 0) {
                             $eventException = $this->toTineModel($exception);
-                            $eventException->recurid    = new Tinebase_DateTime($exception->ExceptionStartTime);
+                            $eventException->recurid    = new Tinebase_DateTime($exception->exceptionStartTime);
                             $eventException->is_deleted = false;
                         } else {
                             $eventException = new Calendar_Model_Event(array(
-                                'recurid'    => new Tinebase_DateTime($exception->ExceptionStartTime),
+                                'recurid'    => new Tinebase_DateTime($exception->exceptionStartTime),
                                 'is_deleted' => true
                             ));
                         }
@@ -586,7 +586,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case 'description':
                     // @todo check $data->$fieldName->Type and convert to/from HTML if needed
                     if ($data->$syncrotonProperty instanceof Syncroton_Model_EmailBody) {
-                        $event->$tine20Property = $data->$syncrotonProperty->Data;
+                        $event->$tine20Property = $data->$syncrotonProperty->data;
                     } else {
                         $event->$tine20Property = null;
                     }
@@ -595,10 +595,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                 case 'rrule':
                     // handle recurrence
-                    if ($data->$syncrotonProperty instanceof Syncroton_Model_EventRecurrence && isset($data->$syncrotonProperty->Type)) {
+                    if ($data->$syncrotonProperty instanceof Syncroton_Model_EventRecurrence && isset($data->$syncrotonProperty->type)) {
                         $rrule = new Calendar_Model_Rrule();
                     
-                        switch($data->$syncrotonProperty->Type) {
+                        switch($data->$syncrotonProperty->type) {
                             case Syncroton_Model_EventRecurrence::TYPE_DAILY:
                                 $rrule->freq = Calendar_Model_Rrule::FREQ_DAILY;
                                 
@@ -606,21 +606,21 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                             case Syncroton_Model_EventRecurrence::TYPE_WEEKLY:
                                 $rrule->freq  = Calendar_Model_Rrule::FREQ_WEEKLY;
-                                $rrule->byday = $this->_convertBitMaskToDay($data->$syncrotonProperty->DayOfWeek);
+                                $rrule->byday = $this->_convertBitMaskToDay($data->$syncrotonProperty->dayOfWeek);
                                 
                                 break;
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_MONTHLY:
                                 $rrule->freq       = Calendar_Model_Rrule::FREQ_MONTHLY;
-                                $rrule->bymonthday = $data->$syncrotonProperty->DayOfMonth;
+                                $rrule->bymonthday = $data->$syncrotonProperty->dayOfMonth;
                                 
                                 break;
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_MONTHLY_DAYN:
                                 $rrule->freq = Calendar_Model_Rrule::FREQ_MONTHLY;
                     
-                                $week   = $data->$syncrotonProperty->WeekOfMonth;
-                                $day    = $data->$syncrotonProperty->DayOfWeek;
+                                $week   = $data->$syncrotonProperty->weekOfMonth;
+                                $day    = $data->$syncrotonProperty->dayOfWeek;
                                 $byDay  = $week == 5 ? -1 : $week;
                                 $byDay .= $this->_convertBitMaskToDay($day);
                     
@@ -630,17 +630,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_YEARLY:
                                 $rrule->freq       = Calendar_Model_Rrule::FREQ_YEARLY;
-                                $rrule->bymonth    = (int)$xmlData->Recurrence->MonthOfYear;
-                                $rrule->bymonthday = (int)$xmlData->Recurrence->DayOfMonth;
+                                $rrule->bymonth    = (int)$xmlData->Recurrence->monthOfYear;
+                                $rrule->bymonthday = (int)$xmlData->Recurrence->dayOfMonth;
                                 
                                 break;
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_YEARLY_DAYN:
                                 $rrule->freq    = Calendar_Model_Rrule::FREQ_YEARLY;
-                                $rrule->bymonth = $data->$syncrotonProperty->MonthOfYear;
+                                $rrule->bymonth = $data->$syncrotonProperty->monthOfYear;
                     
-                                $week = $data->$syncrotonProperty->WeekOfMonth;
-                                $day  = $data->$syncrotonProperty->DayOfWeek;
+                                $week = $data->$syncrotonProperty->weekOfMonth;
+                                $day  = $data->$syncrotonProperty->dayOfWeek;
                                 $byDay  = $week == 5 ? -1 : $week;
                                 $byDay .= $this->_convertBitMaskToDay($day);
                     
@@ -649,14 +649,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                                 break;
                         }
                         
-                        $rrule->interval = isset($data->$syncrotonProperty->Interval) ? $data->$syncrotonProperty->Interval : 1;
+                        $rrule->interval = isset($data->$syncrotonProperty->interval) ? $data->$syncrotonProperty->interval : 1;
                     
-                        if(isset($data->$syncrotonProperty->Occurrences)) {
-                            $rrule->count = $data->$syncrotonProperty->Occurrences;
+                        if(isset($data->$syncrotonProperty->occurrences)) {
+                            $rrule->count = $data->$syncrotonProperty->occurrences;
                             $rrule->until = null;
-                        } else if(isset($data->$syncrotonProperty->Until)) {
+                        } else if(isset($data->$syncrotonProperty->until)) {
                             $rrule->count = null;
-                            $rrule->until = new Tinebase_DateTime($data->$syncrotonProperty->Until);
+                            $rrule->until = new Tinebase_DateTime($data->$syncrotonProperty->until);
                             // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
                             if ($rrule->until->format('s') == '00') {
                                 $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
@@ -694,7 +694,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         }
         
         // decode timezone data
-        if (isset($data->Timezone)) {
+        if (isset($data->timezone)) {
             $timeZoneConverter = ActiveSync_TimezoneConverter::getInstance(
                 Tinebase_Core::getLogger(),
                 Tinebase_Core::get(Tinebase_Core::CACHE)
@@ -702,12 +702,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
             try {
                 $timezone = $timeZoneConverter->getTimezone(
-                    $data->Timezone,
+                    $data->timezone,
                     Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
                 );
                 $event->originator_tz = $timezone;
             } catch (ActiveSync_TimezoneNotFoundException $e) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " timezone data not found " . $data->Timezone);
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " timezone data not found " . $data->timezone);
                 $event->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
             }
         
@@ -751,12 +751,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $currentAlarm = $event->alarms->getFirstRecord();
         $alarm = NULL;
         
-        if (isset($data->Reminder)) {
+        if (isset($data->reminder)) {
             $dtstart = clone $event->dtstart;
             
             $alarm = new Tinebase_Model_Alarm(array(
-                'alarm_time'        => $dtstart->subMinute($data->Reminder),
-                'minutes_before'    => in_array($data->Reminder, array(0, 5, 15, 30, 60, 120, 720, 1440, 2880)) ? $data->Reminder : 'custom',
+                'alarm_time'        => $dtstart->subMinute($data->reminder),
+                'minutes_before'    => in_array($data->reminder, array(0, 5, 15, 30, 60, 120, 720, 1440, 2880)) ? $data->reminder : 'custom',
                 'model'             => 'Calendar_Model_Event'
             ));
             
@@ -831,9 +831,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $organizerEmail = Tinebase_Core::getUser()->accountEmailAddress;
         }
     
-        $syncrotonEvent->OrganizerName = $organizerName;
+        $syncrotonEvent->organizerName = $organizerName;
         if ($organizerEmail) {
-            $syncrotonEvent->OrganizerEmail = $organizerEmail;
+            $syncrotonEvent->organizerEmail = $organizerEmail;
         }
     }
     
@@ -847,7 +847,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected function _handleBusyStatus($data, $event)
     {
-        if (! isset($data->BusyStatus)) {
+        if (! isset($data->busyStatus)) {
             return;
         }
         
@@ -858,7 +858,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             return;
         }
         
-        $busyStatus = $data->BusyStatus;
+        $busyStatus = $data->busyStatus;
         if (in_array(strtolower($this->_device->devicetype), $this->_devicesWithWrongBusyStatusDefault)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Device uses a bad default setting. BUSY and FREE are mapped to ACCEPTED.');

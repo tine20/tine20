@@ -130,8 +130,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $syncrotonFileReference = $controller->getFileReference($fileReference);
         
-        $this->assertEquals('text/plain', $syncrotonFileReference->ContentType);
-        $this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->Data)));
+        $this->assertEquals('text/plain', $syncrotonFileReference->contentType);
+        $this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->data)));
     }
     
     /**
@@ -168,11 +168,11 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         #foreach ($syncrotonEmail as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $syncrotonEmail->Subject);
+        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $syncrotonEmail->subject);
         // size of the body
-        $this->assertEquals(9606, $syncrotonEmail->Body->EstimatedDataSize);
+        $this->assertEquals(9606, $syncrotonEmail->body->estimatedDataSize);
         // size of the attachment
-        $this->assertEquals(2787, $syncrotonEmail->Attachments[0]->EstimatedDataSize);
+        $this->assertEquals(2787, $syncrotonEmail->attachments[0]->estimatedDataSize);
     }
     
     /**
@@ -186,10 +186,10 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4, 'truncationSize' => 2000))));
         
-        #foreach ($syncrotonEmail->Body as $key => $value) {echo "$key => "; var_dump($value);}
+        #foreach ($syncrotonEmail->body as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(1, $syncrotonEmail->Body->Truncated);
-        $this->assertEquals(2000, strlen($syncrotonEmail->Body->Data));
+        $this->assertEquals(1, $syncrotonEmail->body->truncated);
+        $this->assertEquals(2000, strlen($syncrotonEmail->body->data));
     }
     
     public function testSendEmail()

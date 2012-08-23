@@ -227,7 +227,6 @@ Zeile 3</AirSyncBase:Data>
         // replace email to make current user organizer and attendee
         $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
     }
-//     public function testCreateEntry($syncrotonFolder = null) {}
     
     public function testCreateEntry($syncrotonFolder = null)
     {
@@ -239,46 +238,45 @@ Zeile 3</AirSyncBase:Data>
     
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
+    
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
-//         print_r(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
     
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
     
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(0,         $syncrotonEvent->AllDayEvent);
-        $this->assertEquals(2,         $syncrotonEvent->BusyStatus);
-        $this->assertEquals('Repeat',  $syncrotonEvent->Subject);
-        $this->assertEquals(15,        $syncrotonEvent->Reminder);
-        $this->assertTrue($syncrotonEvent->EndTime instanceof DateTime);
-        $this->assertTrue($syncrotonEvent->StartTime instanceof DateTime);
-        $this->assertEquals('20101123T160000Z', $syncrotonEvent->EndTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101123T130000Z', $syncrotonEvent->StartTime->format('Ymd\THis\Z'));
-        $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->Attendees[0]->Email);
+        $this->assertEquals(0,         $syncrotonEvent->allDayEvent);
+        $this->assertEquals(2,         $syncrotonEvent->busyStatus);
+        $this->assertEquals('Repeat',  $syncrotonEvent->subject);
+        $this->assertEquals(15,        $syncrotonEvent->reminder);
+        $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
+        $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
+        $this->assertEquals('20101123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20101123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
+        $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->attendees[0]->email);
         
         //Body
-        $this->assertTrue($syncrotonEvent->Body instanceof Syncroton_Model_EmailBody);
-        $this->assertEquals('Hello', $syncrotonEvent->Body->Data);
+        $this->assertTrue($syncrotonEvent->body instanceof Syncroton_Model_EmailBody);
+        $this->assertEquals('Hello', $syncrotonEvent->body->data);
         
         // Recurrence
-        $this->assertTrue($syncrotonEvent->Recurrence instanceof Syncroton_Model_EventRecurrence);
-        $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->Recurrence->Type);
-        $this->assertEquals(1, $syncrotonEvent->Recurrence->Interval);
-        $this->assertTrue($syncrotonEvent->Recurrence->Until instanceof DateTime);
-        $this->assertEquals('20101128T225959Z', $syncrotonEvent->Recurrence->Until->format('Ymd\THis\Z'));
+        $this->assertTrue($syncrotonEvent->recurrence instanceof Syncroton_Model_EventRecurrence);
+        $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->recurrence->type);
+        $this->assertEquals(1, $syncrotonEvent->recurrence->interval);
+        $this->assertTrue($syncrotonEvent->recurrence->until instanceof DateTime);
+        $this->assertEquals('20101128T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
         
         // Exceptions
-        $this->assertEquals(2, count($syncrotonEvent->Exceptions));
-        $this->assertTrue($syncrotonEvent->Exceptions[0] instanceof Syncroton_Model_EventException);
-        $this->assertEquals(0, $syncrotonEvent->Exceptions[0]->Deleted);
-        $this->assertEquals('Repeat mal anders', $syncrotonEvent->Exceptions[0]->Subject);
-        $this->assertEquals('20101125T130000Z', $syncrotonEvent->Exceptions[0]->ExceptionStartTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101125T170000Z', $syncrotonEvent->Exceptions[0]->EndTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101125T140000Z', $syncrotonEvent->Exceptions[0]->StartTime->format('Ymd\THis\Z'));
+        $this->assertEquals(2, count($syncrotonEvent->exceptions));
+        $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
+        $this->assertEquals(0, $syncrotonEvent->exceptions[0]->deleted);
+        $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
+        $this->assertEquals('20101125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20101125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20101125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
         
-        $this->assertEquals(1, $syncrotonEvent->Exceptions[1]->Deleted);
-        $this->assertEquals('20101124T130000Z', $syncrotonEvent->Exceptions[1]->ExceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals(1, $syncrotonEvent->exceptions[1]->deleted);
+        $this->assertEquals('20101124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
     }
@@ -300,11 +298,11 @@ Zeile 3</AirSyncBase:Data>
     
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(1,         $syncrotonEvent->AllDayEvent);
-        $this->assertTrue($syncrotonEvent->EndTime instanceof DateTime);
-        $this->assertTrue($syncrotonEvent->StartTime instanceof DateTime);
-        $this->assertEquals('20101106T230000Z', $syncrotonEvent->EndTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101103T230000Z', $syncrotonEvent->StartTime->format('Ymd\THis\Z'));
+        $this->assertEquals(1,         $syncrotonEvent->allDayEvent);
+        $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
+        $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
+        $this->assertEquals('20101106T230000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20101103T230000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
     
         return array($serverId, $syncrotonEvent);
     }
@@ -326,18 +324,18 @@ Zeile 3</AirSyncBase:Data>
     
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(0, $syncrotonEvent->AllDayEvent);
-        $this->assertTrue($syncrotonEvent->EndTime instanceof DateTime);
-        $this->assertTrue($syncrotonEvent->StartTime instanceof DateTime);
-        $this->assertEquals('20101220T100000Z', $syncrotonEvent->EndTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101220T090000Z', $syncrotonEvent->StartTime->format('Ymd\THis\Z'));
+        $this->assertEquals(0, $syncrotonEvent->allDayEvent);
+        $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
+        $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
+        $this->assertEquals('20101220T100000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20101220T090000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
     
         // Recurrence
-        $this->assertTrue($syncrotonEvent->Recurrence instanceof Syncroton_Model_EventRecurrence);
-        $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->Recurrence->Type);
-        $this->assertEquals(1, $syncrotonEvent->Recurrence->Interval);
-        $this->assertTrue($syncrotonEvent->Recurrence->Until instanceof DateTime);
-        $this->assertEquals('20101223T225959Z', $syncrotonEvent->Recurrence->Until->format('Ymd\THis\Z'));
+        $this->assertTrue($syncrotonEvent->recurrence instanceof Syncroton_Model_EventRecurrence);
+        $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->recurrence->type);
+        $this->assertEquals(1, $syncrotonEvent->recurrence->interval);
+        $this->assertTrue($syncrotonEvent->recurrence->until instanceof DateTime);
+        $this->assertEquals('20101223T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
     }
@@ -359,7 +357,7 @@ Zeile 3</AirSyncBase:Data>
     
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(Syncroton_Model_Event::BUSY_STATUS_BUSY, $syncrotonEvent->BusyStatus);
+        $this->assertEquals(Syncroton_Model_Event::BUSY_STATUS_BUSY, $syncrotonEvent->busyStatus);
         
         return array($serverId, $syncrotonEvent);
     }
@@ -374,14 +372,14 @@ Zeile 3</AirSyncBase:Data>
     
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
     
-        unset($syncrotonEvent->Recurrence);
-        unset($syncrotonEvent->Exceptions);
+        unset($syncrotonEvent->recurrence);
+        unset($syncrotonEvent->exceptions);
     
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
     
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
     
-        $this->assertFalse($syncrotonEvent->Recurrence instanceof Syncroton_Model_EventRecurrence);
+        $this->assertFalse($syncrotonEvent->recurrence instanceof Syncroton_Model_EventRecurrence);
     
         return array($serverId, $syncrotonEvent);
     }

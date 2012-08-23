@@ -21,60 +21,58 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     protected $_mapping = array(
         #'Anniversary'           => 'anniversary',
         #'AssistantName'         => 'assistantname',
-        'AssistantPhoneNumber' => 'tel_assistent',
-        'Birthday'              => 'bday',
-        'Body'                  => 'note',
-        #'BodySize'              => 'bodysize',
-        #'BodyTruncated'         => 'bodytruncated',
+        'assistantPhoneNumber' => 'tel_assistent',
+        'birthday'              => 'bday',
+        'body'                  => 'note',
         #'Business2PhoneNumber'  => 'business2phonenumber',
-        'BusinessAddressCity'          => 'adr_one_locality',
-        'BusinessAddressCountry'       => 'adr_one_countryname',
-        'BusinessAddressPostalCode'    => 'adr_one_postalcode',
-        'BusinessAddressState'         => 'adr_one_region',
-        'BusinessAddressStreet'        => 'adr_one_street',
-        'BusinessFaxNumber'     => 'tel_fax',
-        'BusinessPhoneNumber'   => 'tel_work',
+        'businessAddressCity'          => 'adr_one_locality',
+        'businessAddressCountry'       => 'adr_one_countryname',
+        'businessAddressPostalCode'    => 'adr_one_postalcode',
+        'businessAddressState'         => 'adr_one_region',
+        'businessAddressStreet'        => 'adr_one_street',
+        'businessFaxNumber'     => 'tel_fax',
+        'businessPhoneNumber'   => 'tel_work',
         #'CarPhoneNumber'        => 'carphonenumber',
         #'Categories'            => 'categories',
         #'Category'              => 'category',
         #'Children'              => 'children',
         #'Child'                 => 'child',
-        'CompanyName'           => 'org_name',
-        'Department'            => 'org_unit',
-        'Email1Address'         => 'email',
-        'Email2Address'         => 'email_home',
+        'companyName'           => 'org_name',
+        'department'            => 'org_unit',
+        'email1Address'         => 'email',
+        'email2Address'         => 'email_home',
         #'Email3Address'         => 'email3address',
-        'FileAs'                => 'n_fileas',
-        'FirstName'             => 'n_given',
-        'Home2PhoneNumber'      => 'tel_cell_private',
-        'HomeAddressCity'              => 'adr_two_locality',
-        'HomeAddressCountry'           => 'adr_two_countryname',
-        'HomeAddressPostalCode'        => 'adr_two_postalcode',
-        'HomeAddressState'             => 'adr_two_region',
-        'HomeAddressStreet'            => 'adr_two_street',
-        'HomeFaxNumber'         => 'tel_fax_home',
-        'HomePhoneNumber'       => 'tel_home',
-        'JobTitle'              => 'title', 
-        'LastName'              => 'n_family',
-        'MiddleName'            => 'n_middle',
-        'MobilePhoneNumber'     => 'tel_cell',
-        'OfficeLocation'        => 'room',
+        'fileAs'                => 'n_fileas',
+        'firstName'             => 'n_given',
+        'home2PhoneNumber'      => 'tel_cell_private',
+        'homeAddressCity'              => 'adr_two_locality',
+        'homeAddressCountry'           => 'adr_two_countryname',
+        'homeAddressPostalCode'        => 'adr_two_postalcode',
+        'homeAddressState'             => 'adr_two_region',
+        'homeAddressStreet'            => 'adr_two_street',
+        'homeFaxNumber'         => 'tel_fax_home',
+        'homePhoneNumber'       => 'tel_home',
+        'jobTitle'              => 'title', 
+        'lastName'              => 'n_family',
+        'middleName'            => 'n_middle',
+        'mobilePhoneNumber'     => 'tel_cell',
+        'officeLocation'        => 'room',
         #'OtherCity'             => 'adr_one_locality',
         #'OtherCountry'          => 'adr_one_countryname',
         #'OtherPostalCode'       => 'adr_one_postalcode',
         #'OtherState'            => 'adr_one_region',
         #'OtherStreet'           => 'adr_one_street',
-        'PagerNumber'           => 'tel_pager',
+        'pagerNumber'           => 'tel_pager',
         #'RadioPhoneNumber'      => 'radiophonenumber',
         #'Spouse'                => 'spouse',
-        'Suffix'                => 'n_prefix',
+        'duffix'                => 'n_prefix',
         #'Title'                 => '', //salutation
-        'WebPage'               => 'url',
+        'webPage'               => 'url',
         #'YomiCompanyName'       => 'yomicompanyname',
         #'YomiFirstName'         => 'yomifirstname',
         #'YomiLastName'          => 'yomilastname',
         #'Rtf'                   => 'rtf',
-        'Picture'               => 'jpegphoto'
+        'picture'               => 'jpegphoto'
     );
         
     /**
@@ -132,10 +130,14 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . " contact data " . print_r($entry->toArray(), TRUE));
+        
         $syncrotonContact = new Syncroton_Model_Contact();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0') {
+            // skip empty values
+            if (empty($entry->$tine20Property) && $entry->$tine20Property != '0' || count($entry->$tine20Property) === 0) {
                 continue;
             }
             
@@ -148,8 +150,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 
                 case 'note':
                     $syncrotonContact->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
-                        'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
-                        'Data' => $entry->$tine20Property
+                        'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
+                        'data' => $entry->$tine20Property
                     ));
                     
                     break;
