@@ -1,0 +1,3 @@
+Berater,Mandant,Abrechnungsmonat,Mitarbeiternummer,"Name, Vorname",Postleitzahl des Mitarbeiters,Ort des Mitarbeiters,Strasse /Postfach des Mitarbeiters,Hausnummer des Mitarbeiters,Eintrittsdatum aktuell,Austrittsdatum aktuell,Geburtsdatum des Mitarbeiters,Anzahl der Kinderfreibeträge,Stammkostenstelle des Mitarbeiters,Kontonummer der Mitarbeiterbankverbindung,Bankbezeichnung der Mitarbeiterbankverbindung,Bankleitzahl der Mitarbeiterbankverbindung,Bezeichnung der gesetzlichen Krankenkasse des Mitarbeiters
+12,34,2011/07,00001,"Clever, Susan",2111,London,Street,48,01.10.2001,,12.12.1973,,7,1234,Hypo Real Estate,1234,techniker
+12,35,2011/07,00002,"Employed, Hans",2143,Brighton,Way,50,01.10.2001,,18.08.1978,,6,1235,Leeman Brothers,1235,barmer

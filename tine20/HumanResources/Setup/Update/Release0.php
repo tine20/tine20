@@ -14,7 +14,6 @@ class HumanResources_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * update 0.1 -> 0.2
      * - add fileserver (access) to timeaccounts
-     *
      */
     public function update_1()
     {
@@ -47,5 +46,17 @@ class HumanResources_Setup_Update_Release0 extends Setup_Update_Abstract
         $this->_backend->addForeignKey('humanresources_contract', $declaration);
         $this->setTableVersion('humanresources_contract', '2');
         $this->setApplicationVersion('HumanResources', '0.2');
+    }
+    
+    /**
+     * update from 0.2 to 6.0
+     * - update import export defs
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('HumanResources'));
+        $this->setApplicationVersion('HumanResources', '6.0');
     }
 }

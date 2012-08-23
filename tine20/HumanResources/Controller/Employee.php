@@ -72,13 +72,15 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         
-        foreach($_record->contracts as $contractArray) {
-            if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-            if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-            if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
-            $contractArray['employee_id'] = $_createdRecord->getId();
-            $contract = new HumanResources_Model_Contract($contractArray);
-            $contracts->addRecord($contract);
+        if (! empty($_record->contracts)) {
+            foreach ($_record->contracts as $contractArray) {
+                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                $contractArray['employee_id'] = $_createdRecord->getId();
+                $contract = new HumanResources_Model_Contract($contractArray);
+                $contracts->addRecord($contract);
+            }
         }
         $contracts->sort('start_date', 'ASC');
         foreach($contracts->getIterator() as $contract) {
@@ -107,16 +109,18 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $ec = HumanResources_Controller_Contract::getInstance();
 
-        foreach($_record->contracts as $contractArray) {
-            if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-            if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-            if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
-            $contractArray['employee_id'] = $_oldRecord->getId();
-            $contract = new HumanResources_Model_Contract($contractArray);
-            if($contract->id) {
-                $contracts->addRecord($ec->update($contract));
-            } else {
-                $contracts->addRecord($ec->create($contract));
+        if (! empty($_record->contracts)) {
+            foreach ($_record->contracts as $contractArray) {
+                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                $contractArray['employee_id'] = $_oldRecord->getId();
+                $contract = new HumanResources_Model_Contract($contractArray);
+                if($contract->id) {
+                    $contracts->addRecord($ec->update($contract));
+                } else {
+                    $contracts->addRecord($ec->create($contract));
+                }
             }
         }
             

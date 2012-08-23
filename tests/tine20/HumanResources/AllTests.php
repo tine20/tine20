@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'HumanResources_AllTests::main');
-}
-
 class HumanResources_AllTests
 {
     public static function main ()
@@ -28,10 +24,7 @@ class HumanResources_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 HumanResources All Tests');
         $suite->addTestSuite('HumanResources_JsonTests');
+        $suite->addTestSuite('HumanResources_CliTests');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'HumanResources_AllTests::main') {
-    HumanResources_AllTests::main();
 }

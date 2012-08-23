@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>hr_employee_import_csv</name>
+    <model>HumanResources_Model_Employee</model>
+    <plugin>HumanResources_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>1</dryrun>
+    <delimiter>,</delimiter>
+    <description>employee import</description>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>Mitarbeiternummer</source>
+            <destination>number</destination>
+        </field>
+        <field>
+            <source>Name, Vorname</source>
+            <destination>n_fn</destination>
+        </field>
+        <field>
+            <source>Postleitzahl des Mitarbeiters</source>
+            <destination>postalcode</destination>
+        </field>
+        <field>
+            <source>Ort des Mitarbeiters</source>
+            <destination>locality</destination>
+        </field>
+        <field>
+            <source>Strasse /Postfach des Mitarbeiters</source>
+            <destination>street</destination>
+        </field>
+        <field>
+            <source>Hausnummer des Mitarbeiters</source>
+            <destination>street2</destination>
+        </field>
+        <field>
+            <source>Geburtsdatum des Mitarbeiters</source>
+            <destination>bday</destination>
+        </field>
+        <field>
+            <source>Eintrittsdatum aktuell</source>
+            <destination>employment_begin</destination>
+        </field>
+        <field>
+            <source>Austrittsdatum aktuell</source>
+            <destination>employment_end</destination>
+        </field>
+        <field>
+            <source>Kontonummer der Mitarbeiterbankverbindung</source>
+            <destination>bank_account_number</destination>
+        </field>
+        <field>
+            <source>Bankbezeichnung der Mitarbeiterbankverbindung</source>
+            <destination>bank_name</destination>
+        </field>
+        <field>
+            <source>Bankleitzahl der Mitarbeiterbankverbindung</source>
+            <destination>bank_code_number</destination>
+        </field>
+        <field>
+            <source>Bezeichnung der gesetzlichen Krankenkasse des Mitarbeiters</source>
+            <destination>health_insurance</destination>
+        </field>
+    </mapping>
+</config>

@@ -247,6 +247,7 @@ class Tinebase_Frontend_Cli_Abstract
      * import records
      *
      * @param Zend_Console_Getopt   $_opts
+     * @return array import result
      */
     protected function _import($_opts)
     {
@@ -254,6 +255,9 @@ class Tinebase_Frontend_Cli_Abstract
         
         if ($_opts->d) {
             $args['dryrun'] = 1;
+            if ($_opts->v) {
+                echo "Doing dry run.\n";
+            }
         }
         
         if (array_key_exists('definition', $args))  {
@@ -275,13 +279,14 @@ class Tinebase_Frontend_Cli_Abstract
         }
         
         // loop files in argv
+        $result = array();
         foreach ((array) $args['filename'] as $filename) {
             // read file
             if ($_opts->v) {
                 echo "reading file $filename ...";
             }
             try {
-                $result = $importer->importFile($filename);
+                $result[$filename] = $importer->importFile($filename);
                 if ($_opts->v) {
                     echo "done.\n";
                 }
@@ -296,16 +301,18 @@ class Tinebase_Frontend_Cli_Abstract
                 continue;
             }
             
-            echo "Imported " . $result['totalcount'] . " records. Import failed for " . $result['failcount'] . " records. \n";
-            if (isset($result['duplicatecount']) && ! empty($result['duplicatecount'])) {
-                echo "Found " . $result['duplicatecount'] . " duplicates.\n";
+            echo "Imported " . $result[$filename]['totalcount'] . " records. Import failed for " . $result[$filename]['failcount'] . " records. \n";
+            if (isset($result['duplicatecount']) && ! empty($result[$filename]['duplicatecount'])) {
+                echo "Found " . $result[$filename]['duplicatecount'] . " duplicates.\n";
             }
-                        
+            
             // import (check if dry run)
-            if ($_opts->d) {
-                print_r($result['results']->toArray());
+            if ($_opts->d && $_opts->v) {
+                print_r($result[$filename]['results']->toArray());
             } 
         }
+        
+        return $result;
     }
 
     /**

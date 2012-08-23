@@ -166,8 +166,4 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         // check output
         $this->assertEquals("Imported 3 records. Import failed for 0 records. \n", $out);
     }
-}       
-    
-if (PHPUnit_MAIN_METHOD == 'Admin_CliTest::main') {
-    Admin_CliTest::main();
 }
