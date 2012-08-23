@@ -60,7 +60,7 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchInventoryItems($filter, $paging)
     {
         return $this->_search($filter, $paging, $this->_controller, 'Inventory_Model_InventoryItemFilter', TRUE);
-    }     
+    }
     
     /**
      * Return a single record
@@ -107,8 +107,9 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function autoCompleteInventoryItemProperty($property, $startswith)
     {
-        if (preg_match('/[^A-Za-z0-9_]/', $property)) {
+        if (! in_array($property, Inventory_Model_InventoryItem::getValidFields())) {
             // NOTE: it would be better to ask the model for property presece, but we can't atm.
+            // NOTE: Maybe we can .. not sure. - Michael
             throw new Tasks_Exception_UnexpectedValue('bad property name');
         }
         

@@ -50,7 +50,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'containerProperty' => 'container_id',
         'containerName'     => 'inventory record list', // _('inventory record list')
         'containersName'    => 'inventory record lists', // _('inventory record lists')
+
         // relations (linked Inventory_Model_InventoryItem records) and other metadata
+
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
@@ -135,6 +137,18 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     'label'      => NULL
             )
      );
+    
+    /**
+     * Returns every valid key to manage in Frontend/Json.php
+     * 
+     * @todo to be removed if we have a similiar function in the core
+     * @param void
+     * @return array
+     */
+    public static function getValidFields ()
+    {
+        return array_keys(self::$_fields);
+    }
     
     /**
      * overwrite constructor to add more filters

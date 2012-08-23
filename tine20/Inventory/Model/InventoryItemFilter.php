@@ -35,6 +35,8 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
      */
     protected $_modelName = 'Inventory_Model_InventoryItem';
     
+    protected $_defaultFilter = 'query';
+    
     /**
      * @var array filter model fieldName => definition
      */
