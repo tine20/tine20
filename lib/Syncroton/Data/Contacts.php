@@ -47,8 +47,8 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
             
             if ($contact->firstName == $query) {
                 $found[] = new Syncroton_Model_StoreResponseResult(array(
-                    'LongId' => 'addressbookFolderId-' .  $serverId,
-                    'Properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $options)
+                    'longId' => 'addressbookFolderId-' .  $serverId,
+                    'properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $options)
                 ));
             }
         }

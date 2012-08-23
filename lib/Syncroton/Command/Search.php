@@ -57,7 +57,7 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
         }
         
         $storeResponse = new Syncroton_Model_StoreResponse(array(
-           'Status' => self::STATUS_SUCCESS,
+           'status' => self::STATUS_SUCCESS,
         ));
         
         try {
@@ -70,7 +70,7 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
             $start = $options['range'][0];
             $limit = $options['range'][1] + 1;
             $total = count($results);
-            $storeResponse->Total = $total;
+            $storeResponse->total = $total;
 
             if ($total) {
                 if ($start > $total) {
@@ -84,18 +84,18 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
                     $results = array_slice($results, $start, $limit-$start);
                 }
 
-                $storeResponse->Range = array($start, $start + count($results) - 1);
+                $storeResponse->range = array($start, $start + count($results) - 1);
             }
 
             foreach ($results as $result) {
-                if (empty($result->Properties)) {
-                    $result->Properties = $dataController->getSearchEntry($result->LongId, $this->_store->options);
+                if (empty($result->properties)) {
+                    $result->properties = $dataController->getSearchEntry($result->longId, $this->_store->options);
                 }
 
-                $storeResponse->Result[] = $result;
+                $storeResponse->result[] = $result;
             }
         } catch (Exception $e) {
-            $storeResponse->Status = self::STATUS_SERVER_ERROR;
+            $storeResponse->status = self::STATUS_SERVER_ERROR;
         }
 
         $search = $this->_outputDom->documentElement;
