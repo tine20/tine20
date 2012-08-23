@@ -265,9 +265,13 @@
                 case 'changed':
                     switch ($_notificationLevel) {
                         case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
-                            $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been rescheduled' ), $_event->summary, $startDateString);
-                            $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                            break;
+                            if (array_key_exists('dtstart', $_updates)) {
+                                $oldStartDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale);
+                                $messageSubject = sprintf($translate->_('Event "%1$s" has been rescheduled from %2$s to %3$s' ), $_event->summary, $oldStartDateString, $startDateString);
+                                $method = Calendar_Model_iMIP::METHOD_REQUEST;
+                                break;
+                            }
+                            // fallthrough if dtstart didn't change
                             
                         case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
                             $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
