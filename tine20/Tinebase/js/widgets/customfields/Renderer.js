@@ -63,6 +63,8 @@ Tine.widgets.customfields.Renderer = function(){
                                 return Tine.Tinebase.common.dateTimeRenderer(customfields[cfName]);
                             case 'time':
                                 return Tine.Tinebase.common.timeRenderer(customfields[cfName]);
+                            case 'boolean':
+                                return Tine.Tinebase.common.booleanRenderer(customfields[cfName]);
                             default:
                                 return Ext.util.Format.htmlEncode(customfields[cfName]);
                         }
