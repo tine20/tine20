@@ -200,14 +200,20 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.dialog.PreferencesPanel.superclass.afterRender.call(this);
         
+        // NOTE: server side translations have problems with quotes. Preferences with quotes
+        //       in their description don't get translated. Thus we (re) translate them here
+        //       as the js translations are much better
+        var app = Tine.Tinebase.appMgr.get(this.appName),
+            gt  = app ? app.i18n._.createDelegate(app.i18n) : _;
+        
         if (this.items && this.items.items) {
             for (var i=0; i < this.items.items.length; i++) {
                 var field = this.items.items[i];
                 Ext.QuickTips.register({
                     target: field,
                     dismissDelay: 30000,
-                    title: Tine.Tinebase.common.doubleEncode(field.fieldLabel),
-                    text: Tine.Tinebase.common.doubleEncode(field.description),
+                    title: Ext.util.Format.htmlEncode(gt(field.fieldLabel)),
+                    text: Ext.util.Format.htmlEncode(gt(field.description)),
                     width: 200
                 });
             }
