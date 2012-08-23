@@ -327,6 +327,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
+        if ($_which === 0) {
+            return $_event;
+        }
+        
         $freqMap = array(
             self::FREQ_DAILY   => Tinebase_DateTime::MODIFIER_DAY,
             self::FREQ_WEEKLY  => Tinebase_DateTime::MODIFIER_WEEK,
