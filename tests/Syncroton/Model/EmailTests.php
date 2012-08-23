@@ -71,15 +71,15 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);}
     
         $this->assertEquals(2, count($email));
-        $this->assertEquals(1, $email->Read);
-        $this->assertTrue($email->Flag instanceof Syncroton_Model_EmailFlag);
+        $this->assertEquals(1, $email->read);
+        $this->assertTrue($email->flag instanceof Syncroton_Model_EmailFlag);
         
         // validate flags        
-        $this->assertEquals('0', $email->Flag->ReminderSet);
-        $this->assertEquals('20090224T080000Z', $email->Flag->StartDate->format("Ymd\THis\Z"), 'StartDate');
-        $this->assertEquals('20090224T080000Z', $email->Flag->UtcStartDate->format("Ymd\THis\Z"), 'UtcStartDate');
-        $this->assertEquals('20090225T120000Z', $email->Flag->DueDate->format("Ymd\THis\Z"), 'DueDate');
-        $this->assertEquals('20090225T120000Z', $email->Flag->UtcDueDate->format("Ymd\THis\Z"), 'UtcDueDate');
+        $this->assertEquals('0', $email->flag->reminderSet);
+        $this->assertEquals('20090224T080000Z', $email->flag->startDate->format("Ymd\THis\Z"), 'StartDate');
+        $this->assertEquals('20090224T080000Z', $email->flag->utcStartDate->format("Ymd\THis\Z"), 'UtcStartDate');
+        $this->assertEquals('20090225T120000Z', $email->flag->dueDate->format("Ymd\THis\Z"), 'DueDate');
+        $this->assertEquals('20090225T120000Z', $email->flag->utcDueDate->format("Ymd\THis\Z"), 'UtcDueDate');
     }
     
     /**
@@ -99,29 +99,30 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $appData = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
         $email = new Syncroton_Model_Email(array(
-            'AccountId'    => 'FooBar',
-            'Attachments'  => array(
+            'accountId'    => 'FooBar',
+            'attachments'  => array(
                 new Syncroton_Model_EmailAttachment(array(
-                    'FileReference' => '12345abcd',
-                    'UmAttOrder'    => 1
-                ))
+                    'displayName'   => 'example.pdf',
+                    'fileReference' => '12345abcd',
+                    'umAttOrder'    => 1
+                )) 
             ),
-            'Categories'   => array('123', '456'),
-            'Cc'           => 'l.kneschke@metaways.de',
-            'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
-            'Flag'         => new Syncroton_Model_EmailFlag(array(
-                'Status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
-                'ReminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
+            'categories'   => array('123', '456'),
+            'cc'           => 'l.kneschke@metaways.de',
+            'dateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+            'flag'         => new Syncroton_Model_EmailFlag(array(
+                'status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
+                'reminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
             )),
-            'From'         => 'k.kneschke@metaways.de',
-            'Subject'      => 'Test Subject',
-            'To'           => 'j.kneschke@metaways.de',
-            'Read'         => 1,
-            'Body'         => new Syncroton_Model_EmailBody(array(
-                'Type'         => Syncroton_Model_EmailBody::TYPE_HTML,
-                'Data'         => 'Hallo <br>',
-                'EstimatedDataSize' => 1234,
-                'Truncated'    => 1
+            'from'         => 'k.kneschke@metaways.de',
+            'subject'      => 'Test Subject',
+            'to'           => 'j.kneschke@metaways.de',
+            'read'         => 1,
+            'body'         => new Syncroton_Model_EmailBody(array(
+                'type'         => Syncroton_Model_EmailBody::TYPE_HTML,
+                'data'         => 'Hallo <br>',
+                'estimatedDataSize' => 1234,
+                'truncated'    => 1
             ))
         ));
         
@@ -147,7 +148,7 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Attachments/AirSyncBase:Attachment/AirSyncBase:FileReference');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('12345abcd', $nodes->item(0)->nodeValue, $testDoc->saveXML());
-
+        
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Attachments/AirSyncBase:Attachment/Email2:UmAttOrder');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('1', $nodes->item(0)->nodeValue, $testDoc->saveXML());

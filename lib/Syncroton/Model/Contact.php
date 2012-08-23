@@ -30,149 +30,74 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
     
     protected $_properties = array(
         'AirSyncBase' => array(
-            'Body'                   => array('type' => 'container')
+            'body'                   => array('type' => 'container', 'class' => 'Syncroton_Model_EmailBody')
         ),
         'Contacts' => array(
-            'Alias'                  => array('type' => 'string'),
-            'Anniversary'            => array('type' => 'datetime'),
-            'AssistantName'          => array('type' => 'string'),
-            'AssistantPhoneNumber'   => array('type' => 'string'),
-            'Birthday'               => array('type' => 'datetime'),
-            //'BodySize'              => 0x0a,
-            //'BodyTruncated'         => 0x0b,
-            'Business2PhoneNumber'   => array('type' => 'string'),
-            'BusinessAddressCity'    => array('type' => 'string'),
-            'BusinessAddressCountry' => array('type' => 'string'),
-            'BusinessAddressPostalCode' => array('type' => 'string'),
-            'BusinessAddressState'   => array('type' => 'string'),
-            'BusinessAddressStreet'  => array('type' => 'string'),
-            'BusinessFaxNumber'      => array('type' => 'string'),
-            'BusinessPhoneNumber'    => array('type' => 'string'),
-            'CarPhoneNumber'         => array('type' => 'string'),
-            'Categories'             => array('type' => 'container', 'childName' => 'Category'),
-            //'Category'              => array('type' => 'string'),
-            'Children'               => array('type' => 'container', 'childName' => 'Child'),
-            //'Child'                 => array('type' => 'string'),
-            'CompanyName'            => array('type' => 'string'),
-            'Department'             => array('type' => 'string'),
-            'Email1Address'          => array('type' => 'string'),
-            'Email2Address'          => array('type' => 'string'),
-            'Email3Address'          => array('type' => 'string'),
-            'FileAs'                 => array('type' => 'string'),
-            'FirstName'              => array('type' => 'string'),
-            'Home2PhoneNumber'       => array('type' => 'string'),
-            'HomeAddressCity'        => array('type' => 'string'),
-            'HomeAddressCountry'     => array('type' => 'string'),
-            'HomeAddressPostalCode'  => array('type' => 'string'),
-            'HomeAddressState'       => array('type' => 'string'),
-            'HomeAddressStreet'      => array('type' => 'string'),
-            'HomeFaxNumber'          => array('type' => 'string'),
-            'HomePhoneNumber'        => array('type' => 'string'),
-            'JobTitle'               => array('type' => 'string'),
-            'LastName'               => array('type' => 'string'),
-            'MiddleName'             => array('type' => 'string'),
-            'MobilePhoneNumber'      => array('type' => 'string'),
-            'OfficeLocation'         => array('type' => 'string'),
-            'OtherAddressCity'       => array('type' => 'string'),
-            'OtherAddressCountry'    => array('type' => 'string'),
-            'OtherAddressPostalCode' => array('type' => 'string'),
-            'OtherAddressState'      => array('type' => 'string'),
-            'OtherAddressStreet'     => array('type' => 'string'),
-            'PagerNumber'            => array('type' => 'string'),
-            'Picture'                => array('type' => 'string', 'encoding' => 'base64'),
-            'RadioPhoneNumber'       => array('type' => 'string'),
-            'Rtf'                    => array('type' => 'string'),
-            'Spouse'                 => array('type' => 'string'),
-            'Suffix'                 => array('type' => 'string'),
-            'Title'                  => array('type' => 'string'),
-            'WebPage'                => array('type' => 'string'),
-            'WeightedRank'           => array('type' => 'string'),
-            'YomiCompanyName'        => array('type' => 'string'),
-            'YomiFirstName'          => array('type' => 'string'),
-            'YomiLastName'           => array('type' => 'string'),
+            'alias'                  => array('type' => 'string'),
+            'anniversary'            => array('type' => 'datetime'),
+            'assistantName'          => array('type' => 'string'),
+            'assistantPhoneNumber'   => array('type' => 'string'),
+            'birthday'               => array('type' => 'datetime'),
+            'business2PhoneNumber'   => array('type' => 'string'),
+            'businessAddressCity'    => array('type' => 'string'),
+            'businessAddressCountry' => array('type' => 'string'),
+            'businessAddressPostalCode' => array('type' => 'string'),
+            'businessAddressState'   => array('type' => 'string'),
+            'businessAddressStreet'  => array('type' => 'string'),
+            'businessFaxNumber'      => array('type' => 'string'),
+            'businessPhoneNumber'    => array('type' => 'string'),
+            'carPhoneNumber'         => array('type' => 'string'),
+            'categories'             => array('type' => 'container', 'childElement' => 'category'),
+            'children'               => array('type' => 'container', 'childElement' => 'child'),
+            'companyName'            => array('type' => 'string'),
+            'department'             => array('type' => 'string'),
+            'email1Address'          => array('type' => 'string'),
+            'email2Address'          => array('type' => 'string'),
+            'email3Address'          => array('type' => 'string'),
+            'fileAs'                 => array('type' => 'string'),
+            'firstName'              => array('type' => 'string'),
+            'home2PhoneNumber'       => array('type' => 'string'),
+            'homeAddressCity'        => array('type' => 'string'),
+            'homeAddressCountry'     => array('type' => 'string'),
+            'homeAddressPostalCode'  => array('type' => 'string'),
+            'homeAddressState'       => array('type' => 'string'),
+            'homeAddressStreet'      => array('type' => 'string'),
+            'homeFaxNumber'          => array('type' => 'string'),
+            'homePhoneNumber'        => array('type' => 'string'),
+            'jobTitle'               => array('type' => 'string'),
+            'lastName'               => array('type' => 'string'),
+            'middleName'             => array('type' => 'string'),
+            'mobilePhoneNumber'      => array('type' => 'string'),
+            'officeLocation'         => array('type' => 'string'),
+            'otherAddressCity'       => array('type' => 'string'),
+            'otherAddressCountry'    => array('type' => 'string'),
+            'otherAddressPostalCode' => array('type' => 'string'),
+            'otherAddressState'      => array('type' => 'string'),
+            'otherAddressStreet'     => array('type' => 'string'),
+            'pagerNumber'            => array('type' => 'string'),
+            'picture'                => array('type' => 'string', 'encoding' => 'base64'),
+            'padioPhoneNumber'       => array('type' => 'string'),
+            'rtf'                    => array('type' => 'string'),
+            'spouse'                 => array('type' => 'string'),
+            'suffix'                 => array('type' => 'string'),
+            'title'                  => array('type' => 'string'),
+            'webPage'                => array('type' => 'string'),
+            'weightedRank'           => array('type' => 'string'),
+            'yomiCompanyName'        => array('type' => 'string'),
+            'yomiFirstName'          => array('type' => 'string'),
+            'yomiLastName'           => array('type' => 'string'),
         ),
         'Contacts2' => array(
-            'AccountName'            => array('type' => 'string'),
-            'CompanyMainPhone'       => array('type' => 'string'),
-            'CustomerId'             => array('type' => 'string'),
-            'GovernmentId'           => array('type' => 'string'),
-            'IMAddress'              => array('type' => 'string'),
-            'IMAddress2'             => array('type' => 'string'),
-            'IMAddress3'             => array('type' => 'string'),
-            'ManagerName'            => array('type' => 'string'),
-            'MMS'                    => array('type' => 'string'),
-            'NickName'               => array('type' => 'string'),
+            'accountName'            => array('type' => 'string'),
+            'companyMainPhone'       => array('type' => 'string'),
+            'customerId'             => array('type' => 'string'),
+            'governmentId'           => array('type' => 'string'),
+            'iMAddress'              => array('type' => 'string'),
+            'iMAddress2'             => array('type' => 'string'),
+            'iMAddress3'             => array('type' => 'string'),
+            'managerName'            => array('type' => 'string'),
+            'mMS'                    => array('type' => 'string'),
+            'nickName'               => array('type' => 'string'),
         )
     );
-    
-    protected function _parseContactsNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from Contacts namespace
-        $children = $properties->children('uri:Contacts');
-    
-        foreach ($children as $elementName => $xmlElement) {
-    
-            switch ($elementName) {
-                case 'Categories':
-                    $categories = array();
-                    
-                    foreach ($xmlElement->Category as $category) {
-                        $categories[] = (string) $category;
-                    }
-                    
-                    $this->$elementName = $categories;
-                    
-                    break;
-                    
-                case 'Children':
-                    $children = array();
-                    
-                    foreach ($xmlElement->Child as $child) {
-                        $children[] = (string) $child;
-                    }
-                    
-                    $this->$elementName = $children;
-                    
-                    break;
-                    
-                case 'Picture':
-                    $this->$elementName = base64_decode((string) $xmlElement);
-                    
-                    break;
-                    
-                default:
-                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-                    
-                    switch ($elementProperties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                            
-                            break;
-                            
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-                            
-                            break;
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-                            
-                            break;
-                    }
-            }
-        }
-    }
-    
-    protected function _parseContacts2Namespace(SimpleXMLElement $properties)
-    {
-        // fetch data from Contacts2 namespace
-        $children = $properties->children('uri:Contacts2');
-    
-        foreach ($children as $elementName => $xmlElement) {
-    
-            switch ($elementName) {
-                default:
-                    $this->$elementName = (string) $xmlElement;
-            }
-        }
-    }    
 }

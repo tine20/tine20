@@ -38,79 +38,21 @@ class Syncroton_Model_EmailFlag extends Syncroton_Model_AEntry
 
     protected $_properties = array(
         'Email' => array(
-            'CompleteTime'       => array('type' => 'datetime'),
-            'FlagType'           => array('type' => 'string'),
-            'Status'             => array('type' => 'number'),
+            'completeTime'       => array('type' => 'datetime'),
+            'flagType'           => array('type' => 'string'),
+            'status'             => array('type' => 'number'),
         ),
         'Tasks' => array(
-            'DateCompleted'      => array('type' => 'datetime'),
-            'DueDate'            => array('type' => 'datetime'),
-            'OrdinalDate'        => array('type' => 'datetime'),
-            'ReminderSet'        => array('type' => 'number'),
-            'ReminderTime'       => array('type' => 'datetime'),
-            'StartDate'          => array('type' => 'datetime'),
-            'Subject'            => array('type' => 'string'),
-            'SubOrdinalDate'     => array('type' => 'string'),
-            'UtcStartDate'       => array('type' => 'datetime'),
-            'UtcDueDate'         => array('type' => 'datetime'),
+            'dateCompleted'      => array('type' => 'datetime'),
+            'dueDate'            => array('type' => 'datetime'),
+            'ordinalDate'        => array('type' => 'datetime'),
+            'reminderSet'        => array('type' => 'number'),
+            'reminderTime'       => array('type' => 'datetime'),
+            'startDate'          => array('type' => 'datetime'),
+            'subject'            => array('type' => 'string'),
+            'subOrdinalDate'     => array('type' => 'string'),
+            'utcStartDate'       => array('type' => 'datetime'),
+            'utcDueDate'         => array('type' => 'datetime'),
         ),
     );
-
-    protected function _parseEmailNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from AirSyncBase namespace
-        $children = $properties->children('uri:Email');
-
-        foreach ($children as $elementName => $xmlElement) {
-            switch ($elementName) {
-                case 'FlagStatus':
-                    // Android bug http://code.google.com/p/android/issues/detail?id=36113
-                    $elementName = 'Status';
-
-                default:
-                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-
-                    switch ($elementProperties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                            break;
-
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-                            break;
-
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-                            break;
-                    }
-            }
-        }
-    }
-
-    protected function _parseTasksNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from AirSyncBase namespace
-        $children = $properties->children('uri:Tasks');
-
-        foreach ($children as $elementName => $xmlElement) {
-            switch ($elementName) {
-                default:
-                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-
-                    switch ($elementProperties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                            break;
-
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-                            break;
-
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-                            break;
-                    }
-            }
-        }
-    }
 }

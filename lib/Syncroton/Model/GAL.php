@@ -35,63 +35,17 @@ class Syncroton_Model_GAL extends Syncroton_Model_AEntry
 
     protected $_properties = array(
         'GAL' => array(
-            'Alias'         => array('type' => 'string'),
-            'Company'       => array('type' => 'string'),
-            'DisplayName'   => array('type' => 'string'),
-            'EmailAddress'  => array('type' => 'string'),
-            'FirstName'     => array('type' => 'string'),
-            'LastName'      => array('type' => 'string'),
-            'MobilePhone'   => array('type' => 'string'),
-            'Office'        => array('type' => 'string'),
-            'Phone'         => array('type' => 'string'),
-            'Picture'       => array('type' => 'composite'),
-            'Title'         => array('type' => 'string'),
+            'alias'         => array('type' => 'string'),
+            'company'       => array('type' => 'string'),
+            'displayName'   => array('type' => 'string'),
+            'emailAddress'  => array('type' => 'string'),
+            'firstName'     => array('type' => 'string'),
+            'lastName'      => array('type' => 'string'),
+            'mobilePhone'   => array('type' => 'string'),
+            'office'        => array('type' => 'string'),
+            'phone'         => array('type' => 'string'),
+            'picture'       => array('type' => 'container'),
+            'title'         => array('type' => 'string'),
         )
     );
-
-    public function appendXML(DOMElement $_domParrent)
-    {
-        $this->_addXMLNamespaces($_domParrent);
-
-        foreach($this->_elements as $elementName => $value) {
-            // skip empty values
-            if($value === null || $value === '' || (is_array($value) && empty($value))) {
-                continue;
-            }
-
-            list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-
-            $nameSpace = 'uri:' . $nameSpace;
-
-            // strip off any non printable control characters
-/*
-            if (!ctype_print($value)) {
-                $value = $this->removeControlChars($value);
-            }
-*/
-            switch ($elementName) {
-                case 'Picture':
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-                    $value->appendXML($element);
-                    $_domParrent->appendChild($element);
-                    break;
-
-                default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
-
-                    if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
-                        if (is_resource($value)) {
-                            stream_filter_append($value, 'convert.base64-encode');
-                            $value = stream_get_contents($value);
-                        } else {
-                            $value = base64_encode($value);
-                        }
-                    }
-
-                    $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
-
-                    $_domParrent->appendChild($element);
-            }
-        }
-    }
 }

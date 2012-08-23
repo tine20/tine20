@@ -22,10 +22,10 @@ class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
     
     protected $_properties = array(
         'AirSyncBase' => array(
-            'ContentType' => array('type' => 'string'),
+            'contentType' => array('type' => 'string'),
         ),
         'ItemOperations' => array(
-            'Data'        => array('type' => 'string', 'encoding' => 'base64'),
+            'data'        => array('type' => 'string', 'encoding' => 'base64'),
         )
     );
         

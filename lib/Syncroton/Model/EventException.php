@@ -28,22 +28,22 @@ class Syncroton_Model_EventException extends Syncroton_Model_Event
     
     protected $_properties = array(
         'Calendar' => array(
-            'AllDayEvent'             => array('type' => 'number'),
-            'AppointmentReplyTime'    => array('type' => 'datetime'),
-            'Attendees'               => array('type' => 'container'),
-            'BusyStatus'              => array('type' => 'number'),
-            'Categories'              => array('type' => 'container'),
-            'Deleted'                 => array('type' => 'number'),
-            'DtStamp'                 => array('type' => 'datetime'),
-            'EndTime'                 => array('type' => 'datetime'),
-            'ExceptionStartTime'      => array('type' => 'datetime'),
-            'Location'                => array('type' => 'string'),
-            'MeetingStatus'           => array('type' => 'number'),
-            'Reminder'                => array('type' => 'number'),
-            'ResponseType'            => array('type' => 'number'),
-            'Sensitivity'             => array('type' => 'number'),
-            'StartTime'               => array('type' => 'datetime'),
-            'Subject'                 => array('type' => 'string'),
+            'allDayEvent'             => array('type' => 'number'),
+            'appointmentReplyTime'    => array('type' => 'datetime'),
+            'attendees'               => array('type' => 'container', 'childElement' => 'attendee', 'class' => 'Syncroton_Model_EventAttendee'),
+            'busyStatus'              => array('type' => 'number'),
+            'categories'              => array('type' => 'container', 'childElement' => 'category'),
+            'deleted'                 => array('type' => 'number'),
+            'dtStamp'                 => array('type' => 'datetime'),
+            'endTime'                 => array('type' => 'datetime'),
+            'exceptionStartTime'      => array('type' => 'datetime'),
+            'location'                => array('type' => 'string'),
+            'meetingStatus'           => array('type' => 'number'),
+            'reminder'                => array('type' => 'number'),
+            'responseType'            => array('type' => 'number'),
+            'sensitivity'             => array('type' => 'number'),
+            'startTime'               => array('type' => 'datetime'),
+            'subject'                 => array('type' => 'string'),
         )
     );    
 }

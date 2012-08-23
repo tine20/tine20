@@ -45,6 +45,10 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
             <Contacts:Category>1234</Contacts:Category>
             <Contacts:Category>5678</Contacts:Category>
         </Contacts:Categories>
+        <Contacts:Children>
+            <Contacts:Child>1234</Contacts:Child>
+            <Contacts:Child>5678</Contacts:Child>
+        </Contacts:Children>
         <Contacts:Picture>cGljdHVyZQ==</Contacts:Picture>
         <AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>Rewdfyyh fddg</AirSyncBase:Data></AirSyncBase:Body>
     </ApplicationData>
@@ -72,15 +76,19 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         
         #foreach ($contact as $key => $value) {echo $key; var_dump($value);} 
         
-        $this->assertEquals(8, count($contact));
-        $this->assertEquals("Fritzchen",  $contact->FileAs);
-        $this->assertEquals("Fritzchen",  $contact->FirstName);
-        $this->assertEquals("Meinen",     $contact->LastName);
-        $this->assertEquals("1969-12-31", $contact->Birthday->format('Y-m-d'));
-        $this->assertEquals("The Boss",   $contact->ManagerName);
-        $this->assertEquals("picture",    $contact->Picture);
-        $this->assertTrue($contact->Body instanceof Syncroton_Model_EmailBody);
-        $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $contact->Body->Type);
+        $this->assertEquals(9, count($contact));
+        $this->assertEquals("Fritzchen",  $contact->fileAs);
+        $this->assertEquals("Fritzchen",  $contact->firstName);
+        $this->assertEquals("Meinen",     $contact->lastName);
+        $this->assertEquals("1969-12-31", $contact->birthday->format('Y-m-d'));
+        $this->assertEquals("The Boss",   $contact->managerName);
+        $this->assertEquals("picture",    $contact->picture);
+        $this->assertTrue($contact->body instanceof Syncroton_Model_EmailBody);
+        $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $contact->body->type);
+        $this->assertTrue(is_array($contact->children));
+        $this->assertContains(1234, $contact->children);
+        $this->assertTrue(is_array($contact->categories));
+        $this->assertContains(5678, $contact->categories);
     }
     
     /**
@@ -101,7 +109,7 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
         $contact = new Syncroton_Model_Contact($xml->Collections->Collection->Commands->Add->ApplicationData);
-        $contact->Picture    = fopen(__DIR__ . '/../../files/test_image.jpeg', 'r');
+        $contact->picture    = fopen(__DIR__ . '/../../files/test_image.jpeg', 'r');
         
         $contact->appendXML($appData);
         
@@ -120,6 +128,10 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('The Boss', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Contacts:Children/Contacts:Child');
+        $this->assertEquals(2, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('1234', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body/AirSyncBase:Type');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $nodes->item(0)->nodeValue, $testDoc->saveXML());
@@ -129,5 +141,4 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
         $encoder->encode($testDoc);
     }
-    
 }

@@ -124,15 +124,15 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $xpath->registerNamespace('Email', 'uri:Email');
         
         $nodes = $xpath->query('//ItemOperations:ItemOperations/ItemOperations:Status');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, 'ItemOperations:Status missing');
         $this->assertEquals(Syncroton_Command_ItemOperations::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//ItemOperations:ItemOperations/ItemOperations:Response/ItemOperations:Fetch/ItemOperations:Status');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, 'ItemOperations:Status missing');
         $this->assertEquals(Syncroton_Command_ItemOperations::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//ItemOperations:ItemOperations/ItemOperations:Response/ItemOperations:Fetch/ItemOperations:Properties/AirSyncBase:ContentType');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals('text/plain', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, 'AirSyncBase:ContentType missing');
+        $this->assertEquals('text/plain', $nodes->item(0)->nodeValue, 'contenttype mismatch');
     }    
 }

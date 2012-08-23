@@ -38,7 +38,7 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
     protected $_properties = array(
         'Search' => array(
             'Status'    => array('type' => 'number'),
-            'Result'    => array('type' => 'container'),
+            'Result'    => array('type' => 'container', 'multiple' => true),
             'Range'     => array('type' => 'string'),
             'Total'     => array('type' => 'number'),
         )
