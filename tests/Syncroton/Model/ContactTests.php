@@ -86,9 +86,9 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($contact->body instanceof Syncroton_Model_EmailBody);
         $this->assertEquals(Syncroton_Model_EmailBody::TYPE_PLAINTEXT, $contact->body->type);
         $this->assertTrue(is_array($contact->children));
-        $this->assertContains(1234, $contact->children);
+        $this->assertContains('1234', $contact->children);
         $this->assertTrue(is_array($contact->categories));
-        $this->assertContains(5678, $contact->categories);
+        $this->assertContains('5678', $contact->categories);
     }
     
     /**
