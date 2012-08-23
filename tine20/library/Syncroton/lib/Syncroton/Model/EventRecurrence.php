@@ -54,47 +54,17 @@ class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
     
     protected $_properties = array(
         'Calendar' => array(
-            'CalendarType'            => array('type' => 'number'),
-            'DayOfMonth'              => array('type' => 'number'),
-            'DayOfWeek'               => array('type' => 'number'),
-            'FirstDayOfWeek'          => array('type' => 'number'),
-            'Interval'                => array('type' => 'number'),
-            'IsLeapMonth'             => array('type' => 'number'),
-            'MonthOfYear'             => array('type' => 'number'),
-            'Occurrences'             => array('type' => 'number'),
-            'Type'                    => array('type' => 'number'),
-            'Until'                   => array('type' => 'datetime'),
-            'WeekOfMonth'             => array('type' => 'number'),
+            'calendarType'            => array('type' => 'number'),
+            'dayOfMonth'              => array('type' => 'number'),
+            'dayOfWeek'               => array('type' => 'number'),
+            'firstDayOfWeek'          => array('type' => 'number'),
+            'interval'                => array('type' => 'number'),
+            'isLeapMonth'             => array('type' => 'number'),
+            'monthOfYear'             => array('type' => 'number'),
+            'occurrences'             => array('type' => 'number'),
+            'type'                    => array('type' => 'number'),
+            'until'                   => array('type' => 'datetime'),
+            'weekOfMonth'             => array('type' => 'number'),
         )
     );
-    
-    protected function _parseCalendarNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from Contacts namespace
-        $children = $properties->children('uri:Calendar');
-    
-        foreach ($children as $elementName => $xmlElement) {
-    
-            switch ($elementName) {
-                default:
-                    $properties =  $this->_properties['Calendar'][$elementName];
-                    
-                    switch ($properties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                            
-                            break;
-                            
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-                            
-                            break;
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-                            
-                            break;
-                    }
-            }
-        }
-    }
 }

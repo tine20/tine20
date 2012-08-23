@@ -14,82 +14,68 @@
  * @package     Model
  * @property    array    Attachments
  * @property    string   ContentType
+ * @property    Syncroton_Model_EmailFlag  Flag
  * @property    Syncroton_Model_EmailBody  Body
  * @property    array    Cc
  * @property    array    To
  * @property    int      Read
  */
-
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
     
     protected $_properties = array(
         'AirSyncBase' => array(
-            'Attachments'             => array('type' => 'container', 'childName' => 'Attachment'),
-            'ContentType'             => array('type' => 'string'),
-            'Body'                    => array('type' => 'container'),
-            'NativeBodyType'          => array('type' => 'number'),
+            'attachments'             => array('type' => 'container', 'childElement' => 'attachment', 'class' => 'Syncroton_Model_EmailAttachment'),
+            'contentType'             => array('type' => 'string'),
+            'body'                    => array('type' => 'container', 'class' => 'Syncroton_Model_EmailBody'),
+            'nativeBodyType'          => array('type' => 'number'),
         ),
         'Email' => array(
-            'BusyStatus'              => array('type' => 'number'),
-            'Categories'              => array('type' => 'container', 'childName' => 'Category'),
-            'Cc'                      => array('type' => 'string'),
-            'CompleteTime'            => array('type' => 'datetime'),
-            'ContentClass'            => array('type' => 'string'),
-            'DateReceived'            => array('type' => 'datetime'),
-            #'DayOfMonth'              => array('type' => 'number'),
-            #'DayOfWeek'               => array('type' => 'number'),
-            'DisallowNewTimeProposal' => array('type' => 'number'),
-            'DisplayTo'               => array('type' => 'string'),
-            'DTStamp'                 => array('type' => 'datetime'),
-            'EndTime'                 => array('type' => 'datetime'),
-            'Flag'                    => array('type' => 'container'),
-            'FlagType'                => array('type' => 'string'),
-            'From'                    => array('type' => 'string'),
-            'GlobalObjId'             => array('type' => 'string'),
-            'Importance'              => array('type' => 'number'),
-            'InstanceType'            => array('type' => 'number'),
-            'InternetCPID'            => array('type' => 'string'),
-            #'Interval'                => array('type' => 'number'),
-            'Location'                => array('type' => 'string'),
-            'MeetingRequest'          => array('type' => 'container'),
-            'MessageClass'            => array('type' => 'string'),
-            #'MonthOfYear'             => array('type' => 'number'),
-            #'Occurrences'             => array('type' => 'number'),
-            'Organizer'               => array('type' => 'string'),
-            'Read'                    => array('type' => 'number'),
-            #'Recurrence'              => array('type' => 'container'),
-            #'RecurrenceId'            => array('type' => 'datetime'),
-            'Recurrences'             => array('type' => 'container'),
-            'Reminder'                => array('type' => 'number'),
-            'ReplyTo'                 => array('type' => 'string'),
-            'ResponseRequested'       => array('type' => 'number'),
-            'Sensitivity'             => array('type' => 'number'),
-            'StartTime'               => array('type' => 'datetime'),
-            'Status'                  => array('type' => 'number'),
-            'Subject'                 => array('type' => 'string'),
-            'ThreadTopic'             => array('type' => 'string'),
-            'TimeZone'                => array('type' => 'timezone'),
-            'To'                      => array('type' => 'string'),
-            #'Type'                    => array('type' => 'number'),
-            #'Until'                   => array('type' => 'datetime'),
-            #'WeekOfMonth'             => array('type' => 'number'),
+            'busyStatus'              => array('type' => 'number'),
+            'categories'              => array('type' => 'container', 'childElement' => 'category'),
+            'cc'                      => array('type' => 'string'),
+            'completeTime'            => array('type' => 'datetime'),
+            'contentClass'            => array('type' => 'string'),
+            'dateReceived'            => array('type' => 'datetime'),
+            'disallowNewTimeProposal' => array('type' => 'number'),
+            'displayTo'               => array('type' => 'string'),
+            'dTStamp'                 => array('type' => 'datetime'),
+            'endTime'                 => array('type' => 'datetime'),
+            'flag'                    => array('type' => 'container'),
+            'from'                    => array('type' => 'string'),
+            'globalObjId'             => array('type' => 'string'),
+            'importance'              => array('type' => 'number'),
+            'instanceType'            => array('type' => 'number'),
+            'internetCPID'            => array('type' => 'string'),
+            'location'                => array('type' => 'string'),
+            'meetingRequest'          => array('type' => 'container', 'class' => 'Syncroton_Model_EmailMeetingRequest'),
+            'messageClass'            => array('type' => 'string'),
+            'organizer'               => array('type' => 'string'),
+            'read'                    => array('type' => 'number'),
+            'recurrences'             => array('type' => 'container'),
+            'reminder'                => array('type' => 'number'),
+            'replyTo'                 => array('type' => 'string'),
+            'responseRequested'       => array('type' => 'number'),
+            'sensitivity'             => array('type' => 'number'),
+            'startTime'               => array('type' => 'datetime'),
+            'status'                  => array('type' => 'number'),
+            'subject'                 => array('type' => 'string'),
+            'threadTopic'             => array('type' => 'string'),
+            'timeZone'                => array('type' => 'timezone'),
+            'to'                      => array('type' => 'string'),
         ),
         'Email2' => array(
-            'AccountId'             => array('type' => 'string'),
-            #'CalendarType'          => array('type' => 'number'),
-            'ConversationId'        => array('type' => 'byteArray'), // @todo handle this
-            'ConversationIndex'     => array('type' => 'byteArray'), // @todo handle this
-            #'FirstDayOfWeek'        => array('type' => 'number'),
-            #'IsLeapMonth'           => array('type' => 'number'),
-            'LastVerbExecuted'      => array('type' => 'number'),
-            'LastVerbExecutionTime' => array('type' => 'datetime'),
-            'MeetingMessageType'    => array('type' => 'number'),
-            'ReceivedAsBcc'         => array('type' => 'number'),
-            'Sender'                => array('type' => 'string'),
-            'UmCallerID'            => array('type' => 'string'),
-            'UmUserNotes'           => array('type' => 'string'),
+            'accountId'             => array('type' => 'string'),
+            'conversationId'        => array('type' => 'byteArray'), // @todo handle this
+            'conversationIndex'     => array('type' => 'byteArray'), // @todo handle this
+            'lastVerbExecuted'      => array('type' => 'number'),
+            'lastVerbExecutionTime' => array('type' => 'datetime'),
+            'meetingMessageType'    => array('type' => 'number'),
+            'receivedAsBcc'         => array('type' => 'number'),
+            'sender'                => array('type' => 'string'),
+            'umCallerID'            => array('type' => 'string'),
+            'umUserNotes'           => array('type' => 'string'),
         ),
     );
     
@@ -140,7 +126,11 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
                     $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
     
                     break;
-    
+
+                case 'Flag':
+                    $this->$elementName = new Syncroton_Model_EmailFlag($xmlElement);
+                    break;
+
                 default:
                     list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
     

@@ -62,21 +62,25 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 #$value = $this->removeControlChars($value);
             }
             
-            $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
-            
-            if (is_array($value)) {
+            if (isset($elementProperties['childElement'])) {
+                $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
                 foreach($value as $subValue) {
-                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementProperties['childName']);
+                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementProperties['childElement']));
                     
-                    $this->_appendXMLElement($subElement, array(), $subValue);
+                    $this->_appendXMLElement($subElement, $elementProperties, $subValue);
                     
                     $element->appendChild($subElement);
+                    
                 }
+                $_domParrent->appendChild($element);
             } else {
+                $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
+                
                 $this->_appendXMLElement($element, $elementProperties, $value);
+                
+                $_domParrent->appendChild($element);
             }
             
-            $_domParrent->appendChild($element);
         }
     }
     
@@ -146,8 +150,8 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
             if ($namespace == 'Internal') {
                 continue;
             }
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
+            
+            $this->_parseNamespace($namespace, $properties);
         }
     
         return;
@@ -200,25 +204,66 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
             }
         }
         
-        throw new InvalidArgumentException("$element is no valid property of this object");
+        throw new InvalidArgumentException("$element is no valid property of " . get_class($this));
     }
     
-    protected function _parseAirSyncBaseNamespace(SimpleXMLElement $properties)
+    protected function _parseNamespace($nameSpace, SimpleXMLElement $properties)
     {
-        // fetch data from Contacts2 namespace
-        $children = $properties->children('uri:AirSyncBase');
-    
+        // fetch data from Contacts namespace
+        $children = $properties->children("uri:$nameSpace");
+        
         foreach ($children as $elementName => $xmlElement) {
-    
-            switch ($elementName) {
-                case 'Body':
-                    $this->$elementName = new Syncroton_Model_EmailBody($xmlElement);
+            $elementName = lcfirst($elementName);
+            
+            if (!isset($this->_properties[$nameSpace][$elementName])) {
+                continue;
+            }
+            
+            list (, $elementProperties) = $this->_getElementProperties($elementName);
+            
+            switch ($elementProperties['type']) {
+                case 'container':
+                    if (isset($elementProperties['childElement'])) {
+                        $property = array();
+                        
+                        $childElement = ucfirst($elementProperties['childElement']);
+                        
+                        foreach ($xmlElement->$childElement as $subXmlElement) {
+                            if (isset($elementProperties['class'])) {
+                                $property[] = new $elementProperties['class']($subXmlElement);
+                            } else {
+                                $property[] = (string) $subXmlElement;
+                            }
+                        }
+                    } else {
+                        $subClassName = isset($elementProperties['class']) ? $elementProperties['class'] : get_class($this) . ucfirst($elementName);
+                        
+                        $property = new $subClassName($xmlElement);
+                    }
+                    
+                    break;
+                    
+                case 'datetime':
+                    $property = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
     
                     break;
     
+                case 'number':
+                    $property = (int) $xmlElement;
+    
+                    break;
+                    
                 default:
-                    $this->$elementName = (string) $xmlElement;
+                    $property = (string) $xmlElement;
+    
+                    break;
             }
+            
+            if (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
+                $property = base64_decode($property);
+            }
+            
+            $this->$elementName = $property;
         }
     }
     
@@ -231,12 +276,12 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     
     public function __set($name, $value)
     {
-        list ($namespace, $properties) = $this->_getElementProperties($name);
-    
+        list ($nameSpace, $properties) = $this->_getElementProperties($name);
+        
         if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
             throw new InvalidArgumentException("value for $name must be an instance of DateTime");
         }
-    
+        
         $this->_elements[$name] = $value;
     }
     

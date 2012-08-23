@@ -40,8 +40,8 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
     
         // example code
         return new Syncroton_Model_FileReference(array(
-            'ContentType' => 'text/plain',
-            'Data'        => 'Lars'
+            'contentType' => 'text/plain',
+            'data'        => 'Lars'
         ));
     }
     
@@ -100,25 +100,25 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
             $testData = array(
                 'emailInboxFolderId' => array(
                     'email1' => new Syncroton_Model_Email(array(
-                        'AccountId'    => 'FooBar',
-                        'Attachments'  => array(
+                        'accountId'    => 'FooBar',
+                        'attachments'  => array(
                             new Syncroton_Model_EmailAttachment(array(
-                                'FileReference' => '12345abcd',
-                                'UmAttOrder'    => 1
+                                'fileReference' => '12345abcd',
+                                'umAttOrder'    => 1
                             ))
                         ),
-                        'Categories'   => array('123', '456'),
-                        'Cc'           => 'l.kneschke@metaways.de',
-                        'DateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
-                        'From'         => 'k.kneschke@metaways.de',
-                        'Subject'      => 'Test Subject',
-                        'To'           => 'j.kneschke@metaways.de',
-                        'Read'         => 1,
-                        'Body'         => new Syncroton_Model_EmailBody(array(
-                            'Type'              => Syncroton_Model_EmailBody::TYPE_PLAINTEXT, 
-                            'Data'              => 'Hello!', 
-                            'Truncated'         => true, 
-                            'EstimatedDataSize' => 600
+                        'categories'   => array('123', '456'),
+                        'cc'           => 'l.kneschke@metaways.de',
+                        'dateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+                        'from'         => 'k.kneschke@metaways.de',
+                        'subject'      => 'Test Subject',
+                        'to'           => 'j.kneschke@metaways.de',
+                        'read'         => 1,
+                        'body'         => new Syncroton_Model_EmailBody(array(
+                            'type'              => Syncroton_Model_EmailBody::TYPE_PLAINTEXT, 
+                            'data'              => 'Hello!', 
+                            'truncated'         => true, 
+                            'estimatedDataSize' => 600
                         ))
                     )),
                 )

@@ -27,8 +27,9 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
         $contact = $this->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $collectionId)), $serverId);
         
         return new Syncroton_Model_GAL(array(
-            'FirstName' => $contact->FirstName,
-            'LastName'  => $contact->LastName
+            'firstName' => $contact->firstName,
+            'lastName'  => $contact->lastName,
+            'picture'   => new Syncroton_Model_GALPicture(array('status' => 1, 'data' => 'abc'))
         ));
     }
     
@@ -45,10 +46,10 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
         foreach ($serverIds as $serverId) {
             $contact = $this->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => 'addressbookFolderId')), $serverId);
             
-            if ($contact->FirstName == $query) {
+            if ($contact->firstName == $query) {
                 $found[] = new Syncroton_Model_StoreResponseResult(array(
-                    'LongId' => 'addressbookFolderId-' .  $serverId,
-                    'Properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $options)
+                    'longId' => 'addressbookFolderId-' .  $serverId,
+                    'properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $options)
                 ));
             }
         }
@@ -89,44 +90,44 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
             $testData = array(
                 'addressbookFolderId' => array(
                     'contact1' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Lars', 
-                        'LastName'  => 'Kneschke'
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
                     )),
                     'contact2' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Cornelius', 
-                        'LastName'  => 'Weiß'
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
                     )),
                     'contact3' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Lars', 
-                        'LastName'  => 'Kneschke'
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
                     )),
                     'contact4' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Cornelius', 
-                        'LastName'  => 'Weiß'
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
                     )),
                     'contact5' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Lars', 
-                        'LastName'  => 'Kneschke'
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
                     )),
                     'contact6' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Cornelius', 
-                        'LastName'  => 'Weiß'
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
                     )),
                     'contact7' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Lars', 
-                        'LastName'  => 'Kneschke'
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
                     )),
                     'contact8' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Cornelius', 
-                        'LastName'  => 'Weiß'
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
                     )),
                     'contact9' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Lars', 
-                        'LastName'  => 'Kneschke'
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
                     )),
                     'contact10' => new Syncroton_Model_Contact(array(
-                        'FirstName' => 'Cornelius', 
-                        'LastName'  => 'Weiß'
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
                     ))
                 )
             );

@@ -103,6 +103,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
      */
     protected $_syncState;
     
+    protected $_maxWindowSize = 100;
+    
     /**
      * process the XML file and add, change, delete or fetches data 
      */
@@ -112,6 +114,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         $xml = simplexml_import_dom($this->_requestBody);
         
         $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
+        
+        if ($this->_globalWindowSize > $this->_maxWindowSize) {
+            $this->_globalWindowSize = $this->_maxWindowSize;
+        }
         
         foreach ($xml->Collections->Collection as $xmlCollection) {
             $collectionData = new Syncroton_Model_SyncCollection($xmlCollection);
@@ -468,13 +474,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
                 
                 
-                
-                
                 if (!empty($clientModifications['added']) || !empty($clientModifications['changed']) || !empty($clientModifications['deleted']) ||
                     !empty($serverModifications['added']) || !empty($serverModifications['changed']) || !empty($serverModifications['deleted'])) {
                     $collectionData->syncState->counter++;
                 }
                 
+
                 // collection header
                 $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                 if (!empty($collectionData->folder->class)) {

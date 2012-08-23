@@ -46,6 +46,13 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
                                 <Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate>
                                 <Tasks:Complete>0</Tasks:Complete>
                                 <Tasks:Sensitivity>0</Tasks:Sensitivity>
+                                <Tasks:Categories>
+                                    <Tasks:Category>1234</Tasks:Category>
+                                    <Tasks:Category>5678</Tasks:Category>
+                                </Tasks:Categories>
+                                <Tasks:Recurrence>
+                                    <Tasks:Type>1</Tasks:Type>
+                                </Tasks:Recurrence>
                             </ApplicationData>
                         </Change>
                     </Commands>
@@ -75,13 +82,15 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
         
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
-        $this->assertEquals(7, count($event));
-        $this->assertEquals(1,  $event->Importance); 
-        $this->assertEquals(0,  $event->Complete);
-        $this->assertEquals(0,  $event->Sensitivity);
-        $this->assertEquals('Testaufgabe auf mfe', $event->Subject);
-        $this->assertEquals('20101128T225900Z', $event->UtcDueDate->format("Ymd\THis\Z"));
-        $this->assertEquals('20101128T235900Z', $event->DueDate->format("Ymd\THis\Z"));
+        $this->assertEquals(9, count($event));
+        $this->assertEquals(1,  $event->importance); 
+        $this->assertEquals(0,  $event->complete);
+        $this->assertEquals(0,  $event->sensitivity);
+        $this->assertEquals('Testaufgabe auf mfe', $event->subject);
+        $this->assertEquals('20101128T225900Z', $event->utcDueDate->format("Ymd\THis\Z"));
+        $this->assertEquals('20101128T235900Z', $event->dueDate->format("Ymd\THis\Z"));
+        $this->assertTrue($event->recurrence instanceof Syncroton_Model_TaskRecurrence);
+        $this->assertEquals(Syncroton_Model_TaskRecurrence::TYPE_WEEKLY, $event->recurrence->type);
     }
     
     /**
@@ -122,6 +131,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Tasks:DueDate');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('2010-11-28T23:59:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Tasks:Recurrence/Tasks:Type');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals(Syncroton_Model_TaskRecurrence::TYPE_WEEKLY, $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');

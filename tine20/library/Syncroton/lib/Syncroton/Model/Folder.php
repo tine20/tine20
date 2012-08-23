@@ -34,40 +34,4 @@ class Syncroton_Model_Folder extends Syncroton_Model_AEntry implements Syncroton
             'lastfiltertype' => array('type' => 'number')
         ),
     );
-    
-    protected function _parseFolderHierarchyNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from Contacts namespace
-        $children = $properties->children('uri:FolderHierarchy');
-    
-        foreach ($children as $elementName => $xmlElement) {
-            $elementName = lcfirst($elementName);
-            
-            if (!isset($this->_properties['FolderHierarchy'][$elementName])) {
-                continue;
-            }
-            
-            switch ($elementName) {
-                default:
-                    list ($nameSpace, $elementProperties) = $this->_getElementProperties($elementName);
-    
-                    switch ($elementProperties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-    
-                            break;
-    
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-    
-                            break;
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-    
-                            break;
-                    }
-            }
-        }
-    }
 }
-

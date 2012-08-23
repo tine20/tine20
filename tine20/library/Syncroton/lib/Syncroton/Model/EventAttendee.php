@@ -22,6 +22,8 @@
 
 class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
 {
+    protected $_xmlBaseElement = 'Attendee';
+    
     /**
      * attendee status
      */
@@ -40,87 +42,10 @@ class Syncroton_Model_EventAttendee extends Syncroton_Model_AEntry
     
     protected $_properties = array(
         'Calendar' => array(
-            'AttendeeStatus'          => array('type' => 'number'),
-            'AttendeeType'            => array('type' => 'number'),
-            'Email'                   => array('type' => 'string'),
-            'Name'                    => array('type' => 'string'),
+            'attendeeStatus'          => array('type' => 'number'),
+            'attendeeType'            => array('type' => 'number'),
+            'email'                   => array('type' => 'string'),
+            'name'                    => array('type' => 'string'),
         )
     );
-    
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        if ($properties->getName() !== 'Attendee') {
-            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
-        }
-        
-        $this->_elements = array();
-        
-        foreach (array_keys($this->_properties) as $namespace) {
-            $functionName = '_parse' . $namespace . 'Namespace';
-            $this->$functionName($properties);
-        }
-        
-        $airSyncBaseData = $properties->children('uri:AirSyncBase');
-        
-        return;
-    }
-    
-    protected function _parseCalendarNamespace(SimpleXMLElement $properties)
-    {
-        // fetch data from Contacts namespace
-        $children = $properties->children('uri:Calendar');
-    
-        foreach ($children as $elementName => $xmlElement) {
-    
-            switch ($elementName) {
-                default:
-                    $properties =  $this->_properties['Calendar'][$elementName];
-                    
-                    switch ($properties['type']) {
-                        case 'datetime':
-                            $this->$elementName = new DateTime((string) $xmlElement, new DateTimeZone('UTC'));
-                            
-                            break;
-                            
-                        case 'number':
-                            $this->$elementName = (int) $xmlElement;
-                            
-                            break;
-                        default:
-                            $this->$elementName = (string) $xmlElement;
-                            
-                            break;
-                    }
-            }
-        }
-    }
-    
-    public function &__get($name)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        return $this->_elements[$name];
-    }
-    
-    public function __set($name, $value)
-    {
-        if (!array_key_exists($name, $this->_properties['Calendar'])) {
-            throw new InvalidArgumentException("$name is no valid property of this object");
-        }
-        
-        $properties = $this->_properties['Calendar'][$name];
-        
-        if ($properties['type'] == 'datetime' && !$value instanceof DateTime) {
-            throw new InvalidArgumentException("value for $name must be an instance of DateTime");
-        }
-        
-        $this->_elements[$name] = $value;
-    }
 }

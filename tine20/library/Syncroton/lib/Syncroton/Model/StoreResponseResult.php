@@ -20,12 +20,12 @@ class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AEntry
 
     protected $_properties = array(
         'AirSync' => array(
-            'Class'        => array('type' => 'string'),
-            'CollectionId' => array('type' => 'string'),
+            'class'        => array('type' => 'string'),
+            'collectionId' => array('type' => 'string'),
         ),
         'Search' => array(
-            'LongId'     => array('type' => 'string'),
-            'Properties' => array('type' => 'container'),
+            'longId'     => array('type' => 'string'),
+            'properties' => array('type' => 'container'),
         )
     );
 }

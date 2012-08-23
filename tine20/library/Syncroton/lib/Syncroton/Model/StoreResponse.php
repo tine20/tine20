@@ -37,10 +37,10 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
 
     protected $_properties = array(
         'Search' => array(
-            'Status'    => array('type' => 'number'),
-            'Result'    => array('type' => 'container'),
-            'Range'     => array('type' => 'string'),
-            'Total'     => array('type' => 'number'),
+            'status'    => array('type' => 'number'),
+            'result'    => array('type' => 'container', 'multiple' => true),
+            'range'     => array('type' => 'string'),
+            'total'     => array('type' => 'number'),
         )
     );
 
@@ -59,7 +59,7 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
             $nameSpace = 'uri:' . $nameSpace;
 
             switch ($elementName) {
-                case 'Result':
+                case 'result':
                     foreach ($value as $result) {
                         $element = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Result');
                         $result->appendXML($element);
@@ -67,13 +67,13 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
                     }
                     break;
 
-                case 'Range':
+                case 'range':
                     if (is_array($value) && count($value) == 2) {
                         $value = implode('-', $value);
                     }
 
                 default:
-                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, $elementName);
+                    $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
                     $element->appendChild($_domParrent->ownerDocument->createTextNode($value));
                     $_domParrent->appendChild($element);
             }

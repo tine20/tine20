@@ -107,8 +107,12 @@ class Syncroton_Server
             try {
                 $decoder = new Syncroton_Wbxml_Decoder($this->_body);
                 $requestBody = $decoder->decode();
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml request: " . $requestBody->saveXML());
+                if ($this->_logger instanceof Zend_Log) {
+                    $requestBody->formatOutput = true;
+                    // remove not important XML information
+                    $request_str = preg_replace('|(</*)([a-z0-9]+:)?([a-z0-9]+)[^>]*>|i', '\\1\\3>', $requestBody->saveXML());
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml request:\n" . trim($request_str));
+                }
             } catch(Syncroton_Wbxml_Exception_UnexpectedEndOfFile $e) {
                 $requestBody = NULL;
             }
@@ -162,8 +166,12 @@ class Syncroton_Server
         }
         
         if ($response instanceof DOMDocument) {
-            if ($this->_logger instanceof Zend_Log) 
-                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response: " . $response->saveXML());
+            if ($this->_logger instanceof Zend_Log) {
+                $response->formatOutput = true;
+                // remove not important XML information
+                $response_str = preg_replace('|(</*)([a-z0-9]+:)?([a-z0-9]+)[^>]*>|i', '\\1\\3>', $response->saveXML());
+                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response:\n" . trim($response_str));
+            }
         
             $outputStream = fopen("php://temp", 'r+');
         

@@ -105,19 +105,20 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
         $this->assertEquals(15, count($event));
-        $this->assertEquals(0,  $event->AllDayEvent); 
-        $this->assertEquals(2,  $event->BusyStatus);
-        $this->assertEquals(0,  $event->Sensitivity);
-        $this->assertEquals(1,  $event->MeetingStatus);
-        $this->assertEquals(1,  count($event->Attendees));
-        $this->assertEquals(2,  count($event->Exceptions));
-        $this->assertEquals(15, $event->Reminder);
-        $this->assertEquals('Repeat', $event->Subject);
-        $this->assertEquals('20101125T150537Z', $event->DtStamp->format("Ymd\THis\Z"));
-        $this->assertEquals('20101123T160000Z', $event->EndTime->format("Ymd\THis\Z"));
-        $this->assertEquals('20101123T130000Z', $event->StartTime->format("Ymd\THis\Z"));
-        $this->assertEquals('20101128T225959Z', $event->Recurrence->Until->format("Ymd\THis\Z"));
-        $this->assertEquals('6de7cb687964dc6eea109cd81750177979362217', $event->UID);
+        $this->assertEquals(0,  $event->allDayEvent); 
+        $this->assertEquals(2,  $event->busyStatus);
+        $this->assertEquals(0,  $event->sensitivity);
+        $this->assertEquals(1,  $event->meetingStatus);
+        $this->assertEquals(1,  count($event->attendees));
+        $this->assertTrue(is_array($event->exceptions));
+        $this->assertEquals(2,  count($event->exceptions), 'exceptions mismatch');
+        $this->assertEquals(15, $event->reminder);
+        $this->assertEquals('Repeat', $event->subject);
+        $this->assertEquals('20101125T150537Z', $event->dtStamp->format("Ymd\THis\Z"));
+        $this->assertEquals('20101123T160000Z', $event->endTime->format("Ymd\THis\Z"));
+        $this->assertEquals('20101123T130000Z', $event->startTime->format("Ymd\THis\Z"));
+        $this->assertEquals('20101128T225959Z', $event->recurrence->until->format("Ymd\THis\Z"));
+        $this->assertEquals('6de7cb687964dc6eea109cd81750177979362217', $event->uID);
     }
     
     /**
@@ -137,7 +138,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $appData    = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
-        $event->Body = new Syncroton_Model_EmailBody(array('Data' => 'lars', 'Type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT));
+        $event->body = new Syncroton_Model_EmailBody(array('data' => 'lars', 'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT));
         
         $event->appendXML($appData);
         

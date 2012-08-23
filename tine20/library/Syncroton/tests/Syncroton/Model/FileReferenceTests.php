@@ -46,8 +46,8 @@ class Syncroton_Model_FileReferenceTests extends PHPUnit_Framework_TestCase
         $appData = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
         
         $email = new Syncroton_Model_FileReference(array(
-            'ContentType' => 'text/plain',
-            'Data'        => 'Lars'
+            'contentType' => 'text/plain',
+            'data'        => 'Lars'
         ));
         
         $email->appendXML($appData);

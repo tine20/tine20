@@ -135,8 +135,8 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         #$bday->setTimezone('UTC');        
         
         #$this->assertEquals($bday->toString(), $result->bday->toString());
-        $this->assertEquals('Fritzchen', $entry->FirstName);
-        $this->assertEquals('Meinen',    $entry->LastName);
+        $this->assertEquals('Fritzchen', $entry->firstName);
+        $this->assertEquals('Meinen',    $entry->lastName);
         
         return $entry;
     }
@@ -150,7 +150,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $entry = $this->testAddContact();
         
-        $searchResult = $dataController->search($entry->FirstName, array());
+        $searchResult = $dataController->search($entry->firstName, array());
         
         #var_dump($searchResult);
         

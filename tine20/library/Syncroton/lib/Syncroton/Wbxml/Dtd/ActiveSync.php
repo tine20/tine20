@@ -40,7 +40,7 @@ class Syncroton_Wbxml_Dtd_ActiveSync
     const CODEPAGE_SETTINGS          = 18;
     const CODEPAGE_DOCUMENTLIBRARY   = 19;
     const CODEPAGE_ITEMOPERATIONS    = 20;
-    const CODEPAGE_COMPOSEEMAIL      = 21;
+    const CODEPAGE_COMPOSEMAIL       = 21;
     const CODEPAGE_EMAIL2            = 22;
     const CODEPAGE_NOTES             = 23;
     const CODEPAGE_RIGHTSMANAGEMENT  = 24;
