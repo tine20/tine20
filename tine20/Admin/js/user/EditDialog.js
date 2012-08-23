@@ -222,8 +222,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var confirmForm = this.passwordConfirmWindow.items.first().getForm(),
             confirmValues = confirmForm.getValues(),
             passwordStatus = confirmForm.findField('passwordStatus'),
-            passwordField = this.getForm().findField('accountPassword');
-                     
+            passwordField = (this.getForm()) ? this.getForm().findField('accountPassword') : null;
+        
         if (! passwordField) {
             // oops: something went wrong, this should not happen
             return false;
@@ -591,7 +591,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
         
         var smtpConfig = Tine.Felamimail.registry.get('defaults').smtp;
-        var domains = smtpConfig.secondarydomains.length ? smtpConfig.secondarydomains.split(',') : [];
+        var domains = (smtpConfig.secondarydomains && smtpConfig.secondarydomains.length) ? smtpConfig.secondarydomains.split(',') : [];
         if (smtpConfig.primarydomain.length) {
             domains.push(smtpConfig.primarydomain);
         }
