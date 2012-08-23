@@ -13,6 +13,7 @@
         <field>
             <source>Mitarbeiternummer</source>
             <destination>number</destination>
+            <typecast>integer</typecast>
         </field>
         <field>
             <source>Name, Vorname</source>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.1</version>
+    <version>6.2</version>
     <order>51</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -87,7 +87,6 @@
                 <field>
                     <name>number</name>
                     <type>integer</type>
-                    <length>3</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

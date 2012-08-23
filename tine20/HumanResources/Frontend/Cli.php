@@ -203,6 +203,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'bank_name',
             'bank_code_number',
             'health_insurance',
+            'number',
         );
         $changed = FALSE;
         foreach ($fieldsToUpdate as $field) {

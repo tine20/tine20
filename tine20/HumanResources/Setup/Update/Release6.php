@@ -29,4 +29,22 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '2');
         $this->setApplicationVersion('HumanResources', '6.1');
     }
+
+    /**
+     * update 6.1 -> 6.2
+     * - number should be int(11)
+     */
+    public function update_1()
+    {
+        $field = '<field>
+                    <name>number</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_employee', $declaration);
+        $this->setTableVersion('humanresources_employee', '3');
+        $this->setApplicationVersion('HumanResources', '6.2');
+    }
 }

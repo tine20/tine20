@@ -422,6 +422,22 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $data[$key] = $field['fixed'];
             } else if (isset($field['append'])) {
                 $data[$key] .= $field['append'] . $_data[$key];
+            } else if (isset($field['typecast'])) {
+                switch ($field['typecast']) {
+                    case 'int':
+                    case 'integer':
+                        $data[$key] = (integer) $_data[$key];
+                        break; 
+                    case 'string':
+                        $data[$key] = (string) $_data[$key];
+                        break;
+                    case 'bool':
+                    case 'boolean':
+                        $data[$key] = (string) $_data[$key];
+                        break;
+                    default:
+                        $data[$key] = $_data[$key];
+                }
             } else {
                 $data[$key] = $_data[$key];
             }

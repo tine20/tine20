@@ -302,13 +302,17 @@ class Tinebase_Frontend_Cli_Abstract
             }
             
             echo "Imported " . $result[$filename]['totalcount'] . " records. Import failed for " . $result[$filename]['failcount'] . " records. \n";
-            if (isset($result['duplicatecount']) && ! empty($result[$filename]['duplicatecount'])) {
+            if (isset($result[$filename]['duplicatecount']) && ! empty($result[$filename]['duplicatecount'])) {
                 echo "Found " . $result[$filename]['duplicatecount'] . " duplicates.\n";
             }
             
             // import (check if dry run)
             if ($_opts->d && $_opts->v) {
                 print_r($result[$filename]['results']->toArray());
+                
+                if ($result[$filename]['failcount'] > 0) {
+                    print_r($result[$filename]['exceptions']->toArray());
+                }
             } 
         }
         
