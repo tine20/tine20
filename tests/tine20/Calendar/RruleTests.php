@@ -827,6 +827,28 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testComputeNextOccurrenceWithWhich()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'weekly',
+            'dtstart'       => '2009-09-09 08:00:00',
+            'dtend'         => '2009-09-09 10:00:00',
+            'rrule'         => 'FREQ=WEEKLY;BYDAY=WE,FR;INTERVAL=1',
+            'originator_tz' => 'Europe/Berlin',
+        ));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        $from = new Tinebase_DateTime('now');
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from, 0);
+        $this->assertEquals($event, $nextOccurrence, 'which = 0 means same event');
+        
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from, 4);
+        $this->assertLessThan($nextOccurrence->dtstart, $from);
+        $this->assertGreaterThan($nextOccurrence->dtstart, $from->modify('+ 3 weeks'));
+    }
+    
     public function testWeeklyWithCount()
     {
         $event = new Calendar_Model_Event(array(
