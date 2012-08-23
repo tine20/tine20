@@ -41,7 +41,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     evalGrants: true,
     showContainerSelector: true,
     
-    
     /**
      * executed after record got updated from proxy
      * 

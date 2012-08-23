@@ -1,119 +1,41 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"Project-Id-Version: Tine 2.0 - Inventory\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-07-21 11:15+0300\n"
-"Last-Translator: Nikolay Parukhin <nik@sevpinro.ru>\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Russian\n"
+"X-Poedit-Country: \n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/InventoryItemGridPanel.js:83 js/Model.js:85
-#: js/InventoryItemEditDialog.js:137
-msgid "ID"
+#: Model/InventoryItem.php:49
+msgid "inventory record"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:89 js/Model.js:77
-#: js/InventoryItemEditDialog.js:121
-msgid "Name"
+#: Model/InventoryItem.php:50
+msgid "inventory records"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:95 js/Model.js:79
-#: js/InventoryItemEditDialog.js:129
-msgid "Type"
+#: Model/InventoryItem.php:52
+msgid "inventory record list"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:102 js/Model.js:87
-#: js/InventoryItemEditDialog.js:163
-msgid "Added"
+#: Model/InventoryItem.php:53
+msgid "inventory record lists"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:109 js/Model.js:86
-#: js/InventoryItemEditDialog.js:155
-msgid "Location"
+#: Config.php:31
+msgid "Status Available"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:115 js/InventoryItemEditDialog.js:171
-msgid "Total number"
-msgstr ""
-
-#: js/InventoryItemGridPanel.js:121 js/InventoryItemEditDialog.js:181
-msgid "Active number"
-msgstr ""
-
-#: js/InventoryItemGridPanel.js:127 js/InventoryItemEditDialog.js:144
-msgid "Description"
-msgstr "Описание"
-
-#: js/InventoryItemGridPanel.js:139
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/InventoryItemGridPanel.js:145
-msgid "Budget"
-msgstr "Бюджет"
-
-#: js/InventoryItemGridPanel.js:169
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-#: js/Inventory.js:24 Setup/setup.xml:4
-msgid "Inventory"
-msgstr ""
-
-#: js/Model.js:37
-msgid "Item"
-msgid_plural "Items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:41
-msgid "inventories"
-msgstr ""
-
-#: js/Model.js:42
-msgid "inventory"
-msgid_plural "inventories"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:76
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:90
-msgid "Last modified"
-msgstr ""
-
-#: js/Model.js:91
-msgid "Last modifier"
-msgstr ""
-
-#: js/Model.js:92
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:93
-msgid "Creator"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:78
-msgid "The active number must be less than or equal total number."
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:101
-msgid "Inventory Item"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:149
-msgid "Enter description"
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
 msgstr ""
 
 #: Setup/Initialize.php:33
@@ -136,67 +58,55 @@ msgstr ""
 msgid "unkown"
 msgstr ""
 
-#: Controller.php:74
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr ""
+
+#: Controller.php:80
 #, python-format
-msgid "%s's personal inventory"
+msgid "%s's personal inventorys"
 msgstr ""
 
-#: Config.php:31
-msgid "Status Available"
+#: js/InventoryItemEditDialog.js:74
+msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: Config.php:33
-msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
+#: js/InventoryItemEditDialog.js:97
+msgid "Inventory Item"
 msgstr ""
 
-#~ msgid "ExampleApplication"
-#~ msgstr "ПриложениеПример"
+#: js/InventoryItemEditDialog.js:119
+msgid "Name"
+msgstr ""
 
-#~ msgid "Status"
-#~ msgstr "Статус"
+#: js/InventoryItemEditDialog.js:127
+msgid "Type"
+msgstr ""
 
-#, fuzzy
-#~ msgid "ExampleRecord"
-#~ msgstr "ЗаписьПример"
+#: js/InventoryItemEditDialog.js:137
+msgid "ID"
+msgstr ""
 
-#~ msgid "ExampleRecords"
-#~ msgstr "ЗаписиПримеры"
+#: js/InventoryItemEditDialog.js:146
+msgid "Description"
+msgstr ""
 
-#~ msgid "All ExampleRecords"
-#~ msgstr "Все ЗаписиПримеры"
+#: js/InventoryItemEditDialog.js:151
+msgid "Enter description"
+msgstr ""
 
-#~ msgid "record list"
-#~ msgid_plural "record lists"
-#~ msgstr[0] "список записей"
-#~ msgstr[1] "списка записей"
-#~ msgstr[2] "списков записей"
+#: js/InventoryItemEditDialog.js:159
+msgid "Location"
+msgstr ""
 
-#~ msgid "Number"
-#~ msgstr "Номер"
+#: js/InventoryItemEditDialog.js:167
+msgid "Added"
+msgstr ""
 
-#~ msgid "Unit"
-#~ msgstr "Единица"
+#: js/InventoryItemEditDialog.js:176
+msgid "Total number"
+msgstr ""
 
-#~ msgid "Unit Price"
-#~ msgstr "Цена за единицу"
-
-#~ msgid "Timesheets are billable"
-#~ msgstr "Табели оплачиваемы"
-
-#~ msgid "closed"
-#~ msgstr "закрыт"
-
-#~ msgid "open"
-#~ msgstr "открыт"
-
-#~ msgid "Billed"
-#~ msgstr "Оплачен"
-
-#~ msgid "not yet billed"
-#~ msgstr "ещё не оплачен"
-
-#~ msgid "to bill"
-#~ msgstr "к оплате"
-
-#~ msgid "billed"
-#~ msgstr "оплачен"
+#: js/InventoryItemEditDialog.js:184
+msgid "Active number"
+msgstr ""

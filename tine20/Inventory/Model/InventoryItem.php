@@ -41,26 +41,16 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_meta = array(
-        'id'                    => 'id',
-        'name'                  => 'name',
-        'type'                  => 'type',
-        'container_id'          => 'container_id',
-
-        'recordName'            => 'inventory record', // _('inventory record')
-        'recordsName'           => 'inventory records', // _('inventory records')
-        'containerProperty'     => 'container_id',
-        'containerName'         => 'inventory record list', // _('inventory record list')
-        'containersName'        => 'inventory record lists', // _('inventory record lists')
-
-    // modlog information
-        'created_by'            => 'created_by',
-        'creation_time'         => 'creation_time',
-        'last_modified_by'      => 'last_modified_by',
-        'last_modified_time'    => 'last_modified_time',
-        'is_deleted'            => 'is_deleted',
-        'deleted_time'          => 'deleted_time',
-        'deleted_by'            => 'deleted_by',
-    // relations (linked Inventory_Model_InventoryItem records) and other metadata
+        'id'                => 'id',
+        'name'              => 'name',
+        'type'              => 'type',
+        'container_id'      => 'container_id',
+        'recordName'        => 'inventory record', // _('inventory record')
+        'recordsName'       => 'inventory records', // _('inventory records')
+        'containerProperty' => 'container_id',
+        'containerName'     => 'inventory record list', // _('inventory record list')
+        'containersName'    => 'inventory record lists', // _('inventory record lists')
+        // relations (linked Inventory_Model_InventoryItem records) and other metadata
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
@@ -79,11 +69,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'name'              => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-                    'label'      => NULL,
+                    'label'      => 'Name', // _('Name')
             ),
             'type'              => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-                    'label'      => NULL,
+                    'label'      => 'Type',// _('Type')
             ),
             'container_id'      => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
@@ -91,7 +81,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'inventory_id'      => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => 'Inventory ID' // _('Inventory ID')
             ),
             'description'       => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -100,10 +90,10 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'location'          => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
-                    'label'      => NULL
+                    'label'      => 'Location' // _('Location')
             ),
             'add_time'          => array(
-                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                     'label'      => NULL
             ),
             'total_number'      => array(
@@ -113,7 +103,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'active_number'     => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => 'Available' // _(Available)
             ),
             // modlog information
             'created_by'        => array(
@@ -161,7 +151,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         {
             $this->_filters[$val] = new Zend_Filter_Empty(NULL);
         }
-        print_r($this->_filters,true);
+    
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     

@@ -47,14 +47,6 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
             'idProperty' => 'inventory_item.id',
             'applicationName' => 'Inventory',
         )),
-        // modlog filters
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-        
-        // @todo add filters
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'inventory_id'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
