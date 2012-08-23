@@ -28,7 +28,8 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
         
         return new Syncroton_Model_GAL(array(
             'firstName' => $contact->firstName,
-            'lastName'  => $contact->lastName
+            'lastName'  => $contact->lastName,
+            'picture'   => new Syncroton_Model_GALPicture(array('status' => 1, 'data' => 'abc'))
         ));
     }
     
