@@ -412,7 +412,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $data = $_fieldOrData;
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-                . 'Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
+                . ' Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
             
             $data = array(
                 'field'     => $_fieldOrData,
@@ -441,12 +441,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             );
             $filter = NULL;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-                . print_r($definition, TRUE));
             $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
             $filter = new $definition['filter']($data);
         }
-            
+        
         return $filter;
     }
     
