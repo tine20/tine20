@@ -1123,10 +1123,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getModlogColumns: function() {
         var result = [
-            { id: 'creation_time',      header: _('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
-            { id: 'created_by',         header: _('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true },
-            { id: 'last_modified_time', header: _('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
-            { id: 'last_modified_by',   header: _('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true }
+            { id: 'creation_time',      header: _('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            { id: 'created_by',         header: _('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
+            { id: 'last_modified_time', header: _('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            { id: 'last_modified_by',   header: _('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true }
         ];
 
         return result;
