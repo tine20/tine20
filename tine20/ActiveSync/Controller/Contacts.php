@@ -65,7 +65,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         'pagerNumber'           => 'tel_pager',
         #'RadioPhoneNumber'      => 'radiophonenumber',
         #'Spouse'                => 'spouse',
-        'duffix'                => 'n_prefix',
+        'suffix'                => 'n_prefix',
         #'Title'                 => '', //salutation
         'webPage'               => 'url',
         #'YomiCompanyName'       => 'yomicompanyname',
