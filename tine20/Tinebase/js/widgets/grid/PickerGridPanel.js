@@ -269,7 +269,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function(recordToAdd) {
-        var record = new this.newRecordClass(Ext.applyIf(recordToAdd, this.newRecordDefaults), recordToAdd.id);
+        var record = new this.newRecordClass(Ext.applyIf(recordToAdd.data, this.newRecordDefaults || {}), recordToAdd.id);
         
         // check if already in
         if (! this.recordStore.getById(record.id)) {

@@ -311,7 +311,7 @@ class Tinebase_Relations
                     if (method_exists($appController, $getMultipleMethod)) {
                         $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
                     } else {
-                        throw Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
+                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
