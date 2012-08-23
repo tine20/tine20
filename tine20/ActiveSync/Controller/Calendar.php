@@ -209,7 +209,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     
                     if($alarm instanceof Tinebase_Model_Alarm) {
                         // NOTE: option minutes_before is always calculated by Calendar_Controller_Event::_inspectAlarmSet
-                        // @todo does not work as expected currently
                         $minutesBefore = (int) $alarm->getOption('minutes_before');
                         
                         // avoid negative alarms which may break phones

@@ -227,6 +227,7 @@ Zeile 3</AirSyncBase:Data>
         // replace email to make current user organizer and attendee
         $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
     }
+//     public function testCreateEntry($syncrotonFolder = null) {}
     
     public function testCreateEntry($syncrotonFolder = null)
     {
@@ -238,8 +239,9 @@ Zeile 3</AirSyncBase:Data>
     
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-    
+        
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+//         print_r(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
     
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
     
@@ -248,7 +250,7 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(0,         $syncrotonEvent->AllDayEvent);
         $this->assertEquals(2,         $syncrotonEvent->BusyStatus);
         $this->assertEquals('Repeat',  $syncrotonEvent->Subject);
-echo "^";#$this->assertEquals(15,        $syncrotonEvent->Reminder);
+        $this->assertEquals(15,        $syncrotonEvent->Reminder);
         $this->assertTrue($syncrotonEvent->EndTime instanceof DateTime);
         $this->assertTrue($syncrotonEvent->StartTime instanceof DateTime);
         $this->assertEquals('20101123T160000Z', $syncrotonEvent->EndTime->format('Ymd\THis\Z'));
