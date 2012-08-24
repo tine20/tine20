@@ -2,13 +2,13 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>0.1</version>
+    <version>0.2</version>
     <order>60</order>
     <status>disabled</status>
     <tables>
         <table>
             <name>inventory_item</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -51,7 +51,6 @@
                     <name>location</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>add_time</name>
