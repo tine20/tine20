@@ -217,6 +217,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_POLICY_MIN_NUMBERS = 'pwPolicyMinNumbers';
     
     /**
+     * AUTOMATIC_BUGREPORTS
+     *
+     * @var string
+     */
+    const AUTOMATIC_BUGREPORTS = 'automaticBugreports';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -473,6 +480,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Minimum numbers in password',
             'type'                  => 'int',
             'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::AUTOMATIC_BUGREPORTS => array(
+                                   //_('Automatic bugreports')
+            'label'                 => 'Automatic bugreports',
+                                   //_('Always send bugreports, even on timeouts and other exceptions / failures.')
+            'description'           => 'Always send bugreports, even on timeouts and other exceptions / failures.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -135,9 +135,12 @@ Tine.Tinebase.ExceptionHandler = function() {
             fn: callback,
             scope: callbackScope
         };
+        
+        Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception:');
+        Tine.log.debug(exception);
     
-        if(!callback) callback = Ext.emptyFn;
-        if(!callbackScope) callbackScope = this;
+        if (!callback) callback = Ext.emptyFn;
+        if (!callbackScope) callbackScope = this;
         
         switch (exception.code) {
             // not authorised
@@ -202,7 +205,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             // server communication loss
             case 510:
                 // NOTE: when communication is lost, we can't create a nice ext window.
-                // NOTE: - reloads/redirects cancle all open xhr requests from the browser side
+                // NOTE: - reloads/redirects cancel all open xhr requests from the browser side
                 //       - we need some way to distinguish server/client connection losses
                 //       - the extjs xhr abstraction has no such feature
                 //       - so we defer the alert. In case of reload/redirect the deferd fn dosn't get executed
@@ -217,6 +220,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                     title: _('Timeout'), 
                     msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.')
                 }));
+                
                 break;
                 
             // empty response
@@ -254,25 +258,38 @@ Tine.Tinebase.ExceptionHandler = function() {
                 
             // generic failure -> notify developers
             default:
-            
-            var windowHeight = 400;
-            if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
-                windowHeight = Ext.getBody().getHeight(true) * 0.7;
-            }
-            
-            if (! Tine.Tinebase.exceptionDlg) {
-                Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
-                    height: windowHeight,
-                    exception: exception,
-                    listeners: {
-                        close: function() {
-                            Tine.Tinebase.exceptionDlg = null;
+                var windowHeight = 400;
+                if (Ext.getBody().getHeight(true) * 0.7 < windowHeight) {
+                    windowHeight = Ext.getBody().getHeight(true) * 0.7;
+                }
+                
+                if (! Tine.Tinebase.exceptionDlg) {
+                    Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                        height: windowHeight,
+                        exception: exception,
+                        listeners: {
+                            close: function() {
+                                Tine.Tinebase.exceptionDlg = null;
+                            }
                         }
+                    });
+                    Tine.Tinebase.exceptionDlg.show();
+                }
+                break;
+        }
+        
+        if (Tine.Tinebase.registry.get('config').automaticBugreports && Tine.Tinebase.registry.get('config').automaticBugreports.value && ! Tine.Tinebase.exceptionDlg) {
+            Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Activate non-interacive exception dialog.');
+            Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                exception: exception,
+                nonInteractive: true,
+                listeners: {
+                    close: function() {
+                        Tine.Tinebase.exceptionDlg = null;
                     }
-                });
-                Tine.Tinebase.exceptionDlg.show();
-            }
-            break;
+                }
+            });
+            Tine.Tinebase.exceptionDlg.show();
         }
     }
     
