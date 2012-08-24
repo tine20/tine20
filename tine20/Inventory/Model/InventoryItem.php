@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -51,7 +51,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'containerName'     => 'inventory record list', // _('inventory record list')
         'containersName'    => 'inventory record lists', // _('inventory record lists')
 
+
         // relations (linked Inventory_Model_InventoryItem records) and other metadata
+
 
         'hasRelations'      => true,
         'hasCustomFields'   => true,
@@ -160,12 +162,12 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-    
-        foreach (array("total_number", "active_number") AS $val)
+        foreach (array("total_number", "active_number", "add_time") as $val)
         {
             $this->_filters[$val] = new Zend_Filter_Empty(NULL);
         }
-    
+        
+        
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     

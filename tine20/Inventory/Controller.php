@@ -77,7 +77,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
         $account = Tinebase_User::getInstance()->getUserById($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal inventorys"), $account->accountFullName),
+            'name'              => sprintf($translation->_("%s's personal inventory"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_accountId,
             'backend'           => 'Sql',
