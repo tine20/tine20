@@ -135,8 +135,11 @@ class TimeZoneConvert_TransitionRule extends TimeZoneConvert_Model
      */
     public function computeTransitionDate($year)
     {
+        $minute = str_pad($this->minute, 2, STR_PAD_LEFT);
+        $second = str_pad($this->second, 2, STR_PAD_LEFT);
+
         $transition = DateTime::createFromFormat('Y-m-d G:i:s', 
-            "{$year}-{$this->month}-1 {$this->hour}:{$this->minute}:{$this->second}",
+            "{$year}-{$this->month}-1 {$this->hour}:{$minute}:{$second}",
             new DateTimeZone('UTC')
         );
         
