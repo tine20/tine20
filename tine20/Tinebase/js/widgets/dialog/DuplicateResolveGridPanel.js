@@ -455,7 +455,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
                 resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
             }
             
-            Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record (tags field)');
+            Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record field: ' + resolveRecord.get('fieldName'));
             Tine.log.debug(resolveRecord);
         }, this);
         
@@ -483,6 +483,9 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
 
         }, this);
 
+        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::getResolvedRecord() resolved record:');
+        Tine.log.debug(record);
+        
         return record;
     },
 

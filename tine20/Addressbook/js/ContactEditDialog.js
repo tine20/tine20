@@ -543,15 +543,16 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onRecordLoad: function () {
         // NOTE: it comes again and again till 
         if (this.rendered) {
-            var container;
-                        
+            var container = this.record.get('container_id');
+            
             // handle default container
+            // TODO is this still needed? don't we already have generic default container handling?
             if (! this.record.id) {
                 if (this.forceContainer) {
                     container = this.forceContainer;
                     // only force initially!
                     this.forceContainer = null;
-                } else {
+                } else if (! Ext.isObject(container)) {
                     container = Tine.Addressbook.registry.get('defaultAddressbook');
                 }
                 
