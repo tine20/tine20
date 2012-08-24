@@ -825,6 +825,10 @@
           "path": "css/ux/display/"
         },
         {
+          "text": "CenterLayout.css",
+          "path": "css/ux/layout/"
+        },
+        {
           "text": "LockCombo.css",
           "path": "css/ux/"
         },
