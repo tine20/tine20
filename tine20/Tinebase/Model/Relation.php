@@ -59,12 +59,14 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     
     /**
      * all valid fields
+     * 
+     * @todo add custom (Alnum + some chars like '-') validator for id fields
      */
     protected $_validators = array(
-        'id'                     => array('allowEmpty' => true,  'Alnum'),
+        'id'                     => array('allowEmpty' => true),
         'own_model'              => array('presence' => 'required', 'allowEmpty' => false),
         'own_backend'            => array('presence' => 'required', 'allowEmpty' => false),
-        'own_id'                 => array('presence' => 'required', 'allowEmpty' => true, 'Alnum'),
+        'own_id'                 => array('presence' => 'required', 'allowEmpty' => true),
         'own_degree'             => array('presence' => 'required', 'allowEmpty' => false, array('InArray', array(
             self::DEGREE_PARENT, 
             self::DEGREE_CHILD, 
@@ -72,8 +74,8 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         ))),
         'related_model'          => array('presence' => 'required', 'allowEmpty' => false),
         'related_backend'        => array('presence' => 'required', 'allowEmpty' => false),
-        'related_id'             => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
-        'type'                   => array('presence' => 'required', 'allowEmpty' => false),
+        'related_id'             => array('presence' => 'required', 'allowEmpty' => false),
+        'type'                   => array('presence' => 'required', 'allowEmpty' => true),
         'remark'                 => array('allowEmpty' => true          ), // freeform field for manual relations
         'related_record'         => array('allowEmpty' => true          ), // property to store 'resolved' relation record
         'created_by'             => array('allowEmpty' => true,         ),
