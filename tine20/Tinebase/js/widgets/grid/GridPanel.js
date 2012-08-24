@@ -258,6 +258,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type Tine.widgets.grid.FilterSelectionModel
      */
     selectionModel: null,
+    
+    /**
+     * add records from other applications using the split add button
+     * - activated by default
+     * 
+     * @type Bool
+     * @property splitAddButton
+     */
+    splitAddButton: true,
 
     layout: 'border',
     border: false,
@@ -1010,25 +1019,35 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             var items = [];
             
-            if(this.action_addInNewWindow) {
-                items.push(Ext.apply(
-                    new Ext.SplitButton(this.action_addInNewWindow), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top',
-                        arrowAlign:'right',
-                        menu: new Ext.menu.Menu({
-                            items: [],
-                            plugins: [{
-                                ptype: 'ux.itemregistry',
-                                key:   'Tine.widgets.grid.GridPanel.addButton'
-                            }]
+            if (this.action_addInNewWindow) {
+                if (this.splitAddButton) {
+                    items.push(Ext.apply(
+                        new Ext.SplitButton(this.action_addInNewWindow), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top',
+                            arrowAlign:'right',
+                            menu: new Ext.menu.Menu({
+                                items: [],
+                                plugins: [{
+                                    ptype: 'ux.itemregistry',
+                                    key:   'Tine.widgets.grid.GridPanel.addButton'
+                                }]
+                            })
                         })
-                    })
-                );
+                    );
+                } else {
+                    items.push(Ext.apply(
+                        new Ext.Button(this.action_addInNewWindow), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        })
+                    );
+                }
             }
             
-            if(this.action_editInNewWindow) {
+            if (this.action_editInNewWindow) {
                 items.push(Ext.apply(
                     new Ext.Button(this.action_editInNewWindow), {
                         scale: 'medium',
@@ -1038,7 +1057,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 );
             }
             
-            if(this.action_deleteRecord) {
+            if (this.action_deleteRecord) {
                 items.push(Ext.apply(
                     new Ext.Button(this.action_deleteRecord), {
                         scale: 'medium',
@@ -1048,7 +1067,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 );
             }
             
-            if(this.actions_print) {
+            if (this.actions_print) {
                 items.push(Ext.apply(
                     new Ext.Button(this.actions_print), {
                         scale: 'medium',
