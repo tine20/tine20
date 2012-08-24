@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,6 +26,13 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     closeAction: 'close',
     autoScroll: true,
     releaseMode: true,
+    
+    /**
+     * non-interactive mode: do not show anything and just submit the report
+     * 
+     * @type Boolean
+     */
+    nonInteractive: false,
     
     /**
      * @private
@@ -58,8 +65,13 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         Tine.Tinebase.ExceptionDialog.superclass.initComponent.call(this);
         
         this.on('show', function () {
-            // fix layout issue
-            this.setHeight(this.getHeight() + 10);
+            if (this.nonInteractive) {
+                Tine.log.debug('Tine.Tinebase.ExceptionDialog::onShow -> Sending bugreport non-interactive ...');
+                this.onSendReport();
+            } else {
+                // fix layout issue
+                this.setHeight(this.getHeight() + 10);
+            }
         }, this);
     },
     
@@ -159,7 +171,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      * @private
      */
     onSendReport: function () {
-        Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
+        if (! this.nonInteractive) {
+            Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
+        }
         var baseUrl = 'http://www.tine20.org/bugreport.php';
         var hash = this.generateHash();
         
@@ -195,7 +209,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
         }
         
-        window.setTimeout(this.showTransmissionCompleted, 4000);
+        if (! this.nonInteractive) {
+            window.setTimeout(this.showTransmissionCompleted, 4000);
+        }
         
         this.close();
     },
