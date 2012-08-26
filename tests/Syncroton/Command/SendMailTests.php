@@ -97,7 +97,7 @@ IHRpbmUyMGFkbWluQGNhbGRhdi5uZXQKQ0M6IAoKCg==&#13;';
     }
     
     /**
-     * test sending emails
+     * test sending emails failure
      */
     public function testSendMailException()
     {

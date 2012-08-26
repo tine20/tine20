@@ -105,4 +105,37 @@ IHRpbmUyMGFkbWluQGNhbGRhdi5uZXQKQ0M6IAoKCg==&#13;
         
         $this->assertEquals(null, $responseDoc);
     }
+    
+    /**
+     * test forwarding emails failure
+     */
+    public function testSmartForwardException()
+    {
+        // delete folder created above
+        $doc = new DOMDocument();
+        $doc->loadXML('<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <SmartForward xmlns="uri:ComposeMail">
+                <ClientId>SendMail-1044646665832</ClientId>
+                <SaveInSentItems/>
+                <Source>
+                    <ItemId>a7fb71114125cc569d09948988a92f9d31321656</ItemId>
+                    <FolderId>a130b7462fde72c7d6215ce32226e1794d631fa8</FolderId>
+                </Source>
+                <Mime>triggerException</Mime>
+            </SmartForward>'
+        );
+        
+        $smartForward = new Syncroton_Command_SmartForward($doc, $this->_device, null);
+        $smartForward->handle();
+        $responseDoc = $smartForward->getResponse();
+        
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('ComposeMail', 'uri:ComposeMail');
+        
+        $nodes = $xpath->query('//ComposeMail:SmartForward/ComposeMail:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Exception_Status::MAILBOX_SERVER_OFFLINE, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
 }
