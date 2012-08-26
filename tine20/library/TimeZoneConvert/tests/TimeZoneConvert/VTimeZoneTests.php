@@ -338,6 +338,23 @@ EOT;
         $this->assertEquals('Europe/Berlin', $tzid);
     }
     
+    public function testGetVTimezoneUTC()
+    {
+        $VTimeZone = $this->uit->getVTimezone('UTC');
+
+        // make shure it don't fails
+        // UTC should not be represented as VTIMEZONE normally
+        $UTCTZ = <<<EOT
+BEGIN:VTIMEZONE
+TZID:UTC
+END:VTIMEZONE
+EOT;
+        foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
+            if (! $line) continue;
+             $this->assertTrue(strstr($UTCTZ, $line) !== FALSE, "$line failed");
+        }
+    }
+
     public function testGetVTimezoneEuropeBerlin()
     {
         $VTimeZone = $this->uit->getVTimezone('Europe/Berlin');
@@ -353,6 +370,7 @@ EOT;
         $until = new DateTime('2037-12-31T00:00:00', new DateTimeZone('UTC'));
         
         $VTimeZone = $this->uit->getVTimezone('Asia/Jerusalem', $from, $until);
+
         foreach(explode(TimeZoneConvert_VTimeZone::EOL, $VTimeZone) as $line) {
             if (! $line || strstr($line, 'TZNAME') !== FALSE) continue; // different TZNAME
              $this->assertTrue(strstr(self::$customAsiaJerusalem, $line) !== FALSE, "$line failed");
