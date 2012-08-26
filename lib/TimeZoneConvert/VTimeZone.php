@@ -72,6 +72,9 @@ class TimeZoneConvert_VTimeZone
         );
         
         foreach($splitedTransitions as $component => $transitions) {
+            // don't add component when there are no transitions
+            if (count ($transitions) == 0) continue;
+
             // check if rrule is OK: compute recurring rule and check all transitions
             $useRrule = TRUE;
             $transitionRule = TimeZoneConvert_TransitionRule::createFromTransition($transitions->getFirst());
