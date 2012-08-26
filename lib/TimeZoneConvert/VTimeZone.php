@@ -51,7 +51,10 @@ class TimeZoneConvert_VTimeZone
     /**
      * gets vtimezone string from php timezone identifier
      * 
-     * @param string $tzid
+     * @param  string       $tzid
+     * @param  DateTime     $from
+     * @param  DateTime     $until
+     * @return string
      */
     public function getVTimezone($tzid, $from=NULL, $until=NULL)
     {
@@ -102,7 +105,7 @@ class TimeZoneConvert_VTimeZone
                 $transitionRule = TimeZoneConvert_TransitionRule::createFromTransition($transitions->getFirst(), FALSE);
                 $transitionRule->clearTransitionDates();
                 foreach($transitions as $transition) {
-                    $transitionRule->addTransitionDate(new DateTime('@' . $transition['ts']));
+                    $transitionRule->addTransitionDate(new DateTime($transition['time'], new DateTimeZone('UTC')));
                 }
             }
             
@@ -345,15 +348,15 @@ class TimeZoneConvert_VTimeZone
         
         $offsetFromSign = $offsetFrom >=0 ? '+' : '-';
         $offsetFromString = $offsetFromSign .
-            str_pad(floor($offsetFrom/3600), 2, '0', STR_PAD_LEFT) .
-            str_pad(($offsetFrom%3600)/60, 2, '0', STR_PAD_LEFT);
+            str_pad(floor(abs($offsetFrom)/3600), 2, '0', STR_PAD_LEFT) .
+            str_pad((abs($offsetFrom)%3600)/60, 2, '0', STR_PAD_LEFT);
         
         $offsetToSign = $transitionRule->offset >=0 ? '+' : '-';
         $offsetToString = $offsetToSign .
-            str_pad(floor($transitionRule->offset/3600), 2, '0', STR_PAD_LEFT) .
-            str_pad(($transitionRule->offset%3600)/60, 2, '0', STR_PAD_LEFT);
+            str_pad(floor(abs($transitionRule->offset)/3600), 2, '0', STR_PAD_LEFT) .
+            str_pad((abs($transitionRule->offset)%3600)/60, 2, '0', STR_PAD_LEFT);
         
-        $dtstart = $dtstart->modify("$offsetFromSign $offsetFrom seconds");
+        $dtstart = $dtstart->modify("$offsetFrom seconds");
         
         if ($transitionRule->isRecurringRule()) {
             $rule = 'RRULE:' . TimeZoneConvert_VTimeZone_Rrule::createFromTransitionRule($transitionRule);
@@ -362,7 +365,7 @@ class TimeZoneConvert_VTimeZone
             $rdatesArray = array();
             foreach($rdates as $rdate) {
                 $rdate = clone $rdate;
-                $rdate->modify("$offsetFromSign $offsetFrom seconds");
+                $rdate->modify("$offsetFrom seconds");
                 
                 $rdatesArray[] = $rdate->format('Ymd\THis');
             }
