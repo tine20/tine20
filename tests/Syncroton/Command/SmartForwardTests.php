@@ -58,7 +58,8 @@ IHRpbmUyMGFkbWluQGNhbGRhdi5uZXQKQ0M6IAoKCg==&#13;
         
         $smartForward = new Syncroton_Command_SmartForward($doc, $this->_device, null);
         $smartForward->handle();
-        #$responseDoc = $smartForward->getResponse();
-        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $responseDoc = $smartForward->getResponse();
+        
+        $this->assertEquals(null, $responseDoc);
     }
 }
