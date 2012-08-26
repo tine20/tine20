@@ -39,6 +39,7 @@ class Syncroton_Command_AllTests
         $suite->addTestSuite('Syncroton_Command_SearchTests');
         $suite->addTestSuite('Syncroton_Command_SettingsTests');
         $suite->addTestSuite('Syncroton_Command_SmartForwardTests');
+        $suite->addTestSuite('Syncroton_Command_SendMailTests');
         $suite->addTestSuite('Syncroton_Command_SyncTests');
         
         return $suite;

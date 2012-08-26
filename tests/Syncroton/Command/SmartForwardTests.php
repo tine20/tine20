@@ -60,5 +60,5 @@ IHRpbmUyMGFkbWluQGNhbGRhdi5uZXQKQ0M6IAoKCg==&#13;
         $smartForward->handle();
         #$responseDoc = $smartForward->getResponse();
         #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
-    }    
+    }
 }

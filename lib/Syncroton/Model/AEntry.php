@@ -165,7 +165,10 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     protected function _addXMLNamespaces(DOMElement $_domParrent)
     {
         foreach($this->_properties as $namespace => $namespaceProperties) {
-            $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
+            // don't add default namespace again
+            if($_domParrent->ownerDocument->documentElement->namespaceURI != 'uri:'.$namespace) {
+                $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
+            }
         }
     }
     

@@ -69,6 +69,9 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
      */
     public function sendEmail($inputStream, $saveInSent)
     {
+        if ($inputStream == 'triggerException') {
+            throw new Syncroton_Exception_Status(Syncroton_Exception_Status::MAILBOX_SERVER_OFFLINE);
+        }
         // send email
     }
     
