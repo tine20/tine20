@@ -47,7 +47,7 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
             
             if (isset ($xml->Source)) {
                 if ($xml->Source->LongId) {
-                    $this->_source = $xml->Source->LongId;
+                    $this->_source = (string)$xml->Source->LongId;
                 } else {
                     $this->_source = array(
                         'collectionId' => (string)$xml->Source->FolderId,
