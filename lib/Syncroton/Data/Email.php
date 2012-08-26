@@ -2,7 +2,8 @@
 /**
  * Syncroton
  *
- * @package     Model
+ * @package     Syncroton
+ * @subpackage  Data
  * @license     http://www.tine20.org/licenses/lgpl.html LGPL Version 3
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
@@ -13,14 +14,12 @@
  *
  * @package     Model
  */
-
 class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Data_IDataEmail
 {
     /**
      * used by unit tests only to simulated added folders
      */
-    public static $entries = array(
-    );
+    public static $entries = array();
     
     /**
      * (non-PHPdoc)
@@ -31,12 +30,13 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
         // forward email
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_AData::getFileReference()
+     */
     public function getFileReference($fileReference)
     {
         list($messageId, $partId) = explode('-', $fileReference, 2);
-    
-        // example code
-        //$file = $this->_imapBackend->getMessagePart($messageId, $partId);
     
         // example code
         return new Syncroton_Model_FileReference(array(
@@ -54,6 +54,10 @@ class Syncroton_Data_Email extends Syncroton_Data_AData implements Syncroton_Dat
         // forward email
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_AData::updateEntry()
+     */
     public function updateEntry($_folderId, $_serverId, Syncroton_Model_IEntry $_entry)
     {
         // not used by email
