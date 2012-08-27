@@ -1378,6 +1378,7 @@ class Setup_Controller
     {
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
         $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        $disabledFK = FALSE;
         
         do {
             $oldCount = count($applicationTables);
@@ -1408,6 +1409,10 @@ class Setup_Controller
                     if (preg_match('/SQLSTATE\[42S02\]: Base table or view not found/', $message) && $_application->name != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
                         unset($applicationTables[$key]);
+                    } else {
+                        Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Disabling foreign key checks ... ");
+                        Tinebase_Core::getDb()->query("SET FOREIGN_KEY_CHECKS=0");
+                        $disabledFK = TRUE;
                     }
                 }
             }
@@ -1416,7 +1421,11 @@ class Setup_Controller
                 throw new Setup_Exception('dead lock detected oldCount: ' . $oldCount);
             }
         } while (count($applicationTables) > 0);
-                
+        
+        if ($disabledFK) {
+            Tinebase_Core::getDb()->query("SET FOREIGN_KEY_CHECKS=1");
+        }
+        
         if ($_application->name != 'Tinebase') {
             // delete containers, config options and other data for app
             Tinebase_Application::getInstance()->removeApplicationData($_application);
