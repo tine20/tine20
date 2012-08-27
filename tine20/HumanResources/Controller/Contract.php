@@ -115,7 +115,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
         $lastRecord = $this->search($filter, $paging)->getFirstRecord();
-        if($lastRecord && empty($lastRecord->end_date)) {
+        if ($lastRecord && empty($lastRecord->end_date) && $_record->start_date) {
             $date = clone $_record->start_date;
             $lastRecord->end_date = $date->subDay(1);
             $this->update($lastRecord, false);
@@ -159,5 +159,14 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
 
         return $contracts->getFirstRecord();
+    }
+    
+    public function getContractsByEmployeeId($employeeId)
+    {
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
+        $recs = $this->search($filter, null);
+        
+        return $recs;
     }
 }

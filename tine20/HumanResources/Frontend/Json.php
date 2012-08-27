@@ -192,9 +192,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         switch (get_class($_record)) {
             case 'HumanResources_Model_Employee':
                 if($_record->has('contracts')) {
-                    $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-                    $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
-                    $recs = HumanResources_Controller_Contract::getInstance()->search($filter, null);
+                    $recs = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($_record['id']);
                     $_record['contracts'] = $this->_multipleRecordsToJson($recs);
                 }
                 break;

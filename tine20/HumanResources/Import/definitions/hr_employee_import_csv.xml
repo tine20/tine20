@@ -47,6 +47,11 @@
             <source>Austrittsdatum aktuell</source>
             <destination>employment_end</destination>
         </field>
+        <!-- HACK: using countryname for cost center -->
+        <field>
+            <source>Stammkostenstelle des Mitarbeiters</source>
+            <destination>countryname</destination>
+        </field>
         <field>
             <source>Kontonummer der Mitarbeiterbankverbindung</source>
             <destination>bank_account_number</destination>

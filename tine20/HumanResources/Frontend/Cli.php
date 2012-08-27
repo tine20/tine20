@@ -36,7 +36,15 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )
         ),
-    );
+        'importEmployee' => array(
+            'description'   => 'Import Employee csv file',
+                'params' => array(
+                    'feast_calendar_id'     => 'the id of the contracts\' feast calendar (container)',
+                    'working_time_model_id' => 'use this working time model for the contract',
+                    'vacation_days'         => 'use this amount of vacation days for the contract'
+            )
+        ),
+        );
 
     /**
      * transfers the account data to employee data
@@ -84,7 +92,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $importedEmployee = $this->_getImportedEmployees($importResult);
             
             foreach ($importedEmployee as $employee) {
-                $this->_sanitizeEmployee($employee);
+                $this->_sanitizeEmployee($opts, $employee);
                 $currentEmployee = $this->_getCurrentEmployee($employee);
                 
                 if ($currentEmployee) {
@@ -138,11 +146,12 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * sanitize employee data
-     * - fix n_fn + street(2) + number
+     * - fix n_fn + street(2) + contract / cost center
      * 
+     * @param Zend_Console_Getopt $opts
      * @param HumanResources_Model_Employee $employee
      */
-    protected function _sanitizeEmployee($employee)
+    protected function _sanitizeEmployee($opts, $employee)
     {
         if (preg_match('/([\w\s]+), ([\w\s]+)/u', $employee->n_fn, $matches)) {
             $employee->n_fn = $matches[2] . ' ' . $matches[1];
@@ -150,6 +159,27 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (! empty($employee->street2)) {
             $employee->street = $employee->street . ' ' . $employee->street2;
             $employee->street2 = '';
+        }
+
+        if (! empty($employee->countryname)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . 'Trying to add contract with cost center number ' . $employee->countryname);
+            
+            $args = $this->_parseArgs($opts);
+            // expecting cost center number here, creating contract from data
+            $costCenter = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
+                'field'    => 'number',
+                'operator' => 'equals',
+                'value'    => $employee->countryname,
+            ))))->getFirstRecord();
+            $contract = HumanResources_Controller_Employee::getInstance()->createContractDataForEmployee(array(
+                'feastCalendarId'     => isset($args['feast_calendar_id']) ? $args['feast_calendar_id'] : NULL,
+                'workingTimeModelId'  => isset($args['working_time_model_id']) ? $args['working_time_model_id'] : NULL,
+                'vacationDays'        => isset($args['vacation_days']) ? $args['vacation_days'] : NULL,
+                'costCenterId'        => $costCenter ? $costCenter->getId() : NULL,
+            ), TRUE);
+            $employee->contracts = array($contract);
+            unset($employee->countryname);
         }
     }
     
@@ -161,21 +191,33 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _getCurrentEmployee($employee)
     {
+        $result = NULL;
+        $currentEmployee = NULL;
+        
         if ($employee->getId()) {
             try {
                 $currentEmployee = HumanResources_Controller_Employee::getInstance()->get($employee->getId());
+                $currentEmployee->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($employee->getId())->toArray();
+                if ($currentEmployee->n_fn === $employee->n_fn) {
+                    return $currentEmployee;
+                }
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $currentEmployee = NULL;
             }
-        } else {
-            $currentEmployee = HumanResources_Controller_Employee::getInstance()->search(new HumanResources_Model_EmployeeFilter(array(array(
-                'field'     => 'query',
-                'operator'  => 'contains',
-                'value'     => $employee->n_fn
-            ))))->getFirstRecord();
+        } 
+        
+        $result = HumanResources_Controller_Employee::getInstance()->search(new HumanResources_Model_EmployeeFilter(array(array(
+            'field'     => 'query',
+            'operator'  => 'contains',
+            'value'     => $employee->n_fn
+        ))))->getFirstRecord();
+        
+        if ($result === NULL && $currentEmployee !== NULL) {
+            // use the employee with matching number if no one with the same name could be found
+            $result = $currentEmployee;
         }
         
-        return $currentEmployee;
+        return $result;
     }
     
     /**
@@ -204,11 +246,27 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'bank_code_number',
             'health_insurance',
             'number',
+            'contracts',
         );
         $changed = FALSE;
         foreach ($fieldsToUpdate as $field) {
             if (! empty($employee->{$field}) && $currentEmployee->{$field} !== $employee->{$field}) {
-                $currentEmployee->{$field} = $employee->{$field};
+                if ($field === 'contracts' && ! empty($currentEmployee->{$field})) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                        . print_r($currentEmployee->toArray(), TRUE));
+                    if ($currentEmployee->contracts[0]['cost_center_id'] !== $employee->contracts[0]['cost_center_id']['id']) {
+                        $contracts = $currentEmployee->contracts;
+                        $contracts[0]['cost_center_id'] = $employee->contracts[0]['cost_center_id']['id'];
+                        if ($opts->v) {
+                            echo "Updating cost center for " . $employee->n_fn . " to " . $currentEmployee->contracts[0]['cost_center_id'] . "\n";
+                        }
+                        $currentEmployee->contracts = $contracts;
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                            . print_r($currentEmployee->toArray(), TRUE));
+                    }
+                } else {
+                    $currentEmployee->{$field} = $employee->{$field};
+                }
                 $changed = TRUE;
             }
         }

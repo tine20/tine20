@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for HumanResources CLI frontend
  */
-class HumanResources_CliTests extends PHPUnit_Framework_TestCase
+class HumanResources_CliTests extends HumanResources_TestCase
 {
     /**
      * Backend
@@ -55,6 +55,8 @@ class HumanResources_CliTests extends PHPUnit_Framework_TestCase
      */
     public function testImportEmployee()
     {
+        $cc = $this->_getCostCenter(7);
+        
         $this->_doImport();
         
         $susan = $this->_getSusan();
@@ -64,6 +66,10 @@ class HumanResources_CliTests extends PHPUnit_Framework_TestCase
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $this->assertEquals($sclever->getId(), $susan->account_id, print_r($susan->toArray(), TRUE));
         $this->assertEquals('1973-12-11 23:00:00', $susan->bday->__toString(), print_r($susan->toArray(), TRUE));
+        
+        $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
+        $this->assertEquals(1, count($susan->contracts), 'no contracts found');
+        $this->assertEquals($cc->getId(), $susan->contracts->getFirstRecord()->cost_center_id);
         
         return $susan;
     }
@@ -78,7 +84,14 @@ class HumanResources_CliTests extends PHPUnit_Framework_TestCase
             'dry|d'                 => "Dry run - don't change anything",
         ));
         $filename = dirname(__FILE__) . '/files/employee.csv';
-        $opts->setArguments(array($filename));
+        
+        $args = array(
+            $filename,
+            'feast_calendar_id=' . $this->_getFeastCalendar()->getId(),
+            'working_time_model_id=' . $this->_getWorkingTime()->getId(),
+            'vacation_days=30',
+        );
+        $opts->setArguments($args);
 
         ob_start();
         $result = $this->_cli->importEmployee($opts);
@@ -125,18 +138,27 @@ class HumanResources_CliTests extends PHPUnit_Framework_TestCase
     /**
      * test employee import update
      */
-    public function testImportEmployeeUpdate()
+    public function testImportUpdate()
     {
         $this->_doImport();
         
         sleep(1);
         $susan = $this->_getSusan();
         $susan->bank_name = 'xyz';
+        $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
+        $susan->contracts->getFirstRecord()->cost_center_id = NULL;
+        $susan->contracts = $susan->contracts->toArray();
         HumanResources_Controller_Employee::getInstance()->update($susan);
         
         sleep(1);
         $this->_doImport(FALSE);
         $susan = $this->_getSusan();
         $this->assertEquals('Hypo Real Estate', $susan->bank_name, print_r($susan->toArray(), TRUE));
+        
+        // cost center check
+        $cc = $this->_getCostCenter(7);
+        $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
+        $this->assertEquals(1, count($susan->contracts), 'no contracts found');
+        $this->assertEquals($cc->getId(), $susan->contracts->getFirstRecord()->cost_center_id);
     }
 }

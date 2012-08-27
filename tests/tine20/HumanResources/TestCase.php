@@ -23,10 +23,12 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      * @var Tinebase_Model_Container
      */
     protected $_feast_calendar = NULL;
+
     /**
      * @var HumanResources_Frontend_Json
      */
     protected $_json = array();
+
     /**
      * test department
      *
@@ -67,6 +69,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
+
     /**
      * returns the current user or the user defined by the login name
      * @return Tinebase_Model_User
@@ -78,6 +81,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         }
         return Tinebase_Core::getUser();
     }
+
     /**
      * returns one of the un setup created workintimes
      * @return HumanResources_Model_WorkingTime
@@ -88,6 +92,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         $wt = HumanResources_Controller_WorkingTime::getInstance()->search($filter);
         return $wt->getFirstRecord();
     }
+
     /**
      * returns the default feast calendar
      * @return Tinebase_Model_Container
@@ -107,6 +112,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 
         return $this->_feast_calendar;
     }
+
     /**
      * returns the contact of the current user
      * @return Addressbook_Model_Contact
@@ -116,15 +122,32 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         return Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
     }
 
-    protected function _getCostCenter()
+    /**
+     * get cost center
+     * 
+     * @param string
+     * @return Sales_Model_CostCenter
+     */
+    protected function _getCostCenter($number = NULL)
     {
+        if ($number !== NULL) {
+            $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
+                'field'    => 'number',
+                'operator' => 'equals',
+                'value'    => $number,
+            ))))->getFirstRecord();
+            if ($c) {
+                return $c;
+            }
+        }
         $c = new Sales_Model_CostCenter(array(
-            'number' => Tinebase_Record_Abstract::generateUID(),
+            'number' => ($number) ? $number : Tinebase_Record_Abstract::generateUID(),
             'remark' => Tinebase_Record_Abstract::generateUID(),
         ));
         $c = Sales_Controller_CostCenter::getInstance()->create($c);
         return $c;
     }
+
     /**
      * returns a new contract
      * return HumanResources_Model_Contract
@@ -146,6 +169,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 
         return $c;
     }
+
     /**
      * returns an employee with account_id
      * @return HumanResources_Model_Employee

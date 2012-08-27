@@ -62,6 +62,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * @param   Tinebase_Record_Interface $_createdRecord
      * @param   Tinebase_Record_Interface $_record
      * @return  void
+     * 
+     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
@@ -72,11 +74,17 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         
-        if (! empty($_record->contracts)) {
+        if (! empty($_record->contracts) && is_array($_record->contracts)) {
             foreach ($_record->contracts as $contractArray) {
-                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                if (is_array($contractArray['workingtime_id'])) {
+                    $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                }
+                if (is_array($contractArray['cost_center_id'])) {
+                    $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                }
+                if (is_array($contractArray['feast_calendar_id'])) {
+                    $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                }
                 $contractArray['employee_id'] = $_createdRecord->getId();
                 $contract = new HumanResources_Model_Contract($contractArray);
                 $contracts->addRecord($contract);
@@ -95,6 +103,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * 
+     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
+     * @todo use getMigration()
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -108,15 +119,26 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
 
         $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $ec = HumanResources_Controller_Contract::getInstance();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+            . print_r($_record->contracts, TRUE));
 
-        if (! empty($_record->contracts)) {
+        if (! empty($_record->contracts) && is_array($_record->contracts)) {
             foreach ($_record->contracts as $contractArray) {
-                if ($contractArray['workingtime_id']['id']) $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-                if ($contractArray['cost_center_id']['id']) $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-                if ($contractArray['feast_calendar_id']['id']) $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                if (is_array($contractArray['workingtime_id'])) {
+                    $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                }
+                if (is_array($contractArray['cost_center_id'])) {
+                    $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
+                }
+                if (is_array($contractArray['feast_calendar_id'])) {
+                    $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                }
                 $contractArray['employee_id'] = $_oldRecord->getId();
                 $contract = new HumanResources_Model_Contract($contractArray);
-                if($contract->id) {
+                if ($contract->id) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                        . 'Updating contract ' . $contract->id);
                     $contracts->addRecord($ec->update($contract));
                 } else {
                     $contracts->addRecord($ec->create($contract));
@@ -183,44 +205,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     public function transferUserAccounts($_deletePrivateInfo = FALSE, $_feastCalendarId = NULL, $_workingTimeModelId = NULL, $_vacationDays = NULL, $cliCall = FALSE)
     {
         $lastNumber = $this->getLastEmployeeNumber();
-        if($_feastCalendarId && $_workingTimeModelId && $_vacationDays) {
-            $createContract = true;
-            try {
-                $feastCalendar = Tinebase_Container::getInstance()->get($_feastCalendarId);
-            } catch (Exception $e) {
-                if($cliCall) {
-                    die('The Calendar with the id ' . $_feastCalendarId . ' could not be found!' . chr(10));
-                } else {
-                    throw $e;
-                }
-            }
-            
-            if($cliCall) {
-                echo 'Found Calendar ' . $feastCalendar->name . chr(10);
-            }
-            
-            try {
-                $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($_workingTimeModelId);
-            } catch (Exception $e) {
-                if($cliCall) {
-                    die('The Working Time Model with the id ' . $_workingTimeModelId . ' could not be found!' . chr(10));
-                } else {
-                    throw $e;
-                }
-            }
-            
-            if($cliCall) {
-                echo 'Found Working Time Model "' . $workingTimeModel->title . '"' . chr(10);
-            }
-            
-        } elseif ($_feastCalendarId || $_workingTimeModelId || $_vacationDays) {
-            $msg = 'You have to define the feast_calendar_id, the working_time_model_id and vacation_days to create a contract!';
-            if($cliCall) {
-                die($msg . chr(10));
-            } else {
-                throw new Tinebase_Exception_InvalidArgument($msg);
-            }
-        }
         
         // get all active accounts
         $filter = new Addressbook_Model_ContactFilter(array(
@@ -258,12 +242,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     'n_fn'        => $account->n_fn,
                 ));
                 if($createContract) {
-                    $contract = array(
-                        'feast_calendar_id'  => $feastCalendar->toArray(),
-                        'workingtime_id'     => $workingTimeModel->toArray(),
-                        'vacation_days'      => $_vacationDays,
-                        'cost_center_id'     => NULL,
-                    );
+                    $contract = $this->createContractDataForEmployee(array(
+                        'feastCalendarId' => $_feastCalendarId,
+                        'workingTimeModelId' => $_workingTimeModelId,
+                        'vacationDays' => $_vacationDays,
+                    ), $cliCall);
                     $employee->contracts = array($contract);
                 }
                 
@@ -303,5 +286,62 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             echo 'Created ' . $countCreated . ' employees.' . chr(10);
             echo 'Transfer OK' . chr(10);
         }
+    }
+    
+    /**
+     * create contract data
+     * 
+     * @param array $contractData
+     * @param boolean $cliCall
+     * @return array
+     */
+    public function createContractDataForEmployee($contractData = array(), $cliCall = FALSE)
+    {
+        if (isset($contractData['feastCalendarId'])) {
+            try {
+                $feastCalendar = Tinebase_Container::getInstance()->get($contractData['feastCalendarId']);
+            } catch (Exception $e) {
+                if ($cliCall) {
+                    die('The Calendar with the id ' . $contractData['feastCalendarId'] . ' could not be found!' . chr(10));
+                } else {
+                    throw $e;
+                }
+            }
+            if ($cliCall) {
+                echo 'Found Calendar ' . $feastCalendar->name . chr(10);
+            }
+        } else {
+            $feastCalendar = NULL;
+        }
+        
+        if (isset($contractData['workingTimeModelId'])) {
+            try {
+                $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($contractData['workingTimeModelId']);
+            } catch (Exception $e) {
+                if ($cliCall) {
+                    die('The Working Time Model with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
+                } else {
+                    throw $e;
+                }
+            }
+            if ($cliCall) {
+                echo 'Found Working Time Model "' . $workingTimeModel->title . '"' . chr(10);
+            }
+        } else {
+            $workingTimeModel = NULL;
+        }
+        
+        if (isset($contractData['costCenterId'])) {
+            $costCenter = Sales_Controller_CostCenter::getInstance()->get($contractData['costCenterId']);
+        } else {
+            $costCenter = NULL;
+        }
+        
+        return array(
+            'feast_calendar_id'  => $feastCalendar ? $feastCalendar->toArray() : NULL,
+            'workingtime_id'     => $workingTimeModel ? $workingTimeModel->toArray() : NULL,
+            'vacation_days'      => isset($contractData['vacationDays']) ? $contractData['vacationDays'] : NULL,
+            'cost_center_id'     => $costCenter ? $costCenter->toArray() : NULL,
+        );
     }
 }
