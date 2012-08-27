@@ -223,8 +223,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
         $exceptionData['code']    = $exception->getCode();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) 
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
         if (Tinebase_Core::getConfig()->suppressExceptionTraces !== TRUE) {
             $exceptionData['trace'] = $this->_getTraceAsArray($exception);
             $this->_logExceptionTrace($exception);
