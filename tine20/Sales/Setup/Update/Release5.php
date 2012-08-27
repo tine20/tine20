@@ -154,7 +154,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
      * - change default values for cleared, status 
      * 
      * @return void
-     */    
+     */
     public function update_4()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -181,22 +181,19 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('sales_contracts', 4);
         
         // transfer cleared value
+        $be = new Sales_Backend_Contract();
         
         $filter = new Sales_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text('cleared', 'equals', '0'));
-        $results = Sales_Controller_Contract::getInstance()->search($filter, null, false, true);
-
-        $be = new Sales_Backend_Contract();
+        $results = $be->search($filter, null, false, true);
         $be->updateMultiple($results, array('cleared' => 'NOTCLEARED'));
 
         $filter = new Sales_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text('cleared', 'equals', '1'));
-        $results = Sales_Controller_Contract::getInstance()->search($filter, null, false, true);
-        
+        $results = $be->search($filter, null, false, true);
         $be->updateMultiple($results, array('cleared' => 'CLEARED'));
         
         // keyfieldconfigs
-        
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config', 
             'tableName' => 'config',
@@ -242,7 +239,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
      * - added table cost_centers
      * 
      * @return void
-     */    
+     */
     public function update_5()
     {
         $tableDefinition = '
