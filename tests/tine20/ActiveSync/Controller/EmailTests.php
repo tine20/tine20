@@ -135,6 +135,23 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test seen flag
+     * 
+     * @see 0007008: add test for seen flag
+     */
+    public function testMarkAsRead()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $controller->updateEntry(null, $message->getId(), new Syncroton_Model_Email(array('read' => 1)));
+        
+        $message = Felamimail_Controller_Message::getInstance()->get($message->getId());
+        $this->assertEquals(array(Zend_Mail_Storage::FLAG_SEEN), $message->flags);
+    }
+    
+    /**
      * test invalid chars
      */
     public function _testInvalidBodyChars()
@@ -195,8 +212,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     public function testSendEmail()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
-        
-        #$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
