@@ -73,6 +73,25 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 this.setHeight(this.getHeight() + 10);
             }
         }, this);
+        
+        this.on('close', function() {
+            if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('config') && 
+                Tine.Tinebase.registry.get('config').automaticBugreports && 
+                Tine.Tinebase.registry.get('config').automaticBugreports.value && ! this.nonInteractive
+            ) {
+                Tine.log.debug('Tine.Tinebase.ExceptionDialog::onCancel -> Activate non-interacive exception dialog.');
+                Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
+                    exception: this.exception,
+                    nonInteractive: true,
+                    listeners: {
+                        close: function() {
+                            Tine.Tinebase.exceptionDlg = null;
+                        }
+                    }
+                });
+                Tine.Tinebase.exceptionDlg.show();
+            }
+        }, this);
     },
     
     /**
@@ -84,7 +103,6 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             text: _('Cancel'),
             iconCls: 'action_cancel',
             scope: this,
-            enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
             handler: function() {
                 this.close();
             }
@@ -92,6 +110,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             text: _('Send Report'),
             iconCls: 'action_saveAndClose',
             scope: this,
+            enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
             handler: this.onSendReport
         }];
         
