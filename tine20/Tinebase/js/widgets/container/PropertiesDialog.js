@@ -50,8 +50,8 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
         for (var grant in this.grantContainer.account_grants) {
             if (this.grantContainer.account_grants.hasOwnProperty(grant) && this.grantContainer.account_grants[grant] && Tine.widgets.container.GrantsGrid.prototype[grant + 'Title']) {
                 this.myGrants.push({
-                    title: Tine.widgets.container.GrantsGrid.prototype[grant + 'Title'],
-                    description: Tine.widgets.container.GrantsGrid.prototype[grant + 'Description']
+                    title: _(Tine.widgets.container.GrantsGrid.prototype[grant + 'Title']),
+                    description: _(Tine.widgets.container.GrantsGrid.prototype[grant + 'Description'])
                 })
             }
         }
