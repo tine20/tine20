@@ -253,7 +253,7 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
         $this->assertEquals('20101123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
         $this->assertEquals('20101123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
-        $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->attendees[0]->email);
+        $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->attendees[0]->email, 'event: ' . var_export($syncrotonEvent, TRUE));
         
         //Body
         $this->assertTrue($syncrotonEvent->body instanceof Syncroton_Model_EmailBody);
