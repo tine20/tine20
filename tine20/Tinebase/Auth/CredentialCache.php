@@ -95,7 +95,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using credential cache apapter: ' . $adapterClass);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using credential cache adapter: ' . $adapterClass);
         $this->_cacheAdapter = new $adapterClass();
     }
     
