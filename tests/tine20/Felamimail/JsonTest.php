@@ -109,7 +109,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_pathsToDelete = array();
-
+    
     /**
      * Runs the test methods of this class.
      *
@@ -450,6 +450,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
+        $originalEmail =  $contact->email;
         $contact->email = $this->_account->email;
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
 
@@ -485,6 +486,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
         Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
+        
+        // reset sclevers original email address
+        $contact->email = $originalEmail;
+        Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
     }
     
     /**
