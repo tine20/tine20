@@ -321,7 +321,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         e.preventDefault();
         var row = this.getView().findRowIndex(target);
         var attender = this.store.getAt(row);
-        if (attender) {
+        if (attender && ! this.disabled) {
             // don't delete 'add' row
             var attender = this.store.getAt(row);
             if (! attender.get('user_id')) {
@@ -561,6 +561,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * disable contents not panel
      */
     setDisabled: function(v) {
-        this.el[v ? 'mask' : 'unmask']();
+        this.disabled = v;
+        if (v) {
+            this.store.filterBy(function(r) {return ! r.id.match(/^new-/)});
+        } else {
+            this.store.clearFilter();
+        }
     }
 });
