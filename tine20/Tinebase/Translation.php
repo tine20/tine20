@@ -456,9 +456,9 @@ class Tinebase_Translation
         // 2008-08-25 \s -> \n as there are situations when whitespace like space breaks the thing!
         $po = preg_replace('/"(\n+)"/', '', $po);
         // Create a singular version of plural defined words
-        preg_match_all ('/msgid "(.*?)"\nmsgid_plural ".*"\nmsgstr\[0\] "(.*?)"/', $po, $plurals);
+        preg_match_all('/msgid "(.*?)"\nmsgid_plural ".*"\nmsgstr\[0\] "(.*?)"\n/', $po, $plurals);
         for ($i = 0; $i < count($plurals[0]); $i++) {
-            $po = $po."\n".'msgid "'.$plurals[1][$i].'"'."\n".'msgstr "'.$plurals[2][$i].'"'."\n";
+            $po = $po . "\n".'msgid "' . $plurals[1][$i] . '"' . "\n" . 'msgstr "' . $plurals[2][$i] . '"' . "\n";
         }
         $po = preg_replace('/msgid "(.*?)"\nmsgid_plural "(.*?)"/', 'msgid "$1, $2"', $po);
         $po = preg_replace_callback('/msg(\S+) /', create_function('$matches','
