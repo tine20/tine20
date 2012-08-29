@@ -53,7 +53,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'received'      => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'received'      => array('filter' => 'Tinebase_Model_Filter_Date'),
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
     // custom filters
         'path'          => array('custom' => true),
