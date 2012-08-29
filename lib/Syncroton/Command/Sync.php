@@ -369,7 +369,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         $totalChanges = 0;
         
         foreach($this->_collections as $collectionData) {
-            $moreAvailable     = false;
             $collectionChanges = 0;
             
             // invalid collectionid provided
@@ -670,7 +669,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     
                     $countOfPendingChanges = (count($serverModifications['added']) + count($serverModifications['changed']) + count($serverModifications['deleted'])); 
                     if ($countOfPendingChanges > 0) {
-                        $moreAvailable = true;
                         $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                     }
                 
@@ -690,7 +688,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $this->_syncTimeStamp->modify('+1 sec');
                 
                 // store pending data in sync state when needed
-                if(isset($moreAvailable) && $moreAvailable === true) {
+                if(isset($countOfPendingChanges) && $countOfPendingChanges > 0) {
                     $collectionData->syncState->pendingdata = array(
                         'added'   => (array)$serverModifications['added'],
                         'changed' => (array)$serverModifications['changed'],
