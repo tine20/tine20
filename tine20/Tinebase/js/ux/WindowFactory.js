@@ -77,6 +77,8 @@ Ext.ux.WindowFactory.prototype = {
     getExtWindow: function (c) {
         // add titleBar
         c.height = c.height + 20;
+        // border width
+        c.width = c.width + 16;
         
         //limit the window size
         c.height = Math.min(Ext.getBody().getBox().height, c.height);
