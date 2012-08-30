@@ -111,7 +111,9 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             this.lastFocusEl = document.activeElement;
             
             // save west panel scrolling position so we can restore it after selecting nodes
-            this.leftPanelScrollTop = this.treePanel.app.getMainScreen().getWestPanel().body.getScroll().top;
+            if (this.treePanel.app.getMainScreen().getWestPanel().body) {
+                this.leftPanelScrollTop = this.treePanel.app.getMainScreen().getWestPanel().body.getScroll().top;
+            }
             
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
