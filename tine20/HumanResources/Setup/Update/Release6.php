@@ -47,4 +47,27 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '3');
         $this->setApplicationVersion('HumanResources', '6.2');
     }
+
+    /**
+     * update 6.2 -> 6.3
+     * - some cols can be NULL
+     */
+    public function update_2()
+    {
+        $fields = array('<field>
+                    <name>firstday_date</name>
+                    <type>date</type>
+                </field>', '<field>
+                    <name>remark</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>', );
+
+        foreach ($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->alterCol('humanresources_freetime', $declaration);
+        }
+        $this->setTableVersion('humanresources_freetime', '2');
+        $this->setApplicationVersion('HumanResources', '6.3');
+    }
 }

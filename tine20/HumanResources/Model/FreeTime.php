@@ -49,11 +49,11 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employee_id' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'remark'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'employee_id'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'remark'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'firstday_date' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -65,15 +65,15 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         'freedays'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        );
+    );
 
-        /**
-         * name of fields containing datetime or an array of datetime information
-         * @var array list of datetime fields
-         */
-        protected $_datetimeFields = array(
-            'creation_time',
-            'last_modified_time',
-            'deleted_time',
-        );
+    /**
+     * name of fields containing datetime or an array of datetime information
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
+    );
 }
