@@ -861,7 +861,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $movedNode = $this->_copyOrMoveFileNode($_source, $_destination, 'move', $_forceOverwrite);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $movedNode = $this->_moveFolderNode($_source, $sourceNode, $_destination);
+                $movedNode = $this->_moveFolderNode($_source, $sourceNode, $_destination, $_forceOverwrite);
                 break;
         }
         
@@ -874,26 +874,42 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Model_Tree_Node_Path $source
      * @param Tinebase_Model_Tree_Node $sourceNode [unused]
      * @param Tinebase_Model_Tree_Node_Path $destination
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _moveFolderNode($source, $sourceNode, $destination)
+    protected function _moveFolderNode($source, $sourceNode, $destination, $_forceOverwrite = FALSE)
     {
         $this->_checkPathACL($source, 'get', FALSE);
         
         $destinationParentPathRecord = $destination->getParent();
         $destinationNodeName = NULL;
-        if (! $destinationParentPathRecord->container) {
-            // destination has no container yet (toplevel)
-            $this->_moveFolderContainer($source, $destination);
+        
+        if ($destination->isToplevelPath()) {
+            $this->_moveFolderContainer($source, $destination, $_forceOverwrite);
             $destinationNodeName = $destination->container->getId();
         } else {
             $this->_checkPathACL($destinationParentPathRecord, 'update');
+            
+            if ($source->getParent()->flatpath != $destinationParentPathRecord->flatpath) {
+                try {
+                    $this->_checkIfExists($destination);
+                } catch (Filemanager_Exception_NodeExists $fene) {
+                    if ($_forceOverwrite && $source->statpath !== $destination->statpath) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Removing folder node ' . $destination->statpath);
+                        $this->_backend->rmdir($destination->statpath, TRUE);
+                    } else if (! $_forceOverwrite) {
+                        throw $fene;
+                    }
+                }
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Rename Folder ' . $source->statpath . ' -> ' . $destination->statpath);
         
         $this->_backend->rename($source->statpath, $destination->statpath);
+        
         $movedNode = $this->_backend->stat($destination->statpath);
         if ($destinationNodeName !== NULL) {
             $movedNode->name = $destinationNodeName;
@@ -907,9 +923,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Tree_Node_Path $source
      * @param Tinebase_Model_Tree_Node_Path $destination
+     * @param boolean $forceOverwrite
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _moveFolderContainer($source, $destination)
+    protected function _moveFolderContainer($source, $destination, $forceOverwrite = FALSE)
     {
         if ($source->isToplevelPath()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -919,12 +936,32 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
             $container = $source->container;
             if ($container->name !== $destination->name) {
+                try {
+                    $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
+                        'Filemanager',
+                        $destination->name,
+                        $destination->containerType,
+                        Tinebase_Core::getUser()
+                    );
+                    if (! $forceOverwrite) {
+                        $fene = new Filemanager_Exception_NodeExists('container exists');
+                        $fene->addExistingNodeInfo($this->_backend->stat($destination->statpath));
+                        throw $fene;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Removing existing folder node and container ' . $destination->flatpath);
+                        $this->_backend->rmdir($destination->statpath, TRUE);
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // ok
+                }
+                
                 $container->name = $destination->name;
                 $container = Tinebase_Container::getInstance()->update($container);
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating container ' . $destination->name);
+                . ' Creating container ' . $destination->name);
             $container = $this->_createContainer($destination->name, $destination->containerType);
         }
         
