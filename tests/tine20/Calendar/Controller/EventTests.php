@@ -705,7 +705,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testAttendeeGroupMembersRecurringAddUser()
     {
-        $this->markTestIncomplete('test fails sometimes / needs fixing');
+//         $this->markTestIncomplete('test fails sometimes / needs fixing');
         
         try {
             // clenup if exists
@@ -751,7 +751,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $oldSeries = $events->filter('rrule_until', '/.+/', TRUE)->getFirstRecord();
         $newSeries = $events->filter('rrule_until', '/^$/', TRUE)->getFirstRecord();
         
-        $this->assertEquals(2, $events->count(), 'recur event must be splitted');
+        $this->assertEquals(2, $events->count(), 'recur event must be splitted', print_r($events->toArray(), TRUE));
         // check if this user was added to event
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $user = $oldSeries->attendee
