@@ -350,6 +350,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
             width: this.filterFieldWidth,
+            minListWidth: 240, // will be ignored if width is heigher
+            resizable: true,
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
