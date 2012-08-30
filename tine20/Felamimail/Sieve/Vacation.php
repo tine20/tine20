@@ -112,7 +112,7 @@ class Felamimail_Sieve_Vacation
      */
     public function setDays($days)
     {
-        if(!ctype_digit("$days")) {
+        if (! ctype_digit("$days")) {
             throw new InvalidArgumentException('$days must be numbers only' . $days);
         }
         
