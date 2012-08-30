@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_EventException extends Syncroton_Model_Event
+class Syncroton_Model_EventException extends Syncroton_Model_AEntry
 {    
     protected $_xmlBaseElement = 'Exception';
     
