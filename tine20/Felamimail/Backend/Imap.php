@@ -985,7 +985,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                         . ' ' . print_r($matches, TRUE));
                     
                     $headerValue = str_replace("\n", '', $matches[1]);
-                    $result = str_replace($matches[0], iconv_mime_encode(ucfirst($field), $headerValue) . "\n", $result);
+                    $headerValue = mbConvertTo($headerValue);
+                    $headerString = iconv_mime_encode(ucfirst($field), $headerValue);
+                    
+                    $result = str_replace($matches[0], $headerString . "\n", $result);
                 }
             }
             

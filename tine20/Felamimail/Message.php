@@ -102,7 +102,7 @@ class Felamimail_Message extends Zend_Mail_Message
     public static function convertText($_string, $_isHeader = TRUE, $_ellipsis = 0)
     {
         $string = $_string;
-        if(preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
+        if (preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
             $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
             if ($_isHeader) {
                 $string = iconv_mime_decode($string, 2);
