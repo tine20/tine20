@@ -458,35 +458,35 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * return a container by container name
      *
-     * @param   int|Tinebase_Model_Container $_containerId the id of the container
-     * @param   int|Tinebase_Model_Container $_ignoreACL
-     * @param   string $_type
-     * @param   string $_ownerId
+     * @param   string $appName app name
+     * @param   int|Tinebase_Model_Container $containerName
+     * @param   string $type
+     * @param   string $ownerId
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function getContainerByName($_application, $_containerName, $_type, $_ownerId = null)
+    public function getContainerByName($appName, $containerName, $type, $ownerId = NULL)
     {
-        if ($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
-            throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
+        if ($type !== Tinebase_Model_Container::TYPE_PERSONAL && $type !== Tinebase_Model_Container::TYPE_SHARED) {
+            throw new Tinebase_Exception_UnexpectedValue ("Invalid type $type supplied.");
         }
         
-        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL && empty($_ownerId)) {
-            throw new Tinebase_Exception_UnexpectedValue ('$_ownerId can not be empty for personal folders');
+        if ($type == Tinebase_Model_Container::TYPE_PERSONAL && empty($ownerId)) {
+            throw new Tinebase_Exception_UnexpectedValue ('$ownerId can not be empty for personal folders');
         }
         
-        $ownerId = $_ownerId instanceof Tinebase_Model_User ? $_ownerId->getId() : $_ownerId;
+        $ownerId = $ownerId instanceof Tinebase_Model_User ? $ownerId->getId() : $ownerId;
         
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
 
         $select = $this->_getSelect()
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
-            ->where("{$this->_db->quoteIdentifier('container.name')} = ?", $_containerName)
-            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", $_type)
+            ->where("{$this->_db->quoteIdentifier('container.name')} = ?", $containerName)
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", $type)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
 
-        if ($_type == Tinebase_Model_Container::TYPE_PERSONAL) {
+        if ($type == Tinebase_Model_Container::TYPE_PERSONAL) {
             $select->where("{$this->_db->quoteIdentifier('owner.account_id')} = ?", $ownerId);
         }
         
@@ -494,10 +494,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if (count($containersData) == 0) {
-            throw new Tinebase_Exception_NotFound("Container $_containerName not found.");
+            throw new Tinebase_Exception_NotFound("Container $containerName not found.");
         }
         if (count($containersData) > 1) {
-            throw new Tinebase_Exception_NotFound("Container $_containerName name duplicate.");
+            throw new Tinebase_Exception_Duplicate("Container $containerName name duplicate.");
         }
 
         $container = new Tinebase_Model_Container($containersData[0]);
