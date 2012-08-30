@@ -29,7 +29,7 @@ class Setup_Core extends Tinebase_Core
     /**
      * init setup framework
      */
-    public static function initFramework()
+    public static function initFramework($initSession = true)
     {
         Setup_Core::setupConfig();
         

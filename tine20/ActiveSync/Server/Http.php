@@ -19,35 +19,32 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
     /**
      * the request
      * 
-    * @var Zend_Controller_Request_Http
-    */
+     * @var Zend_Controller_Request_Http
+     */
     protected $_request = NULL;
+    
+    protected $_body;
     
     /**
      * handler for ActiveSync requests
      * 
      * @return boolean
      */
-    public function handle()
+    public function handle(Zend_Controller_Request_Http $request = null, $body = null)
     {
-        $this->_request = new Zend_Controller_Request_Http();
-        
-        try {
-            Tinebase_Core::initFramework();
-        } catch (Zend_Session_Exception $exception) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
-            Zend_Session::expireSessionCookie();
-            header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            return;
-        }
+        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+
+        Tinebase_Core::initFramework(false);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
         
         // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
-        if(!isset($_SERVER['PHP_AUTH_USER'])) {
+        $loginName = $this->_request->getServer('PHP_AUTH_USER');
+        $password  = $this->_request->getServer('PHP_AUTH_PW');
+        
+        if(empty($loginName)) {
             // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
             if (isset($_SERVER["REMOTE_USER"])) {
                 $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"], 6));
@@ -60,17 +57,17 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
             }
 
             if (isset($basicAuthData) && !empty($basicAuthData)) {
-                list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
+                list($loginName, $password) = explode(":", $basicAuthData);
             }
         }
         
-        if(empty($_SERVER['PHP_AUTH_USER'])) {
+        if(empty($loginName)) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
-        if($this->_authenticate($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR']) !== true) {
+        if($this->_authenticate($loginName, $password, $_SERVER['REMOTE_ADDR']) !== true) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
@@ -79,31 +76,30 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         try {
             $activeSync = Tinebase_Application::getInstance()->getApplicationByName('ActiveSync');
         } catch (Tinebase_Exception_NotFound $e) {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not installed');
             return;
         }
         
         if($activeSync->status != 'enabled') {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled');
             return;
         }
         
         if(Tinebase_Core::getUser()->hasRight($activeSync, Tinebase_Acl_Rights::RUN) !== true) {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $_SERVER['PHP_AUTH_USER']);
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled for account');
             return;
         }
         
         $this->_initializeRegistry();
         
-        $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $this->_request);
+        $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $this->_request, $this->_body);
         
         $syncFrontend->handle();
         
-        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Handle logout');
-        #Tinebase_Controller::getInstance()->logout($this->_request->getClientIp());
+        Tinebase_Controller::getInstance()->logout($this->_request->getClientIp(), false);
     }
     
     /**

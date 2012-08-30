@@ -58,6 +58,10 @@ class Tinebase_Core
      * constant for session namespace (tinebase) registry index
      */
     const SESSION = 'session';
+    
+    /**
+     */
+    const SESSIONID = 'sessionId';
 
     /**
      * constant for current account/user
@@ -340,9 +344,17 @@ class Tinebase_Core
 
     /**
      * init tine framework
+     * 
+     * @param boolean $initSession
      */
-    public static function initFramework()
+    public static function initFramework($initSession = true)
     {
+        $config = self::getConfig();
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME',      getDevelopmentRevision());
+        define('TINE20_PACKAGESTRING', 'none');
+        define('TINE20_RELEASETIME',   'none');
+        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
         
@@ -354,7 +366,9 @@ class Tinebase_Core
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
         
-        Tinebase_Core::setupSession();
+        if ($initSession === true) {
+            Tinebase_Core::setupSession();
+        }
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
@@ -370,7 +384,9 @@ class Tinebase_Core
         
         Tinebase_Core::enableProfiling();
         
-        header('X-API: http://www.tine20.org/apidocs/tine20/');
+        if (PHP_SAPI !== 'cli') {
+            header('X-API: http://www.tine20.org/apidocs/tine20/');
+        }
     }
     
     /**
@@ -659,12 +675,6 @@ class Tinebase_Core
             'name'              => 'TINE20SESSID',
         ));
         
-        $config = self::getConfig();
-        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      getDevelopmentRevision());
-        define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
-        
         if (isset(self::get(self::SESSION)->currentAccount)) {
             self::set(self::USER, self::get(self::SESSION)->currentAccount);
         }
@@ -700,9 +710,9 @@ class Tinebase_Core
         try {
             Zend_Session::start();
         } catch (Exception $e) {
-            Zend_Session::destroy();
             self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
             self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            Zend_Session::destroy();
             throw $e;
         }
         
@@ -714,6 +724,7 @@ class Tinebase_Core
         self::set('jsonKey', $session->jsonKey);
 
         self::set(self::SESSION, $session);
+        self::set(self::SESSIONID, session_id());
     }
     /**
      * set session options
@@ -1025,17 +1036,22 @@ class Tinebase_Core
         $session = self::get(self::SESSION);
 
         if ($_timezone === NULL) {
-            if (isset($session->timezone)) {
+            
+            if ($session instanceof Zend_Session_Namespace && isset($session->timezone)) {
                 $timezone = $session->timezone;
             } else {
                 // get timezone from preferences
                 $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
-                $session->timezone = $timezone;
+                if ($session instanceof Zend_Session_Namespace) {
+                    $session->timezone = $timezone;
+                }
             }
 
         } else {
             $timezone = $_timezone;
-            $session->timezone = $timezone;
+            if ($session instanceof Zend_Session_Namespace) {
+                $session->timezone = $timezone;
+            }
             
             if ($_saveaspreference) {
                 // save as user preference

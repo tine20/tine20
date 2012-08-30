@@ -73,14 +73,16 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         
+        Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
+        
         $accessLog = new Tinebase_Model_AccessLog(array(
-            'sessionid'     => session_id(),
+            'sessionid'     => Tinebase_Core::get(Tinebase_Core::SESSIONID),
             'ip'            => $_ipAddress,
             'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => $authResult->getCode(),
             'clienttype'    => $_clientIdString,   
         ), TRUE);
-
+        
         $user = NULL;
         if ($accessLog->result == Tinebase_Auth::SUCCESS) {
             $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
@@ -199,7 +201,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             
             $_user->setLoginTime($_accessLog->ip);
             
-            $_accessLog->sessionid = session_id();
+            $_accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
             $_accessLog->login_name = $_user->accountLoginName;
             $_accessLog->account_id = $_user->getId();
         }
@@ -224,22 +226,26 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
-        Zend_Session::regenerateId();
-        
-        /** 
-         * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
-         * -> search all Set-Cookie: headers and replace them with the last one!
-         **/
-        $cookieHeaders = array();
-        foreach(headers_list() as $headerString) {
-            if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
-                array_push($cookieHeaders, $headerString);
+        if (Zend_Session::isStarted()) {
+            Zend_Session::regenerateId();
+            Tinebase_Core::set(Tinebase_Core::SESSIONID, session_id());
+            
+            /** 
+             * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+             * -> search all Set-Cookie: headers and replace them with the last one!
+             **/
+            $cookieHeaders = array();
+            foreach(headers_list() as $headerString) {
+                if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                    array_push($cookieHeaders, $headerString);
+                }   
             }   
-        }   
-        header(array_pop($cookieHeaders), true);
-        /** end of fix **/
-        
-        Tinebase_Core::getSession()->currentAccount = $_user;
+            header(array_pop($cookieHeaders), true);
+            /** end of fix **/
+            
+            Tinebase_Core::getSession()->currentAccount = $_user;
+        }
+    
     }
     
     /**
@@ -318,11 +324,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             $currentAccount = Tinebase_Core::getUser();
     
             if (is_object($currentAccount)) {
-                Tinebase_AccessLog::getInstance()->setLogout(session_id(), $_ipAddress);
+                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
             }
         }
         
-        Zend_Session::destroy();
+        if (Zend_Session::isStarted()) {
+            Zend_Session::destroy();
+        }
     }   
     
     /**

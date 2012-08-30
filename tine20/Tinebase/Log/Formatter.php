@@ -26,7 +26,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * 
      * @var string
      */
-    static $_sessionId;
+    static $_requestId;
     
     /**
      * search strings
@@ -50,8 +50,8 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      */
     public function format($event)
     {
-        if (! self::$_sessionId) {
-            self::$_sessionId = substr(Tinebase_Record_Abstract::generateUID(), 0, 5);
+        if (! self::$_requestId) {
+            self::$_requestId = Tinebase_Record_Abstract::generateUID(5);
         }
         
         $user = Tinebase_Core::getUser();
@@ -60,7 +60,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         
         $output = str_replace($this->_search, $this->_replace, $output);
         
-        return self::$_sessionId . " $userName - $output";
+        return self::$_requestId . " $userName - $output";
     }
     
     /**

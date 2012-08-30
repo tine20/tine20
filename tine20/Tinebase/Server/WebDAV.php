@@ -18,6 +18,15 @@
  */
 class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
 {
+    /**
+     * the request
+     *
+     * @var Zend_Controller_Request_Http
+     */
+    protected $_request = NULL;
+    
+    protected $_body;
+    
    /**
     * @var Sabre_DAV_Server
     */
@@ -27,49 +36,54 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle()
+    public function handle(Zend_Controller_Request_Http $request = null, $body = null)
     {
-        try {
-            Tinebase_Core::initFramework();
-        } catch (Zend_Session_Exception $exception) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
-            Zend_Session::expireSessionCookie();
-            
-            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            
-            return;
-        }
+        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        
+        Tinebase_Core::initFramework(false);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
         
-        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
+        // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
+        $loginName = $this->_request->getServer('PHP_AUTH_USER');
+        $password  = $this->_request->getServer('PHP_AUTH_PW');
+        
+        if(empty($loginName)) {
+            // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
+            if (isset($_SERVER["REMOTE_USER"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"], 6));
+            } elseif (isset($_SERVER["REDIRECT_REMOTE_USER"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["REDIRECT_REMOTE_USER"], 6));
+            } elseif (isset($_SERVER["Authorization"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["Authorization"], 6));
+            } elseif (isset($_SERVER["HTTP_AUTHORIZATION"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"], 6));
+            }
+        
+            if (isset($basicAuthData) && !empty($basicAuthData)) {
+                list($loginName, $password) = explode(":", $basicAuthData);
+            }
+        }
+        
+        if(empty($loginName)) {
             header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
-            
             return;
         }
         
-        // when used with (f)cgi no PHP_AUTH variables are available without defining a special rewrite rule
-        if(!isset($_SERVER['PHP_AUTH_USER'])) {
-            // $_SERVER["REMOTE_USER"] == "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            $basicAuthData = base64_decode(substr(isset($_SERVER["REMOTE_USER"]) ? $_SERVER["REMOTE_USER"] : $_SERVER['REDIRECT_REMOTE_USER'], 6));
-            list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
-        }
-        
-        if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
+        if(Tinebase_Controller::getInstance()->login($loginName, $password, $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
             header('WWW-Authenticate: Basic realm="CardDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
         self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
+        self::$_server->httpRequest->setBody($this->_body);
         
         // compute base uri
-        $request = new Zend_Controller_Request_Http();
-        self::$_server->setBaseUri($request->getBaseUrl() . '/');
+        self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
         
         $tempDir = Tinebase_Core::getTempDir();
         if (!empty($tempDir)) {
@@ -92,6 +106,8 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         self::$_server->addPlugin(new Sabre_DAV_Browser_Plugin());
         
         self::$_server->exec();
+        
+        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
     }
     
    /**

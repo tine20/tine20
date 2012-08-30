@@ -194,6 +194,11 @@ class Tinebase_Auth
         $this->_backend->setIdentity($_username);
         $this->_backend->setCredential($_password);
         
+        if (Zend_Session::isStarted()) {
+            Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_Session());
+        } else {
+            Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
+        }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
         
         if($result->isValid()) {
