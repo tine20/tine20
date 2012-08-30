@@ -682,6 +682,51 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testMoveFolderNodesToFolderExisting
+     * 
+     * @see 0007028: moving a folder to another folder with a folder with the same name
+     */
+    public function testMoveFolderNodesToFolderExisting()
+    {
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/dir1';
+        $result = $this->_json->moveNodes(array($targetNode['path']), array($testPath), FALSE);
+        $dirs = $this->testCreateDirectoryNodesInShared();
+        try {
+            $result = $this->_json->moveNodes(array($testPath), '/shared/testcontainer', FALSE);
+            $this->fail('Expected Filemanager_Exception_NodeExists!');
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            $result = $this->_json->moveNodes(array($testPath), '/shared/testcontainer', TRUE);
+            $this->assertEquals(1, count($result));
+            $this->assertEquals('/shared/testcontainer/dir1', $result[0]['path']);
+        }
+    }
+
+    /**
+     * testMoveContainerFolderNodeToExistingContainer
+     * 
+     * @see 0007028: moving a folder to another folder with a folder with the same name
+     */
+    public function testMoveContainerFolderNodeToExistingContainer()
+    {
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer2';
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
+        $createdNode = $result[0];
+        $this->_objects['containerids'][] = $createdNode['name']['id'];
+        
+        try {
+            $result = $this->_json->moveNodes(array($targetNode['path']), array($createdNode['path']), FALSE);
+            $this->fail('Expected Filemanager_Exception_NodeExists!');
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            $result = $this->_json->moveNodes(array($targetNode['path']), array($createdNode['path']), TRUE);
+            $this->assertEquals(1, count($result));
+            $this->assertEquals($testPath, $result[0]['path']);
+        }
+    }
+    
+    /**
     * testMoveFolderNodesToTopLevel
     */
     public function testMoveFolderNodesToTopLevel()
