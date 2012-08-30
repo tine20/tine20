@@ -242,6 +242,7 @@
             
             // NOTE: organizer gets mails unless she set notificationlevel to NONE
             if (($prefUser == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($prefUser != $organizer->getId() || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preferred notification loevel not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
     
@@ -376,7 +377,6 @@
         
             Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " could not send notification :" . $e);
             return;
         }
     }
