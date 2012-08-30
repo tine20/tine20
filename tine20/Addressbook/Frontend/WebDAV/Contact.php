@@ -21,6 +21,11 @@
 class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabre_CardDAV_ICard, Sabre_DAVACL_IACL
 {
     /**
+     * @var Tinebase_Model_Container
+     */
+    protected $_container;
+    
+    /**
      * @var Addressbook_Model_Contact
      */
     protected $_contact;
@@ -44,6 +49,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function __construct(Tinebase_Model_Container $_container, $_contact = null) 
     {
+        $this->_container = $_container;
         $this->_contact = $_contact;
 
         list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -74,7 +80,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
         
         $card = new self($container, $contact);
-                
+        
         return $card;
     }
     
@@ -82,10 +88,22 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      * Deletes the card
      *
      * @return void
+     * 
+     * @see Calendar_Frontend_WebDAV_Event::delete()
      */
     public function delete() 
     {
-        Addressbook_Controller_Contact::getInstance()->delete($this->_contact);
+        // when a move occurs, thunderbird first sends to delete command and immediately a put command
+        // we must delay the delete command, otherwise the put command fails
+        sleep(1);
+        
+        // (re) fetch contact as tree move does not refresh src node before delete
+        // check if we are still in the same container, if not -> it is a MOVE 
+        $contact = Addressbook_Controller_Contact::getInstance()->get($this->_contact);
+        
+        if ($contact->container_id == $this->_container->getId()) {
+            Addressbook_Controller_Contact::getInstance()->delete($contact);
+        }
     }
     
     /**
