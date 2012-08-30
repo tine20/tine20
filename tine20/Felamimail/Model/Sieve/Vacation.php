@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -28,7 +28,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -95,7 +95,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         $fsv = new Felamimail_Sieve_Vacation();
         
         $fsv->setEnabled($this->enabled)
-            ->setDays($this->days)
+            ->setDays((is_int($this->days) && $this->days > 0) ? $this->days : 1)
             ->setSubject($this->subject)
             ->setFrom($this->from)
             ->setMime($this->mime)
