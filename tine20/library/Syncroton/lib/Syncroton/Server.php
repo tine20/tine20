@@ -283,7 +283,6 @@ class Syncroton_Server
             $deviceType = fread($stream, $deviceTypeLength);
             
             // @todo parse command parameters 
-            
             $result = array(
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
@@ -291,7 +290,8 @@ class Syncroton_Server
                 'deviceType'      => $deviceType,
                 'saveInSent'      => null,
                 'collectionId'    => null,
-                'itemId'          => null
+                'itemId'          => null,
+                'attachmentName'  => null
             );
         } else {
             $result = array(
@@ -301,7 +301,8 @@ class Syncroton_Server
                 'deviceType'      => $request->getQuery('DeviceType'),
                 'saveInSent'      => $request->getQuery('SaveInSent'),
                 'collectionId'    => $request->getQuery('CollectionId'),
-                'itemId'          => $request->getQuery('ItemId')
+                'itemId'          => $request->getQuery('ItemId'),
+                'attachmentName'  => $request->getQuery('AttachmentName'),
             );
         }
         

@@ -18,7 +18,7 @@
 class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
 {
     protected $_defaultNameSpace    = 'uri:ComposeMail';
-    protected $_documentElement     = 'Sendmail';
+    protected $_documentElement     = 'SendMail';
 
     protected $_saveInSent;
     protected $_source;
@@ -47,7 +47,7 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
             
             if (isset ($xml->Source)) {
                 if ($xml->Source->LongId) {
-                    $this->_source = $xml->Source->LongId;
+                    $this->_source = (string)$xml->Source->LongId;
                 } else {
                     $this->_source = array(
                         'collectionId' => (string)$xml->Source->FolderId,
@@ -70,7 +70,20 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
     public function getResponse()
     {
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, $this->_syncTimeStamp);
-    
-        $dataController->sendEmail($this->_mime, $this->_saveInSent);        
+
+        try {
+            $dataController->sendEmail($this->_mime, $this->_saveInSent);
+        } catch (Syncroton_Exception_Status $ses) {
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " Sending email failed: " . $ses->getMessage());
+
+            $response = new Syncroton_Model_SendMail(array(
+                'status' => $ses->getCode(),
+            ));
+
+            $response->appendXML($this->_outputDom->documentElement);
+
+            return $this->_outputDom;
+        }
     }
 }

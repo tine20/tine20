@@ -160,7 +160,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $policykey));
 
-        $this->_device->policykey = null;
+        $this->_device->policykey = $policykey;
         $this->_deviceBackend->update($this->_device);
     }
 

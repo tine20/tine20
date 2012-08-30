@@ -39,9 +39,17 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         
         $request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?User=abc1234&DeviceId=Appl7R743U8YWH8&DeviceType=iPhone&Cmd=Sync'));
         
+        ob_start();
+        
         $server = new Syncroton_Server('abc1234', $request, $doc);
         
         $server->handle();
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('AwFqAEVcT0sDMAABUgM0OHJ1NDdmaGY3Z2hmN2ZnaDQAAU4DMwABAQEB', base64_encode($result));
     }
     
     public function testBase64EncodedParameters()
@@ -60,6 +68,14 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         
         $server = new Syncroton_Server('abc1234', $request, $doc);
         
+        ob_start();
+        
         $server->handle();
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('AwFqAEVcT0sDMAABUgM0OHJ1NDdmaGY3Z2hmN2ZnaDQAAU4DMwABAQEB', base64_encode($result));
     }
 }
