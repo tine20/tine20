@@ -405,7 +405,12 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 
                 if($collectionData['getChanges'] === true) {
                     // continue sync session?
-                    if(is_array($collectionData['syncState']->pendingdata)) {
+                    if (is_array($collectionData['syncState']->pendingdata) 
+                        && (count($collectionData['syncState']->pendingdata['serverAdds']) +
+                            count($collectionData['syncState']->pendingdata['serverChanges']) +
+                            count($collectionData['syncState']->pendingdata['serverDeletes'])
+                        ) > 0
+                    ) {
                         if ($this->_logger instanceof Zend_Log)
                             $this->_logger->info(__METHOD__ . '::' . __LINE__ . " restored from sync state ");
                         
@@ -458,9 +463,6 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                     if ($this->_logger instanceof Zend_Log)
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
                 }
-                
-                
-                
                 
                 if (!empty($collectionData['added']) || !empty($collectionData['changed']) || !empty($collectionData['deleted']) ||
                     !empty($serverAdds) || !empty($serverChanges) || !empty($serverDeletes)) {
@@ -526,8 +528,15 @@ class Syncope_Command_Sync extends Syncope_Command_Wbxml
                 if ($responses->hasChildNodes() === true) {
                     $collection->appendChild($responses);
                 }
-                
+                if ($this->_logger instanceof Zend_Log) {
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " count: " . (count($serverAdds) + count($serverChanges) + count($serverDeletes)));
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " windowSize " . $collectionData['windowSize']);
+                }
+
                 if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
+                    if ($this->_logger instanceof Zend_Log) {
+                        $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " set moreAvailable");
+                    }
                     $moreAvailable = true;
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                 }
