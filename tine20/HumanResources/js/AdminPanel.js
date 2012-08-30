@@ -6,6 +6,7 @@
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * TODO make config saving work and activate update action again
  */
 
 Ext.ns('Tine.HumanResources');
@@ -78,7 +79,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
      * init buttons
      */
     initButtons : function() {
-        this.fbar = [ '->', this.action_cancel, this.action_update ];
+        this.fbar = [ '->', this.action_cancel /*, this.action_update */ ];
     },  
 
     /**
