@@ -64,4 +64,49 @@ class Syncroton_Model_Event extends Syncroton_Model_AEntry
             'uID'                       => array('type' => 'string'),
         )
     );
+    
+    public function setFromArray(array $properties)
+    {
+        parent::setFromArray($properties);
+        
+        $this->_copyFieldsFromParent();
+    }
+    
+    /**
+     * set properties from SimpleXMLElement object
+     *
+     * @param SimpleXMLElement $xmlCollection
+     * @throws InvalidArgumentException
+     */
+    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
+    {
+        parent::setFromSimpleXMLElement($properties);
+        
+        $this->_copyFieldsFromParent();
+    }
+    
+    /**
+     * copy some fileds of the main event to the exception if they are missing
+     * these fields can be left out, if they have the same value in the main event
+     * and the exception 
+     */
+    protected function _copyFieldsFromParent()
+    {
+        if (isset($this->_elements['exceptions']) && is_array($this->_elements['exceptions'])) {
+            foreach ($this->_elements['exceptions'] as $exception) {
+                // no need to update deleted exceptions
+                if ($exception->deleted == 1) {
+                    continue;
+                }
+        
+                $parentFields = array('allDayEvent', 'attendees', 'busyStatus', 'meetingStatus', 'sensitivity', 'subject');
+        
+                foreach ($parentFields as $field) {
+                    if (!isset($exception->$field) && isset($this->_elements[$field])) {
+                        $exception->$field = $this->_elements[$field];
+                    }
+                }
+            }
+        }
+    }
 }
