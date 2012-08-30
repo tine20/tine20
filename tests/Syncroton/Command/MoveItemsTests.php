@@ -77,7 +77,7 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//Move:Moves/Move:Response/Move:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_MoveItems::STATUS_INVALID_SOURCE, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Exception_Status_MoveItems::INVALID_SOURCE, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
         
     /**
@@ -112,7 +112,42 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//Move:Moves/Move:Response/Move:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_MoveItems::STATUS_INVALID_DESTINATION, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Exception_Status_MoveItems::INVALID_DESTINATION, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+
+    /**
+     */
+    public function testMoveSameDstAndSrcFolder()
+    {
+        // do initial sync first
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:ItemOperations"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
+        $folderSync->handle();
+        $responseDoc = $folderSync->getResponse();
+        
+        
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Moves xmlns="uri:Move"><Move><SrcMsgId>2246b0b87ee914e283d6c53717cc36c68cacd187</SrcMsgId><SrcFldId>addressbookFolderId</SrcFldId><DstFldId>addressbookFolderId</DstFldId></Move></Moves>'
+        );
+        
+        $moveItems = new Syncroton_Command_MoveItems($doc, $this->_device, null);
+        $moveItems->handle();
+        $responseDoc = $moveItems->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('Move', 'uri:Move');
+        
+        $nodes = $xpath->query('//Move:Moves/Move:Response/Move:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Exception_Status_MoveItems::SAME_FOLDER, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
         
     /**
