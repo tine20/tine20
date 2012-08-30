@@ -1190,6 +1190,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Philipp Schüle', $cachedMessage->from_name, print_r($cachedMessage->toArray(), TRUE));
     }
     
+    /**
+     * testHeaderWithoutEncodingInformation
+     * 
+     * @see 0006250: missing Umlauts in some mails
+     */
+    public function testHeaderWithoutEncodingInformation()
+    {
+        $cachedMessage = $this->messageTestHelper('Wortmann1.eml');
+        
+        $this->assertTrue(! empty($cachedMessage->subject) && is_string($cachedMessage->subject), 'subject empty or no string: '. print_r($cachedMessage->toArray(), TRUE));
+        $this->assertContains('Höchstgeschwindigkeit', $cachedMessage->subject, print_r($cachedMessage->toArray(), TRUE));
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
