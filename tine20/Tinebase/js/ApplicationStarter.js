@@ -73,12 +73,11 @@ Tine.Tinebase.ApplicationStarter = {
      * @param {Object} fieldconfig
      * @return {Object}
      */
-    getField: function(fieldconfig, key) {
+    getField: function(fieldconfig, key) {     
+        // default type is auto
+        var field = {name: key};
         
-        // default type is string
-        var field = {name: key, type: 'string'};
-        
-        if(fieldconfig.type) {
+        if (fieldconfig.type) {
             // add pre defined type
             field.type = this.types[fieldconfig.type];
             switch (fieldconfig.type) {
