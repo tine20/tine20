@@ -266,8 +266,8 @@ class Tinebase_Translation
                 'scan' => Zend_Translate::LOCALE_FILENAME,
                 'disableNotices' => TRUE,
                 );
-        //Switch between Po and Mo adapter depending on the mode
-        switch(TINE20_BUILDTYPE) {
+        // Switch between Po and Mo adapter depending on the mode
+        switch (TINE20_BUILDTYPE) {
             case 'DEVELOPMENT':
                 $translate = new Zend_Translate('gettextPo', $path, null, $options);
                 break;

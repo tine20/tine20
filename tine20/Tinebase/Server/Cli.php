@@ -29,6 +29,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         Tinebase_Core::setupServerTimezone();
         Tinebase_Core::setupLogger();
         Tinebase_Core::setupStreamWrapper();
+        Tinebase_Core::setupBuildConstants();
         Tinebase_Core::setupSession();
         Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');

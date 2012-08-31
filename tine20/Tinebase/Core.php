@@ -347,14 +347,8 @@ class Tinebase_Core
      * 
      * @param boolean $initSession
      */
-    public static function initFramework($initSession = true)
+    public static function initFramework($initSession = TRUE)
     {
-        $config = self::getConfig();
-        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      getDevelopmentRevision());
-        define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
-        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
         
@@ -365,6 +359,8 @@ class Tinebase_Core
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
+        
+        Tinebase_Core::setupBuildConstants();
         
         if ($initSession === true) {
             Tinebase_Core::setupSession();
@@ -387,6 +383,18 @@ class Tinebase_Core
         if (PHP_SAPI !== 'cli') {
             header('X-API: http://www.tine20.org/apidocs/tine20/');
         }
+    }
+    
+    /**
+     * initializes the build constants like buildtype, package information, ...
+     */
+    public static function setupBuildConstants()
+    {
+        $config = self::getConfig();
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME',      getDevelopmentRevision());
+        define('TINE20_PACKAGESTRING', 'none');
+        define('TINE20_RELEASETIME',   'none');
     }
     
     /**
@@ -443,7 +451,6 @@ class Tinebase_Core
 
     /**
      * initializes the config
-     *
      */
     public static function setupConfig()
     {

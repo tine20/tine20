@@ -34,7 +34,7 @@ class Setup_Core extends Tinebase_Core
         Setup_Core::setupConfig();
         
         Setup_Core::setupTempDir();
-                
+        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Setup_Core::setupServerTimezone();
 
