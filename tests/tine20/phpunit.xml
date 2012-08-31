@@ -6,4 +6,9 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         colors="true" />
+         colors="true">
+    <listeners>
+        <listener class="LogListener" file="LogListener.php">
+        </listener>
+    </listeners>
+</phpunit>
