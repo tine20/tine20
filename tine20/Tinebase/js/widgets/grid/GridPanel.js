@@ -939,7 +939,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
 
         // which grid to use?
-        var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : Ext.grid.GridPanel;
+        var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : (this.gridConfig.gridType || Ext.grid.GridPanel);
 
         this.gridConfig.store = this.store;
 
