@@ -75,8 +75,12 @@ class Tinebase_AsyncJob
         if ($lastJob) {
             if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_RUNNING) {
                 if (Tinebase_DateTime::now()->isLater($lastJob->end_time)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Old ' . $_name . ' job is running too long. Finishing it now.');
                     $this->finishJob($lastJob, Tinebase_Model_AsyncJob::STATUS_FAILURE);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Current job runs till ' . $lastJob->end_time->toString());
                 }
                 $result = FALSE;
             } else {
@@ -178,6 +182,9 @@ class Tinebase_AsyncJob
      */
     public function finishJob(Tinebase_Model_AsyncJob $_asyncJob, $_status = Tinebase_Model_AsyncJob::STATUS_SUCCESS, $_message = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Finishing job ' . $_asyncJob->name . ' with status ' . $_status);
+        
         $_asyncJob->end_time = Tinebase_DateTime::now();
         $_asyncJob->status = $_status;
         if ($_message !== NULL) {
@@ -185,7 +192,7 @@ class Tinebase_AsyncJob
         }
         
         $result = $this->_backend->update($_asyncJob);
-            
+        
         return $result;
     }
 }
