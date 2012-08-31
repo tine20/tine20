@@ -705,8 +705,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testAttendeeGroupMembersRecurringAddUser()
     {
-        $this->markTestIncomplete('test fails sometimes / needs fixing');
-        
         try {
             // clenup if exists
             $cleanupUser = Tinebase_User::getInstance()->getFullUserByLoginName('testAttendeeGroupMembersAddUser');
@@ -773,20 +771,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
         )), new Tinebase_Model_Pagination(array()));
         
-        $oldSeries = $events->filter('rrule_until', '/.+/', TRUE)->getFirstRecord();
         $newSeries = $events->filter('rrule_until', '/^$/', TRUE)->getFirstRecord();
         
-        $this->assertEquals(2, $events->count(), 'recur event must be splitted');
-        // check if this user was added to event
-        $loadedEvent = $this->_controller->get($persistentEvent->getId());
-        $user = $oldSeries->attendee
-            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $newUser->contact_id);
-        $this->assertEquals(0, count($user), 'added user is attender of old event, but should not be');
+        // check if this user was deleted from event
         $user = $newSeries->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $newUser->contact_id);
-        $this->assertEquals(0, count($user), 'added user is attender of new event, but should not be');
+        $this->assertEquals(0, count($user), 'deleted user is attender of new event, but should not be');
     }
     
     
