@@ -321,10 +321,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // reset capabilities if imap host / port changed
-        if (isset($_SESSION[$this->_applicationName]) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+        if (isset(Tinebase_Core::getSession()->Felamimail) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Resetting capabilities for account ' . $_record->name);
-            unset($_SESSION[$this->_applicationName][$_record->getId()]);
+            unset(Tinebase_Core::getSession()->Felamimail[$_record->getId()]);
         }
     }
 
@@ -487,9 +487,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        if (isset($_SESSION[$this->_applicationName]) && array_key_exists($_account->getId(), $_SESSION[$this->_applicationName])) {
+        if (isset(Tinebase_Core::getSession()->Felamimail) && array_key_exists($_account->getId(), Tinebase_Core::getSession()->Felamimail)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
-            return $_SESSION[$this->_applicationName][$_account->getId()];
+            return Tinebase_Core::getSession()->Felamimail[$_account->getId()];
         }
         
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
@@ -515,7 +515,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // save capabilities in SESSION
-        $_SESSION[$this->_applicationName][$_account->getId()] = $capabilities;
+        Tinebase_Core::getSession()->Felamimail[$_account->getId()] = $capabilities;
         
         return $capabilities;
     }

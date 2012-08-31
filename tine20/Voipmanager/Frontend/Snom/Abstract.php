@@ -49,7 +49,7 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
             exit;
         }
         
-        $_SESSION['phoneIsAutenticated'] = true;
+        Tinebase_Core::getSession()->phoneIsAuthenticated = true;
     }
     
     /**

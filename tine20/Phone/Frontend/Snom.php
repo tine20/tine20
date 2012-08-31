@@ -31,7 +31,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function directory($mac)
     {
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
@@ -76,7 +76,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function menu($mac, $activeLine)
     {
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
@@ -115,7 +115,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function getCallForward($mac, $activeLine)
     {
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
@@ -168,7 +168,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function setCallForward($mac, $activeLine, $mode, $number)
     {
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
@@ -249,7 +249,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             return;
         }
         
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
@@ -341,7 +341,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
-        if (!isset($_SESSION['phoneIsAutenticated'])) {
+        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
             $this->_authenticate();
         }
         
