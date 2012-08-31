@@ -239,6 +239,15 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     return f;
 };
 
+Tine.Tinebase.data.Record.generateUID = function(length) {
+    var uid = String(CryptoJS.SHA1(String(Math.floor(Math.random()*Math.pow(10, 16))) + String(new Date().getMilliseconds())));
+    
+    if (length) {
+        uid = uid.substring(0, length);
+    }
+    
+    return uid;
+};
 Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     add: function(record) {
         if (! Ext.isFunction(record.getMeta)) {

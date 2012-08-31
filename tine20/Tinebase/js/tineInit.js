@@ -240,9 +240,6 @@ Tine.Tinebase.tineInit = {
             'X-Tine20-Request-Type' : 'JSON'
         };
         
-        // to use as jsonprc id
-        Ext.Ajax.requestId = 0;
-        
         /**
          * inspect all requests done via the ajax singleton
          * 
@@ -256,6 +253,9 @@ Tine.Tinebase.tineInit = {
         Ext.Ajax.on('beforerequest', function (connection, options) {
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
+            options.headers['X-Tine20-TransactionId'] = Tine.Tinebase.data.Record.generateUID();
+            
+            options.url = Ext.urlAppend((options.url ? options.url : Tine.Tinebase.tineInit.requestUrl),  'transactionid=' + options.headers['X-Tine20-TransactionId']);
             
             // convert non Ext.Direct request to jsonrpc
             // - convert params
@@ -282,7 +282,7 @@ Tine.Tinebase.tineInit = {
                     jsonrpc: '2.0',
                     method: options.params.method,
                     params: params,
-                    id: ++Ext.Ajax.requestId
+                    id: ++Ext.Direct.TID
                 });
                 
                 options.cbs = {};
@@ -400,6 +400,7 @@ Tine.Tinebase.tineInit = {
                     message: 'request exception: ' + response.statusText,
                     traceHTML: response.responseText,
                     request: options.jsonData,
+                    requestHeaders: options.headers,
                     response: response.responseText
                 };
                 

@@ -42,6 +42,14 @@
           "path": "../library/OpenLayers/"
         },
         {
+          "text": "core.js",
+          "path": "../library/CryptoJS/"
+        },
+        {
+          "text": "sha1.js",
+          "path": "../library/CryptoJS/"
+        },
+        {
           "text": "GeoExt.js",
           "path": "../library/GeoExt/script/"
         },
