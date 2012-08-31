@@ -70,5 +70,6 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse(strpos($loggerFile, $config->database->password), 'pw found!');
         $this->assertContains('********', $loggerFile);
+        $this->assertContains(Tinebase_Core::getUser()->accountLoginName . ' - ', $loggerFile);
     }
 }

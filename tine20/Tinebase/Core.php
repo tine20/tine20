@@ -169,11 +169,17 @@ class Tinebase_Core
 
         // set default internal encoding
         ini_set('iconv.internal_encoding', 'utf-8');
-
+        
+        // check transaction header
+        if (isset($_SERVER['HTTP_X_TINE20_TRANSACTIONID'])) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Client transaction {$_SERVER['HTTP_X_TINE20_TRANSACTIONID']}");
+            Tinebase_Log_Formatter::setPrefix(substr($_SERVER['HTTP_X_TINE20_TRANSACTIONID'], 0, 5));
+        }
+        
         $server = NULL;
         
         /**************************** JSON API *****************************/
-        if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  ||
+        if ((isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  ||
             (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
             (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
         ) {

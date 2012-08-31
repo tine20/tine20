@@ -12,7 +12,7 @@
 
 /**
  * Log Formatter for Tine 2.0
- * - prefixes log statements with session info
+ * - prefixes log statements
  * - replaces passwords
  * - adds user name
  * 
@@ -26,7 +26,14 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * 
      * @var string
      */
-    static $_sessionId;
+    protected static $_prefix;
+    
+    /**
+     * username
+     * 
+     * @var string
+     */
+    protected static $_username = NULL;
     
     /**
      * search strings
@@ -50,17 +57,14 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      */
     public function format($event)
     {
-        if (! self::$_sessionId) {
-            self::$_sessionId = substr(Tinebase_Record_Abstract::generateUID(), 0, 5);
+        if (! self::$_prefix) {
+            self::$_prefix = substr(Tinebase_Record_Abstract::generateUID(), 0, 5);
         }
         
-        $user = Tinebase_Core::getUser();
-        $userName = ($user && is_object($user)) ? $user->accountDisplayName : '-- none --';
         $output = parent::format($event);
-        
         $output = str_replace($this->_search, $this->_replace, $output);
         
-        return self::$_sessionId . " $userName - $output";
+        return self::getPrefix() . ' ' . self::getUsername() . ' - ' . $output;
     }
     
     /**
@@ -78,5 +82,49 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             $this->_search[] = $config->{Tinebase_Config::AUTHENTICATIONBACKEND}->password;
             $this->_replace[] = '********';
         }
+    }
+    
+    /**
+     * get current prefix
+     * 
+     * @return string
+     */
+    public static function getPrefix()
+    {
+        return self::$_prefix;
+    }
+    
+    /**
+     * get current username
+     * 
+     * @return string
+     */
+    public static function getUsername()
+    {
+        if (self::$_username === NULL) {
+            $user = Tinebase_Core::getUser();
+            self::$_username = ($user && is_object($user))
+                ? (isset($user->accountLoginName)
+                    ? $user->accountLoginName
+                    : (isset($user->accountDisplayName) ? $user->accountDisplayName : NULL)) 
+                : NULL;
+        }
+        
+        return (self::$_username) ? self::$_username : '-- none --';
+    }
+    
+    /**
+     * set/append prefix
+     * 
+     * @param string $prefix
+     * @param bool $append
+     */
+    public static function setPrefix($prefix, $append = TRUE)
+    {
+        if ($append) {
+            $prefix = self::getPrefix() . " $prefix";
+        }
+        
+        self::$_prefix = $prefix;
     }
 }
