@@ -9,16 +9,16 @@
  */
 
 /**
- * class to handle ActiveSync event
+ * class to handle ActiveSync email
  *
  * @package     Model
- * @property    array    Attachments
- * @property    string   ContentType
- * @property    Syncroton_Model_EmailFlag  Flag
- * @property    Syncroton_Model_EmailBody  Body
- * @property    array    Cc
- * @property    array    To
- * @property    int      Read
+ * @property    array    attachments
+ * @property    string   contentType
+ * @property    array    flag
+ * @property    Syncroton_Model_EmailBody    body
+ * @property    array    cc
+ * @property    array    to
+ * @property    int      read
  */
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
 {
