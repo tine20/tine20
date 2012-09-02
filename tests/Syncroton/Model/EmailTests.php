@@ -93,6 +93,7 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         
         $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
         $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
         $testDoc->formatOutput = true;
         $testDoc->encoding     = 'utf-8';
         
@@ -123,7 +124,8 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
                 'data'         => 'Hallo <br>',
                 'estimatedDataSize' => 1234,
                 'truncated'    => 1
-            ))
+            )),
+            'conversationId' => 'abcd'
         ));
         
         $email->appendXML($appData);
@@ -156,6 +158,10 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body/AirSyncBase:Type');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals(Syncroton_Model_EmailBody::TYPE_HTML, $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:ConversationId');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('abcd', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());

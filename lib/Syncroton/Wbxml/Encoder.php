@@ -159,8 +159,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         xml_set_character_data_handler($parser, '_handleCharacters');
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         
-        $xmlString = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null,  $_dom->saveXML());
-        if (!xml_parse($parser, $xmlString)) {
+        if (!xml_parse($parser, $_dom->saveXML())) {
             #file_put_contents(tempnam(sys_get_temp_dir(), "xmlerrors"), $_dom->saveXML());
             throw new Syncroton_Wbxml_Exception(sprintf('XML error: %s at line %d',
                 xml_error_string(xml_get_error_code($parser)),
@@ -181,10 +180,11 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
     protected function _handleStartTag($_parser, $_tag, $_attributes)
     {
         $this->_level++;
+        $this->_currentTagData = null;
         
         // write data for previous tag happens whith <tag1><tag2>
         if($this->_currentTag !== NULL) {
-            $this->_writeTag($this->_currentTag, $this->_attributes, true, $this->_currentTagData);
+            $this->_writeTag($this->_currentTag, $this->_attributes, true);
         }
 
         list($nameSpace, $this->_currentTag) = explode(';', $_tag);
@@ -194,6 +194,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         }
 
         $this->_attributes = $_attributes;
+        
     }
     
     /**
@@ -291,6 +292,13 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         // handle the tag
         $identity = $this->_codePage->getIdentity($_tag);
         
+        if (is_array($_attributes) && isset($_attributes['Syncroton:encoding'])) {
+            $encoding = 'opaque';
+            unset($_attributes['Syncroton:encoding']);
+        } else {
+            $encoding = 'termstring';
+        }
+        
         if(!empty($_attributes)) {
             $identity |= 0x80;
         }
@@ -303,8 +311,11 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         
         // handle the data
         if($_data !== NULL) {
-            $this->_writeByte(Syncroton_Wbxml_Abstract::STR_I);
-            $this->_writeTerminatedString($_data);
+            if ($encoding == 'opaque') {
+                $this->_writeOpaqueString($_data);
+            } else {
+                $this->_writeTerminatedString($_data);
+            }
         }
         
         $this->_currentTagData = NULL;

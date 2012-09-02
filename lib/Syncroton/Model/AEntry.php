@@ -57,11 +57,6 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
             
             $nameSpace = 'uri:' . $nameSpace;
             
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                #$value = $this->removeControlChars($value);
-            }
-            
             if (isset($elementProperties['childElement'])) {
                 $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
                 foreach($value as $subValue) {
@@ -172,7 +167,7 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         }
     }
     
-    protected function _appendXMLElement($element, $elementProperties, $value)
+    protected function _appendXMLElement(DOMElement $element, $elementProperties, $value)
     {
         if ($value instanceof Syncroton_Model_IEntry) {
             $value->appendXML($element);
@@ -189,9 +184,30 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 }
             }
             
+            // strip off any non printable control characters
+            if (!ctype_print($value)) {
+                $value = $this->_removeControlChars($value);
+            }
+            
+            if ($elementProperties['type'] == 'byteArray') {
+                $element->setAttributeNS('uri:Syncroton', 'Syncroton:encoding', 'oqaque');
+            }
+            
             $element->appendChild($element->ownerDocument->createTextNode($value));
         }
     }
+    
+    /**
+     * removed control chars from string which are not allowd in XML values
+     *
+     * @param  string|array $_dirty
+     * @return string
+     */
+    protected function _removeControlChars($dirty)
+    {
+        return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $dirty);
+    }
+    
     
     /**
      * 
