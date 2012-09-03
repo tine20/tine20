@@ -218,7 +218,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                     value += type;
                             }
                         }
-                        value = Tine.Tinebase.common.doubleEncode(value);
+                        value = Ext.util.Format.htmlEncode(value);
                         return Ext.util.Format.nl2br(value);
                     } else {
                         return '';
