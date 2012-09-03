@@ -50,7 +50,8 @@ Tine.Tinebase.ApplicationStarter = {
         'Tinebase_Model_Filter_DateTime': 'date',
         'Tinebase_Model_Filter_Bool': 'bool',
         'Tinebase_Model_Filter_ForeignId': 'foreign',
-        'Tinebase_Model_Filter_Int': 'number'
+        'Tinebase_Model_Filter_Int': 'number',
+        'Tinebase_Model_Filter_User': 'user'
     },
     
     /**
