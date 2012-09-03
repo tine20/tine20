@@ -154,22 +154,35 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     /**
      * test invalid chars
      */
-    public function _testInvalidBodyChars()
+    public function testInvalidBodyChars()
     {
-        //invalid_body_chars.eml
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
         
-        $options = array();
-        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
-        $controller->appendXML($properties, $message->folder_id, $message->getId(), $options);
-        $this->_domDocument->documentElement->appendChild($properties);
+        $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
         
-        $this->_domDocument->formatOutput = true;
-        $xml = $this->_domDocument->saveXML();
+        $syncrotonEmail->conversationId = "Hallo\x0E";
+        
+        $imp                   = new DOMImplementation();
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
+        $testDoc->formatOutput = true;
+        $testDoc->encoding     = 'utf-8';
+        
+        $syncrotonEmail->appendXML($testDoc->documentElement);
+        
+        #echo $testDoc->saveXML();
+        
+        $xml = $testDoc->saveXML();
         
         $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $xml), $xml);
+        
+        // try to encode XML until we have wbxml tests
+        $outputStream = fopen("php://temp", 'r+');
+        $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
+        $encoder->encode($testDoc);
     }
     
     /**

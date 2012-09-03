@@ -396,6 +396,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $syncrotonEmail->attachments = $syncrotonAttachments;
         }
         
+        $syncrotonEmail->conversationId    = Tinebase_Record_Abstract::generateUID();
+        $syncrotonEmail->conversationIndex = '32767';
+        
         return $syncrotonEmail;
     }
     
