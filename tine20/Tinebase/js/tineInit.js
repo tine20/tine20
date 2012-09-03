@@ -240,6 +240,8 @@ Tine.Tinebase.tineInit = {
             'X-Tine20-Request-Type' : 'JSON'
         };
         
+        Ext.Ajax.transactions = {};
+        
         /**
          * inspect all requests done via the ajax singleton
          * 
@@ -296,6 +298,11 @@ Tine.Tinebase.tineInit = {
                 delete options.failure;
                 delete options.callback;
             }
+            
+            Ext.Ajax.transactions[options.headers['X-Tine20-TransactionId']] = {
+                date: new Date(),
+                json: options.jsonData
+            };
         });
         
         /**
@@ -314,6 +321,7 @@ Tine.Tinebase.tineInit = {
          *        Memory exhausted to 550
          */
         Ext.Ajax.on('requestcomplete', function (connection, response, options) {
+            delete Ext.Ajax.transactions[options.headers['X-Tine20-TransactionId']];
             
             // detect resoponse errors (e.g. html from xdebug) and convert into error response
             if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
@@ -389,6 +397,7 @@ Tine.Tinebase.tineInit = {
          *       -> timeouts: status code 520
          */
         Ext.Ajax.on('requestexception', function (connection, response, options) {
+            delete Ext.Ajax.transactions[options.headers['X-Tine20-TransactionId']];
             // map connection errors to errorcode 510 and timeouts to 520
             var errorCode = response.status > 0 ? response.status :
                             (response.status === 0 ? 510 : 520);
@@ -401,6 +410,7 @@ Tine.Tinebase.tineInit = {
                     traceHTML: response.responseText,
                     request: options.jsonData,
                     requestHeaders: options.headers,
+                    openTransactions: Ext.Ajax.transactions,
                     response: response.responseText
                 };
                 
