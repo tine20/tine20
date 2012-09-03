@@ -1056,12 +1056,9 @@ class Setup_Controller
         );
 
         $result = array();
+        $tinebaseInstalled = $this->isInstalled('Tinebase');
         foreach ($configs as $config) {
-            try {
-                $result[$config] = Tinebase_Config::getInstance()->get($config, 0);
-            } catch (Exception $e) {
-                $result[$config] = 0;
-            }
+            $result[$config] = ($tinebaseInstalled) ? Tinebase_Config::getInstance()->get($config, 0) : 0;
         }
         
         return $result;
@@ -1602,7 +1599,8 @@ class Setup_Controller
         } catch (Tinebase_Exception_NotFound $tenf) {
             $result = FALSE;
         } catch (Exception $e) {
-            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Application ' . $appname . ' is not installed.');
+            Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             $result = FALSE;
         }
         
