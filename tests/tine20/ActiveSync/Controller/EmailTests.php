@@ -156,7 +156,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testInvalidBodyChars()
     {
-        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
+        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS);
+        
+        $controller = $this->_getController($device);
         
         $message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
         
@@ -171,7 +173,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $testDoc->formatOutput = true;
         $testDoc->encoding     = 'utf-8';
         
-        $syncrotonEmail->appendXML($testDoc->documentElement);
+        $syncrotonEmail->appendXML($testDoc->documentElement, $device);
         
         #echo $testDoc->saveXML();
         
