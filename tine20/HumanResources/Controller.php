@@ -59,4 +59,23 @@ class HumanResources_Controller extends Tinebase_Controller_Event
         
         return self::$_instance;
     }
+    
+    /**
+     * save HR settings
+     *
+     * @param array config
+     * @return Sales_Model_Config
+     *
+     * @todo generalize this
+     */
+    public function setConfig($config)
+    {
+        if(!Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
+            throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on HumanResources'));
+        }
+        
+        HumanResources_Config::getInstance()->set(HumanResources_Config::DEFAULT_FEAST_CALENDAR, $config[HumanResources_Config::DEFAULT_FEAST_CALENDAR]);
+        
+        return array('SUCCESS' => true);
+    }
 }

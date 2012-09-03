@@ -263,6 +263,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contract->workingtime_id = HumanResources_Controller_WorkingTime::getInstance()->get($contract->workingtime_id);
 
         return array('results' => $dates, 'totalcount' => count($dates), 'contract' => $contract->toArray());
-
+    }
+    
+    /**
+     * Sets the config for HR
+     * @param array $config
+     */
+    public function setConfig($config) {
+        return HumanResources_Controller::getInstance()->setConfig($config);
     }
 }

@@ -50,6 +50,12 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
 
         // get items for this dialog
         this.items = this.getFormItems();
+
+        var id = Tine.HumanResources.registry.get('config').defaultFeastCalendar.value;
+        
+        if(id) {
+            this.loadRecord(id);
+        }
         
         Tine.HumanResources.AdminPanel.superclass.initComponent.call(this);
     },
@@ -79,7 +85,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
      * init buttons
      */
     initButtons : function() {
-        this.fbar = [ '->', this.action_cancel /*, this.action_update */ ];
+        this.fbar = [ '->', this.action_cancel , this.action_update ];
     },  
 
     /**
@@ -88,7 +94,6 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
      * @param {} position
      */
     onRender : function(ct, position) {
-        this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading...')});
         Tine.HumanResources.AdminPanel.superclass.onRender.call(this, ct, position);
 
         // generalized keybord map for edit dlgs
@@ -99,6 +104,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
             scope : this
         } ]);
 
+        this.loadMaskCt = ct;
     },
     
     /**
@@ -114,6 +120,13 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
      * save record and close window
      */
     onUpdate : function() {
+        if(! this.loadMask) {
+            this.loadMask = new Ext.LoadMask(this.loadMaskCt);
+        }
+        
+        this.loadMask.msg = 'Saving...';
+        this.loadMask.show();
+
         Ext.Ajax.request({
             url: 'index.php',
             scope: this,
@@ -124,19 +137,50 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
                 }
             },
             success : function(_result, _request) {
-                this.onCancel();
+                this.loadMask.hide();
+                // reload mainscreen to make sure registry gets updated
+                window.location = window.location.href.replace(/#+.*/, '');
             }
         });
     },
 
+    loadRecord: function(id) {
+        
+        if(! this.rendered) {
+            this.loadRecord.defer(100, this, [id]);
+            return false;
+        }
+        
+        this.loadMask = new Ext.LoadMask(this.loadMaskCt);
+        this.loadMask.show();
+        
+        var request = Ext.Ajax.request({
+            url: 'index.php',
+            scope: this,
+            params: {
+                method: 'Admin.getContainer',
+                id: id
+            },
+            success : function(_result, _request) {
+                this.onRecordLoad(Ext.decode(_result.responseText));
+            }
+        });
+    },
+    
+    onRecordLoad: function(result) {
+        var field = this.getForm().findField('defaultFeastCalendar');
+        field.setValue(result);
+        
+        this.loadMask.hide();
+    },
+    
     /**
      * create and return form items
      * @return Object
      */
     getFormItems: function() {
-        
         var dfc = Tine.HumanResources.registry.get('config').defaultFeastCalendar;
-
+        
         return {
             border: false,
             frame:  false,
