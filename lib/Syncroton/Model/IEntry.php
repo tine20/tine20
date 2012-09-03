@@ -22,9 +22,22 @@
 
 interface Syncroton_Model_IEntry
 {
+    /**
+     * 
+     * @param unknown_type $properties
+     */
     public function __construct($properties = null);
     
-    public function appendXML(DOMElement $_domParrent);
+    /**
+     * 
+     * @param DOMElement $_domParrent
+     */
+    /**
+     * 
+     * @param DOMElement $_domParrent
+     * @param Syncroton_Model_IDevice $device
+     */
+    public function appendXML(DOMElement $_domParrent, Syncroton_Model_IDevice $device);
     
     /**
      * return array of valid properties
@@ -33,6 +46,10 @@ interface Syncroton_Model_IEntry
      */
     public function getProperties();
     
+    /**
+     * 
+     * @param array $properties
+     */
     public function setFromArray(array $properties);
     
     /**

@@ -151,7 +151,7 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
                     'policyId'   => null,
                     'ownerId'    => '1234',
                     'useragent'  => 'blabla',
-                    'acsversion' => '2.5',
+                    'acsversion' => '12.1',
                     'remotewipe' => 0
                 )); 
                 break;

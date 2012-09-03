@@ -113,7 +113,7 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
                     $dataController
                         ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'])), $fetch['serverId'])
-                        ->appendXML($properties);
+                        ->appendXML($properties, $this->_device);
                     $fetchTag->appendChild($properties);
                     
                 } elseif (isset($fetch['fileReference'])) {
@@ -123,7 +123,7 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
                     $dataController
                         ->getFileReference($fetch['fileReference'])
-                        ->appendXML($properties);
+                        ->appendXML($properties, $this->_device);
                     $fetchTag->appendChild($properties);
                 }
             } catch (Syncroton_Exception_NotFound $e) {

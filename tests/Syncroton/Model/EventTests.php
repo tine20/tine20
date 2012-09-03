@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_EventTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects
@@ -141,7 +141,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
         $event->body = new Syncroton_Model_EmailBody(array('data' => 'lars', 'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT));
         
-        $event->appendXML($appData);
+        $event->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML();
         

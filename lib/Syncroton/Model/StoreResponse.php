@@ -44,7 +44,11 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
         )
     );
 
-    public function appendXML(DOMElement $_domParrent)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_AEntry::appendXML()
+     */
+    public function appendXML(DOMElement $_domParrent, Syncroton_Model_IDevice $device)
     {
         $this->_addXMLNamespaces($_domParrent);
 
@@ -62,7 +66,7 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
                 case 'result':
                     foreach ($value as $result) {
                         $element = $_domParrent->ownerDocument->createElementNS($nameSpace, 'Result');
-                        $result->appendXML($element);
+                        $result->appendXML($element, $device);
                         $_domParrent->appendChild($element);
                     }
                     break;

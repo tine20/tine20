@@ -26,6 +26,10 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     
     protected $_dateTimeFormat = "Y-m-d\TH:i:s.000\Z";
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::__construct()
+     */
     public function __construct($properties = null)
     {
         if ($properties instanceof SimpleXMLElement) {
@@ -39,9 +43,9 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
      * (non-PHPdoc)
      * @see Syncroton_Model_IEntry::appendXML()
      */
-    public function appendXML(DOMElement $_domParrent)
+    public function appendXML(DOMElement $domParrent, Syncroton_Model_IDevice $device)
     {
-        $this->_addXMLNamespaces($_domParrent);
+        $this->_addXMLNamespaces($domParrent);
         
         foreach($this->_elements as $elementName => $value) {
             // skip empty values
@@ -55,25 +59,31 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 continue;
             }
             
+            $elementVersion = isset($elementProperties['supportedSince']) ? $elementProperties['supportedSince'] : '12.0';
+            
+            if (version_compare($device->acsversion, $elementVersion, '<')) {
+                continue;
+            }
+            
             $nameSpace = 'uri:' . $nameSpace;
             
             if (isset($elementProperties['childElement'])) {
-                $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
+                $element = $domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
                 foreach($value as $subValue) {
-                    $subElement = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementProperties['childElement']));
+                    $subElement = $domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementProperties['childElement']));
                     
-                    $this->_appendXMLElement($subElement, $elementProperties, $subValue);
+                    $this->_appendXMLElement($device, $subElement, $elementProperties, $subValue);
                     
                     $element->appendChild($subElement);
                     
                 }
-                $_domParrent->appendChild($element);
+                $domParrent->appendChild($element);
             } else {
-                $element = $_domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
+                $element = $domParrent->ownerDocument->createElementNS($nameSpace, ucfirst($elementName));
                 
-                $this->_appendXMLElement($element, $elementProperties, $value);
+                $this->_appendXMLElement($device, $element, $elementProperties, $value);
                 
-                $_domParrent->appendChild($element);
+                $domParrent->appendChild($element);
             }
             
         }
@@ -113,6 +123,10 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::setFromArray()
+     */
     public function setFromArray(array $properties)
     {
         $this->_elements = array();
@@ -155,22 +169,22 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     /**
      * add needed xml namespaces to DomDocument
      * 
-     * @param unknown_type $_domParrent
+     * @param unknown_type $domParrent
      */
-    protected function _addXMLNamespaces(DOMElement $_domParrent)
+    protected function _addXMLNamespaces(DOMElement $domParrent)
     {
         foreach($this->_properties as $namespace => $namespaceProperties) {
             // don't add default namespace again
-            if($_domParrent->ownerDocument->documentElement->namespaceURI != 'uri:'.$namespace) {
-                $_domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
+            if($domParrent->ownerDocument->documentElement->namespaceURI != 'uri:'.$namespace) {
+                $domParrent->ownerDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:'.$namespace, 'uri:'.$namespace);
             }
         }
     }
     
-    protected function _appendXMLElement(DOMElement $element, $elementProperties, $value)
+    protected function _appendXMLElement(Syncroton_Model_IDevice $device, DOMElement $element, $elementProperties, $value)
     {
         if ($value instanceof Syncroton_Model_IEntry) {
-            $value->appendXML($element);
+            $value->appendXML($element, $device);
         } else {
             if ($value instanceof DateTime) {
                 $value = $value->format($this->_dateTimeFormat);

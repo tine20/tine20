@@ -34,8 +34,8 @@ class Syncroton_Model_EmailAttachment extends Syncroton_Model_AEntry
             'method'                  => array('type' => 'string'),
         ),
         'Email2' => array(
-            'umAttDuration'         => array('type' => 'number'),
-            'umAttOrder'            => array('type' => 'number'),
+            'umAttDuration'         => array('type' => 'number', 'supportedSince' => '14.0'),
+            'umAttOrder'            => array('type' => 'number', 'supportedSince' => '14.0'),
         ),
     );
 }

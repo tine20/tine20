@@ -105,7 +105,7 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
         $response = $search->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Response'));
         $store    = $response->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Store'));
 
-        $storeResponse->appendXML($store);
+        $storeResponse->appendXML($store, $this->_device);
 
         return $this->_outputDom;
     }

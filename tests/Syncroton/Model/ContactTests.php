@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_ContactTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects
@@ -111,7 +111,7 @@ class Syncroton_Model_ContactTests extends PHPUnit_Framework_TestCase
         $contact = new Syncroton_Model_Contact($xml->Collections->Collection->Commands->Add->ApplicationData);
         $contact->picture    = fopen(__DIR__ . '/../../files/test_image.jpeg', 'r');
         
-        $contact->appendXML($appData);
+        $contact->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML();
         

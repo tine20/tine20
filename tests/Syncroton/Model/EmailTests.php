@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
 {
     protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
         <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email" xmlns:Tasks="uri:Tasks">
@@ -83,11 +83,9 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
+     * test xml generation for Android
      */
-    public function testAppendXmlData()
+    public function testAppendXmlDataAS141()
     {
         $imp                   = new DOMImplementation();
         
@@ -128,7 +126,8 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
             'conversationId' => 'abcd'
         ));
         
-        $email->appendXML($appData);
+        $this->_testDevice->acsversion = '14.1';
+        $email->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML(); 
         
@@ -162,6 +161,92 @@ class Syncroton_Model_EmailTests extends PHPUnit_Framework_TestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:ConversationId');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('abcd', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('2012-04-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        // try to encode XML until we have wbxml tests
+        $outputStream = fopen("php://temp", 'r+');
+        $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
+        $encoder->encode($testDoc);
+    }
+    /**
+     * test xml generation for Android
+     */
+    public function testAppendXmlDataAS120()
+    {
+        $imp                   = new DOMImplementation();
+        
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
+        $testDoc->formatOutput = true;
+        $testDoc->encoding     = 'utf-8';
+        
+        $appData = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
+        
+        $email = new Syncroton_Model_Email(array(
+            'accountId'    => 'FooBar',
+            'attachments'  => array(
+                new Syncroton_Model_EmailAttachment(array(
+                    'displayName'   => 'example.pdf',
+                    'fileReference' => '12345abcd',
+                    'umAttOrder'    => 1
+                )) 
+            ),
+            'categories'   => array('123', '456'),
+            'cc'           => 'l.kneschke@metaways.de',
+            'dateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
+            'flag'         => new Syncroton_Model_EmailFlag(array(
+                'status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
+                'reminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
+            )),
+            'from'         => 'k.kneschke@metaways.de',
+            'subject'      => 'Test Subject',
+            'to'           => 'j.kneschke@metaways.de',
+            'read'         => 1,
+            'body'         => new Syncroton_Model_EmailBody(array(
+                'type'         => Syncroton_Model_EmailBody::TYPE_HTML,
+                'data'         => 'Hallo <br>',
+                'estimatedDataSize' => 1234,
+                'truncated'    => 1
+            )),
+            'conversationId' => 'abcd'
+        ));
+        
+        $this->_testDevice->acsversion = '12.0';
+        $email->appendXML($appData, $this->_testDevice);
+        
+        #echo $testDoc->saveXML(); 
+        
+        $xpath = new DomXPath($testDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        $xpath->registerNamespace('AirSyncBase', 'uri:AirSyncBase');
+        $xpath->registerNamespace('Email', 'uri:Email');
+        $xpath->registerNamespace('Email2', 'uri:Email2');
+        $xpath->registerNamespace('Tasks', 'uri:Tasks');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:AccountId');
+        $this->assertEquals(0, $nodes->length, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:DateReceived');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('2012-03-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Attachments/AirSyncBase:Attachment/AirSyncBase:FileReference');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals('12345abcd', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Attachments/AirSyncBase:Attachment/Email2:UmAttOrder');
+        $this->assertEquals(0, $nodes->length, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body/AirSyncBase:Type');
+        $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
+        $this->assertEquals(Syncroton_Model_EmailBody::TYPE_HTML, $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:ConversationId');
+        $this->assertEquals(0, $nodes->length, $testDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
