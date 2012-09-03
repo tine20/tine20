@@ -88,24 +88,34 @@ class Syncroton_Model_StoreRequest
                 if (isset($xmlStore->Query->And->ConversationId)) {
                     $this->_store['query']['and']['conversationId'] = (string) $xmlStore->Query->And->ConversationId;
                 }
+
+                // Protocol specification defines Value as string and DateReceived as datetime, but
+                // PocketPC device I tested sends XML as follows:
+                // <GreaterThan>
+                //    <DateReceived>
+                //    <Value>2012-08-02T16:54:11.000Z</Value>
+                // </GreaterThan>
+
                 if (isset($xmlStore->Query->And->GreaterThan)) {
                     if (isset($xmlStore->Query->And->GreaterThan->Value)) {
-                        $this->_store['query']['and']['greaterThan']['value'] = (string) $xmlStore->Query->And->GreaterThan->Value;
+                        $value = (string) $xmlStore->Query->And->GreaterThan->Value;
+                        $this->_store['query']['and']['greaterThan']['value'] = new DateTime($value, new DateTimeZone('UTC'));
                     }
 
                     $email = $xmlStore->Query->And->GreaterThan->children('uri:Email');
                     if (isset($email->DateReceived)) {
-                        $this->_store['query']['and']['greaterThan']['dateReceived'] = new DateTime((string) $email->DateReceived, new DateTimeZone('UTC'));
+                        $this->_store['query']['and']['greaterThan']['dateReceived'] = true;
                     }
                 }
                 if (isset($xmlStore->Query->And->LessThan)) {
                     if (isset($xmlStore->Query->And->LessThan->Value)) {
-                        $this->_store['query']['and']['lessThan']['value'] = (string) $xmlStore->Query->And->LessThan->Value;
+                        $value = (string) $xmlStore->Query->And->LessThan->Value;
+                        $this->_store['query']['and']['lessThan']['value'] = new DateTime($value, new DateTimeZone('UTC'));
                     }
 
                     $email = $xmlStore->Query->And->LessThan->children('uri:Email');
                     if (isset($email->DateReceived)) {
-                        $this->_store['query']['and']['leasThan']['dateReceived'] = new DateTime((string) $email->DateReceived, new DateTimeZone('UTC'));
+                        $this->_store['query']['and']['leasThan']['dateReceived'] = true;
                     }
                 }
 
