@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.3</version>
+    <version>6.4</version>
     <order>51</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -82,6 +82,30 @@
                     <name>n_fn</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>title</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>salutation</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>n_family</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>n_given</name>
+                    <type>text</type>
+                    <length>64</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

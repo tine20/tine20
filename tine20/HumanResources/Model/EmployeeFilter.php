@@ -37,6 +37,11 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
         'number'     => array('filter' => 'Tinebase_Model_Filter_Int'),
         'query'      => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_fn', 'bank_account_holder', 'email'))),
 
+        'n_given'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'n_family'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'title'      => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'salutation' => array('filter' => 'Tinebase_Model_Filter_Text'),
+        
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),

@@ -106,6 +106,34 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 sortable: true,
                 dataIndex: 'n_fn'
             }, {
+                id: 'salutation',
+                header: this.app.i18n._("Salutation"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'salutation',
+                hidden: true
+            }, {
+                id: 'title',
+                header: this.app.i18n._("Title"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'title',
+                hidden: true
+            }, {
+                id: 'n_given',
+                header: this.app.i18n._("First Name"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'n_given',
+                hidden: true
+            }, {
+                id: 'n_family',
+                header: this.app.i18n._("Last Name"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'n_family',
+                hidden: true
+            }, {
                 id: 'employment_begin',
                 header: this.app.i18n._("Employment begin"),
                 width: 150,

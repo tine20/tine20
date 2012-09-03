@@ -23,6 +23,10 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'tel_home',            type: 'string'},
     {name: 'tel_cell',            type: 'string'},
     {name: 'title',               type: 'string'},
+    {name: 'n_given',             type: 'string'},
+    {name: 'n_family',            type: 'string'},
+    {name: 'salutation',          type: 'string'},
+    {name: 'title',               type: 'string'},
     {name: 'n_fn',                type: 'string'},
     {name: 'bday',                type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'bank_account_holder', type: 'string'},
@@ -95,13 +99,17 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
     
     return [
         { label: _('Quick search'),           field: 'query', operators: ['contains']},
-        { label: app.i18n._('Employee name'), field: 'name' },
+        { label: app.i18n._('Employee name'), field: 'n_fn' },
         { filtertype: 'tinebase.tag', app: app},
         { label: _('Last Modified Time'),     field: 'last_modified_time', valueType: 'date'},
         { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
         { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
         { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
         { label: _('Account'),                field: 'account_id',         valueType: 'user'},
+        { label: _('First Name'),             field: 'n_given'},
+        { label: _('Title'),                  field: 'title'},
+        { label: _('Last Name'),              field: 'n_family'},
+        { label: _('Salutation'),             field: 'salutation'},
         { filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Sales.Model.Division, ownField: 'division_id'}
     ];
 };

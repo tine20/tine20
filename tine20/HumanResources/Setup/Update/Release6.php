@@ -70,4 +70,43 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_freetime', '2');
         $this->setApplicationVersion('HumanResources', '6.3');
     }
+    
+    /**
+     * update 6.3 -> 6.4
+     * - add fields title, salutation, n_family, n_given
+     */
+    public function update_3()
+    {
+        $fields = array('<field>
+                    <name>title</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>', '
+                <field>
+                    <name>salutation</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>', '
+                <field>
+                    <name>n_family</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>', '
+                <field>
+                    <name>n_given</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>');
+
+        foreach ($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('humanresources_employee', $declaration);
+        }
+        $this->setTableVersion('humanresources_employee', '4');
+        $this->setApplicationVersion('HumanResources', '6.4');
+    }
 }

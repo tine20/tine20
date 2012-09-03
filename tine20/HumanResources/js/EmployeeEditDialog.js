@@ -72,6 +72,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     /**
+     * updates the display name on change of n_given or n_fanily
+     */
+    updateDisplayName: function() {
+        var nfn = this.getForm().findField('n_given').getValue() + (this.getForm().findField('n_family').getValue() ? ' ' + this.getForm().findField('n_family').getValue() : '');
+        this.getForm().findField('n_fn').setValue(nfn);
+    },
+    
+    /**
      * executed when record gets updated from form
      * @private
      */
@@ -183,17 +191,19 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         click: function() {
                                             var sr = this.contactPicker.selectedRecord;
                                             if(sr) {
-                                                this.form.findField('n_fn').setValue(sr.get('n_fn'));
+                                                Ext.each(['n_fn', 'title', 'salutation', 'n_given', 'n_family'], function(f) {
+                                                    this.form.findField(f).setValue(sr.get(f));
+                                                }, this);
+                                                
                                                 if(this.showPrivateInformation) {
                                                     this.form.findField('bank_account_holder').setValue(sr.get('n_fn'));
                                                     Ext.each(['countryname', 'locality', 'postalcode', 'region', 'street', 'street2'], function(f){
-                                                        this.form.findField(f).setValue(sr.get('adr_two_'+f));
+                                                        this.form.findField(f).setValue(sr.get('adr_two_' + f));
                                                     }, this);
                                                     
                                                     Ext.each(['email', 'tel_home', 'tel_cell', 'bday'], function(f){
                                                         this.form.findField(f).setValue(sr.get(f));
                                                     }, this);
-                                                    
                                                 }
                                             }
                                         }
@@ -202,7 +212,36 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .450,
                                     allowBlank: false,
                                     fieldLabel: this.app.i18n._('Full Name'),
-                                    name: 'n_fn'
+                                    name: 'n_fn',
+                                    disabled: true
+                                }], [
+                                new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    fieldLabel: this.app.i18n._('Salutation'),
+                                    name: 'salutation',
+                                    app: 'Addressbook',
+                                    keyFieldName: 'contactSalutation',
+                                    value: '',
+                                    columnWidth: .25
+                                }), {
+                                    columnWidth: .25,
+                                    fieldLabel: this.app.i18n._('Title'),
+                                    name: 'title'
+                                }, {
+                                    columnWidth: .25,
+                                    fieldLabel: this.app.i18n._('First Name'),
+                                    name: 'n_given',
+                                    listeners: {
+                                        scope: this,
+                                        blur: this.updateDisplayName
+                                    }
+                                }, {
+                                    columnWidth: .25,
+                                    fieldLabel: this.app.i18n._('Last Name'),
+                                    name: 'n_family',
+                                    listeners: {
+                                        scope: this,
+                                        blur: this.updateDisplayName
+                                    }
                                 }]
                             ]
                         }]
@@ -257,13 +296,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         layout: 'hfit',
                         autoHeight: true,
                         title: this.app.i18n._('Internal Information'),
-//                        disabled: ! this.showPrivateInformation,
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'top',
-                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {
-//                                disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation
-                                }),
+                            formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {}),
                             items: [
                                 [
                                 Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
@@ -390,7 +426,7 @@ Tine.HumanResources.EmployeeEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 570,
+        height: 620,
         name: Tine.HumanResources.EmployeeEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.HumanResources.EmployeeEditDialog',
         contentPanelConstructorConfig: config
