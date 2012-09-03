@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_PolicyTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_PolicyTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects
@@ -56,7 +56,7 @@ class Syncroton_Model_PolicyTests extends PHPUnit_Framework_TestCase
             #'approvedApplicationList' => array('12werwerwer', 'sdafasdfas')
         ));
         
-        $provData->appendXML($provDoc);
+        $provData->appendXML($provDoc, $this->_testDevice);
         
         #echo $testDoc->saveXML(); 
         

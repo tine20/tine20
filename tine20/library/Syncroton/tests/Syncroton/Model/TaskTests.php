@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_TaskTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_TaskTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects
@@ -112,7 +112,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body>
         $xml   = new SimpleXMLElement($this->_testXMLInput);
         $event = new Syncroton_Model_Task($xml->Collections->Collection->Commands->Change->ApplicationData);
         
-        $event->appendXML($appData);
+        $event->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML(); 
         

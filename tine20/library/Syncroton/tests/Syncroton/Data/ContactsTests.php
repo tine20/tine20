@@ -98,7 +98,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $dataController
             ->getEntry($collection, $allEntries[0])
-            ->appendXML($applicationData);
+            ->appendXML($applicationData, $device);
         
         #echo $testDoc->saveXML();
         
@@ -198,7 +198,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         
         $dataController
             ->getEntry($collection, $allEntries[0])
-            ->appendXML($applicationData);
+            ->appendXML($applicationData, $device);
         
         
         // no offset and namespace === uri:Contacts

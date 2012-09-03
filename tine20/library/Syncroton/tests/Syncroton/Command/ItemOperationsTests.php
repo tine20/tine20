@@ -17,6 +17,8 @@
  */
 class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
 {
+    #protected $_logPriority = Zend_Log::DEBUG;
+    
     /**
      * Runs the test methods of this class.
      *

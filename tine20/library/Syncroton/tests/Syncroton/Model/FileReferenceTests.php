@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_FileReferenceTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_FileReferenceTests extends Syncroton_Model_ATestCase
 {
     /**
      * Runs the test methods of this class.
@@ -50,7 +50,7 @@ class Syncroton_Model_FileReferenceTests extends PHPUnit_Framework_TestCase
             'data'        => 'Lars'
         ));
         
-        $email->appendXML($appData);
+        $email->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML(); 
         

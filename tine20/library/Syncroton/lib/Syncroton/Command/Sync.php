@@ -525,7 +525,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                             
                             $dataController
                                 ->getEntry($collectionData, $serverId)
-                                ->appendXML($applicationData);
+                                ->appendXML($applicationData, $this->_device);
                             
                             $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                             
@@ -584,7 +584,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
 
                         $dataController
                             ->getEntry($collectionData, $serverId)
-                            ->appendXML($applicationData);
+                            ->appendXML($applicationData, $this->_device);
                         
                         $commands->appendChild($add);
                         
@@ -621,7 +621,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         $dataController
                             ->getEntry($collectionData, $serverId)
-                            ->appendXML($applicationData);
+                            ->appendXML($applicationData, $this->_device);
                         
 
                         $commands->appendChild($change);

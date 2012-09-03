@@ -9,16 +9,16 @@
  */
 
 /**
- * class to handle ActiveSync event
+ * class to handle ActiveSync email
  *
  * @package     Model
- * @property    array    Attachments
- * @property    string   ContentType
- * @property    Syncroton_Model_EmailFlag  Flag
- * @property    Syncroton_Model_EmailBody  Body
- * @property    array    Cc
- * @property    array    To
- * @property    int      Read
+ * @property    array    attachments
+ * @property    string   contentType
+ * @property    array    flag
+ * @property    Syncroton_Model_EmailBody    body
+ * @property    array    cc
+ * @property    array    to
+ * @property    int      read
  */
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
 {
@@ -33,7 +33,7 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
         ),
         'Email' => array(
             'busyStatus'              => array('type' => 'number'),
-            'categories'              => array('type' => 'container', 'childElement' => 'category'),
+            'categories'              => array('type' => 'container', 'childElement' => 'category', 'supportedSince' => '14.0'),
             'cc'                      => array('type' => 'string'),
             'completeTime'            => array('type' => 'datetime'),
             'contentClass'            => array('type' => 'string'),
@@ -66,16 +66,16 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
             'to'                      => array('type' => 'string'),
         ),
         'Email2' => array(
-            'accountId'             => array('type' => 'string'),
-            'conversationId'        => array('type' => 'byteArray'), // @todo handle this
-            'conversationIndex'     => array('type' => 'byteArray'), // @todo handle this
-            'lastVerbExecuted'      => array('type' => 'number'),
-            'lastVerbExecutionTime' => array('type' => 'datetime'),
-            'meetingMessageType'    => array('type' => 'number'),
-            'receivedAsBcc'         => array('type' => 'number'),
-            'sender'                => array('type' => 'string'),
-            'umCallerID'            => array('type' => 'string'),
-            'umUserNotes'           => array('type' => 'string'),
+            'accountId'             => array('type' => 'string', 'supportedSince' => '14.1'),
+            'conversationId'        => array('type' => 'byteArray', 'supportedSince' => '14.0'),
+            'conversationIndex'     => array('type' => 'byteArray', 'supportedSince' => '14.0'),
+            'lastVerbExecuted'      => array('type' => 'number', 'supportedSince' => '14.0'),
+            'lastVerbExecutionTime' => array('type' => 'datetime', 'supportedSince' => '14.0'),
+            'meetingMessageType'    => array('type' => 'number', 'supportedSince' => '14.1'),
+            'receivedAsBcc'         => array('type' => 'number', 'supportedSince' => '14.0'),
+            'sender'                => array('type' => 'string', 'supportedSince' => '14.0'),
+            'umCallerID'            => array('type' => 'string', 'supportedSince' => '14.0'),
+            'umUserNotes'           => array('type' => 'string', 'supportedSince' => '14.0'),
         ),
     );
 }

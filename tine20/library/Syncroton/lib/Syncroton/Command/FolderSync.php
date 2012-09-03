@@ -185,7 +185,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
         foreach($adds as $folder) {
             $add = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Add'));
             
-            $folder->appendXML($add);
+            $folder->appendXML($add, $this->_device);
 
             // store folder in backend
             if (empty($folder->id)) {

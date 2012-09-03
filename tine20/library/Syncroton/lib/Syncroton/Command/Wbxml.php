@@ -145,16 +145,19 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->format('Y-m-d H:i:s'));
         
-        // Creates an instance of the DOMImplementation class
-        $imp = new DOMImplementation();
-        
-        // Creates a DOMDocumentType instance
-        $dtd = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-
-        // Creates a DOMDocument instance
-        $this->_outputDom = $imp->createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
-        $this->_outputDom->formatOutput = false;
-        $this->_outputDom->encoding     = 'utf-8';
+        if (isset($this->_defaultNameSpace) && isset($this->_documentElement)) {
+            // Creates an instance of the DOMImplementation class
+            $imp = new DOMImplementation();
+            
+            // Creates a DOMDocumentType instance
+            $dtd = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+            
+            // Creates a DOMDocument instance
+            $this->_outputDom = $imp->createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
+            $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
+            $this->_outputDom->formatOutput = false;
+            $this->_outputDom->encoding     = 'utf-8';
+        }
         
         if ($this->_skipValidatePolicyKey != true) {
             if (!empty($this->_device->policyId)) {

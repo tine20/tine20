@@ -202,8 +202,37 @@ abstract class Syncroton_Wbxml_Abstract
         fwrite($this->_stream, $_string);
     }
     
+    /**
+     * write opaque string to stream
+     * 
+     * @param string|resource $_string
+     * @throws Syncroton_Wbxml_Exception
+     */
+    protected function _writeOpaqueString($_string)
+    {
+        if (is_resource($_string)) {
+            $stream = $_string;
+        } else {
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, $_string);
+        }
+        $length = ftell($stream);
+        rewind($stream);
+        
+        $this->_writeByte(Syncroton_Wbxml_Abstract::OPAQUE);
+        $this->_writeMultibyteUInt($length);
+        $writenBytes = stream_copy_to_stream($stream, $this->_stream);
+        
+        if($writenBytes !== $length) {
+            throw new Syncroton_Wbxml_Exception('blow');
+        }
+        
+        fclose($stream);
+    }
+    
     protected function _writeTerminatedString($_string)
     {
+        $this->_writeByte(Syncroton_Wbxml_Abstract::STR_I);
         fwrite($this->_stream, $_string);
         fwrite($this->_stream, chr(0));
     }

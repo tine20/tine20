@@ -159,10 +159,11 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         $sync->handle();
-        $sync->getResponse();
+        $responseDoc = $sync->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         
-        // now do the first sync
+        // now do the first sync with a windowsize of 2
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -171,7 +172,8 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
         $sync->handle();
-        $sync->getResponse();
+        $responseDoc = $sync->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         
         // and now we can send the GetItemEstimate command

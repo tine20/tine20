@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_EventTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects
@@ -112,6 +112,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1,  count($event->attendees));
         $this->assertTrue(is_array($event->exceptions));
         $this->assertEquals(2,  count($event->exceptions), 'exceptions mismatch');
+        $this->assertEquals(0,  $event->exceptions[0]->sensitivity, 'sensitivity of exception mismatch');
         $this->assertEquals(15, $event->reminder);
         $this->assertEquals('Repeat', $event->subject);
         $this->assertEquals('20101125T150537Z', $event->dtStamp->format("Ymd\THis\Z"));
@@ -140,7 +141,7 @@ class Syncroton_Model_EventTests extends PHPUnit_Framework_TestCase
         $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
         $event->body = new Syncroton_Model_EmailBody(array('data' => 'lars', 'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT));
         
-        $event->appendXML($appData);
+        $event->appendXML($appData, $this->_testDevice);
         
         #echo $testDoc->saveXML();
         

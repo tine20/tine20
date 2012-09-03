@@ -15,7 +15,7 @@
  * @package     Syncroton
  * @subpackage  Tests
  */
-class Syncroton_Model_SyncCollectionTests extends PHPUnit_Framework_TestCase
+class Syncroton_Model_SyncCollectionTests extends Syncroton_Model_ATestCase
 {
     /**
      * @var array test objects

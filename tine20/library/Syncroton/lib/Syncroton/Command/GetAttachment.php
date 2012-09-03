@@ -23,6 +23,8 @@ class Syncroton_Command_GetAttachment extends Syncroton_Command_Wbxml
      */
     protected $_attachmentName;
     
+    protected $_skipValidatePolicyKey = true;
+    
     /**
      * process the XML file and add, change, delete or fetches data 
      *

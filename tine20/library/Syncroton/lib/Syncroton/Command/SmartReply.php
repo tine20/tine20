@@ -39,7 +39,7 @@ class Syncroton_Command_SmartReply extends Syncroton_Command_SendMail
                 'status' => $ses->getCode(),
             ));
 
-            $response->appendXML($this->_outputDom->documentElement);
+            $response->appendXML($this->_outputDom->documentElement, $this->_device);
 
             return $this->_outputDom;
         }

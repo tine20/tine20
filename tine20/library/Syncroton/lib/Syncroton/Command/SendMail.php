@@ -81,7 +81,7 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
                 'status' => $ses->getCode(),
             ));
 
-            $response->appendXML($this->_outputDom->documentElement);
+            $response->appendXML($this->_outputDom->documentElement, $this->_device);
 
             return $this->_outputDom;
         }

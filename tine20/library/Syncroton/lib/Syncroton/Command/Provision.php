@@ -126,7 +126,7 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
             $easProvisionDoc = $data->appendChild($this->_outputDom->createElementNS('uri:Provision', 'EASProvisionDoc'));
             $this->_policyBackend
                 ->get($this->_device->policyId)
-                ->appendXML($easProvisionDoc);
+                ->appendXML($easProvisionDoc, $this->_device);
         }
         
         $this->_deviceBackend->update($this->_device);
