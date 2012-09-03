@@ -93,7 +93,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
      */
     protected $_contentController;
     
-    # $source, $inputStream, $saveInSent, $replaceMime
     /**
      * (non-PHPdoc)
      * @see Syncroton_Data_IDataEmail::forwardEmail()

@@ -440,8 +440,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
             $ownAttendee = Calendar_Model_Attender::getOwnAttender($updatedEmtry->attendee);
             
-            if ($_folderId != $this->_specialFolderName) {
-                $ownAttendee->displaycontainer_id = $_folderId;
+            if ($folderId != $this->_specialFolderName) {
+                $ownAttendee->displaycontainer_id = $folderId;
             }
             
             $updatedEmtry = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($updatedEmtry, $ownAttendee);
