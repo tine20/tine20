@@ -342,7 +342,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
         
         if ($userCredentialCache !== NULL) {
-                $credentialsBackend->getCachedCredentials($userCredentialCache);
+            $credentialsBackend->getCachedCredentials($userCredentialCache);
         } else {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
                 . ' Something went wrong with the CredentialsCache / use given username/password instead.'
