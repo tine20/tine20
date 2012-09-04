@@ -27,21 +27,25 @@ class Tinebase_Frontend_Json_Container
      * @param  string $application
      * @param  string $containerType
      * @param  string $owner
+     * @param  array $requiredGrants
      * @return array
      */
-    public function getContainer($application, $containerType, $owner)
+    public function getContainer($application, $containerType, $owner, $requiredGrants = NULL)
     {
+        if (!$requiredGrants) {
+            $requiredGrants = Tinebase_Model_Grants::GRANT_READ;
+        }
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, $requiredGrants);
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, $requiredGrants);
                 break;
                 
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, Tinebase_Model_Grants::GRANT_READ);
+                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, $requiredGrants);
                 break;
                 
             default:

@@ -382,9 +382,24 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                 containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                 appName: this.app.appName,
-                requiredGrant: this.evalGrants ? 'addGrant' : false
+                requiredGrant: this.evalGrants ? 'addGrant' : false,
+                disabled: this.isContainerSelectorDisabled(),
+                listeners: {
+                    scope: this,
+                    select: function() {    
+                        // enable or disable save button dependent to containers account grants
+                        var grants = ContainerForm.selectedContainer ? ContainerForm.selectedContainer.account_grants : {};
+                        // on edit check editGrant, on add check addGrant
+                        if (this.record.data.id) {  // edit if record has already an id
+                            var disable = grants.hasOwnProperty('editGrant') ? ! grants.editGrant : false;
+                        } else {
+                            var disable = grants.hasOwnProperty('addGrant') ? ! grants.addGrant : false;
+                        }
+                        this.action_saveAndClose.setDisabled(disable);
+                    }
+                }
             });
-            this.on('render', function() {this.getForm().add(ContainerForm);}, this);
+            this.on('render', function() { this.getForm().add(ContainerForm); }, this);
             
             this.fbar = [
                 _('Saved in'),
@@ -392,6 +407,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             ].concat(this.fbar);
         }
         
+    },
+    
+    /**
+     * checks if the container selector should be disabled (dependent on account grants of the container itself)
+     * @return {}
+     */
+    isContainerSelectorDisabled: function() {
+        return (! this.evalGrants) ? false : this.record.data.id ? (! this.record.data[this.recordClass.getMeta('containerProperty')].account_grants.editGrant) : false
     },
     
     /**

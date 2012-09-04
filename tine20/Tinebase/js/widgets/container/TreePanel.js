@@ -91,10 +91,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     recordClass: null,
     /**
-     * @cfg {String} requiredGrant
-     * grant which is required to select leaf node(s)
+     * @cfg {Array} requiredGrants
+     * grants which are required to select leaf node(s)
      */
-    requiredGrant: 'readGrant',
+    requiredGrants: null,
+    
     /**
      * @cfg {Boolean} useContainerColor
      * use container colors
@@ -241,18 +242,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * returns object of selected container/filter or null/default
      * 
-     * @param {String} [requiredGrant]
+     * @param {Array} [requiredGrants]
      * @param {Tine.Tinebase.Model.Container} [defaultContainer]
      * @param {Boolean} onlySingle use default if more than one container in selection
      * @return {Tine.Tinebase.Model.Container}
      */
-    getSelectedContainer: function(requiredGrant, defaultContainer, onlySingle) {
+    getSelectedContainer: function(requiredGrants, defaultContainer, onlySingle) {
         var container = defaultContainer,
             sm = this.getSelectionModel(),
             selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
         if (Ext.isArray(selection) && selection.length > 0 && (! onlySingle || selection.length === 1 || ! container)) {
-            container = this.getContainerFromSelection(selection, requiredGrant) || container;
+            container = this.getContainerFromSelection(selection, requiredGrants) || container;
         } 
         // postpone this as we don't get the whole container record here
 //        else if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
@@ -266,15 +267,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * get container from selection
      * 
      * @param {Array} selection
-     * @param {String} requiredGrant
+     * @param {Array} requiredGrants
      * @return {Tine.Tinebase.Model.Container}
      */
-    getContainerFromSelection: function(selection, requiredGrant) {
+    getContainerFromSelection: function(selection, requiredGrants) {
         var result = null;
-        
+
         Ext.each(selection, function(node) {
             if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
-                if (! requiredGrant || this.hasGrant(node, requiredGrant)) {
+                if (! requiredGrants || this.hasGrant(node, requiredGrants)) {
                     result = node.attributes.container;
                     // take the first one
                     return false;
@@ -288,17 +289,18 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * get container from filter toolbar
      * 
-     * @param {String} requiredGrant
+     * @param {Array} requiredGrants
      * @return {Tine.Tinebase.Model.Container}
      * 
      * TODO make this work -> atm we don't get the account grants here (why?)
      */
-    getContainerFromFilter: function(requiredGrant) {
+    getContainerFromFilter: function(requiredGrants) {
         var result = null;
         
         // check if single container is selected in filter toolbar 
         var ftb = this.filterPlugin.getGridPanel().filterToolbar,
             filterValue = null;
+
         ftb.filterStore.each(function(filter) {
             if (filter.get('field') == this.recordClass.getMeta('containerProperty')) {
                 filterValue = filter.get('value');
@@ -341,12 +343,21 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * checkes if user has requested grant for given container represented by a tree node 
      * 
      * @param {Ext.tree.TreeNode} node
-     * @param {String} grant
+     * @param {Array} grant
      * @return {}
      */
-    hasGrant: function(node, grant) {
-        var attr = node.attributes;
-        return (attr && attr.leaf && attr.container.account_grants[grant]);
+    hasGrant: function(node, grants) {
+        var attr = node.attributes,
+            condition = false;
+
+        if(attr && attr.leaf) {
+            condition = true;
+            Ext.each(grants, function(grant) {
+                condition = condition && attr.container.account_grants[grant];
+            }, this);
+        }
+
+        return condition;
     },
     
     /**
@@ -409,10 +420,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * called when node is appended to this tree
      */
     onAppendNode: function(tree, parent, appendedNode, idx) {
-        if (this.useContainerColor && appendedNode.leaf) {
-            appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color || '#808080'}}, true);
-            }, appendedNode.ui);
+        if (appendedNode.leaf && this.hasGrant(appendedNode, this.requiredGrants)) {
+            if (this.useContainerColor) {
+                appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
+                    this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color || '#808080'}}, true);
+                }, appendedNode.ui);
+            }
         }
     },
     
@@ -510,6 +523,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             method: 'Tinebase_Container.getContainer',
             application: this.app.appName,
             containerType: type,
+            requiredGrants: this.requiredGrants,
             owner: owner
         };
         

@@ -158,6 +158,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     columnWidth: 1,
                                     id: this.app.appName + 'EditDialogContainerSelector',
                                     fieldLabel: _('Saved in'),
+                                    ref: '../../../../../../../../containerSelect',
                                     //width: 300,
                                     //listWidth: 300,
                                     name: this.recordClass.getMeta('containerProperty'),
@@ -165,7 +166,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
-                                    requiredGrant: this.evalGrants ? 'addGrant' : false
+                                    requiredGrants: this.record.data.id ? ['editGrant'] : ['addGrant'],
+                                    disabled: this.record.data.id ? (! this.record.data.container_id.account_grants.editGrant) : false
                                 })]]
                             }]
                         }, {
@@ -335,7 +337,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
     },
-    
+
     /**
      * checks if form data is valid
      * 
@@ -396,6 +398,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             // apply grants
             if (! this.record.get('editGrant')) {
+                // disable container selection combo if user has no right to edit
+                this.containerSelect.setDisabled(this.record.data.id ? (! this.record.data.container_id.account_grants.editGrant) : false);
                 this.getForm().items.each(function(f){
                     if(f.isFormField && f.requiredGrant !== undefined){
                         f.setDisabled(! this.record.get(f.requiredGrant));

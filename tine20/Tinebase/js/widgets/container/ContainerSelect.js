@@ -63,10 +63,17 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     recordClass: null,
     /**
-     * @cfg {String} requiredGrant
-     * grant which is required to select leaf node(s)
+     * @cfg {Array} requiredGrants
+     * grants which are required to select leaf node(s)
      */
-    requiredGrant: 'readGrant',
+    requiredGrants: null,
+    
+    /**
+     * @cfg {String} requiredGrant (legacy - should not be used any more)
+     * grants which is required to select leaf node(s)
+     */
+    requiredGrant: null,
+    
     /**
      *  @cfg {Number} trigger2width
      */
@@ -105,6 +112,15 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                 this.stateId = this.recordClass.getMeta('appName') + '-tinebase-widgets-container-selectcombo-' + this.recordClass.getMeta('modelName');
             }
         }
+
+        // legacy handling for requiredGrant
+        if(this.requiredGrant && ! this.requiredGrants) {
+            this.requiredGrants = [this.requiredGrant];
+        } else if (! this.requiredGrant && ! this.requiredGrants) {
+            // set default required Grants
+            this.requiredGrants = ['readGrant', 'addGrant', 'editGrant'];
+        }
+
         // no state saving for startPath != /
         this.on('beforestatesave', function() {return this.startPath === '/';}, this);
         
@@ -307,7 +323,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             allowNodeSelect: this.allowNodeSelect,
             containerName: this.containerName,
             containersName: this.containersName,
-            requiredGrant: this.requiredGrant,
+            requiredGrants: this.requiredGrants,
             TriggerField: this
         });
     },
@@ -337,7 +353,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             // store already has a record of this container
             container = this.store.getAt(this.store.findExact('path', container.path));
             
-        }else if (container.path || container.id) {
+        } else if (container.path || container.id) {
             // ignore server name for node 'My containers'
             if (container.path && container.path === Tine.Tinebase.container.getMyNodePath()) {
                 container.name = null;
@@ -356,7 +372,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         container.set('is_container_node', !!!Tine.Tinebase.container.pathIsContainer(container.get('path')));
         this.selectedContainer = container.data;
         
-        // make shure other is _last_ entry in list
+        // make sure other is _last_ entry in list
         this.store.remove(this.otherRecord);
         this.store.add(this.otherRecord);
         
@@ -448,10 +464,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      */
     tree: null,
     /**
-     * @cfg {String} requiredGrant
-     * grant which is required to select leaf node(s)
+     * @cfg {Array} requiredGrants
+     * grants which are required to select leaf node(s)
      */
-    requiredGrant: 'readGrant',
+    requiredGrants: ['readGrant'],
     
     /**
      * @private
@@ -489,7 +505,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             containersName: this.TriggerField.containersName,
             appName: this.TriggerField.appName,
             defaultContainer: this.TriggerField.defaultContainer,
-            requiredGrant: this.requiredGrant
+            requiredGrants: this.requiredGrants
         });
         
         this.tree.on('click', this.onTreeNodeClick, this);
