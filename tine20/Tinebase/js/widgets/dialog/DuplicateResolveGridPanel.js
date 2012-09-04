@@ -420,47 +420,50 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
      * @param {Sting} strategy
      */
     applyStrategy: function(strategy) {
-        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy action: ' + strategy);
-        var grant = this.duplicates[this.duplicateIdx].get('container_id') ? this.duplicates[this.duplicateIdx].get('container_id').account_grants['editGrant'] : false;
-
-        // change stategy from merge to keep if user has no rights to merge
-        if (strategy.match(/^merge/) && ! grant) {
-            Tine.log.info('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy user has no editGrant, changeing strategy to keep');
-
-            this.resolveStrategy = strategy = 'keep';
-            this.fireEvent('strategychange', this, strategy);
-        }
-
+        Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() - action: ' + strategy);
+        
         this.resolveStrategy = strategy;
+        this.checkEditGrant();
 
         this.each(function(resolveRecord) {
             var theirs = resolveRecord.get('value' + this.duplicateIdx),
                 mine = resolveRecord.get('clientValue'),
-                location = strategy === 'keep' ? 'mine' : 'theirs';
+                location = this.resolveStrategy === 'keep' ? 'mine' : 'theirs';
 
             // undefined or empty theirs value -> keep mine
-            if (strategy == 'mergeTheirs' && ['', 'null', 'undefined', '[]'].indexOf(String(theirs)) > -1) {
+            if (this.resolveStrategy == 'mergeTheirs' && ['', 'null', 'undefined', '[]'].indexOf(String(theirs)) > -1) {
                 location = 'mine';
             }
 
             // only keep mine if its not undefined or empty
-            if (strategy == 'mergeMine' && ['', 'null', 'undefined', '[]'].indexOf(String(mine)) < 0) {
+            if (this.resolveStrategy == 'mergeMine' && ['', 'null', 'undefined', '[]'].indexOf(String(mine)) < 0) {
                 location = 'mine';
             }
 
             // special merge for tags
             // TODO generalize me
             if (resolveRecord.get('fieldName') == 'tags') {
-                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(strategy != 'discard' ? mine : []).concat(strategy != 'keep' ? theirs : [])));
+                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(this.resolveStrategy != 'discard' ? mine : []).concat(this.resolveStrategy != 'keep' ? theirs : [])));
             } else {
                 resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
             }
             
-            Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() resolved record field: ' + resolveRecord.get('fieldName'));
+            Tine.log.debug('Tine.widgets.dialog.DuplicateResolveStore::applyStrategy() - resolved record field: ' + resolveRecord.get('fieldName'));
             Tine.log.debug(resolveRecord);
         }, this);
         
         this.commitChanges();
+    },
+    
+    checkEditGrant: function() {
+        var grant = this.duplicates[this.duplicateIdx].get('container_id') ? this.duplicates[this.duplicateIdx].get('container_id').account_grants['editGrant'] : false;
+
+        // change strategy from merge to keep if user has no rights to merge
+        if (this.resolveStrategy.match(/^merge/) && ! grant) {
+            Tine.log.info('Tine.widgets.dialog.DuplicateResolveStore::checkEditGrant() - user has no editGrant, changing strategy to keep');
+            this.resolveStrategy = 'keep';
+            this.fireEvent('strategychange', this, this.resolveStrategy);
+        }
     },
 
     /**
