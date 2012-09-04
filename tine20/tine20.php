@@ -13,17 +13,7 @@ if (php_sapi_name() != 'cli') {
     die('Not allowed: wrong sapi name!');
 }
 
-$paths = array(
-    realpath(dirname(__FILE__)),
-    realpath(dirname(__FILE__) . '/library'),
-    get_include_path()
-);
-set_include_path(implode(PATH_SEPARATOR, $paths));
-
-require_once 'Zend/Loader/Autoloader.php';
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->setFallbackAutoloader(true);
-Tinebase_Autoloader::initialize($autoloader);
+require_once 'bootstrap.php';
 
 /**
  * anonymous methods (no pw/user required)
