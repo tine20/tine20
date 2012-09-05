@@ -164,7 +164,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
         
-        $syncrotonEmail->conversationId = "Hallo\x0E";
+        $syncrotonEmail->subject = "Hallo\x0E";
         
         $imp                   = new DOMImplementation();
         $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");

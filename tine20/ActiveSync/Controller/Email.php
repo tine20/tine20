@@ -362,7 +362,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         }
         
         $syncrotonEmail->body = $this->_getSyncrotonBody($entry, $options);
-        $syncrotonEmail->nativeBodyType = $syncrotonEmail->body->type;
+        if ($syncrotonEmail->body->type < 4) {
+            $syncrotonEmail->nativeBodyType = $syncrotonEmail->body->type;
+        }
+        
         if ($syncrotonEmail->body->type == Syncroton_Command_Sync::BODY_TYPE_MIME) {
             $syncrotonEmail->messageClass = 'IPM.Note.SMIME';
         } else {
@@ -396,8 +399,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $syncrotonEmail->attachments = $syncrotonAttachments;
         }
         
+        #$syncrotonEmail->flag = array(new Syncroton_Model_EmailFlag(array('status' => '0')));
+        #$syncrotonEmail->categories = array('Test');
         $syncrotonEmail->conversationId    = Tinebase_Record_Abstract::generateUID();
-        $syncrotonEmail->conversationIndex = '32767';
+        $syncrotonEmail->conversationIndex = "\x00\x01\x02\x03\x04";
         
         return $syncrotonEmail;
     }
@@ -495,6 +500,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         
         if ($isTruncacted === 1) {
             $synrotonBody->truncated = 1;
+        } else {
+            $synrotonBody->truncated = 0;
         }
         
         return $synrotonBody;
