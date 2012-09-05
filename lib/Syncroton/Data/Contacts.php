@@ -129,11 +129,56 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
                         'firstName' => 'Cornelius', 
                         'lastName'  => 'Weiß'
                     ))
+                ),
+                'anotherAddressbookFolderId' => array(
+                    'contact1' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact2' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact3' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact4' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact5' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact6' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact7' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact8' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact9' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact10' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    ))
                 )
             );
             
             foreach ($testData['addressbookFolderId'] as $data) {
                 $this->createEntry('addressbookFolderId', $data);
+            }
+            foreach ($testData['anotherAddressbookFolderId'] as $data) {
+                $this->createEntry('anotherAddressbookFolderId', $data);
             }
         }
     }

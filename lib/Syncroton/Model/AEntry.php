@@ -203,12 +203,6 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 // encode to base64; the wbxml encoder will base64_decode it again
                 // this way we can also transport data, which would break the xmlparser otherwise
                 $element->appendChild($element->ownerDocument->createCDATASection(base64_encode($value)));
-            } elseif($elementProperties['type'] == 'string') {
-                // strip off any non printable control characters
-                if (!ctype_print($value)) {
-                    $value = $this->_removeControlChars($value);
-                }
-                $element->appendChild($element->ownerDocument->createCDATASection($value));
             } else {
                 // strip off any non printable control characters
                 if (!ctype_print($value)) {

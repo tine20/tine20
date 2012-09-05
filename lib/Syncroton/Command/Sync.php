@@ -472,19 +472,15 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverModifications['added']) . '/' . count($serverModifications['changed']) . '/' . count($serverModifications['deleted'])  . ' entries for sync from server to client');
                 }
                 
-                
-                if (!empty($clientModifications['added']) || !empty($clientModifications['changed']) || !empty($clientModifications['deleted']) ||
-                    !empty($serverModifications['added']) || !empty($serverModifications['changed']) || !empty($serverModifications['deleted'])) {
-                    $collectionData->syncState->counter++;
-                }
-                
 
                 // collection header
                 $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
                 if (!empty($collectionData->folder->class)) {
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData->folder->class));
                 }
-                $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey', $collectionData->syncState->counter));
+                
+                $syncKeyNode = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'SyncKey'));
+                
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $collectionData->collectionId));
                 $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
                 
@@ -552,7 +548,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $newContentStates = array();
                 
                 foreach($serverModifications['added'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -600,7 +596,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         'folder_id'        => $collectionData->folder,
                         'contentid'        => $serverId,
                         'creation_time'    => $this->_syncTimeStamp,
-                        'creation_synckey' => $collectionData->syncState->counter
+                        'creation_synckey' => $collectionData->syncState->counter + 1
                     ));
                     unset($serverModifications['added'][$id]);    
                 }
@@ -609,7 +605,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                  * process entries changed on server side
                  */
                 foreach($serverModifications['changed'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -641,7 +637,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $deletedContentStates = array();
                 
                 foreach($serverModifications['deleted'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges === $this->_globalWindowSize) {
+                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -665,17 +661,37 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     unset($serverModifications['deleted'][$id]);
                 }
                 
-                if ($commands->hasChildNodes() === true) {
+                $countOfPendingChanges = (count($serverModifications['added']) + count($serverModifications['changed']) + count($serverModifications['deleted'])); 
+                if ($countOfPendingChanges > 0) {
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
+                } else {
+                    $serverModifications = null;
+                }
                     
-                    $countOfPendingChanges = (count($serverModifications['added']) + count($serverModifications['changed']) + count($serverModifications['deleted'])); 
-                    if ($countOfPendingChanges > 0) {
-                        $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
-                    }
-                
+                if ($commands->hasChildNodes() === true) {
                     $collection->appendChild($commands);
                 }
                 
                 $totalChanges += $collectionChanges;
+                
+                // increase SyncKey if needed
+                if ((
+                        // sent the clients updates?
+                        !empty($clientModifications['added']) ||
+                        !empty($clientModifications['changed']) ||
+                        !empty($clientModifications['deleted'])
+                    ) || (
+                        // sends the server updates to the client?
+                        $commands->hasChildNodes() === true
+                    ) || (
+                        // changed the pending data?
+                        $collectionData->syncState->pendingdata != $serverModifications
+                    )
+                ) {
+                    // then increase SyncKey
+                    $collectionData->syncState->counter++;
+                }
+                $syncKeyNode->appendChild($this->_outputDom->createTextNode($collectionData->syncState->counter));
                 
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData->syncState->counter);
@@ -718,6 +734,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     // store contentstates for new entries added to client
                     if (isset($newContentStates)) {
                         foreach($newContentStates as $state) {
+                            #$state->creation_synckey = $collectionData->syncState->counter;
                             $this->_contentStateBackend->create($state);
                         }
                     }
