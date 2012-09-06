@@ -42,7 +42,7 @@ class Syncroton_Model_Email extends Syncroton_Model_AEntry
             'displayTo'               => array('type' => 'string'),
             'dTStamp'                 => array('type' => 'datetime'),
             'endTime'                 => array('type' => 'datetime'),
-            'flag'                    => array('type' => 'container'),
+            'flag'                    => array('type' => 'container', 'class' => 'Syncroton_Model_EmailFlag'),
             'from'                    => array('type' => 'string'),
             'globalObjId'             => array('type' => 'string'),
             'importance'              => array('type' => 'number'),

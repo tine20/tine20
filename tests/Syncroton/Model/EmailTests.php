@@ -111,7 +111,8 @@ class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
             'dateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
             'flag'         => new Syncroton_Model_EmailFlag(array(
                 'status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
-                'reminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
+                'flagType'     => 'FollowUp',
+                'reminderSet'  => 0,
             )),
             'from'         => 'k.kneschke@metaways.de',
             'subject'      => 'Test Subject',
@@ -162,9 +163,9 @@ class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
         $this->assertEquals("AAECAw==", $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderSet');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('2012-04-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals('0', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
