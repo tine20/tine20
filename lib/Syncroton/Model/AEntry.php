@@ -191,11 +191,10 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 
             } elseif (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
                 if (is_resource($value)) {
-                    stream_filter_append($value, 'convert.base64-encode');
+                    rewind($value);
                     $value = stream_get_contents($value);
-                } else {
-                    $value = base64_encode($value);
                 }
+                $value = base64_encode($value);
             }
             
             if ($elementProperties['type'] == 'byteArray') {
