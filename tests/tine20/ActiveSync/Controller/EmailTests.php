@@ -132,6 +132,18 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('text/plain', $syncrotonFileReference->contentType);
         $this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->data)));
+        
+        $imp = new DOMImplementation();
+        
+        // Creates a DOMDocumentType instance
+        $dtd = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        
+        // Creates a DOMDocument instance
+        $syncDoc = $imp->createDocument('uri:ItemOperations', 'ItemOperations', $dtd);
+        $syncDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
+        $syncDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase', 'uri:AirSyncBase');
+        $syncDoc->formatOutput = false;
+        $syncDoc->encoding     = 'utf-8';
     }
     
     /**
@@ -286,7 +298,41 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(1, count($folders));
         $this->assertTrue(array_pop($folders) instanceof Syncroton_Model_Folder);
     }
+    
+    /**
+     * test search for emails
+     */
+    public function testSearch()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $request = new Syncroton_Model_StoreRequest(array(
+            'query' => array(
+                'and' => array(
+                    'freetext'     => 'Removal',
+                    'classes'      => array('Email'),
+                    'collections'  => array($this->_emailTestClass->getFolder()->getId())
+                )
+            ),
+            'options' => array(
+                'mimeSupport' => 0,
+                'bodyPreferences' => array(
+                    array(
+                        'type' => 2,
+                        'truncationSize' => 20000
+                    )
+                ),
+                'range' => array(0,9)
+            )
+        ));
+        
+        $result = $controller->search($request);
+        
+        #var_dump($result);
+    }
+    
     /**
      * return active device
      * 

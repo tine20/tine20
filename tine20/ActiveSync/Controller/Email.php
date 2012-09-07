@@ -15,7 +15,7 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
-class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataEmail
+class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataEmail, Syncroton_Data_IDataSearch
 {
     protected $_mapping = array(
         'body'              => 'body',
@@ -333,7 +333,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " email data " . print_r($entry->toArray(), true));
         
         $syncrotonEmail = new Syncroton_Model_Email();
@@ -377,6 +377,20 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         // read flag
         $syncrotonEmail->read = in_array('\Seen', $entry->flags) ? 1 : 0;
         
+        $syncrotonEmail->flag = in_array('\Flagged', $entry->flags) ? 
+            new Syncroton_Model_EmailFlag(array(
+                'status'       => Syncroton_Model_EmailFlag::STATUS_ACTIVE,
+                'flagType'     => 'FollowUp',
+                'reminderSet'  => 0,
+                'startDate'    => Tinebase_DateTime::now(),
+                'utcStartDate' => Tinebase_DateTime::now(),
+                'dueDate'    => Tinebase_DateTime::now()->addWeek(1),
+                'utcDueDate' => Tinebase_DateTime::now()->addWeek(1),
+            )) : 
+            new Syncroton_Model_EmailFlag(array(
+                'status' => Syncroton_Model_EmailFlag::STATUS_CLEARED
+            ));
+        
         // attachments?
         if ($entry->has_attachment == true) {
             $syncrotonAttachments = array();
@@ -399,12 +413,88 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $syncrotonEmail->attachments = $syncrotonAttachments;
         }
         
-        #$syncrotonEmail->flag = array(new Syncroton_Model_EmailFlag(array('status' => '0')));
+        
         #$syncrotonEmail->categories = array('Test');
         $syncrotonEmail->conversationId    = Tinebase_Record_Abstract::generateUID();
         $syncrotonEmail->conversationIndex = "\x00\x01\x02\x03\x04";
         
         return $syncrotonEmail;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataSearch::getSearchEntry()
+     */
+    public function getSearchEntry($longId, $options)
+    {
+        // @todo remove from Search Interface
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataSearch::search()
+     */
+    public function search(Syncroton_Model_StoreRequest $store)
+    {
+        $storeResponse = new Syncroton_Model_StoreResponse();
+        
+        if (!isset($store->query['and']) && !isset($store->query['and']['freetext'])) {
+            $storeResponse->total = 0;
+            return $storeResponse;
+        }
+        
+        $filter = new $this->_contentFilterClass(array(array(
+            'field'     => 'query',
+            'operator'  => 'contains',
+            'value'     => $store->query['and']['freetext']
+        )));
+        
+        if (isset($store->query['and']['collections'])) {
+            // @todo search for multiple folders
+            $folderId = $store->query['and']['collections'][0];
+        } else {
+            $folderId = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName(
+                Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT},
+                'INBOX'
+            )->getId();
+        }
+        $this->_addContainerFilter($filter, $folderId);
+        
+        if (isset($store->options['range'])) {
+            $pagination = new Tinebase_Model_Pagination(array(
+                'start' => $store->options['range'][0],
+                'limit' => $store->options['range'][1] - $store->options['range'][0]
+            ));
+        } else {
+            $pagination = null;
+        }
+        
+        $serverIds = $this->_contentController->search($filter, $pagination, false, true, 'sync');
+        $totalCount = $this->_contentController->searchCount($filter, 'sync');
+        
+        foreach ($serverIds as $serverId) {
+            $email = $this->getEntry(
+                new Syncroton_Model_SyncCollection(array(
+                    'collectionId' => $folderId,
+                    'options'      => $store->options
+                )), 
+                $serverId
+            );
+    
+            $storeResponse->result[] = new Syncroton_Model_StoreResponseResult(array(
+                'class'        => 'Email',
+                'longId'       => $folderId . '-' . $serverId,
+                'collectionId' => $folderId,
+                'properties'   => $email
+            ));
+        }
+        
+        $storeResponse->total = $totalCount;
+        if (count($storeResponse->result) > 0) {
+            $storeResponse->range = array($store->options['range'][0], $store->options['range'][1]);
+        }
+        
+        return $storeResponse;
     }
     
     /**
@@ -542,6 +632,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
         
+        try {
+            $message = $this->_contentController->get($serverId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            throw new Syncroton_Exception_NotFound($tenf->getMessage());
+        }
+        
         if(isset($entry->read)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId set read flag: $entry->read");
@@ -551,18 +649,21 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             } else {
                 Felamimail_Controller_Message_Flags::getInstance()->clearFlags($serverId, Zend_Mail_Storage::FLAG_SEEN);
             }
-            
-            try {
-                $message = $this->_contentController->get($serverId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
-                throw new Syncroton_Exception_NotFound($tenf->getMessage());
-            }
-            
-            $message->timestamp = $this->_syncTimeStamp;
-            $this->_contentController->update($message);
         }
+        
+        if(isset($entry->flag)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId set flagged flag: {$entry->flag->status}");
+            
+            if($entry->flag->status == Syncroton_Model_EmailFlag::STATUS_ACTIVE) {
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($serverId, Zend_Mail_Storage::FLAG_FLAGGED);
+            } else {
+                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($serverId, Zend_Mail_Storage::FLAG_FLAGGED);
+            }
+        }
+        
+        $message->timestamp = $this->_syncTimeStamp;
+        $this->_contentController->update($message);
         
         return;
     }

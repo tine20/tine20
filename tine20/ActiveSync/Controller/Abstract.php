@@ -288,6 +288,11 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
+        // is $serverId a LongId?
+        if (strpos($serverId, '-') !== false) {
+            list($collection->collectionId, $serverId) = explode('-', $serverId, 2);
+        }
+        
         try {
             $entry = $this->_contentController->get($serverId);
         } catch (Tinebase_Exception_NotFound $tenf) {
