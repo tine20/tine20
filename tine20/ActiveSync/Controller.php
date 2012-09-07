@@ -3,7 +3,6 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +13,6 @@
  * controller for ActiveSync
  *
  * @package     ActiveSync
- * @subpackage  Controller
  */
 class ActiveSync_Controller extends Tinebase_Controller_Abstract
 {

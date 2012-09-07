@@ -12,7 +12,6 @@
  * backend for ActiveSync preferences
  *
  * @package     ActiveSync
- * @subpackage  Backend
  */
 class ActiveSync_Preference extends Tinebase_Preference_Abstract
 {

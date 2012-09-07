@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -16,7 +16,7 @@
  * This class handles all Json requests for the ActiveSync application
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @subpackage  Frontend
  */
 class ActiveSync_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {

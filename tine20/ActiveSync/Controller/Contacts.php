@@ -15,7 +15,6 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
- 
 class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract 
 {
     protected $_mapping = array(

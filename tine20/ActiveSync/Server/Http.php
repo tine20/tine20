@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     ActiveSync
+ * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>

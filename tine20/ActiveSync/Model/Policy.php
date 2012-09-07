@@ -3,6 +3,7 @@
  * Tine 2.0
  * 
  * @package     ActiveSync
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,6 +14,7 @@
  * class to hold policy data
  * 
  * @package     ActiveSync
+ * @subpackage  Model
  * @property  string  $acsversion         activesync protocoll version
  * @property  string  $calendarfilter_id  the calendar filter id
  * @property  string  $contactsfilter_id  the contacts filter id
