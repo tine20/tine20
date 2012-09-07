@@ -35,6 +35,8 @@ class Syncroton_Registry extends ArrayObject
     const TASKS_DATA_CLASS    = 'tasks_data_class';
     const GAL_DATA_CLASS      = 'gal_data_class';
     
+    const DEFAULT_POLICY      = 'default_policy';
+    
     const DATABASE            = 'database';
     const TRANSACTIONMANAGER  = 'transactionmanager';
     
