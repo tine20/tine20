@@ -191,23 +191,24 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
                 
             } elseif (isset($elementProperties['encoding']) && $elementProperties['encoding'] == 'base64') {
                 if (is_resource($value)) {
-                    stream_filter_append($value, 'convert.base64-encode');
+                    rewind($value);
                     $value = stream_get_contents($value);
-                } else {
-                    $value = base64_encode($value);
                 }
-            }
-            
-            // strip off any non printable control characters
-            if (!ctype_print($value)) {
-                $value = $this->_removeControlChars($value);
+                $value = base64_encode($value);
             }
             
             if ($elementProperties['type'] == 'byteArray') {
                 $element->setAttributeNS('uri:Syncroton', 'Syncroton:encoding', 'oqaque');
+                // encode to base64; the wbxml encoder will base64_decode it again
+                // this way we can also transport data, which would break the xmlparser otherwise
+                $element->appendChild($element->ownerDocument->createCDATASection(base64_encode($value)));
+            } else {
+                // strip off any non printable control characters
+                if (!ctype_print($value)) {
+                    $value = $this->_removeControlChars($value);
+                }
+                $element->appendChild($element->ownerDocument->createTextNode($value));
             }
-            
-            $element->appendChild($element->ownerDocument->createTextNode($value));
         }
     }
     
@@ -221,7 +222,6 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
     {
         return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $dirty);
     }
-    
     
     /**
      * 

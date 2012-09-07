@@ -134,14 +134,36 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         );
         $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
-        $folderSync->getResponse();
+        $responseDoc = $folderSync->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         
         // request initial synckey
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>2</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>0</SyncKey>
+                        <CollectionId>addressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>0</SyncKey>
+                        <CollectionId>anotherAddressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                </Collections>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -155,15 +177,16 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(1, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(1, $nodes->item(1)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         
@@ -171,7 +194,29 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>2</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>1</SyncKey>
+                        <CollectionId>addressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>1</SyncKey>
+                        <CollectionId>anotherAddressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                </Collections>
+                <WindowSize>2</WindowSize>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -185,19 +230,20 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, 'class count mismatch: ' . $syncDoc->saveXML());
+        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, 'class mismatch' . $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->item(1)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:MoreAvailable');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -210,11 +256,80 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
 
         
-        // now do the next sync global windowsize = 2
+        // now do the first sync windowsize of collection = 2
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections><WindowSize>2</WindowSize></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>2</SyncKey>
+                        <CollectionId>addressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>2</SyncKey>
+                        <CollectionId>anotherAddressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <GetChanges/>
+                        <WindowSize>2</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                </Collections>
+                <WindowSize>2</WindowSize>
+            </Sync>'
+        );
+        
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->item(1)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:MoreAvailable');
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        #$this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        
+        // and now fetch the rest
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>3</SyncKey>
+                        <CollectionId>addressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                    <Collection>
+                        <Class>Contacts</Class>
+                        <SyncKey>2</SyncKey>
+                        <CollectionId>anotherAddressbookFolderId</CollectionId>
+                        <DeletesAsMoves/>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                </Collections>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -228,32 +343,13 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:MoreAvailable');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        
-        // and now fetch the rest
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>20</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
-        );
-        
-        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
-        
-        $sync->handle();
-        
-        $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-        
-        $xpath = new DomXPath($syncDoc);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        $this->assertEquals(2, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(3, $nodes->item(1)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:MoreAvailable');
         $this->assertEquals(0, $nodes->length, $syncDoc->saveXML());
@@ -272,7 +368,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Contacts="uri:Contacts"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>4</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     <Commands><Add><ClientId>42</ClientId><ApplicationData><Contacts:FirstName>Lars</Contacts:FirstName></ApplicationData></Add></Commands>
                 </Collection>
@@ -295,7 +391,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(5, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -318,7 +414,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>5</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     <Commands><Change><ServerId>' . $serverId . '</ServerId><ApplicationData><Contacts:FirstName>aaaadde</Contacts:FirstName><Contacts:LastName>aaaaade</Contacts:LastName></ApplicationData></Change></Commands>
                 </Collection>
@@ -341,7 +437,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(6, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -361,7 +457,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>5</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     <Commands><Delete><ServerId>' . $serverId . '</ServerId></Delete></Commands>
                 </Collection>
@@ -384,7 +480,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(6, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -401,7 +497,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges>0</GetChanges><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>5</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges>0</GetChanges><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     <Commands><Fetch><ServerId>' . $serverId . '</ServerId></Fetch></Commands>
                 </Collection>
@@ -424,7 +520,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(5, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Responses/AirSync:Fetch/AirSync:ServerId');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -443,7 +539,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>5</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                 </Collection>
             </Collections></Sync>'
@@ -468,7 +564,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(6, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -499,7 +595,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>5</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                 </Collection>
             </Collections></Sync>'
@@ -521,7 +617,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(6, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -541,7 +637,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>4</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                 </Collection>
             </Collections></Sync>'
@@ -559,7 +655,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(3, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
@@ -583,7 +679,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
                 <Collection>
-                    <Class>Contacts</Class><SyncKey>2</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                    <Class>Contacts</Class><SyncKey>4</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
                     <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     <Commands><Add><ClientId>42</ClientId><ApplicationData></ApplicationData></Add></Commands>
                 </Collection>

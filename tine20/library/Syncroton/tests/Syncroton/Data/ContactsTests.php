@@ -144,18 +144,20 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
     /**
      * test search contacts
      */
-    public function testSearchContacts()
+    public function testSearchGAL()
     {
         $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
         
         $entry = $this->testAddContact();
         
-        $searchResult = $dataController->search($entry->firstName, array());
+        $searchResult = $dataController->search(new Syncroton_Model_StoreRequest(array(
+            'query' => 'lars',
+            'options' => array()
+        )));
         
         #var_dump($searchResult);
         
-        $this->assertEquals(1, count($searchResult));
-        $this->assertTrue($searchResult[0] instanceof Syncroton_Model_StoreResponseResult);
+        $this->assertTrue($searchResult instanceof Syncroton_Model_StoreResponse);
     }
     
     /**

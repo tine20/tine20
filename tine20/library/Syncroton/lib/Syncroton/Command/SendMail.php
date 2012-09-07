@@ -34,9 +34,13 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
         if ($this->_requestParameters['contentType'] == 'message/rfc822') {
             $this->_mime          = $this->_requestBody;
             $this->_saveInSent    = $this->_requestParameters['saveInSent'] == 'T';
+            $this->_replaceMime   = false;
             
-            $this->_collectionId  = $this->_requestParameters['collectionId'];
-            $this->_itemId        = $this->_requestParameters['itemId'];
+            $this->_source = array(
+                    'collectionId' => $this->_requestParameters['collectionId'],
+                    'itemId'       => $this->_requestParameters['itemId'],
+                    'instanceId'   => null
+            );
             
         } else {
             $xml = simplexml_import_dom($this->_requestBody);

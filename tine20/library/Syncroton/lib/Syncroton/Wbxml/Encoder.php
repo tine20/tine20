@@ -292,9 +292,9 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         // handle the tag
         $identity = $this->_codePage->getIdentity($_tag);
         
-        if (is_array($_attributes) && isset($_attributes['Syncroton:encoding'])) {
+        if (is_array($_attributes) && isset($_attributes['uri:Syncroton;encoding'])) {
             $encoding = 'opaque';
-            unset($_attributes['Syncroton:encoding']);
+            unset($_attributes['uri:Syncroton;encoding']);
         } else {
             $encoding = 'termstring';
         }
@@ -312,7 +312,7 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         // handle the data
         if($_data !== NULL) {
             if ($encoding == 'opaque') {
-                $this->_writeOpaqueString($_data);
+                $this->_writeOpaqueString(base64_decode($_data));
             } else {
                 $this->_writeTerminatedString($_data);
             }

@@ -24,8 +24,19 @@
  * @property    string   pinglifetime
  * @property    string   remotewipe
  * @property    string   useragent
+ * @property    string   imei
+ * @property    string   model
+ * @property    string   friendlyname
+ * @property    string   os
+ * @property    string   oslanguage
+ * @property    string   phonenumber
+ * @property    string   pinglifetime
+ * @property    string   pingfolder
+ * @property    string   contactsfilter_id
+ * @property    string   calendarfilter_id
+ * @property    string   tasksfilter_id
+ * @property    string   emailfilter_id
  */
-
 interface Syncroton_Model_IDevice
 {
     /**

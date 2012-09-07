@@ -335,7 +335,8 @@ class Syncroton_Server
                 'deviceid'   => $requestParameters['deviceId'],
                 'devicetype' => $requestParameters['deviceType'],
                 'useragent'  => $requestParameters['userAgent'],
-                'acsversion' => $requestParameters['protocolVersion']
+                'acsversion' => $requestParameters['protocolVersion'],
+                'policyId'   => Syncroton_Registry::isRegistered(Syncroton_Registry::DEFAULT_POLICY) ? Syncroton_Registry::get(Syncroton_Registry::DEFAULT_POLICY) : null
             )));
         }
         

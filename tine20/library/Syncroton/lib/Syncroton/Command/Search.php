@@ -56,46 +56,22 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
             throw new RuntimeException('class must be instanceof Syncroton_Data_IDataSearch');
         }
         
-        $storeResponse = new Syncroton_Model_StoreResponse(array(
-           'status' => self::STATUS_SUCCESS,
-        ));
-        
         try {
             $options = $this->_store->options;
             
             // Search
-            $results = $dataController->search($this->_store->query, $options);
-
-            // Calculate requested range
-            $start = $options['range'][0];
-            $limit = $options['range'][1] + 1;
-            $total = count($results);
-            $storeResponse->total = $total;
-
-            if ($total) {
-                if ($start > $total) {
-                    $start = $total;
-                }
-                if ($limit > $total) {
-                    $limit = max($start+1, $total);
-                }
-
-                if ($start > 0 || $limit < $total) {
-                    $results = array_slice($results, $start, $limit-$start);
-                }
-
-                $storeResponse->range = array($start, $start + count($results) - 1);
-            }
-
-            foreach ($results as $result) {
-                if (empty($result->properties)) {
-                    $result->properties = $dataController->getSearchEntry($result->longId, $this->_store->options);
-                }
-
-                $storeResponse->result[] = $result;
-            }
+            $storeResponse = $dataController->search($this->_store);
+            $storeResponse->status = self::STATUS_SUCCESS;
+            
         } catch (Exception $e) {
-            $storeResponse->status = self::STATUS_SERVER_ERROR;
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " search exception: " . $e->getMessage());
+            if ($this->_logger instanceof Zend_Log)
+                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " saerch exception trace : " . $e->getTraceAsString());
+            
+            $storeResponse = new Syncroton_Model_StoreResponse(array(
+               'status' => self::STATUS_SERVER_ERROR
+            ));
         }
 
         $search = $this->_outputDom->documentElement;

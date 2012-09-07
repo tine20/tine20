@@ -31,10 +31,9 @@ interface Syncroton_Data_IDataSearch
     /**
      * Search command handler
      *
-     * @param array $query   Search query parameters
-     * @param array $options Search options
+     * @param Syncroton_Model_StoreRequest $store   Search query parameters
      *
-     * @return array List of Syncroton_Model_StoreResponseResult
+     * @return Syncroton_Model_StoreResponse
      */
-    public function search($query, $options);
+    public function search(Syncroton_Model_StoreRequest $store);
 }

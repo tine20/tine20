@@ -58,7 +58,11 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
-            <Fetch><Store>Mailbox</Store><AirSync:CollectionId>emailInboxFolderId</AirSync:CollectionId><AirSync:ServerId>' . $entries[0] . '</AirSync:ServerId></Fetch>
+                <Fetch>
+                    <Store>Mailbox</Store>
+                    <AirSync:CollectionId>emailInboxFolderId</AirSync:CollectionId><AirSync:ServerId>' . $entries[0] . '</AirSync:ServerId>
+                    <Options><BodyPreference xmlns="uri:AirSyncBase"><Type>1</Type><TruncationSize>819200</TruncationSize><AllOrNone>0</AllOrNone></BodyPreference></Options>
+                </Fetch>
             </ItemOperations>'
         );
         
@@ -82,7 +86,7 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $this->assertEquals(Syncroton_Command_ItemOperations::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//ItemOperations:ItemOperations/ItemOperations:Response/ItemOperations:Fetch/ItemOperations:Properties/Email:Subject');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, 'email subject missing');
         $this->assertEquals('Test Subject', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
 
         $this->assertEquals("uri:Email", $responseDoc->lookupNamespaceURI('Email'), $responseDoc->saveXML());

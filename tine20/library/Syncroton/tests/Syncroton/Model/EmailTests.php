@@ -111,7 +111,8 @@ class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
             'dateReceived' => new DateTime('2012-03-21 14:00:00', new DateTimeZone('UTC')), 
             'flag'         => new Syncroton_Model_EmailFlag(array(
                 'status'       => Syncroton_Model_EmailFlag::STATUS_COMPLETE,
-                'reminderTime' => new DateTime('2012-04-21 14:00:00', new DateTimeZone('UTC'))
+                'flagType'     => 'FollowUp',
+                'reminderSet'  => 0,
             )),
             'from'         => 'k.kneschke@metaways.de',
             'subject'      => 'Test Subject',
@@ -123,7 +124,7 @@ class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
                 'estimatedDataSize' => 1234,
                 'truncated'    => 1
             )),
-            'conversationId' => 'abcd'
+            'conversationId' => "\x00\x01\x02\x03"
         ));
         
         $this->_testDevice->acsversion = '14.1';
@@ -160,16 +161,19 @@ class Syncroton_Model_EmailTests extends Syncroton_Model_ATestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email2:ConversationId');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('abcd', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals("AAECAw==", $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderTime');
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Email:Flag/Tasks:ReminderSet');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
-        $this->assertEquals('2012-04-21T14:00:00.000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        $this->assertEquals('0', $nodes->item(0)->nodeValue, $testDoc->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
         $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
         $encoder->encode($testDoc);
+        
+        #rewind($outputStream);
+        #file_put_contents('/tmp/wbxml.dump', $outputStream);
     }
     /**
      * test xml generation for Android

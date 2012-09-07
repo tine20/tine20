@@ -36,7 +36,7 @@ class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
             'data'              => array('type' => 'string'),
             'truncated'         => array('type' => 'number'),
             'part'              => array('type' => 'number'),
-            'preview'           => array('type' => 'string'),
+            'preview'           => array('type' => 'string', 'supportedSince' => '14.0'),
         ),
     );
 }

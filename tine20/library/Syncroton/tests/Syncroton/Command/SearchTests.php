@@ -17,6 +17,8 @@
  */
 class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
 {
+    #protected $_logPriority = Zend_Log::DEBUG;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -42,7 +44,7 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
                     <Name>GAL</Name>
                     <Query>Lars</Query>
                     <Options>
-                        <Range>0-1</Range>
+                        <Range>0-3</Range>
                         <RebuildResults/>
                         <DeepTraversal/>
                     </Options>
@@ -69,7 +71,7 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
         $this->assertEquals(5, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//Search:Search/Search:Response/Search:Store/Search:Result');
-        $this->assertEquals(2, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(4, $nodes->length, $responseDoc->saveXML());
         #$this->assertEquals(Syncroton_Command_Search::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }    
 }
