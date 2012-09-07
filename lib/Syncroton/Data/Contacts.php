@@ -37,24 +37,40 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
      * (non-PHPdoc)
      * @see Syncroton_Data_IDataSearch::search()
      */
-    public function search($query, $options)
+    public function search(Syncroton_Model_StoreRequest $store)
     {
-        $found = array();
+        $storeResponse = new Syncroton_Model_StoreResponse();
         
         $serverIds = $this->getServerEntries('addressbookFolderId', Syncroton_Command_Sync::FILTER_NOTHING);
+        
+        $total = 0;
+        $found = array();
         
         foreach ($serverIds as $serverId) {
             $contact = $this->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => 'addressbookFolderId')), $serverId);
             
-            if ($contact->firstName == $query) {
+            if ($contact->firstName == $store->query) {
+                $total++;
+                
+                if (count($found) == $store->options['range'][1]+1) {
+                    continue;
+                }
                 $found[] = new Syncroton_Model_StoreResponseResult(array(
                     'longId' => 'addressbookFolderId-' .  $serverId,
-                    'properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $options)
+                    'properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $store->options)
                 ));
             }
         }
         
-        return $found;
+        if (count($found) > 0) {
+            $storeResponse->result = $found;
+            $storeResponse->range = array(0, count($found) - 1);
+            $storeResponse->total = $total;
+        } else {
+            $storeResponse->total = $total;
+        }
+        
+        return $storeResponse;
     }
     
     protected function _initData()

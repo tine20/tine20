@@ -44,7 +44,8 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
         if (isset($xml->Fetch)) {
             foreach ($xml->Fetch as $fetch) {
                 $fetchArray = array(
-                    'store' => (string)$fetch->Store
+                    'store' => (string)$fetch->Store,
+                    'options' => array()
                 );
                 
                 // try to fetch element from namespace AirSync
@@ -53,6 +54,13 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                 if (isset($airSync->CollectionId)) {
                     $fetchArray['collectionId'] = (string)$airSync->CollectionId;
                     $fetchArray['serverId']     = (string)$airSync->ServerId;
+                }
+                
+                // try to fetch element from namespace Search
+                $search = $fetch->children('uri:Search');
+                
+                if (isset($search->LongId)) {
+                    $fetchArray['longId'] = (string)$search->LongId;
                 }
                 
                 // try to fetch element from namespace AirSyncBase
@@ -67,14 +75,25 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     $airSyncBase = $fetch->Options->children('uri:AirSyncBase');
                     
                     if (isset($airSyncBase->BodyPreference)) {
-                        // required
-                        $fetchArray['bodyPreferenceType'] = (int) $airSyncBase->BodyPreference->Type;
-                        
-                        // optional
-                        if (isset($airSyncBase->BodyPreference->TruncationSize)) {
-                            $fetchArray['truncationSize'] = (int) $airSyncBase->BodyPreference->TruncationSize;
+                        foreach ($airSyncBase->BodyPreference as $bodyPreference) {
+                            $type = (int) $bodyPreference->Type;
+                            $fetchArray['options']['bodyPreferences'][$type] = array(
+                                'type' => $type
+                            );
+                    
+                            // optional
+                            if (isset($bodyPreference->TruncationSize)) {
+                                $fetchArray['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
+                            }
+                            
+                            // optional
+                            if (isset($bodyPreference->AllOrNone)) {
+                                $fetchArray['options']['bodyPreferences'][$type]['allOrNone'] = (int) $bodyPreference->AllOrNone;
+                            }
                         }
                     }
+                    
+                    
                 }
                 $this->_fetches[] = $fetchArray;
             }
@@ -92,6 +111,7 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
         // add aditional namespaces
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSync'     , 'uri:AirSync');
+        $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Search'      , 'uri:Search');
         
         $itemOperations = $this->_outputDom->documentElement;
         
@@ -112,7 +132,17 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
                     $dataController
-                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'])), $fetch['serverId'])
+                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['collectionId'], 'options' => $fetch['options'])), $fetch['serverId'])
+                        ->appendXML($properties, $this->_device);
+                    $fetchTag->appendChild($properties);
+                    
+                } elseif (isset($fetch['longId'])) {
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
+                    $fetchTag->appendChild($this->_outputDom->createElementNS('uri:Search', 'LongId', $fetch['longId']));
+                    
+                    $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
+                    $dataController
+                        ->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $fetch['longId'], 'options' => $fetch['options'])), $fetch['longId'])
                         ->appendXML($properties, $this->_device);
                     $fetchTag->appendChild($properties);
                     
