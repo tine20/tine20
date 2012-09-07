@@ -388,6 +388,10 @@ class Tinebase_Core
         
         if (PHP_SAPI !== 'cli') {
             header('X-API: http://www.tine20.org/apidocs/tine20/');
+            if (isset($_SERVER['HTTP_X_TRANSACTIONID'])) {
+                header('X-TransactionID: ' . substr($_SERVER['HTTP_X_TRANSACTIONID'], 1, -1) . ';' . $_SERVER['SERVER_NAME'] . ';16.4.5009.816;' . date('Y-m-d H:i:s') . ' UTC;265.1558 ms');
+            }
+            
         }
     }
     

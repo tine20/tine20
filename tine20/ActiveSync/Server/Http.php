@@ -160,5 +160,7 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN) === true) {
             Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
         }
+        
+        Syncroton_Registry::set(Syncroton_Registry::DEFAULT_POLICY, ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEFAULT_POLICY));
     }
 }
