@@ -955,18 +955,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $from = Tinebase_DateTime::now()->subMonth(6);
                     break;
             }
-            // next 10 years
-            $to = Tinebase_DateTime::now()->addYear(10);
-            
-            // remove all 'old' period filters
-            $filter->removeFilter('period');
-            
-            // add period filter
-            $filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
-                'from'  => $from,
-                'until' => $to
-            )));
+        } else {
+            // don't return more than the previous 6 months
+            $from = Tinebase_DateTime::now()->subMonth(6);
         }
+        
+        // next 10 years
+        $to = Tinebase_DateTime::now()->addYear(10);
+        
+        // remove all 'old' period filters
+        $filter->removeFilter('period');
+        
+        // add period filter
+        $filter->addFilter(new Calendar_Model_PeriodFilter('period', 'within', array(
+            'from'  => $from,
+            'until' => $to
+        )));
         
         return $filter;
     }

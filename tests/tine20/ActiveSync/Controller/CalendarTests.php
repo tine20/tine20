@@ -54,11 +54,11 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
                             <Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone>
                             <Calendar:AllDayEvent>0</Calendar:AllDayEvent>
                             <Calendar:BusyStatus>2</Calendar:BusyStatus>
-                            <Calendar:DtStamp>20101125T150537Z</Calendar:DtStamp>
-                            <Calendar:EndTime>20101123T160000Z</Calendar:EndTime>
+                            <Calendar:DtStamp>20121125T150537Z</Calendar:DtStamp>
+                            <Calendar:EndTime>20121123T160000Z</Calendar:EndTime>
                             <Calendar:Sensitivity>0</Calendar:Sensitivity>
                             <Calendar:Subject>Repeat</Calendar:Subject>
-                            <Calendar:StartTime>20101123T130000Z</Calendar:StartTime>
+                            <Calendar:StartTime>20121123T130000Z</Calendar:StartTime>
                             <Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID>
                             <Calendar:MeetingStatus>1</Calendar:MeetingStatus>
                             <Calendar:Attendees>
@@ -68,14 +68,14 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
                                 </Calendar:Attendee>
                             </Calendar:Attendees>
                             <Calendar:Recurrence>
-                                <Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20101128T225959Z</Calendar:Until>
+                                <Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20121128T225959Z</Calendar:Until>
                             </Calendar:Recurrence>
                             <Calendar:Exceptions>
                                 <Calendar:Exception>
-                                    <Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20101125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20101125T140000Z</Calendar:StartTime><Calendar:EndTime>20101125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent>
+                                    <Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20121125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20121125T140000Z</Calendar:StartTime><Calendar:EndTime>20121125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent>
                                 </Calendar:Exception>
                                 <Calendar:Exception>
-                                    <Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20101124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception>
+                                    <Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20121124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception>
                                 </Calendar:Exceptions>
                             <Calendar:Reminder>15</Calendar:Reminder>
                             <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
@@ -251,8 +251,8 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(15,        $syncrotonEvent->reminder);
         $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
         $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
-        $this->assertEquals('20101123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
         $this->assertEquals(1, count($syncrotonEvent->attendees), 'event: ' . var_export($syncrotonEvent->attendees, TRUE));
         $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->attendees[0]->email, 'event: ' . var_export($syncrotonEvent, TRUE));
         
@@ -265,19 +265,19 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->recurrence->type);
         $this->assertEquals(1, $syncrotonEvent->recurrence->interval);
         $this->assertTrue($syncrotonEvent->recurrence->until instanceof DateTime);
-        $this->assertEquals('20101128T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
+        $this->assertEquals('20121128T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
         
         // Exceptions
         $this->assertEquals(2, count($syncrotonEvent->exceptions));
         $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
         $this->assertEquals(0, $syncrotonEvent->exceptions[0]->deleted);
         $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
-        $this->assertEquals('20101125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20101125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
         
         $this->assertEquals(1, $syncrotonEvent->exceptions[1]->deleted);
-        $this->assertEquals('20101124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals('20121124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
     }
