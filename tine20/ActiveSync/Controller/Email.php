@@ -885,7 +885,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
                     $received = $today->subWeek(2);
                     break;
                 case Syncroton_Command_Sync::FILTER_1_MONTH_BACK:
-                    $received = $today->subMonth(2);
+                    $received = $today->subMonth(1);
                     break;
             }
             
