@@ -105,6 +105,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     
     protected $_maxWindowSize = 100;
     
+    protected $_heartbeatInterval;
+    
     /**
      * process the XML file and add, change, delete or fetches data 
      */
@@ -113,6 +115,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         // input xml
         $xml = simplexml_import_dom($this->_requestBody);
         
+        $this->_heartbeatInterval = isset($xml->HeartbeatInterval) ? (int)$xml->HeartbeatInterval : null;
         $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
         
         if ($this->_globalWindowSize > $this->_maxWindowSize) {
@@ -367,6 +370,38 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
 
         $totalChanges = 0;
+        
+        // continue only if there are changes or no time is left
+        if ($this->_heartbeatInterval > 0) {
+            $intervalStart = time();
+            
+            do {
+                foreach($this->_collections as $collectionData) {
+                    // countinue immediately if folder does not exist 
+                    if (! ($collectionData->folder instanceof Syncroton_Model_IFolder)) {
+                        break 2;
+                        
+                    // countinue immediately if syncstate is invalid
+                    } elseif (! ($collectionData->syncState instanceof Syncroton_Model_ISyncState)) {
+                        break 2;
+                        
+                    } else {
+                        $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class , $this->_device, $this->_syncTimeStamp);
+                        
+                        $estimate = $dataController->getCountOfChanges($this->_contentStateBackend, $collectionData->folder, $collectionData->syncState);
+                        
+                        // countinue immediately if there are changes available
+                        if ($estimate > 0) {
+                            break 2;
+                        }
+                    }
+                }
+                
+                // wait some PING_TIMEOUT seconds until neext loop
+                sleep(Syncroton_Command_Ping::PING_TIMEOUT);
+                
+            } while (time() - $intervalStart < $this->_heartbeatInterval);
+        }
         
         foreach($this->_collections as $collectionData) {
             $collectionChanges = 0;
@@ -700,9 +735,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             if (isset($collectionData->syncState) && $collectionData->syncState instanceof Syncroton_Model_ISyncState && 
                 $collectionData->syncState->counter != $collectionData->syncKey) {
                         
-                // increment sync timestamp by 1 second
-                $this->_syncTimeStamp->modify('+1 sec');
-                
                 // store pending data in sync state when needed
                 if(isset($countOfPendingChanges) && $countOfPendingChanges > 0) {
                     $collectionData->syncState->pendingdata = array(
@@ -723,7 +755,9 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     $keepPreviousSyncKey = true;
                 }
                 
-                $collectionData->syncState->lastsync = $this->_syncTimeStamp;
+                $collectionData->syncState->lastsync = clone $this->_syncTimeStamp;
+                // increment sync timestamp by 1 second
+                $collectionData->syncState->lastsync->modify('+1 sec');
                 
                 try {
                     $transactionId = Syncroton_Registry::getTransactionManager()->startTransaction(Syncroton_Registry::getDatabase());

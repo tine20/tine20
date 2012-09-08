@@ -39,7 +39,10 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1356</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections><Collection><Class>Contacts</Class><SyncKey>1356</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections>
+                <HeartbeatInterval>10</HeartbeatInterval>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -69,7 +72,10 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections>
+                <HeartbeatInterval>10</HeartbeatInterval>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
@@ -329,6 +335,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
                         <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     </Collection>
                 </Collections>
+                <HeartbeatInterval>10</HeartbeatInterval>
             </Sync>'
         );
         
@@ -628,6 +635,11 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $this->assertEquals($entries[0], $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
     
+    /**
+     * test sync with no changes
+     * 
+     * the SyncKey should not change
+     */
     public function testSyncWithNoChanges()
     {
         $serverId = $this->testSyncOfContacts();
@@ -635,12 +647,14 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
-                <Collection>
-                    <Class>Contacts</Class><SyncKey>4</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
-                    <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
-                </Collection>
-            </Collections></Sync>'
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
+                <Collections>
+                    <Collection>
+                        <Class>Contacts</Class><SyncKey>4</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize>
+                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
+                    </Collection>
+                </Collections>
+            </Sync>'
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
