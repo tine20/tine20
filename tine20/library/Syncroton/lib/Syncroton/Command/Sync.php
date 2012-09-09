@@ -105,7 +105,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     
     protected $_maxWindowSize = 100;
     
-    protected $_heartbeatInterval;
+    protected $_heartbeatInterval = null;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -115,7 +115,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         // input xml
         $xml = simplexml_import_dom($this->_requestBody);
         
-        $this->_heartbeatInterval = isset($xml->HeartbeatInterval) ? (int)$xml->HeartbeatInterval : null;
+        if (isset($xml->HeartbeatInterval)) {
+            $this->_heartbeatInterval = (int)$xml->HeartbeatInterval;
+        } elseif (isset($xml->Wait)) {
+            $this->_heartbeatInterval = (int)$xml->Wait * 60;
+        }
+        
         $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
         
         if ($this->_globalWindowSize > $this->_maxWindowSize) {
