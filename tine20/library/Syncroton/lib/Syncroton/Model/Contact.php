@@ -33,7 +33,7 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             'body'                   => array('type' => 'container', 'class' => 'Syncroton_Model_EmailBody')
         ),
         'Contacts' => array(
-            'alias'                  => array('type' => 'string'),
+            'alias'                  => array('type' => 'string', 'supportedSince' => '14.0'),
             'anniversary'            => array('type' => 'datetime'),
             'assistantName'          => array('type' => 'string'),
             'assistantPhoneNumber'   => array('type' => 'string'),
@@ -82,7 +82,7 @@ class Syncroton_Model_Contact extends Syncroton_Model_AEntry
             'suffix'                 => array('type' => 'string'),
             'title'                  => array('type' => 'string'),
             'webPage'                => array('type' => 'string'),
-            'weightedRank'           => array('type' => 'string'),
+            'weightedRank'           => array('type' => 'string', 'supportedSince' => '14.0'),
             'yomiCompanyName'        => array('type' => 'string'),
             'yomiFirstName'          => array('type' => 'string'),
             'yomiLastName'           => array('type' => 'string'),

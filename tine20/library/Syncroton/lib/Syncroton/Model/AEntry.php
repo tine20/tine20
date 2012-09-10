@@ -198,7 +198,7 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
             }
             
             if ($elementProperties['type'] == 'byteArray') {
-                $element->setAttributeNS('uri:Syncroton', 'Syncroton:encoding', 'oqaque');
+                $element->setAttributeNS('uri:Syncroton', 'Syncroton:encoding', 'opaque');
                 // encode to base64; the wbxml encoder will base64_decode it again
                 // this way we can also transport data, which would break the xmlparser otherwise
                 $element->appendChild($element->ownerDocument->createCDATASection(base64_encode($value)));
