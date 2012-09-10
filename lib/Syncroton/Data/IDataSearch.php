@@ -19,16 +19,6 @@
 interface Syncroton_Data_IDataSearch
 {
     /**
-     * Returns properties of search entry
-     *
-     * @param string $longId  Entry identifier
-     * @param array  $options Search options
-     *
-     * @return Syncroton_Model_IEntry
-     */
-    public function getSearchEntry($longId, $options);
-
-    /**
      * Search command handler
      *
      * @param Syncroton_Model_StoreRequest $store   Search query parameters

@@ -83,7 +83,7 @@ class Syncroton_Model_StoreRequest
         } elseif (isset($xmlStore->Query)) {
             if (isset($xmlStore->Query->And)) {
                 if (isset($xmlStore->Query->And->FreeText)) {
-                    $this->_store['query']['and']['freetext'] = (string) $xmlStore->Query->And->FreeText;
+                    $this->_store['query']['and']['freeText'] = (string) $xmlStore->Query->And->FreeText;
                 }
                 if (isset($xmlStore->Query->And->ConversationId)) {
                     $this->_store['query']['and']['conversationId'] = (string) $xmlStore->Query->And->ConversationId;
