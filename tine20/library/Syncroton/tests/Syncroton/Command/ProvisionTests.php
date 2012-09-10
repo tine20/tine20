@@ -76,14 +76,32 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
     }
     
     /**
-     * test xml generation for IPhone
+     * test get empty policy
      */
-    public function testGetPolicy()
+    public function testGetEmptyPolicy()
     {
+        $this->_device->policyId = null;
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Provision xmlns="uri:Provision"><Policies><Policy><PolicyType>MS-EAS-Provisioning-WBXML</PolicyType></Policy></Policies></Provision>'
+            <Provision xmlns="uri:Provision"  xmlns:Settings="uri:Settings">
+                 <Settings:DeviceInformation>
+                    <Settings:Set>
+                        <Settings:Model>...</Settings:Model>
+                        <Settings:IMEI>...</Settings:IMEI>
+                        <Settings:PhoneNumber>...</Settings:PhoneNumber>
+                        <Settings:OS>...</Settings:OS>
+                        <Settings:OSLanguage>...</Settings:OSLanguage>
+                        <Settings:FriendlyName>...</Settings:FriendlyName>
+                        <Settings:MobileOperator>...</Settings:MobileOperator>
+                        <Settings:UserAgent>...</Settings:UserAgent>
+                    </Settings:Set>
+                </Settings:DeviceInformation>
+                <Policies>
+                    <Policy><PolicyType>MS-EAS-Provisioning-WBXML</PolicyType></Policy>
+                </Policies>
+            </Provision>'
         );
         
         $provision = new Syncroton_Command_Provision($doc, $this->_device, $this->_device->policykey);
@@ -95,10 +113,70 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
         
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('Provision', 'uri:Provision');
+        $xpath->registerNamespace('Settings', 'uri:Settings');
         
         $nodes = $xpath->query('//Provision:Provision/Provision:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(Syncroton_Command_FolderSync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Settings:DeviceInformation/Settings:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Provision::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:PolicyType');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Provision::POLICYTYPE_WBXML, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Provision::STATUS_POLICY_NOPOLICY, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+    
+    /**
+     * test get policy
+     */
+    public function testGetPolicy()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Provision xmlns="uri:Provision"  xmlns:Settings="uri:Settings">
+                 <Settings:DeviceInformation>
+                    <Settings:Set>
+                        <Settings:Model>...</Settings:Model>
+                        <Settings:IMEI>086465r87697</Settings:IMEI>
+                        <Settings:PhoneNumber>...</Settings:PhoneNumber>
+                        <Settings:OS>...</Settings:OS>
+                        <Settings:OSLanguage>...</Settings:OSLanguage>
+                        <Settings:FriendlyName>...</Settings:FriendlyName>
+                        <Settings:MobileOperator>...</Settings:MobileOperator>
+                        <Settings:UserAgent>...</Settings:UserAgent>
+                    </Settings:Set>
+                </Settings:DeviceInformation>
+                <Policies>
+                    <Policy><PolicyType>MS-EAS-Provisioning-WBXML</PolicyType></Policy>
+                </Policies>
+            </Provision>'
+        );
+        
+        $provision = new Syncroton_Command_Provision($doc, $this->_device, $this->_device->policykey);
+        
+        $provision->handle();
+        
+        $responseDoc = $provision->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('Provision', 'uri:Provision');
+        $xpath->registerNamespace('Settings', 'uri:Settings');
+        
+        $nodes = $xpath->query('//Provision:Provision/Provision:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_FolderSync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//Provision:Provision/Settings:DeviceInformation/Settings:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Provision::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:PolicyType');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
@@ -111,6 +189,10 @@ class Syncroton_Command_ProvisionTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//Provision:Provision/Provision:Policies/Provision:Policy/Provision:Data/Provision:EASProvisionDoc/Provision:DevicePasswordEnabled');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(1, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $updatedDevice = Syncroton_Registry::getDeviceBackend()->get($this->_device->id);
+        
+        $this->assertEquals('086465r87697', $updatedDevice->imei);
     }
     
     /**

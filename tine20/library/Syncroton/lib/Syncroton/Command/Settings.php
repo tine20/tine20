@@ -30,7 +30,10 @@ class Syncroton_Command_Settings extends Syncroton_Command_Wbxml
     protected $_defaultNameSpace = 'uri:Settings';
     protected $_documentElement  = 'Settings';
     
-    protected $_deviceInformationSet     = false;
+    /**
+     * @var Syncroton_Model_DeviceInformation
+     */
+    protected $_deviceInformation;
     protected $_userInformationRequested = false;
     
     
@@ -43,15 +46,15 @@ class Syncroton_Command_Settings extends Syncroton_Command_Wbxml
         $xml = simplexml_import_dom($this->_requestBody);
         
         if(isset($xml->DeviceInformation->Set)) {
-            $this->_deviceInformationSet = true;
+            $this->_deviceInformation = new Syncroton_Model_DeviceInformation($xml->DeviceInformation->Set);
             
-            $this->_device->model           = (string)$xml->DeviceInformation->Set->Model;
-            $this->_device->imei            = (string)$xml->DeviceInformation->Set->IMEI;
-            $this->_device->friendlyname    = (string)$xml->DeviceInformation->Set->FriendlyName;
-            $this->_device->os              = (string)$xml->DeviceInformation->Set->OS;
-            $this->_device->oslanguage      = (string)$xml->DeviceInformation->Set->OSLanguage;
-            $this->_device->phonenumber     = (string)$xml->DeviceInformation->Set->PhoneNumber;
-            
+            $this->_device->model           = $this->_deviceInformation->model;
+            $this->_device->imei            = $this->_deviceInformation->iMEI;
+            $this->_device->friendlyname    = $this->_deviceInformation->friendlyName;
+            $this->_device->os              = $this->_deviceInformation->oS;
+            $this->_device->oslanguage      = $this->_deviceInformation->oSLanguage;
+            $this->_device->phonenumber     = $this->_deviceInformation->phoneNumber;
+                        
             $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
@@ -71,7 +74,7 @@ class Syncroton_Command_Settings extends Syncroton_Command_Wbxml
         
         $settings->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', self::STATUS_SUCCESS));
         
-        if($this->_deviceInformationSet === true) {
+        if ($this->_deviceInformation instanceof Syncroton_Model_DeviceInformation) {
             $deviceInformation = $settings->appendChild($this->_outputDom->createElementNS('uri:Settings', 'DeviceInformation'));
             $set = $deviceInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Set'));
             $set->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', self::STATUS_SUCCESS));

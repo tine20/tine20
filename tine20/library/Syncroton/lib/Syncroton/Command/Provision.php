@@ -20,13 +20,18 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
     protected $_defaultNameSpace = 'uri:Provision';
     protected $_documentElement  = 'Provision';
     
-    const POLICYTYPE_XML   = 'MS-WAP-Provisioning-XML';
     const POLICYTYPE_WBXML = 'MS-EAS-Provisioning-WBXML';
     
     const STATUS_SUCCESS                   = 1;
     const STATUS_PROTOCOL_ERROR            = 2;
     const STATUS_GENERAL_SERVER_ERROR      = 3;
     const STATUS_DEVICE_MANAGED_EXTERNALLY = 4;
+    
+    const STATUS_POLICY_SUCCESS        = 1;
+    const STATUS_POLICY_NOPOLICY       = 2;
+    const STATUS_POLICY_UNKNOWNTYPE    = 3;
+    const STATUS_POLICY_CORRUPTED      = 4;
+    const STATUS_POLICY_WRONGPOLICYKEY = 5;
     
     const REMOTEWIPE_REQUESTED = 1;
     const REMOTEWIPE_CONFIRMED = 2;
@@ -35,7 +40,11 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
     
     protected $_policyType;
     protected $_sendPolicyKey;
-    protected $_deviceInformationSet = false;
+    
+    /**
+     * @var Syncroton_Model_DeviceInformation
+     */
+    protected $_deviceInformation;
     
     /**
      * process the XML file and add, change, delete or fetches data 
@@ -57,8 +66,17 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         // try to fetch element from Settings namespace
         $settings = $xml->children('uri:Settings');
         if (isset($settings->DeviceInformation) && isset($settings->DeviceInformation->Set)) {
-            // @todo update device informations
-            $this->_deviceInformationSet = true;
+            $this->_deviceInformation = new Syncroton_Model_DeviceInformation($settings->DeviceInformation->Set);
+            
+            $this->_device->model           = $this->_deviceInformation->model;
+            $this->_device->imei            = $this->_deviceInformation->iMEI;
+            $this->_device->friendlyname    = $this->_deviceInformation->friendlyName;
+            $this->_device->os              = $this->_deviceInformation->oS;
+            $this->_device->oslanguage      = $this->_deviceInformation->oSLanguage;
+            $this->_device->phonenumber     = $this->_deviceInformation->phoneNumber;
+            
+            $this->_device = $this->_deviceBackend->update($this->_device);
+            
         }
     }
     
@@ -105,31 +123,38 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' send policy to device');
         
-        $this->_device->policykey = $this->generatePolicyKey();
-                
         $provision = $sync = $this->_outputDom->documentElement;
-        if ($this->_deviceInformationSet === true) {
+        $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
+
+        // settings
+        if ($this->_deviceInformation instanceof Syncroton_Model_DeviceInformation) {
             $deviceInformation = $provision->appendChild($this->_outputDom->createElementNS('uri:Settings', 'DeviceInformation'));
             $deviceInformation->appendChild($this->_outputDom->createElementNS('uri:Settings', 'Status', 1));
         }
-        $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
         
+        // policies
         $policies = $provision->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policies'));
         $policy = $policies->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Policy'));
         $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyType', $this->_policyType));
-        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', 1));
-        $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
-        if ($this->_policyType == self::POLICYTYPE_XML) {
-            $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data'));
+        
+        if ($this->_policyType != self::POLICYTYPE_WBXML) {
+            $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', self::STATUS_POLICY_UNKNOWNTYPE));
+        } elseif (empty($this->_device->policyId)) {
+            $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', self::STATUS_POLICY_NOPOLICY));
         } else {
+            $this->_device->policykey = $this->generatePolicyKey();
+            
+            $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Status', self::STATUS_POLICY_SUCCESS));
+            $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'PolicyKey', $this->_device->policykey));
+            
             $data = $policy->appendChild($this->_outputDom->createElementNS('uri:Provision', 'Data'));
             $easProvisionDoc = $data->appendChild($this->_outputDom->createElementNS('uri:Provision', 'EASProvisionDoc'));
             $this->_policyBackend
                 ->get($this->_device->policyId)
                 ->appendXML($easProvisionDoc, $this->_device);
+            
+            $this->_deviceBackend->update($this->_device);
         }
-        
-        $this->_deviceBackend->update($this->_device);
     }
     
     /**
