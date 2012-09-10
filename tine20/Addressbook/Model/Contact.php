@@ -14,13 +14,49 @@
  * 
  * @package     Addressbook
  * @subpackage  Model
- * @property    account_id    id of associated user
- * @property    email        the email address of the contact
- * @property    n_family
- * @property    n_fileas     display name
- * @property    n_fn        the full name
- * @property    n_given        
- * @property    type        type of contact
+ * @property    account_id                 id of associated user
+ * @property    adr_one_countryname        name of the country the contact lives in
+ * @property    adr_one_locality           locality of the contact
+ * @property    adr_one_postalcode         postalcode belonging to the locality
+ * @property    adr_one_region             region the contact lives in
+ * @property    adr_one_street             street where the contact lives
+ * @property    adr_one_street2            street2 where contact lives
+ * @property    adr_two_countryname        second home/country where the contact lives
+ * @property    adr_two_locality           second locality of the contact
+ * @property    adr_two_postalcode         ostalcode belonging to second locality
+ * @property    adr_two_region             second region the contact lives in
+ * @property    adr_two_street             second street where the contact lives
+ * @property    adr_two_street2            second street2 where the contact lives
+ * @property    assistent                  name of the assistent of the contact
+ * @property    bday                       date of birth of contact
+ * @property    container_id               id of container
+ * @property    email                      the email address of the contact
+ * @property    email_home                 the private email address of the contact
+ * @property    jpegphoto                  photo of the contact
+ * @property    n_family                   surname of the contact
+ * @property    n_fileas                   display surname, name
+ * @property    n_fn                       the full name
+ * @property    n_given                    forename of the contact
+ * @property    n_middle                   middle name of the contact
+ * @property    note                       notes of the contact    
+ * @property    n_prefix
+ * @property    n_suffix
+ * @property    org_name                   name of the company the contact works at
+ * @property    org_unit
+ * @property    role                       type of role of the contact  
+ * @property    tel_assistent              phone number of the assistent
+ * @property    tel_car
+ * @property    tel_cell                   mobile phone number
+ * @property    tel_cell_private           private mobile number
+ * @property    tel_fax                    number for calling the fax
+ * @property    tel_fax_home               private fax number
+ * @property    tel_home                   telephone number of contact's home
+ * @property    tel_pager                  contact's pager number
+ * @property    tel_work                   contact's office phone number
+ * @property    title                      special title of the contact
+ * @property    type                       type of contact
+ * @property    url                        url of the contact
+ * @property    url_home                   private url of the contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
