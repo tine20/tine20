@@ -35,4 +35,3 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         return parent::fromTine20RecordSet($_records);
     }
 }
-?>
