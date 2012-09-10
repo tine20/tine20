@@ -20,7 +20,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     protected $_mapping = array(
         #'Anniversary'           => 'anniversary',
         #'AssistantName'         => 'assistantname',
-        'assistantPhoneNumber' => 'tel_assistent',
+        'assistantPhoneNumber'  => 'tel_assistent',
         'birthday'              => 'bday',
         'body'                  => 'note',
         #'Business2PhoneNumber'  => 'business2phonenumber',

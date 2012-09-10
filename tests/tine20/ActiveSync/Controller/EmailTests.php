@@ -126,7 +126,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $fileReference = $message->getId() . '-2';
+        $fileReference = $message->getId() . ActiveSync_Controller_Abstract::LONGID_DELIMITER . '2';
         
         $syncrotonFileReference = $controller->getFileReference($fileReference);
         

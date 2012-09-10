@@ -203,7 +203,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
         
-        list($messageId, $partId) = explode('-', $fileReference, 2);
+        list($messageId, $partId) = explode(ActiveSync_Controller_Abstract::LONGID_DELIMITER, $fileReference, 2);
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
@@ -401,7 +401,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
                 foreach ($attachments as $attachment) {
                     $syncrotonAttachment = new Syncroton_Model_EmailAttachment(array(
                         'displayName'       => trim($attachment['filename']),
-                        'fileReference'     => $entry->getId() . '-' . $attachment['partId'],
+                        'fileReference'     => $entry->getId() . ActiveSync_Controller_Abstract::LONGID_DELIMITER . $attachment['partId'],
                         'method'            => 1,
                         'estimatedDataSize' => $attachment['size']
                     ));
@@ -483,7 +483,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
             $storeResponse->result[] = new Syncroton_Model_StoreResponseResult(array(
                 'class'        => 'Email',
-                'longId'       => $folderId . '-' . $serverId,
+                'longId'       => $folderId . ActiveSync_Controller_Abstract::LONGID_DELIMITER . $serverId,
                 'collectionId' => $folderId,
                 'properties'   => $email
             ));

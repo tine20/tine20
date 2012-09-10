@@ -17,6 +17,8 @@
  */
 abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
 {
+    const LONGID_DELIMITER = "\xe2\x87\x94"; # ⇔
+    
     /**
      * information about the current device
      *
@@ -288,8 +290,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
         // is $serverId a LongId?
-        if (strpos($serverId, '-') !== false) {
-            list($collection->collectionId, $serverId) = explode('-', $serverId, 2);
+        if (strpos($serverId, ActiveSync_Controller_Abstract::LONGID_DELIMITER) !== false) {
+            list($collection->collectionId, $serverId) = explode(ActiveSync_Controller_Abstract::LONGID_DELIMITER, $serverId, 2);
         }
         
         try {
