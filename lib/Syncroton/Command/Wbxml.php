@@ -161,10 +161,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         
         if ($this->_skipValidatePolicyKey != true) {
             if (!empty($this->_device->policyId)) {
-                if ($this->_policyKey === null) {
-                    throw new Syncroton_Exception_PolicyKeyMissing();
-                } 
-                
                 $policy = $this->_policyBackend->get($this->_device->policyId);
                 
                 if($policy->policyKey != $this->_policyKey) {
