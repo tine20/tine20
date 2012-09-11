@@ -27,13 +27,14 @@ class Syncroton_Model_DeviceInformation extends Syncroton_Model_AEntry
     
     protected $_properties = array(
         'Settings' => array(
-            'friendlyName'   => array('type' => 'string'),
-            'iMEI'           => array('type' => 'string'),
-            'mobileOperator' => array('type' => 'string'),
-            'model'          => array('type' => 'string'),
-            'oS'             => array('type' => 'string'),
-            'oSLanguage'     => array('type' => 'string'),
-            'phoneNumber'    => array('type' => 'string')
+            'enableOutboundSMS' => array('type' => 'number'),
+            'friendlyName'      => array('type' => 'string'),
+            'iMEI'              => array('type' => 'string'),
+            'mobileOperator'    => array('type' => 'string'),
+            'model'             => array('type' => 'string'),
+            'oS'                => array('type' => 'string'),
+            'oSLanguage'        => array('type' => 'string'),
+            'phoneNumber'       => array('type' => 'string')
         ),
     );
 }
