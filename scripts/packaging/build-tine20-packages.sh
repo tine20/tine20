@@ -11,7 +11,7 @@ BASEDIR="./tine20build"
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Milan"
+CODENAME="Joey"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
@@ -222,7 +222,7 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/jsb2tk;  rm -rf JSBuilder2 tests)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES setup.php tine20.php"
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES setup.php tine20.php bootstrap.php"
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     
