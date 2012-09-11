@@ -107,7 +107,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             iconCls: 'action_edit'
         });
         
-        this.title =  Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
+        this.title = this.i18nTitle = Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
         this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         this.contextMenuItems = [this.actionEditInNewWindow];
@@ -152,7 +152,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     updateTitle: function(count) {
         count = Ext.isNumber(count) ? count : this.store.getCount();
-        this.setTitle((count > 0) ?  _('Relations') + ' (' + count + ')' : _('Relations'));
+        this.setTitle((count > 0) ?  this.i18nTitle + ' (' + count + ')' : this.i18nTitle);
     },
     
     /**
