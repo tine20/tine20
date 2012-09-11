@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  * @todo        add role rights (run, admin) to all new installed apps
@@ -1135,16 +1135,21 @@ class Setup_Controller
     }
     
     /**
-     * save config option in db using {@see Tinebase_Config::setConfigForApplication}
+     * save config option in db
      *
-     * @param String $_key
-     * @param String || array $_value
+     * @param string $key
+     * @param string|array $value
+     * @param string $applicationName
      * @return void
      */
-    public function setConfigOption($_key, $_value)
+    public function setConfigOption($key, $value, $applicationName = 'Tinebase')
     {
-        $value = is_string($_value) ? $_value : Zend_Json::encode($_value);
-        Tinebase_Config::getInstance()->setConfigForApplication($_key, $value);
+        $value = is_string($value) ? $value : Zend_Json::encode($value);
+        
+        $config = Tinebase_Config_Abstract::factory($applicationName);
+        if ($config) {
+            $config->set($key, $value);
+        }
     }
     
     /**

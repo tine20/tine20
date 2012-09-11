@@ -367,9 +367,12 @@ class Setup_Frontend_Cli
         }
         $configKey = (string)$options['configkey'];
         $configValue = self::parseConfigValue($options['configvalue']);
+        
+        $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
+        
         if (empty($errors)) {
-           Setup_Controller::setConfigOption($configKey, $configValue);
-           echo "OK - Updated configuration option $configKey\n";
+           Setup_Controller::setConfigOption($configKey, $configValue, $applicationName);
+           echo "OK - Updated configuration option $configKey for application $applicationName\n";
         } else {
             echo "ERRORS - The following errors occured: \n";
             foreach ($errors as $error) {

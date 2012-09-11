@@ -549,8 +549,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * get config for client registry
      * 
      * @return Tinebase_Config_Struct
-     * 
-     * @todo add getConfigForApp() static function that does the call_user_func(array($configClassName, 'getInstance'));
      */
     public function getClientRegistryConfig()
     {
@@ -559,9 +557,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         $filters = array();
         $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
         foreach ($userApplications as $application) {
-            $configClassName = $application->name . '_Config';
-            if (@class_exists($configClassName)) {
-                $config = call_user_func(array($configClassName, 'getInstance'));
+            $config = Tinebase_Config_Abstract::factory($application->name);
+            if ($config) {
                 $clientProperties[$application->name] = new Tinebase_Config_Struct(array());
                 $properties = $config->getProperties();
                 foreach( (array) $properties as $name => $definition) {
@@ -579,9 +576,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Got ' . count($clientProperties[$application->name]) . ' config items for ' . $application->name . '.');
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' Application ' . $application->name . ' has no config.');
             }
         }
         

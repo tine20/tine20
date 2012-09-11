@@ -102,6 +102,30 @@ abstract class Tinebase_Config_Abstract
 //    abstract public static function getProperties();
     
     /**
+     * get config object for application
+     * 
+     * @param string $applicationName
+     * @return Tinebase_Config_Abstract
+     */
+    public static function factory($applicationName)
+    {
+        if ($applicationName === 'Tinebase') {
+            return Tinebase_Core::getConfig();
+        }
+        
+        $configClassName = $applicationName . '_Config';
+        if (@class_exists($configClassName)) {
+            $config = call_user_func(array($configClassName, 'getInstance'));
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Application ' . $applicationName . ' has no config class.');
+            $config = NULL;
+        }
+        
+        return $config;
+    }
+    
+    /**
      * retrieve a value and return $default if there is no element set.
      *
      * @param  string $name
