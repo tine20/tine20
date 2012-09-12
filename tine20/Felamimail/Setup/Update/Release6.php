@@ -50,4 +50,16 @@ class Felamimail_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '6.1');
     }
+
+    /**
+     * update to 6.2
+     * - drop structure col from message cache
+     */
+    public function update_1()
+    {
+        $this->_backend->dropCol('felamimail_cache_message', 'structure');
+        $this->setTableVersion('felamimail_cache_message', 8);
+        
+        $this->setApplicationVersion('Felamimail', '6.2');
+    }
 }

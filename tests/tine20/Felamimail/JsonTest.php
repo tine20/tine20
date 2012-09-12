@@ -856,11 +856,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->saveMessage($forwardMessageData);
         $forwardMessage = $this->_searchForMessageBySubject($fwdSubject);
         
+        $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
+        $this->assertTrue(array_key_exists('structure', $forwardMessage), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
-
-        // check forwarded/passed flag
+        
         $message = $this->_json->getMessage($message['id']);
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
     
     /**

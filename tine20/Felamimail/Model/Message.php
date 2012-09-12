@@ -82,7 +82,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -151,6 +151,79 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     );
     
     /**
+     * gets record related properties
+     * 
+     * @param string _name of property
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return mixed value of property
+     */
+    public function __get($_name)
+    {
+        $result = parent::__get($_name);
+        
+        if ($_name === 'structure' && empty($result)) {
+            $result = $this->_fetchStructure();
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * fetch structure from cache or imap server, parse it and store it into cache
+     * 
+     * @return array
+     */
+    protected function _fetchStructure()
+    {
+        $cacheId = $this->_getStructureCacheId();
+        $cache = Tinebase_Core::getCache();
+        if ($cache->test($cacheId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting message structure from cache: ' . $cacheId);
+            $result = $cache->load($cacheId);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
+            
+            try {
+                $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id);
+                $result = $summary['structure'];
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                // imap server might have gone away
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' IMAP protocol error during summary fetching: ' . $zmpe->getMessage());
+                $result = array();
+            }
+            $this->_setStructure($result);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get cache id for structure
+     * 
+     * @return string
+     */
+    protected function _getStructureCacheId()
+    {
+        return 'messageStructure' . $this->folder_id . $this->messageuid;
+    }
+    
+    /**
+     * set structure and save into cache
+     * 
+     * @param array $structure
+     */
+    protected function _setStructure($structure)
+    {
+        $cacheId = $this->_getStructureCacheId();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Caching message structure: ' . $cacheId);
+        Tinebase_Core::getCache()->save($structure, $cacheId, array('messageStructure'));
+        
+        $this->structure = $structure;
+    }
+    
+    /**
      * check if message has \SEEN flag
      * 
      * @return boolean
@@ -158,7 +231,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function hasSeenFlag()
     {
         return (is_array($this->flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $this->flags));
-    }    
+    }
     
     /**
      * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender' fields
@@ -216,8 +289,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function parseStructure($_structure = NULL)
     {
         if ($_structure !== NULL) {
-            $this->structure = $_structure;
+            $this->_setStructure($_structure);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Parsing structure: ' . print_r($this->structure, TRUE));
+        
         $this->content_type  = isset($this->structure['contentType']) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
         $this->_setBodyContentType();
     }
@@ -337,7 +413,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $result = array();
         
         if (! array_key_exists('type', $_structure) || $_structure['type'] != 'text') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Structure has no type key or type != text: ' . print_r($_structure, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Structure has no type key or type != text: ' . print_r($_structure, TRUE));
             return $result;
         }
         

@@ -642,7 +642,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             .  " cache sequence: {$this->_imapMessageSequence} / imap count: {$_folder->imap_totalcount}");
     
         if ($this->_messagesToBeAddedToCache($_folder)) {
-                        
+            
             if ($this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE || $this->_initialCacheStatus == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
                 $_folder->cache_job_actions_est += ($_folder->imap_totalcount - $this->_imapMessageSequence);
             }
@@ -702,7 +702,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         return ($messageSequenceEnd == $_folder->imap_totalcount);
     }
-
+    
     /**
      * add imap messages to cache and increase counters
      * 
@@ -1181,5 +1181,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE));
+    }
+    
+    /**
+     * fetch message summary from IMAP server
+     * 
+     * @param string $messageUid
+     * @param string $accountId
+     * @return array
+     */
+    public function getMessageSummary($messageUid, $accountId)
+    {
+        $imap = Felamimail_Backend_ImapFactory::factory($accountId);
+        $summary = $imap->getSummary($messageUid, NULL, TRUE);
+        
+        return $summary;
     }
 }
