@@ -102,14 +102,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         self::enforceEventParameters($event);
         
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach($event->exdate as $exdate) {
-                if ($exdate->is_deleted == false && $exdate->organizer != $event->organizer) {
-                    throw new Sabre_DAV_Exception_PreconditionFailed('Organizer for exdate must be the same like base event');
-                }
-            }
-        }
-        
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
@@ -436,7 +428,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $event->last_modified_time = $recordBeforeUpdate->last_modified_time;
         
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
-        $ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee);
         
         // event 'belongs' current user -> allow container move
         if ($currentContainer->isPersonalOf(Tinebase_Core::getUser())) {
@@ -449,8 +440,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 $event->container_id = $this->_container->getId();
             } else {
                 // @TODO allow organizer to move original cal when he edits the displaycal event?
-                if ($ownAttendee && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-                    $ownAttendee->displaycontainer_id = $this->_container->getId();
+                if ($this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                    Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
                 }
             }
         }
@@ -459,12 +450,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-TINE20-CONTAINER not present -> restrict container moves");
-            if ($ownAttendee && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-                if ($ownAttendee->displaycontainer_id == $currentContainer->getId()) {
-                    $event->container_id = $this->_container->getId();
-                }
-                
-                $ownAttendee->displaycontainer_id = $this->_container->getId();
+            if ($this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
             }
         }
         
@@ -520,7 +507,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     protected function _assertEventFilter()
     {
-        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($this->_eventFilter);
+        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter(clone $this->_eventFilter);
     }
     
     /**
