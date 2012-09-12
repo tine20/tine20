@@ -161,9 +161,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 array('field' => 'id', 'operator' => 'in', 'value' => $eventIds)
             )), NULL, FALSE, FALSE, $_action);
             
-            $oldFilter = $this->setEventFilter($_filter);
+            // NOTE: it would be correct to wrap this with the search filter, BUT
+            //       this breaks webdasv as it fetches its events with a search id OR uid.
+            //       ActiveSync sets its syncfilter generically so it's not problem either
+//             $oldFilter = $this->setEventFilter($_filter);
             $events = $this->_toiTIP($events);
-            $this->setEventFilter($oldFilter);
+//             $this->setEventFilter($oldFilter);
         }
         
         return $_onlyIds ? $eventIds : $events;
@@ -417,6 +420,28 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         $this->_eventController->getAlarms($events);
+    }
+    
+    /**
+     * set displaycontainer for given attendee 
+     * 
+     * @param Calendar_Model_Event    $_event
+     * @param string                  $_container
+     * @param Calendar_Model_Attender $_attendee    defaults to calendarUser
+     */
+    public function setDisplaycontainer($_event, $_container, $_attendee = NULL)
+    {
+        if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach ($_event->exdate as $idx => $exdate) {
+                self::setDisplaycontainer($exdate, $_container, $_attendee);
+            }
+        }
+        
+        $attendeeRecord = Calendar_Model_Attender::getAttendee($_event->attendee, $_attendee ? $_attendee : $this->getCalendarUser());
+        
+        if ($attendeeRecord) {
+            $attendeeRecord->displaycontainer_id = $_container;
+        }
     }
     
     /**
