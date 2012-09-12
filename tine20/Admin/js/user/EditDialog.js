@@ -783,7 +783,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.333
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n.gettext('First Name'),
+                        fieldLabel: this.app.i18n.gettext('First name'),
                         name: 'accountFirstName',
                         columnWidth: 0.5,
                         listeners: {
@@ -793,12 +793,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         }
                     }, {
-                        fieldLabel: this.app.i18n.gettext('Last Name'),
+                        fieldLabel: this.app.i18n.gettext('Last name'),
                         name: 'accountLastName',
                         allowBlank: false,
                         columnWidth: 0.5
                     }], [{
-                        fieldLabel: this.app.i18n.gettext('Login Name'),
+                        fieldLabel: this.app.i18n.gettext('Login name'),
                         name: 'accountLoginName',
                         allowBlank: false,
                         columnWidth: 0.5
@@ -833,14 +833,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }
                     }], [{
                         vtype: 'email',
-                        fieldLabel: this.app.i18n.gettext('Emailaddress'),
+                        fieldLabel: this.app.i18n.gettext('Email'),
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
                         columnWidth: 0.5
                     }, {
                         //vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('OpenID'),
-                        emptyText: '(' + this.app.i18n.gettext('Login Name') + ')',
+                        emptyText: '(' + this.app.i18n.gettext('Login name') + ')',
                         name: 'openid',
                         columnWidth: 0.5
                     }], [{

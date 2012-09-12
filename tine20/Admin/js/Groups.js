@@ -101,7 +101,7 @@ Tine.Admin.Groups.Main = {
         this.translation.textdomain('Admin');
         
         this.actions.addGroup = new Ext.Action({
-            text: this.translation.gettext('add group'),
+            text: this.translation.gettext('Add Group'),
             disabled: true,
             handler: this.handlers.addGroup,
             iconCls: 'action_addGroup',
@@ -109,7 +109,7 @@ Tine.Admin.Groups.Main = {
         });
         
         this.actions.editGroup = new Ext.Action({
-            text: this.translation.gettext('edit group'),
+            text: this.translation.gettext('Edit Group'),
             disabled: true,
             handler: this.handlers.editGroup,
             iconCls: 'action_edit',
@@ -117,7 +117,7 @@ Tine.Admin.Groups.Main = {
         });
         
         this.actions.deleteGroup = new Ext.Action({
-            text: this.translation.gettext('delete group'),
+            text: this.translation.gettext('Delete Group'),
             disabled: true,
             handler: this.handlers.deleteGroup,
             iconCls: 'action_delete',

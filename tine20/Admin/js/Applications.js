@@ -76,23 +76,25 @@ Tine.Admin.Applications.Main = function() {
         });
     };
     
-
+    var translation = new Locale.Gettext();
+    translation.textdomain('Admin');
+    
     var _action_enable = new Ext.Action({
-        text: 'enable application',
+        text: translation.gettext('Enable Application'),
         disabled: true,
         handler: _enableDisableButtonHandler.createDelegate(this, ['enabled']),
         iconCls: 'action_enable'
     });
 
     var _action_disable = new Ext.Action({
-        text: 'disable application',
+        text: translation.gettext('Disable Application'),
         disabled: true,
         handler: _enableDisableButtonHandler.createDelegate(this, ['disabled']),
         iconCls: 'action_disable'
     });
 
     var _action_settings = new Ext.Action({
-        text: 'settings',
+        text: translation.gettext('Settings'),
         disabled: true,
         handler: _settingsHandler,
         iconCls: 'action_settings'

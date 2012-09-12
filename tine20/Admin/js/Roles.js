@@ -99,7 +99,7 @@ Tine.Admin.Roles.Main = {
         this.translation.textdomain('Admin');
         
         this.actions.addRole = new Ext.Action({
-            text: this.translation.gettext('add role'),
+            text: this.translation.gettext('Add Role'),
             disabled: true,
             handler: this.handlers.addRole,
             iconCls: 'action_permissions',
@@ -107,7 +107,7 @@ Tine.Admin.Roles.Main = {
         });
         
         this.actions.editRole = new Ext.Action({
-            text: this.translation.gettext('edit role'),
+            text: this.translation.gettext('Edit Role'),
             disabled: true,
             handler: this.handlers.editRole,
             iconCls: 'action_edit',
@@ -115,7 +115,7 @@ Tine.Admin.Roles.Main = {
         });
         
         this.actions.deleteRole = new Ext.Action({
-            text: this.translation.gettext('delete role'),
+            text: this.translation.gettext('Delete Role'),
             disabled: true,
             handler: this.handlers.deleteRole,
             iconCls: 'action_delete',

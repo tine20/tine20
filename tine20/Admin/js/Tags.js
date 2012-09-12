@@ -94,7 +94,7 @@ Tine.Admin.Tags.Main = {
         this.translation.textdomain('Admin');
         
         this.actions.addTag = new Ext.Action({
-            text: this.translation.gettext('add tag'),
+            text: this.translation.gettext('Add Tag'),
             handler: this.handlers.addTag,
             iconCls: 'action_tag',
             scope: this,
@@ -102,7 +102,7 @@ Tine.Admin.Tags.Main = {
         });
         
         this.actions.editTag = new Ext.Action({
-            text: this.translation.gettext('edit tag'),
+            text: this.translation.gettext('Edit Tag'),
             disabled: true,
             handler: this.handlers.editTag,
             iconCls: 'action_edit',
@@ -110,7 +110,7 @@ Tine.Admin.Tags.Main = {
         });
         
         this.actions.deleteTag = new Ext.Action({
-            text: this.translation.gettext('delete tag'),
+            text: this.translation.gettext('Delete Tag'),
             disabled: true,
             handler: this.handlers.deleteTag,
             iconCls: 'action_delete',
