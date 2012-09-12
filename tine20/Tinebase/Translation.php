@@ -79,7 +79,7 @@ class Tinebase_Translation
         if (Tinebase_Config::isReady() === TRUE) {
             $customTranslationsDir = Tinebase_Config::getInstance()->translations;
             if ($customTranslationsDir) {
-                foreach((array) scandir($customTranslationsDir) as $dir) {
+                foreach((array) @scandir($customTranslationsDir) as $dir) {
                     $poFile = "$customTranslationsDir/$dir/Tinebase/translations/$dir.po";
                     if (is_readable($poFile)) {
                         $availableTranslations[$dir] = array(
