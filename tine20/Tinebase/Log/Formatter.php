@@ -58,7 +58,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     public function format($event)
     {
         if (! self::$_prefix) {
-            self::$_prefix = substr(Tinebase_Record_Abstract::generateUID(), 0, 5);
+            self::$_prefix = Tinebase_Record_Abstract::generateUID(5);
         }
         
         $output = parent::format($event);
