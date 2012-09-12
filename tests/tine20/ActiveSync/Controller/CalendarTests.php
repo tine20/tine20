@@ -385,6 +385,29 @@ Zeile 3</AirSyncBase:Data>
         return array($serverId, $syncrotonEvent);
     }
     
+    public function testRecurEventExceptionFilters($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+        
+        // remove testuser as attendee
+        $eventBackend = new Calendar_Backend_Sql();
+        $exception = $eventBackend->getByProperty($syncrotonEvent->uID . '-' . $syncrotonEvent->exceptions[0]->exceptionStartTime->format(Tinebase_Record_Abstract::ISO8601LONG), 'recurid');
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($exception->attendee);
+        $eventBackend->deleteAttendee(array($ownAttendee->getId()));
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        // assert fallout by filter
+        $this->assertTrue((bool) $syncrotonEvent->exceptions[0]->deleted);
+        $this->assertTrue((bool) $syncrotonEvent->exceptions[1]->deleted);
+    }
+    
     /**
      * test search events (unsyncable)
      * 

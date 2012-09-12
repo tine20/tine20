@@ -187,6 +187,17 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     
     /**
      * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::__construct()
+     */
+    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
+    {
+        parent::__construct($_device, $_syncTimeStamp);
+        
+        $this->_contentController->setEventFilter($this->_getContentFilter(0));
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
      * @todo handle BusyStatus
      */

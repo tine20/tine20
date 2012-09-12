@@ -36,6 +36,11 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     protected $_until = NULL;
     
     /**
+     * @var string
+     */
+    protected $_disabled = FALSE;
+    
+    /**
      * returns from datetime
      *
      * @return Tinebase_DateTime
@@ -53,6 +58,19 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     public function getUntil()
     {
         return new Tinebase_DateTime($this->_until);
+    }
+    
+    /**
+     * set this filter en/disabled
+     * 
+     * @param bool $_disabled
+     */
+    public function setDisabled($_disabled=TRUE)
+    {
+        $oldDisabled = $this->_disabled;
+        $this->_disabled = $_disabled;
+        
+        return $oldDisabled;
     }
     
     /**
@@ -81,6 +99,10 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if ($this->_disabled === TRUE) {
+            return;
+        }
+        
         $filter = new Calendar_Model_EventFilter(array(
             array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
                array('field' => 'rrule', 'operator' => 'isnull',  'value' => NULL),

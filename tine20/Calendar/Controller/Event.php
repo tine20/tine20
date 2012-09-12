@@ -900,16 +900,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * NOTE: deleted instances are saved in the base events exception property
      * NOTE: returns all exceptions regardless of current filters and access restrictions
      * 
-     * @param  Calendar_Model_Event $_event
-     * @param  boolean              $_fakeDeletedInstances
+     * @param  Calendar_Model_Event        $_event
+     * @param  boolean                     $_fakeDeletedInstances
+     * @param  Calendar_Model_EventFilter  $_eventFilter
      * @return Tinebase_Record_RecordSet of Calendar_Model_Event
      */
-    public function getRecurExceptions($_event, $_fakeDeletedInstances = FALSE)
+    public function getRecurExceptions($_event, $_fakeDeletedInstances = FALSE, $_eventFilter=NULL)
     {
-        $exceptions = $this->_backend->search(new Calendar_Model_EventFilter(array(
+        $exceptionFilter = new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals',  'value' => $_event->uid),
             array('field' => 'recurid', 'operator' => 'notnull', 'value' => NULL)
-        )));
+        ));
+        
+        if ($_eventFilter instanceof Calendar_Model_EventFilter) {
+            $exceptionFilter->addFilterGroup($_eventFilter);
+        }
+        
+        $exceptions = $this->_backend->search($exceptionFilter);
         
         if ($_fakeDeletedInstances) {
             $baseEvent = $this->getRecurBaseEvent($_event);
@@ -1335,6 +1342,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $exceptionAttender->status = $_attender->status;
             $exceptionAttender->transp = $_attender->transp;
             $eventInstance->alarms     = clone $_recurInstance->alarms;
+            $eventInstance->alarms->setId(NULL);
+            
             $updatedAttender = $this->attenderStatusUpdate($eventInstance, $exceptionAttender, $exceptionAttender->status_authkey);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

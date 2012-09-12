@@ -82,8 +82,8 @@ Ext.ux.form.ClearableDateField = Ext.extend(Ext.form.DateField, {
     },
     
     setValue: function(v) {
-        if (!v) {
-            this.triggers[0].hide();
+        if (Ext.isArray(this.triggers) && this.triggers[0] && typeof this.triggers[0].show == 'function') {
+             this.triggers[0][ v ? 'show' : 'hide']();
         }
         
         return Ext.ux.form.ClearableDateField.superclass.setValue.apply(this, arguments);

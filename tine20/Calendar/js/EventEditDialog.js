@@ -300,7 +300,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, organizerCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 width: 300,
                 name: 'organizer',
-                userOnly: true
+                userOnly: true,
+                getValue: function() {
+                    var id = Tine.Addressbook.SearchCombo.prototype.getValue.apply(this, arguments),
+                        record = this.store.getById(id);
+                        
+                    return record ? record.data : id;
+                }
             })]
         });
         
@@ -309,7 +315,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (o.field == 'user_id'
                 && o.record.get('user_type') == 'resource'
                 && o.record.get('user_id').is_location
-                && !this.getForm().findField('location').getValue()
             ) {
                 this.getForm().findField('location').setValue(
                     this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))

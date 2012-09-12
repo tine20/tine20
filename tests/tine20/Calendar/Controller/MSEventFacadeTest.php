@@ -29,6 +29,16 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         parent::setUp();
         
         $this->_uit = Calendar_Controller_MSEventFacade::getInstance();
+        $this->_uit->setEventFilter(new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'equals', 'value' => array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => Tinebase_Core::getUser()->contact_id,
+            )),
+            array(
+                'field' => 'attender_status', 'operator' => 'notin', 'value' => array(
+                    Calendar_Model_Attender::STATUS_DECLINED
+                )
+        ))));
     }
     
     public function getTestEvent()
@@ -148,6 +158,9 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         
         // fake what the client does
         $event->alarms->setId(NULL);
+        foreach($event->exdate->alarms as $alarms) {
+            $alarms->setId(NULL);
+        }
         
         $event = $this->_uit->update($event);
         $this->_assertTestEvent($event);
@@ -291,7 +304,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     
     /**
      * sclever declines event exception.
-     * => from her iTIP perspective this is an fallout than
+     * => from her iTIP perspective, with the filter, this is an fallout than
      */
     public function testPerspectiveExceptionFallout()
     {
@@ -308,6 +321,17 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentException->attendee->removeRecord($persistentSClever);
         
         $currUser = $this->_uit->setCalendarUser($sclever);
+        $this->_uit->setEventFilter(new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'equals', 'value' => array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => $this->_personasContacts['sclever']->getId(),
+            )),
+            array(
+                'field' => 'attender_status', 'operator' => 'notin', 'value' => array(
+                    Calendar_Model_Attender::STATUS_DECLINED
+                )
+        ))));
+        
         $event = $this->_uit->update($event);
         
         //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
