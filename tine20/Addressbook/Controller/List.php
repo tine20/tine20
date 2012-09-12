@@ -277,4 +277,18 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     
         return $contactIds;
     }
+    
+    /**
+    * you can define default filters here
+    *
+    * @param Tinebase_Model_Filter_FilterGroup $_filter
+    */
+    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    {
+        if (! $_filter->isFilterSet('showHidden')) {
+            $hiddenFilter = $_filter->createFilter('showHidden', 'equals', FALSE);
+            $hiddenFilter->setIsImplicit(TRUE);
+            $_filter->addFilter($hiddenFilter);
+        }
+    }
 }

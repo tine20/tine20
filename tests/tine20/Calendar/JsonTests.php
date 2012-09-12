@@ -637,7 +637,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         // record should not be found
         $this->assertEquals($e->getMessage(), 'Calendar_Model_Event record with id '.$event->getId().' not found!');
-        
     }
     
     /**
@@ -695,5 +694,31 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         
         return $attenderData;
+    }
+    
+    /**
+     * test filter with hidden group -> should return empty result
+     * 
+     * @see 0006934: setting a group that is hidden from adb as attendee filter throws exception
+     */
+    public function testHiddenGroupFilter()
+    {
+        $hiddenGroup = new Tinebase_Model_Group(array(
+            'name'          => 'hiddengroup',
+            'description'   => 'hidden group',
+            'visibility'     => Tinebase_Model_Group::VISIBILITY_HIDDEN
+        ));
+        $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
+        
+        $filter = array(array(
+            'field'    => 'attender',
+            'operator' => 'equals',
+            'value'    => array(
+                'user_id'   => $hiddenGroup->list_id,
+                'user_type' => 'group',
+            ),
+        ));
+        $result = $this->_uit->searchEvents($filter, array());
+        $this->assertEquals(0, $result['totalcount']);
     }
 }

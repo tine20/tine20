@@ -5,12 +5,12 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     New BSD License
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * This object appends all contained filters at once concated by the concetation
+ * This object appends all contained filters at once concated by the concatenation
  * operator of the filtergroup, in order to archive nested filters.
  * 
  * @package     Tinebase
@@ -60,6 +60,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
     
     /**
      * Adds a WHERE condition to the query by AND.
+     * 
      * @param string   $cond  The WHERE condition.
      * @param string   $value OPTIONAL A single value to quote into the condition.
      * @param constant $type  OPTIONAL The type of the given value
@@ -116,8 +117,10 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
     
     /**
      * appends where buffer at once to original select obj.
+     * 
+     * @param string $_concatenationCondition AND|OR
      */
-    public function appendWhere($_concatenationCondition)
+    public function appendWhere($_concatenationCondition = Zend_Db_Select::SQL_AND)
     {
         if (! empty($this->_parts[Zend_Db_Select::WHERE])) {
             $method = $_concatenationCondition == Zend_Db_Select::SQL_OR ? 'orWhere' : 'where';

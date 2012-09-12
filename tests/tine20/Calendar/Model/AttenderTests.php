@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Model_AttenderTests::main');
-}
-
 /**
  * Test class for Calendar_Model_Attender
  * 
@@ -200,9 +196,4 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $this->assertTrue(in_array($this->_personasContacts['sclever']->getId(), $userIds), 'sclever missing');
         $this->assertTrue(in_array($persistentContact->getId(), $userIds), 'unittestorg missing');
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Model_AttenderTests::main') {
-    Calendar_Model_AttenderTests::main();
 }

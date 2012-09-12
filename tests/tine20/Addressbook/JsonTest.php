@@ -61,6 +61,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected $_makeSCleverVisibleAgain = FALSE;
     
     /**
+     * group ids to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_groupIdsToDelete = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -117,7 +124,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->_instance->deleteContacts($this->_contactIdsToDelete);
 
-        foreach($this->_customfieldIdsToDelete as $cfd) {
+        foreach ($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
         }
         
@@ -125,6 +132,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
             $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
             Tinebase_User::getInstance()->updateUser($sclever);
+        }
+        
+        if ($this->_groupIdsToDelete) {
+            Admin_Controller_Group::getInstance()->delete($this->_groupIdsToDelete);
         }
     }
 
@@ -1419,5 +1430,29 @@ Steuernummer 33/111/32212";
         $filter[] = array('field' => 'showDisabled', 'operator' => 'equals',   'value' => TRUE);
         $result = $this->_instance->searchContacts($filter, array());
         $this->assertEquals(1, $result['totalcount']);
+    }
+    
+    /**
+     * test search hidden list -> should not appear
+     * 
+     * @see 0006934: setting a group that is hidden from adb as attendee filter throws exception
+     */
+    public function testSearchHiddenList()
+    {
+        $hiddenGroup = new Tinebase_Model_Group(array(
+            'name'          => 'hiddengroup',
+            'description'   => 'hidden group',
+            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
+        ));
+        $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
+        $this->_groupIdsToDelete = array($hiddenGroup->getId());
+        
+        $filter = array(array(
+            'field'    => 'name',
+            'operator' => 'equals',
+            'value'    => 'hiddengroup'
+        ));
+        $result = $this->_instance->searchLists($filter, array());
+        $this->assertEquals(0, $result['totalcount'], 'should not find hidden list: ' . print_r($result, TRUE));
     }
 }

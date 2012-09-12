@@ -336,8 +336,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     preg_match('/(?P<localName>.*)@' . preg_quote($smtpConfig['primarydomain']) . '$/', $newAttendee['email'], $matches)
                 ) {
                     $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
-                        array('field' => 'name', 'operator' => 'equals', 'value' => $matches['localName']),
-                        array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+                        array('field' => 'name',       'operator' => 'equals', 'value' => $matches['localName']),
+                        array('field' => 'type',       'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP),
+                        array('field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE),
                     )));
                     
                     if(count($lists) > 0) {
@@ -358,8 +359,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
             } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
-                    array('field' => 'name', 'operator' => 'equals', 'value' => $newAttendee['displayName']),
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+                    array('field' => 'name',       'operator' => 'equals', 'value' => $newAttendee['displayName']),
+                    array('field' => 'type',       'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP),
+                    array('field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE),
                 )));
                 
                 if(count($lists) > 0) {

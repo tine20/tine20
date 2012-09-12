@@ -292,7 +292,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         );
         
         // get group and add grants for it
-        $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter());
+        $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
+            array('field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE)
+        )));
         $groupToAdd = $lists->getFirstRecord();
         $newGrants->addRecord(
             new Tinebase_Model_Grants(array(
