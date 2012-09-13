@@ -419,52 +419,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::updateEntry()
-     */
-    public function updateEntry($folderId, $serverId, Syncroton_Model_IEntry $entry)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
-    
-        $oldEntry = $this->_contentController->get($serverId);
-    
-        $updatedEmtry = $this->toTineModel($entry, $oldEntry);
-        $updatedEmtry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
-        if ($folderId != $this->_specialFolderName) {
-            $updatedEmtry->container_id = $folderId;
-        }
-                
-        if ($updatedEmtry->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach ($updatedEmtry->exdate as $exdate) {
-                if ($exdate->is_deleted == false) {
-                    $exdate->container_id = $updatedEmtry->container_id;
-                }
-            }
-        }
-
-        if ($oldEntry->organizer == Tinebase_Core::getUser()->contact_id) {
-            $updatedEmtry = $this->_contentController->update($updatedEmtry);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " current user is not organizer => update attendee status only ");
-            
-            $ownAttendee = Calendar_Model_Attender::getOwnAttender($updatedEmtry->attendee);
-            
-            if ($folderId != $this->_specialFolderName) {
-                $ownAttendee->displaycontainer_id = $folderId;
-            }
-            
-            $updatedEmtry = Calendar_Controller_MSEventFacade::getInstance()->attenderStatusUpdate($updatedEmtry, $ownAttendee);
-        }
-    
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updated entry id " . $updatedEmtry->getId());
-    
-        return $updatedEmtry->getId();
-    }
-    
-    /**
      * convert string of days (TU,TH) to bitmask used by ActiveSync
      *  
      * @param $_days
@@ -530,24 +484,20 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     break;
                     
                 case 'attendee':
-                    if (! $event->$tine20Property instanceof Tinebase_Record_RecordSet) {
-                        $event->$tine20Property = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-                    }
                     
                     $newAttendees = array();
-                
+                    
                     foreach($data->$syncrotonProperty as $attendee) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                             __METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->email);
-                
+                        
                         if(isset($attendee->attendeeType) && array_key_exists($attendee->attendeeType, $this->_attendeeTypeMapping)) {
                             $role = $this->_attendeeTypeMapping[$attendee->attendeeType];
                         } else {
                             $role = Calendar_Model_Attender::ROLE_REQUIRED;
                         }
-                
+                        
                         // AttendeeStatus send only on repsonse
-                
                         if (preg_match('/(?P<firstName>\S*) (?P<lastNameName>\S*)/', $attendee->name, $matches)) {
                             $firstName = $matches['firstName'];
                             $lastName  = $matches['lastNameName'];
@@ -555,7 +505,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                             $firstName = null;
                             $lastName  = $attendee->name;
                         }
-                
+                        
                         // @todo handle resources
                         $newAttendees[] = array(
                             'userType'  => Calendar_Model_Attender::USERTYPE_USER,
@@ -574,22 +524,22 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case 'exdate':
                     // handle exceptions from recurrence
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-                
+                    
                     foreach ($data->$syncrotonProperty as $exception) {
                         if ($exception->deleted === 0) {
                             $eventException = $this->toTineModel($exception);
-                            $eventException->recurid    = new Tinebase_DateTime($exception->exceptionStartTime);
-                            $eventException->is_deleted = false;
+                            $eventException->last_modified_time = $this->_syncTimeStamp;
+                            $eventException->recurid            = new Tinebase_DateTime($exception->exceptionStartTime);
+                            $eventException->is_deleted         = false;
                         } else {
                             $eventException = new Calendar_Model_Event(array(
                                 'recurid'    => new Tinebase_DateTime($exception->exceptionStartTime),
                                 'is_deleted' => true
                             ));
                         }
-                
+                        
                         $exdates->addRecord($eventException);
                     }
-                
                     $event->$tine20Property = $exdates;
                     
                     break;
@@ -676,8 +626,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                             $rrule->count = null;
                             $rrule->until = null;
                         }
-                    
-                        $event->rrule = $rrule;                    
+                        
+                        $event->rrule = $rrule;
                     }
                     
                     break;
@@ -697,11 +647,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
         if(isset($event->is_all_day_event) && $event->is_all_day_event == 1) {
             $event->dtend->subSecond(1);
-        }
-        
-        // reset exdates
-        if ($event->rrule === null) {
-            $event->exdate = null;
         }
         
         // decode timezone data
@@ -728,13 +673,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         $this->_handleAlarms($data, $event);
         
-        $this->_addCurrentUserAttender($event);
-        
         $this->_handleBusyStatus($data, $event);
-        
-        if (empty($event->organizer)) {
-            $event->organizer = Tinebase_Core::getUser()->contact_id;
-        }
         
         // event should be valid now
         $event->isValid();
@@ -784,33 +723,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         } else if ($currentAlarm) {
             // current alarm got removed
             $event->alarms->removeRecord($currentAlarm);
-        }
-    }
-    
-    /**
-     * always add current user as participant
-     * 
-     * @param Calendar_Model_Event $event
-     */
-    protected function _addCurrentUserAttender($event)
-    {        
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
-        
-        if ($ownAttender === NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " Add current user as attender.");
-            
-            $newAttender = new Calendar_Model_Attender(array(
-                'user_id'   => Tinebase_Core::getUser()->contact_id,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ));
-            
-            if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
-                $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            }
-            $event->attendee->addRecord($newAttender);
         }
     }
     

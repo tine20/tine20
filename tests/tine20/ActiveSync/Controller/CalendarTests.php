@@ -408,6 +408,36 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue((bool) $syncrotonEvent->exceptions[1]->deleted);
     }
     
+    public function testStatusUpdate($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+        
+        // transfer event to other user
+        $rwright = array_value('rwright', $this->_personas = Zend_Registry::get('personas'));
+        $eventBackend = new Calendar_Backend_Sql();
+        $eventBackend->updateMultiple($eventBackend->getMultipleByProperty($syncrotonEvent->uID, 'uid')->id, array(
+            'container_id'  => Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $rwright->getId()),
+            'organizer'     => $rwright->contact_id
+        ));
+        
+        $syncrotonEvent->exceptions[0]->busyStatus = 1;
+        $syncrotonEvent->exceptions[0]->subject = 'do not update';
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        // container im syncroton event?
+        // exdate hat keine id und kein uid
+        $this->assertEquals(1, $syncrotonEvent->exceptions[0]->busyStatus);
+        $this->assertNotEquals('do not update', $syncrotonEvent->exceptions[0]->subject);
+    }
+    
     /**
      * test search events (unsyncable)
      * 

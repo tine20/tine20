@@ -75,12 +75,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $eventExceptions = $_record->exdate->filter('is_deleted', false);
             
             foreach ($eventExceptions as $eventException) {
-                // set timefields
-                // @todo move to MS event facade
-                $eventException->creation_time = $_record->creation_time;
-                if (isset($_record->last_modified_time)) {
-                    $eventException->last_modified_time = $_record->last_modified_time;
-                }
                 $vevent = $this->_convertCalendarModelEvent($eventException, $_record);
                 $vcalendar->add($vevent);
             }
@@ -92,48 +86,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
         
         return $vcalendar;
-    }
-    
-    /**
-     * Returns the standard and daylight transitions for the given {@param $_timezone}
-     * and {@param $_year}.
-     *
-     * @param DateTimeZone $_timezone
-     * @param $_year
-     * @return Array
-     */
-    protected function _getTransitionsForTimezoneAndYear(DateTimeZone $_timezone, $_year)
-    {
-        $standardTransition = null;
-        $daylightTransition = null;
-    
-        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-            // Since php version 5.3.0 getTransitions accepts optional start and end parameters.
-            $start = mktime(0, 0, 0, 12, 1, $_year - 1);
-            $end   = mktime(24, 0, 0, 12, 31, $_year);
-            $transitions = $_timezone->getTransitions($start, $end);
-        } else {
-            $transitions = $_timezone->getTransitions();
-        }
-    
-        $index = 0;            //we need to access index counter outside of the foreach loop
-        $transition = array(); //we need to access the transition counter outside of the foreach loop
-        foreach ($transitions as $index => $transition) {
-            if (strftime('%Y', $transition['ts']) == $_year) {
-                if (isset($transitions[$index+1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
-                    $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
-                    $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
-                } else {
-                    $daylightTransition = $transition['isdst'] ? $transition : null;
-                    $standardTransition = $transition['isdst'] ? null : $transition;
-                }
-                break;
-            } elseif ($index == count($transitions) -1) {
-                $standardTransition = $transition;
-            }
-        }
-         
-        return array($standardTransition, $daylightTransition);
     }
     
     /**
@@ -392,14 +344,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $event = new Calendar_Model_Event(null, false);
         }
         
-        // keep current exdate's (only the not deleted ones)
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            $event->exdate->addIndices(array('is_deleted'));
-            $oldExdates = $event->exdate->filter('is_deleted', false);
-        } else {
-            $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
-        }
-        
         if (!isset($vcalendar->METHOD)) {
             $this->_method = $vcalendar->METHOD;
         }
@@ -419,6 +363,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // parse the event exceptions
+        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Events');
         foreach ($vcalendar->VEVENT as $vevent) {
             if(isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);

@@ -1089,6 +1089,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
         
         // external organizer (iTIP)
         if (! $_record->resolveOrganizer()->account_id && count($_record->attendee) > 1) {

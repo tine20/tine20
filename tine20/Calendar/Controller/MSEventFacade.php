@@ -254,10 +254,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $exceptions = $_event->exdate;
         $_event->exdate = NULL;
         
+        $this->_addCurrentUserAsAttendee($_event);
         $savedEvent = $this->_eventController->create($_event);
         
         if ($exceptions instanceof Tinebase_Record_RecordSet) {
             foreach($exceptions as $exception) {
+                $this->_addCurrentUserAsAttendee($exception);
                 $this->_prepareException($savedEvent, $exception);
                 $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
             }
@@ -590,6 +592,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     protected function _fromiTIP($_event, $_currentEvent)
     {
+        if (! $_event->rrule) {
+            $_event->exdate = NULL;
+        }
+        
         if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
             
             try{
@@ -622,6 +628,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
+        $currentCUAttendee  = Calendar_Model_Attender::getAttendee($_currentEvent->attendee, $this->_calendarUser);
         $isOrganizer = $_event->isOrganizer($this->_calendarUser);
         
         // remove perspective 
@@ -654,6 +661,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $_event->alarms->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($this->_calendarUser));
         }
         $_event->alarms->merge($_currentEvent->alarms);
+        
+        // in MS world only cal_user can do status updates
+        if ($CUAttendee) {
+            $CUAttendee->status_authkey = $currentCUAttendee ? $currentCUAttendee->status_authkey : NULL;
+        }
     }
     
     /**
@@ -720,5 +732,39 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // NOTE: we always refetch the base event as it might be touched in the meantime
         $currBaseEvent = $this->_eventController->getRecurBaseEvent($_exception);
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
+    }
+    
+    /**
+     * add current user to attendee
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _addCurrentUserAsAttendee($event)
+    {
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        
+        if (! $ownAttender) {
+            if ($event->organizer && $event->organizer != Tinebase_Core::getUser()->contact_id) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Not adding current user as attendee as current user is not organizer.");
+            }
+            
+            else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " adding current user as attendee.");
+                
+                $newAttender = new Calendar_Model_Attender(array(
+                    'user_id'   => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+                ));
+                
+                if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+                    $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                }
+                $event->attendee->addRecord($newAttender);
+            }
+        }
     }
 }

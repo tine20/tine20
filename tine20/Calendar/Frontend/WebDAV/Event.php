@@ -100,8 +100,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         ));
         Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($filter);
         
-        self::enforceEventParameters($event);
-        
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
@@ -151,58 +149,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         return $vevent;
     }
     
-    public static function enforceEventParameters(Calendar_Model_Event $_event)
-    {
-        // got there any attendees added?
-        if(! $_event->attendee instanceof Tinebase_Record_RecordSet) {
-            $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        }
-
-        // can happen only during create not on update
-        if (empty($_event->organizer)) {
-            $_event->organizer = Tinebase_Core::getUser()->contact_id;
-        }
-        
-        // the organizer must always be an attendee
-        if ($_event->organizer === Tinebase_Core::getUser()->contact_id && ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee)) == null) {
-            $_event->attendee->addRecord(new Calendar_Model_Attender(array(
-                'user_id'   => Tinebase_Core::getUser()->contact_id,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
-                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
-            )));
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added organizer as attendee ");
-        }
-        
-        if (empty($_event->transp)) {
-            $_event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
-        }
-        
-        // check also attached exdates
-        if ($_event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach($_event->exdate as $exdate) {
-                if ($exdate->is_deleted == false) {
-                    $exdate->container_id = $_event->container_id;
-                    $exdate->organizer    = $_event->organizer;
-                    self::enforceEventParameters($exdate);
-                }
-                
-                if (! $exdate->getId()) {
-                    // new exdates must authenticate for status updates
-                    foreach($_event->attendee as $attendee) {
-                        if ($attendee->status_authkey) {
-                            $exdateAttedee = Calendar_Model_Attender::getAttendee($exdate->attendee, $attendee);
-                            if ($exdateAttedee) {
-                                $exdateAttedee->status_authkey = $attendee->status_authkey;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     /**
      * Deletes the card
      *
@@ -236,7 +182,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             if ($attendee && $attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(10) > $event->last_modified_time) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
-                self::enforceEventParameters($event);
                 $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
             } 
         }
@@ -424,8 +369,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
         
         // iCal does sends back an old value, because it does not refresh the vcalendar after 
-        // update. Therefor we must reapply the value of last_modified_time after the convert
-        $event->last_modified_time = $recordBeforeUpdate->last_modified_time;
+        // update. Moreover concurrency management is based on etag in CalDAV, so we set last_modified to
+        // now to circumvent internal concurrency checks
+        $event->last_modified_time = Tinebase_DateTime::now();
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach ($event->exdate as $idx => $exdate) {
+                $exdate->last_modified_time = $event->last_modified_time;
+            }
+        }
         
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
         
@@ -454,8 +405,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
             }
         }
-        
-        self::enforceEventParameters($event);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));

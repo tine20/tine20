@@ -229,8 +229,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " create entry");
         
         $entry = $this->toTineModel($entry);
-        $entry->creation_time = new Tinebase_DateTime($this->_syncTimeStamp);
-        $entry->created_by = Tinebase_Core::getUser()->getId();
         
         // container_id gets set to personal folder in application specific controller if missing
         if($folderId != $this->_specialFolderName) {
@@ -330,6 +328,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         $updatedEmtry = $this->toTineModel($entry, $oldEntry);
+        // @FIXME: this skips concurrency handling
         $updatedEmtry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
         
         try {
