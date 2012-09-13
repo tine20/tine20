@@ -305,7 +305,6 @@ function prepareDebianPackaging()
     
     # Replace all matches of - with .
     DEBIANVERSION=${RELEASE//-/.}
-    DEBIANVERSION=${DEBIANVERSION//\~*/}
 
     mkdir -p "$PACKAGEDIR/tine20-$DEBIANVERSION"
     
@@ -327,7 +326,6 @@ function prepareUniventionPackaging()
     
     # Replace all matches of - with .
     DEBIANVERSION=${RELEASE//-/.}
-    DEBIANVERSION=${DEBIANVERSION//\~*/}
 
     mkdir -p "$PACKAGEDIR/tine20-$DEBIANVERSION"
     
