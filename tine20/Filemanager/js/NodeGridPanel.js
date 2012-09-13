@@ -11,7 +11,7 @@ Ext.ns('Tine.Filemanager');
  * File grid panel
  * 
  * @namespace   Tine.Filemanager
- * @class       Tine.Filemanager.GridPanel
+ * @class       Tine.Filemanager.NodeGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
  * <p>Node Grid Panel</p>
@@ -26,7 +26,7 @@ Ext.ns('Tine.Filemanager');
  * @constructor
  * Create a new Tine.Filemanager.FileGridPanel
  */
-Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     
     /**
@@ -99,7 +99,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.onFilesSelect
         });
         
-        Tine.Filemanager.GridPanel.superclass.initComponent.call(this);
+        Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad);
         this.initPagingToolbar();
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
@@ -110,7 +110,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     afterRender: function() {
         
-        Tine.Filemanager.GridPanel.superclass.afterRender.call(this);
+        Tine.Filemanager.NodeGridPanel.superclass.afterRender.call(this);
         this.action_upload.setDisabled(true);
         this.initDropTarget();
         this.currentFolderNode = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getRootNode();
@@ -127,7 +127,15 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumnModel: function(){
         
-        var columns = [{
+        var columns = [{ 
+                id: 'tags',
+                header: this.app.i18n._('Tags'),
+                dataIndex: 'tags',
+                width: 50,
+                renderer: Tine.Tinebase.common.tagsRenderer,
+                sortable: false,
+                hidden: false
+            }, {
                 id: 'name',
                 header: this.app.i18n._("Name"),
                 width: 70,
@@ -204,7 +212,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.usernameRenderer 
             }
         ];
-        
         
         return new Ext.grid.ColumnModel({
             defaults: {
@@ -315,6 +322,16 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.action_upload = new Ext.Action(this.getAddAction());
         
+        this.action_editFile = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: false,
+            text: this.app.i18n._('Edit Properties'),
+            handler: this.onEditFile,
+            iconCls: 'action_edit_file',
+            disabled: false,
+            actionType: 'edit',
+            scope: this
+        });
         this.action_createFolder = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'reply',
@@ -363,7 +380,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.contextMenu = Tine.Filemanager.GridContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
-            actions: ['delete', 'rename', 'download', 'resume', 'pause'],
+            actions: ['delete', 'rename', 'download', 'resume', 'pause', 'edit'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -384,7 +401,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
            this.action_createFolder,
            this.action_goUpFolder,
            this.action_download,
-           this.action_deleteRecord
+           this.action_deleteRecord,
+           this.action_editFile
        ]);
     },
     
@@ -424,6 +442,12 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 }]
                             })
                         }),
+                        
+                        Ext.apply(new Ext.Button(this.action_editFile), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
                         Ext.apply(new Ext.Button(this.action_deleteRecord), {
                             scale: 'medium',
                             rowspan: 2,
@@ -455,7 +479,21 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         return this.actionToolbar;
     },
-    
+    /**
+     * opens the edit dialog
+     */
+    onEditFile: function() {
+        var sel = this.getGrid().getSelectionModel().getSelections();
+
+        if(sel.length == 1) {
+            var record = new Tine.Filemanager.Model.Node(sel[0].data);
+            var window = Tine.Filemanager.NodeEditDialog.openWindow({record: record});
+        }
+        
+        window.on('saveAndClose', function() {
+            this.getGrid().store.reload();
+        }, this);
+    },
     /**
      * create folder in current position
      * 
@@ -561,7 +599,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * grid row doubleclick handler
      * 
-     * @param {Tine.Filemanager.GridPanel} grid
+     * @param {Tine.Filemanager.NodeGridPanel} grid
      * @param {} row record
      * @param {Ext.EventObjet} e
      */

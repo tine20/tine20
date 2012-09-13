@@ -26,7 +26,6 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Filemanager';
-            
     /**
      * search file/directory nodes
      *
@@ -143,15 +142,29 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * save node(s) / NOOP
-     * 
-     * save node doesn't do anything at the moment
-     * @param string|array $filenames string->single file, array->multiple
-     * @return input param
+     * returns the node record
+     * @param string $id
+     * @return array
+     */
+    public function getNode($id)
+    {
+        return $this->_get($id, Filemanager_Controller_Node::getInstance());
+    }
+    
+    /**
+     * save node
+     * save node here in json fe just updates meta info (name, description, relations, customfields, tags, notes),
+     * if record already exists (after it had been uploaded)
+     * @param array with record data 
+     * @return array
      */
     public function saveNode($recordData)
     {
-        return $recordData;
+        if(array_key_exists('created_by', $recordData)) {
+            return $this->_save($recordData, Filemanager_Controller_Node::getInstance(), 'Node');
+        } else {    // on upload complete
+            return $recordData;
+        }
     }
     
 }

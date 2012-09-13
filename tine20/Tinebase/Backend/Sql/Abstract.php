@@ -952,7 +952,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function update(Tinebase_Record_Interface $_record) 
     {
-        
         $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {

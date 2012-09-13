@@ -704,6 +704,25 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * limits this recordset by pagination
+     * sorting should always be applied before to get the desired sequence
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return $this
+     */
+    public function limitByPagination($_pagination)
+    {
+        if ($_pagination !== NULL && $_pagination->limit) {
+            $indices = range($_pagination->start, $_pagination->start + $_pagination->limit - 1);
+            foreach($this as $index => &$record) {
+                if(! in_array($index, $indices)) {
+                    $this->offsetUnset($index);
+                }
+            }
+        }
+        return $this;
+    }
+    
+    /**
      * translate all member records of this set
      * 
      */

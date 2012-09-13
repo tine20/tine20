@@ -24,7 +24,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
      * holds the default Model of this application
      * @var string
      */
-    protected static $_defaultModel = 'Tinebase_Model_Tree_Node';
+    protected static $_defaultModel = 'Filemanager_Model_Node';
     
     /**
      * holds the instance of the singleton

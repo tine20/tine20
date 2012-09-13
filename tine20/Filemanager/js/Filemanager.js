@@ -27,12 +27,36 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     }
 });
 
+/*
+ * register additional action for genericpickergridpanel
+ */
+Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
+    text: 'Save locally',   // _('Save locally')
+    iconCls: 'action_filemanager_save_all',
+    requiredGrant: 'readGrant',
+    actionType: 'saveLocaly',
+    allowMultiple: false,
+    handler: function(action) {
+        var node = action.grid.store.getAt(action.gridIndex).get('related_record');
+        var downloadPath = node.path;
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Filemanager.downloadFile',
+                requestType: 'HTTP',
+                path: downloadPath
+            }
+        }).start();
+    }
+});
+
 /**
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.MainScreen
  * @extends Tine.widgets.MainScreen
  */
-Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
+Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
+    activeContentType: 'Node'
+});
 
 /**
  * generic exception handler for filemanager

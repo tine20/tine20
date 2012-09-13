@@ -48,7 +48,6 @@ Tine.widgets.tree.ContextMenu = {
             allowMultiple: false
         });
         
-        
         this.action_delete = new Ext.Action({
             text: String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.config.nodeName),
             iconCls: 'action_delete',
@@ -104,7 +103,15 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config,
             actionUpdater: this.isResumeEnabled
         });
-        
+        this.action_editFile = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: false,
+            text: _('Edit Properties'),
+            handler: this.onEditFile,
+            iconCls: 'action_edit_file',
+            actionType: 'edit',
+            scope: this
+        });
         this.action_pause = new Ext.Action({
             text: String.format(_('Pause upload'), config.nodeName),
             iconCls: 'action_pause',
@@ -153,6 +160,9 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'download':
                     items.push(this.action_download);
+                    break;
+                case 'edit':
+                    items.push(this.action_editFile);
                     break;
                 default:
                     // add custom actions

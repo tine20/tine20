@@ -17,7 +17,7 @@
  * @package     Filemanager
  * @subpackage  Controller
  */
-class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implements Tinebase_Controller_SearchInterface
+class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 {
     /**
      * application name (is needed in checkRight())
@@ -32,6 +32,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @var Tinebase_FileSystem
      */
     protected $_backend = NULL;
+    
+    /**
+     * the model handled by this controller
+     * @var string
+     */
+    protected $_modelName = 'Filemanager_Model_Node';
+    
+    /**
+     * TODO handle modlog
+     * @var boolean
+     */
+    protected $_omitModLog = TRUE;
+    
+    /**
+     * holds the total count of the last recursive search
+     * @var integer
+     */
+    protected $_recursiveSearchTotalCount = 0;
     
     /**
      * holds the instance of the singleton
@@ -73,6 +91,87 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::update()
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        if (! $this->_checkACLContainer($this->_backend->getNodeContainer($_record->getId()), 'update')) {
+            throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+        }
+
+        return parent::update($_record);
+    }
+    
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        foreach (array_keys($_record->toArray()) as $property) {
+            if (! in_array($property, array('id', 'name', 'description', 'relations', 'customfields', 'tags', 'notes', 'object_id'))) {
+                unset($_record->{$property});
+            }
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::getMultiple()
+     * 
+     * @return  Tinebase_Record_RecordSet
+     */
+    public function getMultiple($_ids)
+    {
+        $results = $this->_backend->getMultipleTreeNodes($_ids);
+        $this->resolveMultipleTreeNodesPath($results);
+        
+        return $results;
+    }
+    
+    /**
+     * Resolve path of multiple tree nodes
+     * 
+     * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
+     */
+    public function resolveMultipleTreeNodesPath($_records)
+    {
+        $records = ($_records instanceof Tinebase_Model_Tree_Node)
+            ? new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($_records)) : $_records;
+            
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Resolving paths for ' . count($records) .  ' records.');
+            
+        foreach ($records as $record) {
+            $path = $this->_backend->getPathOfNode($record, TRUE);
+            $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($path, $this->_applicationName);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Got path ' . $record->path .  ' for node ' . $record->name);
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::get()
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        if (! $this->_checkACLContainer($this->_backend->getNodeContainer($_id), 'get')) {
+            throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+        }
+        $record = parent::get($_id);
+        if($record) {
+            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
+        }
+        return $record;
+    }
+    
+    /**
      * search tree nodes
      * 
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
@@ -84,7 +183,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $path = $this->_checkFilterACL($_filter, $_action);
+        // perform recursive search on recursive filter set
+        if($_filter->getFilter('recursive')) {
+            return $this->_searchNodesRecursive($_filter, $_pagination);
+        } else {
+            $path = $this->_checkFilterACL($_filter, $_action);
+        }
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
@@ -118,6 +222,43 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $this->_sortContainerNodes($result, $path, $_pagination);
         }
         return $result;
+    }
+    
+    /**
+     * search tree nodes for search combo
+     * 
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * 
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    
+    protected function _searchNodesRecursive($_filter, $_pagination)
+    {
+        $files = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $ret = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $folders = $this->_getRootNodes();
+        $folders->merge($this->_getOtherUserNodes());
+
+        while($folders->count()) {
+            $node = $folders->getFirstRecord();
+            $filter = new Tinebase_Model_Tree_Node_Filter(array(
+                array('field' => 'path', 'operator' => 'equals', 'value' => $node->path),
+                ), 'AND');
+            $result = $this->search($filter);
+            $folders->merge($result->filter('type', 'folder'));
+            
+            if($_filter->getFilter('query') && $_filter->getFilter('query')->getValue()) {
+                $files->merge($result->filter('type', 'file')->filter('name', '/^'.$_filter->getFilter('query')->getValue().'./i', true));
+            } else {
+                $files->merge($result->filter('type', 'file'));
+            }
+            
+            $folders->removeRecord($node);
+        }
+        $this->_recursiveSearchTotalCount = $files->count();
+        $ret = $files->sortByPagination($_pagination)->limitByPagination($_pagination);
+        return $ret;
     }
     
     /**
@@ -311,7 +452,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     {
         $path = $this->_checkFilterACL($_filter, $_action);
         
-        if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+        if($_filter->getFilter('recursive') && $_filter->getFilter('recursive')->getValue()) {
+            $result = $this->_recursiveSearchTotalCount;
+        } else if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = count($this->_getRootNodes());
         } else if ($path->containerType === Tinebase_Model_Container::TYPE_PERSONAL && ! $path->containerOwner) {
             $result = count($this->_getOtherUserNodes());
@@ -1043,5 +1186,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         }
         
         return $success;
+    }
+    
+    /**
+     * Deletes a set of records.
+     *
+     * If one of the records could not be deleted, no record is deleted
+     *
+     * @param   array array of record identifiers
+     * @return  Tinebase_Record_RecordSet
+     */
+    public function delete($_ids)
+    {
+        $nodes = $this->getMultiple($_ids);
+        foreach ($nodes as $node) {
+            if ($this->_checkACLContainer($this->_backend->getNodeContainer($_record->getId()), 'delete')) {
+                $this->_backend->deleteFileNode($node);
+            } else {
+                $nodes->removeRecord($node);
+            }
+        }
+        
+        return $nodes;
     }
 }

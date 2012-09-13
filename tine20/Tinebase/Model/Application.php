@@ -75,7 +75,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     /**
      * converts a int, string or Tinebase_Model_Application to an accountid
      *
-     * @param   int|string|Tinebase_Model_Application $_accountId the accountid to convert
+     * @param   int|string|Tinebase_Model_Application $_applicationId the app id to convert
      * @return  int
      * @throws  Tinebase_Exception_InvalidArgument
      */

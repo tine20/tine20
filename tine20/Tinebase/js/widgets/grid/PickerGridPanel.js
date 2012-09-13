@@ -168,6 +168,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             items: contextItems.concat(this.contextMenuItems)
         });
         
+        // removes temporarly added items
+        this.contextMenu.on('hide', function() {
+            if(this.contextMenu.hasOwnProperty('tempItems') && this.contextMenu.tempItems.length) {
+                Ext.each(this.contextMenu.tempItems, function(item) {
+                    this.contextMenu.remove(item.itemId);
+                }, this);
+            }
+            this.contextMenu.tempItems = [];
+        }, this);
+        
         if (this.enableBbar) {
             this.bbar = new Ext.Toolbar({
                 items: [
@@ -235,15 +245,25 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
         
         // on rowcontextmenu handler
-        this.on('rowcontextmenu', function(grid, row, e) {
-            e.stopEvent();
-            var selModel = grid.getSelectionModel();
-            if(!selModel.isSelected(row)) {
-                selModel.selectRow(row);
-            }
-            
-            this.contextMenu.showAt(e.getXY());
-        }, this);
+        this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
+    },
+    /**
+     * that's the context menu handler
+     * @param {} grid
+     * @param {} row
+     * @param {} e
+     */
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        
+        this.fireEvent('beforecontextmenu', grid, row, e);
+        
+        var selModel = grid.getSelectionModel();
+        if(!selModel.isSelected(row)) {
+            selModel.selectRow(row);
+        }
+        
+        this.contextMenu.showAt(e.getXY());
     },
     
     /**

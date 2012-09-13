@@ -534,6 +534,10 @@
             "path": "js/widgets/relation/"
         },
         {
+            "text": "MenuItemManager.js",
+            "path": "js/widgets/relation/"
+        },
+        {
             "text": "GenericPickerGridPanel.js",
             "path": "js/widgets/relation/"
         },

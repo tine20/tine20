@@ -163,7 +163,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if (! $_onlyIds) {
             if ($_getRelations) {
-                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
+                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId()));
             }
             if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
@@ -337,7 +337,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Tags::getInstance()->getTagsOfRecord($record);
         }
         if ($record->has('relations')) {
-            $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $record->getId());
+            $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $record->getId());
         }
         if ($record->has('alarms')) {
             $this->getAlarms($record);
@@ -610,8 +610,9 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Update ' . $this->_modelName);
 
+        $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
+        
         try {
-            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
@@ -699,8 +700,19 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing concurrency check ...');
 
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-        $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_backend->getType(), $_record->getId());
+        $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_getBackendType(), $_record->getId());
         $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
+    }
+    
+    /**
+     * get backend type
+     * 
+     * @return string
+     */
+    protected function _getBackendType()
+    {
+        $type = (method_exists( $this->_backend, 'getType')) ? $this->_backend->getType() : 'Sql';
+        return $type;
     }
 
     /**
@@ -719,7 +731,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Writing modlog');
     
-        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName, $this->_backend->getType(), $_newRecord->getId());
+        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName, $this->_getBackendType(), $_newRecord->getId());
         
         return $currentMods;
     }
@@ -735,7 +747,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
     {
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
-            $type = $this->_backend->getType();
+            $type = $this->_getBackendType();
             Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations);
         }
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
@@ -821,7 +833,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
-            $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_backend->getType(), $updateMetaData);
+            $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_getBackendType(), $updateMetaData);
             Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId);
         }
     }
@@ -1196,13 +1208,13 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         // delete notes & relations
         if ($_record->has('notes')) {
-            Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_backend->getType(), $_record->getId());
+            Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
         }
         if ($_record->has('relations')) {
-            $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_backend->getType(), $_record->getId());
+            $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $_record->getId());
             if (!empty($relations)) {
                 // remove relations
-                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_backend->getType(), $_record->getId(), array());
+                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $_record->getId(), array());
 
                 // remove related objects
                 if (!empty($this->_relatedObjectsToDelete)) {

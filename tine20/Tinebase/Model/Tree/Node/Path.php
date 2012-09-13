@@ -139,12 +139,12 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * removes app id (and /folders namespace) from a path
      * 
      * @param string $_flatpath
-     * @param Tinebase_Model_Application $_application
+     * @param Tinebase_Model_Application|string $_application
      * @return string
      */
     public static function removeAppIdFromPath($_flatpath, $_application)
     {
-        $appId = $_application->getId();
+        $appId = (is_string($_application)) ? Tinebase_Application::getInstance()->getApplicationById($_application)->getId() : $_application->getId();
         return preg_replace('@^/' . $appId . '/folders@', '', $_flatpath);
     }
     
@@ -382,7 +382,14 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (count($pathParts) > 3) {
             // replace account login name with id
             if ($this->containerOwner) {
-                $pathParts[3] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
+                try {
+                    $pathParts[3] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // try again with id
+                    $user = Tinebase_User::getInstance()->getFullUserById($this->containerOwner);
+                    $pathParts[3] = $user->getId();
+                    $this->containerOwner = $user->accountLoginName;
+                }
             }
         
             // replace container name with id

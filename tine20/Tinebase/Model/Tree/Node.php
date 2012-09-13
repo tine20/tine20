@@ -89,6 +89,12 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             array('InArray', array(true, false))
         ),
+        
+        'relations' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tags' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'customfields' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
     // fields from filemanager_objects table (ro)
         'type'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 

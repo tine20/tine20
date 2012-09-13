@@ -11,13 +11,13 @@ Ext.ns('Tine.Filemanager');
 
 /**
  * @namespace Tine.Filemanager
- * @class Tine.Filemanager.TreePanel
+ * @class Tine.Filemanager.NodeTreePanel
  * @extends Tine.widgets.container.TreePanel
  * 
  * @author Martin Jatho <m.jatho@metaways.de>
  */
 
-Tine.Filemanager.TreePanel = function(config) {
+Tine.Filemanager.NodeTreePanel = function(config) {
     Ext.apply(this, config);
     
     this.addEvents(
@@ -41,10 +41,10 @@ Tine.Filemanager.TreePanel = function(config) {
         'containerrename'
     );
     
-    Tine.Filemanager.TreePanel.superclass.constructor.call(this);
+    Tine.Filemanager.NodeTreePanel.superclass.constructor.call(this);
 };
 
-Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
+Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
     
     filterMode : 'filterToolbar',
     
@@ -67,7 +67,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
         
-        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
+        Tine.Filemanager.NodeTreePanel.superclass.initComponent.call(this);
         
         // init drop zone
         this.dropConfig = {
@@ -240,7 +240,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     },
     
     onBeforeCreateNode: function(attr) {
-        Tine.Filemanager.TreePanel.superclass.onBeforeCreateNode.apply(this, arguments);
+        Tine.Filemanager.NodeTreePanel.superclass.onBeforeCreateNode.apply(this, arguments);
         
         attr.leaf = false;
         
@@ -315,7 +315,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * - select default path
      */
     afterRender: function() {
-        Tine.Filemanager.TreePanel.superclass.afterRender.call(this);
+        Tine.Filemanager.NodeTreePanel.superclass.afterRender.call(this);
     },
     
     /**
@@ -336,7 +336,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             return;
         }
         
-        Tine.log.debug('Tine.Filemanager.TreePanel::onContextMenu - context node:');
+        Tine.log.debug('Tine.Filemanager.NodeTreePanel::onContextMenu - context node:');
         Tine.log.debug(node);
         
         if (node.id == 'otherUsers' || (node.parentNode && node.parentNode.id == 'otherUsers')) {
@@ -409,7 +409,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.currentFolderNode = node;
-        Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
+        Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, sm, node);
     
     },
     
@@ -704,7 +704,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         grid.currenFolderNode = node;
         
-        Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);
+        Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);
         
     },
     

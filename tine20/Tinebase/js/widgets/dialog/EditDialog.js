@@ -673,6 +673,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         
                         if (closeWindow) {
                             this.purgeListeners();
+                            this.window.fireEvent('saveAndClose');
                             this.window.close();
                         }
                         this.saving = false;

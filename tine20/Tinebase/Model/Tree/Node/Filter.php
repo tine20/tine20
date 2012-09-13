@@ -85,5 +85,9 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Int',
             'options' => array('tablename' => 'tree_filerevisions')
         ),
+    // recursive search
+        'recursive' => array(
+            'filter' => 'Tinebase_Model_Filter_Bool'
+        )
     );
 }

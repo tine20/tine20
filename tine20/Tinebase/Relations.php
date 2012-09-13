@@ -220,12 +220,9 @@ class Tinebase_Relations
                 continue;
             }
             
-            // records need to be presented as JSON strings
-            if (is_array($relation->related_record)) {
-                $json = Zend_Json::encode($relation->related_record);
-            }
+            $data = Zend_Json::encode($relation->related_record);
             $relation->related_record = new $relation->related_model();
-            $relation->related_record->setFromJsonInUsersTimezone($json);
+            $relation->related_record->setFromJsonInUsersTimezone($data);
         }
     }
     

@@ -24,13 +24,19 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'type' },
     { name: 'contenttype' },
     { name: 'description' },
-    { name: 'creation_time' },
-    { name: 'account_grants' }
+    { name: 'account_grants' },
+    { name: 'description' },
+    { name: 'object_id'},
+    
+    { name: 'relations' },
+    { name: 'customfields' },
+    { name: 'notes' },
+    { name: 'tags' }
 ]), {
     appName: 'Filemanager',
     modelName: 'Node',
     idProperty: 'id',
-    titleProperty: 'title',
+    titleProperty: 'name',
     // ngettext('file', 'files', n); gettext('file');
     recordName: 'file',
     recordsName: 'files',
@@ -150,6 +156,17 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
     
+    /**
+     * is automatically called in generic GridPanel
+     */
+    saveRecord : function(record, request) {
+        if(record.hasOwnProperty('fileRecord')) {
+            return;
+        } else {
+            Tine.Tinebase.data.RecordProxy.prototype.saveRecord.call(this, record, request);
+        }
+    },
+
     /**
      * deleting file or folder
      * 
@@ -472,13 +489,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         });
         
         
-    },
-    
-    /**
-     * is automatically called in generic GridPanel
-     */
-    saveRecord : function() {
-        // NOOP
     },
     
     /**

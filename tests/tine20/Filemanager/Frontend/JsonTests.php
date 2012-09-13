@@ -426,6 +426,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     * 
     * @see 0006068: No umlauts at beginning of file names / https://forge.tine20.org/mantisbt/view.php?id=6068
     * @see 0006150: Problem loading files with russian file names / https://forge.tine20.org/mantisbt/view.php?id=6150
+    * 
+    * @return array first created node
     */
     public function testCreateFileNodeWithUTF8Filenames()
     {
@@ -438,6 +440,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('ütest.eml', $result[0]['name']);
         $this->assertEquals('Безимени.txt', $result[1]['name']);
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
+        
+        return $result[0];
     }
     
     /**
@@ -947,5 +951,139 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $path->setContainer($this->_personalContainer);
         $this->assertEquals('/' . $this->_application->getId() . '/folders/personal/' 
             . Tinebase_Core::getUser()->getId() . '/' . $this->_personalContainer->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
+    }
+
+    /**
+     * testGetUpdate
+     * 
+     * @see 0006736: Create File (Edit)InfoDialog
+     * @return array
+     */
+    public function testGetUpdate()
+    {
+        $this->testCreateFileNodes();
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer'
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        
+        $this->assertEquals(2, $result['totalcount']);
+        
+        $node = $this->_json->getNode($result['results'][0]['id']);
+        $this->assertEquals('file', $node['type']);
+        
+        $node['description'] = 'UNITTEST';
+        $node = $this->_json->saveNode($node);
+        
+        $this->assertEquals('UNITTEST', $node['description']);
+        
+        return $node;
+    }
+    
+    /**
+     * testSetRelation
+     * 
+     * @see 0006736: Create File (Edit)InfoDialog
+     */
+    public function testSetRelation()
+    {
+        $node = $this->testGetUpdate();
+        $node['relations'] = array($this->_getRelationData($node));
+        $node = $this->_json->saveNode($node);
+        
+        $this->assertEquals(1, count($node['relations']));
+        $this->assertEquals('PHPUNIT, ali', $node['relations'][0]['related_record']['n_fileas']);
+        
+        $adbJson = new Addressbook_Frontend_Json();
+        $contact = $adbJson->getContact($node['relations'][0]['related_id']);
+        $this->assertEquals($node['name'], $contact['relations'][0]['related_record']['name']);
+    }
+    
+    /**
+     * get contact relation data
+     * 
+     * @param array $node
+     * @return array
+     */
+    protected function _getRelationData($node)
+    {
+        return array(
+            'own_model'              => 'Filemanager_Model_Node',
+            'own_backend'            => 'Sql',
+            'own_id'                 => $node['id'],
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'type'                   => 'FILE',
+            'related_backend'        => 'Sql',
+            'related_model'          => 'Addressbook_Model_Contact',
+            'remark'                 => NULL,
+            'related_record'         => array(
+                'n_given'           => 'ali',
+                'n_family'          => 'PHPUNIT',
+                'org_name'          => Tinebase_Record_Abstract::generateUID(),
+                'tel_cell_private'  => '+49TELCELLPRIVATE',
+            )
+        );
+    }
+
+    /**
+     * testSetRelationToFileInPersonalFolder
+     * 
+     * @see 0006736: Create File (Edit)InfoDialog
+     */
+    public function testSetRelationToFileInPersonalFolder()
+    {
+        $node = $this->testCreateFileNodeWithUTF8Filenames();
+        $node['relations'] = array($this->_getRelationData($node));
+        $node = $this->_json->saveNode($node);
+        
+        $adbJson = new Addressbook_Frontend_Json();
+        $contact = $adbJson->getContact($node['relations'][0]['related_id']);
+        $this->assertEquals(1, count($contact['relations']));
+        $relatedNode = $contact['relations'][0]['related_record'];
+        $this->assertEquals($node['name'], $relatedNode['name']);
+        $pathRegEx = '@^/personal/[a-f0-9]+/[0-9]+/' . preg_quote($relatedNode['name']) . '$@';
+        $this->assertTrue(preg_match($pathRegEx, $relatedNode['path']) === 1, 'path mismatch: ' . print_r($relatedNode, TRUE) . ' regex: ' . $pathRegEx);
+    }
+    
+    /**
+     * tests the recursive filter
+     */
+    public function testSearchRecursiveFilter()
+    {
+        $fixtures = array(
+            array('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testa', 'color-red.gif'),
+            array('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testb', 'color-green.gif'),
+            array('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testc', 'color-blue.gif'));
+
+        $tempFileBackend = new Tinebase_TempFile();
+        
+        foreach($fixtures as $path) {
+            $node = $this->_json->createNode($path[0], Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
+            
+            $this->_objects['containerids'][] = $node['name']['id'];
+            
+            $this->assertTrue(is_array($node['name']));
+            $this->assertEquals(str_replace('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/', '', $path[0]), $node['name']['name']);
+            $this->assertEquals($path[0], $node['path']);
+            
+            $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($node['path']);
+    
+            $filepath = $node['path'] . '/' . $path[1];
+            // create empty file first (like the js frontend does)
+            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, array(), FALSE);
+            $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/' . $path[1]);
+            $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), TRUE);
+        }
+        
+        $filter = array(
+            array('field' => 'recursive', 'operator' => 'equals',   'value' => 1),
+            array('field' => 'path',      'operator' => 'equals',   'value' => '/'),
+            array('field' => 'query',     'operator' => 'contains', 'value' => 'color'),
+        'AND');
+        
+        $result = $this->_json->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
+        $this->assertEquals(3, count($result), '3 files should have been found!');
     }
 }

@@ -8,8 +8,8 @@
  * @version     $Id: Tasks.css 3797 2008-08-11 08:33:21Z c.weiss@metaways.de $
  *
  */
- 
-.FilemanagerIconCls {
+
+.FilemanagerIconCls, .tine-recordclass-gridicon.FilemanagerNode {
     background-image:url(../../images/oxygen/16x16/apps/system-file-manager.png) !important;
 }
 .x-btn-medium .FilemanagerIconCls {
@@ -17,6 +17,18 @@
 }
 .x-btn-large .FilemanagerIconCls {
     background-image:url(../../images/oxygen/32x32/apps/system-file-manager.png) !important;
+}
+
+.action_edit_file {
+    background-image:url(../../images/oxygen/16x16/apps/kjournal.png) !important;
+}
+
+.x-btn-medium .action_edit_file {
+    background-image:url(../../images/oxygen/22x22/apps/kjournal.png) !important;
+}
+
+.x-btn-large .action_edit_file {
+    background-image:url(../../images/oxygen/32x32/apps/kjournal.png) !important;
 }
 
 .action_filemanager_folder_up {

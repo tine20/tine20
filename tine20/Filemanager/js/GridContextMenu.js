@@ -19,7 +19,6 @@ Tine.Filemanager.GridContextMenu = {
     /**
      * rename tree node
      */
-    
     renameNode: function() {
         if (this.scope.ctxNode) {
             
@@ -229,6 +228,17 @@ Tine.Filemanager.GridContextMenu = {
      */
     reloadNode: function() {
         Tine.log.debug("grid reload node");
+    },
+    
+    /**
+     * calls the file edit dialog from the grid
+     * @param {} button
+     * @param {} event
+     */
+    onEditFile: function(button, event) {
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.getMainScreen().getCenterPanel();
+        grid.onEditFile.call(grid);
     },
     
     /**

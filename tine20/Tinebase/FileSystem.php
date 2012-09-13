@@ -126,6 +126,33 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     } 
     
     /**
+     * Get one tree node (by id)
+     *
+     * @param integer|Tinebase_Record_Interface $_id
+     * @param $_getDeleted get deleted records
+     * @return Tinebase_Record_Interface
+     */
+    public function get($_id, $_getDeleted = FALSE)
+    {
+        $node = $this->_treeNodeBackend->get($_id, $_getDeleted);
+        $fileObject = $this->_fileObjectBackend->get($node->object_id);
+        $node->description = $fileObject->description;
+        
+        return $node;
+    }
+    
+    /**
+     * Get multiple tree nodes identified by id
+     *
+     * @param string|array $_id Ids
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function getMultipleTreeNodes($_id) 
+    {
+        return $this->_treeNodeBackend->getMultiple($_id);
+    }
+    
+    /**
      * create container node
      * 
      * @param Tinebase_Model_Container $_container
@@ -719,7 +746,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $result = $this->_treeNodeBackend->search($_filter, $_pagination);
         return $result;
     }
-
+    
     /**
     * search tree nodes count
     *
@@ -786,13 +813,59 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * @param Tinebase_Model_Tree_Node $_node
      * @return Tinebase_Model_Tree_Node
      */
-    public function updateNode(Tinebase_Model_Tree_Node $_node)
+    public function update(Tinebase_Model_Tree_Node $_node)
     {
-        $currentNodeObject = $this->_treeNodeBackend->get($_node->getId());
+        $currentNodeObject = $this->get($_node->getId());
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->setRecordMetaData($_node, 'update', $currentNodeObject);
-                
+        
+        // update file object
+        $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
+        $fileObject->description = $_node->description;
+        $this->_fileObjectBackend->update($fileObject);
+        
         return $this->_treeNodeBackend->update($_node);
+    }
+    
+    /**
+     * get container of node
+     * 
+     * @param Tinebase_Model_Tree_Node|string $node
+     * @return Tinebase_Model_Container
+     */
+    public function getNodeContainer($node)
+    {
+        $nodesPath = $this->getPathOfNode($node);
+        
+        if (count($nodesPath) < 4) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+                ' ' . print_r($nodesPath[0], TRUE));
+            throw new Tinebase_Exception_NotFound('Could not find container for node ' . $nodesPath[0]['id']);
+        }
+        
+        $containerNode = ($nodesPath[2]['name'] === Tinebase_Model_Container::TYPE_PERSONAL) ? $nodesPath[4] : $nodesPath[3];
+        return Tinebase_Container::getInstance()->get($containerNode['name']);
+    }
+    
+    /**
+     * get path of node
+     * 
+     * @param Tinebase_Model_Tree_Node|string $node
+     * @param boolean $getPathAsString
+     * @return array|string
+     */
+    public function getPathOfNode($node, $getPathAsString = FALSE)
+    {
+        $node = $node instanceof Tinebase_Model_Tree_Node ? $node : $this->get($node);
+        
+        $nodesPath = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node));
+        while ($node->parent_id) {
+            $node = $this->get($node->parent_id);
+            $nodesPath->addRecord($node);
+        }
+        
+        $result = ($getPathAsString) ? '/' . implode('/', array_reverse($nodesPath->name)) : array_reverse($nodesPath->toArray());
+        return $result;
     }
     
     /**

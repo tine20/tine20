@@ -108,8 +108,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         });
         
         this.title = this.i18nTitle = Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
+        
         this.on('added', Tine.widgets.dialog.EditDialog.prototype.addToDisableOnEditMultiple, this);
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
+        
+        this.on('beforecontextmenu', this.onBeforeContextMenu.createDelegate(this), this);
+        
         this.contextMenuItems = [this.actionEditInNewWindow];
         // preparing keyfield and constrains configs
         this.keyFieldConfigs = {};
@@ -203,6 +207,35 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var cp = ms.getCenterPanel(model);
         cp.onEditInNewWindow({actionType: 'edit', mode: 'remote'}, record);
     },
+    
+    /**
+     * is called before context menu is shown
+     * adds additional menu items from Tine.widgets.relation.MenuItemManager
+     * @param {Tine.widgets.grid.PickerGridPanel} grid
+     * @param {Integer} index
+     * @return {Boolean}
+     */
+    onBeforeContextMenu: function(grid, index) {
+        var record = grid.store.getAt(index);
+        var model = record.get('related_model').split('_Model_');
+        
+        var app = Tine.Tinebase.appMgr.get(model[0]);
+        var additionalItems = Tine.widgets.relation.MenuItemManager.get(model[0], model[1], {
+            scope: app,
+            grid: grid,
+            gridIndex: index
+        });
+        
+        Ext.each(additionalItems, function(item) {
+            item.setText(app.i18n._(item.getText()));
+            this.contextMenu.add(item);
+            if(! this.contextMenu.hasOwnProperty('tempItems')) {
+                this.contextMenu.tempItems = [];
+            }
+            this.contextMenu.tempItems.push(item);
+        }, this);
+    },
+    
     /**
      * creates the model combo
      * @return {Ext.form.ComboBox}

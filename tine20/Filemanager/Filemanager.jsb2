@@ -24,15 +24,23 @@
           "path": "js/"
         },
         {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "PathFilterPlugin.js",
           "path": "js/"
         },
         {
-          "text": "TreePanel.js",
+          "text": "NodeEditDialog.js",
           "path": "js/"
         },
         {
-          "text": "GridPanel.js",
+          "text": "NodeTreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeGridPanel.js",
           "path": "js/"
         },
         {
