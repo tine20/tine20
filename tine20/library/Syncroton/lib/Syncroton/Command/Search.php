@@ -57,12 +57,9 @@ class Syncroton_Command_Search extends Syncroton_Command_Wbxml
         }
         
         try {
-            $options = $this->_store->options;
-            
             // Search
             $storeResponse = $dataController->search($this->_store);
             $storeResponse->status = self::STATUS_SUCCESS;
-            
         } catch (Exception $e) {
             if ($this->_logger instanceof Zend_Log)
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " search exception: " . $e->getMessage());
