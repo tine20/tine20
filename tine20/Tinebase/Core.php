@@ -157,19 +157,6 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        // disable magic_quotes_runtime
-        ini_set('magic_quotes_runtime', 0);
-
-        // display errors we can't handle ourselves
-        error_reporting(E_COMPILE_ERROR | E_CORE_ERROR | E_ERROR | E_PARSE);
-        ini_set('display_errors', 1);
-
-        ini_set('log_errors', 1);
-        set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_STRICT);
-
-        // set default internal encoding
-        ini_set('iconv.internal_encoding', 'utf-8');
-        
         // check transaction header
         if (isset($_SERVER['HTTP_X_TINE20_TRANSACTIONID'])) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Client transaction {$_SERVER['HTTP_X_TINE20_TRANSACTIONID']}");
@@ -355,9 +342,6 @@ class Tinebase_Core
      */
     public static function initFramework($initSession = TRUE)
     {
-        // Server Timezone must be setup before logger, as logger has timehandling!
-        Tinebase_Core::setupServerTimezone();
-        
         Tinebase_Core::setupTempDir();
         
         Tinebase_Core::setupStreamWrapper();
@@ -391,7 +375,6 @@ class Tinebase_Core
             if (isset($_SERVER['HTTP_X_TRANSACTIONID'])) {
                 header('X-TransactionID: ' . substr($_SERVER['HTTP_X_TRANSACTIONID'], 1, -1) . ';' . $_SERVER['SERVER_NAME'] . ';16.4.5009.816;' . date('Y-m-d H:i:s') . ' UTC;265.1558 ms');
             }
-            
         }
     }
     
@@ -1030,15 +1013,6 @@ class Tinebase_Core
                 . ' Setting CTYPE locale from "' . $ctypeLocale . '" to "' . $newCTypeLocale . '".');
             setlocale(LC_CTYPE, $newCTypeLocale);
         }
-    }
-
-    /**
-     * intializes the timezone handling
-     */
-    public static function setupServerTimezone()
-    {
-        // All server operations are done in UTC
-        date_default_timezone_set('UTC');
     }
 
     /**

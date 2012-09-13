@@ -73,9 +73,6 @@ class TestServer
         // set max execution time
         Tinebase_Core::setExecutionLifeTime(1200);
 
-        // set default internal encoding
-        iconv_set_encoding("internal_encoding", "UTF-8");
-
         Zend_Registry::set('locale', new Zend_Locale($config->locale));
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
