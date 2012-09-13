@@ -29,6 +29,13 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
     protected $_filename = NULL;
     
     /**
+     * contact ids to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_contactIdsToDelete = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -48,8 +55,6 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         $this->_filename = dirname(__FILE__) . '/files/contacts.vcf';
     }
 
@@ -61,7 +66,9 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (! empty($this->_contactIdsToDelete)) {
+            Addressbook_Controller_Contact::getInstance()->delete($this->_contactIdsToDelete);
+        }
     }
     
     /**
@@ -73,6 +80,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => TRUE));
         
         $result = $this->_instance->importFile($this->_filename);
+        $this->_contactIdsToDelete = array($result['results']->getArrayOfIds());
         
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import all contacts.');
         $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
@@ -104,6 +112,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      * test import data #3
      * 
      * @see 0006852: always add iconv filter on import
+     * 
+     * @return Addressbook_Model_Contact
      */
     public function testImportWithIconv()
     {
@@ -112,10 +122,13 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
         
         $result = $this->_instance->importFile($this->_filename);
+        $this->_contactIdsToDelete = array($result['results']->getArrayOfIds());
         
         $importedContact = $result['results']->getFirstRecord();
         $this->assertTrue($importedContact !== NULL);
         $this->assertEquals('Stephan Läunig', $importedContact->n_fn, print_r($importedContact, TRUE));
+        
+        return $importedContact;
     }
 
     /**
@@ -143,6 +156,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
         
         $result = $this->_instance->importFile($this->_filename);
+        $this->_contactIdsToDelete = array($result['results']->getArrayOfIds());
         
         $importedContact = $result['results']->getFirstRecord();
         
@@ -160,5 +174,19 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
         $this->_importFalk($definition);
+    }
+    
+    /**
+     * test import a duplicate
+     * 
+     * @see 0006898: duplicate-merging and tag attaching do not work on vcard import
+     */
+    public function testImportDuplicate()
+    {
+        $contact = $this->testImportWithIconv();
+        
+        // import again -> should have duplicate
+        $result = $this->_instance->importFile($this->_filename);
+        $this->assertEquals(1, $result['duplicatecount'], 'should detect duplicate contact ' . print_r($result, TRUE));
     }
 }

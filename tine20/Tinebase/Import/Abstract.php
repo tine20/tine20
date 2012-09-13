@@ -135,11 +135,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_appendStreamFilters($_resource);
         $this->_beforeImport($_resource);
         $this->_doImport($_resource, $_clientRecordData);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
-            . ' fail: ' . $this->_importResult['failcount'] 
-            . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
+        $this->_logImportResult();
         
         return $this->_importResult;
     }
@@ -203,7 +199,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * do import: loop data -> convert to records -> import records
      * 
-     * @param resource $_resource
+     * @param mixed $_resource
      * @param array $_clientRecordData
      */
     protected function _doImport($_resource = NULL, $_clientRecordData = array())
@@ -780,14 +776,25 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 'clientRecord' => ($_record !== NULL && $_record instanceof Tinebase_Record_Abstract) ? $_record->toArray() 
                     : (is_array($_record) ? $_record : array()),
             );
-        }        
+        }
 
         $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-            'code'            => $_e->getCode(),
-            'message'        => $_e->getMessage(),
+            'code'          => $_e->getCode(),
+            'message'       => $_e->getMessage(),
             'exception'     => $exception,
             'index'         => $_recordIndex,
         )));
+    }
+    
+    /**
+     * log import result
+     */
+    protected function _logImportResult()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
+            . ' fail: ' . $this->_importResult['failcount'] 
+            . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
     }
     
     /**

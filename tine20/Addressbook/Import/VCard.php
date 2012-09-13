@@ -9,8 +9,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
  * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
 
 require_once 'vcardphp/vcard.php';
@@ -31,14 +29,15 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         'encoding'          => 'auto',
         'encodingTo'        => 'UTF-8',
         'dryrun'            => FALSE,
-        'dryrunCount'       => 20,
-        'dryrunLimit'       => 0,
         'duplicateCount'    => 0,
+        'updateMethod'      => 'update',
         'createMethod'      => 'create',
         'model'             => '',
         'urlIsHome'            => 0,
         'mapNicknameToField'=> '',
         'useStreamFilter'   => FALSE,
+        'shared_tags'       => 'create', //'onlyexisting',
+        'autotags'          => array(),
     );
     
     /**
@@ -55,7 +54,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * 
      * @param  Tinebase_Model_ImportExportDefinition $_definition
      * @param  array                                 $_options
-     * @return Calendar_Import_Ical
+     * @return Addressbook_Import_VCard
      * 
      * @todo move this to abstract when we no longer need to be php 5.2 compatible
      */
@@ -91,33 +90,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     }
     
     /**
-     * get filter for duplicate check
-     * 
-     * @param Tinebase_Record_Interface $_record
-     * @return Tinebase_Model_Filter_FilterGroup
-     */
-    protected function _getDuplicateSearchFilter(Tinebase_Record_Interface $_record)
-    {
-        $containerFilter = array('field' => 'container_id',    'operator' => 'equals', 'value' => $this->_options['container_id']);
-        
-        if (empty($_record->n_given) && empty($_record->n_family)) {
-            // check organisation duplicates if given/fullnames are empty
-            $filter = new Addressbook_Model_ContactFilter(array(
-                $containerFilter,
-                array('field' => 'org_name',        'operator' => 'equals', 'value' => $_record->org_name),
-            ));
-        } else {
-            $filter = new Addressbook_Model_ContactFilter(array(
-                $containerFilter,
-                array('field' => 'n_given',         'operator' => 'equals', 'value' => $_record->n_given),
-                array('field' => 'n_family',        'operator' => 'equals', 'value' => $_record->n_family),
-            ));
-        }
-        
-        return $filter;
-    }
-    
-    /**
      * add some more values (container id)
      *
      * @return array
@@ -144,51 +116,32 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
             $lines[] = str_replace("\n", "", $line);
         }
         
+        $this->_doImport($lines, $_clientRecordData);
+        $this->_logImportResult();
+        
+        return $this->_importResult;
+    }
+    
+    /**
+     * get raw data of a single record
+     * 
+     * @param  mixed $_resource
+     * @return array
+     */
+    protected function _getRawData(&$_resource) 
+    {
         $card = new VCard();
-        while ($card->parse($lines) && 
-            (! $this->_options['dryrun'] 
-                || ! ($this->_options['dryrunLimit'] && $this->_importResult['totalcount'] >= $this->_options['dryrunCount'])
-            )
-        ) {
-            $property = $card->getProperty('N');
-            if ($property) {
-                try {
-                    $mappedData = $this->_doMapping($card);
-                    
-                    if (! empty($mappedData)) {
-                        $convertedData = $this->_doConversions($mappedData);
-
-                        // merge additional values (like group id, container id ...)
-                        $mergedData = array_merge($convertedData, $this->_addData($convertedData));
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
-                        
-                        // import record into tine!
-                        $recordToImport = $this->_createRecordToImport($mergedData);
-                        $importedRecord = $this->_importRecord($recordToImport);
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
-                        $this->_importResult['failcount']++;
-                    }
-                    
-                } catch (Exception $e) {
-                    // don't add incorrect record (name missing for example)
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    $this->_importResult['failcount']++;
-                }
+        
+        $result = FALSE;
+        while ($card->parse($_resource)) {
+            if ($card->getProperty('N')) {
+                return $card;
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No N property: ' . print_r($card, TRUE));
             }
-            
-            $card = new VCard();
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
-            . ' fail: ' . $this->_importResult['failcount'] . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
-        
-        return $this->_importResult;
+        return FALSE;
     }
     
     /**
