@@ -28,8 +28,10 @@ class Setup_Core extends Tinebase_Core
 
     /**
      * init setup framework
+     * 
+     * @param boolean $startSession  ignored in setup
      */
-    public static function initFramework($initSession = true)
+    public static function initFramework($startSession = true)
     {
         Setup_Core::setupConfig();
         
@@ -44,7 +46,11 @@ class Setup_Core extends Tinebase_Core
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings 
         Setup_Core::setupCache();
         
+        Setup_Core::setupBuildConstants();
+        
         Setup_Core::setupSession();
+        
+        Setup_Core::startSession('tine20setup');
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
@@ -238,19 +244,21 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupSession()
     {
-        self::startSession(array(
-            'name'              => 'TINE20SETUPSESSID',
-        ), 'tinesetup');
-        
-        if (isset(self::get(self::SESSION)->setupuser)) {
-            self::set(self::USER, self::get(self::SESSION)->setupuser);
-        }
-
+        self::setSessionOptions(array(
+            'name' => 'TINE20SETUPSESSID'
+        ));
+    }
+    
+    /**
+     * initializes the build constants like buildtype, package information, ...
+     */
+    public static function setupBuildConstants()
+    {
         $config = self::getConfig();
-        define('TINE20_BUILDTYPE', strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20SETUP_CODENAME', getDevelopmentRevision());
+        define('TINE20_BUILDTYPE',           strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20SETUP_CODENAME',       getDevelopmentRevision());
         define('TINE20SETUP_PACKAGESTRING', 'none');
-        define('TINE20SETUP_RELEASETIME', 'none');
+        define('TINE20SETUP_RELEASETIME',   'none');
     }
     
     /**

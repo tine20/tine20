@@ -338,9 +338,9 @@ class Tinebase_Core
     /**
      * init tine framework
      * 
-     * @param boolean $initSession
+     * @param boolean $startSession
      */
-    public static function initFramework($initSession = TRUE)
+    public static function initFramework($startSession = TRUE)
     {
         Tinebase_Core::setupTempDir();
         
@@ -352,8 +352,10 @@ class Tinebase_Core
         
         Tinebase_Core::setupBuildConstants();
         
-        if ($initSession === true) {
-            Tinebase_Core::setupSession();
+        Tinebase_Core::setupSession();
+        
+        if ($startSession === true) {
+            Tinebase_Core::startSession('tinebase');
         }
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
@@ -671,13 +673,10 @@ class Tinebase_Core
      */
     public static function setupSession()
     {
-        self::startSession(array(
-            'name'              => 'TINE20SESSID',
+        self::setSessionOptions(array(
+            'name' => 'TINE20SESSID'
         ));
-        
-        if (isset(self::get(self::SESSION)->currentAccount)) {
-            self::set(self::USER, self::get(self::SESSION)->currentAccount);
-        }
+        self::setSessionBackend();
     }
     
     /**
@@ -702,11 +701,8 @@ class Tinebase_Core
      * @param string $_namespace
      * @throws Exception
      */
-    public static function startSession($_options = array(), $_namespace = 'tinebase')
+    public static function startSession($_namespace)
     {
-        self::setSessionOptions($_options);
-        self::setSessionBackend();
-        
         try {
             Zend_Session::start();
         } catch (Exception $e) {
@@ -718,13 +714,20 @@ class Tinebase_Core
         
         $session = new Zend_Session_Namespace($_namespace);
 
+        if (isset($session->currentAccount)) {
+            self::set(self::USER, $session->currentAccount);
+        }
+        if (isset($session->setupuser)) {
+            self::set(self::USER, $session->setupuser);
+        }
         if (!isset($session->jsonKey)) {
             $session->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
         self::set('jsonKey', $session->jsonKey);
-
+        
         self::set(self::SESSION, $session);
         self::set(self::SESSIONID, session_id());
+        
     }
     /**
      * set session options

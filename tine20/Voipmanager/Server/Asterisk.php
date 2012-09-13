@@ -25,8 +25,10 @@ class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
      */
     public function handle()
     {
-        Tinebase_Core::initFramework();
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
+        Tinebase_Core::initFramework(false);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
         
         if (Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineAsterisk') === true) {
             $server = new Tinebase_Http_Server();

@@ -23,14 +23,34 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      */
     protected function _authenticate()
     {
+        Tinebase_Core::setSessionOptions(array(
+            'use_cookies' => 0,
+            'use_only_cookies' => 0
+        ));
+        
+        if (Zend_Session::sessionExists()) {
+            try {
+                Tinebase_Core::startSession('snomPhone');
+                
+                if (isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
+                    return;
+                }
+                
+            } catch (Exception $e) {
+                // continue code flow and try to authenticate user
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session restore faled: ' . $e->getMessage());
+            }
+            
+        }
+        
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
-            Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' PHP_AUTH_USER not set');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PHP_AUTH_USER not set');
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
             exit;
         }
         
-        Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' authenticate ' . $_SERVER['PHP_AUTH_USER']);
         
         $authAdapter = new Zend_Auth_Adapter_DbTable(Tinebase_Core::getDb());
         $authAdapter->setTableName(SQL_TABLE_PREFIX . 'snom_phones')
@@ -43,13 +63,11 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
         $authResult = $authAdapter->authenticate();
         
         if (!$authResult->isValid()) {
-            Zend_Registry::get('logger')->warn(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' authentication failed for ' . $_SERVER['PHP_AUTH_USER']);
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
             header('HTTP/1.0 401 Unauthorized');
             exit;
         }
-        
-        Tinebase_Core::getSession()->phoneIsAuthenticated = true;
     }
     
     /**

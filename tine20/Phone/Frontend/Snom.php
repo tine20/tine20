@@ -25,15 +25,27 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
     protected $_applicationName = 'Phone';
 
     /**
+     * authenticate and store result in session to avoid sending any request
+     * twice. The SSL handshake for SNOM 320 takes very long
+     */
+    protected function _authenticate()
+    {
+        parent::_authenticate();
+        
+        if (!Zend_Session::isStarted()) {
+            Tinebase_Core::startSession('snomPhone');
+        }
+        
+        Tinebase_Core::getSession()->phoneIsAuthenticated = true;
+    }
+    /**
      * public function to access the directory
      * 
      * @param string $mac
      */
     public function directory($mac)
     {
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         # get the phone
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac);
@@ -76,9 +88,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function menu($mac, $activeLine)
     {
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         # get the phone
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
@@ -115,9 +125,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function getCallForward($mac, $activeLine)
     {
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         # get the phone
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
@@ -168,9 +176,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function setCallForward($mac, $activeLine, $mode, $number)
     {
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         # get the phone
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
@@ -249,9 +255,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             return;
         }
         
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac. ' search for ' . $query);
             
@@ -341,9 +345,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
-        if (!isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-            $this->_authenticate();
-        }
+        $this->_authenticate();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
