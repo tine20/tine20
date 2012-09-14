@@ -49,12 +49,12 @@ class Syncroton_Command_FolderDelete extends Syncroton_Command_Wbxml
         }
         
         try {
-            $this->_folder = $this->_folderBackend->getFolder($this->_device, $serverId);
+            $folder = $this->_folderBackend->getFolder($this->_device, $serverId);
             
-            $dataController = Syncroton_Data_Factory::factory($this->_folder->class, $this->_device, $this->_syncTimeStamp);
+            $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
             
             // delete folder in data backend
-            $dataController->deleteFolder($this->_folder);
+            $dataController->deleteFolder($folder);
             
         } catch (Syncroton_Exception_NotFound $senf) {
             if ($this->_logger instanceof Zend_Log)
@@ -64,8 +64,9 @@ class Syncroton_Command_FolderDelete extends Syncroton_Command_Wbxml
         }
         
         // delete folder in syncState backend
-        $this->_folderBackend->delete($this->_folder);
-            
+        $this->_folderBackend->delete($folder);
+        
+        $this->_folder = $folder;
     }
     
     /**
@@ -84,7 +85,6 @@ class Syncroton_Command_FolderDelete extends Syncroton_Command_Wbxml
             
         } elseif (!$this->_folder instanceof Syncroton_Model_IFolder) {
             $folderDelete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_FOLDER_NOT_FOUND));
-            $folderDelete->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'SyncKey', $this->_syncState->counter));
             
         } else {
             $this->_syncState->counter++;

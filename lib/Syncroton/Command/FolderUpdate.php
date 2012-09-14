@@ -21,6 +21,11 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
     protected $_documentElement     = 'FolderUpdate';
     
     /**
+     * @var Syncroton_Model_SyncState
+     */
+    protected $_folder;
+    
+    /**
      * 
      * @var Syncroton_Model_Folder
      */
@@ -40,34 +45,34 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
 
         if (!($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
-            
-            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
-            
             return;
         }
         
-        $folderUpdate = new Syncroton_Model_Folder($xml);
+        $updatedFolder = new Syncroton_Model_Folder($xml);
         
         if ($this->_logger instanceof Zend_Log)
-            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " parentId: {$folderUpdate->parentId} displayName: {$folderUpdate->displayName}");
+            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " parentId: {$updatedFolder->parentId} displayName: {$updatedFolder->displayName}");
         
         try {
-            $folder = $this->_folderBackend->getFolder($this->_device, $folderUpdate->serverId);
+            $folder = $this->_folderBackend->getFolder($this->_device, $updatedFolder->serverId);
             
-            $folder->displayName = $folderUpdate->displayName;
-            $folder->parentId    = $folderUpdate->parentId;
+            $folder->displayName = $updatedFolder->displayName;
+            $folder->parentId    = $updatedFolder->parentId;
             
             $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
             
             // update folder in data backend
             $dataController->updateFolder($folder);
-            // update folder status in Syncroton backend
-            $this->_folderBackend->update($folder);
             
         } catch (Syncroton_Exception_NotFound $senf) {
             if ($this->_logger instanceof Zend_Log)
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $senf->getMessage());
+            
+            return;
         }
+        
+        // update folder status in Syncroton backend
+        $this->_folder = $this->_folderBackend->update($folder);
     }
     
     /**
@@ -83,6 +88,9 @@ class Syncroton_Command_FolderUpdate extends Syncroton_Command_Wbxml
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " invalid synckey provided. FolderSync 0 needed.");
             $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status',  Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY));
+            
+        } elseif (!$this->_folder instanceof Syncroton_Model_IFolder) {
+            $folderUpdate->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', Syncroton_Command_FolderSync::STATUS_FOLDER_NOT_FOUND));
             
         } else {
             $this->_syncState->counter++;
