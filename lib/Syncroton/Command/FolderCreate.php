@@ -20,13 +20,6 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
     protected $_defaultNameSpace    = 'uri:FolderHierarchy';
     protected $_documentElement     = 'FolderCreate';
     
-    protected $_classes             = array(
-        Syncroton_Data_Factory::CLASS_CALENDAR,
-        Syncroton_Data_Factory::CLASS_CONTACTS,
-        Syncroton_Data_Factory::CLASS_EMAIL,
-        Syncroton_Data_Factory::CLASS_TASKS
-    );
-    
     /**
      * 
      * @var Syncroton_Model_Folder
@@ -47,9 +40,6 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " synckey is $syncKey");
         
         if (!($this->_syncState = $this->_syncStateBackend->validate($this->_device, 'FolderSync', $syncKey)) instanceof Syncroton_Model_SyncState) {
-        
-            $this->_syncStateBackend->resetState($this->_device, 'FolderSync');
-        
             return;
         }
         
