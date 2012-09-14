@@ -204,6 +204,95 @@ Zeile 3</AirSyncBase:Data>
         </Collections>
     </Sync>';
     
+    protected $_testXMLInputOutlook13 = '<?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+    <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+      <Collections>
+        <Collection>
+          <SyncKey>5</SyncKey>
+          <CollectionId>calendar-root</CollectionId>
+          <DeletesAsMoves>0</DeletesAsMoves>
+          <GetChanges>0</GetChanges>
+          <WindowSize>512</WindowSize>
+          <Options>
+            <FilterType>0</FilterType>
+            <BodyPreference xmlns="uri:AirSyncBase">
+              <Type>2</Type>
+              <AllOrNone>1</AllOrNone>
+            </BodyPreference>
+          </Options>
+          <Commands>
+            <Change>
+              <ServerId>d8a9cecb073736aa78c95a249f383123cc03365b</ServerId>
+              <ApplicationData>
+                <Timezone xmlns="uri:Calendar">xP///1cALgAgAEUAdQByAG8AcABlACAAUwB0AGEAbgBkAGEAcgBkACAAVABpAG0AZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAFcALgAgAEUAdQByAG8AcABlACAARABhAHkAbABpAGcAaAB0ACAAVABpAG0AZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Timezone>
+                <DtStamp xmlns="uri:Calendar">20120914T125503Z</DtStamp>
+                <StartTime xmlns="uri:Calendar">20120914T140000Z</StartTime>
+                <Subject xmlns="uri:Calendar">TEST9</Subject>
+                <UID xmlns="uri:Calendar">fd4b68a5871aa0082284e9bc5664a35da207b75b</UID>
+                <OrganizerName xmlns="uri:Calendar">unittest@tine20.org</OrganizerName>
+                <OrganizerEmail xmlns="uri:Calendar">unittest@tine20.org</OrganizerEmail>
+                <Attendees xmlns="uri:Calendar">
+                  <Attendee>
+                    <Email>unittest@tine20.org</Email>
+                    <Name>Admin Account, Tine 2.0</Name>
+                    <AttendeeStatus>3</AttendeeStatus>
+                    <AttendeeType>1</AttendeeType>
+                  </Attendee>
+                  <Attendee>
+                    <Email>pwulf@tine20.org</Email>
+                    <Name>Wulf, Paul</Name>
+                    <AttendeeStatus>0</AttendeeStatus>
+                    <AttendeeType>1</AttendeeType>
+                  </Attendee>
+                </Attendees>
+                <EndTime xmlns="uri:Calendar">20120914T143000Z</EndTime>
+                <Recurrence xmlns="uri:Calendar">
+                  <Type>0</Type>
+                  <Interval>1</Interval>
+                  <Occurrences>3</Occurrences>
+                </Recurrence>
+                <Exceptions xmlns="uri:Calendar">
+                  <Exception>
+                    <ExceptionStartTime>20120916T140000Z</ExceptionStartTime>
+                    <StartTime>20120916T140000Z</StartTime>
+                    <DtStamp>20120914T125503Z</DtStamp>
+                    <EndTime>20120916T143000Z</EndTime>
+                    <Sensitivity>0</Sensitivity>
+                    <BusyStatus>2</BusyStatus>
+                    <Attendees>
+                      <Attendee>
+                        <Email>unittest@tine20.org</Email>
+                        <Name>Admin Account, Tine 2.0</Name>
+                        <AttendeeStatus>0</AttendeeStatus>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                      <Attendee>
+                        <Email>unittest@tine20.org</Email>
+                        <Name>Admin Account, Tine 2.0</Name>
+                        <AttendeeStatus>3</AttendeeStatus>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                      <Attendee>
+                        <Email>pwulf@tine20.org</Email>
+                        <Name>Wulf, Paul</Name>
+                        <AttendeeStatus>4</AttendeeStatus>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                    </Attendees>
+                  </Exception>
+                </Exceptions>
+                <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+                <MeetingStatus xmlns="uri:Calendar">1</MeetingStatus>
+                <ResponseRequested xmlns="uri:Calendar">1</ResponseRequested>
+              </ApplicationData>
+            </Change>
+          </Commands>
+        </Collection>
+      </Collections>
+    </Sync>';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -361,6 +450,23 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(Syncroton_Model_Event::BUSY_STATUS_BUSY, $syncrotonEvent->busyStatus);
         
         return array($serverId, $syncrotonEvent);
+    }
+    
+    public function testCreateEntryOutlook13($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+    
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), new Tinebase_DateTime(null, null, 'de_DE'));
+    
+        $xml = new SimpleXMLElement($this->_testXMLInputOutlook13);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+    
+        $tine20Event = $controller->toTineModel($syncrotonEvent);
+//         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+    
+        $this->assertFalse(!!$tine20Event->exdate[0]->is_deleted);
     }
     
     public function testUpdateEntry($syncrotonFolder = null)

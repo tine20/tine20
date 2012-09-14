@@ -526,7 +526,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                     
                     foreach ($data->$syncrotonProperty as $exception) {
-                        if ($exception->deleted === 0) {
+                        if ($exception->deleted == 0) {
                             $eventException = $this->toTineModel($exception);
                             $eventException->last_modified_time = $this->_syncTimeStamp;
                             $eventException->recurid            = new Tinebase_DateTime($exception->exceptionStartTime);
