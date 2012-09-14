@@ -106,7 +106,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.initLayout();
         
         // init autoRefresh
-        this.autoRefreshTask = new Ext.util.DelayedTask(this.refresh.createDelegate(this, [true]), this, [{
+        this.autoRefreshTask = new Ext.util.DelayedTask(this.refresh, this, [{
             refresh: true,
             autoRefresh: true
         }]);
@@ -1021,7 +1021,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Object} options
      */
     onStoreLoadException: function(proxy, type, error, options) {
-        
         // reset autoRefresh
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
@@ -1147,12 +1146,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    refresh: function (refresh) {
-        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::refresh(' + refresh + ')');
+    refresh: function (options) {
+        // convert old boolean argument
+        options = Ext.isObject(options) ? options : {
+            refresh: !!options
+        };
+        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::refresh(' + options.refresh + ')');
         var panel = this.getCalendarPanel(this.activeView);
-        panel.getStore().load({
-            refresh: refresh
-        });
+        panel.getStore().load(options);
         
         // clear favorites
         Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getFavoritesPanel().getSelectionModel().clearSelections();
