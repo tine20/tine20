@@ -16,6 +16,8 @@
  * 
  * @package     Addressbook
  * @subpackage  Export
+ * 
+ * @deprecated this is no longer supported 
  */
 class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {
