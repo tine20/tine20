@@ -107,7 +107,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     useAccountRecord: true,
                                     blurOnSelect: true,
                                     fieldLabel: this.app.i18n._('Modified By'),
-                                    name: 'modified_by'
+                                    name: 'last_modified_by'
                                 }), {
                                     fieldLabel: this.app.i18n._('Last Modified'),
                                     name: 'last_modified_time',

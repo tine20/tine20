@@ -246,12 +246,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 array('field' => 'path', 'operator' => 'equals', 'value' => $node->path),
                 ), 'AND');
             $result = $this->search($filter);
-            $folders->merge($result->filter('type', 'folder'));
+            $folders->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FOLDER));
             
             if($_filter->getFilter('query') && $_filter->getFilter('query')->getValue()) {
-                $files->merge($result->filter('type', 'file')->filter('name', '/^'.$_filter->getFilter('query')->getValue().'./i', true));
+                $files->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE)->filter('name', '/^'.$_filter->getFilter('query')->getValue().'./i', true));
             } else {
-                $files->merge($result->filter('type', 'file'));
+                $files->merge($result->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE));
             }
             
             $folders->removeRecord($node);
@@ -1081,7 +1081,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if ($container->name !== $destination->name) {
                 try {
                     $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
-                        'Filemanager',
+                        $this->_applicationName,
                         $destination->name,
                         $destination->containerType,
                         Tinebase_Core::getUser()

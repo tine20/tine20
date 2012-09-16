@@ -37,13 +37,13 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     modelName: 'Node',
     idProperty: 'id',
     titleProperty: 'name',
-    // ngettext('file', 'files', n); gettext('file');
-    recordName: 'file',
-    recordsName: 'files',
+    // ngettext('File', 'Files', n); gettext('File');
+    recordName: 'File',
+    recordsName: 'Files',
     containerProperty: null,
-    // ngettext('folder', 'folders', n); gettext('folder');
-    containerName: 'folder',
-    containersName: 'folders',
+    // ngettext('Folder', 'Folders', n); gettext('Folder');
+    containerName: 'Folder',
+    containersName: 'Folders',
     
     /**
      * checks whether creating folders is allowed
