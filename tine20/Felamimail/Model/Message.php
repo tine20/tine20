@@ -218,7 +218,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $cacheId = $this->_getStructureCacheId();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Caching message structure: ' . $cacheId);
-        Tinebase_Core::getCache()->save($structure, $cacheId, array('messageStructure'));
+        Tinebase_Core::getCache()->save($structure, $cacheId, array('messageStructure'), 86400); // 24 hours
         
         $this->structure = $structure;
     }
