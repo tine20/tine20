@@ -4,7 +4,7 @@
     <!-- gettext('Inventory') -->   
     <version>0.2</version>
     <order>60</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <tables>
         <table>
             <name>inventory_item</name>

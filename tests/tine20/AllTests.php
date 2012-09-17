@@ -44,6 +44,7 @@ class AllTests
         $suite->addTest(Filemanager_AllTests::suite());
         $suite->addTest(Projects_AllTests::suite());
         $suite->addTest(HumanResources_AllTests::suite());
+        $suite->addTest(Inventory_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
         
         return $suite;
