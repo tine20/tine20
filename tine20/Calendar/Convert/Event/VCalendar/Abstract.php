@@ -718,6 +718,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     
                 case 'VALARM':
                     foreach($property as $valarm) {
+                        
+                        // we can't cope with action NONE
+                        // iCal 6.0 send default alarms in the year 1976 with action NONE
+                        if ($valarm->ACTION == 'NONE') continue;
+                        
                         switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
