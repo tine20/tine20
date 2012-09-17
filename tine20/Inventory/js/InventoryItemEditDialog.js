@@ -111,7 +111,15 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     },
                     items: [
                         //Start name type
-                        [{
+                        [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Inventory',
+                            keyFieldName: 'inventoryType',
+                            fieldLabel: this.app.i18n._('Type'),
+                            name: 'type',
+                            columnWidth: 0.5,
+                            allowBlank: false,
+                            maxLength: 100
+                        }), {
                         columnWidth: 1,
                         xtype: 'tine.widget.field.AutoCompleteField',
                         recordClass: this.recordClass,
@@ -120,15 +128,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         columnWidth: 0.5,
                         allowBlank: false,
                         maxLength: 100
-                        }, new Tine.Tinebase.widgets.keyfield.ComboBox({
-                            app: 'Inventory',
-                            keyFieldName: 'inventoryType',
-                            fieldLabel: this.app.i18n._('Type'),
-                            name: 'type',
-                            columnWidth: 0.5,
-                            allowBlank: false,
-                            maxLength: 100
-                        })],
+                        }],
                         //End name type
                         //Start ID
                         [{
