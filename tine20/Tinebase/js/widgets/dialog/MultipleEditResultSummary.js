@@ -152,7 +152,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         summary += String.format( (this.response.failcount>1) ? _('{0} {1} have invalid data after updating. These {1} have not been changed.') : _('{0} {1} has invalid data after updating. This {1} has not been changed.'), this.response.failcount, rn);
        
         return {
-            border: false,            
+            border: false,
             cls : 'x-ux-display',
             layout: 'ux.display',
             

@@ -176,4 +176,5 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
 
 });
 
+Ext.reg('addressbookcontactpicker', Tine.Addressbook.SearchCombo);
 Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.SearchCombo);
