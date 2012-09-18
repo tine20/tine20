@@ -366,8 +366,39 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_OLD)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cleaning up the cache (mode: ' . $_mode . ')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Cleaning up the cache (mode: ' . $_mode . ')');
         
         Tinebase_Core::getCache()->clean($_mode);
+    }
+    
+    /**
+     * cleanup old sessions files => needed only for filesystems based sessions
+     */
+    public function cleanupSessions()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Cleaning up old session files');
+        
+        $config = Tinebase_Core::getConfig();
+        
+        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
+        
+        if (strtolower($backendType) == 'file') {
+            $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400;
+            $path = ini_get('session.save_path');
+            
+            $dir = new DirectoryIterator($path);
+            
+            foreach ($dir as $fileinfo) {
+                if (!$fileinfo->isDot() && !$fileinfo->isLink() && $fileinfo->isFile()) {
+                    if ($fileinfo->getMTime() < Tinebase_DateTime::now()->getTimestamp() - $maxLifeTime) {
+                        unlink($fileinfo->getPathname());
+                    }
+                }
+            }
+            
+            Tinebase_Config::getInstance()->set(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN, Tinebase_DateTime::now()->toString());
+        }
     }
 }

@@ -26,7 +26,6 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     {
         $this->_setupCliConfig();
         Tinebase_Core::setupTempDir();
-        Tinebase_Core::setupServerTimezone();
         Tinebase_Core::setupLogger();
         Tinebase_Core::setupStreamWrapper();
         Tinebase_Core::setupBuildConstants();

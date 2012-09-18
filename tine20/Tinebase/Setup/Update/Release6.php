@@ -87,4 +87,15 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('container', 6);
         $this->setApplicationVersion('Tinebase', '6.3');
     }
+    
+    /**
+     * update to 6.4
+     * - add credential cache cleanup task to scheduler
+     */
+    public function update_3()
+    {
+        Tinebase_Scheduler_Task::addSessionsCleanupTask(Tinebase_Core::getScheduler());
+        
+        $this->setApplicationVersion('Tinebase', '6.4');
+    }
 }

@@ -139,6 +139,25 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     }
     
     /**
+     * add sessions cleanup task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addSessionsCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY, array(
+            'controller'    => 'Tinebase_Controller',
+            'action'        => 'cleanupSessions',
+        ));
+        
+        $_scheduler->addTask('Tinebase_cleanupSessions', $task);
+        $_scheduler->saveTask();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Saved task Tinebase_Controller::cleanupSessions in scheduler.');
+    }
+    
+    /**
      * add credential cache cleanup task to scheduler
      * 
      * @param Zend_Scheduler $_scheduler

@@ -35,6 +35,7 @@ try {
     array(
         'help|h'                => 'Display this help Message',
         'verbose|v'             => 'Output messages',
+        'config|c=s'            => 'Path to config.inc.php file',
         'dry|d'                 => "Dry run - don't change anything",    
         'info|i'                => 'Get usage description of method',
     
@@ -53,6 +54,12 @@ try {
 if (count($opts->toArray()) === 0 || $opts->h || empty($opts->method)) {
     echo $opts->getUsageMessage();
     exit;
+}
+
+if ($opts->config) {
+    // add path to config.inc.php to include path
+    $path = strstr($opts->config, 'config.inc.php') !== false ? dirname($opts->config) : $opts->config;
+    set_include_path($path . PATH_SEPARATOR . get_include_path());
 }
 
 // get username / password if not already set

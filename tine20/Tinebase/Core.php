@@ -780,6 +780,7 @@ class Tinebase_Core
         $config = self::getConfig();
         $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
         $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
+        
         switch ($backendType) {
             case 'File':
                 if ($config->gc_maxlifetime) {
@@ -789,6 +790,20 @@ class Tinebase_Core
                 Zend_Session::setOptions(array(
                     'gc_maxlifetime'     => $maxLifeTime
                 ));
+                
+                $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
+                
+                if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {
+                    Zend_Session::setOptions(array(
+                        'gc_probability' => 0,
+                        'gc_divisor'     => 100
+                    ));
+                } else {
+                    Zend_Session::setOptions(array(
+                        'gc_probability' => 1,
+                        'gc_divisor'     => 100
+                    ));
+                }
                 
                 $sessionSavepath = self::getSessionDir();
                 if (ini_set('session.save_path', $sessionSavepath) !== false) {

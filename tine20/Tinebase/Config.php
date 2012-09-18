@@ -224,6 +224,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTOMATIC_BUGREPORTS = 'automaticBugreports';
     
     /**
+     * LAST_SESSIONS_CLEANUP_RUN
+     *
+     * @var Tinebase_DateTime
+     */
+    const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -492,6 +499,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::LAST_SESSIONS_CLEANUP_RUN => array(
+                                   //_('Last sessions cleanup run')
+            'label'                 => 'Last sessions cleanup run',
+                                   //_('Stores the timestamp of the last sessions cleanup task run.')
+            'description'           => 'Stores the timestamp of the last sessions cleanup task run.',
+            'type'                  => self::TYPE_DATETIME,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
     );
     
