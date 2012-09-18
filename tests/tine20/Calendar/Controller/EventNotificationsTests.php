@@ -484,7 +484,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         try {
             Tinebase_AsyncJobTest::triggerAsyncEvents();
         } catch (Exception $e) {
-            // something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
             $this->markTestIncomplete($e->getMessage());
         }
         

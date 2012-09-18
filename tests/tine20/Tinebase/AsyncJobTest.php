@@ -61,35 +61,7 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
      */
     public static function triggerAsyncEvents($numOfParallels = 5)
     {
-        // assemble command
-        $cmd = implode(' ', $_SERVER['argv']);
-        $cmd = preg_replace(array(
-            '/\/phpunit/',
-            '/--stderr /',
-            '/--colors /',
-            '/--verbose /',
-            '/--stop-on-failure /',
-            '/Calendar_Controller_EventNotificationsTests/',
-            '/AllTests AllTests.php/',
-            '/--debug /',
-            '/--filter [\S]+\D/',
-            '/--configuration [\S]+\D/',
-            '/[\S]+\.php$/'
-        ), array(
-            '/php',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-        ), $cmd);
-        $cmd .= realpath(__DIR__ . "/../../../tine20/tine20.php");
-        $cmd .= " --method Tinebase.triggerAsyncEvents";
+        $cmd = TestServer::assembleCliCommand('Tinebase.triggerAsyncEvents');
         
         // start multiple cronruns at the same time
         // NOTE: we don't use pnctl as we don't need it here and it's not always available
