@@ -414,7 +414,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {}
      */
     isContainerSelectorDisabled: function() {
-        return (! this.evalGrants) ? false : this.record.data.id ? (! this.record.data[this.recordClass.getMeta('containerProperty')].account_grants.editGrant) : false
+        var cp = this.recordClass.getMeta('containerProperty'),
+            container = this.record.data[cp],
+            grants = (container && container.hasOwnProperty('account_grants')) ? container.account_grants : null;
+            
+        return (this.evalGrants && this.record.data.id) ? (grants && grants.hasOwnProperty('editGrant') && grants.editGrant) : false;
     },
     
     /**
