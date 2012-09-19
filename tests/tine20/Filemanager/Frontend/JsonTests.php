@@ -197,9 +197,18 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'value'    => '/'
         ));
         $result = $this->_json->searchNodes($filter, array());
-        
-        $this->assertEquals(3, $result['totalcount']);
-        $this->assertEquals('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName, $result['results'][0]['path']);
+        $this->_assertRootNodes($result);
+    }
+    
+    /**
+     * assert 3 root nodes
+     * 
+     * @param array $searchResult
+     */
+    protected function _assertRootNodes($searchResult)
+    {
+        $this->assertEquals(3, $searchResult['totalcount'], 'did not get root nodes: ' . print_r($searchResult, TRUE));
+        $this->assertEquals('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName, $searchResult['results'][0]['path']);
     }
     
     /**
@@ -341,7 +350,33 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
         $this->assertEquals($filter[0]['value'], $result['filter'][0]['value']['path'], 'filter path mismatch');
     }
+    /**
+     * testSearchWithInvalidPath
+     * 
+     * @see 0007110: don't show exception for invalid path filters
+     */
+    public function testSearchWithInvalidPath()
+    {
+        // wrong user
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/xyz'
+        ));
+        
+        $result = $this->_json->searchNodes($filter, array());
+        $this->_assertRootNodes($result);
+        
+        // wrong type
+        $filter[0]['value'] = '/lala';
+        $result = $this->_json->searchNodes($filter, array());
+        $this->_assertRootNodes($result);
 
+        // no path filter
+        $result = $this->_json->searchNodes(array(), array());
+        $this->_assertRootNodes($result);
+    }
+    
     /**
      * create container in personal folder
      * 

@@ -276,14 +276,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         $pathFilters = $_filter->getFilter('path', TRUE);
-        
         if (count($pathFilters) !== 1) {
-            throw new Tinebase_Exception_AccessDenied('Exactly one path filter required.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . 'Exactly one path filter required.');
+            $pathFilter = (count($pathFilters) > 1) ? $pathFilters[0] : new Tinebase_Model_Tree_Node_PathFilter(array(
+                'field'     => 'path',
+                'operator'  => 'equals',
+                'value'     => '/',)
+            );
+            $_filter->removeFilter('path');
+            $_filter->addFilter($pathFilter);
+        } else {
+            $pathFilter = $pathFilters[0];
         }
         
         // add base path and check grants
-        $pathFilter = $pathFilters[0];
-        $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
+        try {
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not determine path, setting root path (' . $e->getMessage() . ')');
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath('/'));
+        }
         $pathFilter->setValue($path);
         
         $this->_checkPathACL($path, $_action);
