@@ -7,12 +7,12 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2012-04-03 17:33+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
-"Language-Team: Polish (http://www.transifex.net/projects/p/tine20/language/pl/)\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -53,17 +53,17 @@ msgstr "Szkic"
 msgid "Flagged"
 msgstr "Wyróżniona"
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Temat"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "wiadomość"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr "%1$ jest poza biurem"
 
@@ -71,7 +71,7 @@ msgstr "%1$ jest poza biurem"
 msgid "Signature"
 msgstr "Podpis"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "konto"
@@ -322,7 +322,7 @@ msgid "Could not save script on Sieve server."
 msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
@@ -411,7 +411,7 @@ msgstr "Usuń"
 msgid "Add Account"
 msgstr "Dodaj konto"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Drukuj podgląd"
@@ -444,7 +444,7 @@ msgstr "Nadawca"
 msgid "To"
 msgstr "Do"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Wysłane"
 
@@ -464,15 +464,15 @@ msgstr "Przesłane dalej"
 msgid "Recent"
 msgstr "Nowe"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr "Twoja kwota"
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr "{0} dostępnych (w sumie: {1})"
 
@@ -589,85 +589,85 @@ msgstr "DW"
 msgid "Bcc"
 msgstr "UDW"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "Konto e-mail"
 msgstr[1] "konta e-mail"
 msgstr[2] "konta-email"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr "Pobrane"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr "Szkice"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr "Szablony"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr "Spam"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr "Kosz"
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
 msgstr[1] "listy wiadomości"
 msgstr[2] "listy wiadomości"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Urlop"
 msgstr[1] "urlopy"
 msgstr[2] "urlopy"
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flaga"
 msgstr[1] "flagi"
 msgstr[2] "flagi"
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista flag"
 msgstr[1] "listy flag"
 msgstr[2] "listy flag"
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr "Kliknij tutaj, aby ustawić Do/DW/UDW."
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "Do:"
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "DW:"
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "UDW:"
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr "Usuń"
 

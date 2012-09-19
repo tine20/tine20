@@ -1,18 +1,19 @@
 # 
 # Translators:
+#   <arturmon82@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-09 12:48+0000\n"
-"Last-Translator: parukhin <parukhin@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2012-08-22 10:45+0000\n"
+"Last-Translator: артур Мудрых <arturmon82@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -25,19 +26,19 @@ msgstr "управление общими папками"
 msgid "Create new shared folders"
 msgstr "Создание новых  общих папок"
 
-#: Controller/Node.php:164
+#: Controller/Node.php:163
 msgid "My folders"
 msgstr "Мои папки"
 
-#: Controller/Node.php:171
+#: Controller/Node.php:170
 msgid "Shared folders"
 msgstr "Общие папки"
 
-#: Controller/Node.php:178
+#: Controller/Node.php:177
 msgid "Other users folders"
 msgstr "Папки других пользователей"
 
-#: Controller.php:95
+#: Controller.php:94
 #, python-format
 msgid "%s's personal files"
 msgstr "Личные файлы %s"
@@ -46,19 +47,29 @@ msgstr "Личные файлы %s"
 msgid "Filemanager"
 msgstr "Менеджер файлов"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:56
+msgid "Service Unavailable"
+msgstr "Сервис не доступен"
+
+#: js/Filemanager.js:57
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+
+#: js/Filemanager.js:79
 msgid "Files already exists"
 msgstr "Файлы уже существуют"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:79
 msgid "Do you want to replace the following file(s)?"
 msgstr "Вы хотите заменить следующий(е) файл(ы)?"
 
-#: js/Filemanager.js:100
+#: js/Filemanager.js:112
 msgid "Failure on create folder"
 msgstr "Сбой при создании папки"
 
-#: js/Filemanager.js:101
+#: js/Filemanager.js:113
 msgid "Item with this name already exists!"
 msgstr "Элемент с таким именем уже существует!"
 
@@ -70,11 +81,11 @@ msgstr "Введите новое имя для {0}:"
 msgid "Not renamed {0}"
 msgstr "Не переименовано {0}"
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:484
+#: js/GridContextMenu.js:41 js/GridPanel.js:475
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:528
+#: js/GridContextMenu.js:145 js/GridPanel.js:519
 msgid "Do you really want to delete the following files?"
 msgstr "Вы действительно хотите удалить следующие файлы?"
 
@@ -112,7 +123,7 @@ msgstr "Время последнего изменения"
 
 #: js/GridPanel.js:200
 msgid "Last Modified By"
-msgstr ""
+msgstr "Последнее изменение:"
 
 #: js/GridPanel.js:234
 msgid "Show closed"
@@ -124,7 +135,7 @@ msgstr ""
 
 #: js/GridPanel.js:296
 msgid "Upload"
-msgstr ""
+msgstr "Загрузить"
 
 #: js/GridPanel.js:322
 msgid "Create Folder"
@@ -142,44 +153,32 @@ msgstr "Сохранить локально"
 msgid "Delete"
 msgstr "Удалить"
 
-#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
-msgid "Rename"
-msgstr "Переименовать"
-
-#: js/GridPanel.js:378
-msgid "Pause upload"
-msgstr "Приостановить загрузку"
-
-#: js/GridPanel.js:385
-msgid "Resume upload"
-msgstr "Продолжить загрузку"
-
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "New Folder"
 msgstr "Новая папка"
 
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "Please enter the name of the new folder:"
 msgstr "Введите имя новой папки:"
 
-#: js/GridPanel.js:484
+#: js/GridPanel.js:475
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
-#: js/TreePanel.js:760
+#: js/GridPanel.js:629 js/GridPanel.js:782 js/TreePanel.js:649
+#: js/TreePanel.js:759
 msgid "Upload Failed"
 msgstr "Сбой загрузки"
 
-#: js/GridPanel.js:639 js/TreePanel.js:651
+#: js/GridPanel.js:630 js/TreePanel.js:650
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:792 js/TreePanel.js:761
+#: js/GridPanel.js:783 js/TreePanel.js:760
 msgid "Putting files in this folder is not allowed!"
-msgstr ""
+msgstr "Помещение файлов в этой папке не допускается!"
 
 #: js/Model.js:34
 msgid "file"

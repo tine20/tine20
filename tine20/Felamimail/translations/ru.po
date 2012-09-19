@@ -1,37 +1,38 @@
 # 
 # Translators:
+#   <arturmon82@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-09 21:16+0000\n"
-"Last-Translator: parukhin <parukhin@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2012-08-23 02:27+0000\n"
+"Last-Translator: артур Мудрых <arturmon82@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
-msgstr ""
+msgstr "управление учетными записями электронной почты"
 
 #: Acl/Rights.php:107
 msgid "Edit and delete email accounts"
-msgstr ""
+msgstr "Редактирование и удаление учетных записей электронной почты"
 
 #: Acl/Rights.php:110
 msgid "Add email accounts"
-msgstr ""
+msgstr "Добавление учетных записей электронной почты"
 
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
-msgstr ""
+msgstr "Создание новых учетных записей электронной почты"
 
 #: Controller/Message/Flags.php:24 js/GridPanel.js:577
 msgid "Answered"
@@ -43,7 +44,7 @@ msgstr ""
 
 #: Controller/Message/Flags.php:26
 msgid "Deleted"
-msgstr ""
+msgstr "Удален"
 
 #: Controller/Message/Flags.php:27
 msgid "Draft"
@@ -53,17 +54,17 @@ msgstr ""
 msgid "Flagged"
 msgstr ""
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Тема"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "Тело"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
@@ -71,7 +72,7 @@ msgstr ""
 msgid "Signature"
 msgstr "Подпись"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Учетная запись"
@@ -209,7 +210,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:323
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: js/AccountEditDialog.js:324
 msgid "Plain Text"
@@ -277,7 +278,7 @@ msgstr "Учётные данные"
 
 #: js/Felamimail.js:787 js/Felamimail.js:820
 msgid "IMAP Error"
-msgstr ""
+msgstr "Ошибка IMAP"
 
 #: js/Felamimail.js:788
 msgid "No connection to IMAP server."
@@ -299,7 +300,7 @@ msgstr ""
 
 #: js/Felamimail.js:850
 msgid "SMTP Error"
-msgstr ""
+msgstr "Ошибка SMTP"
 
 #: js/Felamimail.js:851
 msgid "No connection to SMTP server."
@@ -322,13 +323,13 @@ msgid "Could not save script on Sieve server."
 msgstr ""
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Папка"
+msgstr[1] "Папки"
+msgstr[2] "Папки"
 
 #: js/FolderSelectPanel.js:75
 msgid "Cancel"
@@ -411,7 +412,7 @@ msgstr "Удалить"
 msgid "Add Account"
 msgstr "Добавить учетную запись"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr ""
@@ -444,7 +445,7 @@ msgstr ""
 msgid "To"
 msgstr "To"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Отправлено"
 
@@ -464,15 +465,15 @@ msgstr "Перенаправленное"
 msgid "Recent"
 msgstr "Последние"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr ""
 
@@ -589,85 +590,85 @@ msgstr "Cc"
 msgid "Bcc"
 msgstr "Bcc"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr ""
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr ""
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/RecipientGrid.js:204
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr ""
 
-#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "To:"
 
-#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:337
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr ""
 
@@ -773,7 +774,7 @@ msgstr ""
 
 #: js/sieve/RulesGridPanel.js:199
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: js/sieve/RulesGridPanel.js:206
 msgid "Conditions"
@@ -979,7 +980,7 @@ msgstr ""
 
 #: Setup/Initialize.php:67
 msgid "All drafts"
-msgstr ""
+msgstr "Все черновики"
 
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"

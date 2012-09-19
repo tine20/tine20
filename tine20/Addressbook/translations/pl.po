@@ -1,31 +1,26 @@
+# 
+# Translators:
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Addressbook\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-04 13:38+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-06-28 19:04+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-05 05:10+0000\n"
-"X-Generator: Launchpad (build 14900)\n"
-"X-Poedit-Country: POLAND\n"
-"X-Poedit-Language: Polish\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-# If the translated text is too long we can just write over the whole sentence without the word 'shared' like: "Zarządzaj książkami adresowymi".
-# Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
 msgstr "edytowanie wspólnych książek adresowych"
 
-# It is also possible to use "wspólne" instead of "współdzielone".
-# Es is auch moeglich, "wspólne" statt "współdzielone" zu verwenden.
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
 msgstr "Utwórz nowe, wspólne książki adresowe"
@@ -44,12 +39,9 @@ msgstr "Pola sprawdzane pod kątem powtarzalności danych"
 
 #: Config.php:47
 msgid ""
-"These fields are checked when a new contact is created. If a record with the "
-"same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
-"Niniejsze pola są sprawdzane, gdy tworzony jest nowy kontakt. Jeśli "
-"znaleziony zostanie wiersz z polami zawierającymi takie same dane, zostanie "
-"wyświetlony wyjątek - duplikat."
+"These fields are checked when a new contact is created. If a record with the"
+" same data in the fields is found, a duplicate exception is thrown."
+msgstr "Niniejsze pola są sprawdzane, gdy tworzony jest nowy kontakt. Jeśli zostanie znaleziony wiersz z polami zawierającymi takie same dane, zostanie wyświetlony wyjątek - duplikat."
 
 #: Config.php:59
 msgid "Contact salutations available"
@@ -59,9 +51,7 @@ msgstr "Dostępne formy powitania"
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
-"Możliwe formy powitania. Pamiętaj proszę, że podczas eksportu albo "
-"synchronizacji dodatkowe wartości mogą nie być uwzględniane."
+msgstr "Możliwe formy powitania. Pamiętaj proszę, że podczas eksportu albo synchronizacji dodatkowe wartości mogą nie być uwzględniane."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -71,7 +61,11 @@ msgstr "Reguły parsowania adresów"
 msgid "Path to a XML file with address parsing rules."
 msgstr "Ścieżka do pliku XML zawierającego reguły parsowania adresów."
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr "Wczytano nową grafikę dla kontaktu."
+
+#: Controller.php:97
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s osobista książka adresowa"
@@ -104,8 +98,6 @@ msgstr "Telefon (komórka)"
 msgid "Telephone Car"
 msgstr "Telefon (samochód)"
 
-# As mentioned above, we cannot use the letter 'x'. It couldn't be correct in Polish. But in this case two forms are possible: "Faks" or "Fax". I suggest to use the first one.
-# Wie oben erwaehnt, wir sollen den Buchstaben 'x' nicht benutzen. In diesem Fall jedoch sind beide Formen moeglich: "Faks" oder "Fax". Ich schage vor, die erste Form zu benutzen.
 #: Export/Pdf.php:64
 msgid "Telephone Fax"
 msgstr "Faks"
@@ -183,11 +175,11 @@ msgstr "Stanowisko"
 msgid "Contact import from Google address book"
 msgstr "Import kontaktów z książki adresowej Google"
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr "Import kontaktów z VCARD"
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr "Import kontaktów z CSV książki adresowej Mac"
 
@@ -211,9 +203,7 @@ msgstr "Lista importu (###CURRENTDATE###)"
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
-"Kontakty zaimportowane ###CURRENTDATE### o ###CURRENTTIME### przez "
-"###USERFULLNAME###"
+msgstr "Kontakty zaimportowane ###CURRENTDATE### o ###CURRENTTIME### przez ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -264,7 +254,7 @@ msgstr "Nazwisko"
 #: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
 #: js/ContactEditDialog.js:466 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:191
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
 msgstr "Firma"
 
@@ -286,8 +276,6 @@ msgstr "Dopełnienie nazwiska (sufiks)"
 msgid "Job Role"
 msgstr "Pełniona funkcja"
 
-# I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
-# Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
 #: js/ContactEditDialog.js:187
 msgid "Contact Information"
 msgstr "Informacje kontaktowe"
@@ -406,7 +394,7 @@ msgstr "Zakończ tryb znakowy"
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] "Kontakt"
+msgstr[0] "kontakt"
 msgstr[1] "kontakty"
 msgstr[2] "kontakty"
 
@@ -477,18 +465,14 @@ msgstr "Położenie geograficzne"
 #: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] "Eksport {0}"
-msgstr[1] "Eksport {0}"
-msgstr[2] "Eksport {0}"
+msgstr[0] "Eksportuj {0}"
+msgstr[1] "Eksportuj {0}"
+msgstr[2] "Eksportuj {0}"
 
-# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
-# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
 msgstr "Eksportuj jako PDF"
 
-# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
-# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
 #: js/ContactGrid.js:170
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
@@ -666,17 +650,17 @@ msgstr "Domyślna książka adresowa dla nowych kontaktów"
 
 #: Preference.php:69
 msgid "Default Favorite"
-msgstr "Domyślne ulubione"
+msgstr "Domyślny, ulubiony zasób"
 
 #: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "Domyślny ulubiony adres ładowany podczas otwierania skrzynki adresowej"
 
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:189
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
 msgid "Mr"
 msgstr "Pan"
 
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:190
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
 msgid "Ms"
 msgstr "Pani"
 
@@ -711,15 +695,3 @@ msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
 #: Setup/setup.xml:648
 msgid "Internal Contacts"
 msgstr "Kontakty wewnętrzne"
-
-msgid "Searching..."
-msgstr "Wyszukiwanie..."
-
-msgid "Call contact"
-msgstr "Wywołaj kontakt"
-
-msgid "Compose email"
-msgstr "Nowa wiadomość"
-
-#~ msgid "Export Contact"
-#~ msgstr "Eksportuj kontakt"

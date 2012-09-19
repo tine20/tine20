@@ -1,20 +1,20 @@
+# 
+# Translators:
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Filemanager\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-03 11:59+0000\n"
-"Last-Translator: Wojciech Kaczmarek <Unknown>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-06-20 10:18+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-04 05:21+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Polish\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:97
@@ -25,19 +25,19 @@ msgstr "zarządzanie wspólnymi katalogami"
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
 
-#: Controller/Node.php:164
+#: Controller/Node.php:163
 msgid "My folders"
 msgstr "Moje katalogi"
 
-#: Controller/Node.php:171
+#: Controller/Node.php:170
 msgid "Shared folders"
 msgstr "Wspólne katalogi"
 
-#: Controller/Node.php:178
+#: Controller/Node.php:177
 msgid "Other users folders"
 msgstr "Katalogi innych użytkowników"
 
-#: Controller.php:95
+#: Controller.php:94
 #, python-format
 msgid "%s's personal files"
 msgstr "%s osobistych plików"
@@ -46,19 +46,29 @@ msgstr "%s osobistych plików"
 msgid "Filemanager"
 msgstr "Zarządca plików"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:56
+msgid "Service Unavailable"
+msgstr "Usługa niedostępna"
+
+#: js/Filemanager.js:57
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Zarządca plików nie został prawidłowo skonfigurowany. Proszę wrócić do zaawansowanej konfiguracji {0} Tine 2.0 Admin FAQ{1} albo skontaktować się ze swoim administratorem."
+
+#: js/Filemanager.js:79
 msgid "Files already exists"
 msgstr "Te pliki już istnieją"
 
-#: js/Filemanager.js:67
+#: js/Filemanager.js:79
 msgid "Do you want to replace the following file(s)?"
 msgstr "Czy chcesz zastąpić następujące pliki?"
 
-#: js/Filemanager.js:100
+#: js/Filemanager.js:112
 msgid "Failure on create folder"
 msgstr "Błąd podczas tworzenia katalogu"
 
-#: js/Filemanager.js:101
+#: js/Filemanager.js:113
 msgid "Item with this name already exists!"
 msgstr "Obiekt o takiej nazwie już istnieje!"
 
@@ -70,11 +80,11 @@ msgstr "Proszę wpisać nową nazwę dla {0}:"
 msgid "Not renamed {0}"
 msgstr "Nazwa {0} nie została zmieniona"
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:484
+#: js/GridContextMenu.js:41 js/GridPanel.js:475
 msgid "You have to supply a {0} name!"
 msgstr "Musisz wprowadzić nazwę {0}!"
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:528
+#: js/GridContextMenu.js:145 js/GridPanel.js:519
 msgid "Do you really want to delete the following files?"
 msgstr "Czy na pewno chcesz usunąć następujące pliki?"
 
@@ -142,45 +152,30 @@ msgstr "Zapisz lokalnie"
 msgid "Delete"
 msgstr "Usuń"
 
-#: js/GridPanel.js:367 js/GridPanel.js:368 js/GridPanel.js:370
-msgid "Rename"
-msgstr "Zmień nazwę"
-
-#: js/GridPanel.js:378
-msgid "Pause upload"
-msgstr "Zatrzymaj przesyłanie"
-
-#: js/GridPanel.js:385
-msgid "Resume upload"
-msgstr "Kontynuuj przesyłanie"
-
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "New Folder"
 msgstr "Nowy katalog"
 
-#: js/GridPanel.js:479
+#: js/GridPanel.js:470
 msgid "Please enter the name of the new folder:"
 msgstr "Proszę wpisać nazwę nowego katalogu:"
 
-#: js/GridPanel.js:484
+#: js/GridPanel.js:475
 msgid "No {0} added"
 msgstr "{0} nie został dodany"
 
-#: js/GridPanel.js:638 js/GridPanel.js:791 js/TreePanel.js:650
-#: js/TreePanel.js:760
+#: js/GridPanel.js:629 js/GridPanel.js:782 js/TreePanel.js:649
+#: js/TreePanel.js:759
 msgid "Upload Failed"
 msgstr "Przesyłanie zakończone niepowodzeniem"
 
-#: js/GridPanel.js:639 js/TreePanel.js:651
+#: js/GridPanel.js:630 js/TreePanel.js:650
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
-msgstr ""
-"Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. "
-"Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego "
-"pliku: "
+msgstr "Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku: "
 
-#: js/GridPanel.js:792 js/TreePanel.js:761
+#: js/GridPanel.js:783 js/TreePanel.js:760
 msgid "Putting files in this folder is not allowed!"
 msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
@@ -221,53 +216,3 @@ msgstr "Typ"
 #: js/PathFilterModel.js:50
 msgid "path"
 msgstr "ścieżka"
-
-msgid "Do you want to replace the files?"
-msgstr "Czy chcesz zastąpić niniejsze pliki?"
-
-msgid "Updating {0} \"{1}\""
-msgstr "Aktualizuję {0} \"{1}\""
-
-msgid "Confirm"
-msgstr "Potwierdź"
-
-msgid "Do you really want to delete \"{0}\"?"
-msgstr "Czy na pewno chcesz usunąć \"{0}\"?"
-
-msgid "Deleting {0} \"{1}\""
-msgstr "Usuwanie {0} \"{1}\""
-
-msgid "Creating {0}..."
-msgstr "Tworzenie {0}..."
-
-msgid "Deleting {0} "
-msgstr "Usuwanie {0}..."
-
-msgid "Dropping on this folder not allowed!"
-msgstr "Usunięcie niniejszego katalogu jest niedozwolone!"
-
-#~ msgid "New {0}"
-#~ msgstr "Nowy {0}"
-
-#~ msgid "Please enter the name of the new {0}:"
-#~ msgstr "Proszę wpisać nazwę nowego {0}:"
-
-#~ msgid "user files"
-#~ msgstr "pliki użytkownika"
-
-#~ msgid "user file folders"
-#~ msgstr "katalogi plików użytkownika"
-
-#, fuzzy
-#~ msgid "user file folder"
-#~ msgid_plural "user file folders"
-#~ msgstr[0] "katalog pliku użytkownika"
-#~ msgstr[1] "katalog pliku użytkownika"
-#~ msgstr[2] "katalog pliku użytkownika"
-
-#, fuzzy
-#~ msgid "user file"
-#~ msgid_plural "user files"
-#~ msgstr[0] "plik użytkownika"
-#~ msgstr[1] "plik użytkownika"
-#~ msgstr[2] "plik użytkownika"

@@ -7,12 +7,12 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2012-04-19 15:06+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -53,17 +53,17 @@ msgstr "utkast"
 msgid "Flagged"
 msgstr "Markerad"
 
-#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:233
+#: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
 #: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Ämne"
 
-#: Controller/Message/Send.php:236 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
 msgid "Body"
 msgstr "Layout"
 
-#: Controller/Sieve.php:299
+#: Controller/Sieve.php:298
 msgid "Out of Office reply from %1$s"
 msgstr "Frånvarande svar från %1$s"
 
@@ -71,7 +71,7 @@ msgstr "Frånvarande svar från %1$s"
 msgid "Signature"
 msgstr "Signatur"
 
-#: js/AccountEditDialog.js:112 js/Model.js:350
+#: js/AccountEditDialog.js:112 js/Model.js:353
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
@@ -321,7 +321,7 @@ msgid "Could not save script on Sieve server."
 msgstr "Kunde inte spara skriptet på Sieve server."
 
 #: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
-#: js/Model.js:496 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
+#: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
 msgid_plural "Folders"
@@ -409,7 +409,7 @@ msgstr "Radera"
 msgid "Add Account"
 msgstr "Lägg till Användare"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1275 js/GridPanel.js:1291
+#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Förhandsvisa"
@@ -442,7 +442,7 @@ msgstr "Sändare"
 msgid "To"
 msgstr "Till"
 
-#: js/GridPanel.js:514 js/Model.js:490
+#: js/GridPanel.js:514 js/Model.js:493
 msgid "Sent"
 msgstr "Skickat"
 
@@ -462,15 +462,15 @@ msgstr "Vidarebefodrat"
 msgid "Recent"
 msgstr "Senaste"
 
-#: js/GridPanel.js:1120
+#: js/GridPanel.js:1165
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1128
+#: js/GridPanel.js:1173
 msgid "Your quota"
 msgstr "Din andel"
 
-#: js/GridPanel.js:1129
+#: js/GridPanel.js:1174
 msgid "{0} available (total: {1})"
 msgstr "{0} tillgängligt (total: {1})"
 
@@ -586,79 +586,79 @@ msgstr "Cc"
 msgid "Bcc"
 msgstr "Bcc"
 
-#: js/Model.js:354
+#: js/Model.js:357
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "E-post Konton"
 msgstr[1] "E-post Konton"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "INBOX"
 msgstr "INKORG"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Drafts"
 msgstr "utkast"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Templates"
 msgstr "mallar"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Junk"
 msgstr "Skräppost"
 
-#: js/Model.js:490
+#: js/Model.js:493
 msgid "Trash"
 msgstr "Skräp"
 
-#: js/Model.js:499 js/Model.js:616 js/Model.js:681
+#: js/Model.js:502 js/Model.js:619 js/Model.js:684
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "postlista"
 msgstr[1] "postlistor"
 
-#: js/Model.js:612
+#: js/Model.js:615
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Semester"
 msgstr[1] "Semestrar"
 
-#: js/Model.js:678
+#: js/Model.js:681
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regler"
 
-#: js/Model.js:804
+#: js/Model.js:807
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flagga"
 msgstr[1] "Flaggar"
 
-#: js/Model.js:807
+#: js/Model.js:810
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flagg lista"
 msgstr[1] "Flagg listor"
 
-#: js/RecipientGrid.js:203
+#: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
 msgstr "Klicka här för att ställa in / CC / BCC."
 
-#: js/RecipientGrid.js:207 js/RecipientGrid.js:231
+#: js/RecipientGrid.js:209 js/RecipientGrid.js:233
 msgid "To:"
 msgstr "Till:"
 
-#: js/RecipientGrid.js:210 js/RecipientGrid.js:232
+#: js/RecipientGrid.js:212 js/RecipientGrid.js:234
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:213 js/RecipientGrid.js:233
+#: js/RecipientGrid.js:215 js/RecipientGrid.js:235
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:336
+#: js/RecipientGrid.js:340
 msgid "Remove"
 msgstr "Flytta"
 

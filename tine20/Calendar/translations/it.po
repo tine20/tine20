@@ -1,19 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Calendar\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:53+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-06-20 09:58+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Italian\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:96
@@ -70,43 +70,43 @@ msgid ""
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Allarme per evento \"%1$s\" a %2$s"
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Evento invito \"%1$s\" a %2$s"
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "L'evento \"%1$s\" a %2$s è stato rischedulato"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "L'evento \"%1$s\" a %2$s è stato aggiornato"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s ha accettato \"%2$s\" a %3$s"
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s ha declinato l'evento \"%2$s\" a %3$s"
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Risposta provvisoria da %1$s per l'evento \"%2$s\" a %3$s"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Nessuna risposta da %1$s per l'evento \"%2$s\" a %3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Il partecipanete ha cambiato per l'evento \"%1$s\" a %2$s"
 
@@ -153,7 +153,7 @@ msgid "Manage Resources"
 msgstr "Gestisci risorse"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Partecipante"
 
@@ -181,7 +181,7 @@ msgstr "Utente"
 msgid "Group"
 msgstr "Gruppo"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Risorsa"
@@ -205,7 +205,7 @@ msgid "Click here to invite another attender..."
 msgstr "Clicca qui per invitare un altro partecipante..."
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Nessuna informazione"
 
@@ -231,7 +231,7 @@ msgstr[1] "Calendari"
 msgid "Originally"
 msgstr "Originariamente"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "Eventi"
 
@@ -290,12 +290,12 @@ msgstr "Bloccante"
 msgid "Location"
 msgstr "Luogo"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organizzatore"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "giorno intero"
 
@@ -488,9 +488,7 @@ msgstr "Per favore cambia la selezione"
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
-msgstr ""
-"La tua selezione contiene eventi ricorrenti. Gli eventi ricorrenti devono "
-"essere cancellati separatamente!"
+msgstr "La tua selezione contiene eventi ricorrenti. Gli eventi ricorrenti devono essere cancellati separatamente!"
 
 #: js/MainScreenCenterPanel.js:756
 msgid "Delete Event"
@@ -546,7 +544,7 @@ msgstr "Modifica Evento"
 msgid "Cancel this action"
 msgstr ""
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Evento"
@@ -564,25 +562,29 @@ msgstr ""
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:225
-msgid "Event (as attendee)"
+#: js/Model.js:216
+msgid "Attendee Role"
 msgstr ""
 
 #: js/Model.js:232
+msgid "Event (as attendee)"
+msgstr ""
+
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr ""
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Partecipante"
 msgstr[1] "Partecipanti"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Risorse"
 
@@ -707,15 +709,15 @@ msgstr "Ogni {0}. Annualmente"
 msgid "of"
 msgstr "di"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr ""
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr ""
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr ""
 
@@ -727,12 +729,10 @@ msgstr ""
 msgid "unknown"
 msgstr "sconosciuto"
 
-#: Model/Attender.php:427
+#: Model/Attender.php:444
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr ""
-"Questo contatto è stato automaticamente aggiunto dal sistema come "
-"partecipante dell'evento"
+msgstr "Questo contatto è stato automaticamente aggiunto dal sistema come partecipante dell'evento"
 
 #: Model/Event.php:237
 msgid "Start"
@@ -763,12 +763,12 @@ msgid "Organizer timezone"
 msgstr "Fuso orario organizzatore"
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Sì"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "No"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Sì"
 
 #: Preference.php:31
 msgid "All my events"
@@ -801,13 +801,9 @@ msgstr "Prendi le email di notifica"
 #: Preference.php:92
 msgid ""
 "The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
-msgstr ""
-"I livelli di azione per cui vuoi essere notificato. Attenzione che gli "
-"organizzatori riceveranno notifiche per tutti gli aggiornamenti includendo "
-"le risposte dei partecipanti a meno che tale impostazione sia impostata a "
-"\"Mai\""
+"organizers will get notifications for all updates including attendee answers"
+" unless this preference is set to \"Never\""
+msgstr "I livelli di azione per cui vuoi essere notificato. Attenzione che gli organizzatori riceveranno notifiche per tutti gli aggiornamenti includendo le risposte dei partecipanti a meno che tale impostazione sia impostata a \"Mai\""
 
 #: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
@@ -928,49 +924,3 @@ msgstr ""
 #: views/eventNotification.php:63
 msgid "Event details"
 msgstr "Dettagli Evento"
-
-msgid "forever"
-msgstr "per sempre"
-
-msgid "Forever"
-msgstr "Per sempre"
-
-msgid "Until"
-msgstr "Fino a"
-
-msgid "Unknown calendar"
-msgstr "Calendario sconosciuto"
-
-msgid "unknown)"
-msgstr "sconosciuto)"
-
-msgid "Confirm Update of Series"
-msgstr "Conferma l'Aggiornamento della Serie"
-
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-"Vuoi veramente aggiornare tutti gli eventi di questa serie ricorrente di "
-"eventi?"
-
-msgid "Confirm Deletion of Series"
-msgstr "Conferma la Cancellazione della Serie"
-
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
-"Vuoi veramente cancellare tutti gli eventi di queste serie di eventi "
-"ricorrenti?"
-
-msgid "Event \"%1$s\" at %s has been canceled"
-msgstr "L'evento \"%1$s\" a %s è stato cancellato"
-
-msgid "Resources {0}"
-msgstr "Risorse {0}"
-
-msgid "Show declined events"
-msgstr "Visualizza gli eventi declinati"
-
-msgid "Publish Free/Busy Information"
-msgstr "Pubblica informazioni disponibilità/occupazione"
-
-msgid "Allow all users to view your free/busy information"
-msgstr "Permetti a tutti gli utenti di vedere la tua disponibilità/occupazione"

@@ -7,12 +7,12 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2012-04-18 16:06+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.net/projects/p/tine20/language/sv_SE/)\n"
+"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -53,11 +53,11 @@ msgid ""
 "impact other Tasks systems on export or syncronisation."
 msgstr "Möjliga uppgift prioriteringar. Observera att ytterligare prioriteringar kan påverka andra uppgifter system på export eller synkronisering."
 
-#: Controller/Task.php:165
+#: Controller/Task.php:164
 msgid "Notification for Task "
 msgstr "Notifiering för uppgift"
 
-#: Controller.php:96
+#: Controller.php:95
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s personliga uppgifter"

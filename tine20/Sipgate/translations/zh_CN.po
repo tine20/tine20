@@ -1,19 +1,20 @@
+# 
+# Translators:
+#   <spacen_zj@hotmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Sipgate\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-06-23 23:54+0000\n"
+"Last-Translator: vehery <spacen_zj@hotmail.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: CHINA\n"
-"X-Poedit-Language: Chinese\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AddressbookGridPanelHook.js:38
@@ -22,89 +23,89 @@ msgstr ""
 
 #: js/AddressbookGridPanelHook.js:62
 msgid "Compose SMS"
-msgstr ""
+msgstr "编写短信"
 
 #: js/AddressbookGridPanelHook.js:256
 msgid "Work"
-msgstr ""
+msgstr "工作"
 
 #: js/AddressbookGridPanelHook.js:266
 msgid "Home"
-msgstr ""
+msgstr "家庭"
 
 #: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
 msgid "Cell"
-msgstr ""
+msgstr "移动"
 
 #: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
 msgid "Cell private"
-msgstr ""
+msgstr "移动2"
 
 #: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
 #: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: js/CallStateWindow.js:106
 msgid "connecting..."
-msgstr ""
+msgstr "正在连接..."
 
 #: js/CallStateWindow.js:144
 msgid "Connecting to: "
-msgstr ""
+msgstr "连接到:"
 
 #: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
 msgid "Dial Number"
-msgstr ""
+msgstr "拨号"
 
 #: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
 #: js/SmsEditDialog.js:68
 msgid "Close"
-msgstr ""
+msgstr "关闭"
 
 #: js/DialNumberDialog.js:120
 msgid "Number to call"
-msgstr ""
+msgstr "拨号到"
 
 #: js/SearchAddressDialog.js:56
 msgid "Add Number"
-msgstr ""
+msgstr "添加号码"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Phone"
-msgstr ""
+msgstr "电话"
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
 msgid "Mobile"
-msgstr ""
+msgstr "手机"
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
 msgid "Fax"
-msgstr ""
+msgstr "传真"
 
 #: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
 msgid "Car phone"
-msgstr ""
+msgstr "车载电话"
 
 #: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
 msgid "Pager"
-msgstr ""
+msgstr "传呼"
 
 #: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
 msgid "Phone (private)"
-msgstr ""
+msgstr "电话(私人)"
 
 #: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
 msgid "Fax (private)"
-msgstr ""
+msgstr "传真(私人)"
 
 #: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
 msgid "Mobile (private)"
-msgstr ""
+msgstr "手机(私人)"
 
 #: js/SearchAddressDialog.js:145
 msgid "-- create new --"
-msgstr ""
+msgstr "创建"
 
 #: js/SearchAddressDialog.js:146
 msgid "Select existing contact or create a new one"
@@ -112,47 +113,47 @@ msgstr ""
 
 #: js/SearchAddressDialog.js:181
 msgid "Choose Device"
-msgstr ""
+msgstr "选择设备"
 
 #: js/SearchAddressDialog.js:214
 msgid "Choose Address"
-msgstr ""
+msgstr "选择地址本"
 
 #: js/Sipgate.js:30
 msgid "Edit phone settings"
-msgstr ""
+msgstr "修改电话设置"
 
 #: js/Sipgate.js:44
 msgid "Sipgate"
-msgstr ""
+msgstr "SIP网关"
 
 #: js/Sipgate.js:55
 msgid "Devices"
-msgstr ""
+msgstr "设备"
 
 #: js/Sipgate.js:154
 msgid "Dial number"
-msgstr ""
+msgstr "拨号"
 
 #: js/Sipgate.js:155
 msgid "Initiates a new outgoing call"
-msgstr ""
+msgstr "初始化一个外呼连接"
 
 #: js/Sipgate.js:162
 msgid "Add Number to Addressbook"
-msgstr ""
+msgstr "添加电话号码到地址本"
 
 #: js/Sipgate.js:163
 msgid "Adds this number to the Addressbook"
-msgstr ""
+msgstr "添加这个号码到地址本"
 
 #: js/Sipgate.js:282
 msgid "Calls from"
-msgstr ""
+msgstr "来自"
 
 #: js/Sipgate.js:293
 msgid "Calls to"
-msgstr ""
+msgstr "呼叫"
 
 #: js/Sipgate.js:312
 msgid "Displaying calls {0} - {1} of {2}"
@@ -168,23 +169,23 @@ msgstr ""
 
 #: js/Sipgate.js:335
 msgid "Remote Party"
-msgstr ""
+msgstr "状态"
 
 #: js/Sipgate.js:340
 msgid "Remote Number"
-msgstr ""
+msgstr "远端号码"
 
 #: js/Sipgate.js:345
 msgid "Local Uri"
-msgstr ""
+msgstr "本地Uri"
 
 #: js/Sipgate.js:350
 msgid "Remote Uri"
-msgstr ""
+msgstr "远程Uri"
 
 #: js/Sipgate.js:357
 msgid "Call started"
-msgstr ""
+msgstr "开始呼叫"
 
 #: js/Sipgate.js:367
 msgid "Call ID"
@@ -192,7 +193,7 @@ msgstr ""
 
 #: js/Sipgate.js:534
 msgid "unknown Person"
-msgstr ""
+msgstr "匿名"
 
 #: js/Sipgate.js:555
 msgid "Configuration not set"

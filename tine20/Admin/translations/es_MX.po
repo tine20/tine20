@@ -5,14 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-18 01:28+0000\n"
-"Last-Translator: Miguel Gutierrez <>\n"
-"Language-Team: Spanish (Mexico) (http://www.transifex.net/projects/p/tine20/language/es_MX/)\n"
+"PO-Revision-Date: 2012-06-20 10:13+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_MX\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -124,11 +124,11 @@ msgstr "ver contenedores"
 msgid "view personal and shared containers"
 msgstr "ver contenedores personales y compartidos"
 
-#: Controller/Container.php:199
+#: Controller/Container.php:198
 msgid "Your container has been changed"
 msgstr "Tu contenedor a sido modificado"
 
-#: Controller/Container.php:200
+#: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Tu contenedor a sido modificado por %1$s %2$sNota: %3$s"
 
@@ -164,14 +164,14 @@ msgstr "Tipo de Cliente"
 msgid "Session ID"
 msgstr "ID de Sesión"
 
-#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+#: js/AccessLog.js:130 js/user/EditDialog.js:767 js/user/EditDialog.js:810
 msgid "Login Name"
 msgstr "Nombre de Usuario"
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
 #: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:325
 msgid "Name"
 msgstr "Nombre"
 
@@ -276,11 +276,11 @@ msgstr "configuraciones"
 msgid "Search:"
 msgstr "Buscar:"
 
-#: js/Applications.js:226 js/user/EditDialog.js:836
+#: js/Applications.js:226 js/user/EditDialog.js:840
 msgid "disabled"
 msgstr "deshabilitado"
 
-#: js/Applications.js:229 js/user/EditDialog.js:835
+#: js/Applications.js:229 js/user/EditDialog.js:839
 msgid "enabled"
 msgstr "habilitado"
 
@@ -300,7 +300,7 @@ msgstr "No hay aplicaciones para mostrar"
 msgid "Order"
 msgstr "Ordenar"
 
-#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+#: js/Applications.js:279 js/user/EditDialog.js:832 js/user/GridPanel.js:176
 msgid "Status"
 msgstr "Estado"
 
@@ -401,7 +401,7 @@ msgstr "La clase de registro proporcionada no fue encontrada"
 msgid "OK"
 msgstr "Aceptar"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:695
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -481,8 +481,8 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
-msgstr "Reiniciar aplicación para aplicar los nuevos campos personalizados?"
+msgid "Restart application to apply new customfields?"
+msgstr ""
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
@@ -515,19 +515,19 @@ msgstr "Nombre del Grupo"
 msgid "Description"
 msgstr "Descripción"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:877
 msgid "Visibility"
 msgstr "Visibilidad"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Display in addressbook"
 msgstr "Mostrar en libreta de direcciones"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Hide from addressbook"
 msgstr "Esconder de la libreta de direcciones"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:897
 msgid "Saved in Addressbook"
 msgstr "Guardado en libreta de direcciones"
 
@@ -729,245 +729,245 @@ msgstr "No hay etiquetas que mostrar"
 msgid "Usage:&#160;"
 msgstr "Uso:&#160;"
 
-#: js/user/EditDialog.js:187
+#: js/user/EditDialog.js:191
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "El dominio no está permitido. Compruebe su configuración de dominios SMTP."
 
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:688
+#: js/user/EditDialog.js:238 js/user/EditDialog.js:241
+#: js/user/EditDialog.js:692
 msgid "Passwords do not match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: js/user/EditDialog.js:240
+#: js/user/EditDialog.js:244
 msgid "Passwords match!"
 msgstr "¡Las contraseñas coinciden!"
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+#: js/user/EditDialog.js:290 js/user/EditDialog.js:815
 msgid "Primary group"
 msgstr "Grupo primario"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:367
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:377
+#: js/user/EditDialog.js:381
 msgid "Home Directory"
 msgstr "Carpeta personal"
 
-#: js/user/EditDialog.js:381
+#: js/user/EditDialog.js:385
 msgid "Login Shell"
 msgstr "Intérprete (shell) de acceso"
 
-#: js/user/EditDialog.js:387
+#: js/user/EditDialog.js:391
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:401
+#: js/user/EditDialog.js:405
 msgid "Home Drive"
 msgstr "Unidad Home"
 
-#: js/user/EditDialog.js:406
+#: js/user/EditDialog.js:410
 msgid "Logon Time"
 msgstr "Hora de Ingreso"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
-#: js/user/EditDialog.js:926
+#: js/user/EditDialog.js:412 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:930
 msgid "never logged in"
 msgstr "nunca ha ingresado"
 
-#: js/user/EditDialog.js:411
+#: js/user/EditDialog.js:415
 msgid "Home Path"
 msgstr "Ubicación Home"
 
-#: js/user/EditDialog.js:416
+#: js/user/EditDialog.js:420
 msgid "Logoff Time"
 msgstr "Hora de Salida"
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:422
 msgid "never logged off"
 msgstr "nunca ha salido"
 
-#: js/user/EditDialog.js:421
+#: js/user/EditDialog.js:425
 msgid "Profile Path"
 msgstr "Ubicación del Perfil"
 
-#: js/user/EditDialog.js:426
+#: js/user/EditDialog.js:430
 msgid "Password Last Set"
 msgstr "Última Contraseña Guardada"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
-#: js/user/EditDialog.js:930
+#: js/user/EditDialog.js:432 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:934
 msgid "never"
 msgstr "nunca"
 
-#: js/user/EditDialog.js:431
+#: js/user/EditDialog.js:435
 msgid "Logon Script"
 msgstr "Script de Inicio"
 
-#: js/user/EditDialog.js:436
+#: js/user/EditDialog.js:440
 msgid "Password Can Change"
 msgstr "La Contraseña Puede Cambiar"
 
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:442 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:452
 msgid "not set"
 msgstr "sin guardar"
 
-#: js/user/EditDialog.js:441
+#: js/user/EditDialog.js:445
 msgid "Password Must Change"
 msgstr "La Contraseña Debe Cambiar"
 
-#: js/user/EditDialog.js:446
+#: js/user/EditDialog.js:450
 msgid "Kick Off Time"
 msgstr "Tiempo de Expulsión"
 
-#: js/user/EditDialog.js:466
+#: js/user/EditDialog.js:470
 msgid "IMAP Quota (MB)"
 msgstr "Cuota IMAP (MB)"
 
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
 msgid "Quota"
 msgstr "Cuota"
 
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+#: js/user/EditDialog.js:490 js/user/EditDialog.js:528
 msgid "no quota set"
 msgstr "no existe cuota establecida"
 
-#: js/user/EditDialog.js:496
+#: js/user/EditDialog.js:500
 msgid "Current Mailbox size"
 msgstr "Tamaño actual del Mailbox"
 
-#: js/user/EditDialog.js:504
+#: js/user/EditDialog.js:508
 msgid "Sieve Quota (MB)"
 msgstr "Cuota de Filtro (MB)"
 
-#: js/user/EditDialog.js:534
+#: js/user/EditDialog.js:538
 msgid "Current Sieve size"
 msgstr "Tamaño actual del Filtro"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+#: js/user/EditDialog.js:547 js/user/EditDialog.js:909
 msgid "Information"
 msgstr "Información"
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:561
 msgid "Last Login"
 msgstr "Booleano"
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:602
 msgid "Email Alias"
 msgstr "Pseudónimo de Correo"
 
-#: js/user/EditDialog.js:604
+#: js/user/EditDialog.js:608
 msgid "Add an alias address..."
 msgstr "Agregar un pseudónimo de dirección..."
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:621
 msgid "Email Forward"
 msgstr "Reenvío de Correo"
 
-#: js/user/EditDialog.js:623
+#: js/user/EditDialog.js:627
 msgid "Add a forward address..."
 msgstr "Agregar una dirección de correo de reenvio..."
 
-#: js/user/EditDialog.js:635
+#: js/user/EditDialog.js:639
 msgid "Forward Only"
 msgstr "Sólo Reenviar"
 
-#: js/user/EditDialog.js:655
+#: js/user/EditDialog.js:659
 msgid "Password confirmation"
 msgstr "Confirmación de Contraseña"
 
-#: js/user/EditDialog.js:672
+#: js/user/EditDialog.js:676
 msgid "Repeat password"
 msgstr "Repetir Contraseña"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:702
 msgid "Ok"
 msgstr "Aceptar"
 
-#: js/user/EditDialog.js:733
+#: js/user/EditDialog.js:737
 msgid "Account"
 msgstr "Cuenta"
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:752
 msgid "First Name"
 msgstr "Nombres"
 
-#: js/user/EditDialog.js:758
+#: js/user/EditDialog.js:762
 msgid "Last Name"
 msgstr "Apellidos"
 
-#: js/user/EditDialog.js:768
+#: js/user/EditDialog.js:772
 msgid "Password"
 msgstr "Contraseña"
 
-#: js/user/EditDialog.js:772
+#: js/user/EditDialog.js:776
 msgid "no password set"
 msgstr "no hay contraseña guardada"
 
-#: js/user/EditDialog.js:799
+#: js/user/EditDialog.js:803
 msgid "Emailaddress"
 msgstr "Dirección de Correo"
 
-#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+#: js/user/EditDialog.js:809 js/user/GridPanel.js:182
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:841
 msgid "expired"
 msgstr "expirado"
 
-#: js/user/EditDialog.js:838
+#: js/user/EditDialog.js:842
 msgid "blocked"
 msgstr "bloqueado"
 
-#: js/user/EditDialog.js:845
+#: js/user/EditDialog.js:849
 msgid "Invalid Status"
 msgstr "estado inválido"
 
-#: js/user/EditDialog.js:846
+#: js/user/EditDialog.js:850
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr "Estado de bloqueo sólo es válido si el usuario trata de entrar con una contraseña incorrecta a menudo. No es posible establecer este estado aquí."
 
-#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:872 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "Expira"
 
-#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "Último ingreso el"
 
-#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:926 js/user/EditDialog.js:930
 msgid "don't know"
 msgstr "desconocido"
 
-#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:928 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "Último ingreso desde"
 
-#: js/user/EditDialog.js:928
+#: js/user/EditDialog.js:932
 msgid "Password set"
 msgstr "Contraseña guardada"
 
-#: js/user/EditDialog.js:935
+#: js/user/EditDialog.js:939
 msgid "User groups"
 msgstr "Grupos de usuario"
 
-#: js/user/EditDialog.js:941
+#: js/user/EditDialog.js:945
 msgid "User roles"
 msgstr "Cargos de usuario"
 
-#: js/user/EditDialog.js:947
+#: js/user/EditDialog.js:951
 msgid "Fileserver"
 msgstr "Servidor de Archivos"
 
-#: js/user/EditDialog.js:953
+#: js/user/EditDialog.js:957
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:962
+#: js/user/EditDialog.js:966
 msgid "SMTP"
 msgstr "SMTP"
 

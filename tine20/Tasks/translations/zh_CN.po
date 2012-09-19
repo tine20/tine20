@@ -1,20 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tasks\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:01+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-02 13:57+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:89
@@ -53,11 +52,11 @@ msgid ""
 "impact other Tasks systems on export or syncronisation."
 msgstr ""
 
-#: Controller/Task.php:165
+#: Controller/Task.php:164
 msgid "Notification for Task "
 msgstr ""
 
-#: Controller.php:96
+#: Controller.php:95
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s 的个人任务"
@@ -100,14 +99,13 @@ msgstr "百分比"
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/GridPanel.js:181 js/Tasks.js:163
 msgid "Creation Time"
 msgstr "创建时间"
 
 #: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:66
+#: Setup/Update/Release5.php:70
 msgid "Completed"
 msgstr "完成的"
 
@@ -201,51 +199,51 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Preference.php:25
+#: Preference.php:24
 msgid "All my tasks"
 msgstr ""
 
-#: Preference.php:67
+#: Preference.php:66
 msgid "Default Favorite"
 msgstr ""
 
-#: Preference.php:68
+#: Preference.php:67
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Preference.php:71
+#: Preference.php:70
 msgid "Default Task List"
 msgstr ""
 
-#: Preference.php:72
+#: Preference.php:71
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:65
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:69
 msgid "No response"
 msgstr ""
 
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:67
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:71
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Initialize.php:37 Setup/Update/Release5.php:68
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:72
 msgid "In process"
 msgstr ""
 
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:158
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:162
 msgid "low"
 msgstr ""
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:159
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:163
 msgid "normal"
 msgstr ""
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:160
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:164
 msgid "high"
 msgstr ""
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:161
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:165
 msgid "urgent"
 msgstr ""
 
@@ -280,99 +278,3 @@ msgstr ""
 #: Setup/Initialize.php:126
 msgid "Tasks without responsible"
 msgstr ""
-
-msgid "NEEDS-ACTION"
-msgstr "需要执行"
-
-msgid "COMPLETED"
-msgstr "完成"
-
-msgid "IN-PROCESS"
-msgstr "正在处理"
-
-msgid "CANCELLED"
-msgstr "取消了"
-
-msgid "Failed"
-msgstr "失败"
-
-msgid "Could not save task."
-msgstr "不能保存任务"
-
-#, fuzzy
-msgid "to to list"
-msgstr "要做的事项列表"
-
-#, fuzzy
-msgid "Tasks) "
-msgstr "任务"
-
-msgid "Could not delete task(s)."
-msgstr "不能删除任务"
-
-msgid "Edit task"
-msgstr "编辑任务"
-
-msgid "Add task"
-msgstr "添加任务"
-
-msgid "Delete task"
-msgid_plural "Delete tasks"
-msgstr[0] "删除任务"
-
-msgid "Enter searchfilter"
-msgstr "输入搜索过滤器"
-
-msgid "Search:"
-msgstr "搜索："
-
-msgid "Displaying tasks {0} - {1} of {2}"
-msgstr "显示任务 {0} - {1} of {2}"
-
-msgid "No tasks to display"
-msgstr "没有任务要显示"
-
-msgid "No Tasks to display"
-msgstr "没有任务要显示"
-
-msgid "Loading Task..."
-msgstr "加载任务..."
-
-msgid "Please Wait"
-msgstr "请稍等"
-
-msgid "Add New Task"
-msgstr "添加新任务"
-
-msgid "Edit Task \"{0}\""
-msgstr "编辑任务 \"{0}\""
-
-msgid "Please wait"
-msgstr "请稍等"
-
-msgid "Saving Task"
-msgstr "保存任务"
-
-msgid "Errors"
-msgstr "错误"
-
-msgid "Please fix the errors noted."
-msgstr "请修改标注的错误"
-
-msgid "Confirm"
-msgstr "确认"
-
-msgid "Do you really want to delete this task?"
-msgstr "确实要删除这个任务？"
-
-msgid "Please wait a moment..."
-msgstr "请稍等一会儿..."
-
-msgid "Enter short name..."
-msgstr "输入短名..."
-
-msgid "Saved in"
-msgstr "保存到"
-
-msgid "Folder"
-msgstr "文件夹"

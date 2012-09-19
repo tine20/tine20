@@ -1,20 +1,20 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine2.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:54+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Yuuki ’Taisa’ Kitamura <ykitamura@clasi-co.jp>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-06-20 10:13+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:52+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: JAPAN\n"
-"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
 msgid "manage access log"
@@ -29,10 +29,9 @@ msgid "manage accounts"
 msgstr "アカウントの管理"
 
 #: Acl/Rights.php:190
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"グループとユーザの追加と編集、グループにメンバーの追加、ユーザパスワードの変"
-"更"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "グループとユーザの追加と編集、グループにメンバーの追加、ユーザパスワードの変更"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
@@ -48,10 +47,9 @@ msgstr "役割の管理"
 
 #: Acl/Rights.php:198
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"ロールの追加と編集、メンバーにロールの新規追加、アプリケーション権限のロール"
-"への付与"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "ロールの追加と編集、メンバーにロールの新規追加、アプリケーション権限のロールへの付与"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -125,11 +123,11 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: Controller/Container.php:199
+#: Controller/Container.php:198
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:200
+#: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
@@ -137,7 +135,6 @@ msgstr ""
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
@@ -147,7 +144,6 @@ msgstr "ＩＰアドレス"
 msgid "User"
 msgid_plural "Users"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -165,14 +161,14 @@ msgstr ""
 msgid "Session ID"
 msgstr "セッションＩＤ"
 
-#: js/AccessLog.js:130 js/user/EditDialog.js:763 js/user/EditDialog.js:806
+#: js/AccessLog.js:130 js/user/EditDialog.js:767 js/user/EditDialog.js:810
 msgid "Login Name"
 msgstr "ログイン名"
 
 #: js/AccessLog.js:131 js/Applications.js:278 js/container/EditDialog.js:123
-#: js/customfield/EditDialog.js:595 js/customfield/GridPanel.js:72
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
 #: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+#: js/user/EditDialog.js:289 js/user/EditDialog.js:325
 msgid "Name"
 msgstr "名前"
 
@@ -250,12 +246,11 @@ msgstr ""
 
 #: js/ApplicationFilter.js:33 js/container/EditDialog.js:135
 #: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:528 js/customfield/GridPanel.js:74
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -277,11 +272,11 @@ msgstr "設定"
 msgid "Search:"
 msgstr "検索："
 
-#: js/Applications.js:226 js/user/EditDialog.js:836
+#: js/Applications.js:226 js/user/EditDialog.js:840
 msgid "disabled"
 msgstr "無効"
 
-#: js/Applications.js:229 js/user/EditDialog.js:835
+#: js/Applications.js:229 js/user/EditDialog.js:839
 msgid "enabled"
 msgstr "有効"
 
@@ -297,11 +292,11 @@ msgstr "アプリケーションの表示 {0} - {1} 件中 {2}"
 msgid "No applications to display"
 msgstr "表示するアプリケーションがありません"
 
-#: js/Applications.js:277 js/customfield/EditDialog.js:625
+#: js/Applications.js:277 js/customfield/EditDialog.js:626
 msgid "Order"
 msgstr ""
 
-#: js/Applications.js:279 js/user/EditDialog.js:828 js/user/GridPanel.js:176
+#: js/Applications.js:279 js/user/EditDialog.js:832 js/user/GridPanel.js:176
 msgid "Status"
 msgstr "ステータス"
 
@@ -313,10 +308,9 @@ msgstr ""
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/container/EditDialog.js:144 js/container/GridPanel.js:73
-#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:583
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
 #: js/customfield/GridPanel.js:73
 msgid "Type"
 msgstr ""
@@ -351,7 +345,6 @@ msgstr ""
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
 #: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
@@ -398,81 +391,80 @@ msgstr ""
 msgid "Given record class not found"
 msgstr ""
 
-#: js/customfield/EditDialog.js:464
+#: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr ""
 
-#: js/customfield/EditDialog.js:470 js/user/EditDialog.js:691
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:695
 msgid "Cancel"
 msgstr ""
 
-#: js/customfield/EditDialog.js:503
+#: js/customfield/EditDialog.js:504
 msgid "Configure store"
 msgstr ""
 
-#: js/customfield/EditDialog.js:549 js/customfield/GridPanel.js:75
+#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:75
 msgid "Model"
 msgstr ""
 
-#: js/customfield/EditDialog.js:560
+#: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
 msgstr ""
 
-#: js/customfield/EditDialog.js:571
+#: js/customfield/EditDialog.js:572
 msgid "Text"
 msgstr ""
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:573
 msgid "Number"
 msgstr ""
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:574
 msgid "Date"
 msgstr ""
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:575
 msgid "DateTime"
 msgstr ""
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:576
 msgid "Time"
 msgstr ""
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:577
 msgid "Boolean"
 msgstr ""
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:578
 msgid "Search Combo"
 msgstr ""
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:579
 msgid "Key Field"
 msgstr ""
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:580
 msgid "Record"
 msgstr ""
 
-#: js/customfield/EditDialog.js:601 js/customfield/GridPanel.js:71
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
 msgstr ""
 
-#: js/customfield/EditDialog.js:607
+#: js/customfield/EditDialog.js:608
 msgid "Length"
 msgstr ""
 
-#: js/customfield/EditDialog.js:615
+#: js/customfield/EditDialog.js:616
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:620 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:621 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
-msgstr[1] ""
 
-#: js/customfield/EditDialog.js:648
+#: js/customfield/EditDialog.js:649
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
@@ -482,7 +474,7 @@ msgid "Confirm"
 msgstr "確認"
 
 #: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new cusomfields?"
+msgid "Restart application to apply new customfields?"
 msgstr ""
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
@@ -516,19 +508,19 @@ msgstr "グループ名"
 msgid "Description"
 msgstr "説明"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:873
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:877
 msgid "Visibility"
 msgstr ""
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Display in addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:879
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:883
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:893
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:897
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -652,7 +644,6 @@ msgstr ""
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
@@ -730,245 +721,245 @@ msgstr "表示するタグがありません"
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/user/EditDialog.js:187
+#: js/user/EditDialog.js:191
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
 
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:688
+#: js/user/EditDialog.js:238 js/user/EditDialog.js:241
+#: js/user/EditDialog.js:692
 msgid "Passwords do not match!"
 msgstr ""
 
-#: js/user/EditDialog.js:240
+#: js/user/EditDialog.js:244
 msgid "Passwords match!"
 msgstr ""
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:811
+#: js/user/EditDialog.js:290 js/user/EditDialog.js:815
 msgid "Primary group"
 msgstr "プライマリーグループ"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:367
 msgid "Unix"
 msgstr ""
 
-#: js/user/EditDialog.js:377
+#: js/user/EditDialog.js:381
 msgid "Home Directory"
 msgstr ""
 
-#: js/user/EditDialog.js:381
+#: js/user/EditDialog.js:385
 msgid "Login Shell"
 msgstr ""
 
-#: js/user/EditDialog.js:387
+#: js/user/EditDialog.js:391
 msgid "Windows"
 msgstr ""
 
-#: js/user/EditDialog.js:401
+#: js/user/EditDialog.js:405
 msgid "Home Drive"
 msgstr ""
 
-#: js/user/EditDialog.js:406
+#: js/user/EditDialog.js:410
 msgid "Logon Time"
 msgstr ""
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:922
-#: js/user/EditDialog.js:926
+#: js/user/EditDialog.js:412 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:930
 msgid "never logged in"
 msgstr "ログインしていません"
 
-#: js/user/EditDialog.js:411
+#: js/user/EditDialog.js:415
 msgid "Home Path"
 msgstr ""
 
-#: js/user/EditDialog.js:416
+#: js/user/EditDialog.js:420
 msgid "Logoff Time"
 msgstr ""
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:422
 msgid "never logged off"
 msgstr ""
 
-#: js/user/EditDialog.js:421
+#: js/user/EditDialog.js:425
 msgid "Profile Path"
 msgstr ""
 
-#: js/user/EditDialog.js:426
+#: js/user/EditDialog.js:430
 msgid "Password Last Set"
 msgstr ""
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:870
-#: js/user/EditDialog.js:930
+#: js/user/EditDialog.js:432 js/user/EditDialog.js:874
+#: js/user/EditDialog.js:934
 msgid "never"
 msgstr "未"
 
-#: js/user/EditDialog.js:431
+#: js/user/EditDialog.js:435
 msgid "Logon Script"
 msgstr ""
 
-#: js/user/EditDialog.js:436
+#: js/user/EditDialog.js:440
 msgid "Password Can Change"
 msgstr ""
 
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:442 js/user/EditDialog.js:447
+#: js/user/EditDialog.js:452
 msgid "not set"
 msgstr ""
 
-#: js/user/EditDialog.js:441
+#: js/user/EditDialog.js:445
 msgid "Password Must Change"
 msgstr ""
 
-#: js/user/EditDialog.js:446
+#: js/user/EditDialog.js:450
 msgid "Kick Off Time"
 msgstr ""
 
-#: js/user/EditDialog.js:466
+#: js/user/EditDialog.js:470
 msgid "IMAP Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+#: js/user/EditDialog.js:489 js/user/EditDialog.js:527
 msgid "Quota"
 msgstr ""
 
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+#: js/user/EditDialog.js:490 js/user/EditDialog.js:528
 msgid "no quota set"
 msgstr ""
 
-#: js/user/EditDialog.js:496
+#: js/user/EditDialog.js:500
 msgid "Current Mailbox size"
 msgstr ""
 
-#: js/user/EditDialog.js:504
+#: js/user/EditDialog.js:508
 msgid "Sieve Quota (MB)"
 msgstr ""
 
-#: js/user/EditDialog.js:534
+#: js/user/EditDialog.js:538
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:905
+#: js/user/EditDialog.js:547 js/user/EditDialog.js:909
 msgid "Information"
 msgstr ""
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:561
 msgid "Last Login"
 msgstr ""
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:602
 msgid "Email Alias"
 msgstr ""
 
-#: js/user/EditDialog.js:604
+#: js/user/EditDialog.js:608
 msgid "Add an alias address..."
 msgstr ""
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:621
 msgid "Email Forward"
 msgstr ""
 
-#: js/user/EditDialog.js:623
+#: js/user/EditDialog.js:627
 msgid "Add a forward address..."
 msgstr ""
 
-#: js/user/EditDialog.js:635
+#: js/user/EditDialog.js:639
 msgid "Forward Only"
 msgstr ""
 
-#: js/user/EditDialog.js:655
+#: js/user/EditDialog.js:659
 msgid "Password confirmation"
 msgstr ""
 
-#: js/user/EditDialog.js:672
+#: js/user/EditDialog.js:676
 msgid "Repeat password"
 msgstr ""
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:702
 msgid "Ok"
 msgstr ""
 
-#: js/user/EditDialog.js:733
+#: js/user/EditDialog.js:737
 msgid "Account"
 msgstr ""
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:752
 msgid "First Name"
 msgstr "名"
 
-#: js/user/EditDialog.js:758
+#: js/user/EditDialog.js:762
 msgid "Last Name"
 msgstr "姓"
 
-#: js/user/EditDialog.js:768
+#: js/user/EditDialog.js:772
 msgid "Password"
 msgstr "パスワード"
 
-#: js/user/EditDialog.js:772
+#: js/user/EditDialog.js:776
 msgid "no password set"
 msgstr "パスワードが設定されていません"
 
-#: js/user/EditDialog.js:799
+#: js/user/EditDialog.js:803
 msgid "Emailaddress"
 msgstr "Eメールアドレス"
 
-#: js/user/EditDialog.js:805 js/user/GridPanel.js:182
+#: js/user/EditDialog.js:809 js/user/GridPanel.js:182
 msgid "OpenID"
 msgstr ""
 
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:841
 msgid "expired"
 msgstr ""
 
-#: js/user/EditDialog.js:838
+#: js/user/EditDialog.js:842
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:845
+#: js/user/EditDialog.js:849
 msgid "Invalid Status"
 msgstr ""
 
-#: js/user/EditDialog.js:846
+#: js/user/EditDialog.js:850
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr ""
 
-#: js/user/EditDialog.js:868 js/user/GridPanel.js:186
+#: js/user/EditDialog.js:872 js/user/GridPanel.js:186
 msgid "Expires"
 msgstr "期間"
 
-#: js/user/EditDialog.js:920 js/user/GridPanel.js:183
+#: js/user/EditDialog.js:924 js/user/GridPanel.js:183
 msgid "Last login at"
 msgstr "前回のログイン"
 
-#: js/user/EditDialog.js:922 js/user/EditDialog.js:926
+#: js/user/EditDialog.js:926 js/user/EditDialog.js:930
 msgid "don't know"
 msgstr ""
 
-#: js/user/EditDialog.js:924 js/user/GridPanel.js:184
+#: js/user/EditDialog.js:928 js/user/GridPanel.js:184
 msgid "Last login from"
 msgstr "前回のログイン（From)"
 
-#: js/user/EditDialog.js:928
+#: js/user/EditDialog.js:932
 msgid "Password set"
 msgstr "パスワード設定"
 
-#: js/user/EditDialog.js:935
+#: js/user/EditDialog.js:939
 msgid "User groups"
 msgstr ""
 
-#: js/user/EditDialog.js:941
+#: js/user/EditDialog.js:945
 msgid "User roles"
 msgstr ""
 
-#: js/user/EditDialog.js:947
+#: js/user/EditDialog.js:951
 msgid "Fileserver"
 msgstr ""
 
-#: js/user/EditDialog.js:953
+#: js/user/EditDialog.js:957
 msgid "IMAP"
 msgstr ""
 
-#: js/user/EditDialog.js:962
+#: js/user/EditDialog.js:966
 msgid "SMTP"
 msgstr ""
 
@@ -1024,118 +1015,8 @@ msgstr ""
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
-msgstr[1] ""
 
 #: js/user/Users.js:144
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] ""
-msgstr[1] ""
-
-msgid "Loading Tag..."
-msgstr "タグをロードしています..."
-
-msgid "Please Wait"
-msgstr "お待ちください"
-
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "本当に選択したアクセスログエントリを削除しますか？"
-
-msgid "delete entry"
-msgstr "エントリの削除"
-
-msgid "select all"
-msgstr "全て選択"
-
-msgid "Display from:"
-msgstr "表示："
-
-msgid "to:"
-msgstr "ＴＯ："
-
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "アクセスログエントリの表示 {0} - {1} 件中 {2}"
-
-msgid "No access log entries to display"
-msgstr "表示するアクセスログエントリがありません"
-
-msgid "Account ID"
-msgstr "アカウントＩＤ"
-
-msgid "Loading Role..."
-msgstr "ロールをロードしています..."
-
-msgid "Do you really want to delete the selected account(s)?"
-msgstr "選択されたアカウントを本当に削除しますか？"
-
-msgid "Deleting account(s)..."
-msgstr "アカウントを削除しています..."
-
-msgid "Some error occurred while trying to delete the account(s)."
-msgstr "アカウントの削除中にエラーが発生しました"
-
-msgid "Displaying accounts {0} - {1} of {2}"
-msgstr "アカウントの表示 {0} - {1} 件中 {2}"
-
-msgid "No accounts to display"
-msgstr "表示するアカウントがありません"
-
-msgid "add account"
-msgstr "アカウントの追加"
-
-msgid "edit account"
-msgstr "アカウントの編集"
-
-msgid "delete account"
-msgstr "アカウントの削除"
-
-msgid "Deleting group..."
-msgstr "グループを削除しています..."
-
-#, fuzzy
-msgid "Email UID"
-msgstr "Eメール"
-
-#, fuzzy
-msgid "Email GID"
-msgstr "Eメール"
-
-#, fuzzy
-msgid "Email Username"
-msgstr "Eメール"
-
-msgid "enter searchfilter"
-msgstr "サーチフィルタの入力"
-
-msgid "remove account"
-msgstr "アカウントの削除"
-
-msgid "Role members"
-msgstr "ロールメンバー"
-
-msgid "Deleting tag..."
-msgstr "タグを削除しています..."
-
-msgid "name"
-msgstr "名前"
-
-msgid "status"
-msgstr "状態"
-
-msgid "Deleting account..."
-msgstr "アカウントを削除しています..."
-
-msgid "Some error occurred while trying to delete the account."
-msgstr "アカウントの削除中にエラーが発生しました。"
-
-msgid "Saving User Account"
-msgstr "アカウントを保存しています"
-
-msgid "Could not save user account."
-msgstr "アカウントを保存できません"
-
-msgid "Add New User Account"
-msgstr "新規ユーザアカウントの追加"
-
-msgid "Edit User Account \"{0}\""
-msgstr "ユーザアカウントの編集 \"{0}\""

@@ -1,18 +1,19 @@
 # 
 # Translators:
+#   <arturmon82@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-15 22:22+0000\n"
-"Last-Translator: parukhin <parukhin@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.net/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2012-08-23 02:59+0000\n"
+"Last-Translator: артур Мудрых <arturmon82@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -71,43 +72,43 @@ msgid ""
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Событие \"%1$s\" в %2$s было отменено"
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Событие \"%1$s\" в %2$s было переназначено"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Событие \"%1$s\" в %2$s было обновлено"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
 
@@ -143,7 +144,7 @@ msgstr "Состояние"
 
 #: js/AddToEventPanel.js:217
 msgid "Select Status"
-msgstr ""
+msgstr "Выбрать Состояние"
 
 #: js/AddToEventPanel.js:237
 msgid "Adding {0} Attendee to event"
@@ -154,7 +155,7 @@ msgid "Manage Resources"
 msgstr "Управление ресурсами"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Участник"
 
@@ -182,7 +183,7 @@ msgstr "Пользователь"
 msgid "Group"
 msgstr "Группа"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ресурс"
@@ -207,7 +208,7 @@ msgid "Click here to invite another attender..."
 msgstr "Нажмите здесь, чтобы пригласить другого участника..."
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Нет информации"
 
@@ -234,7 +235,7 @@ msgstr[2] "Календарей"
 msgid "Originally"
 msgstr "Изначально"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "События"
 
@@ -293,12 +294,12 @@ msgstr ""
 msgid "Location"
 msgstr "Местоположение"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Организатор"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "весь день"
 
@@ -349,7 +350,7 @@ msgstr ""
 
 #: js/iMIPDetailsPanel.js:69
 msgid "Checking Calendar Data..."
-msgstr ""
+msgstr "Проверка данных Календаря ..."
 
 #: js/iMIPDetailsPanel.js:95
 msgid "Reply to Recurring Event"
@@ -385,7 +386,7 @@ msgstr ""
 
 #: js/iMIPDetailsPanel.js:216
 msgid "Unsupported message"
-msgstr ""
+msgstr "Неподдерживаемое сообщение"
 
 #: js/iMIPDetailsPanel.js:226
 msgid "This is an event invitation for someone else."
@@ -530,7 +531,7 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:1091
 msgid "Scheduling Conflict"
-msgstr ""
+msgstr "Конфликт планирования"
 
 #: js/MainScreenCenterPanel.js:1093
 msgid "The following attendee are busy at the requested time:"
@@ -548,7 +549,7 @@ msgstr "Изменить событие"
 msgid "Cancel this action"
 msgstr ""
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Событие"
@@ -567,26 +568,30 @@ msgstr "Быстрый поиск"
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:225
-msgid "Event (as attendee)"
+#: js/Model.js:216
+msgid "Attendee Role"
 msgstr ""
 
 #: js/Model.js:232
+msgid "Event (as attendee)"
+msgstr ""
+
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr ""
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Участник"
 msgstr[1] "Участника"
 msgstr[2] "Участников"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Ресурсы"
 
@@ -711,15 +716,15 @@ msgstr ""
 msgid "of"
 msgstr "из"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr ""
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr "Поиск события"
 
@@ -731,7 +736,7 @@ msgstr "Миникалендарь"
 msgid "unknown"
 msgstr ""
 
-#: Model/Attender.php:427
+#: Model/Attender.php:444
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
@@ -765,12 +770,12 @@ msgid "Organizer timezone"
 msgstr ""
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Да"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "Нет"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Да"
 
 #: Preference.php:31
 msgid "All my events"

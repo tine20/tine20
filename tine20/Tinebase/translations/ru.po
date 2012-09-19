@@ -1,25 +1,21 @@
+# 
+# Translators:
+#   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Tinebase\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 13:07+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2012-06-20 09:55+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:54+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
-"X-Poedit-Language: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-SearchPath-0: Tinebase\n"
-"X-Poedit-Basepath: ../../\n"
-"X-Poedit-KeywordsList: _\n"
 
 #: Acl/Rights/Abstract.php:71
 msgid "admin"
@@ -69,156 +65,156 @@ msgstr ""
 msgid "The right to manage the own client state."
 msgstr ""
 
-#: Config.php:167
+#: Config.php:169
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:169
+#: Config.php:171
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:178
+#: Config.php:180
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:180
+#: Config.php:182
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:189
+#: Config.php:191
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:191
+#: Config.php:193
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:200
+#: Config.php:202
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:202
+#: Config.php:204
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:210
+#: Config.php:212
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:212
+#: Config.php:214
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:221
+#: Config.php:223
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:223
+#: Config.php:225
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:231
+#: Config.php:233
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:233
+#: Config.php:235
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:242
+#: Config.php:244
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:244
+#: Config.php:246
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:252
+#: Config.php:254
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:254
+#: Config.php:256
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:262
+#: Config.php:264
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:264
+#: Config.php:266
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:272
+#: Config.php:274
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:274
+#: Config.php:276
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:282
+#: Config.php:284
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:284
+#: Config.php:286
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:292
+#: Config.php:294
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:294
+#: Config.php:296
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:302
+#: Config.php:304
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:304
+#: Config.php:306
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:312
+#: Config.php:314
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:314
+#: Config.php:316
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:322
+#: Config.php:324
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:324
+#: Config.php:326
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:332
+#: Config.php:334
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:334
+#: Config.php:336
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Container.php:608
+#: Container.php:615
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1407
+#: Container.php:1401
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr ""
 
-#: Container.php:1408
+#: Container.php:1402
 msgid "System Container"
-msgstr ""
+msgstr "Системный контейнер"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -260,12 +256,12 @@ msgstr "неизвестно"
 
 #: js/AboutDialog.js:41 js/MainMenu.js:112
 msgid "About {0}"
-msgstr ""
+msgstr "О {0}"
 
 #: js/AboutDialog.js:60 js/PasswordChangeDialog.js:66
 #: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
-#: js/widgets/container/ContainerSelect.js:459
-#: js/widgets/dialog/EditDialog.js:231
+#: js/widgets/container/ContainerSelect.js:474
+#: js/widgets/dialog/EditDialog.js:266
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
 #: js/widgets/tags/TagsMassAttachAction.js:100
@@ -276,7 +272,7 @@ msgstr "Ок"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:241
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:276
 #: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Применить"
@@ -304,7 +300,7 @@ msgstr ""
 
 #: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
 msgid "Field Name"
-msgstr ""
+msgstr "Название поля"
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -312,43 +308,45 @@ msgstr ""
 
 #: js/AppManager.js:209
 msgid ""
-"There are no applications enabled for you. Please contact your administrator."
+"There are no applications enabled for you. Please contact your "
+"administrator."
 msgstr ""
 
-#: js/common.js:178
+#: js/common.js:213
 msgid "Usage:&#160;"
-msgstr ""
+msgstr "Использование:&#160;"
 
-#: js/common.js:207
+#: js/common.js:242
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:256
+#: js/common.js:291
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} минута"
 msgstr[1] "{0} минуты"
 msgstr[2] "{0} минут"
 
-#: js/common.js:257
+#: js/common.js:292
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 msgstr[2] "{0} часов"
 
-#: js/common.js:258
+#: js/common.js:293
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} рабочий день"
 msgstr[1] "{0} рабочих дня"
 msgstr[2] "{0} рабочих дней"
 
-#: js/common.js:285
+#: js/common.js:320
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Container.js:123
 msgid "All {0}"
@@ -366,14 +364,14 @@ msgstr "{0} других пользователей"
 msgid "My {0}"
 msgstr "Мои {0}"
 
-#: js/data/Record.js:162
+#: js/data/Record.js:163
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Задача"
 msgstr[1] "Задачи"
 msgstr[2] "Задач"
 
-#: js/data/Record.js:166
+#: js/data/Record.js:167
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "список заданий"
@@ -382,9 +380,9 @@ msgstr[2] "списков заданий"
 
 #: js/ExceptionDialog.js:72 js/PasswordChangeDialog.js:60
 #: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
-#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/container/ContainerSelect.js:465
 #: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/EditDialog.js:249
+#: js/widgets/dialog/EditDialog.js:284
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
@@ -400,18 +398,13 @@ msgstr "Послать отчёт"
 
 #: js/ExceptionDialog.js:107
 msgid "The last action you made was potentially not performed correctly."
-msgstr ""
-"Последнее действие, которое Вы сделали, было потенциально не правильно "
-"выполнено."
+msgstr "Последнее действие, которое Вы сделали, было потенциально не правильно выполнено."
 
 #: js/ExceptionDialog.js:108
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
-msgstr ""
-"Пожалуйста, помогите улучшить это программное обеспечение. Сообщите "
-"издателю, включив краткое описание, что и где Вы делали, когда возникла "
-"ошибка."
+msgstr "Пожалуйста, помогите улучшить это программное обеспечение. Сообщите издателю, включив краткое описание, что и где Вы делали, когда возникла ошибка."
 
 #: js/ExceptionDialog.js:114
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:146
@@ -476,11 +469,9 @@ msgstr "Параллельные обновления"
 
 #: js/ExceptionHandler.js:181
 msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
-msgstr ""
-"Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. "
-"Вам нужно обновить и сделать изменения снова."
+"Someone else saved this record while you where editing the data. You need to"
+" reload and make your changes again."
+msgstr "Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. Вам нужно обновить и сделать изменения снова."
 
 #: js/ExceptionHandler.js:189
 msgid "Service Unavailable"
@@ -489,8 +480,8 @@ msgstr ""
 #: js/ExceptionHandler.js:190
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
-"overloading, maintenance or misconfiguration of the server. Please try again "
-"or contact your administrator."
+"overloading, maintenance or misconfiguration of the server. Please try again"
+" or contact your administrator."
 msgstr ""
 
 #: js/ExceptionHandler.js:196
@@ -545,7 +536,8 @@ msgstr ""
 
 #: js/ExceptionHandler.js:251
 msgid ""
-"Your user account has no role memberships. Please contact your administrator."
+"Your user account has no role memberships. Please contact your "
+"administrator."
 msgstr ""
 
 #: js/LoginPanel.js:80 js/LoginPanel.js:118
@@ -567,17 +559,17 @@ msgstr ""
 #: js/LoginPanel.js:139
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas "
-"and get help."
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
+" and get help."
 msgstr ""
 
 #: js/LoginPanel.js:145
 msgid "Tine 2.0 Homepage"
-msgstr ""
+msgstr "Сайт Tine 2.0"
 
 #: js/LoginPanel.js:146
 msgid "Tine 2.0 Forum"
-msgstr ""
+msgstr "Форум Tine 2.0"
 
 #: js/LoginPanel.js:191
 msgid "about {0} minutes"
@@ -599,7 +591,7 @@ msgstr ""
 
 #: js/LoginPanel.js:226
 msgid "Languages"
-msgstr ""
+msgstr "Языки"
 
 #: js/LoginPanel.js:227
 msgid "Duration"
@@ -607,15 +599,15 @@ msgstr ""
 
 #: js/LoginPanel.js:268
 msgid "Browser incompatible"
-msgstr ""
+msgstr "Несовместимый браузер"
 
 #: js/LoginPanel.js:270
 msgid "Your browser is not supported by Tine 2.0."
-msgstr ""
+msgstr "Ваш браузер не поддерживается Tine 2.0."
 
 #: js/LoginPanel.js:275
 msgid "Browser incompatible?"
-msgstr ""
+msgstr "Несовместимый браузер?"
 
 #: js/LoginPanel.js:277
 msgid ""
@@ -632,11 +624,11 @@ msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:385
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:389
 #: js/widgets/persistentfilter/PickerPanel.js:314
 #: js/widgets/persistentfilter/PickerPanel.js:352
 #: js/widgets/persistentfilter/PickerPanel.js:402
-#: js/widgets/tree/ContextMenu.js:183
+#: js/widgets/tree/ContextMenu.js:181
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
@@ -657,16 +649,16 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:551 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/EditDialog.js:586 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:372
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
 msgstr "Ошибки"
 
 #: js/LoginPanel.js:379 js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:561 js/widgets/dialog/ExportDialog.js:140
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:368
+#: js/widgets/dialog/EditDialog.js:596 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:372
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
@@ -688,7 +680,7 @@ msgstr "Параметры"
 
 #: js/MainMenu.js:131
 msgid "Edit Profile"
-msgstr ""
+msgstr "Изменить профиль"
 
 #: js/MainMenu.js:138
 msgid "Change password"
@@ -718,11 +710,11 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:568
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:380
-#: js/widgets/grid/GridPanel.js:1470
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:603
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:384
+#: js/widgets/grid/GridPanel.js:1504
 #: js/widgets/persistentfilter/PickerPanel.js:312
-#: js/widgets/tree/ContextMenu.js:337
+#: js/widgets/tree/ContextMenu.js:335
 msgid "Confirm"
 msgstr "Подтверждение"
 
@@ -741,42 +733,48 @@ msgstr ""
 #: js/Models.js:131 js/widgets/tags/TagFilter.js:30
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Тег"
+msgstr[1] "Теги"
+msgstr[2] "Теги"
 
 #: js/Models.js:279
 msgid "Import"
 msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Импорт"
+msgstr[1] "Импорт"
+msgstr[2] "Импорт"
 
 #: js/Models.js:306 js/widgets/container/GrantsGrid.js:51
-#: js/widgets/dialog/ExportDialog.js:46
+#: js/widgets/dialog/ExportDialog.js:48
 msgid "Export"
 msgid_plural "Export"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Экспорт"
+msgstr[1] "Экспорт"
+msgstr[2] "Экспорт"
 
 #: js/Models.js:344
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Models.js:371 js/widgets/relation/FilterModel.js:32
 msgid "Relation"
 msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Отношение"
+msgstr[1] "Отношения"
+msgstr[2] "Отношения"
 
 #: js/Models.js:393
 msgid "Department"
 msgid_plural "Departments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Отдел"
+msgstr[1] "Отделы"
+msgstr[2] "Отделы"
 
 #: js/Models.js:401 js/widgets/account/PickerGridPanel.js:265
-#: js/widgets/container/PropertiesDialog.js:104
+#: js/widgets/container/PropertiesDialog.js:107
 #: js/widgets/grid/LinkGridPanel.js:103
 msgid "Name"
 msgstr "Имя"
@@ -786,6 +784,7 @@ msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Models.js:420
 msgid "Configs"
@@ -824,7 +823,7 @@ msgid "Your password has been changed."
 msgstr "Ваш пароль изменен."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/dialog/ImportDialog.js:651
+#: js/widgets/dialog/ImportDialog.js:652
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 msgid "Failure"
 msgstr "Сбой"
@@ -879,9 +878,7 @@ msgstr "Поздравления!"
 msgid ""
 "You have entered all needed information. If you press the Finish button we "
 "will send you the registration email."
-msgstr ""
-"Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, "
-"вам будет отправлено подтверждающие электронное письмо."
+msgstr "Вы ввели всю необходимую информацию. Как только вы нажмете кнопку готово, вам будет отправлено подтверждающие электронное письмо."
 
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
@@ -913,8 +910,7 @@ msgstr "Загрузка не удалась"
 
 #: js/ux/form/ImageField.js:164
 msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
-"Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
+msgstr "Картинка не смогла загрузиться. Пожалуйста информируйте администратора."
 
 #: js/ux/form/ImageField.js:176
 msgid "Change Image"
@@ -938,8 +934,7 @@ msgstr "Ошибка при обработке картинки"
 
 #: js/ux/form/ImageField.js:280
 msgid "Could not load image. Please notify your Administrator"
-msgstr ""
-"Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
+msgstr "Картинка не могла загрузиться. Пожалуйста, информируйте своего администратора"
 
 #: js/ux/form/RecordsComboBox.js:26
 msgid "Software Version"
@@ -965,7 +960,7 @@ msgstr "Инвертировать выбор"
 msgid "(paused)"
 msgstr ""
 
-#: js/ux/PopupWindowManager.js:166
+#: js/ux/PopupWindowManager.js:164
 msgid ""
 "The window you want to work with is backgrounded. Your browser doesn't "
 "support to foreground the window for you, so you need to use your operating "
@@ -979,11 +974,11 @@ msgstr "ввести поисковый фильтр"
 
 #: js/widgets/account/PickerGridPanel.js:156
 msgid "Search User"
-msgstr ""
+msgstr "Поиск пользователя"
 
 #: js/widgets/account/PickerGridPanel.js:162
 msgid "Search Group"
-msgstr ""
+msgstr "Поиск группы"
 
 #: js/widgets/account/PickerGridPanel.js:168
 msgid "Add Anyone"
@@ -995,11 +990,11 @@ msgstr ""
 
 #: js/widgets/account/PickerGridPanel.js:227
 msgid "Search for users ..."
-msgstr ""
+msgstr "Поиск пользователей..."
 
 #: js/widgets/account/PickerGridPanel.js:249
 msgid "Search for groups ..."
-msgstr ""
+msgstr "Поиск групп..."
 
 #: js/widgets/ActivitiesPanel.js:147
 msgid "Add a Note..."
@@ -1039,7 +1034,7 @@ msgstr "Добавить {0} примечание"
 msgid "Type"
 msgstr "Тип"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1119
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1127
 msgid "Created By"
 msgstr "Создано"
 
@@ -1061,7 +1056,7 @@ msgstr "История"
 
 #: js/widgets/ActivitiesPanel.js:592
 msgid "Quick search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
 msgid "Time"
@@ -1071,19 +1066,19 @@ msgstr "Время"
 msgid "User"
 msgstr "Пользователь"
 
-#: js/widgets/container/ContainerSelect.js:107
+#: js/widgets/container/ContainerSelect.js:113
 msgid "choose other {0}..."
 msgstr "выберите другое {0}..."
 
-#: js/widgets/container/ContainerSelect.js:110
+#: js/widgets/container/ContainerSelect.js:116
 msgid "Select a {0}"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:130
+#: js/widgets/container/ContainerSelect.js:136
 msgid "Recently used {0}:"
 msgstr "Недавно используемый {0}:"
 
-#: js/widgets/container/ContainerSelect.js:447
+#: js/widgets/container/ContainerSelect.js:462
 msgid "please select a {0}"
 msgstr "пожалуйста, выберите {0}"
 
@@ -1110,7 +1105,7 @@ msgstr "Обновление разрешений"
 
 #: js/widgets/container/GrantsDialog.js:126
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 #: js/widgets/container/GrantsDialog.js:127
 msgid "You are not allowed to remove all admins for this container!"
@@ -1172,24 +1167,25 @@ msgstr ""
 msgid "The grant to access records marked as private in this container"
 msgstr ""
 
-#: js/widgets/container/PropertiesDialog.js:87
+#: js/widgets/container/PropertiesDialog.js:90
 msgid "Properties"
 msgstr ""
 
-#: js/widgets/container/PropertiesDialog.js:110
+#: js/widgets/container/PropertiesDialog.js:113
 #: js/widgets/tags/TagsPanel.js:616
 msgid "Color"
 msgstr "Цвет"
 
-#: js/widgets/container/PropertiesDialog.js:116
+#: js/widgets/container/PropertiesDialog.js:119
 msgid "My Grants"
 msgstr ""
 
 #: js/widgets/container/TreePanel.js:141
 msgid "container"
 msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "контейнер"
+msgstr[1] "контейнера"
+msgstr[2] "контейнеров"
 
 #: js/widgets/container/TreePanel.js:532
 msgid "You are not allowed to select the {0} '{1}':"
@@ -1205,13 +1201,13 @@ msgstr ""
 
 #: js/widgets/CountryCombo.js:34
 msgid "Select a country..."
-msgstr ""
+msgstr "Выберите страну..."
 
-#: js/widgets/customfields/EditDialogPlugin.js:148
+#: js/widgets/customfields/EditDialogPlugin.js:146
 msgid "General"
 msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:160
+#: js/widgets/customfields/EditDialogPlugin.js:158
 msgid "Custom Fields"
 msgstr "Дополнительные поля"
 
@@ -1241,11 +1237,11 @@ msgstr "Нет"
 
 #: js/widgets/dialog/AlarmPanel.js:62
 msgid "0 minutes before"
-msgstr ""
+msgstr "только что"
 
 #: js/widgets/dialog/AlarmPanel.js:63
 msgid "5 minutes before"
-msgstr ""
+msgstr "5 минут назад"
 
 #: js/widgets/dialog/AlarmPanel.js:64
 msgid "15 minutes before"
@@ -1265,7 +1261,7 @@ msgstr "2 часа до"
 
 #: js/widgets/dialog/AlarmPanel.js:68
 msgid "12 hours before"
-msgstr ""
+msgstr "12 часов назад"
 
 #: js/widgets/dialog/AlarmPanel.js:69
 msgid "1 day before"
@@ -1273,7 +1269,7 @@ msgstr "1 день до"
 
 #: js/widgets/dialog/AlarmPanel.js:70
 msgid "2 days before"
-msgstr ""
+msgstr "2 дня назад"
 
 #: js/widgets/dialog/CredentialsDialog.js:83
 msgid "Please enter your credentials"
@@ -1283,7 +1279,7 @@ msgstr ""
 #: js/widgets/dialog/MultipleEditResultSummary.js:86
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:57
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:113
 msgid "Merging Records..."
@@ -1362,61 +1358,61 @@ msgstr ""
 msgid "Keep both records"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:258 js/widgets/EditRecord.js:188
+#: js/widgets/dialog/EditDialog.js:293 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "удалить"
 
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/dialog/EditDialog.js:311
+#: js/widgets/dialog/EditDialog.js:333 js/widgets/dialog/EditDialog.js:346
 #: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Сохранено в"
 
-#: js/widgets/dialog/EditDialog.js:387 js/widgets/grid/GridPanel.js:389
+#: js/widgets/dialog/EditDialog.js:422 js/widgets/grid/GridPanel.js:389
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:390
+#: js/widgets/dialog/EditDialog.js:425
 msgid "Add New {0}"
 msgstr "Добавить новый {0}"
 
-#: js/widgets/dialog/EditDialog.js:392
+#: js/widgets/dialog/EditDialog.js:427
 msgid "Edit {0} \"{1}\""
 msgstr "Редактировать {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:440
+#: js/widgets/dialog/EditDialog.js:475
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:568
+#: js/widgets/dialog/EditDialog.js:603
 msgid "Do you really want to delete this {0}?"
 msgstr "Вы уверены, что хотите удалить {0}?"
 
-#: js/widgets/dialog/EditDialog.js:570 js/widgets/grid/GridPanel.js:1503
+#: js/widgets/dialog/EditDialog.js:605 js/widgets/grid/GridPanel.js:1537
 msgid "Deleting {0}"
 msgstr "Удаление {0}"
 
-#: js/widgets/dialog/EditDialog.js:580 js/widgets/tags/TagsPanel.js:291
+#: js/widgets/dialog/EditDialog.js:615 js/widgets/tags/TagsPanel.js:291
 #: js/widgets/tags/TagsPanel.js:409 js/widgets/tags/TagsPanel.js:442
 msgid "Failed"
 msgstr "Не удалось"
 
-#: js/widgets/dialog/EditDialog.js:580
+#: js/widgets/dialog/EditDialog.js:615
 msgid "Could not delete {0}."
 msgstr "Не удалось удалить {0}."
 
-#: js/widgets/dialog/EditDialog.js:632
+#: js/widgets/dialog/EditDialog.js:667
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:74
+#: js/widgets/dialog/ExportDialog.js:84
 msgid "Export {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:101
+#: js/widgets/dialog/ExportDialog.js:111
 msgid "Export definition"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:110
+#: js/widgets/dialog/ExportDialog.js:120
 msgid "Select Export Definition ..."
 msgstr ""
 
@@ -1434,198 +1430,202 @@ msgstr ""
 
 #: js/widgets/dialog/FileListDialog.js:91
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: js/widgets/dialog/FileListDialog.js:99
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
-#: js/widgets/dialog/ImportDialog.js:220
+#: js/widgets/dialog/ImportDialog.js:221
 msgid "Choose File and Format"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:229
+#: js/widgets/dialog/ImportDialog.js:230
 msgid "Choose Import File"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:233
+#: js/widgets/dialog/ImportDialog.js:234
 msgid ""
-"Please choose the file that contains the {0} you want to add to Tine 2.0"
+"Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:237
+#: js/widgets/dialog/ImportDialog.js:238
 msgid "Select file containing your {0}"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:245 js/widgets/dialog/ImportDialog.js:250
+#: js/widgets/dialog/ImportDialog.js:246 js/widgets/dialog/ImportDialog.js:251
 msgid "What should the file you upload look like?"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:253
+#: js/widgets/dialog/ImportDialog.js:254
 msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You "
-"will have to manually adjust your file so Tine 2.0 can handle it."
+"Tine 2.0 does not understand all kind of files you might want to upload. You"
+" will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:256
+#: js/widgets/dialog/ImportDialog.js:257
 msgid ""
-"Following you find a list of all supported import formats and a sample file, "
-"how Tine 2.0 expects your file to look like."
+"Following you find a list of all supported import formats and a sample file,"
+" how Tine 2.0 expects your file to look like."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:259
+#: js/widgets/dialog/ImportDialog.js:260
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:280 js/widgets/dialog/ImportDialog.js:312
+#: js/widgets/dialog/ImportDialog.js:281 js/widgets/dialog/ImportDialog.js:313
 msgid "Download example file"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:283
+#: js/widgets/dialog/ImportDialog.js:284
 msgid "Import description"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:333
+#: js/widgets/dialog/ImportDialog.js:334
 msgid "Set Import Options"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:341
+#: js/widgets/dialog/ImportDialog.js:342
 msgid "Select {0} to add you {1} to:"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:393
+#: js/widgets/dialog/ImportDialog.js:394
 msgid "Checking Import"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:422
+#: js/widgets/dialog/ImportDialog.js:423
 msgid "Resolve Conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:431
+#: js/widgets/dialog/ImportDialog.js:432
 msgid "There are {0} {1} that might already exist."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:438
-msgid "Conflict"
-msgstr ""
-
 #: js/widgets/dialog/ImportDialog.js:439
-msgid "First Conflict"
-msgstr ""
+msgid "Conflict"
+msgstr "Конфликт"
 
 #: js/widgets/dialog/ImportDialog.js:440
-msgid "Previous Conflict"
-msgstr ""
+msgid "First Conflict"
+msgstr "Первый конфликт"
 
 #: js/widgets/dialog/ImportDialog.js:441
-msgid "Next Conflict"
-msgstr ""
+msgid "Previous Conflict"
+msgstr "Предыдущий конфликт"
 
 #: js/widgets/dialog/ImportDialog.js:442
-msgid "Last Conflict"
-msgstr ""
+msgid "Next Conflict"
+msgstr "Следующий конфликт"
 
-#: js/widgets/dialog/ImportDialog.js:448
+#: js/widgets/dialog/ImportDialog.js:443
+msgid "Last Conflict"
+msgstr "Последний конфликт"
+
+#: js/widgets/dialog/ImportDialog.js:449
 msgid "Conflict is resolved"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:453
+#: js/widgets/dialog/ImportDialog.js:454
 msgid "Resolve all conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:547
+#: js/widgets/dialog/ImportDialog.js:548
 msgid "Processing Conflict Data"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:572 js/widgets/dialog/ImportDialog.js:592
+#: js/widgets/dialog/ImportDialog.js:573 js/widgets/dialog/ImportDialog.js:593
 msgid "No conflict to resolve"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:591
-msgid "(This is record {0} in you import file)"
+#: js/widgets/dialog/ImportDialog.js:592
+msgid "(This is record {0} in your import file)"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:616
+#: js/widgets/dialog/ImportDialog.js:617
 msgid "No Detail Informations"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:621
+#: js/widgets/dialog/ImportDialog.js:622
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
-msgstr ""
+msgstr "Резюме"
 
-#: js/widgets/dialog/ImportDialog.js:650
+#: js/widgets/dialog/ImportDialog.js:651
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
-msgstr ""
+msgstr "Индекс"
 
-#: js/widgets/dialog/ImportDialog.js:666
+#: js/widgets/dialog/ImportDialog.js:667
 msgid "Importing {0}"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:728
+#: js/widgets/dialog/ImportDialog.js:698
+msgid "{0} records had failures and where discarded."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:740
 msgid "In total we found {0} records in your import file."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:731
+#: js/widgets/dialog/ImportDialog.js:743
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:738
+#: js/widgets/dialog/ImportDialog.js:750
 msgid "{0} of them where identified as duplicates."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:741
+#: js/widgets/dialog/ImportDialog.js:753
 msgid ""
 "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:745
+#: js/widgets/dialog/ImportDialog.js:757
 msgid "From the identified duplicates {0} will be discarded."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:761
+#: js/widgets/dialog/ImportDialog.js:773
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:772
+#: js/widgets/dialog/ImportDialog.js:784
 msgid "{0} records have failures and will be discarded."
 msgstr ""
 
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
-msgstr ""
+msgstr "Ссылки"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:118
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:188
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:254
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:192
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:258
 msgid "Delete value from all selected records"
-msgstr ""
+msgstr "Удалить значения из всех выбранных записей"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:237
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:241
 msgid "Undo change for all selected records"
-msgstr ""
+msgstr "Отменить изменения для выделенных записей"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:287
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:291
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:288
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:292
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:381
-msgid "Do you really want to change these {0} records?"
-msgstr ""
-
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:385
+msgid "Do you really want to change these {0} records?"
+msgstr "Вы действительно хотите изменить эти {0} записи?"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:389
 msgid "Applying changes"
-msgstr ""
+msgstr "Применить изменения"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 msgid "You edited {0} {1}."
@@ -1645,7 +1645,8 @@ msgid ""
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:125
@@ -1683,19 +1684,19 @@ msgstr "Общие параметры"
 
 #: js/widgets/dialog/PreferencesTreePanel.js:87
 msgid "My Profile"
-msgstr ""
+msgstr "Мой профиль"
 
 #: js/widgets/dialog/WizardPanel.js:173
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: js/widgets/dialog/WizardPanel.js:180
 msgid "Next"
-msgstr ""
+msgstr "Далее"
 
 #: js/widgets/dialog/WizardPanel.js:194
 msgid "Finish"
-msgstr ""
+msgstr "Завершить"
 
 #: js/widgets/form/ConfigPanel.js:113
 msgid "Configuration Problem"
@@ -1711,7 +1712,7 @@ msgstr ""
 
 #: js/widgets/form/ConfigPanel.js:254
 msgid "Save config"
-msgstr ""
+msgstr "Сохранить конфигурацию"
 
 #: js/widgets/form/ConfigPanel.js:264
 msgid "Reload config"
@@ -1719,7 +1720,7 @@ msgstr ""
 
 #: js/widgets/form/FileUploadButton.js:65
 msgid "Wrong File Type"
-msgstr ""
+msgstr "Неверный тип файла"
 
 #: js/widgets/form/FileUploadButton.js:65
 msgid "Please select a file with one of the following extensions:"
@@ -1738,31 +1739,31 @@ msgstr ""
 
 #: js/widgets/grid/FileUploadGrid.js:180
 msgid "Remove file"
-msgstr ""
+msgstr "Удалить файл"
 
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:111
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:109
 msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:103
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:101
 msgid "Resume upload"
 msgstr ""
 
 #: js/widgets/grid/FileUploadGrid.js:244
 msgid "Add file"
-msgstr ""
+msgstr "Добавить файл"
 
 #: js/widgets/grid/FileUploadGrid.js:286
 msgid "name"
-msgstr ""
+msgstr "имя"
 
 #: js/widgets/grid/FileUploadGrid.js:293
 msgid "size"
-msgstr ""
+msgstr "размер"
 
 #: js/widgets/grid/FileUploadGrid.js:300
 msgid "type"
-msgstr ""
+msgstr "тип"
 
 #: js/widgets/grid/FilterModel.js:168
 msgid "contains"
@@ -1826,71 +1827,71 @@ msgstr ""
 msgid "select a operator"
 msgstr "выберите оператор"
 
-#: js/widgets/grid/FilterModel.js:345
+#: js/widgets/grid/FilterModel.js:352
 msgid "Search Account ..."
 msgstr ""
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:462
 msgid "today"
 msgstr "сегодня"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:463
 msgid "yesterday"
 msgstr "вчера"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:464
 msgid "this week"
 msgstr "эта неделя"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:465
 msgid "last week"
 msgstr "последняя неделя"
 
-#: js/widgets/grid/FilterModel.js:459
+#: js/widgets/grid/FilterModel.js:466
 msgid "the week before last"
 msgstr "предпоследняя неделя"
 
-#: js/widgets/grid/FilterModel.js:460
+#: js/widgets/grid/FilterModel.js:467
 msgid "this month"
 msgstr "этот месяц"
 
-#: js/widgets/grid/FilterModel.js:461
+#: js/widgets/grid/FilterModel.js:468
 msgid "last month"
 msgstr "последний месяц"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:469
 msgid "this quarter"
 msgstr "этот квартал"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:470
 msgid "last quarter"
 msgstr "последний квартал"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:471
 msgid "this year"
 msgstr "этот год"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:472
 msgid "last year"
 msgstr "прошлый год"
 
-#: js/widgets/grid/FilterModel.js:469
+#: js/widgets/grid/FilterModel.js:476
 msgid "tomorrow"
 msgstr "завтра"
 
-#: js/widgets/grid/FilterModel.js:470
+#: js/widgets/grid/FilterModel.js:477
 msgid "next week"
 msgstr "следующая неделя"
 
-#: js/widgets/grid/FilterModel.js:471
+#: js/widgets/grid/FilterModel.js:478
 msgid "next month"
 msgstr "следующий месяц"
 
-#: js/widgets/grid/FilterModel.js:472
+#: js/widgets/grid/FilterModel.js:479
 msgid "next quarter"
 msgstr "следующий квартал"
 
-#: js/widgets/grid/FilterModel.js:473
+#: js/widgets/grid/FilterModel.js:480
 msgid "next year"
 msgstr "следующий год"
 
@@ -1898,16 +1899,16 @@ msgstr "следующий год"
 msgid "Attention: There are more filters active!"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:475
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:479
 msgid "Criteria {0}"
-msgstr ""
+msgstr "Условие {0}"
 
-#: js/widgets/grid/FilterPanel.js:256
+#: js/widgets/grid/FilterPanel.js:260
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
 msgid "show details"
-msgstr ""
+msgstr "подробнее"
 
-#: js/widgets/grid/FilterPanel.js:257
+#: js/widgets/grid/FilterPanel.js:261
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
 msgid "Always show advanced filters"
 msgstr ""
@@ -1930,7 +1931,7 @@ msgstr ""
 msgid "Remove Filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:556
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:568
 msgid "Show"
 msgstr "Показать"
 
@@ -1958,11 +1959,11 @@ msgstr ""
 msgid "select a field"
 msgstr "выберите поле"
 
-#: js/widgets/grid/FilterToolbar.js:382
+#: js/widgets/grid/FilterToolbar.js:394
 msgid "Delete this filter"
 msgstr "Удалить этот фильтр"
 
-#: js/widgets/grid/FilterToolbar.js:413
+#: js/widgets/grid/FilterToolbar.js:425
 msgid "and"
 msgstr "и"
 
@@ -1971,6 +1972,7 @@ msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/widgets/grid/ForeignRecordFilter.js:61
 msgid "Edit definition"
@@ -1988,9 +1990,7 @@ msgstr ""
 msgid ""
 "No {0} where found. Please try to change your filter-criteria, view-options "
 "or the {1} you search in."
-msgstr ""
-"Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии "
-"фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
+msgstr "Никаких {0} не найдено. Пожалуйста попытайтесь изменить свои критерии фильтра, варианты представления, или {1} поменять в тех в которых Вы ищете."
 
 #: js/widgets/grid/GridPanel.js:273 js/widgets/grid/GridPanel.js:374
 #: js/widgets/grid/GridPanel.js:375 js/widgets/grid/GridPanel.js:376
@@ -1998,6 +1998,7 @@ msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/widgets/grid/GridPanel.js:400 js/widgets/tree/ContextMenu.js:35
 msgid "Add {0}"
@@ -2008,7 +2009,7 @@ msgid "Print Page"
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:469 js/widgets/grid/GridPanel.js:470
-#: js/widgets/grid/GridPanel.js:472 js/widgets/tree/ContextMenu.js:55
+#: js/widgets/grid/GridPanel.js:472 js/widgets/tree/ContextMenu.js:53
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Удалить {0}"
@@ -2023,55 +2024,56 @@ msgstr "Показаны записи {0} - {1} из {2}"
 msgid "No {0} to display"
 msgstr "Нет {0} для отображения"
 
-#: js/widgets/grid/GridPanel.js:1055
+#: js/widgets/grid/GridPanel.js:1063
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1082
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1118
+#: js/widgets/grid/GridPanel.js:1126
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1120
+#: js/widgets/grid/GridPanel.js:1128
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1121
+#: js/widgets/grid/GridPanel.js:1129
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1444
+#: js/widgets/grid/GridPanel.js:1478
 msgid "Not Allowed"
 msgstr "Не разрешено"
 
-#: js/widgets/grid/GridPanel.js:1445
+#: js/widgets/grid/GridPanel.js:1479
 msgid "You are not allowed to delete all pages at once"
 msgstr "Вам не позволяется удалить все страницы сразу"
 
-#: js/widgets/grid/GridPanel.js:1468
+#: js/widgets/grid/GridPanel.js:1502
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: js/widgets/grid/GridPanel.js:1503
+#: js/widgets/grid/GridPanel.js:1537
 msgid " ... This may take a long time!"
 msgstr " ... Это может занять много времени!"
 
 #: js/widgets/grid/PickerGridPanel.js:159
 msgid "Remove record"
-msgstr ""
+msgstr "Удалить запись"
 
 #: js/widgets/grid/PickerGridPanel.js:254
 msgid "Search for records ..."
-msgstr ""
+msgstr "Поиск записей..."
 
 #: js/widgets/grid/QuickaddGridPanel.js:97
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: js/widgets/grid/RendererManager.js:54
 msgid "has notes"
@@ -2099,7 +2101,7 @@ msgstr ""
 
 #: js/widgets/mainscreen/WestPanel.js:358
 msgid "Modules"
-msgstr ""
+msgstr "Модули"
 
 #: js/widgets/mainscreen/WestPanel.js:369
 msgid "Save current view as favorite"
@@ -2122,7 +2124,7 @@ msgstr ""
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:137
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:155
 msgid "Shared Favorite (visible by all users)"
@@ -2155,7 +2157,7 @@ msgstr ""
 
 #: js/widgets/persistentfilter/PickerPanel.js:350
 msgid "Overwrite?"
-msgstr ""
+msgstr "Перезаписать?"
 
 #: js/widgets/persistentfilter/PickerPanel.js:350
 msgid "Do you want to overwrite the favorite \"{0}\"?"
@@ -2206,7 +2208,7 @@ msgstr "личные"
 
 #: js/widgets/tags/TagsMassAttachAction.js:18
 msgid "Add Tag"
-msgstr ""
+msgstr "Добавить тег"
 
 #: js/widgets/tags/TagsMassAttachAction.js:75
 msgid "Attach the following tag to all selected items:"
@@ -2214,7 +2216,7 @@ msgstr ""
 
 #: js/widgets/tags/TagsMassAttachAction.js:87
 msgid "Select Tag"
-msgstr ""
+msgstr "Выбрать тег"
 
 #: js/widgets/tags/TagsMassAttachAction.js:116
 msgid "Attaching Tag"
@@ -2238,9 +2240,7 @@ msgstr "Добавить новый личный тэг"
 
 #: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
 msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
-"Пожалуйста, обратите внимание: Вы создаёте личный тэг. Только Вы можете "
-"видеть его!"
+msgstr "Пожалуйста, обратите внимание: Вы создаёте личный тэг. Только Вы можете видеть его!"
 
 #: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
 msgid "Enter tag name:"
@@ -2355,7 +2355,7 @@ msgstr ""
 
 #: js/widgets/tags/TagToggleBox.js:141
 msgid "Please Wait..."
-msgstr ""
+msgstr "Минуточку..."
 
 #: js/widgets/tags/TagToggleBox.js:152
 msgid "Detaching Tags"
@@ -2369,67 +2369,67 @@ msgstr "Часовой пояс"
 msgid "setting new timezone..."
 msgstr "задание нового часового пояса..."
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:256
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:254
 msgid "Rename {0}"
 msgstr "Переименовать {0}"
 
-#: js/widgets/tree/ContextMenu.js:64
+#: js/widgets/tree/ContextMenu.js:62
 msgid "Manage {0} Permissions"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:72
+#: js/widgets/tree/ContextMenu.js:70
 msgid "{0} Properties"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:81
+#: js/widgets/tree/ContextMenu.js:79
 msgid "Set {0} color"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:95
+#: js/widgets/tree/ContextMenu.js:93
 msgid "Reload {0}"
 msgstr "Перезагрузить {0}"
 
-#: js/widgets/tree/ContextMenu.js:119
+#: js/widgets/tree/ContextMenu.js:117
 msgid "Download"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:177
+#: js/widgets/tree/ContextMenu.js:175
 msgid "New {0}"
 msgstr "Новый {0}"
 
-#: js/widgets/tree/ContextMenu.js:177
+#: js/widgets/tree/ContextMenu.js:175
 msgid "Please enter the name of the new {0}:"
 msgstr "Пожалуйста, введите имя нового {0}:"
 
-#: js/widgets/tree/ContextMenu.js:180
+#: js/widgets/tree/ContextMenu.js:178
 msgid "No {0} added"
 msgstr "{0} не добавлены"
 
-#: js/widgets/tree/ContextMenu.js:180 js/widgets/tree/ContextMenu.js:263
+#: js/widgets/tree/ContextMenu.js:178 js/widgets/tree/ContextMenu.js:261
 msgid "You have to supply a {0} name!"
 msgstr "Вы должны назвать {0}!"
 
-#: js/widgets/tree/ContextMenu.js:183
+#: js/widgets/tree/ContextMenu.js:181
 msgid "Creating {0}..."
 msgstr "Создание {0}..."
 
-#: js/widgets/tree/ContextMenu.js:257
+#: js/widgets/tree/ContextMenu.js:255
 msgid "Please enter the new name of the {0}:"
 msgstr "Пожалуйста, введите новое имя {0}:"
 
-#: js/widgets/tree/ContextMenu.js:263
+#: js/widgets/tree/ContextMenu.js:261
 msgid "Not renamed {0}"
 msgstr "Не переименованы {0}"
 
-#: js/widgets/tree/ContextMenu.js:337
+#: js/widgets/tree/ContextMenu.js:335
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Вы действительно хотите удалить {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:449
+#: js/widgets/tree/ContextMenu.js:447
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Управлять правами {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:475
+#: js/widgets/tree/ContextMenu.js:473
 msgid "Properties for {0} \"{1}\""
 msgstr ""
 
@@ -2449,11 +2449,11 @@ msgstr "Эта важное обновление должно быть уста�
 msgid "Please consider updating!"
 msgstr "Пожалуйста, рассмотрите обновление!"
 
-#: Notes.php:367
+#: Notes.php:369
 msgid "by"
 msgstr "у"
 
-#: Notes.php:373
+#: Notes.php:378
 msgid "Changed fields:"
 msgstr "Измененные поля:"
 
@@ -2484,9 +2484,7 @@ msgstr "Тип окна"
 #: Preference.php:100
 msgid ""
 "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr ""
-"Вы можете выбрать между стилем окон ExtJs или обычными всплывающими окнами "
-"браузера."
+msgstr "Вы можете выбрать между стилем окон ExtJs или обычными всплывающими окнами браузера."
 
 #: Preference.php:103
 msgid "Confirm Logout"
@@ -2543,178 +2541,3 @@ msgstr ""
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr ""
-
-msgid "low"
-msgstr "низкий"
-
-msgid "normal"
-msgstr "нормальный"
-
-msgid "high"
-msgstr "высокий"
-
-msgid "urgent"
-msgstr "срочный"
-
-#, fuzzy
-msgid "Tagging"
-msgstr "Тэг"
-
-msgid "save filter"
-msgstr "сохранить фильтр"
-
-msgid "Updating {0} \"{1}\""
-msgstr "Обновление {0} \"{1}\""
-
-msgid "Deleting {0} \"{1}\""
-msgstr "Удаление {0} \"{1}\""
-
-msgid "There are no custom fields yet"
-msgstr "Пока ещё нет дополнительных полей"
-
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Вы действительно хотите удалить выделенную запись"
-msgstr[1] "Вы действительно хотите удалить выделенные записи"
-msgstr[2] "Вы действительно хотите удалить выделенные записи"
-
-msgid "About Tine 2.0"
-msgstr "О Tine 2.0"
-
-msgid "Filter"
-msgstr "Фильтр"
-
-#, fuzzy
-msgid "Transfering Configuration..."
-msgstr "Передача {0}..."
-
-msgid "Transfering {0}..."
-msgstr "Передача {0}..."
-
-msgid "Install Google Gears"
-msgstr "Установить Google Gears"
-
-msgid ""
-"Installing Gears will improve the performance of Tine 2.0 by caching all "
-"needed files locally on this computer."
-msgstr ""
-"Установка Gears повысит скорость Tine 2.0 сохранением необходимых файлов "
-"локально на этом компьютере."
-
-msgid "Please enter a name for the filter"
-msgstr "Пожалуйста, введите название фильтра"
-
-msgid "Filter not Saved"
-msgstr "Фильтр не сохранен"
-
-msgid "You have to supply a name for the filter!"
-msgstr "Вы должны дать фильтру название!"
-
-msgid ""
-"You have to supply a shorter name! Names of saved filters can only be up to "
-"40 characters long."
-msgstr ""
-"Вы должны использовать короткое имя! Имена сохраненных фильтров не могут "
-"быть длиннее 40 символов."
-
-msgid "Saving filter"
-msgstr "Сохранённый фильтр"
-
-msgid "My saved filters"
-msgstr "Мои сохранённые фильтры"
-
-msgid "Delete Filter"
-msgstr "Удалить фильтр"
-
-msgid "Do you really want to delete the Filter \"{0}\"?"
-msgstr "Вы уверены, что хотите удалить фильтр \"{0}\"?"
-
-msgid "Deleting Filter \"{0}\""
-msgstr "Удаление фильтра \"{0}\""
-
-msgid "Saved filter"
-msgstr "Сохранённый фильтр"
-
-msgid "Report bugs to tine20.org directly when they occur"
-msgstr "Сообщайте об ошибках, когда они происходят, прямо на tine20.org"
-
-msgid "Check tine20.org for new versions"
-msgstr "Проверить новые версии на tine20.org"
-
-msgid "Remove account"
-msgstr "Удалить учётную запись"
-
-msgid "shared"
-msgstr "общие"
-
-#, fuzzy
-msgid "Permission Denied"
-msgstr "Разрешения"
-
-#, fuzzy
-msgid "You don't have the required grant to select this {0}"
-msgstr "Вы уверены, что хотите удалить {0}?"
-
-msgid "is in"
-msgstr "в"
-
-msgid "remove record"
-msgstr "удалить запись"
-
-msgid "Search"
-msgstr "Поиск"
-
-msgid "Browse"
-msgstr "Листать"
-
-msgid "click to edit"
-msgstr "нажмите, чтобы изменить"
-
-msgid "Plase select an image file (gif/png/jpeg)"
-msgstr "Пожалуйста, выберите файл изображения (gif/png/jpeg)"
-
-msgid "Please Select a Group"
-msgstr "Пожалуйста, выберите группу"
-
-msgid "Register"
-msgstr "Регистрация"
-
-msgid ""
-"The server did not respond to your request. Please check your network or "
-"contact your administrator."
-msgstr ""
-"Сервер не ответил на Ваш запрос. Пожалуйста, проверьте свою сеть или "
-"свяжитесь с Вашим администратором."
-
-msgid "Permissions"
-msgstr "Разрешения"
-
-msgid "Could not save {0}."
-msgstr "Не удалось сохранить {0}."
-
-msgid "add account"
-msgstr "добавить учётную запись"
-
-msgid "nobody"
-msgstr "никто"
-
-msgid "please select an account"
-msgstr "пожалуйста, выберите учётную запись"
-
-msgid "loading new language..."
-msgstr "загрузка нового языка..."
-
-msgid "Export Date"
-msgstr "Экспорт даты"
-
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator."
-msgstr ""
-"Неустранимая ошибка: Сбой самообновления клиента, пожалуйста, обратитесь к "
-"администратору."
-
-msgid "Select all visible ({0} records)"
-msgstr "Выбрать все видимые ({0} записей)"
-
-#~ msgid "Manage permissions"
-#~ msgstr "Управлять правами доступа"

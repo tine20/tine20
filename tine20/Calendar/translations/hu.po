@@ -5,14 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-03 20:27+0000\n"
+"PO-Revision-Date: 2012-07-28 11:51+0000\n"
 "Last-Translator: Tamás Faragó <>\n"
-"Language-Team: Hungarian (http://www.transifex.net/projects/p/tine20/language/hu/)\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -71,43 +71,43 @@ msgid ""
 "might impact other calendar systems on export or syncronisation."
 msgstr "Lehetséges esemény résztvevő szerepek. Kérlek jegyezd meg, hogy a további résztvevő szerepek ütközhetnek a más naptár rendszerekkel exportálások vagy szinkronizáláskor."
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Riasztás \"%1$s\" eseményhez ekkor: %2$s"
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "\"%1$s\" esemény meghívó ekkor:"
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "\"%1$s\" esemény %2$s-kor törölve lett"
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "\"%1$s\" esemény %2$s-kor át lett ütemezve"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "\"%1$s\" esemény %2$s-kor frissítve lett"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s elfogadta ezt az eseményt:\"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s elutasította ezt az eseményt:\"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Bizonytalan válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Nincs válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Résztvevők megváltoztak ezen az eseményen:\"%1$s\" ekkor:%2$s"
 
@@ -154,7 +154,7 @@ msgid "Manage Resources"
 msgstr "Források kezelése"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Résztvevők"
 
@@ -182,7 +182,7 @@ msgstr "Felhasználó"
 msgid "Group"
 msgstr "Csoport"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Forrás"
@@ -206,7 +206,7 @@ msgid "Click here to invite another attender..."
 msgstr "Kattints ide másik résztvevő meghívásához..."
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Nincs információ"
 
@@ -232,7 +232,7 @@ msgstr[1] "Naptárak"
 msgid "Originally"
 msgstr "Eredetileg"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "Események"
 
@@ -291,12 +291,12 @@ msgstr "Blokkolva"
 msgid "Location"
 msgstr "Hely"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Szervező"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "egész nap"
 
@@ -545,7 +545,7 @@ msgstr "Esemény szerkesztése"
 msgid "Cancel this action"
 msgstr "Esemény megszakítása"
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Esemény"
@@ -563,25 +563,29 @@ msgstr "Gyors keresés"
 msgid "Attendee Status"
 msgstr "Résztvevők állapota"
 
-#: js/Model.js:225
+#: js/Model.js:216
+msgid "Attendee Role"
+msgstr "Résztvevő szerep"
+
+#: js/Model.js:232
 msgid "Event (as attendee)"
 msgstr "Esemény (résztvevőként)"
 
-#: js/Model.js:232
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr "Esemény (szervezőként)"
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr "Esemény résztvevő"
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Résztvevő"
 msgstr[1] "Résztvevők"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Források"
 
@@ -706,15 +710,15 @@ msgstr "Minden {0}. évben"
 msgid "of"
 msgstr "hónap"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr "nem található esemény"
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr "Keresés..."
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr "Esemény keresése"
 
@@ -726,7 +730,7 @@ msgstr "Mini naptár"
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: Model/Attender.php:427
+#: Model/Attender.php:444
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
@@ -760,12 +764,12 @@ msgid "Organizer timezone"
 msgstr "Szervező időzónája"
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Igen"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "Nem"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Igen"
 
 #: Preference.php:31
 msgid "All my events"

@@ -1,19 +1,19 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Phone\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-03-02 12:57+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-04-02 13:55+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-03 05:53+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Language: Bulgarian\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AddressbookGridPanelHook.js:35
@@ -155,165 +155,3 @@ msgstr "Позвъняване"
 #: js/Phone.js:712
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
-
-msgid "Dial phone number"
-msgstr "Набран телефонен номер"
-
-msgid "Name"
-msgstr "Име"
-
-msgid "Phone Model"
-msgstr "Модел Телефон"
-
-msgid "MAC Address"
-msgstr "MAC адрес"
-
-msgid "infos"
-msgstr "информации"
-
-msgid "Current IP Address"
-msgstr "Актуален IP адрес"
-
-msgid "Firmware last checked at"
-msgstr "Последна проверка на фирменният продукт"
-
-msgid "Current Software Version"
-msgstr "Актуална програмна версия"
-
-msgid "Settings Loaded at"
-msgstr "Качени настройки"
-
-msgid "redirection"
-msgstr "прехвърлена връзка"
-
-msgid "redirect_event"
-msgstr "причина за прехвърляне на връзка"
-
-msgid "all"
-msgstr "всички"
-
-msgid "busy"
-msgstr "заето"
-
-msgid "none"
-msgstr "нищо"
-
-msgid "time"
-msgstr "време"
-
-msgid "redirect_number"
-msgstr "номер на прехвърляне"
-
-msgid "redirect_time"
-msgstr "време на прехвърляне"
-
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "web_language"
-msgstr "език на програмната маска"
-
-msgid "- factory default -"
-msgstr "- фирмени настройки -"
-
-msgid "language"
-msgstr "език"
-
-msgid "display_method"
-msgstr "метод на показване"
-
-msgid "whole url"
-msgstr "пълен адрес (url)"
-
-msgid "name"
-msgstr "име"
-
-msgid "number"
-msgstr "номер"
-
-msgid "name + number"
-msgstr "име + номер"
-
-msgid "number + name"
-msgstr "номер + име"
-
-msgid "call_waiting"
-msgstr "изчакващо обаждане"
-
-msgid "on"
-msgstr "включено"
-
-msgid "visual"
-msgstr "показва"
-
-msgid "ringer"
-msgstr "линия"
-
-msgid "off"
-msgstr "изключено"
-
-msgid "mwi_notification"
-msgstr "MWI осведомяване"
-
-msgid "silent"
-msgstr "без звук"
-
-msgid "beep"
-msgstr "сигнален тон"
-
-msgid "reminder"
-msgstr "напомняне"
-
-msgid "mwi_dialtone"
-msgstr "MWI сигнал"
-
-msgid "normal"
-msgstr "нормално"
-
-msgid "stutter"
-msgstr "прекъсвач"
-
-msgid "headset_device"
-msgstr "headset уред"
-
-msgid "headset_rj"
-msgstr "Headset RJ"
-
-msgid "message_led_other"
-msgstr "други LED"
-
-msgid "global_missed_counter"
-msgstr "Брояч пропуснати"
-
-msgid "scroll_outgoing"
-msgstr "прелиства изходящи"
-
-msgid "show_local_line"
-msgstr "собствен номер"
-
-msgid "show_call_status"
-msgstr "показва статус на повиквания"
-
-msgid "lineactive"
-msgstr "активна линия"
-
-msgid "sipCombo"
-msgstr "SIP Избор"
-
-msgid "Idle Text"
-msgstr "Текст при ненабрано състояние"
-
-msgid "Lines"
-msgstr "Линии"
-
-msgid "Users"
-msgstr "Потребитили"
-
-msgid "Rights"
-msgstr "Права"
-
-msgid "enter searchfilter"
-msgstr "включи филтър за търсене"
-
-msgid "Incoming"
-msgstr "Входящ"

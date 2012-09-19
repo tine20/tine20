@@ -1,17 +1,18 @@
 # 
 # Translators:
+#   <mail@corneliusweiss.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:50+0000\n"
+"PO-Revision-Date: 2012-08-23 14:13+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
-"Language-Team: German (http://www.transifex.net/projects/p/tine20/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -70,43 +71,43 @@ msgid ""
 "might impact other calendar systems on export or syncronisation."
 msgstr "Verfügbare Teilnehmerrollen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
-#: Controller/EventNotifications.php:244
+#: Controller/EventNotifications.php:254
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:247
+#: Controller/EventNotifications.php:257
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Einladung zum Termin  \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:251
+#: Controller/EventNotifications.php:261
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Termin \"%1$s\" am %2$s wurde abgesagt"
 
-#: Controller/EventNotifications.php:257
+#: Controller/EventNotifications.php:267
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Der Termin \"%1$s\" am %2$s wurde verlegt"
 
-#: Controller/EventNotifications.php:262
+#: Controller/EventNotifications.php:272
 msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "Der Termin \"%1$s\" wurde %2$s verändert"
+msgstr "Der Termin \"%1$s\" am %2$s wurde verändert"
 
-#: Controller/EventNotifications.php:273
+#: Controller/EventNotifications.php:283
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:277
+#: Controller/EventNotifications.php:287
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "Absage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:281
+#: Controller/EventNotifications.php:291
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:295
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:299
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
 
@@ -153,7 +154,7 @@ msgid "Manage Resources"
 msgstr "Verwalte Ressourcen"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
-#: js/EventDetailsPanel.js:281 js/Model.js:358
+#: js/EventDetailsPanel.js:281 js/Model.js:365
 msgid "Attendee"
 msgstr "Teilnehmer"
 
@@ -181,7 +182,7 @@ msgstr "Benutzer"
 msgid "Group"
 msgstr "Gruppe"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:513
+#: js/AttendeeGridPanel.js:170 js/Model.js:520
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ressource"
@@ -205,7 +206,7 @@ msgid "Click here to invite another attender..."
 msgstr "Klicken Sie hier, um neue Teilnehmer einzuladen..."
 
 #: js/AttendeeGridPanel.js:449 js/AttendeeGridPanel.js:467
-#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:374
+#: js/AttendeeGridPanel.js:484 js/AttendeeGridPanel.js:496 js/Model.js:381
 msgid "No Information"
 msgstr "Keine Angabe"
 
@@ -231,7 +232,7 @@ msgstr[1] "Kalender"
 msgid "Originally"
 msgstr "Ursprungskalender"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:362
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:369
 msgid "Events"
 msgstr "Termine"
 
@@ -290,12 +291,12 @@ msgstr "Blockierend"
 msgid "Location"
 msgstr "Ort"
 
-#: js/EventDetailsPanel.js:263 js/Model.js:215 Model/Event.php:243
+#: js/EventDetailsPanel.js:263 js/Model.js:222 Model/Event.php:243
 msgid "Organizer"
 msgstr "Organisator"
 
 #: js/EventEditDialog.js:127 js/GridView.js:125 js/Printer/Base.js:66
-#: js/SearchCombo.js:195
+#: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "ganztägig"
 
@@ -544,7 +545,7 @@ msgstr "Termin bearbeiten"
 msgid "Cancel this action"
 msgstr "Diese Aktion abbrechen"
 
-#: js/Model.js:63 js/Model.js:362 js/SearchCombo.js:76
+#: js/Model.js:63 js/Model.js:369 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
@@ -562,25 +563,29 @@ msgstr "Schnellsuche"
 msgid "Attendee Status"
 msgstr "Teilnehmerstatus"
 
-#: js/Model.js:225
+#: js/Model.js:216
+msgid "Attendee Role"
+msgstr "Teilnehmer Rolle"
+
+#: js/Model.js:232
 msgid "Event (as attendee)"
 msgstr "Termin (als Teilnehmer)"
 
-#: js/Model.js:232
+#: js/Model.js:239
 msgid "Event (as organizer)"
 msgstr "Termin (als Organisator)"
 
-#: js/Model.js:242
+#: js/Model.js:249
 msgid "Event attendee"
 msgstr "Terminteilnehmer"
 
-#: js/Model.js:358
+#: js/Model.js:365
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Teilnehmer/in"
 msgstr[1] "Teilnehmende"
 
-#: js/Model.js:513
+#: js/Model.js:520
 msgid "Resources"
 msgstr "Ressourcen"
 
@@ -705,15 +710,15 @@ msgstr "Jedes {0}. Jahr"
 msgid "of"
 msgstr "im"
 
-#: js/SearchCombo.js:67
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr "keine Termine gefunden"
 
-#: js/SearchCombo.js:68
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr "Suche ..."
 
-#: js/SearchCombo.js:77
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr "Suche Termin"
 
@@ -725,7 +730,7 @@ msgstr "Mini Kalender"
 msgid "unknown"
 msgstr "unbekannt"
 
-#: Model/Attender.php:427
+#: Model/Attender.php:444
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Dieser Kontakt wurde automatisch bei der Syncronisation angelegt"
@@ -759,12 +764,12 @@ msgid "Organizer timezone"
 msgstr "Zeitzone des Organisators"
 
 #: Model/Event.php:275
-msgid "Yes"
-msgstr "Ja"
-
-#: Model/Event.php:275
 msgid "No"
 msgstr "Nein"
+
+#: Model/Event.php:275
+msgid "Yes"
+msgstr "Ja"
 
 #: Preference.php:31
 msgid "All my events"
@@ -879,7 +884,7 @@ msgstr "Abgesagt"
 
 #: Setup/Initialize.php:115 Setup/Update/Release5.php:94
 msgid "Tentative"
-msgstr "Vielleicht"
+msgstr "Vorläufig"
 
 #: views/eventNotification.php:12
 msgid "Updates"

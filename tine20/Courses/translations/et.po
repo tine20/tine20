@@ -1,0 +1,145 @@
+# 
+# Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-09 10:35+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>\n"
+"Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller/Course.php:106
+msgid "teacher"
+msgstr "õpetaja"
+
+#: Controller/Course.php:114
+msgid "Teacher"
+msgstr "Õpetaja"
+
+#: Controller/Course.php:115
+msgid "Teacher Account"
+msgstr "Õpetaja konto"
+
+#: Frontend/Json.php:256 js/CourseEditDialog.js:141 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kursus"
+msgstr[1] "Kursused"
+
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:157
+msgid "Course Name"
+msgstr "Kursuse nimi"
+
+#: js/CourseEditDialog.js:164
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:175
+msgid "Description"
+msgstr "Kirjeldus"
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:85
+msgid "Internet Access"
+msgstr "Interneti ligipääs"
+
+#: js/CourseEditDialog.js:190 js/CourseGridPanel.js:93
+msgid "Fileserver Access"
+msgstr "Failiserveri ligipääs"
+
+#: js/CourseEditDialog.js:222
+msgid "Members"
+msgstr "Liikmed"
+
+#: js/CourseEditDialog.js:248
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:252
+msgid "unknown"
+msgstr "tundmatu"
+
+#: js/CourseEditDialog.js:257
+msgid "Reset Password"
+msgstr "Taasta parool"
+
+#: js/CourseEditDialog.js:275
+msgid "Set new password"
+msgstr "Määra uus parool"
+
+#: js/CourseEditDialog.js:275
+msgid "Please enter the new password:"
+msgstr ""
+
+#: js/CourseGridPanel.js:48
+msgid "Quick search"
+msgstr "Kiirotsing"
+
+#: js/CourseGridPanel.js:70
+msgid "Name"
+msgstr "Nimi"
+
+#: js/CourseGridPanel.js:76
+msgid "Type"
+msgstr "Tüüp"
+
+#: js/CourseGridPanel.js:124
+msgid "Internet Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:135
+msgid "Internet Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:146
+msgid "Fileserver Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:157
+msgid "Fileserver Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:217
+msgid "Failed"
+msgstr "Ebaõnnestus"
+
+#: js/CourseGridPanel.js:218
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Kõik kursused"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kursused"
