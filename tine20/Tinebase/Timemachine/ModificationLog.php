@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -258,7 +258,6 @@ class Tinebase_Timemachine_ModificationLog
         
         // handle concurrent updates on unmodified records
         if (! $_newRecord->last_modified_time instanceof DateTime) {
-            
             if ($_curRecord->creation_time instanceof DateTime) {
                 $_newRecord->last_modified_time = clone $_curRecord->creation_time;
             } else {
@@ -283,10 +282,6 @@ class Tinebase_Timemachine_ModificationLog
             
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
-                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] instanceof Tinebase_DateTime) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
-                    throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
-                }
                 if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] == $diff->new_value) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" .
                     $diff->modified_attribute . "', nothing to do.");

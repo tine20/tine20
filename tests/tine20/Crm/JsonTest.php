@@ -300,9 +300,9 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testRelationWithoutType()
     {
-        $contact    = $this->_getContact();
+        $contact      = $this->_getContact();
         $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
-        $lead       = $this->_getLead();
+        $lead         = $this->_getLead();
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
@@ -312,6 +312,51 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
+    }
+    
+    /**
+     * testConcurrentRelationSetting
+     * 
+     * @see 0007108: inspect and solve concurrency conflicts when setting lead relations
+     */
+    public function testConcurrentRelationSetting()
+    {
+        $leadData = $this->_instance->saveLead($this->_getLead()->toArray());
+        $task = $this->_getTask();
+        
+        $taskJson = new Tasks_Frontend_Json();
+        $taskData = $this->_getTask()->toArray();
+        $taskData['relations'] = array(
+            array(
+                'type'  => 'TASK',
+                'own_model' => 'Tasks_Model_Task',
+                'own_backend' => 'Sql',
+                //'own_id' => 'c0096f3d78edb82a9670931f0f5f575a76b656f0',
+                'own_degree' => 'sibling',
+                'related_model' => 'Crm_Model_Lead',
+                'related_backend' => 'Sql',
+                'related_id' => $leadData['id'],
+                'related_record' => $leadData
+            ),
+        );
+        $taskData = $taskJson->saveTask($taskData);
+        
+        sleep(1);
+        $taskData['description'] = 1;
+        $taskData = $taskJson->saveTask($taskData);
+        sleep(1);
+        
+        $savedLead = $this->_instance->getLead($leadData['id']);
+        $savedLead['relations'][0]['related_record']['description'] = '2';
+        $savedLead['relations'][0]['related_record']['due'] = '2012-10-18 12:54:33';
+        // client may ommit last_modified time -> this should cause a concurrency conflict
+        $savedLead['relations'][0]['related_record']['last_modified_time'] = '';
+        try {
+            $savedLead = $this->_instance->saveLead($savedLead);
+            $this->fail('expected concurrency exception');
+        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+            $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
+        }
     }
     
     /**
