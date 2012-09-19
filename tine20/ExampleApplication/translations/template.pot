@@ -23,70 +23,45 @@ msgid ""
 "ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
+#: Controller.php:79
 #, python-format
 msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:87
+#: js/ExampleRecordEditDialog.js:53
 msgid "ExampleRecord"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
+#: js/ExampleRecordEditDialog.js:70 Model/ExampleRecord.php:59
 msgid "Name"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
-#: js/Model.js:71
+#: js/ExampleRecordEditDialog.js:76 Model/ExampleRecord.php:63
 msgid "Status"
 msgstr ""
 
-#: js/ExampleRecordGridPanel.js:96
-msgid "Title"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:102
-msgid "Budget"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:126
-msgid "Show closed"
-msgstr ""
-
-#: js/Model.js:31
+#: Model/ExampleRecord.php:35
 msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
+msgstr ""
 
-#: js/Model.js:35
+#: Model/ExampleRecord.php:36
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:38
 msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:69
-msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:79
-msgid "Last modified"
+#: Model/ExampleRecord.php:39
+msgid "example record lists"
 msgstr ""
 
-#: js/Model.js:80
-msgid "Last modifier"
+#: Preference.php:60
+msgid "Default Example Record Container"
 msgstr ""
 
-#: js/Model.js:81
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:82
-msgid "Creator"
+#: Preference.php:61
+msgid "The default container for new records"
 msgstr ""
 
 #: Setup/Initialize.php:33

@@ -57,7 +57,11 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller.php:98
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""
+
+#: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
 msgstr ""
@@ -167,11 +171,11 @@ msgstr ""
 msgid "Contact import from Google address book"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:13
+#: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
 msgstr ""
 
-#: Import/definitions/adb_mac_import_csv.xml:16
+#: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
@@ -236,14 +240,14 @@ msgstr ""
 msgid "Middle Name"
 msgstr ""
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr ""
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
@@ -358,27 +362,27 @@ msgstr ""
 msgid "Enter description"
 msgstr ""
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:400
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
+#: js/ContactEditDialog.js:408 js/ContactEditDialog.js:493
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
+#: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:535
+#: js/ContactEditDialog.js:519
 msgid "End token mode"
 msgstr ""
 
@@ -599,11 +603,11 @@ msgid "Quick search"
 msgstr ""
 
 #: js/Model.js:161
-msgid "Last modified"
+msgid "Last Modified Time"
 msgstr ""
 
 #: js/Model.js:162
-msgid "Last modifier"
+msgid "Last Modified By"
 msgstr ""
 
 #: js/Model.js:163
@@ -611,7 +615,7 @@ msgid "Creation Time"
 msgstr ""
 
 #: js/Model.js:164
-msgid "Creator"
+msgid "Created By"
 msgstr ""
 
 #: js/Model.js:201
@@ -652,31 +656,31 @@ msgstr ""
 msgid "Ms"
 msgstr ""
 
-#: Setup/Initialize.php:134 Setup/Update/Release3.php:37
+#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr ""
 
-#: Setup/Initialize.php:139
+#: Setup/Initialize.php:140
 msgid "My company"
 msgstr ""
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:141
 msgid "All coworkers in my company"
 msgstr ""
 
-#: Setup/Initialize.php:153
+#: Setup/Initialize.php:154
 msgid "My contacts"
 msgstr ""
 
-#: Setup/Initialize.php:154
+#: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
 msgstr ""
 
-#: Setup/Initialize.php:166
+#: Setup/Initialize.php:167
 msgid "Last modified by me"
 msgstr ""
 
-#: Setup/Initialize.php:167
+#: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
 msgstr ""
 

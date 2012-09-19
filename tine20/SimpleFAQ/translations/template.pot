@@ -13,28 +13,28 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:109
+#: Controller.php:114
 #, python-format
 msgid "%s's personal FAQs"
 msgstr ""
 
-#: Controller.php:148
+#: Controller.php:164
 msgid "Draft"
 msgstr ""
 
-#: Controller.php:149
+#: Controller.php:165
 msgid "released"
 msgstr ""
 
-#: Controller.php:150
+#: Controller.php:166
 msgid "obsolete"
 msgstr ""
 
-#: Controller.php:153
+#: Controller.php:169
 msgid "Internal"
 msgstr ""
 
-#: Controller.php:154
+#: Controller.php:170
 msgid "Public"
 msgstr ""
 
