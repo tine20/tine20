@@ -33,20 +33,28 @@ class Tinebase_Translation
         'bg',      // Bulgarian            Dimitrina Mileva <d.mileva@metaways.de>
         'ca',      // Catalan              Damià Verger - JUG Països Catalans <dverger@joomla.cat>
         'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
+        'da',      // Danish               Sylvester Nielsen
         'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         'es',      // Spanish (Castilian)  Enrique Palacios <enriquepalaciosc@gmail.com>
         'es_MX',   // Spanish (Mexico)     Miguel Gutierrez 
+        'et',      // Estonian             Rivo Zängov
+        'fa_IR',   // Persian (Iran)       hamid112233
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
+        'hr_HR',   // Croatian (Croatia)   AirMike
         'hu',      // Hungarian            Tamás Faragó <admin@kemenyfem.hu>
         'it',      // Italian              Roberto Rossi <impiastro@gmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
+        'lt',      // Lithuanian           Aurimas Driskius
         'nb',      // Norwegian Bokmål     Ronny Gonzales <gonzito@online.no>
         //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
         'pl',      // Polish               Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>
         //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
-        'ru',      // Russian              Nikolay Parukhin <parukhin@gmail.com> 
+        'pt_BR',   // Portuguese (Brazil)  Eduardo Fukunari
+        'ru',      // Russian              Nikolay Parukhin <parukhin@gmail.com>
+        'sk',      // Slovak               attila623
         'sv_SE',   // Swedish              Andreas Storbjörk <andreas.storbjork@rambolo.net>
+        'tr_TR',   // Turkish (Turkey)     Furkan Karatopraklı
         'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
         'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
     );
