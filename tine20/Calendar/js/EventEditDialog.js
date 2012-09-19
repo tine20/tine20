@@ -167,7 +167,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
                                     requiredGrants: this.record.data.id ? ['editGrant'] : ['addGrant'],
-                                    disabled: this.record.data.id ? (! this.record.data.container_id.account_grants.editGrant) : false
+                                    disabled: true
                                 })]]
                             }]
                         }, {
@@ -398,8 +398,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             // apply grants
             if (! this.record.get('editGrant')) {
-                // disable container selection combo if user has no right to edit
-                this.containerSelect.setDisabled(this.record.data.id ? (! this.record.data.container_id.account_grants.editGrant) : false);
                 this.getForm().items.each(function(f){
                     if(f.isFormField && f.requiredGrant !== undefined){
                         f.setDisabled(! this.record.get(f.requiredGrant));
@@ -409,6 +407,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             Tine.Calendar.EventEditDialog.superclass.onRecordLoad.apply(this, arguments);
             this.perspectiveCombo.loadPerspective();
+            // disable container selection combo if user has no right to edit
+            this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);
             return;
         }
         
