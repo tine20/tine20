@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-20 10:33+0000\n"
+"PO-Revision-Date: 2012-09-19 14:30+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Pfad zu einer XML-Datei mit den Analyseregeln für Adressen."
 msgid "Uploaded new contact image."
 msgstr "Ein neues Kontaktbild wurde hochgeladen."
 
-#: Controller.php:97
+#: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%ss persönliches Adressbuch"
@@ -244,14 +244,14 @@ msgstr "Vorname"
 msgid "Middle Name"
 msgstr "Zweitname"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nachname"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
@@ -366,27 +366,27 @@ msgstr "Beschreibung"
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an"
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:400
 msgid "Export as pdf"
 msgstr "Als Pdf exportieren"
 
-#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
+#: js/ContactEditDialog.js:408 js/ContactEditDialog.js:493
 msgid "Parse address"
 msgstr "Adresse einlesen"
 
-#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
+#: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
 msgstr "Entweder {0} oder {1} muss angegeben werden"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Paste address"
 msgstr "Adresse einfügen"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
 msgstr "Bitte fügen Sie eine Adresse ein, die eingelesen werden soll."
 
-#: js/ContactEditDialog.js:535
+#: js/ContactEditDialog.js:519
 msgid "End token mode"
 msgstr "Beende Merkmalsmodus"
 
@@ -607,20 +607,20 @@ msgid "Quick search"
 msgstr "Schnellsuche"
 
 #: js/Model.js:161
-msgid "Last modified"
-msgstr "Letzte Bearbeitung"
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
 
 #: js/Model.js:162
-msgid "Last modifier"
-msgstr "Letzter Bearbeiter"
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
 
 #: js/Model.js:163
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
 #: js/Model.js:164
-msgid "Creator"
-msgstr "Ersteller"
+msgid "Created By"
+msgstr "Angelegt von"
 
 #: js/Model.js:201
 msgid "List"
@@ -660,31 +660,31 @@ msgstr "Herr"
 msgid "Ms"
 msgstr "Frau"
 
-#: Setup/Initialize.php:134 Setup/Update/Release3.php:37
+#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"
 
-#: Setup/Initialize.php:139
+#: Setup/Initialize.php:140
 msgid "My company"
 msgstr "Meine Firma"
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:141
 msgid "All coworkers in my company"
 msgstr "Alle Mitarbeiter meiner Firma"
 
-#: Setup/Initialize.php:153
+#: Setup/Initialize.php:154
 msgid "My contacts"
 msgstr "Meine Kontakte"
 
-#: Setup/Initialize.php:154
+#: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
 msgstr "Alle Kontakte in meinen Adressbüchern"
 
-#: Setup/Initialize.php:166
+#: Setup/Initialize.php:167
 msgid "Last modified by me"
 msgstr "Zuletzt von mir bearbeitet"
 
-#: Setup/Initialize.php:167
+#: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
 msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
 

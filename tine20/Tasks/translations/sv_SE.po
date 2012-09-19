@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-18 16:06+0000\n"
-"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"PO-Revision-Date: 2012-09-19 08:58+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -57,136 +57,136 @@ msgstr "Möjliga uppgift prioriteringar. Observera att ytterligare prioriteringa
 msgid "Notification for Task "
 msgstr "Notifiering för uppgift"
 
-#: Controller.php:95
+#: Controller.php:102
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s personliga uppgifter"
 
-#: js/GridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Vill du verkligen radera den valda uppgiften?"
-msgstr[1] "Vill du verkligen radera dem valda uppgifterna?"
-
-#: js/GridPanel.js:110
-msgid "Tags"
-msgstr "Taggar"
-
-#: js/GridPanel.js:111 Model/Task.php:199
-msgid "Lead"
-msgstr "Lead"
-
-#: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:148
-msgid "Summary"
-msgstr "Summa"
-
-#: js/GridPanel.js:118
-msgid "Add a task..."
-msgstr "Lägg till en uppgift..."
-
-#: js/GridPanel.js:122 js/Tasks.js:149
-msgid "Due Date"
-msgstr "Förfallo datum"
-
-#: js/GridPanel.js:136 js/TaskEditDialog.js:191 Model/Task.php:190
-msgid "Priority"
-msgstr "Prioritet"
-
-#: js/GridPanel.js:152 Model/Task.php:192
-msgid "Percent"
-msgstr "Procent"
-
-#: js/GridPanel.js:165 js/TaskEditDialog.js:221 js/Tasks.js:151
-#: js/Tasks.js:211 Model/Task.php:191
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Status"
-msgstr[1] "statusar"
-
-#: js/GridPanel.js:181 js/Tasks.js:163
-msgid "Creation Time"
-msgstr "Skapande Tid"
-
-#: js/GridPanel.js:188 js/TaskEditDialog.js:228 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:70
-msgid "Completed"
-msgstr "Avslutande"
-
-#: js/GridPanel.js:195 js/Tasks.js:159
-msgid "Responsible"
-msgstr "Ansvarig"
-
-#: js/GridPanel.js:238
-msgid "Show closed"
-msgstr "Visar stängd"
-
-#: js/TaskEditDialog.js:141
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Du måste ange ett förfallodatum, för ett alarm är ställt"
-
-#: js/TaskEditDialog.js:187
-msgid "Due date"
-msgstr "Förfallo datum"
-
-#: js/TaskEditDialog.js:199 Model/Task.php:188
-msgid "Organizer"
-msgstr "Organiserare"
-
-#: js/TaskEditDialog.js:200
-msgid "Add Responsible ..."
-msgstr "Lägg till Ansvarig ..."
-
-#: js/TaskEditDialog.js:207
-msgid "Notes"
-msgstr "Noteringar"
-
-#: js/TaskEditDialog.js:208
-msgid "Enter description..."
-msgstr "Ange beskrivning"
-
-#: js/TaskEditDialog.js:214
-msgid "Percentage"
-msgstr "Procent"
-
-#: js/Tasks.js:24
-msgid "New Task"
-msgstr "Ny Uppgift"
-
-#: js/Tasks.js:107
+#: js/Models.js:64
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Uppgift"
 msgstr[1] "Uppgifter"
 
-#: js/Tasks.js:107
+#: js/Models.js:64
 msgid "Tasks"
 msgstr "Uppgifter"
 
-#: js/Tasks.js:111
+#: js/Models.js:68
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "att göra lista"
 msgstr[1] "att göra listor"
 
-#: js/Tasks.js:111
+#: js/Models.js:68
 msgid "to do lists"
 msgstr "att göra listor"
 
-#: js/Tasks.js:146
+#: js/Models.js:103
 msgid "Quick search"
 msgstr "Snabb sök"
 
-#: js/Tasks.js:161
-msgid "Last modified"
-msgstr "Senast ändrad"
+#: js/Models.js:105 js/TaskEditDialog.js:173 js/TaskGridPanel.js:114
+msgid "Summary"
+msgstr "Summa"
 
-#: js/Tasks.js:162
-msgid "Last modifier"
-msgstr "senast ändrare"
+#: js/Models.js:106 js/TaskGridPanel.js:122
+msgid "Due Date"
+msgstr "Förfallo datum"
 
-#: js/Tasks.js:164
-msgid "Creator"
-msgstr "Skapare"
+#: js/Models.js:108 js/Models.js:166 js/TaskEditDialog.js:214
+#: js/TaskGridPanel.js:165 Model/Task.php:191
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Status"
+msgstr[1] "statusar"
+
+#: js/Models.js:116 js/TaskGridPanel.js:195
+msgid "Responsible"
+msgstr "Ansvarig"
+
+#: js/Models.js:118
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Models.js:119
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Models.js:120 js/TaskGridPanel.js:181
+msgid "Creation Time"
+msgstr "Skapande Tid"
+
+#: js/Models.js:121
+msgid "Created By"
+msgstr ""
+
+#: js/TaskEditDialog.js:131
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Du måste ange ett förfallodatum, för ett alarm är ställt"
+
+#: js/TaskEditDialog.js:180
+msgid "Due date"
+msgstr "Förfallo datum"
+
+#: js/TaskEditDialog.js:184 js/TaskGridPanel.js:136 Model/Task.php:190
+msgid "Priority"
+msgstr "Prioritet"
+
+#: js/TaskEditDialog.js:192 Model/Task.php:188
+msgid "Organizer"
+msgstr "Organiserare"
+
+#: js/TaskEditDialog.js:193
+msgid "Add Responsible ..."
+msgstr "Lägg till Ansvarig ..."
+
+#: js/TaskEditDialog.js:200
+msgid "Notes"
+msgstr "Noteringar"
+
+#: js/TaskEditDialog.js:201
+msgid "Enter description..."
+msgstr "Ange beskrivning"
+
+#: js/TaskEditDialog.js:207
+msgid "Percentage"
+msgstr "Procent"
+
+#: js/TaskEditDialog.js:221 js/TaskGridPanel.js:188 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Avslutande"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Vill du verkligen radera den valda uppgiften?"
+msgstr[1] "Vill du verkligen radera dem valda uppgifterna?"
+
+#: js/TaskGridPanel.js:110
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/TaskGridPanel.js:111 Model/Task.php:199
+msgid "Lead"
+msgstr "Lead"
+
+#: js/TaskGridPanel.js:118
+msgid "Add a task..."
+msgstr "Lägg till en uppgift..."
+
+#: js/TaskGridPanel.js:152 Model/Task.php:192
+msgid "Percent"
+msgstr "Procent"
+
+#: js/TaskGridPanel.js:240
+msgid "Show closed"
+msgstr "Visar stängd"
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr "Ny Uppgift"
 
 #: Model/Task.php:187
 msgid "Due"
@@ -224,31 +224,31 @@ msgstr "Standard Uppgift Lista"
 msgid "The default task list to create new tasks in."
 msgstr "Standard uppgift lista för att skapa nya uppgifter i."
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:69
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:74
 msgid "No response"
 msgstr "inget svar"
 
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:71
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:76
 msgid "Cancelled"
 msgstr "Avbruten"
 
-#: Setup/Initialize.php:37 Setup/Update/Release5.php:72
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:77
 msgid "In process"
 msgstr "I process"
 
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:162
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:167
 msgid "low"
 msgstr "låg"
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:163
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:168
 msgid "normal"
 msgstr "normal"
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:164
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:169
 msgid "high"
 msgstr "hög"
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:165
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:170
 msgid "urgent"
 msgstr "viktig"
 

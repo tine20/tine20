@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-05-28 17:15+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2012-09-19 08:57+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,44 +39,36 @@ msgid ""
 "syncronisation."
 msgstr ""
 
-#: Controller.php:73
+#: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
 msgstr "Персональные проекты %s"
 
-#: js/AddToProjectPanel.js:56
-msgid "Cancel"
-msgstr "Отмена"
-
-#: js/AddToProjectPanel.js:64
-msgid "OK"
-msgstr "OK"
-
-#: js/AddToProjectPanel.js:99
+#: js/AddToProjectPanel.js:32
 msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-#: js/AddToProjectPanel.js:103
+#: js/AddToProjectPanel.js:36
 msgid "Please select the attenders' role"
 msgstr "Пожалуйста, выберите роль участника"
 
-#: js/AddToProjectPanel.js:123
+#: js/AddToProjectPanel.js:89
 msgid "Select Project"
 msgstr "Выберите проект"
 
-#: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:112
+#: js/AddToProjectPanel.js:91 js/ProjectEditDialog.js:83
 msgid "Role"
 msgstr "Роль"
 
-#: js/AddToProjectPanel.js:148
+#: js/AddToProjectPanel.js:92
 msgid "Select Role"
 msgstr "Выберите роль"
 
-#: js/AddToProjectPanel.js:168
+#: js/AddToProjectPanel.js:112
 msgid "Adding {0} Participants to project"
 msgstr ""
 
-#: js/Model.js:33 js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
+#: js/Model.js:33 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Проект"
@@ -98,39 +90,39 @@ msgstr "Списки проектов"
 msgid "Quick search"
 msgstr "Быстрый поиск"
 
-#: js/Model.js:73 js/ProjectEditDialog.js:161 js/ProjectGridPanel.js:95
+#: js/Model.js:73 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:95
 msgid "Title"
 msgstr "Заголовок"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:166 js/ProjectGridPanel.js:88
+#: js/Model.js:74 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:88
 msgid "Number"
 msgstr "Номер"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:202
+#: js/Model.js:75 js/ProjectEditDialog.js:173
 msgid "Description"
 msgstr "Описание"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:172 js/ProjectGridPanel.js:101
+#: js/Model.js:77 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:101
 msgid "Status"
 msgstr "Статус"
 
 #: js/Model.js:86
-msgid "Last modified"
-msgstr "Последнее изменение"
+msgid "Last Modified Time"
+msgstr ""
 
 #: js/Model.js:87
-msgid "Last modifier"
-msgstr "Изменён:"
+msgid "Last Modified By"
+msgstr ""
 
 #: js/Model.js:88
 msgid "Creation Time"
 msgstr "Время создания"
 
 #: js/Model.js:89
-msgid "Creator"
-msgstr "Создатель"
+msgid "Created By"
+msgstr ""
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:111
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:82
 msgid "Attendee"
 msgstr "Участник"
 
@@ -138,7 +130,7 @@ msgstr "Участник"
 msgid "Attendee Role"
 msgstr "Роль участника"
 
-#: js/ProjectEditDialog.js:216
+#: js/ProjectEditDialog.js:187
 msgid "Enter description"
 msgstr "Введите описание"
 

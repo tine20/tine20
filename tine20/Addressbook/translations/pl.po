@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-28 19:04+0000\n"
+"PO-Revision-Date: 2012-09-19 19:25+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Ścieżka do pliku XML zawierającego reguły parsowania adresów."
 msgid "Uploaded new contact image."
 msgstr "Wczytano nową grafikę dla kontaktu."
 
-#: Controller.php:97
+#: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s osobista książka adresowa"
@@ -245,14 +245,14 @@ msgstr "Imię"
 msgid "Middle Name"
 msgstr "Drugie imię"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
@@ -367,27 +367,27 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:400
 msgid "Export as pdf"
 msgstr "Eksportuj jako PDF"
 
-#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
+#: js/ContactEditDialog.js:408 js/ContactEditDialog.js:493
 msgid "Parse address"
 msgstr "Wczytaj adres"
 
-#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
+#: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Paste address"
 msgstr "Dodaj adres"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
 msgstr "Proszę wpisać adres przeznaczony do wczytania."
 
-#: js/ContactEditDialog.js:535
+#: js/ContactEditDialog.js:519
 msgid "End token mode"
 msgstr "Zakończ tryb znakowy"
 
@@ -610,11 +610,11 @@ msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:161
-msgid "Last modified"
-msgstr "Ostatnio zmieniono"
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
 
 #: js/Model.js:162
-msgid "Last modifier"
+msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
 #: js/Model.js:163
@@ -622,8 +622,8 @@ msgid "Creation Time"
 msgstr "Utworzono"
 
 #: js/Model.js:164
-msgid "Creator"
-msgstr "Utworzył(a)"
+msgid "Created By"
+msgstr "Utworzone przez"
 
 #: js/Model.js:201
 msgid "List"
@@ -664,31 +664,31 @@ msgstr "Pan"
 msgid "Ms"
 msgstr "Pani"
 
-#: Setup/Initialize.php:134 Setup/Update/Release3.php:37
+#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Wszystkie kontakty, które wolno mi czytać"
 
-#: Setup/Initialize.php:139
+#: Setup/Initialize.php:140
 msgid "My company"
 msgstr "Moja firma"
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:141
 msgid "All coworkers in my company"
 msgstr "Wszyscy współpracownicy z mojej firmy"
 
-#: Setup/Initialize.php:153
+#: Setup/Initialize.php:154
 msgid "My contacts"
 msgstr "Moje kontakty"
 
-#: Setup/Initialize.php:154
+#: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
 msgstr "Wszystkie kontakty w mojej książce adresowej"
 
-#: Setup/Initialize.php:166
+#: Setup/Initialize.php:167
 msgid "Last modified by me"
 msgstr "Ostatnio zmienione przeze mnie"
 
-#: Setup/Initialize.php:167
+#: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
 msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
 

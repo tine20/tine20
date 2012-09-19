@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-20 10:11+0000\n"
+"PO-Revision-Date: 2012-09-19 08:56+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Väg till en XML-fil med adress parsing regler."
 msgid "Uploaded new contact image."
 msgstr ""
 
-#: Controller.php:97
+#: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
 msgstr "%s personliga adressbok"
@@ -244,14 +244,14 @@ msgstr "Första Namn"
 msgid "Middle Name"
 msgstr "Mellan Namn"
 
-#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:108 js/Model.js:19
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Efternamn"
 
-#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:448
-#: js/ContactEditDialog.js:466 js/ContactGrid.js:112
+#: js/ContactEditDialog.js:143 js/ContactEditDialog.js:432
+#: js/ContactEditDialog.js:450 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
@@ -366,27 +366,27 @@ msgstr "Beskrivning"
 msgid "Enter description"
 msgstr "Skriv beskrivning"
 
-#: js/ContactEditDialog.js:416
+#: js/ContactEditDialog.js:400
 msgid "Export as pdf"
 msgstr "Exportera som pdf "
 
-#: js/ContactEditDialog.js:424 js/ContactEditDialog.js:509
+#: js/ContactEditDialog.js:408 js/ContactEditDialog.js:493
 msgid "Parse address"
 msgstr "Analysera adress"
 
-#: js/ContactEditDialog.js:448 js/ContactEditDialog.js:466
+#: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
 msgstr "Antingen {0} eller {1} måste anges"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Paste address"
 msgstr "Analysera adress"
 
-#: js/ContactEditDialog.js:501
+#: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
 msgstr "Klistra in en adress som ska analyserad:"
 
-#: js/ContactEditDialog.js:535
+#: js/ContactEditDialog.js:519
 msgid "End token mode"
 msgstr "Avsluta tecken läge"
 
@@ -607,20 +607,20 @@ msgid "Quick search"
 msgstr "Snabb sök"
 
 #: js/Model.js:161
-msgid "Last modified"
-msgstr "Senast ändrad"
+msgid "Last Modified Time"
+msgstr ""
 
 #: js/Model.js:162
-msgid "Last modifier"
-msgstr "Senaste Ändrare"
+msgid "Last Modified By"
+msgstr ""
 
 #: js/Model.js:163
 msgid "Creation Time"
 msgstr "Skapad Tid"
 
 #: js/Model.js:164
-msgid "Creator"
-msgstr "Skapare"
+msgid "Created By"
+msgstr ""
 
 #: js/Model.js:201
 msgid "List"
@@ -660,31 +660,31 @@ msgstr "Mr"
 msgid "Ms"
 msgstr "Ms"
 
-#: Setup/Initialize.php:134 Setup/Update/Release3.php:37
+#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alla kontakter Jag har Läsrättigheter för"
 
-#: Setup/Initialize.php:139
+#: Setup/Initialize.php:140
 msgid "My company"
 msgstr "Mitt företag"
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:141
 msgid "All coworkers in my company"
 msgstr "Alla medarbetare i mitt företag"
 
-#: Setup/Initialize.php:153
+#: Setup/Initialize.php:154
 msgid "My contacts"
 msgstr "Mina kontakter"
 
-#: Setup/Initialize.php:154
+#: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
 msgstr "Alla kontakter i mina Adressböcker"
 
-#: Setup/Initialize.php:166
+#: Setup/Initialize.php:167
 msgid "Last modified by me"
 msgstr "Senast ändrad av mig"
 
-#: Setup/Initialize.php:167
+#: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
 msgstr "Alla kontakter som Jag senast har ändrat"
 

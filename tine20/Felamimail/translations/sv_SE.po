@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-19 15:06+0000\n"
-"Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>\n"
+"PO-Revision-Date: 2012-09-19 08:57+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,19 @@ msgstr "lägg till email konton"
 msgid "Create new email accounts"
 msgstr "Skapa nya email konton"
 
-#: Controller/Message/Flags.php:24 js/GridPanel.js:577
+#: Config.php:38
+msgid "Vacation Templates Container ID"
+msgstr ""
+
+#: Config.php:47
+msgid "Custom Vacation Message"
+msgstr ""
+
+#: Config.php:49
+msgid "User is allowed to set custom vacation message for system account"
+msgstr ""
+
+#: Controller/Message/Flags.php:24 js/GridPanel.js:579
 msgid "Answered"
 msgstr "Svarad"
 
@@ -54,16 +66,16 @@ msgid "Flagged"
 msgstr "Markerad"
 
 #: Controller/Message/Send.php:235 js/GridDetailsPanel.js:233
-#: js/GridPanel.js:482 js/MessageEditDialog.js:921 js/Model.js:141
+#: js/GridPanel.js:484 js/MessageEditDialog.js:883 js/Model.js:141
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Ämne"
 
-#: Controller/Message/Send.php:235 js/MessageEditDialog.js:896
+#: Controller/Message/Send.php:235 js/MessageEditDialog.js:858
 msgid "Body"
 msgstr "Layout"
 
-#: Controller/Sieve.php:298
+#: Controller/Sieve.php:306
 msgid "Out of Office reply from %1$s"
 msgstr "Frånvarande svar från %1$s"
 
@@ -218,10 +230,6 @@ msgstr "Vanlig Text"
 msgid "Depending on content type (experimental)"
 msgstr "Beroende på innehålls typ (experimentell)"
 
-#: js/AddressbookGridPanelHook.js:33
-msgid "Compose email"
-msgstr "Skriv mail"
-
 #: js/ContactGrid.js:254
 msgid "Add as \"To\""
 msgstr "Lägg till som \"Till\""
@@ -238,7 +246,7 @@ msgstr "Lägg till som \"Bcc\""
 msgid "Remove from recipients"
 msgstr "Ta bort från mottagarna"
 
-#: js/ContactGrid.js:341 js/MessageEditDialog.js:505
+#: js/ContactGrid.js:341 js/MessageEditDialog.js:487
 msgid "Loading Mail Addresses"
 msgstr "Laddar mailadresser"
 
@@ -250,77 +258,77 @@ msgstr "Nytt Mail"
 msgid "Email"
 msgstr "Mail"
 
-#: js/Felamimail.js:120
+#: js/Felamimail.js:129
 msgid "Active Vacation Message"
 msgstr "Aktivt semester Meddelande"
 
-#: js/Felamimail.js:121
+#: js/Felamimail.js:130
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-postkonto \"{0}\" har ett aktivt semester meddelande."
 
-#: js/Felamimail.js:507
+#: js/Felamimail.js:527
 msgid "New mails"
 msgstr "nya mail"
 
-#: js/Felamimail.js:508
+#: js/Felamimail.js:528
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Du har {0} ny mail (er) i mappen {1} ({2})."
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:648
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Referenser för {0}"
 
-#: js/Felamimail.js:632
+#: js/Felamimail.js:651
 msgid "Credentials"
 msgstr "referenser"
 
-#: js/Felamimail.js:787 js/Felamimail.js:820
+#: js/Felamimail.js:802 js/Felamimail.js:835
 msgid "IMAP Error"
 msgstr "IMAP Fel"
 
-#: js/Felamimail.js:788
+#: js/Felamimail.js:803
 msgid "No connection to IMAP server."
 msgstr "Ingen anslutning till IMAP server."
 
-#: js/Felamimail.js:804
+#: js/Felamimail.js:819
 msgid "IMAP Credentials Error"
 msgstr "IMAP Referens Fel"
 
-#: js/Felamimail.js:805
+#: js/Felamimail.js:820
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Din e-referenser är fel. Vänligen kontakta din administratör"
 
-#: js/Felamimail.js:821
+#: js/Felamimail.js:836
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "En av dina mappar har tagits bort eller har bytts namn på av någon annan klient. Uppdatera mapplistan av detta konto."
 
-#: js/Felamimail.js:850
+#: js/Felamimail.js:865
 msgid "SMTP Error"
 msgstr "SMTP Fel"
 
-#: js/Felamimail.js:851
+#: js/Felamimail.js:866
 msgid "No connection to SMTP server."
 msgstr "Ingen anslutning till SMTP server"
 
-#: js/Felamimail.js:859
+#: js/Felamimail.js:874
 msgid "Sieve Error"
 msgstr "Såll Fel"
 
-#: js/Felamimail.js:860
+#: js/Felamimail.js:875
 msgid "No connection to Sieve server."
 msgstr "Ingen anslutning till Såll server"
 
-#: js/Felamimail.js:868
+#: js/Felamimail.js:883
 msgid "Save Sieve Script Error"
 msgstr "Spara Såll Skript Fel"
 
-#: js/Felamimail.js:869
+#: js/Felamimail.js:884
 msgid "Could not save script on Sieve server."
 msgstr "Kunde inte spara skriptet på Sieve server."
 
-#: js/FolderFilterModel.js:30 js/GridPanel.js:529 js/Model.js:53
+#: js/FolderFilterModel.js:30 js/GridPanel.js:531 js/Model.js:53
 #: js/Model.js:499 js/TreeContextMenu.js:64 js/TreeContextMenu.js:67
 #: js/TreeContextMenu.js:70
 msgid "Folder"
@@ -344,7 +352,7 @@ msgstr "Mappar av konto {0}"
 msgid "Folders of all accounts"
 msgstr "Mappar av alla konton"
 
-#: js/GridDetailsPanel.js:234 js/MessageEditDialog.js:827
+#: js/GridDetailsPanel.js:234 js/MessageEditDialog.js:789
 msgid "From"
 msgstr "Från"
 
@@ -364,207 +372,219 @@ msgstr "Datum"
 msgid "Show or hide header information"
 msgstr "Vise eller dölj rubrik information"
 
-#: js/GridDetailsPanel.js:330 js/GridPanel.js:468 js/MessageEditDialog.js:761
+#: js/GridDetailsPanel.js:330 js/GridPanel.js:470 js/MessageEditDialog.js:723
 msgid "Attachments"
 msgstr "Bifogade"
 
-#: js/GridPanel.js:110
+#: js/GridPanel.js:112
 msgid "No Messages found or the cache is empty."
 msgstr "Inga meddelanden hittas eller cachen är tom."
 
-#: js/GridPanel.js:144
+#: js/GridPanel.js:146
 msgid "Quota usage"
 msgstr "kvotanvändning"
 
-#: js/GridPanel.js:241
+#: js/GridPanel.js:243
 msgid "Compose"
 msgstr "komponera"
 
-#: js/GridPanel.js:250 js/MessageDisplayDialog.js:47
+#: js/GridPanel.js:252 js/MessageDisplayDialog.js:47
 msgid "Reply"
 msgstr "Svara"
 
-#: js/GridPanel.js:259 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:261 js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Svara Till Alla"
 
-#: js/GridPanel.js:268 js/MessageDisplayDialog.js:59
+#: js/GridPanel.js:270 js/MessageDisplayDialog.js:59
 msgid "Forward"
 msgstr "Framåt"
 
-#: js/GridPanel.js:276
+#: js/GridPanel.js:278
 msgid "Toggle highlighting"
 msgstr "växla markering"
 
-#: js/GridPanel.js:285
+#: js/GridPanel.js:287
 msgid "Mark read/unread"
 msgstr "Markera läst/oläst"
 
-#: js/GridPanel.js:295 js/GridPanel.js:296 js/GridPanel.js:298
+#: js/GridPanel.js:297 js/GridPanel.js:298 js/GridPanel.js:300
 #: js/MessageDisplayDialog.js:40
 msgid "Delete"
 msgstr "Radera"
 
-#: js/GridPanel.js:306
+#: js/GridPanel.js:308
 msgid "Add Account"
 msgstr "Lägg till Användare"
 
-#: js/GridPanel.js:314 js/GridPanel.js:1320 js/GridPanel.js:1336
+#: js/GridPanel.js:316 js/GridPanel.js:1324 js/GridPanel.js:1340
 #: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Förhandsvisa"
 
-#: js/GridPanel.js:322 js/MessageDisplayDialog.js:72
+#: js/GridPanel.js:324 js/MessageDisplayDialog.js:72
 msgid "Print Message"
 msgstr "Utskrifts Meddelande"
 
-#: js/GridPanel.js:461
+#: js/GridPanel.js:463
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:475 js/Model.js:147
+#: js/GridPanel.js:477 js/Model.js:147
 msgid "Flags"
 msgstr "Flaggor"
 
-#: js/GridPanel.js:488 js/Model.js:142 js/sieve/RuleConditionsPanel.js:69
+#: js/GridPanel.js:490 js/Model.js:142 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
 msgstr "Från (E-post)"
 
-#: js/GridPanel.js:494 js/Model.js:143
+#: js/GridPanel.js:496 js/Model.js:143
 msgid "From (Name)"
 msgstr "Från (Namn)"
 
-#: js/GridPanel.js:500
+#: js/GridPanel.js:502
 msgid "Sender"
 msgstr "Sändare"
 
-#: js/GridPanel.js:507 js/Model.js:144
+#: js/GridPanel.js:509 js/Model.js:144
 msgid "To"
 msgstr "Till"
 
-#: js/GridPanel.js:514 js/Model.js:493
+#: js/GridPanel.js:516 js/Model.js:493
 msgid "Sent"
 msgstr "Skickat"
 
-#: js/GridPanel.js:522 js/Model.js:150
+#: js/GridPanel.js:524 js/Model.js:150
 msgid "Received"
 msgstr "Mottaget"
 
-#: js/GridPanel.js:537 js/sieve/RuleConditionsPanel.js:73
+#: js/GridPanel.js:539 js/sieve/RuleConditionsPanel.js:73
 msgid "Size"
 msgstr "Storlek"
 
-#: js/GridPanel.js:580
+#: js/GridPanel.js:582
 msgid "Forwarded"
 msgstr "Vidarebefodrat"
 
-#: js/GridPanel.js:583
+#: js/GridPanel.js:585
 msgid "Recent"
 msgstr "Senaste"
 
-#: js/GridPanel.js:1165
+#: js/GridPanel.js:1169
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1173
+#: js/GridPanel.js:1177
 msgid "Your quota"
 msgstr "Din andel"
 
-#: js/GridPanel.js:1174
+#: js/GridPanel.js:1178
 msgid "{0} available (total: {1})"
 msgstr "{0} tillgängligt (total: {1})"
+
+#: js/GridPanelHook.js:34
+msgid "Compose email"
+msgstr "Skriv mail"
 
 #: js/MessageDisplayDialog.js:65
 msgid "Save"
 msgstr "Spara"
 
-#: js/MessageEditDialog.js:133
+#: js/MessageEditDialog.js:120
 msgid "Send"
 msgstr "Skicka"
 
-#: js/MessageEditDialog.js:141
+#: js/MessageEditDialog.js:128
 msgid "Search Recipients"
 msgstr "Sök Mottagare"
 
-#: js/MessageEditDialog.js:149
+#: js/MessageEditDialog.js:136
 msgid "Save As Draft"
 msgstr "Spara Som utkast"
 
-#: js/MessageEditDialog.js:157
+#: js/MessageEditDialog.js:144
 msgid "Save As Template"
 msgstr "Spara Som Mall"
 
-#: js/MessageEditDialog.js:166
+#: js/MessageEditDialog.js:153
 msgid "Save Email Note"
 msgstr "Spara E-post Notifiering"
 
-#: js/MessageEditDialog.js:174
+#: js/MessageEditDialog.js:161
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the"
 " recipient(s) contact(s)."
 msgstr "Aktivera denna växlingsknappen för att spara e-post som en anteckning till mottagare kontakt (er)."
 
-#: js/MessageEditDialog.js:192
+#: js/MessageEditDialog.js:179
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Klicka här för att söka efter och lägga till mottagare från Adressboken."
 
-#: js/MessageEditDialog.js:304
+#: js/MessageEditDialog.js:293
 msgid "On {0}, {1} wrote"
 msgstr "På {0}, {1} skrev"
 
-#: js/MessageEditDialog.js:324
+#: js/MessageEditDialog.js:313
 msgid "Original message"
 msgstr "Orginal meddelande"
 
-#: js/MessageEditDialog.js:556
+#: js/MessageEditDialog.js:538
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:559
+#: js/MessageEditDialog.js:541
 msgid "{0} Message"
 msgstr "{0} Meddelande"
 
-#: js/MessageEditDialog.js:611 js/MessageEditDialog.js:746
+#: js/MessageEditDialog.js:593 js/MessageEditDialog.js:708
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: js/MessageEditDialog.js:612
+#: js/MessageEditDialog.js:594
 msgid "{0} account setting empty."
 msgstr "{0} konto inställning tomt."
 
-#: js/MessageEditDialog.js:627
+#: js/MessageEditDialog.js:609
 msgid "Errors"
 msgstr "Fel"
 
-#: js/MessageEditDialog.js:627
+#: js/MessageEditDialog.js:609
 msgid "Please fix the errors noted."
 msgstr "Åtgärda felen som noterats."
 
-#: js/MessageEditDialog.js:669 js/MessageEditDialog.js:931
+#: js/MessageEditDialog.js:651 js/MessageEditDialog.js:893
 msgid "Compose email:"
 msgstr "Skriv e-post:"
 
-#: js/MessageEditDialog.js:719
-msgid "Add Note"
-msgstr "Lägg till Notifiering"
-
-#: js/MessageEditDialog.js:720
-msgid "Edit Email Note Text:"
-msgstr "Ändra E-post Notifierings test:"
-
-#: js/MessageEditDialog.js:747
+#: js/MessageEditDialog.js:709
 msgid "Could not send {0}."
 msgstr "Kunde inte skicka {0}."
 
-#: js/MessageEditDialog.js:748
+#: js/MessageEditDialog.js:710
 msgid "Error:"
 msgstr "Fel:"
 
-#: js/MessageEditDialog.js:955
+#: js/MessageEditDialog.js:917
 msgid "Files are still uploading."
 msgstr "Filer laddas fortfarande upp."
 
-#: js/MessageEditDialog.js:975
+#: js/MessageEditDialog.js:944
+msgid "Empty subject"
+msgstr ""
+
+#: js/MessageEditDialog.js:945
+msgid "Do you really want to send a message with an empty subject?"
+msgstr ""
+
+#: js/MessageEditDialog.js:964
+msgid "Add Note"
+msgstr "Lägg till Notifiering"
+
+#: js/MessageEditDialog.js:965
+msgid "Edit Email Note Text:"
+msgstr "Ändra E-post Notifierings test:"
+
+#: js/MessageEditDialog.js:988
 msgid "No recipients set."
 msgstr "Inga mottagare inställd."
 
@@ -612,31 +632,31 @@ msgstr "Skräppost"
 msgid "Trash"
 msgstr "Skräp"
 
-#: js/Model.js:502 js/Model.js:619 js/Model.js:684
+#: js/Model.js:502 js/Model.js:623 js/Model.js:688
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "postlista"
 msgstr[1] "postlistor"
 
-#: js/Model.js:615
+#: js/Model.js:619
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Semester"
 msgstr[1] "Semestrar"
 
-#: js/Model.js:681
+#: js/Model.js:685
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regler"
 
-#: js/Model.js:807
+#: js/Model.js:811
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flagga"
 msgstr[1] "Flaggar"
 
-#: js/Model.js:810
+#: js/Model.js:814
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flagg lista"
@@ -746,81 +766,121 @@ msgstr "Sieve Filter Rules"
 msgid "Sieve Filter Rules for {0}"
 msgstr "Sålla filter regler för {0}"
 
-#: js/sieve/RulesGridPanel.js:77
+#: js/sieve/RulesGridPanel.js:78
 msgid "Move up"
 msgstr "Flytta upp"
 
-#: js/sieve/RulesGridPanel.js:84
+#: js/sieve/RulesGridPanel.js:85
 msgid "Move down"
 msgstr "Flytta ner"
 
-#: js/sieve/RulesGridPanel.js:91
+#: js/sieve/RulesGridPanel.js:92
 msgid "Enable"
 msgstr "Aktivera"
 
-#: js/sieve/RulesGridPanel.js:98
+#: js/sieve/RulesGridPanel.js:99
 msgid "Disable"
 msgstr "Inaktivera"
 
-#: js/sieve/RulesGridPanel.js:199
+#: js/sieve/RulesGridPanel.js:200
 msgid "ID"
 msgstr "ID"
 
-#: js/sieve/RulesGridPanel.js:206
+#: js/sieve/RulesGridPanel.js:207
 msgid "Conditions"
 msgstr "Kondition"
 
-#: js/sieve/RulesGridPanel.js:214
+#: js/sieve/RulesGridPanel.js:215
 msgid "Action"
 msgstr "Handling"
 
-#: js/sieve/RulesGridPanel.js:304
+#: js/sieve/RulesGridPanel.js:305
 msgid "is greater than"
 msgstr "är större än"
 
-#: js/sieve/RulesGridPanel.js:304
+#: js/sieve/RulesGridPanel.js:305
 msgid "is less than"
 msgstr "är mindre än"
 
-#: js/sieve/RulesGridPanel.js:315
+#: js/sieve/RulesGridPanel.js:316
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Huvudrubrik \"{0}\" innehåller \"{1}\""
 
-#: js/sieve/RulesGridPanel.js:315
+#: js/sieve/RulesGridPanel.js:316
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Huvudrubrik \"{0}\" matchar \"{1}\""
 
-#: js/sieve/VacationEditDialog.js:76
+#: js/sieve/VacationEditDialog.js:77
 msgid "Vacation Message for {0}"
 msgstr "Semester Meddelande för {0}"
 
-#: js/sieve/VacationEditDialog.js:94
-msgid "Incoming mails will be answered with this text:"
-msgstr "Inkommande e-post kommer att besvaras med denna text:"
-
-#: js/sieve/VacationEditDialog.js:114
+#: js/sieve/VacationEditDialog.js:109
 msgid "General"
 msgstr "Ällmän"
 
-#: js/sieve/VacationEditDialog.js:133 js/sieve/VacationEditDialog.js:167
-msgid "I am available (vacation message disabled)"
-msgstr "Jag är tillgänglig (semester meddelande inaktiverad)"
-
-#: js/sieve/VacationEditDialog.js:140 js/sieve/VacationEditDialog.js:168
-msgid "I am not available (vacation message enabled)"
-msgstr "Jag är inte tillgänglig (semester-meddelande aktiverat)"
-
-#: js/sieve/VacationEditDialog.js:156
-msgid "Status"
-msgstr "Status"
-
-#: js/sieve/VacationEditDialog.js:180
+#: js/sieve/VacationEditDialog.js:121
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: js/sieve/VacationEditDialog.js:191
+#: js/sieve/VacationEditDialog.js:132
 msgid "Only send all X days to the same sender"
 msgstr "Bara skicka alla X dagar till samma avsändare"
+
+#: js/sieve/VacationEditDialog.js:151
+msgid "Incoming mails will be answered with this text:"
+msgstr "Inkommande e-post kommer att besvaras med denna text:"
+
+#: js/sieve/VacationEditDialog.js:174
+msgid "Status"
+msgstr "Status"
+
+#: js/sieve/VacationEditDialog.js:185
+msgid "I am available (vacation message disabled)"
+msgstr "Jag är tillgänglig (semester meddelande inaktiverad)"
+
+#: js/sieve/VacationEditDialog.js:186
+msgid "I am not available (vacation message enabled)"
+msgstr "Jag är inte tillgänglig (semester-meddelande aktiverat)"
+
+#: js/sieve/VacationEditDialog.js:221
+msgid "Start Date"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:222
+msgid "Set vacation start date ..."
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:227
+msgid "End Date"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:228
+msgid "Set vacation end date ..."
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:234
+msgid "Representative #1"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:235
+msgid "Choose first Representative ..."
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:244
+msgid "Representative #2"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:245
+msgid "Choose second Representative ..."
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:253
+msgid "Message Template"
+msgstr ""
+
+#: js/sieve/VacationEditDialog.js:264
+msgid "Choose Template ..."
+msgstr ""
 
 #: js/TreeContextMenu.js:23
 msgid "Empty Folder"

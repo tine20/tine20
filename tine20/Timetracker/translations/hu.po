@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-03 18:01+0000\n"
+"PO-Revision-Date: 2012-09-19 17:32+0000\n"
 "Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -45,199 +45,215 @@ msgstr "{0}"
 msgid "Not a valid time"
 msgstr "Nem érvényes idő"
 
-#: js/Models.js:45 js/TimesheetEditDialog.js:122
+#: js/Models.js:48 js/TimesheetEditDialog.js:122
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Munkaidő nyílvántartás"
 msgstr[1] "Munkaidő nyílvántartások"
 
-#: js/Models.js:49
+#: js/Models.js:52
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "munkaidő nyílvántartás lista"
 msgstr[1] "munkaidő nyílvántartás listák"
 
-#: js/Models.js:84 js/Models.js:156
+#: js/Models.js:87 js/Models.js:165
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/Models.js:85 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:110
+#: js/Models.js:88 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:110
 msgid "Account"
 msgstr "Azonosító"
 
-#: js/Models.js:86 js/TimesheetEditDialog.js:157 js/TimesheetGridPanel.js:96
+#: js/Models.js:89 js/TimesheetEditDialog.js:157 js/TimesheetGridPanel.js:96
 msgid "Date"
 msgstr "Dátum"
 
-#: js/Models.js:87 js/Models.js:159 js/TimeaccountEditDialog.js:92
-#: js/TimeaccountEditDialog.js:168 js/TimesheetEditDialog.js:170
+#: js/Models.js:90 js/Models.js:168 js/TimeaccountEditDialog.js:95
+#: js/TimeaccountEditDialog.js:181 js/TimesheetEditDialog.js:170
 #: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
 msgid "Description"
 msgstr "Leírás"
 
-#: js/Models.js:88 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
+#: js/Models.js:91 js/TimesheetEditDialog.js:191 js/TimesheetGridPanel.js:105
 #: js/TimesheetGridPanel.js:393
 msgid "Billable"
 msgstr "Számlázható"
 
-#: js/Models.js:89 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
+#: js/Models.js:92 js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:107
 #: js/TimesheetGridPanel.js:398
 msgid "Cleared"
 msgstr "Kiegyenlítve"
 
-#: js/Models.js:132 js/TimeaccountEditDialog.js:66
-#: js/TimesheetEditDialog.js:139 js/TimesheetGridPanel.js:100
+#: js/Models.js:93 js/Models.js:170
+msgid "Last Modified Time"
+msgstr "Utolsó módosítás ideje"
+
+#: js/Models.js:94 js/Models.js:171
+msgid "Last Modified By"
+msgstr "Utoljára módosította"
+
+#: js/Models.js:95 js/Models.js:172
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Models.js:96 js/Models.js:173
+msgid "Created By"
+msgstr "Létrehozta"
+
+#: js/Models.js:141 js/TimeaccountEditDialog.js:69
+#: js/TimesheetEditDialog.js:139
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Időazonosító"
 msgstr[1] "Időazonosítók"
 
-#: js/Models.js:136
+#: js/Models.js:145
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "időazonosító lista"
 msgstr[1] "időazonosító listák"
 
-#: js/Models.js:140 js/TimeaccountEditDialog.js:115
+#: js/Models.js:149 js/TimeaccountEditDialog.js:118
 msgid "closed"
 msgstr "zárt"
 
-#: js/Models.js:157 js/TimeaccountEditDialog.js:82
+#: js/Models.js:166 js/TimeaccountEditDialog.js:85
 #: js/TimeaccountGridPanel.js:94
 msgid "Number"
 msgstr "Szám"
 
-#: js/Models.js:158 js/TimeaccountEditDialog.js:87
+#: js/Models.js:167 js/TimeaccountEditDialog.js:90
 #: js/TimeaccountGridPanel.js:99
 msgid "Title"
 msgstr "Cím"
 
-#: js/Models.js:160
-msgid "Created By"
-msgstr "Létrehozta"
-
-#: js/Models.js:161 js/TimeaccountEditDialog.js:109
+#: js/Models.js:169 js/TimeaccountEditDialog.js:112
 #: js/TimeaccountGridPanel.js:104
 msgid "Status"
 msgstr "Állapot"
 
-#: js/Models.js:162 js/TimeaccountEditDialog.js:136
+#: js/Models.js:174 js/TimeaccountEditDialog.js:139
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr "Könyvelési határidő"
 
-#: js/TimeaccountEditDialog.js:97
+#: js/TimeaccountEditDialog.js:100
 msgid "Unit"
 msgstr "Egység"
 
-#: js/TimeaccountEditDialog.js:101
+#: js/TimeaccountEditDialog.js:104
 msgid "Unit Price"
 msgstr "Egységár"
 
-#: js/TimeaccountEditDialog.js:106 js/TimeaccountGridPanel.js:110
+#: js/TimeaccountEditDialog.js:109 js/TimeaccountGridPanel.js:110
 msgid "Budget"
 msgstr "Költség"
 
-#: js/TimeaccountEditDialog.js:115
+#: js/TimeaccountEditDialog.js:118
 msgid "open"
 msgstr "nyitott"
 
-#: js/TimeaccountEditDialog.js:117
+#: js/TimeaccountEditDialog.js:120
 msgid "Billed"
 msgstr "Számlázott"
 
-#: js/TimeaccountEditDialog.js:125 js/TimeAccountStatusFilterModel.js:47
+#: js/TimeaccountEditDialog.js:128 js/TimeAccountStatusFilterModel.js:47
 #: Setup/setup.xml:81
 msgid "not yet billed"
 msgstr "még nem számlázott"
 
-#: js/TimeaccountEditDialog.js:126 js/TimeAccountStatusFilterModel.js:48
+#: js/TimeaccountEditDialog.js:129 js/TimeAccountStatusFilterModel.js:48
 #: Setup/setup.xml:82
 msgid "to bill"
 msgstr "számlázni"
 
-#: js/TimeaccountEditDialog.js:127 js/TimeAccountStatusFilterModel.js:49
+#: js/TimeaccountEditDialog.js:130 js/TimeAccountStatusFilterModel.js:49
 #: Setup/setup.xml:83
 msgid "billed"
 msgstr "számlázott"
 
-#: js/TimeaccountEditDialog.js:131
+#: js/TimeaccountEditDialog.js:134
 msgid "not cleared yet..."
 msgstr "nincs még kiegyenlítve..."
 
-#: js/TimeaccountEditDialog.js:132 js/TimesheetEditDialog.js:207
+#: js/TimeaccountEditDialog.js:135 js/TimesheetEditDialog.js:207
 msgid "Cleared In"
 msgstr "Kiegyenlítve ekkor"
 
-#: js/TimeaccountEditDialog.js:144
+#: js/TimeaccountEditDialog.js:147
 msgid "none"
 msgstr "semmi"
 
-#: js/TimeaccountEditDialog.js:145
+#: js/TimeaccountEditDialog.js:148
 msgid "last week"
 msgstr "múlt hét"
 
-#: js/TimeaccountEditDialog.js:149
+#: js/TimeaccountEditDialog.js:152 Model/Timeaccount.php:43
+msgid "Cost Center"
+msgstr "Költséghely"
+
+#: js/TimeaccountEditDialog.js:162
 msgid "Timesheets are billable"
 msgstr "Munkaidő nyílvántartás számlázható"
 
-#: js/TimeaccountEditDialog.js:182
+#: js/TimeaccountEditDialog.js:195
 msgid "Enter description"
 msgstr "Leírás megadása"
 
-#: js/TimeaccountEditDialog.js:198
+#: js/TimeaccountEditDialog.js:211
 msgid "Access"
 msgstr "Engedélyek"
 
-#: js/TimeaccountEditDialog.js:221
+#: js/TimeaccountEditDialog.js:234
 msgid "Book Own"
 msgstr "Saját könyvelése"
 
-#: js/TimeaccountEditDialog.js:223
+#: js/TimeaccountEditDialog.js:236
 msgid "The grant to add Timesheets to this Timeaccount"
 msgstr "Munkaidő nyílvántartás hozzáadásának joga ehhez az időazonosítóhoz"
 
-#: js/TimeaccountEditDialog.js:227
+#: js/TimeaccountEditDialog.js:240
 msgid "View All"
 msgstr "Minden megtekintése"
 
-#: js/TimeaccountEditDialog.js:228
+#: js/TimeaccountEditDialog.js:241
 msgid "The grant to view Timesheets of other users"
 msgstr "Másik felhasználók munkaidő nyílvántartásának megtekintési joga"
 
-#: js/TimeaccountEditDialog.js:233
+#: js/TimeaccountEditDialog.js:246
 msgid "Book All"
 msgstr "Minden könyvelése"
 
-#: js/TimeaccountEditDialog.js:234
+#: js/TimeaccountEditDialog.js:247
 msgid "The grant to add Timesheets for other users"
 msgstr "Másik felhasználókhoz munkaidő nyílvántartás hozzáadásának joga"
 
-#: js/TimeaccountEditDialog.js:239
+#: js/TimeaccountEditDialog.js:252
 msgid "Manage Clearing"
 msgstr "Kiegyenlítések kezelése"
 
-#: js/TimeaccountEditDialog.js:240
+#: js/TimeaccountEditDialog.js:253
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Munkaidő nyílvántartás kiegyenlítések kezelésének joga"
 
-#: js/TimeaccountEditDialog.js:245 js/TimeaccountGridPanel.js:143
+#: js/TimeaccountEditDialog.js:258 js/TimeaccountGridPanel.js:143
 msgid "Export"
 msgstr "Exportálás"
 
-#: js/TimeaccountEditDialog.js:246
+#: js/TimeaccountEditDialog.js:259
 msgid "The grant to export Timesheets of Timeaccount"
 msgstr "Időazonosítók munkaidő nyílvántartásainak exportálási joga"
 
-#: js/TimeaccountEditDialog.js:251
+#: js/TimeaccountEditDialog.js:264
 msgid "Manage All"
 msgstr "Minden kezelése"
 
-#: js/TimeaccountEditDialog.js:252
+#: js/TimeaccountEditDialog.js:265
 msgid "Includes all other grants"
 msgstr "Minden más jogot tartalmaz"
 
-#: js/TimeaccountEditDialog.js:260
+#: js/TimeaccountEditDialog.js:273
 msgid "Permissions"
 msgstr "Engedélyek"
 
@@ -258,7 +274,7 @@ msgstr "Exportálás ODS-be"
 msgid "Export as CSV"
 msgstr "Exportálás CSV-be"
 
-#: js/TimeaccountGridPanel.js:170 js/TimeaccountPickerCombo.js:44
+#: js/TimeaccountGridPanel.js:170 js/TimeaccountPickerCombo.js:46
 msgid "Show closed"
 msgstr "Lezártak mutatása"
 
@@ -301,6 +317,10 @@ msgstr "Könyvelési határidő ehhez az időazonosítóhoz lejárt."
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
 msgstr "Kezdési idő"
+
+#: js/TimesheetGridPanel.js:100
+msgid "Time Account (Number - Title)"
+msgstr "Időazonosító (Szám - Cím)"
 
 #: js/TimesheetGridPanel.js:102
 msgid "Time Account closed"

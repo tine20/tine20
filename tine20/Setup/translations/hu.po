@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-03 17:30+0000\n"
+"PO-Revision-Date: 2012-09-19 17:43+0000\n"
 "Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -118,18 +118,20 @@ msgid "Try to split username"
 msgstr "Próbáld kettéválasztani a felhasználónevet"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
-#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
+#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
+#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:584
+#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
+#: js/EmailPanel.js:207
 msgid "Yes"
 msgstr "Igen"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:484
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:581
-#: js/AuthenticationPanel.js:587 js/EmailPanel.js:207
+#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
+#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:584
+#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
+#: js/EmailPanel.js:207
 msgid "No"
 msgstr "Nem"
 
@@ -148,7 +150,7 @@ msgstr "Azonosító domain név "
 msgid "Account domain short name"
 msgstr "Azonosító rövid domain név"
 
-#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:472
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
 msgid "Host"
 msgstr "Gép"
 
@@ -158,17 +160,17 @@ msgstr "Gép"
 msgid "Port"
 msgstr "Port"
 
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:475
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
 msgid "Login name"
 msgstr "Felhasználó név"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:478
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
 #: js/ConfigManagerPanel.js:175 js/ConfigManagerPanel.js:206
 #: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Jelszó"
 
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:483
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
 msgid "Bind requires DN"
 msgstr "Bindnek szükséges a DN"
 
@@ -214,113 +216,141 @@ msgstr "Domain csatolása a felhasználónévhez"
 msgid "Accounts storage"
 msgstr "Azonsítók tárolása"
 
-#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:545
+#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
 msgid "Default user group name"
 msgstr "Alapértelmezett felhasználói csoport neve"
 
-#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:548
+#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:542
 msgid "Default admin group name"
 msgstr "Alapértelmezett admin csoport neve"
 
-#: js/AuthenticationPanel.js:457
-msgid "User can change password"
-msgstr "Felhasználó változtathat jelszót"
-
-#: js/AuthenticationPanel.js:489
+#: js/AuthenticationPanel.js:483
 msgid "User DN"
 msgstr "Felhasználó DN"
 
-#: js/AuthenticationPanel.js:492
+#: js/AuthenticationPanel.js:486
 msgid "User Filter"
 msgstr "Felhasználó szűrő"
 
-#: js/AuthenticationPanel.js:496
+#: js/AuthenticationPanel.js:490
 msgid "User Search Scope"
 msgstr "Felhasználó keresési kör"
 
-#: js/AuthenticationPanel.js:502
+#: js/AuthenticationPanel.js:496
 msgid "Groups DN"
 msgstr "Csoportok DN"
 
-#: js/AuthenticationPanel.js:505
+#: js/AuthenticationPanel.js:499
 msgid "Group Filter"
 msgstr "Csoport szűrő"
 
-#: js/AuthenticationPanel.js:509
+#: js/AuthenticationPanel.js:503
 msgid "Group Search Scope"
 msgstr "Csoport keresési kör"
 
-#: js/AuthenticationPanel.js:515
+#: js/AuthenticationPanel.js:509
 msgid "Password encoding"
 msgstr "Jelszó kódolás"
 
-#: js/AuthenticationPanel.js:521
+#: js/AuthenticationPanel.js:515
 msgid "Use Rfc 2307 bis"
 msgstr "RFC 2307 használata"
 
-#: js/AuthenticationPanel.js:527
+#: js/AuthenticationPanel.js:521
 msgid "Min User Id"
 msgstr "Min felhasználó Id"
 
-#: js/AuthenticationPanel.js:530
+#: js/AuthenticationPanel.js:524
 msgid "Max User Id"
 msgstr "Max felhasználó Id"
 
-#: js/AuthenticationPanel.js:533
+#: js/AuthenticationPanel.js:527
 msgid "Min Group Id"
 msgstr "Min csoport Id"
 
-#: js/AuthenticationPanel.js:536
+#: js/AuthenticationPanel.js:530
 msgid "Max Group Id"
 msgstr "Max csoport Id"
 
-#: js/AuthenticationPanel.js:539
+#: js/AuthenticationPanel.js:533
 msgid "Group UUID Attribute name"
 msgstr "Csoport UUID tulajdonság név"
 
-#: js/AuthenticationPanel.js:542
+#: js/AuthenticationPanel.js:536
 msgid "User UUID Attribute name"
 msgstr "Felhasználó UUID tulajdonság név"
 
-#: js/AuthenticationPanel.js:552
-msgid "Allow user to change her password?"
-msgstr "Engedélyezett a felhasználónak a jelszócsere?"
-
-#: js/AuthenticationPanel.js:558
+#: js/AuthenticationPanel.js:546
 msgid "Readonly access"
 msgstr "Csak olvasható elérés"
 
-#: js/AuthenticationPanel.js:568
+#: js/AuthenticationPanel.js:556
+msgid "Password Settings"
+msgstr "Jelszó beállítások"
+
+#: js/AuthenticationPanel.js:571
+msgid "User can change password"
+msgstr "Felhasználó változtathat jelszót"
+
+#: js/AuthenticationPanel.js:577
+msgid "Enable password policy"
+msgstr "Jelszó szabályok engedélyezése"
+
+#: js/AuthenticationPanel.js:583
+msgid "Only ASCII"
+msgstr "Csak ASCII"
+
+#: js/AuthenticationPanel.js:588
+msgid "Minimum length"
+msgstr "Minimum hossz"
+
+#: js/AuthenticationPanel.js:591
+msgid "Minimum word chars"
+msgstr "Minimum betű karakterek"
+
+#: js/AuthenticationPanel.js:594
+msgid "Minimum uppercase chars"
+msgstr "Minimum nagy karakterek"
+
+#: js/AuthenticationPanel.js:597
+msgid "Minimum special chars"
+msgstr "Minimum speciális karakterek"
+
+#: js/AuthenticationPanel.js:600
+msgid "Minimum numbers"
+msgstr "Minimum számok"
+
+#: js/AuthenticationPanel.js:607
 msgid "Redirect Settings"
 msgstr "Átirányítási beállítások"
 
-#: js/AuthenticationPanel.js:576
+#: js/AuthenticationPanel.js:615
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "Átirányítási URL (átirányítás a belépő oldalra ha üres)"
 
-#: js/AuthenticationPanel.js:580
+#: js/AuthenticationPanel.js:619
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Átirányítás mindig (ha Nem, átirányítás csak kilépés után)"
 
-#: js/AuthenticationPanel.js:586
+#: js/AuthenticationPanel.js:625
 msgid "Redirect to referring site, if exists"
 msgstr "Átirányítás a hivatkozó oldalra, ha létezik"
 
-#: js/AuthenticationPanel.js:600
+#: js/AuthenticationPanel.js:639
 msgid "Save config and install"
 msgstr "Beállítás elmentése és telepítés"
 
-#: js/AuthenticationPanel.js:602 js/ConfigManagerPanel.js:359
+#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:359
 msgid "Save config"
 msgstr "Beállítás elmentése"
 
-#: js/AuthenticationPanel.js:627
+#: js/AuthenticationPanel.js:666
 msgid "Passwords don't match"
 msgstr "Jelszó nem egyezik"
 
-#: js/AuthenticationPanel.js:637 js/AuthenticationPanel.js:644
-#: js/AuthenticationPanel.js:648 js/AuthenticationPanel.js:660
-#: js/AuthenticationPanel.js:671
+#: js/AuthenticationPanel.js:676 js/AuthenticationPanel.js:683
+#: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:699
+#: js/AuthenticationPanel.js:710
 msgid "Should not be empty"
 msgstr "Nem lehet üres"
 
@@ -562,9 +592,9 @@ msgstr "Környezeti ellenörzés végrehajtása..."
 
 #: js/EnvCheckGridPanel.js:130
 msgid ""
-"No {0} where found. Please try to change your filter-criteria, view-options "
-"or the {1} you search in."
-msgstr "{0} nem található. Kérlek változtass a szűrési feltételeken, nézeti opciókon vagy a {1} amiben kerestél."
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "Nem található semmi {0}. Kérlek próbáld megváltoztatni a szűrő feltételeket, a nézet opciókat vagy a {1} amiben keresel."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"

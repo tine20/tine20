@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-20 10:18+0000\n"
+"PO-Revision-Date: 2012-09-19 08:57+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -24,19 +24,19 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: Controller/Node.php:163
+#: Controller/Node.php:304
 msgid "My folders"
 msgstr ""
 
-#: Controller/Node.php:170
+#: Controller/Node.php:311
 msgid "Shared folders"
 msgstr ""
 
-#: Controller/Node.php:177
+#: Controller/Node.php:318
 msgid "Other users folders"
 msgstr ""
 
-#: Controller.php:94
+#: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr ""
@@ -45,169 +45,193 @@ msgstr ""
 msgid "Filemanager"
 msgstr ""
 
-#: js/Filemanager.js:56
+#: js/Filemanager.js:34 js/NodeGridPanel.js:363
+msgid "Save locally"
+msgstr ""
+
+#: js/Filemanager.js:80
 msgid "Service Unavailable"
 msgstr ""
 
-#: js/Filemanager.js:57
+#: js/Filemanager.js:81
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
 " Admin FAQ{1} for configuration advice or contact your administrator."
 msgstr ""
 
-#: js/Filemanager.js:79
+#: js/Filemanager.js:103
 msgid "Files already exists"
 msgstr ""
 
-#: js/Filemanager.js:79
+#: js/Filemanager.js:103
 msgid "Do you want to replace the following file(s)?"
 msgstr ""
 
-#: js/Filemanager.js:112
+#: js/Filemanager.js:136
 msgid "Failure on create folder"
 msgstr ""
 
-#: js/Filemanager.js:113
+#: js/Filemanager.js:137
 msgid "Item with this name already exists!"
 msgstr ""
 
-#: js/GridContextMenu.js:35
+#: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/GridContextMenu.js:41
+#: js/GridContextMenu.js:40
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:41 js/GridPanel.js:475
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:522
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:145 js/GridPanel.js:519
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:563
 msgid "Do you really want to delete the following files?"
 msgstr ""
 
-#: js/GridPanel.js:132
-msgid "Name"
+#: js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:44 js/NodeGridPanel.js:155
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:282 js/Model.js:298
+msgid "Copying data .. {0}"
 msgstr ""
 
-#: js/GridPanel.js:139
-msgid "Size"
+#: js/Model.js:285 js/Model.js:300
+msgid "Moving data .. {0}"
 msgstr ""
 
-#: js/GridPanel.js:146 js/Model.js:522
+#: js/Model.js:304
+msgid "Please wait"
+msgstr ""
+
+#: js/Model.js:530
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:531 js/NodeEditDialog.js:89
+msgid "Type"
+msgstr ""
+
+#: js/Model.js:532 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr ""
 
-#: js/GridPanel.js:154
-msgid "Folder"
-msgstr ""
-
-#: js/GridPanel.js:163
-msgid "Revision"
-msgstr ""
-
-#: js/GridPanel.js:178 js/Model.js:523
+#: js/Model.js:533 js/NodeEditDialog.js:100 js/NodeGridPanel.js:179
 msgid "Creation Time"
 msgstr ""
 
-#: js/GridPanel.js:186
+#: js/NodeEditDialog.js:63 js/NodeEditDialog.js:76
+msgid "Node"
+msgstr ""
+
+#: js/NodeEditDialog.js:82 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr ""
+
+#: js/NodeEditDialog.js:97 js/NodeGridPanel.js:187
 msgid "Created By"
 msgstr ""
 
-#: js/GridPanel.js:193
+#: js/NodeEditDialog.js:109
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:112
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:135
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:149
+msgid "Enter description"
+msgstr ""
+
+#: js/NodeGridPanel.js:125
+msgid "Tags"
+msgstr ""
+
+#: js/NodeGridPanel.js:140
+msgid "Size"
+msgstr ""
+
+#: js/NodeGridPanel.js:164
+msgid "Revision"
+msgstr ""
+
+#: js/NodeGridPanel.js:194
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/GridPanel.js:200
+#: js/NodeGridPanel.js:201
 msgid "Last Modified By"
 msgstr ""
 
-#: js/GridPanel.js:234
+#: js/NodeGridPanel.js:233
 msgid "Show closed"
 msgstr ""
 
-#: js/GridPanel.js:258
+#: js/NodeGridPanel.js:268
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
-#: js/GridPanel.js:296
+#: js/NodeGridPanel.js:306
 msgid "Upload"
 msgstr ""
 
-#: js/GridPanel.js:322
+#: js/NodeGridPanel.js:330
+msgid "Edit Properties"
+msgstr ""
+
+#: js/NodeGridPanel.js:341
 msgid "Create Folder"
 msgstr ""
 
-#: js/GridPanel.js:333
+#: js/NodeGridPanel.js:352
 msgid "Folder Up"
 msgstr ""
 
-#: js/GridPanel.js:344
-msgid "Save locally"
-msgstr ""
-
-#: js/GridPanel.js:354 js/GridPanel.js:355 js/GridPanel.js:357
+#: js/NodeGridPanel.js:373 js/NodeGridPanel.js:374 js/NodeGridPanel.js:376
 msgid "Delete"
 msgstr ""
 
-#: js/GridPanel.js:470
+#: js/NodeGridPanel.js:518
 msgid "New Folder"
 msgstr ""
 
-#: js/GridPanel.js:470
+#: js/NodeGridPanel.js:518
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/GridPanel.js:475
+#: js/NodeGridPanel.js:522
 msgid "No {0} added"
 msgstr ""
 
-#: js/GridPanel.js:629 js/GridPanel.js:782 js/TreePanel.js:649
-#: js/TreePanel.js:759
+#: js/NodeGridPanel.js:669 js/NodeGridPanel.js:821 js/NodeTreePanel.js:662
+#: js/NodeTreePanel.js:772
 msgid "Upload Failed"
 msgstr ""
 
-#: js/GridPanel.js:630 js/TreePanel.js:650
+#: js/NodeGridPanel.js:670 js/NodeTreePanel.js:663
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr ""
 
-#: js/GridPanel.js:783 js/TreePanel.js:760
+#: js/NodeGridPanel.js:822 js/NodeTreePanel.js:773
 msgid "Putting files in this folder is not allowed!"
-msgstr ""
-
-#: js/Model.js:34
-msgid "file"
-msgid_plural "files"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:38
-msgid "folder"
-msgid_plural "folders"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:265 js/Model.js:281
-msgid "Copying data .. {0}"
-msgstr ""
-
-#: js/Model.js:268 js/Model.js:283
-msgid "Moving data .. {0}"
-msgstr ""
-
-#: js/Model.js:287
-msgid "Please wait"
-msgstr ""
-
-#: js/Model.js:520
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:521
-msgid "Type"
 msgstr ""
 
 #: js/PathFilterModel.js:50

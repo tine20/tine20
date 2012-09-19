@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <p.schuele@metaways.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 14:07+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 14:00+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,44 +38,36 @@ msgid ""
 "syncronisation."
 msgstr "Mögliche Teilnehmerrollen. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
-#: Controller.php:73
+#: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
 msgstr "%s persönliche Projekte"
 
-#: js/AddToProjectPanel.js:56
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/AddToProjectPanel.js:64
-msgid "OK"
-msgstr "OK"
-
-#: js/AddToProjectPanel.js:99
+#: js/AddToProjectPanel.js:32
 msgid "Please choose the Project to add the contacts to"
 msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
 
-#: js/AddToProjectPanel.js:103
+#: js/AddToProjectPanel.js:36
 msgid "Please select the attenders' role"
 msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 
-#: js/AddToProjectPanel.js:123
+#: js/AddToProjectPanel.js:89
 msgid "Select Project"
 msgstr "Projekt auswählen"
 
-#: js/AddToProjectPanel.js:147 js/ProjectEditDialog.js:112
+#: js/AddToProjectPanel.js:91 js/ProjectEditDialog.js:83
 msgid "Role"
 msgstr "Rolle"
 
-#: js/AddToProjectPanel.js:148
+#: js/AddToProjectPanel.js:92
 msgid "Select Role"
 msgstr "Rolle auswählen"
 
-#: js/AddToProjectPanel.js:168
+#: js/AddToProjectPanel.js:112
 msgid "Adding {0} Participants to project"
 msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:136 js/ProjectEditDialog.js:149
+#: js/Model.js:33 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -94,39 +87,39 @@ msgstr "Projektlisten"
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/Model.js:73 js/ProjectEditDialog.js:161 js/ProjectGridPanel.js:95
+#: js/Model.js:73 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:95
 msgid "Title"
 msgstr "Titel"
 
-#: js/Model.js:74 js/ProjectEditDialog.js:166 js/ProjectGridPanel.js:88
+#: js/Model.js:74 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:88
 msgid "Number"
 msgstr "Projektnummer"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:202
+#: js/Model.js:75 js/ProjectEditDialog.js:173
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:172 js/ProjectGridPanel.js:101
+#: js/Model.js:77 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:101
 msgid "Status"
 msgstr "Status"
 
 #: js/Model.js:86
-msgid "Last modified"
-msgstr "Letzte Bearbeitung"
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
 
 #: js/Model.js:87
-msgid "Last modifier"
-msgstr "Letzter Bearbeiter"
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
 
 #: js/Model.js:88
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
 #: js/Model.js:89
-msgid "Creator"
-msgstr "Ersteller"
+msgid "Created By"
+msgstr "Angelegt von"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:111
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:82
 msgid "Attendee"
 msgstr "Teilnehmer"
 
@@ -134,7 +127,7 @@ msgstr "Teilnehmer"
 msgid "Attendee Role"
 msgstr "Teilnehmerrolle"
 
-#: js/ProjectEditDialog.js:216
+#: js/ProjectEditDialog.js:187
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
