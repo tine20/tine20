@@ -92,3 +92,8 @@ file_filter = Voipmanager/translations/<lang>.po
 source_file = Voipmanager/translations/template.pot
 source_lang = en
 
+[tine20.HumanResources]
+file_filter = HumanResources/translations/<lang>.po
+source_file = HumanResources/translations/template.pot
+source_lang = en
+
