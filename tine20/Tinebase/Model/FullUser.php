@@ -28,7 +28,8 @@
  * @property    string                  container_id        
  * @property    array                   groups              list of group memberships
  * @property    DateTime                lastLoginFailure    time of last login failure
- * @property    int                        loginFailures       number of login failures
+ * @property    int                     loginFailures       number of login failures
+ * @property    string                  visibility          displayed/hidden in/from addressbook
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User

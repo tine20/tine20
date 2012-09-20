@@ -73,7 +73,8 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@metaways.de',
+            'visibility'            => Tinebase_Model_User::VISIBILITY_DISPLAYED,
         ));
         
         $this->objects['account2'] = new Tinebase_Model_FullUser(array(
@@ -97,9 +98,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
             'accountFirstName'      => 'PHPUnit 3',
             'accountEmailAddress'   => 'phpunit@tine20.org'
         ));
-        Tinebase_User::getInstance()->addUser($this->objects['account1']);
-        Tinebase_User::getInstance()->addUser($this->objects['account2']);
-        Tinebase_User::getInstance()->addUser($this->objects['account3']);
+        foreach (array('account1', 'account2', 'account3') as $user) {
+            Admin_Controller_User::getInstance()->create($this->objects[$user], NULL, NULL);
+        }
     }
 
     /**
@@ -181,7 +182,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         
         $getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
         
-        $this->assertEquals($setGroupMembersArray, $getGroupMembersArray);
+        $this->assertEquals(sort($setGroupMembersArray), sort($getGroupMembersArray));
     }
 
     /**
@@ -290,7 +291,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     /**
      * testSyncLists
      * 
-     * @see http://forge.tine20.org/mantisbt/view.php?id=5768
+     * @see 0005768: create addressbook lists when migrating users
      */
     public function testSyncLists()
     {
@@ -306,7 +307,8 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         $list = Addressbook_Controller_List::getInstance()->get($group->list_id);
         $this->assertEquals($group->getId(), $list->group_id);
         $this->assertEquals($group->name, $list->name);
-        $this->assertTrue(! empty($list->members), 'list members empty: ' . print_r($list->toArray(), TRUE));
+        $this->assertTrue(! empty($list->members), 'list members empty: ' . print_r($list->toArray(), TRUE) 
+            . ' should contain: ' . print_r($this->objects['account1']->toArray(), TRUE));
         $this->assertEquals($this->objects['account1']->contact_id, $list->members[0]);
         
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();

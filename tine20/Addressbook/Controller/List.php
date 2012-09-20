@@ -78,6 +78,80 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::get()
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        $result = new Tinebase_Record_RecordSet('Addressbook_Model_List', array(parent::get($_id, $_containerId)));
+        $this->_removeHiddenListMembers($result);
+        return $result->getFirstRecord();
+    }
+    
+    /**
+     * use contact search to remove hidden list members
+     * 
+     * @param Tinebase_Record_RecordSet $lists
+     */
+    protected function _removeHiddenListMembers($lists)
+    {
+        if (count($lists) === 0) {
+            return;
+        }
+        
+        $allMemberIds = array();
+        foreach ($lists as $list) {
+            $allMemberIds = array_merge($list->members, $allMemberIds);
+        }
+        $allMemberIds = array_unique($allMemberIds);
+        
+        if (empty($allMemberIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' No members found.');
+            return;
+        }
+        
+        $allVisibleMemberIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(array(
+            'field'    => 'id',
+            'operator' => 'in',
+            'value'    => $allMemberIds
+        ))), NULL, FALSE, TRUE);
+        
+        $hiddenMemberids = array_diff($allMemberIds, $allVisibleMemberIds);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Found ' . count($hiddenMemberids) . ' hidden members, removing them');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . print_r($hiddenMemberids, TRUE));
+        
+        foreach ($lists as $list) {
+            $list->members = array_diff($list->members, $hiddenMemberids);
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::search()
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        $this->_removeHiddenListMembers($result);
+        return $result;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::getMultiple()
+     */
+    public function getMultiple($_ids, $_ignoreACL = FALSE)
+    {
+        $result = parent::getMultiple($_ids, $_ignoreACL);
+        $this->_removeHiddenListMembers($result);
+        return $result;
+    }
+    
+    /**
      * add new members to list
      * 
      * @param  mixed  $_listId
@@ -97,7 +171,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         
         $list = $this->_backend->addListMember($_listId, $_newMembers);
         
-        return $list;
+        return $this->get($list->getId());
     }
     
     /**
@@ -150,7 +224,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
         $list = $this->_backend->removeListMember($_listId, $_newMembers);
         
-        return $list;
+        return $this->get($list->getId());
     }
     
     /**
@@ -161,7 +235,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        if (isset($record->type) &&  $record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
+        if (isset($record->type) && $record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
             throw new Addressbook_Exception_InvalidArgument('can not add list of type ' . Addressbook_Model_List::LISTTYPE_GROUP);
         }
     }
@@ -216,6 +290,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'update');
         
             $list = $this->_backend->update($list);
+            $list = $this->get($list->getId());
         
         } catch (Tinebase_Exception_NotFound $tenf) {
             $list = $this->createByGroup($group);
@@ -251,7 +326,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         
         $list = $this->_backend->create($list);
         
-        return $list;
+        return $this->get($list->getId());
     }
     
     /**

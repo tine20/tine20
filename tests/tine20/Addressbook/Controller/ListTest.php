@@ -4,8 +4,10 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * 
+ * @todo implement search test
  */
 
 /**
@@ -14,7 +16,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Addressbook_Controller_List
  */
 class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
 {
@@ -24,9 +26,11 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
+     * the controller
+     * 
+     * @var Addressbook_Controller_List
      */
-    protected $backupGlobals = false;
+    protected $_instance = NULL; 
     
     /**
      * Runs the test methods of this class.
@@ -48,7 +52,10 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $GLOBALS['Addressbook_Controller_ListTest'] = array_key_exists('Addressbook_Controller_ListTest', $GLOBALS) ? $GLOBALS['Addressbook_ListControllerTest'] : array();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        
+        $this->_instance = Addressbook_Controller_List::getInstance();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -145,9 +152,9 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
         $this->objects['contact2'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2'], FALSE);
         
         $this->objects['initialList'] = new Addressbook_Model_List(array(
-            'name'    => 'initial list',
+            'name'         => 'initial list',
             'container_id' => $container->getId(),
-            'members' => array($this->objects['contact1'], $this->objects['contact2'])
+            'members'      => array($this->objects['contact1'], $this->objects['contact2']),
         ));
     }
 
@@ -159,66 +166,64 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Addressbook_Controller_Contact::getInstance()->delete(array(
-            $this->objects['contact1']->getId(),
-            $this->objects['contact2']->getId()
-        ));
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
     }
     
     /**
      * try to add a list
-     *
+     * 
+     * @return Addressbook_Model_List
      */
     public function testAddList()
     {
         $list = $this->objects['initialList'];
 
-        $list = Addressbook_Controller_List::getInstance()->create($list, FALSE);
-        
-        $GLOBALS['Addressbook_ListControllerTest']['listId'] = $list->getId();
+        $list = $this->_instance->create($list, FALSE);
         
         $this->assertEquals($this->objects['initialList']->name, $list->name);
+        
+        return $list;
     }
     
     /**
      * try to get a list
-     *
      */
     public function testGetList()
     {
-        $list = Addressbook_Controller_List::getInstance()->get($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $list = $this->_instance->get($this->testAddList()->getId());
         
         $this->assertEquals($this->objects['initialList']->name, $list->name);
-        $this->assertEquals($GLOBALS['Addressbook_ListControllerTest']['listId'], $list->getId());
     }
     
     /**
      * try to update a list
-     *
      */
     public function testUpdateList()
     {
-        $list = Addressbook_Controller_List::getInstance()->get($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $list = $this->testAddList();
         $list->members = array($this->objects['contact2']);
         
-        $list = Addressbook_Controller_List::getInstance()->update($list);
+        $list = $this->_instance->update($list);
         
-        #$this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
-        #$this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
+        $this->assertEquals(1, count($list->members));
+        $contactId = $list->members[0];
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
+        
+        $this->assertEquals($this->objects['contact2']->adr_one_locality, $contact->adr_one_locality);
     }
 
     /**
      * try to add list member
-     *
      */
     public function testAddListMember()
     {
-        $list = Addressbook_Controller_List::getInstance()->get($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $list = $this->testAddList();
         $list->members = array($this->objects['contact2']);
         
-        $list = Addressbook_Controller_List::getInstance()->update($list);
+        $list = $this->_instance->update($list);
         
-        $list = Addressbook_Controller_List::getInstance()->addListMember($list, $this->objects['contact1']);
+        $list = $this->_instance->addListMember($list, $this->objects['contact1']);
         
         $this->assertTrue(in_array($this->objects['contact1']->getId(), $list->members), 'contact1 not found in members: ' . print_r($list->members, TRUE));
         $this->assertTrue(in_array($this->objects['contact2']->getId(), $list->members), 'contact2 not found in members: ' . print_r($list->members, TRUE));
@@ -226,41 +231,65 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to remove list member
-     *
      */
     public function testRemoveListMember()
     {
-        $list = Addressbook_Controller_List::getInstance()->get($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $list = $this->testAddList();
         $list->members = array($this->objects['contact1'], $this->objects['contact2']);
         
-        $list = Addressbook_Controller_List::getInstance()->update($list);
+        $list = $this->_instance->update($list);
         
-        $list = Addressbook_Controller_List::getInstance()->removeListMember($list, $this->objects['contact1']);
-        #var_dump($list->members);
+        $list = $this->_instance->removeListMember($list, $this->objects['contact1']);
         $this->assertEquals($list->members, array($this->objects['contact2']->getId()));
     }
 
     /**
      * try to delete a list
-     *
      */
     public function testDeleteList()
     {
-
-        Addressbook_Controller_List::getInstance()->delete($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $id = $this->testAddList()->getId();
+        $this->_instance->delete($id);
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $list = Addressbook_Controller_List::getInstance()->get($GLOBALS['Addressbook_ListControllerTest']['listId']);
+        $list = $this->_instance->get($id);
     }
-
+    
     /**
-     * try to delete a contact
-     *
+     * testHiddenMembers
+     * 
+     * @see 0007122: hide hidden users from lists
      */
-    public function _testDeleteUserAccountContact()
+    public function testHiddenMembers()
     {
-        $this->setExpectedException('Addressbook_Exception_AccessDenied');
-        $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        Addressbook_Controller_Contact::getInstance()->delete($userContact->getId());
-    }    
+        $group = new Tinebase_Model_Group(array(
+            'name'          => 'testgroup',
+            'description'   => 'test group',
+            'visibility'    => Tinebase_Model_Group::VISIBILITY_DISPLAYED
+        ));
+        $group = Admin_Controller_Group::getInstance()->create($group);
+        $list = $this->_instance->get($group->list_id);
+        
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $list->members = array($sclever->contact_id);
+        $list = $this->_instance->update($list);
+        
+        // hide sclever
+        $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        Admin_Controller_User::getInstance()->update($sclever, NULL, NULL);
+        
+        // fetch list and check hidden members
+        $listGet = $this->_instance->get($list->getId());
+        $listSearch = $this->_instance->search(new Addressbook_Model_ListFilter(array(array(
+            'field'    => 'id',
+            'operator' => 'in',
+            'value'    => array($list->getId()),
+        ))))->getFirstRecord();
+        $listGetMultiple = $this->_instance->getMultiple(array($list->getId()))->getFirstRecord();
+        foreach (array('get' => $listGet, 'search' => $listSearch, 'getMultiple' => $listGetMultiple) as $fn => $listRecord) {
+            $this->assertTrue($listRecord instanceof Addressbook_Model_List, $fn . ' did not return a list: ' . var_export($listRecord, TRUE));
+            $this->assertEquals(0, count($listRecord->members), 'Hidden sclever should not appear in list members returned by ' . $fn
+                . '(): ' . print_r($listRecord->toArray(), TRUE));
+        }
+    }
 }
