@@ -198,8 +198,8 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 
         $getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
         
-        $this->assertEquals ( array($this->objects['account1']->accountId, $this->objects['account2']->accountId, $this->objects['account3']->accountId), $getGroupMembersArray);
-    }        
+        $this->assertEquals(sort(array($this->objects['account1']->accountId, $this->objects['account2']->accountId, $this->objects['account3']->accountId)), sort($getGroupMembersArray));
+    }
     
     /**
      * try to remove a group member
