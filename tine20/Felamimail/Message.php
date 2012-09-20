@@ -231,7 +231,7 @@ class Felamimail_Message extends Zend_Mail_Message
         foreach ($lines as $line) {
             
             // get indention level and remove quotes
-            if (preg_match('/^[> ]+/', $line, $matches)) {
+            if (preg_match('/^>[> ]*/', $line, $matches)) {
                 $indentionLevel = substr_count($matches[0], '>');
                 $line = str_replace($matches[0], '', $line);
             } else {
