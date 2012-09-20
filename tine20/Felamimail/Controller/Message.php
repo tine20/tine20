@@ -582,7 +582,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if (! ($_account !== NULL && $_account->display_format === Felamimail_Model_Account::DISPLAY_CONTENT_TYPE && $bodyPart->type == Zend_Mime::TYPE_TEXT)) {
                 $body = Felamimail_Message::convertContentType($partStructure['contentType'], $_contentType, $body);
                 if ($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
-                    $body = Felamimail_Message::replaceUriAndSpaces($body);
+                    $body = Felamimail_Message::replaceUris($body);
                     $body = Felamimail_Message::replaceEmails($body);
                 }
             } else {

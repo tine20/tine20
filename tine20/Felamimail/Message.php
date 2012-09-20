@@ -214,16 +214,51 @@ class Felamimail_Message extends Zend_Mail_Message
     
     /**
      * convert text to html
+     * - replace quotes ('>  ') with blockquotes 
+     * - does htmlspecialchars()
+     * - converts linebreaks to <br />
      * 
      * @param string $_text
      * @return string
      */
     public static function convertFromTextToHTML($_text)
     {
-        $html = htmlspecialchars($_text, ENT_COMPAT, 'UTF-8');
-        $html = strtr($html, array("\r\n" => '<br />', "\r" => '<br />', "\n" => '<br />'));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Input: ' . $_text);
         
-        return $html;
+        $lines = preg_split('/\r\n|\n|\r/', $_text);
+        $result = array();
+        $indention = 0;
+        foreach ($lines as $line) {
+            
+            // get indention level and remove quotes
+            if (preg_match('/^[> ]+/', $line, $matches)) {
+                $indentionLevel = substr_count($matches[0], '>');
+                $line = str_replace($matches[0], '', $line);
+            } else {
+                $indentionLevel = 0;
+            }
+            
+            // convert html special chars
+            $line = htmlspecialchars($line, ENT_COMPAT, 'UTF-8');
+            
+            // set blockquote tags for current indentionLevel
+            while ($indention < $indentionLevel) {
+                $line = '<blockquote class="felamimail-body-blockquote">' . $line;
+                $indention++;
+            }
+            while ($indention > $indentionLevel) {
+                $line .= '</blockquote>';
+                $indention--;
+            }
+            
+            $result[] = $line;
+        }
+        
+        $result = implode('<br />', $result);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Result: ' . $result);
+        
+        return $result;
     }
     
     /**
@@ -270,19 +305,16 @@ class Felamimail_Message extends Zend_Mail_Message
     }
     
     /**
-     * replace uris with links and more than one space with &nbsp;
+     * replace uris with links
      *
      * @param string $_content
      * @return string
      */
-    public static function replaceUriAndSpaces($_content) 
+    public static function replaceUris($_content) 
     {
         // uris
         $pattern = '@(https?://|ftp://)([^\s<>\)]+)@';
         $result = preg_replace($pattern, "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $_content);
-        
-        // spaces
-        #$result = preg_replace('/( {2,}|^ )/em', 'str_repeat("&nbsp;", strlen("\1"))', $result);
         
         return $result;
     }
@@ -304,7 +336,7 @@ class Felamimail_Message extends Zend_Mail_Message
         
         return $result;
     }
-    
+
     /**
      * create Felamimail message from Zend_Mail_Message
      * 

@@ -78,4 +78,27 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             "jjlöjlö\n\n" .
             "Pickhuben 2-4, 20457 Hamburg\n", $result);
     }
+
+    /**
+     * test conversion from plain text to html (quotes ('> > ...') to blockquotes)
+     * 
+     * @see 0005334: convert plain text quoting ("> ") to html blockquotes
+     */
+    public function testTextToHtml()
+    {
+        $plaintextMessage = "blabla\n" .
+            "> lalülüüla\n" .
+            "> \n" .
+            "> > >lala\n" .
+            ">  >\n" . 
+            ">  > xyz\n" .
+            "\n\n" .
+            "jojo\n";
+        
+        $result = Felamimail_Message::convertFromTextToHTML($plaintextMessage);
+        
+        $this->assertEquals('blabla<br /><blockquote class="felamimail-body-blockquote">lalülüüla<br /><br />'
+            . '<blockquote class="felamimail-body-blockquote"><blockquote class="felamimail-body-blockquote">lala<br />'
+            . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br />jojo<br />', $result);
+    }
 }
