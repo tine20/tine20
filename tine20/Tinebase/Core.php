@@ -337,10 +337,8 @@ class Tinebase_Core
 
     /**
      * init tine framework
-     * 
-     * @param boolean $startSession
      */
-    public static function initFramework($startSession = TRUE)
+    public static function initFramework()
     {
         Tinebase_Core::setupTempDir();
         
@@ -354,7 +352,7 @@ class Tinebase_Core
         
         Tinebase_Core::setupSession();
         
-        if ($startSession === true) {
+        if (Zend_Session::sessionExists()) {
             Tinebase_Core::startSession('tinebase');
         }
         
@@ -704,15 +702,15 @@ class Tinebase_Core
     public static function startSession($_namespace)
     {
         try {
-            Zend_Session::start();
+            $session = new Zend_Session_Namespace('TinebaseCore');
         } catch (Exception $e) {
             self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
             self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            Zend_Session::destroy();
+            
+            Zend_Session::expireSessionCookie();
+            
             throw $e;
         }
-        
-        $session = new Zend_Session_Namespace($_namespace);
 
         if (isset($session->currentAccount)) {
             self::set(self::USER, $session->currentAccount);

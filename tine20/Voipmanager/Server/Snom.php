@@ -25,7 +25,12 @@ class Voipmanager_Server_Snom implements Tinebase_Server_Interface
      */
     public function handle()
     {
-        Tinebase_Core::initFramework(false);
+        Tinebase_Core::setSessionOptions(array(
+            'use_cookies'      => 0,
+            'use_only_cookies' => 0
+        ));
+        
+        Tinebase_Core::initFramework();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ .' is snom xml request. method: ' . $this->getRequestMethod());

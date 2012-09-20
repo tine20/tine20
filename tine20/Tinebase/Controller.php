@@ -261,8 +261,6 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         $_accessLog->login_name = $_loginname;
         $_accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
-        Zend_Session::destroy();
-        
         sleep(mt_rand(2,5));
     }
     
@@ -314,24 +312,16 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     }
     
     /**
-     * destroy session
+     * logout user
      *
      * @return void
      */
     public function logout($_ipAddress)
     {
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $currentAccount = Tinebase_Core::getUser();
-    
-            if (is_object($currentAccount)) {
-                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
-            }
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+            Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
         }
-        
-        if (Zend_Session::isStarted()) {
-            Zend_Session::destroy();
-        }
-    }   
+    }
     
     /**
      * gets image info and data

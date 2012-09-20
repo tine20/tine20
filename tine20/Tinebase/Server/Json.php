@@ -175,7 +175,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             $classes['Tinebase_Frontend_Json_UserRegistration'] = 'Tinebase_UserRegistration';
             
             // register additional Json apis only available for authorised users
-            if (Zend_Auth::getInstance()->hasIdentity()) {
+            if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                 
                 $applicationParts = explode('.', $method);
                 $applicationName = ucfirst($applicationParts[0]);

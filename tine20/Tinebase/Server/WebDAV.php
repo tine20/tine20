@@ -41,7 +41,7 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
-        Tinebase_Core::initFramework(false);
+        Tinebase_Core::initFramework();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');

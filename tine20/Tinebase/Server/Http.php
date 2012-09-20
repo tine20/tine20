@@ -42,9 +42,9 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
             
             //NOTE: auth check for Tinebase HTTP api is done via Tinebase_Http::checkAuth  
             $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
-    
+            
             // register addidional HTTP apis only available for authorised users
-            if (Zend_Auth::getInstance()->hasIdentity()) {
+            if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
@@ -59,12 +59,20 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
                 }
+                
+            } else {
+                if (empty($_REQUEST['method'])) {
+                    $_REQUEST['method'] = 'Tinebase.login';
+                }
+                
+                // sessionId got send by client, but we don't use sessions for non authenticated users
+                if (Zend_Session::sessionExists()) {
+                    Zend_Session::expireSessionCookie();
+                }
             }
             
-            if (empty($_REQUEST['method'])) {
-                $_REQUEST['method'] = 'Tinebase.login';
-            }
-
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session status: " . (int) Zend_Session::isStarted());
+            
             $this->_method = $_REQUEST['method'];
             $server->handle($_REQUEST);
         } catch (Exception $exception) {

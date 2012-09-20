@@ -54,6 +54,15 @@ require_once 'bootstrap.php';
 error_reporting(E_ALL | E_STRICT);
 restore_error_handler();
 
+// disable sending cookies
+Zend_Session::setOptions(array(
+    'use_cookies'      => 0,
+    'use_only_cookies' => 0
+));
+
+// fake session_id to trigger creation of session
+$_REQUEST['TINE20SESSID'] = Tinebase_Record_Abstract::generateUID();
+
 // init base framework
 TestServer::getInstance()->initFramework();
 

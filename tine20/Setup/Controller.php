@@ -1175,7 +1175,7 @@ class Setup_Controller
             
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Invalid credentials! ' . print_r($authResult->getMessages(), TRUE));
-            Zend_Session::destroy();
+            Zend_Session::expireSessionCookie();
             sleep(2);
             return false;
         }
@@ -1188,6 +1188,8 @@ class Setup_Controller
      */
     public function logout()
     {
+        $_SESSION = array();
+        
         Zend_Session::destroy();
     }
     

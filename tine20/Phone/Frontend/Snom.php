@@ -30,13 +30,22 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     protected function _authenticate()
     {
+        if (Zend_Session::isStarted()) {
+            $snomSession = new Zend_Session_Namespace('snomPhone');
+            
+            if (isset($snomSession->phoneIsAuthenticated)) {
+                return;
+            }
+        }
+        
         parent::_authenticate();
         
         if (!Zend_Session::isStarted()) {
             Tinebase_Core::startSession('snomPhone');
         }
         
-        Tinebase_Core::getSession()->phoneIsAuthenticated = true;
+        $snomSession = new Zend_Session_Namespace('snomPhone');
+        $snomSession->phoneIsAuthenticated = 1;
     }
     /**
      * public function to access the directory
@@ -50,8 +59,10 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         # get the phone
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $mac);
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $phone->template_id);
         $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' phone ' . $template->setting_id);
         $settings = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
         

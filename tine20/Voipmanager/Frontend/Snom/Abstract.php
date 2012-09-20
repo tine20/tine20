@@ -23,26 +23,6 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      */
     protected function _authenticate()
     {
-        Tinebase_Core::setSessionOptions(array(
-            'use_cookies' => 0,
-            'use_only_cookies' => 0
-        ));
-        
-        if (Zend_Session::sessionExists()) {
-            try {
-                Tinebase_Core::startSession('snomPhone');
-                
-                if (isset(Tinebase_Core::getSession()->phoneIsAuthenticated)) {
-                    return;
-                }
-                
-            } catch (Exception $e) {
-                // continue code flow and try to authenticate user
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session restore faled: ' . $e->getMessage());
-            }
-            
-        }
-        
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PHP_AUTH_USER not set');
             header('WWW-Authenticate: Basic realm="Tine 2.0"');
