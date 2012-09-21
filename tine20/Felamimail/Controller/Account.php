@@ -234,6 +234,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         } else {
             $_record->smtp_credentials_id = $_record->credentials_id;
         }
+        
+        $this->_checkSignature($_record);
+    }
+    
+    /**
+     * convert signature to text to remove all html tags and spaces/linebreaks, if the remains are empty -> set empty signature
+     * 
+     * @param Felamimail_Model_Account $account
+     */
+    protected function _checkSignature($account)
+    {
+        if (empty($account->signature)) {
+            return;
+        }
+        
+        $plainTextSignature = Felamimail_Message::convertFromHTMLToText($account->signature, "\n");
+        if (! preg_match('/[^\s^\\n]/', $plainTextSignature, $matches)) {
+            $account->signature = '';
+        }
     }
 
     /**
@@ -267,6 +286,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         } else {
             $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
+        
+        $this->_checkSignature($_record);
     }
     
     /**

@@ -271,9 +271,10 @@ class Felamimail_Message extends Zend_Mail_Message
     public static function convertFromHTMLToText($_html, $_eol = "\r\n")
     {
         $text = preg_replace('/\<br *\/*\>/', $_eol, $_html);
+        $text = str_replace('&nbsp;', ' ', $text);
         $text = strip_tags($text);
         $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
-                
+        
         return $text;
     }
     

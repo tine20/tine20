@@ -200,4 +200,17 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $account = $accountBackend->update($this->_account);
         $newtrash = $this->_controller->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_TRASH);
     }
+    
+    /**
+     * testEmptySignature
+     * 
+     * @see 0006666: Signature delimeter not removed if no Signature is used
+     */
+    public function testEmptySignature()
+    {
+        $this->_account->signature = '<html><body><div><br /></div><p>   </p>&nbsp;<br /></body></html>';
+        $account = $this->_controller->update($this->_account);
+        
+        $this->assertEquals('', $account->signature, 'did not save empty signature');
+    }
 }
