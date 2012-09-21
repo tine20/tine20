@@ -67,7 +67,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
         // create links
         this.on('afterrender', function() {
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.license');
-            el.insertHtml('beforeBegin', _('Released under different '));
+            el.insertHtml('beforeBegin', ' ' + _('Released under different') + ' ');
             el.insertHtml('beforeEnd', _('Open Source Licenses'));
             el.on('click', function(){
                 var ls = new Tine.Tinebase.LicenseScreen();
@@ -75,7 +75,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             });
             
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.credits');
-            el.insertHtml('beforeBegin', _(' with the help of our '));
+            el.insertHtml('beforeBegin', ' ' + _('with the help of our') + ' ');
             el.insertHtml('beforeEnd', _('Contributors'));
             el.on('click', function() {
                 var cs = new Tine.Tinebase.CreditsScreen();
