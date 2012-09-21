@@ -146,7 +146,16 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
             
-            $folder = Felamimail_Controller_Cache_Folder::getInstance()->getIMAPFolderCounter($folder);
+            try {
+                $folder = Felamimail_Controller_Cache_Folder::getInstance()->getIMAPFolderCounter($folder);
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .  ' ' . $zmse->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Removing folder and contained messages from cache.');
+                Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
+                Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
+                continue;
+            }
             
             if ($this->_cacheIsInvalid($folder) || $this->_messagesInCacheButNotOnIMAP($folder)) {
                 $result->addRecord($folder);

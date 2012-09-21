@@ -128,7 +128,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         if (count($result) == 0) {
             // try to get folders from imap server
             $result = $this->_cacheController->update($filterValues['account_id'], $filterValues['globalname']);
-        }             
+        }
         
         $this->_lastSearchCount[Tinebase_Core::getUser()->getId()][$filterValues['account_id']] = count($result);
         
@@ -309,7 +309,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
             $folder = NULL;
-        }            
+        }
         
         // check if folder has subfolders and throw exception if that is the case / OR: delete subfolders if recursive param is TRUE
         // @todo this should not be a Tinebase_Exception_AccessDenied -> we have to create a new exception and call the fmail exception handler when deleting/adding/renaming folders
@@ -351,7 +351,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
     
     /**
-     * rename folder in cache
+     * delete folder in cache
      * 
      * @param string|Felamimail_Model_Account $_account
      * @param Felamimail_Model_Folder $_folder

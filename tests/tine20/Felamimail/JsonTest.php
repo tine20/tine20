@@ -291,7 +291,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $this->assertEquals(0, count($result));
     }
-
+    
     /**
      * testUpdateFolderCache
      */
@@ -372,7 +372,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         return $system;
     }
-        
+    
     /**
      * test change / delete of account
      */
@@ -437,6 +437,21 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $status = $this->_json->getFolderStatus(array(array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())));
         $this->assertEquals(1, count($status));
         $this->assertEquals($this->_account->sent_folder, $status[0]['localname']);
+    }
+
+    /**
+     * test folder status of deleted folder
+     * 
+     * @see 0007134: getFolderStatus should ignore non-existent folders
+     */
+    public function testGetFolderStatusOfDeletedFolder()
+    {
+        $this->testCreateFolders();
+        // remove one of the created folders
+        $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($this->_createdFolders[0]));
+        
+        $status = $this->_json->getFolderStatus(array(array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())));
+        $this->assertEquals(10, count($status), 'Expected 10 folders that need an update: ' . print_r($status, TRUE));
     }
     
     /**
