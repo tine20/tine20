@@ -69,21 +69,22 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
-    public function createPersonalFolder($_accountId)
+    public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation('Projects');
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $account = Tinebase_User::getInstance()->getUserById($accountId);
+        $account = Tinebase_User::getInstance()->getUserById($_account);
+        
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal Projects"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'          => $account->getId(),
             'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId(),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
             'model'             => static::$_defaultModel
         ));
         
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
+        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;

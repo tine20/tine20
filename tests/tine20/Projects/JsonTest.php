@@ -4,7 +4,7 @@
  * 
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add relations tests
@@ -59,6 +59,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Projects_Frontend_Json();
     }
 
@@ -70,14 +71,11 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (! empty($this->_projectsToDelete)) {
-            $this->_json->deleteProjects($this->_projectsToDelete);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
      * try to add a Project
-     *
      */
     public function testAddProject()
     {
@@ -101,7 +99,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get a Project
-     *
      */
     public function testGetProject()
     {
@@ -120,7 +117,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to update a Project
-     *
      */
     public function testUpdateProject()
     {
@@ -143,7 +139,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to search a Project
-     *
      */
     public function testSearchProjects()
     {
@@ -254,8 +249,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("statusfilter", $result['filter'][0]['filters'][0]['filters'][1]['label']);
     }
     
-    /************ protected helper funcs *************/
-    
     /**
      * get Project
      *
@@ -269,7 +262,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
             'status'        => 'IN-PROCESS',
         );
     }
-        
+    
     /**
      * get paging
      *
@@ -342,5 +335,17 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $this->_projectsToDelete[] = $projectData['id'];
         
         return $projectData;
+    }
+    
+    /**
+     * testPersonalContainers
+     * 
+     * @see 0007098: personal containers of other users are shown below personal container node
+     */
+    public function testPersonalContainers()
+    {
+        $containerJson = new Tinebase_Frontend_Json_Container();
+        $personalContainers = $containerJson->getContainer('Projects', 'personal', Tinebase_Core::getUser()->getId());
+        $this->assertEquals(1, count($personalContainers), 'this should only return 1 personal container: ' . print_r($personalContainers, TRUE));
     }
 }
