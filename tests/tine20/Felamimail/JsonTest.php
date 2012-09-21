@@ -448,10 +448,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $this->testCreateFolders();
         // remove one of the created folders
-        $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($this->_createdFolders[0]));
+        $removedFolder = $this->_createdFolders[0];
+        $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($removedFolder));
         
         $status = $this->_json->getFolderStatus(array(array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())));
-        $this->assertEquals(10, count($status), 'Expected 10 folders that need an update: ' . print_r($status, TRUE));
+        $this->assertGreaterThan(2, count($status), 'Expected more than 2 folders that need an update: ' . print_r($status, TRUE));
+        foreach ($status as $folder) {
+            if ($folder['globalname'] == $removedFolder) {
+                $this->fail('removed folder should not appear in status array!');
+            }
+        }
     }
     
     /**
