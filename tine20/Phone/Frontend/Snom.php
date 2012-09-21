@@ -356,7 +356,9 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     public function callHistory($mac, $event, $callId, $local, $remote)
     {
-        $this->_authenticate();
+        // there is no need to start session for call history
+        // it's a single shot request
+        parent::_authenticate();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
