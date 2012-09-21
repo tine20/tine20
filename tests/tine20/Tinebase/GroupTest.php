@@ -187,7 +187,6 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to add a group member
-     *
      */
     public function testAddGroupMember()
     {
@@ -204,7 +203,6 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to remove a group member
-     *
      */
     public function testRemoveGroupMember()
     {
@@ -215,9 +213,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         
         $getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($this->objects['initialGroup']->id);
         
-        $this->assertEquals ( 2, count($getGroupMembersArray) );
-        $this->assertEquals ( array($this->objects['account1']->accountId, $this->objects['account2']->accountId), $getGroupMembersArray);
-
+        $this->assertEquals(2, count($getGroupMembersArray));
+        $expectedValues = array($this->objects['account1']->accountId, $this->objects['account2']->accountId);
+        $this->assertEquals(sort($expectedValues), sort($getGroupMembersArray));
     }
 
     /**
