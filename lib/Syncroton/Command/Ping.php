@@ -30,17 +30,25 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
     
     protected $_changesDetected = false;
     
-    const PING_TIMEOUT = 60;
+    /**
+     * 
+     * @var int
+     */
+    public static $pingTimeout = 60;
     
     /**
-     * Enter description here...
-     *
+     * 
+     * @var int
+     */
+    public static $quietTime = 180;
+    
+    /**
      * @var Syncroton_Backend_StandAlone_Abstract
      */
     protected $_dataBackend;
 
     protected $_defaultNameSpace = 'uri:Ping';
-    protected $_documentElement = 'Ping';
+    protected $_documentElement  = 'Ping';
     
     protected $_foldersWithChanges = array();
     
@@ -95,17 +103,31 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
         
-        if($status === self::STATUS_NO_CHANGES_FOUND) {
+        if ($status === self::STATUS_NO_CHANGES_FOUND) {
 
             $folderWithChanges = array();
             
             do {
-                foreach((array) $folders as $folder) {
+                sleep(self::$pingTimeout);
+                
+                $now = new DateTime('now', new DateTimeZone('utc'));
+                
+                foreach ((array) $folders as $folder) {
                     $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
                     
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
-
+                        
+                        // another process synchronized data of this folder already. let's skip it
+                        if ($syncState->lastsync > $this->_syncTimeStamp) {
+                            continue;
+                        }
+                        
+                        // safe battery time by skipping folders which got synchronied less than self::$quietTime seconds ago
+                        if (($now->getTimestamp() - $syncState->lastsync->getTimestamp()) < self::$quietTime) {
+                            continue;
+                        }
+                        
                         $foundChanges = !!$dataController->getCountOfChanges($this->_contentStateBackend, $folder, $syncState);
                         
                     } catch (Syncroton_Exception_NotFound $e) {
@@ -118,28 +140,22 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                         $foundChanges = true;
                     }
                     
-                    if($foundChanges == true) {
+                    if ($foundChanges == true) {
                         $this->_foldersWithChanges[] = $folder;
                         $status = self::STATUS_CHANGES_FOUND;
                     }
                 }
                 
-                if($status === self::STATUS_CHANGES_FOUND) {
+                if ($status === self::STATUS_CHANGES_FOUND) {
                     break;
                 }
                 
-                // another process synchronized data already
-                if(isset($syncState) && $syncState->lastsync > $this->_syncTimeStamp) {
-                    if ($this->_logger instanceof Zend_Log) 
-                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " terminate ping process. Some other process updated data already.");
-                    break;
-                }
-                
-                sleep(self::PING_TIMEOUT);
                 $secondsLeft = $intervalEnd - time();
+                
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
-            } while($secondsLeft > 0);
+                
+            } while ($secondsLeft > 0);
         }
         
         if ($this->_logger instanceof Zend_Log) 
