@@ -182,7 +182,7 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
     }
 
     /**
-     * save SimpleFAAQ settings
+     * save SimpleFAQ settings
      *
      * @param SimpleFAQ_Model_Config $_settings
      * @return SimpleFAQ_Model_Config

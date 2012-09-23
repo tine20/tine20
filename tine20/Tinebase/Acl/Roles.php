@@ -113,7 +113,7 @@ class Tinebase_Acl_Roles
         if (empty($roleMemberships)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role/group memberships.');
             if (is_object(Tinebase_Core::getUser()) && Tinebase_Core::getUser()->getId() === $_accountId) {
-                // @ŧodo throw exception in this case?
+                // @todo throw exception in this case?
                 Zend_Session::destroy();
             }
             return FALSE;

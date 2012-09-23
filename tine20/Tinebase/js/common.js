@@ -177,7 +177,7 @@ Tine.Tinebase.common = {
      * @param {String} value
      * @param {Boolean} forceUnit
      * @param {Integer} decimals
-     * @þaram {Boolean} useDecimalValues
+     * @param {Boolean} useDecimalValues
      */
     byteFormatter: function(value, forceUnit, decimals, useDecimalValues) {
         value = parseInt(value, 10);
