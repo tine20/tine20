@@ -31,6 +31,8 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         5 => 'not',
         6 => 'in',
         7 => 'notin',
+        8 => 'notnull',
+        9 => 'isnull',
     );
     
     /**
@@ -45,6 +47,8 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         'not'        => array('sqlop' => ' NOT LIKE ?', 'wildcards' => '?'  ),
         'in'         => array('sqlop' => ' IN (?)',     'wildcards' => '?'  ),
         'notin'      => array('sqlop' => ' NOT IN (?)', 'wildcards' => '?'  ),
+        'notnull'    => array('sqlop' => ' IS NOT NULL'                     ),
+        'isnull'     => array('sqlop' => ' IS NULL'                         ),
     );
     
     /**

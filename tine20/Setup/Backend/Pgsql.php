@@ -5,7 +5,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -28,7 +28,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                 19 => 'integer',
                 64 => 'bigint'),
             'defaultType' => 'integer',
-            'defaultLength' => self::INTEGER_DEFAULT_LENGTH),            
+            'defaultLength' => self::INTEGER_DEFAULT_LENGTH),
         'boolean' => array(
             'defaultType' => 'NUMERIC',
             'defaultScale' => 0,
@@ -43,71 +43,72 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             'defaultLength' => null),
         'float' => array(
             'defaultType' => 'double precision',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'decimal' => array(
             'defaultType' => 'numeric',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'datetime' => array(
             'defaultType' => 'timestamp with time zone',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'time' => array(
             'defaultType' => 'time with timezone',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'date' => array(
             'defaultType' => 'date',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'blob' => array(
             'defaultType' => 'text',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'clob' => array(
             'defaultType' => 'text',
-            'defaultLength' => null ),
+            'defaultLength' => null),
         'enum' => array(
             'defaultType' => 'enum',
-            'defaultLength' => null     )
+            'defaultLength' => null)
     );
-    
+
     /**
      * Generates an SQL CREATE STATEMENT
      * @param Setup_Backend_Schema_Table_Abstract $_table
      * @return array CREATE TABLE statement, sequence, indexes
      * @throws Setup_Exception_NotFound
      */
-    public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
+    public function getCreateStatement(Setup_Backend_Schema_Table_Abstract $_table) 
     {
-        
         $enums = array();
         $statement = "CREATE TABLE " . SQL_TABLE_PREFIX . $_table->name . " (\n";
         $statementSnippets = array();
 
+        // get primary key now because it is necessary in two places
+        $primaryKey = $this->_getPrimaryKeyName($_table);
+
         foreach ($_table->fields as $field) {
             if (isset($field->name)) {
-                // getFieldDeclarations() adds 'unsigned' that it doesn't exist in PortgreSQL
-                if (isset($field->unsigned)) $field->unsigned = false;
-                $fieldDeclarations = $this->getFieldDeclarations($field,$_table->name);
-                // removes length of integer between parenthesis 
-                $fieldDeclarations = preg_replace('/integer\([0-9][0-9]\)/', 'integer', $fieldDeclarations);
-                $fieldDeclarations = preg_replace('/smallint\([0-9][0-9]\)/', 'smallint', $fieldDeclarations);
-                $fieldDeclarations = preg_replace('/bigint\([0-9][0-9]\)/', 'bigint', $fieldDeclarations);
-                // replaces integer auto_increment with serial
-                $fieldDeclarations = str_replace('integer NOT NULL auto_increment', "serial NOT NULL", $fieldDeclarations);
+                $fieldDeclarations = $this->getFieldDeclarations($field, $_table->name);
+
+                if (strpos($primaryKey, $field->name) !== false) {
+                    // replaces integer auto_increment with serial
+                    $sequence = SQL_TABLE_PREFIX . $_table->name . "_{$primaryKey}_seq";
+                    // don't create sequence if is field is not auto_increment
+                    $primaryKey = (strpos($fieldDeclarations, 'auto_increment') !== false) ? $primaryKey : null;
+                    $fieldDeclarations = str_replace('integer NOT NULL auto_increment', "integer NOT NULL DEFAULT nextval('" . $sequence . "')", $fieldDeclarations);
+                }
+
                 $statementSnippets[] = $fieldDeclarations;
             }
         }
 
         $createIndexStatement = '';
-        
+
         foreach ($_table->indices as $index) {
             if ($index->foreign) {
                 $statementSnippets[] = $this->getForeignKeyDeclarations($index);
+
             } else {
-                $statementSnippet = $this->getIndexDeclarations($index,$_table->name);
-                if (strpos($statementSnippet, 'CREATE INDEX')!==false)
-                {
+                $statementSnippet = $this->getIndexDeclarations($index, $_table->name);
+                if (strpos($statementSnippet, 'CREATE INDEX') !== false) {
                     $createIndexStatement = $statementSnippet;
-                }
-                else
-                {
+                } else {
                     $statementSnippets[] = $statementSnippet;
                 }
             }
@@ -115,11 +116,31 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
 
         $statement .= implode(",\n", $statementSnippets) . "\n)";
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "\n" .  $statement . "\n" . $createIndexStatement);
+        return array('table' => $statement, 'index' => $createIndexStatement, 'primary' => $primaryKey);
+    }
 
-        return array('table'=>$statement,'index'=>$createIndexStatement);
-    }   
-    
+    /**
+     *
+     * Gets the primary key name
+     * @param Setup_Backend_Schema_Table_Abstract $table
+     */
+    private function _getPrimaryKeyName($table)
+    {
+        $primaryKeyName = '';
+
+        foreach ($table->indices as $index) {
+            if ($index->primary === 'true') {
+                foreach ($index->field as $field) {
+                    $primaryKeyName .= $field . '-';
+                }
+                $primaryKeyName = substr($primaryKeyName, 0, strlen($primaryKeyName) - 1);
+
+                return $primaryKeyName;
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Get schema of existing table
@@ -132,9 +153,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     {
         // Get common table information
         $select = $this->_db->select()
-        ->from('information_schema.tables')
-        ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
-        ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . $_tableName);
+                ->from('information_schema.tables')
+                ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
+                ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
 
         $stmt = $select->query();
@@ -144,8 +165,8 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Pgsql', $tableInfo);
         // get field informations
         $select = $this->_db->select()
-        ->from('information_schema.COLUMNS')
-        ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName);
+                ->from('information_schema.COLUMNS')
+                ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
         $stmt = $select->query();
         $tableColumns = $stmt->fetchAll();
@@ -159,9 +180,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
 
                 // get foreign keys
                 $select = $this->_db->select()
-                ->from('information_schema.KEY_COLUMN_USAGE')
-                ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX .  $_tableName)
-                ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
+                        ->from('information_schema.KEY_COLUMN_USAGE')
+                        ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName)
+                        ->where($this->_db->quoteIdentifier('COLUMN_NAME') . ' = ?', $tableColumn['COLUMN_NAME']);
 
                 $stmt = $select->query();
                 $keyUsage = $stmt->fetchAll();
@@ -171,6 +192,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                         $index->setForeignKey($keyUse);
                     }
                 }
+
                 $existingTable->addIndex($index);
             }
         }
@@ -185,9 +207,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      * @param Setup_Backend_Schema_Field_Abstract declaration
      * @param int position of future column
      */
-    public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
+    public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL) 
     {
-        $statement = "ALTER TABLE '" . SQL_TABLE_PREFIX . $_tableName . "' ADD COLUMN " ;
+        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ADD COLUMN ';
 
         $statement .= $this->getFieldDeclarations($_declaration);
 
@@ -195,8 +217,8 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             if ($_position == 0) {
                 $statement .= ' FIRST ';
             } else {
-                $before = $this->execQuery('DESCRIBE \'' . SQL_TABLE_PREFIX . $_tableName . '\' ');
-                $statement .= ' AFTER \'' . $before[$_position]['Field'] . '\'';
+                $before = $this->execQuery('DESCRIBE "' . SQL_TABLE_PREFIX . $_tableName . '" ');
+                $statement .= ' AFTER "' . $before[$_position]['Field'] . '"';
             }
         }
 
@@ -210,9 +232,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      * @param Setup_Backend_Schema_Field_Abstract declaration
      * @param string old column/field name
      */
-    public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
+    public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
-        $statement = "ALTER TABLE '" . SQL_TABLE_PREFIX . $_tableName . "' CHANGE COLUMN " ;
+        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ALTER COLUMN ';
 
         if ($_oldName === NULL) {
             $oldName = $_declaration->name;
@@ -220,7 +242,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             $oldName = $_oldName;
         }
 
-        $statement .= " '" . $oldName .  "' " . $this->getFieldDeclarations($_declaration);
+        $fieldDeclaration = $this->getFieldDeclarations($_declaration);
+        $fieldDeclaration = trim(str_replace('"' . $oldName . '"', '', $fieldDeclaration));
+
+        $statement .= ' "' . $oldName . '" TYPE ' . $fieldDeclaration;
         $this->execQueryVoid($statement);
     }
 
@@ -230,10 +255,11 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      * @param string tableName
      * @param Setup_Backend_Schema_Index_Abstract declaration
      */
-    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract $_declaration)
+    public function addIndex($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration) 
     {
-        $statement = "ALTER TABLE '" . SQL_TABLE_PREFIX . $_tableName . "' ADD "
-        . $this->getIndexDeclarations($_declaration);
+        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ADD '
+                . $this->getIndexDeclarations($_declaration);
+
         $this->execQueryVoid($statement);
     }
 
@@ -249,26 +275,27 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
     {
         $isNotIndex = false;
-        
+
         $keys = array();
 
         $indexes = str_replace('-', ',', $_key->name);
         $snippet = 'CREATE INDEX  ' . $_tableName . '_' . $_key->name . ' ON ' . SQL_TABLE_PREFIX . $_tableName . "($indexes);";
         $snippet = str_replace('-', '_', $snippet);
+
         if (!empty($_key->primary)) {
             $pkey = $_tableName . '_pkey';
             $pkey = str_replace('-', '_', $pkey);
             $snippet = " CONSTRAINT $pkey PRIMARY KEY ";
             $isNotIndex = true;
-        } else if (!empty($_key->unique)) {
+        } elseif (!empty($_key->unique)) {
             $unique = $_tableName . '_' . $_key->name . '_' . 'key';
             $unique = str_replace('-', '_', $unique);
-            $snippet = "CONSTRAINT $unique UNIQUE " ;
+            $snippet = "CONSTRAINT $unique UNIQUE ";
             $isNotIndex = true;
         }
 
         foreach ($_key->field as $keyfield) {
-            $key = (string)$keyfield;
+            $key = (string) $keyfield;
             $keys[] = $key;
         }
 
@@ -276,8 +303,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             throw new Setup_Exception_NotFound('no keys for index found');
         }
 
-        if ($isNotIndex)
-        {
+        if ($isNotIndex) {
             $snippet .= ' (' . implode(",", $keys) . ')';
         }
 
@@ -294,16 +320,16 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     {
         $snippet = '  CONSTRAINT ' . SQL_TABLE_PREFIX . $_key->referenceTable . '_' . $_key->field . ' FOREIGN KEY ';
         $snippet .= '(' . $_key->field . ") REFERENCES " . SQL_TABLE_PREFIX
-        . $_key->referenceTable .
-                    " (" . $_key->referenceField . ")";
+                . $_key->referenceTable .
+                " (" . $_key->referenceField . ")";
 
         if (!empty($_key->referenceOnDelete)) {
             $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
         }
         if (!empty($_key->referenceOnUpdate)) {
             $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
-        }       
-        
+        }
+
         return $snippet;
     }
 
@@ -318,28 +344,64 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             $this->_db->query("SET FOREIGN_KEY_CHECKS=" . $_value);
         }
     }
-    
+
     /**
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
-     */ 
-    public function createTable(Setup_Backend_Schema_Table_Abstract  $_table)
+     */
+    public function createTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
-        // receives an array with CREATE TABLE and CREATE INDEX statements 
+        // receives an array with CREATE TABLE and CREATE INDEX statements
         $statements = $this->getCreateStatement($_table);
-        
+
         try {
+            // creates sequence
+            if (!empty($statements['primary'])) {
+                $sequence = SQL_TABLE_PREFIX . $_table->name . '_' . $statements['primary'] . '_seq';
+
+                $createSequence = 'CREATE SEQUENCE ' . $sequence;
+
+                $this->execQueryVoid($createSequence);
+            }
+
             // creates table
             $this->execQueryVoid($statements['table']);
-            
+
             // creates indexes
-            if (!empty($statements['index'])) $this->execQueryVoid($statements['index']);
-        }
-        catch (Exception $e)
-        {
+            if (!empty($statements['index']))
+                $this->execQueryVoid($statements['index']);
+
+            // alters sequence
+            if (!empty($statements['primary'])) {
+                $alterSequence = 'ALTER SEQUENCE ' . $sequence . ' OWNED BY ' . SQL_TABLE_PREFIX . $_table->name . '.' . $statements['primary'];
+                $this->execQueryVoid($alterSequence);
+            }
+
+        } catch (Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
         }
     }
-        
+
+     /**
+     * create the right postgreSql-statement-snippet for columns/fields
+     * PostgreSQL has not unsigned modifier
+     *
+     * @param Setup_Backend_Schema_Field_Abstract field / column
+     * @param String | optional $_tableName [Not used in this backend (PostgreSQL)]
+     * @return string
+     */
+    public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
+    {
+        $_field->unsigned = false;
+
+        $fieldDeclarations = parent::getFieldDeclarations($_field, $_tableName);
+
+        $fieldTypes = array ('tinyint', 'mediumint', 'bigint', 'int', 'integer');
+        foreach ($fieldTypes as $fieldType) {
+            $fieldDeclarations = preg_replace('/' . $fieldType . '\([0-9][0-9]\)/', 'integer', $fieldDeclarations);
+        }
+
+        return $fieldDeclarations;
+    }
 }

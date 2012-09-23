@@ -718,7 +718,7 @@ class Tinebase_Tags
 
         $quotedIdentifier = $this->_db->quoteIdentifier('occurrence');
         $data = array(
-            'occurrence' => new Zend_Db_Expr('IF((' . $quotedIdentifier . ' + ' . (int)$_toAdd . ') >= 0,' . $quotedIdentifier . ' + ' . (int)$_toAdd . ', 0)')
+            'occurrence' => new Zend_Db_Expr('(CASE WHEN (' . $quotedIdentifier . ' + ' . (int)$_toAdd . ') >= 0 THEN ' . $quotedIdentifier . ' + ' . (int)$_toAdd . ' ELSE 0 END)')
         );
 
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $tagId));
@@ -739,7 +739,7 @@ class Tinebase_Tags
 
         $quotedIdentifier = $this->_db->quoteIdentifier('occurrence');
         $data = array(
-            'occurrence' => new Zend_Db_Expr('IF((' . $quotedIdentifier . ' - ' . (int)$_toDel . ') >= 0,' . $quotedIdentifier . ' - ' . (int)$_toDel . ', 0)')
+            'occurrence' => new Zend_Db_Expr('(CASE WHEN (' . $quotedIdentifier . ' - ' . (int)$_toDel . ') >= 0 THEN ' . $quotedIdentifier . ' - ' . (int)$_toDel . ' ELSE 0 END)')
         );
 
         $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $tagId));

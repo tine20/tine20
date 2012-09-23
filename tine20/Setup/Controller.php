@@ -173,11 +173,17 @@ class Setup_Controller
         // check pgsql requirements
         $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
         
-        if (! empty($missingMysqlExtensions) && ! empty($missingPgsqlExtensions)) {
+        // check oracle requirements MOD
+        $missingOracleExtensions = array_diff(array('oci8'), $loadedExtensions);
+
+        if (! empty($missingMysqlExtensions) && ! empty($missingPgsqlExtensions) && ! empty($missingOracleExtensions)) {
             $result['result'][] = array(
                 'key'       => 'Database',
                 'value'     => FALSE,
-                'message'   => 'Database extensions missing. For MySQL install: ' . implode(', ', $missingMysqlExtensions) . ' For PostgreSQL install: ' . implode(', ', $missingPgsqlExtensions) . $this->_helperLink
+                'message'   => 'Database extensions missing. For MySQL install: ' . implode(', ', $missingMysqlExtensions) . 
+                               ' For Oracle install: ' . implode(', ', $missingOracleExtensions) . 
+                               ' For PostgreSQL install: ' . implode(', ', $missingPgsqlExtensions) .
+                               $this->_helperLink
             );
             
             return $result;
@@ -186,7 +192,10 @@ class Setup_Controller
         $result['result'][] = array(
             'key'       => 'Database',
             'value'     => TRUE,
-            'message'   => 'Support for following databases enabled: ' . (empty($missingMysqlExtensions) ? 'MySQL' : '') . ' ' . (empty($missingPgsqlExtensions) ? 'PostgreSQL' : '')
+            'message'   => 'Support for following databases enabled: ' . 
+                           (empty($missingMysqlExtensions) ? 'MySQL' : '') . ' ' .
+                           (empty($missingOracleExtensions) ? 'Oracle' : '') . ' ' .
+                           (empty($missingPgsqlExtensions) ? 'PostgreSQL' : '') . ' '
         );
         $result['success'] = TRUE;
         

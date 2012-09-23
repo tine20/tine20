@@ -396,15 +396,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         foreach ($allGrants as $grant) {
             if (in_array($grant, $this->_recordBasedGrants)) {
-                $_select->columns(array($grant => "\n MAX( \n" .
+                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . " OR \n" . 
                     '  /* implicit  */' . $this->_getImplicitGrantCondition($grant) . " OR \n" .
                     '  /* inherited */' . $this->_getInheritedGrantCondition($grant) . " \n" .
-                 ")"));
+                 ") THEN 1 ELSE 0 END ) "));
             } else {
-                $_select->columns(array($grant => "\n MAX( \n" .
+                $_select->columns(array($grant => "\n MAX( CASE WHEN ( \n" .
                     '  /* physgrant */' . $this->_getContainGrantCondition('physgrants', 'groupmemberships', $grant) . "\n" .
-                ")"));
+                ") THEN 1 ELSE 0 END ) "));
             }
         }
     }

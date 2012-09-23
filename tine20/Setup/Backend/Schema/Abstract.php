@@ -59,7 +59,7 @@ abstract class Setup_Backend_Schema_Abstract
         $isValid = true;
         $messages = array();
         
-        $nameValidator = new Zend_Validate_StringLength(1, 23);
+        $nameValidator = new Zend_Validate_StringLength(1, 30);
         if (!$nameValidator->isValid($this->name)) {
             $isValid = false;
             $messages = array_merge($messages, $nameValidator->getErrors());

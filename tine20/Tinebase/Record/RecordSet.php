@@ -248,6 +248,18 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns array of ids
+     */
+    public function getArrayOfIdsAsString()
+    {
+        $ids = array_keys($this->_idMap);
+        foreach($ids as $key => $id) {
+            $ids[$key] = (string) $id;
+        }
+        return $ids;
+    }
+
+    /**
      * returns array with idless (new) records in this set
      * 
      * @return array

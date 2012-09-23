@@ -128,5 +128,4 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
             $this->_select->$method(implode(' ', $this->_parts[Zend_Db_Select::WHERE]));
         }
     }
-    
 }

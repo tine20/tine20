@@ -472,7 +472,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             array(
                 'field' => 'note_type_id',
                 'operator' => 'in',
-                'value' => $this->getNoteTypes($_onlyNonSystemNotes)->getArrayOfIds()
+                'value' => $this->getNoteTypes($_onlyNonSystemNotes)->getArrayOfIdsAsString()
             )
         ));
         

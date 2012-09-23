@@ -146,7 +146,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             value: 'pdo_mysql',
             store: [
                 ['pdo_mysql', 'MySQL'],
-                ['pdo_pgsql', 'PostgreSQL']
+                ['pdo_pgsql', 'PostgreSQL'],
+                ['oracle', 'Oracle']
             ],
             listeners: {
                 scope: this,

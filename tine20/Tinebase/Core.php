@@ -647,6 +647,7 @@ class Tinebase_Core
         Zend_Locale::setCache($cache);
         Zend_Translate::setCache($cache);
         
+        Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
         self::set(self::CACHE, $cache);
     }
 

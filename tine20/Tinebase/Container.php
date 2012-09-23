@@ -1385,7 +1385,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
             $quotedIdentifier = $this->_db->quoteIdentifier('content_seq');
             $data = array(
-                'content_seq' => new Zend_Db_Expr('IF(' . $quotedIdentifier . ',' . $quotedIdentifier . ' + 1, 1)')
+                'content_seq' => new Zend_Db_Expr('(CASE WHEN ' . $quotedIdentifier . ' >= 1 THEN ' . $quotedIdentifier . ' + 1 ELSE 1 END)')
             );
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $containerId)

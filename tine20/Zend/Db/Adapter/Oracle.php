@@ -262,10 +262,14 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      */
     public function lastSequenceId($sequenceName)
     {
-        $this->_connect();
-        $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.CURRVAL FROM dual';
-        $value = $this->fetchOne($sql);
-        return $value;
+        try {
+            $this->_connect();
+            $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.CURRVAL FROM dual';
+            $value = $this->fetchOne($sql);
+            return $value;
+        } catch(Exception $e) {
+            return NULL;
+        }
     }
 
     /**

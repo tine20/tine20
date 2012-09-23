@@ -196,6 +196,20 @@ class Setup_Core extends Tinebase_Core
                         }
                         break;
                         
+                    case self::ORACLE:
+
+                        if (version_compare(self::ORACLE_MINIMAL_VERSION, $serverVersion, '<')) {
+                            self::set(Setup_Core::CHECKDB, TRUE);
+                        } else {
+                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                . ' Oracle server version incompatible! ' . $serverVersion
+                                . ' < ' . self::ORACLE_MINIMAL_VERSION
+                            );
+                        }
+
+                        $dbcheck = TRUE;
+                        break;
+
                     case self::PDO_PGSQL:
                         if (version_compare(self::PGSQL_MINIMAL_VERSION, $serverVersion, '<')) {
                             $dbcheck = TRUE;
