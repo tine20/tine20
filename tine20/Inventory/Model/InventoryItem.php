@@ -45,11 +45,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'name'              => 'name',
         'type'              => 'type',
         'container_id'      => 'container_id',
-        'recordName'        => 'inventory record', // _('inventory record')
-        'recordsName'       => 'inventory records', // _('inventory records')
+        'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
+        'recordsName'       => 'Inventory items', // _('Inventory items')
         'containerProperty' => 'container_id',
-        'containerName'     => 'inventory record list', // _('inventory record list')
-        'containersName'    => 'inventory record lists', // _('inventory record lists')
+        'containerName'     => 'Inventory item list', // _('Inventory item list')
+        'containersName'    => 'Inventory items lists', // _('Inventory items lists')
 
 
         // relations (linked Inventory_Model_InventoryItem records) and other metadata

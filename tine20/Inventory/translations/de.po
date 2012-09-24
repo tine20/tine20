@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Inventory\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-08-22 16:50+0100\n"
+"PO-Revision-Date: 2012-09-26 10:10+0100\n"
 "Last-Translator: Michael Spahn <m.spahn@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -13,25 +13,43 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Model/InventoryItem.php:49
-msgid "inventory record"
-msgstr "Inventar"
+#: Model/InventoryItem.php:48
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] "Inventar Gegenstand"
+msgstr[1] "Inventar Gegenstände"
 
-#: Model/InventoryItem.php:50
-msgid "inventory records"
-msgstr "Inventar Einträge"
+#: Model/InventoryItem.php:49
+msgid "Inventory items"
+msgstr "Inventar Genstände"
+
+#: Model/InventoryItem.php:51
+msgid "Inventory item list"
+msgstr "Inventarliste"
 
 #: Model/InventoryItem.php:52
-msgid "inventory record list"
+msgid "Inventory items lists"
+msgstr "Inventar Listen"
+
+#: Model/InventoryItem.php:76 js/InventoryItemEditDialog.js:126
+msgid "Name"
+msgstr "Name"
+
+#: Model/InventoryItem.php:80 js/InventoryItemEditDialog.js:117
+msgid "Type"
+msgstr "Typ"
+
+#: Model/InventoryItem.php:88
+msgid "Inventory ID"
 msgstr ""
 
-#: Model/InventoryItem.php:53
-msgid "inventory record lists"
-msgstr ""
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:158
+msgid "Location"
+msgstr "Standort"
 
 #: Config.php:31
 msgid "Status Available"
-msgstr ""
+msgstr "Verfügbarkeitssatus"
 
 #: Config.php:33
 msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
@@ -39,74 +57,89 @@ msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "book"
-msgstr ""
+msgstr "Buch"
 
 #: Setup/Initialize.php:34
 msgid "server"
-msgstr ""
+msgstr "Server"
 
 #: Setup/Initialize.php:35
 msgid "monitor"
-msgstr ""
+msgstr "Monitor"
 
 #: Setup/Initialize.php:36
 msgid "keyboard"
-msgstr ""
+msgstr "Tastatur"
 
 #: Setup/Initialize.php:37
 msgid "unkown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "Inventar"
 
-#: Controller.php:80
-#, python-format
-msgid "%s's personal inventorys"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:74
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
+
+#: Controller.php:78
+#, python-format
+msgid "%s's personal inventory"
+msgstr "%s's persönlicher Inventar"
+
+#: Controller.php:81
+#, python-format
+msgid "%s's personal inventory items"
+msgstr "%s's persönliche Inventar Gegenstände"
+
+#: js/InventoryItemEditDialog.js:73
 msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:97
+#: js/InventoryItemEditDialog.js:96
 msgid "Inventory Item"
-msgstr ""
+msgstr "Inventar Gegenstand"
 
-#: js/InventoryItemEditDialog.js:119
-msgid "Name"
-msgstr "Name"
-
-#: js/InventoryItemEditDialog.js:127
-msgid "Type"
-msgstr "Typ"
-
-#: js/InventoryItemEditDialog.js:137
+#: js/InventoryItemEditDialog.js:136
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
-#: js/InventoryItemEditDialog.js:146
+#: js/InventoryItemEditDialog.js:145
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
-#: js/InventoryItemEditDialog.js:151
+#: js/InventoryItemEditDialog.js:150
 msgid "Enter description"
-msgstr ""
+msgstr "Beschreibung eingeben"
 
-#: js/InventoryItemEditDialog.js:159
-msgid "Location"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:167
+#: js/InventoryItemEditDialog.js:166
 msgid "Added"
-msgstr ""
+msgstr "Hinzugefügt"
 
-#: js/InventoryItemEditDialog.js:176
+#: js/InventoryItemEditDialog.js:175
 msgid "Total number"
-msgstr ""
+msgstr "Totale Anzahl"
 
-#: js/InventoryItemEditDialog.js:184
+#: js/InventoryItemEditDialog.js:183
 msgid "Active number"
-msgstr ""
+msgstr "Ausgegebene Anzahl"
 
+#~ msgid "inventory record"
+#~ msgstr "Inventar"
+
+#~ msgid "inventory records"
+#~ msgstr "Inventar Einträge"
+
+#~ msgid "inventory record list"
+#~ msgstr "Inventar Gegenstands Liste"
+
+#~ msgid "inventory record lists"
+#~ msgstr "Inventar Gegenstands Listen"
+
+#~ msgid "%s's personal inventorys"
+#~ msgstr "%ss persönlicher Inventar"

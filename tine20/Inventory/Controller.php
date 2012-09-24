@@ -73,11 +73,10 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
     public function createPersonalFolder($_accountId)
     {
         $translation = Tinebase_Translation::getTranslation('Inventory');
-        
         $account = Tinebase_User::getInstance()->getUserById($_accountId);
         
         $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal inventory"), $account->accountFullName),
+            'name'              => sprintf($translation->_("%s's personal inventory items"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_accountId,
             'backend'           => 'Sql',

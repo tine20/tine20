@@ -14,20 +14,37 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: Model/InventoryItem.php:48
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] ""
+
 #: Model/InventoryItem.php:49
-msgid "inventory record"
+msgid "Inventory items"
 msgstr ""
 
-#: Model/InventoryItem.php:50
-msgid "inventory records"
+#: Model/InventoryItem.php:51
+msgid "Inventory item list"
 msgstr ""
 
 #: Model/InventoryItem.php:52
-msgid "inventory record list"
+msgid "Inventory items lists"
 msgstr ""
 
-#: Model/InventoryItem.php:53
-msgid "inventory record lists"
+#: Model/InventoryItem.php:76 js/InventoryItemEditDialog.js:126
+msgid "Name"
+msgstr ""
+
+#: Model/InventoryItem.php:80 js/InventoryItemEditDialog.js:117
+msgid "Type"
+msgstr ""
+
+#: Model/InventoryItem.php:88
+msgid "Inventory ID"
+msgstr ""
+
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:158
+msgid "Location"
 msgstr ""
 
 #: Config.php:31
@@ -62,51 +79,52 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
-#: Controller.php:80
-#, python-format
-msgid "%s's personal inventorys"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:74
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
+
+#: Controller.php:78
+#, python-format
+msgid "%s's personal inventory"
+msgstr ""
+
+#: Controller.php:81
+#, python-format
+msgid "%s's personal inventory items"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:73
 msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:97
+#: js/InventoryItemEditDialog.js:96
 msgid "Inventory Item"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:119
-msgid "Name"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:127
-msgid "Type"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:137
+#: js/InventoryItemEditDialog.js:136
 msgid "ID"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:146
+#: js/InventoryItemEditDialog.js:145
 msgid "Description"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:151
+#: js/InventoryItemEditDialog.js:150
 msgid "Enter description"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:159
-msgid "Location"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:167
+#: js/InventoryItemEditDialog.js:166
 msgid "Added"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:176
+#: js/InventoryItemEditDialog.js:175
 msgid "Total number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:184
+#: js/InventoryItemEditDialog.js:183
 msgid "Active number"
 msgstr ""
