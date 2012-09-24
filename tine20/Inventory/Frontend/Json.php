@@ -135,16 +135,15 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * Returns registry data
-     * 
+     *
      * @return array
      */
     public function getRegistryData()
     {
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName)->toArray();
+        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer('Inventory_Model_InventoryItem', NULL, 'defaultInventoryItemContainer')->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainerArray['id'])->toArray();
-
         return array(
-            'defaultContainer' => $defaultContainerArray
+            'defaultInventoryItemContainer' => $defaultContainerArray
         );
     }
 }
