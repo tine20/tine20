@@ -46,10 +46,13 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
-        
         this.plugins.push(this.filterToolbar);
         
         Tine.Sales.ContractGridPanel.superclass.initComponent.call(this);
+        this.action_addInNewWindow.actionUpdater = function() {
+            var defaultContainer = this.app.getRegistry().get('defaultContainer');
+            this.action_addInNewWindow.setDisabled(! defaultContainer.account_grants[this.action_addInNewWindow.initialConfig.requiredGrant]);
+        }
     },
     
     /**
