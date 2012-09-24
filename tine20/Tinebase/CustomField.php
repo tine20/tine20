@@ -367,6 +367,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $value = $_record->customfields[$customField->name];
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 
+                // we need to resolve record value if array is given (e.g. on updating customfield)
+                if (strtolower($customField->definition['type']) == 'record' && is_array($value)) {
+                    $modelParts = explode('.', $customField->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
+                    $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
+                    $model = new $modelName(array(), TRUE);
+                    $value = $value[$model->getIdProperty()];
+                }
+                
                 switch (count($filtered)) {
                     case 1:
                         $cf = $filtered->getFirstRecord();
