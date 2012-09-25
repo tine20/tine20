@@ -533,7 +533,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // otherwise update status for user to DECLINED
                 else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: {$records->id}, updating own status to DECLINED only");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: " . $record->id . ", updating own status to DECLINED only");
                     $ownContact = Tinebase_Core::getUser()->contact_id;
                     foreach ($record->attendee as $attender) {
                         if ($attender->user_id == $ownContact && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {

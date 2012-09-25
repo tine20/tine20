@@ -80,7 +80,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
 
-        $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value . 'tag';
+        $correlationName = Tinebase_Record_Abstract::generateUID(5) . ((is_array($this->_value) === true) ? implode(',', $this->_value) : $this->_value) . 'tag';
         // per left join we add a tag column named as the tag and filter this joined column
         // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
         $_select->joinLeft(

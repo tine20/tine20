@@ -282,8 +282,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
         $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
         $account['groups'] = array($account['accountPrimaryGroup']);
-        $account['container_id'] = $account['container_id']['id'];
+        
+        if (is_array($account['container_id']) && is_array($account['container_id']['id']))
+        {
+            $account['container_id'] = $account['container_id']['id'];
+        }
+        
         $account = $this->_json->saveUser($account);
+        
         
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);

@@ -418,7 +418,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
         
         if ($_onlyGetNonAttachmentParts && $this->_partIsAttachment($_structure)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Part is attachment: ' . $_structure['disposition']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Part is attachment: ' . print_r($_structure['disposition'], TRUE));
             return $result;
         }
 
