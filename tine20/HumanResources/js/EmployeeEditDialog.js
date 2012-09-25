@@ -326,6 +326,9 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     name: 'employment_end',
                                     allowBlank: true,
                                     fieldLabel: this.app.i18n._('Employment end')
+                                }, {
+                                    name: 'profession',
+                                    fieldLabel: this.app.i18n._('Profession')
                                 }
                             ]]
                         }]

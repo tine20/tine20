@@ -109,4 +109,22 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '4');
         $this->setApplicationVersion('HumanResources', '6.4');
     }
+    /**
+     * update 6.4 -> 6.5
+     * - add field profession
+     */
+    public function update_4()
+    {
+        $field = '<field>
+                    <name>profession</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_employee', $declaration);
+        
+        $this->setTableVersion('humanresources_employee', '5');
+        $this->setApplicationVersion('HumanResources', '6.5');
+    }
 }

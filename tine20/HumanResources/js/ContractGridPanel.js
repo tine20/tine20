@@ -84,9 +84,16 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
+        
+        if(this.store.getCount() == 0) {
+            recordData.start_date = recordData.start_date ? recordData.start_date : this.editDialog.record.get('employment_begin') ? this.editDialog.record.get('employment_begin') : this.editDialog.form.findField('employment_begin').getValue();
+            recordData.end_date = recordData.end_date ? recordData.end_date : this.editDialog.record.get('employment_end') ? this.editDialog.record.get('employment_end') : this.editDialog.form.findField('employment_end').getValue();
+        }
+        
         recordData.workingtime_id = this.workingTimeQuickAdd.selectedRecord.data;
         recordData.employee_id = this.editDialog.record.get('id');
         recordData.feast_calendar_id = this.calendarQuickAdd.selectedContainer;
+        
         this.store.addSorted(new this.recordClass(recordData));
     },
     

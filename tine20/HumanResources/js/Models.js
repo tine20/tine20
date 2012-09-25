@@ -36,8 +36,9 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.conc
     {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account },
     {name: 'division_id',         type: 'Sales.Division' },
     {name: 'health_insurance',    type: 'string' },
+    {name: 'profession',          type: 'string' },
 
-    {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
     // tine 2.0 tags and notes
     {name: 'tags'},
@@ -104,10 +105,13 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         { label: _('Last Modified Time'),     field: 'last_modified_time', valueType: 'date'},
         { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
         { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
+        { label: _('Employment begin'),       field: 'employment_begin',   valueType: 'date'},
+        { label: _('Employment end'),         field: 'employment_end',     valueType: 'date'},
         { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
         { label: _('Account'),                field: 'account_id',         valueType: 'user'},
         { label: _('First Name'),             field: 'n_given'},
         { label: _('Title'),                  field: 'title'},
+        { label: _('Profession'),             field: 'profession'},
         { label: _('Last Name'),              field: 'n_family'},
         { label: _('Salutation'),             field: 'salutation'},
         { filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Sales.Model.Division, ownField: 'division_id'}
