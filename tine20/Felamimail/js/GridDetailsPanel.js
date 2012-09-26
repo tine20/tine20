@@ -149,7 +149,19 @@ Ext.ns('Tine.Felamimail');
      */
     waitForContent: function(record, body) {
         if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
-            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
+            this.refetchBody(record, {
+                success: this.updateDetails.createDelegate(this, [record, body]),
+                failure: function (exception) {
+                    Tine.log.debug(exception);
+                    this.getLoadMask().hide();
+                    if (exception.code == 404) {
+                        this.defaultTpl.overwrite(body, {msg: this.app.i18n._('Message not available.')});
+                    } else {
+                        Tine.Felamimail.messageBackend.handleRequestException(exception);
+                    }
+                },
+                scope: this
+            });
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
         } else {
@@ -162,14 +174,14 @@ Ext.ns('Tine.Felamimail');
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * @param {Function} callback
-     * @param {String} fnName
      */
-    refetchBody: function(record, callback, fnName) {
+    refetchBody: function(record, callback) {
         // cancel old request first
         if (this.fetchBodyTransactionId && ! Tine.Felamimail.messageBackend.isLoading(this.fetchBodyTransactionId)) {
-            Tine.log.debug('Tine.Felamimail.GridDetailsPanel::' + fnName + '() cancelling current fetchBody request.');
+            Tine.log.debug('Tine.Felamimail.GridDetailsPanel::refetchBody -> cancelling current fetchBody request.');
             Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
         }
+        Tine.log.debug('Tine.Felamimail.GridDetailsPanel::refetchBody -> calling fetchBody');
         this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, callback);
     },
     
@@ -301,7 +313,7 @@ Ext.ns('Tine.Felamimail');
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                             body + '</textarea>';
                     }
-                }                    
+                }
                 return body;
             },
             
@@ -372,7 +384,7 @@ Ext.ns('Tine.Felamimail');
                     
                 if (! this.record.bodyIsFetched()) {
                     // sometimes there is bad timing and we do not have the attachments available -> refetch body
-                    this.refetchBody(this.record, this.onClick.createDelegate(this, [e]), 'onClick');
+                    this.refetchBody(this.record, this.onClick.createDelegate(this, [e]));
                     return;
                 }
                     

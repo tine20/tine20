@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -382,7 +382,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     options.success.apply(options.scope, args);
                 }
             },
-            // note incoming options are implicitly jsonprc converted
+            // note incoming options are implicitly json-rpc converted
             failure: function (response, jsonrpcoptions) {
                 var responseData = Ext.decode(response.responseText),
                     exception = responseData.data ? responseData.data : responseData;
@@ -397,10 +397,15 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                     } else {
                         args = [exception];
                     }
-                
+                    Tine.log.debug('Tine.Tinebase.data.RecordProxy::doXHTTPRequest -> call failure fn');
                     options.failure.apply(options.scope, args);
-                } else {
+                }
+                // requests with callback need to define their own exception handling
+                else if (! options.callback) {
+                    Tine.log.debug('Tine.Tinebase.data.RecordProxy::doXHTTPRequest -> handle exception');
                     this.handleRequestException(exception);
+                } else {
+                    Tine.log.debug('Tine.Tinebase.data.RecordProxy::doXHTTPRequest -> call callback fn');
                 }
             }
         };

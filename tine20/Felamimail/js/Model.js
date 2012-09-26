@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * TODO         think about adding a generic felamimail backend with the exception handler
  */
@@ -196,20 +196,27 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      * fetches body and additional headers (which are needed for the preview panel) into given message
      * 
      * @param {Message} message
+     * @param {Function|Object} callback (NOTE: this has NOTHING to do with standard Ext request callback fn)
      */
     fetchBody: function(message, callback) {
         return this.loadRecord(message, {
             timeout: 120000, // 2 minutes
             scope: this,
-            callback: function(options, success, response) {
-                var msg = this.recordReader(response);
+            success: function(response, options) {
+                var msg = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
                 // NOTE: Flags from the server might be outdated, so we skip them
                 Ext.copyTo(message.data, msg.data, Tine.Felamimail.Model.Message.getFieldNames().remove('flags'));
-                if (Ext.isFunction(callback)){
+                if (Ext.isFunction(callback)) {
                     callback(message);
+                } else if (callback.success) {
+                    Ext.callback(callback.success, callback.scope, [message]);
+                }
+            },
+            failure: function(exception) {
+                if (callback.failure) {
+                    Ext.callback(callback.failure, callback.scope, [exception]);
                 } else {
-                    Ext.callback(callback[success ? 'success' : 'failure'], callback.scope, [message]);
-                    Ext.callback(callback.callback, callback.scope, [message]);
+                    this.handleRequestException(exception);
                 }
             }
         });
