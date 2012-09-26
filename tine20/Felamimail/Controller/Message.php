@@ -576,7 +576,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
+                $bodyCharCountBefore = strlen($body);
                 $body = $this->_purifyBodyContent($body);
+                $bodyCharCountAfter = strlen($body);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Purifying removed ' . ($bodyCharCountBefore - $bodyCharCountAfter) . ' / ' . $bodyCharCountBefore . ' characters.');
+                if ($_message->text_partid && $bodyCharCountAfter < $bodyCharCountBefore / 10) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Purify may have removed (more than 9/10) too many chars, using alternative text message part.');
+                    return $this->_getAndDecodeMessageBody($_message, $_message->text_partid , Zend_Mime::TYPE_TEXT, $_account);
+                }
             }
             
             if (! ($_account !== NULL && $_account->display_format === Felamimail_Model_Account::DISPLAY_CONTENT_TYPE && $bodyPart->type == Zend_Mime::TYPE_TEXT)) {
@@ -735,12 +745,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.DefinitionID', 'purify message body contents');
         $config->set('HTML.DefinitionRev', 1);
-        $config->set('Cache.SerializerPath', $path);
         
+        // some config values to consider
+        /*
+        $config->set('Attr.EnableID', true);
+        $config->set('Attr.ClassUseCDATA', true);
+        $config->set('CSS.AllowTricky', true);
+        */
+        $config->set('Cache.SerializerPath', $path);
+
         if (in_array('images', $this->_purifyElements)) {
             $config->set('HTML.ForbiddenElements', array('img'));
             $config->set('CSS.ForbiddenProperties', array('background-image'));
         }
+        
         
         // add target="_blank" to anchors
         if ($def = $config->maybeGetRawHTMLDefinition()) {

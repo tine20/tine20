@@ -1203,6 +1203,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Höchstgeschwindigkeit', $cachedMessage->subject, print_r($cachedMessage->toArray(), TRUE));
     }
     
+    /**
+     * testFilterTooMuchHtml
+     * 
+     * @see 0007142: sometimes we filter to much html content
+     */
+    public function testFilterTooMuchHtml()
+    {
+        $cachedMessage = $this->messageTestHelper('heavyhtml.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('unwahrscheinlichen Fall, dass Probleme auftreten sollten,', $message->body, print_r($message->toArray(), TRUE));
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
