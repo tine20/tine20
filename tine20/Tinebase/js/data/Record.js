@@ -137,6 +137,12 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         var s = this.titleProperty ? this.titleProperty.split('.') : [null];
         return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
     },
+    /**
+     * returns the id of the record
+     */
+    getId: function() {
+        return this.get(this.idProperty ? this.idProperty : 'id');
+    },
     
     /**
      * converts data to String
@@ -190,7 +196,15 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         return p.fields.get(name);
     };
     f.getMeta = function(name) {
-        return p[name];
+        var value = null;
+        switch(name) {
+            case ('phpClassName'):
+                value = p.appName + '_Model_' + p.modelName;
+                break;
+            default:
+                value = p[name];
+        }
+        return value;
     };
     f.getDefaultData = function() {
         return {};
@@ -235,6 +249,25 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getAppName = function() {
         return Tine.Tinebase.appMgr.get(p.appName).i18n._(p.appName);
     };
+    /**
+     * returns the php class name of the record itself or by the application(name) and model(name)
+     * @param {mixed} app       the application instance or the application name or the record class
+     * @param {mixed} model     the model name
+     * @return {String} php class name
+     */
+    f.getPhpClassName = function(app, model) {
+        // without arguments the php class name of the this is returned
+        if(!app && !model) {
+            return f.getMeta('phpClassName');
+        }
+        // if var app is a record class, the getMeta method is called
+        if (Ext.isFunction(app.getMeta)) {
+            return app.getMeta('phpClassName');
+        }
+
+        var appName = (Ext.isObject(app) && app.hasOwnProperty('name')) ? app.name : app;
+        return appName + '_Model_' + model;
+    },
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };

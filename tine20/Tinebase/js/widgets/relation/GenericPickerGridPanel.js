@@ -492,7 +492,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             own_backend: 'Sql',
             related_backend: 'Sql',
             own_id: (this.record) ? this.record.id : null,
-            own_model: this.app.name + '_Model_' + this.ownRecordClass.getMeta('modelName')
+            own_model: this.ownRecordClass.getPhpClassName()
         };
     },
 
@@ -500,31 +500,68 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * is called when selecting a record in the searchCombo
      */
     onAddRecordFromCombo: function() {
-        var recordToAdd = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue());
-        var relconf = this.getModelCombo().getActiveData();
+        var recordToAdd = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue()),
+            relatedModel = this.getActiveSearchCombo().recordClass.getPhpClassName();
+            
         if(recordToAdd) {
-            delete recordToAdd.data.relations;
-
-            var record = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), {
-                related_record: recordToAdd.data,
-                related_id: recordToAdd.id,
-                related_model: this.getActiveSearchCombo().recordClass.getMeta('appName') + '_Model_' + this.getActiveSearchCombo().recordClass.getMeta('modelName'),
-                type: '',
-                own_degree: 'sibling'
-            }), recordToAdd.id);
-
-            // add if not already in
-            if (this.store.findExact('related_id', recordToAdd.id) === -1) {
+            if(this.relationCheck(recordToAdd, relatedModel)) {
+                delete recordToAdd.data.relations;
+                
+                var record = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), {
+                    related_record: recordToAdd.data,
+                    related_id: recordToAdd.getId(),
+                    related_model: relatedModel,
+                    type: '',
+                    own_degree: 'sibling'
+                }), recordToAdd.getId());
+                
                 Tine.log.debug('Adding new relation:');
                 Tine.log.debug(record);
                 this.store.add([record]);
             }
-
-            this.getActiveSearchCombo().collapse();
-            this.getActiveSearchCombo().reset();
         }
+        this.getActiveSearchCombo().collapse();
+        this.getActiveSearchCombo().reset();
     },
-
+    
+    /**
+     * checks if record to add is already linked or is the same record
+     * @param {Tine.Tinebase.data.Record} recordToAdd
+     * @param {String} relatedModel
+     * @return {Boolean}
+     */
+    relationCheck: function(recordToAdd, relatedModel) {
+        var add = true;
+        this.store.each(function(relation) {
+            if(relation.get('related_model') == relatedModel && relation.get('related_id') == recordToAdd.getId()) {
+                Ext.MessageBox.show({
+                    title: _('Failure'),
+                    msg: _('The record you tried to link is already linked. Please edit the existing link.'),
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.INFO
+                });
+                add = false;
+                return false;
+            }
+        }, this);
+        
+        // don't allow to relate itself
+        if((this.ownRecordClass.getMeta('phpClassName') == relatedModel) && recordToAdd.getId() == this.editDialog.record.getId()) {
+            Ext.MessageBox.show({
+                title: _('Failure'),
+                msg: _('You tried to link a record with itself. This is not allowed!'),
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR  
+            });
+            add = false;
+        }
+        return add;
+    },
+    
+    /**
+     * is called after a row has been edited
+     * @param {Object} o
+     */
     onAfterRowEdit: function(o) {
         this.onUpdate(o.grid.store, o.record);
         this.view.refresh();
