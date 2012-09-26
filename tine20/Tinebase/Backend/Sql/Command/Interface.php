@@ -20,13 +20,6 @@ interface Tinebase_Backend_Sql_Command_Interface
     /**
      *
      * @param Zend_Db_Adapter_Abstract $adapter
-     * @param boolean $on
-     */
-    public static function setAutocommit($adapter,$on);
-
-    /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $field
      * @return string
      */

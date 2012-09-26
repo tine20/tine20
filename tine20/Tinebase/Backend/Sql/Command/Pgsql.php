@@ -18,19 +18,6 @@
 class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     * 
-     * @param $adapter Zend_Db_Adapter_Abstract
-     * @param $on boolean
-     */
-    public static function setAutocommit($adapter, $on)
-    {
-        // SET AUTOCOMMIT=0 is not supported for PostgreSQL
-        if ($on) {
-            $adapter->query('SET AUTOCOMMIT=1;');
-        }
-    }
-
-    /**
      *
      * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $field
@@ -38,6 +25,10 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
      */
     public static function getAggregateFunction($adapter, $field)
     {
+        // post 9.0
+        return "string_agg($field, ',')";
+        
+        // pre 9.0
         return "array_to_string(ARRAY(SELECT unnest(array_agg($field))
                                                ORDER BY 1),',')";
     }

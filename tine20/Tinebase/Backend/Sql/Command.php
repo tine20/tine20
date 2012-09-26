@@ -46,17 +46,6 @@ class Tinebase_Backend_Sql_Command implements Tinebase_Backend_Sql_Command_Inter
 
     /**
      *
-     * @param $adapter Zend_Db_Adapter_Abstract
-     * @param $on boolean
-     */
-    public static function setAutocommit($adapter, $on)
-    {
-        $command = self::_getCommand($adapter);
-        $command->setAutocommit($adapter,$on);
-    }
-
-    /**
-     *
      * @param Tinebase_Container $container
      * @param Zend_Db_Adapter_Abstract $adapter
      * @return string
