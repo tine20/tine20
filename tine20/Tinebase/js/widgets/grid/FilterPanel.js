@@ -16,7 +16,7 @@ Tine.widgets.grid.FilterPanel = function(config) {
         {field: 'query',        operator: 'contains',    value: ''}
     ];
     
-    // the plugins woun't work there
+    // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
     
     // apply some filterPanel configs

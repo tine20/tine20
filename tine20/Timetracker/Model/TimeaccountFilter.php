@@ -53,6 +53,13 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'showClosed'     => array('filter' => 'Timetracker_Model_TimeaccountClosedFilter'),
+        'contract'    => array('filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord', 'options' => array(
+            'controller' => 'Sales_Controller_Contract',
+            'filtergroup' => 'Sales_Model_ContractFilter',
+            'own_filtergroup' => 'Timetracker_Model_TimeaccountFilter',
+            'own_controller' => 'Timetracker_Controller_Timeaccount',
+            'related_model' => 'Sales_Model_Contract',
+        ))
     );
     
     /**

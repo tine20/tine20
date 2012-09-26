@@ -172,7 +172,9 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
         {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {label: app.i18n._('Booking deadline'), field: 'deadline'},
-        {filtertype: 'tinebase.tag', app: app}
+        {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'timetracker.timeaccountcontract'},
+        {filtertype: 'foreignrecord', app: app, ownRecordClass: Tine.Timetracker.Model.Timeaccount, isGeneric: true}
     ];
 };
 

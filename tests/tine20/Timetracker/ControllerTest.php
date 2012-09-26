@@ -107,7 +107,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // reset old admin role rights        
+        // reset old admin role rights
         Tinebase_Acl_Roles::getInstance()->setRoleRights(Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role')->getId(), $this->_roleRights);
         
         // delete timeaccount
@@ -132,7 +132,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_OWN}, array(FALSE));
         $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_ALL}, array(FALSE));
     }
-
+    
     /**
      * test to create TS with book_own grant
      *
@@ -412,17 +412,17 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * get Timesheet
-     *
+     * @param array $data
      * @return Timetracker_Model_Timeaccount
      */
-    protected function _getTimeaccount()
+    protected function _getTimeaccount($data = array())
     {
-        return new Timetracker_Model_Timeaccount(array(
+        return new Timetracker_Model_Timeaccount(array_merge(array(
             'title'         => Tinebase_Record_Abstract::generateUID(),
             'description'   => 'blabla',
             'is_open'       => 1,
             'deadline'      => Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK
-        ), TRUE);
+        ),$data), TRUE);
     }
     
     /**

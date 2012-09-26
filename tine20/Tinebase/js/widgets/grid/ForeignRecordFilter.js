@@ -77,9 +77,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     isGeneric: false,
     
     field: 'foreignRecord',
-//    isForeignFilter: true,
-//    filterValueWidth: 200,
-    
     
     /**
      * @private
