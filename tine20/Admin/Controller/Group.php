@@ -371,7 +371,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $event = new Admin_Event_DeleteGroup();
         $event->groupIds = $_groupIds;
         Tinebase_Event::fireEvent($event);
-    }    
+    }
     
     /**
      * get list of groupmembers

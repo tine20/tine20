@@ -393,7 +393,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($getGroupMembersArray['results'][0]));
         $this->assertEquals($contact->n_fileas, $getGroupMembersArray['results'][0]['name']);
         $this->assertGreaterThan(0, $getGroupMembersArray['totalcount']);
-    }       
+    }
     
     /**
      * try to delete group
@@ -965,5 +965,31 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_DELETE    => false,
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         ));
+    }
+
+    /**
+     * testUpdateGroupMembershipAndContainerGrants
+     * 
+     * @see 0007150: container grants are not updated if group memberships change
+     */
+    public function testUpdateGroupMembershipAndContainerGrants()
+    {
+        $container = $this->_saveContainer();
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $container['account_grants'] = array(array(
+            'account_id'     => $adminGroup->getId(),
+            'account_type'   => 'group',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => false,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        ));
+        $containerUpdated = $this->_json->saveContainer($container);
+        
+        Tinebase_Group::getInstance()->setGroupMembers($adminGroup->getId(), array($this->objects['user']->accountId));
+        
+        $containers = Tinebase_Container::getInstance()->getContainerByACL($this->objects['user']->accountId, 'Addressbook', Tinebase_Model_Grants::GRANT_ADD);
+        $this->assertTrue(count($containers->filter('name', 'testcontainer')) === 1, 'testcontainer ' . print_r($containerUpdated, TRUE) . ' not found: ' . print_r($containers->toArray(), TRUE));
     }
 }
