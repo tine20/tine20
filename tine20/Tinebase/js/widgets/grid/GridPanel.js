@@ -797,6 +797,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (! options.autoRefresh) {
             proxy.handleRequestException(error);
+        } else {
+            Tine.log.debug('Tine.widgets.grid.GridPanel::onStoreLoadException -> auto refresh failed.');
         }
     },
 

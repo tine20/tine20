@@ -62,7 +62,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     evalGrants: false,
     filterSelectionDelete: true,
-    // autoRefresh is done via onFolderStoreUpdate
+    // autoRefresh is done via onUpdateFolderStore
     autoRefreshInterval: false,
     
     /**
@@ -205,7 +205,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if (refresh && this.noDeleteRequestInProgress()) {
                     Tine.log.debug('Refresh grid because of folder update.');
                     this.loadGridData({
-                        removeStrategy: 'keepBuffered'
+                        removeStrategy: 'keepBuffered',
+                        autoRefresh: true
                     });
                 }
             }
@@ -867,7 +868,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.noDeleteRequestInProgress()) {
             Tine.log.debug('Loading grid data after delete.');
             this.loadGridData({
-                removeStrategy: 'keepBuffered'
+                removeStrategy: 'keepBuffered',
+                autoRefresh: true
             });
         }
     },
