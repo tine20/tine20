@@ -2,13 +2,13 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>0.2</version>
+    <version>0.3</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>inventory_item</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -67,7 +67,40 @@
                     <type>integer</type>
                     <notnull>false</notnull>
                 </field>
-              
+                <field>
+                    <name>invoice</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>price</name>
+                    <type>float</type>
+                </field>
+                <field>
+                    <name>costcentre</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>warranty</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>item_added</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>item_removed</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>depreciation</name>
+                    <type>float</type>
+                </field>
+                <field>
+                    <name>amortization</name>
+                    <type>float</type>
+                </field>
                 <!-- defaults for tine system -->
                 <field>
                     <name>created_by</name>

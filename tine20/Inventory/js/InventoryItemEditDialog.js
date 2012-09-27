@@ -35,7 +35,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     windowHeight: 470,
     windowWidth: 800,
-
+    
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
@@ -49,6 +49,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onRecordLoad: function() {
     // you can do something here
         Tine.Inventory.InventoryItemEditDialog.superclass.onRecordLoad.call(this);
+        
     },
     
     /**
@@ -93,7 +94,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._('Inventory Item'),
+                title: this.app.i18n._('General'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -110,34 +111,25 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         columnWidth: .333
                     },
                     items: [
-                        //Start name type
-                        [new Tine.Tinebase.widgets.keyfield.ComboBox({
-                            app: 'Inventory',
-                            keyFieldName: 'inventoryType',
-                            fieldLabel: this.app.i18n._('Type'),
-                            name: 'type',
-                            columnWidth: 0.5,
-                            allowBlank: false,
-                            maxLength: 100
-                        }), {
-                        columnWidth: 1,
-                        xtype: 'tine.widget.field.AutoCompleteField',
-                        recordClass: this.recordClass,
-                        fieldLabel: this.app.i18n._('Name'),
-                        name: 'name',
-                        columnWidth: 0.5,
-                        allowBlank: false,
-                        maxLength: 100
-                        }],
-                        //End name type
                         //Start ID
                         [{
                             columnWidth: 1,
+                            xtype: 'tw-uidtriggerfield',
                             fieldLabel: this.app.i18n._('ID'),
                             name: 'inventory_id',
-                            maxLength: 100
+                            maxLength: 100,
+                            allowBlank: false
                         }],
                         //End ID
+                        //Start name
+                        [{
+                            columnWidth: 1,
+                            fieldLabel: this.app.i18n._('Name'),
+                            name: 'name',
+                            maxLength: 100,
+                            allowBlank: false
+                        }],
+                        //End name
                         //Start description
                         [{
                             xtype: 'textarea',
@@ -158,14 +150,12 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Location'),
                             name: 'location',
                             maxLength: 255
-                            
                         },
                         {
                             xtype: 'extuxclearabledatefield',
                             columnWidth: 0.5,
                             fieldLabel: this.app.i18n._('Added'),
                             name: 'add_time'
-                            
                         }],
                         //end Place and time
                         //Start number
@@ -215,9 +205,83 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
+                },]
+            },
+            {
+                title: this.app.i18n._('Accounting'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'border',
+                items: [
+                    {
+                    region: 'center',
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype:'textfield',
+                        anchor: '100%',
+                        labelSeparator: '',
+                        columnWidth: .333
+                    },
+                    items: [
+                        // Start price, costcentre and invoice
+                        [{
+                            xtype: 'textfield',
+                            name: 'price',
+                            fieldLabel: this.app.i18n._('Price'),
+                            columnWidth: 0.333
+                        },
+                        {
+                            xtype: 'textfield',
+                            name: 'costcentre',
+                            fieldLabel: this.app.i18n._('Costcentre'),
+                            columnWidth: 0.333
+                        },
+                        {
+                            xtype: 'textfield',
+                            name: 'invoice',
+                            fieldLabel: this.app.i18n._('Invoice'),
+                            columnWidth: 0.333
+                        }],
+                        // End price, costcentre and invoice
+                        // Start item_added, warranty and item_removed
+                        [{
+                            xtype: 'datefield',
+                            name: 'item_added',
+                            fieldLabel: this.app.i18n._('Added'),
+                            columnWidth: 0.333
+                        },
+                        {
+                            xtype: 'datefield',
+                            name: 'warranty',
+                            fieldLabel: this.app.i18n._('Warranty'),
+                            columnWidth: 0.333
+                        },
+                        {
+                            xtype: 'datefield',
+                            name: 'item_removed',
+                            fieldLabel: this.app.i18n._('Removed'),
+                            columnWidth: 0.333
+                        }],
+                        // End item_added, warranty and item_removed
+                        // Start depreciation and amortization
+                        [{
+                            xtype: 'numberfield',
+                            name: 'depreciation',
+                            fieldLabel: this.app.i18n._('Depreciation'),
+                            columnWidth: 0.5
+                        },
+                        {
+                            xtype: 'numberfield',
+                            name: 'amortization',
+                            fieldLabel: this.app.i18n._('Amortization'),
+                            columnWidth: 0.5
+                        }]
+                        // End depreciation and amortization
+                    ]
+                    
                 }]
-                
-                
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,

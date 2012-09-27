@@ -56,5 +56,12 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
         'add_time'       => array('filter' => 'Tinebase_Model_Filter_Date'),
         'total_number'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'active_number'  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'costcentre'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'warranty'       => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'item_added'     => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'item_removed'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'depreciation'   => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'amortiziation'  => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'invoice'        => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

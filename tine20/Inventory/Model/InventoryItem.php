@@ -43,18 +43,13 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     protected static $_meta = array(
         'id'                => 'id',
         'name'              => 'name',
-        'type'              => 'type',
+        /*'type'              => 'type',*/
         'container_id'      => 'container_id',
         'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
         'recordsName'       => 'Inventory items', // _('Inventory items')
         'containerProperty' => 'container_id',
         'containerName'     => 'Inventory item list', // _('Inventory item list')
         'containersName'    => 'Inventory items lists', // _('Inventory items lists')
-
-
-        // relations (linked Inventory_Model_InventoryItem records) and other metadata
-
-
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
@@ -75,10 +70,10 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                     'label'      => 'Name', // _('Name')
             ),
-            'type'              => array(
+            /*'type'              => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                     'label'      => 'Type',// _('Type')
-            ),
+            ),*/
             'container_id'      => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                     'label'      => NULL
@@ -90,7 +85,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'description'       => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                     'label'      => NULL
-                   
             ),
             'location'          => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
@@ -98,25 +92,67 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'add_time'          => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => 'Added', // _('Added')
+                    'hidden'     => true
             ),
             'total_number'      => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                     'label'      => NULL
                     
             ),
+            'invoice'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Invoice', // _('Invoice')
+                    'hidden'     => TRUE
+            ),
+            'price'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Price', // _('Price')
+                    'hidden'     => TRUE
+            ),
+            'costcentre'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Cost centre', // _('Cost centre')
+                    'hidden'     => TRUE
+            ),
+            'warranty'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Warranty', // _('Warranty')
+                    'hidden'     => TRUE
+            ),
+            'item_added'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Item added', // _('Item added')
+                    'hidden'     => TRUE
+            ),
+            'item_removed'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Item removed', // _('Item removed')
+                    'hidden'     => TRUE
+            ),
+            'depreciation'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Depreciation', // _('Depreciation')
+                    'hidden'     => TRUE
+            ),
+            'amortization'      => array(
+                    'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                    'label'      => 'Amortization', // _('Amortization')
+                    'hidden'     => TRUE
+            ),
             'active_number'     => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                     'label'      => 'Available' // _(Available)
             ),
-            // modlog information
             'created_by'        => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => NULL,
+                    'hidden'     => TRUE
             ),
             'creation_time'     => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => NULL,
+                    'hidden'     => TRUE
             ),
             'last_modified_by'  => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -128,7 +164,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),    
             'is_deleted'        => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                    'label'      => NULL
+                    'label'      => NULL,
+                    'hidden'     => true
             ),
             'deleted_time'      => array(
                     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -162,7 +199,10 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        foreach (array("total_number", "active_number", "add_time") as $val)
+        foreach (array("total_number", "active_number", "add_time",
+                    "price", "item_added", "warranty",
+                    "item_removed", "depreciation", "amortization")
+                as $val)
         {
             $this->_filters[$val] = new Zend_Filter_Empty(NULL);
         }
