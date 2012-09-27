@@ -829,7 +829,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($containerId);
-        $this->checkSystemContainer($_containerId);
+        $this->checkSystemContainer($containerId);
         
         $tm = Tinebase_TransactionManager::getInstance();   
         $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
