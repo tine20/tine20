@@ -140,7 +140,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $userId = Tinebase_Core::getUser()->getId();
         if (! $_filter->isFilterSet('account')) {
             $accountFilter = $_filter->createFilter('account', 'equals', array(
-                'accountId' => $userId, 
+                'accountId'   => (string) $userId, 
                 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             ));
             $_filter->addFilter($accountFilter);

@@ -180,7 +180,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function getNote($_noteId)
     {
-        $row = $this->_notesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteId));
+        $row = $this->_notesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', (string) $_noteId));
         
         if (!$row) {
             throw new Tinebase_Exception_NotFound('Note not found.');
@@ -419,7 +419,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function deleteNotes(array $_noteIds)
     {
         if (!empty($_noteIds)) {
-            $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', $_noteIds));
+            $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_noteIds));
             $this->_notesTable->delete($where);
         }
     }
@@ -437,7 +437,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $notes = $this->getNotesOfRecord($_model, $_id, $backend);
         
-        $this->deleteNotes($notes->getArrayOfIds());
+        $this->deleteNotes($notes->getArrayOfIdsAsString());
     }
     
     /**

@@ -89,6 +89,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_db;
     
     /**
+     * @var Tinebase_Backend_Sql_Command_Interface
+     */
+    protected $_dbCommand;
+    
+    /**
      * schema of the table
      *
      * @var array
@@ -140,7 +145,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
-        $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
+        $this->_db        = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
         $this->_modelName            = array_key_exists('modelName', $_options)            ? $_options['modelName']    : $this->_modelName;
         $this->_tableName            = array_key_exists('tableName', $_options)            ? $_options['tableName']    : $this->_tableName;
@@ -198,7 +204,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function get($_id, $_getDeleted = FALSE) 
     {
+        if (empty($_id)) {
+            throw new Tinebase_Exception_NotFound('$_id can not be empty');
+        }
+        
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
+        
         return $this->getByProperty($id, $this->_identifier, $_getDeleted);
     }
 
@@ -237,7 +248,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         } else {
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $property) . ' IS NULL');
         }
-
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
@@ -302,6 +315,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                        ->where($columnName . 'IN (?)', $value)
                        ->order($orderBy . ' ' . $_orderDirection);
         
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         
         $resultSet = $this->_rawDataToRecordSet($stmt->fetchAll());
@@ -354,6 +369,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' in (?) /* add acl in getMultiple */', (array) $_containerIds);
             }
         }
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
@@ -382,6 +400,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $select = $this->_getSelect();
         $select->order($orderBy . ' ' . $_orderDirection);
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
             
@@ -478,6 +498,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             $select = $this->_getSelect($subselectCols);
             $this->_addFilter($select, $_filter);
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
             $countSelect = $this->_db->select()->from($select, $searchCountCols);
             
         } else {
@@ -485,7 +506,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_addFilter($countSelect, $_filter);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
+        Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
         
         if (! empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
@@ -597,6 +620,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
+        Tinebase_Backend_Sql_Abstract::traitGroup($_select);
+        
         $stmt = $this->_db->query($_select);
         
         if ($_mode === self::FETCH_ALL) {
@@ -674,7 +699,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                     $selectArray = (array_key_exists('select', $join))
                         ? $join['select'] 
                         : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
-                            ? array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
+                            ? array($foreignColumn => $this->_dbCommand->getAggregate($join['table'] . '.' . $join['field']))
                             : array($foreignColumn => $join['table'] . '.id'));
                     $joinId = (array_key_exists('joinId', $join)) ? $join['joinId'] : $this->_identifier;
                     
@@ -760,7 +785,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
         
         if (!$this->_hasHashId()) {
-            $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName());
+            $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
+            if(!$newId && isset($_record[$identifier])){
+                $newId = $_record[$identifier];
+            }
         }
 
         // if we insert a record without an id, we need to get back one
@@ -872,7 +900,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
                     $select->from(array($join['table'] => $this->_tablePrefix . $join['table']), array($join['field']))
                         ->where($this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']) . ' = ?', $_record->getId());
-                        
+                    
+                    Tinebase_Backend_Sql_Abstract::traitGroup($select);
+                    
                     $stmt = $this->_db->query($select);
                     $currentIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
                     $stmt->closeCursor();
@@ -1207,5 +1237,112 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         return $this->_db;
+    }
+    
+    /**
+     * get dbCommand class
+     *
+     * @return Tinebase_Backend_Sql_Command_Interface
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function getDbCommand()
+    {
+        if (! $this->_dbCommand instanceof Tinebase_Backend_Sql_Command_Interface) {
+            throw new Tinebase_Exception_Backend_Database('Could not fetch database command class');
+        }
+        
+        return $this->_dbCommand;
+    }
+    
+    /**
+     * Public service for grouping treatment
+     * 
+     * @param string $tablePrefix
+     * @param Zend_Db_Select $select
+     */
+    public static function traitGroup(Zend_Db_Select $select)
+    {
+        // not needed for MySQL backends
+        if ($select->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            #return;
+        }
+        
+        $group = $select->getPart(Zend_Db_Select::GROUP);
+        
+        if (empty($group)) {
+            return;
+        }
+        
+        $columns        = $select->getPart(Zend_Db_Select::COLUMNS);
+        $updatedColumns = array();
+        
+        //$column is an array where 0 is table, 1 is field and 2 is alias
+        foreach($columns as $key => $column) {
+            
+            if ($column[1] instanceof Zend_Db_Expr || preg_match('/\(.*\)/', $column[1])) {
+                if (strpos($column[1], '(CASE WHEN') !== false) {
+                    $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $column[1] . ")"), $column[2]);
+                } else {
+                    $updatedColumns[] = $column;
+                }
+                
+                continue;
+            }
+            
+            // resolve * to single columns
+            if ($column[1] == '*') {
+                $tableFields = $select->getAdapter()->describeTable(SQL_TABLE_PREFIX . $column[0]);
+                
+                foreach($tableFields as $columnName => $schema) {
+                    
+                    // adds columns into group by clause (table.field)
+                    // checks if field has a function (that must be an aggregation)
+                    $fieldName = "{$column[0]}.$columnName";
+                    
+                    if (in_array($fieldName, $group)) {
+                        #$updatedColumns[] = array($column[0], $columnName, null);
+                        $updatedColumns[] = array($column[0], $fieldName, $columnName);
+                    } else {
+                        // any selected field which is not in the group by clause must have an aggregate function
+                        // we choose MIN() as default. In practice the affected columns will have only one value anyways.
+                        $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $select->getAdapter()->quoteIdentifier($fieldName) . ")"), $columnName);
+                    }
+                }
+                
+            } else {
+                $fieldName = $column[0] . '.' . $column[1];
+                
+                if (in_array($fieldName, $group)) {
+                    $updatedColumns[] = $column;
+                } else {
+                    // any selected field which is not in the group by clause must have an aggregate function
+                    // we choose MIN() as default. In practice the affected columns will have only one value anyways.
+                    $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $select->getAdapter()->quoteIdentifier($fieldName) . ")"), $column[2] ? $column[2] : $column[1]);
+                }
+            }
+        }
+        
+        $select->reset(Zend_Db_Select::COLUMNS);
+        
+        foreach ($updatedColumns as $column) {
+            $select->columns(!empty($column[2]) ? array($column[2] => $column[1]) : $column[1], $column[0]);
+        }
+
+        // add order by columns to group by
+        $order = $select->getPart(Zend_Db_Select::ORDER);
+        
+        foreach($order as $column) {
+            $field = $column[0];
+            
+            if (preg_match('/.*\..*/',$field) && !in_array($field,$group)) {
+                // adds column into group by clause (table.field)
+                $group[] = $field;
+            }
+        }
+        
+        $select->reset(Zend_Db_Select::GROUP);
+        
+        $select->group($group);
+        
     }
 }

@@ -18,70 +18,81 @@
 class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
+     * 
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_adapter;
+    
+    /**
      * @param Zend_Db_Adapter_Abstract $adapter
+     */
+    public function __construct(Zend_Db_Adapter_Abstract $adapter)
+    {
+        $this->_adapter = $adapter;
+    }
+    
+    /**
      * @param string $field
      * @return string
      * @todo replace by equivalent function of MySQL GROUP_CONCAT in Oracle
      */
-    public static function getAggregateFunction($adapter, $field)
+    public function getAggregate($field)
     {
-        return "GROUP_CONCAT( DISTINCT $field)";
+        $quotedField = $this->_adapter->quoteIdentifier($field);
+        
+        return new Zend_Db_Expr("GROUP_CONCAT( DISTINCT $quotedField)");
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $field
      * @param mixed $returnIfTrue
      * @param mixed $returnIfFalse
      */
-    public static function getIfIsNull($adapter, $field, $returnIfTrue, $returnIfFalse)
+    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse)
     {
-        return "(CASE WHEN $field IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END)";
+        $quotedField = $this->_adapter->quoteIdentifier($field);
+        
+        return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END)");
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $date
      * @return string
      */
-    public static function setDate($adapter, $date)
+    public function setDate($date)
     {
         return "TO_DATE({$date}, 'YYYY-MM-DD hh24:mi:ss') ";
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $value
      * @return string
      */
-    public static function setDateValue($adapter, $value)
+    public function setDateValue($value)
     {
         return "TO_DATE('{$value}', 'YYYY-MM-DD hh24:mi:ss') ";
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return mixed
      */
-    public static function getFalseValue($adapter = null)
+    public function getFalseValue()
     {
         return '0';
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return mixed
      */
-    public static function getTrueValue($adapter = null)
+    public function getTrueValue()
     {
         return '1';
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return string
      */
-    public static function setDatabaseJokerCharacters($adapter)
+    public function setDatabaseJokerCharacters()
     {
         return array('%', '_');
     }

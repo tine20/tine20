@@ -434,57 +434,58 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     protected function _addDeclarationFieldType(array $_buffer, Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
     {
         $typeMapping = $this->getTypeMapping($_field->type);
-        if ($typeMapping) {
-            $fieldType = $typeMapping['defaultType'];
-            if (isset($typeMapping['declarationMethod'])) {
-                $fieldBuffer = call_user_func(array($this, $typeMapping['declarationMethod']), $_field, $_tableName);
-                $_buffer = array_merge($_buffer, $fieldBuffer);
-            } else {
-                if ($_field->length !== NULL) {
-                    if ($this->_db instanceof Zend_Db_Adapter_Oracle) {
-                        if ($_field->type == 'integer' && $_field->length == '64') {
-                            $_field->length = '38';
-                        }
-                    }
-                    if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
-                        foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
-                            if ($_field->length <= $maxLength) {
-                                $fieldType = $type;
-                                $scale  = '';
-                                if (isset($_field->scale)) {
-                                    $scale = ',' . $_field->scale;
-                                } elseif(isset($typeMapping['defaultScale'])) {
-                                    $scale = ',' . $typeMapping['defaultScale'];
-                                }
-                                 
-                                $options = "({$_field->length}{$scale})";
-                                break;
-                            }
-                        }
-                        if (!isset($options)) {
-                            throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given length of {$_field->length} is not supported by field type {$_field->type}");
-                        }
-                    } else {
-                        throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: Length option was specified but is not supported by field type {$_field->type}");
-                    }
-                } else {
-                    $options = '';
-                    if (isset($_field->value)) {
-                        foreach ($_field->value as $value) {
-                            $values[] = $value;
-                        }
-                        $options = "('" . implode("','", $values) . "')";
-                    } elseif(isset($typeMapping['defaultLength'])) {
-                        $scale = isset($typeMapping['defaultScale']) ? ',' . $typeMapping['defaultScale'] : '';
-                        $options = "({$typeMapping['defaultLength']}{$scale})";
-                    }
-                }
-    
-                $_buffer[] = $fieldType . $options;
-            }
-        } else {
+        if (!$typeMapping) {
             throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given field type {$_field->type} is not supported");
         }
+        
+        $fieldType = $typeMapping['defaultType'];
+        if (isset($typeMapping['declarationMethod'])) {
+            $fieldBuffer = call_user_func(array($this, $typeMapping['declarationMethod']), $_field, $_tableName);
+            $_buffer = array_merge($_buffer, $fieldBuffer);
+        } else {
+            if ($_field->length !== NULL) {
+                if ($this->_db instanceof Zend_Db_Adapter_Oracle) {
+                    if ($_field->type == 'integer' && $_field->length == '64') {
+                        $_field->length = '38';
+                    }
+                }
+                if (isset($typeMapping['lengthTypes']) && is_array($typeMapping['lengthTypes'])) {
+                    foreach ($typeMapping['lengthTypes'] as $maxLength => $type) {
+                        if ($_field->length <= $maxLength) {
+                            $fieldType = $type;
+                            $scale  = '';
+                            if (isset($_field->scale)) {
+                                $scale = ',' . $_field->scale;
+                            } elseif(isset($typeMapping['defaultScale'])) {
+                                $scale = ',' . $typeMapping['defaultScale'];
+                            }
+                             
+                            $options = "({$_field->length}{$scale})";
+                            break;
+                        }
+                    }
+                    if (!isset($options)) {
+                        throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: The given length of {$_field->length} is not supported by field type {$_field->type}");
+                    }
+                } else {
+                    throw new Setup_Backend_Exception_InvalidSchema("Could not get field declaration for field {$_field->name}: Length option was specified but is not supported by field type {$_field->type}");
+                }
+            } else {
+                $options = '';
+                if (isset($_field->value)) {
+                    foreach ($_field->value as $value) {
+                        $values[] = $value;
+                    }
+                    $options = "('" . implode("','", $values) . "')";
+                } elseif(isset($typeMapping['defaultLength'])) {
+                    $scale = isset($typeMapping['defaultScale']) ? ',' . $typeMapping['defaultScale'] : '';
+                    $options = "({$typeMapping['defaultLength']}{$scale})";
+                }
+            }
+
+            $_buffer[] = $fieldType . $options;
+        }
+        
         return $_buffer;
     }
     

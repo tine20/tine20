@@ -18,81 +18,85 @@
 class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     *
+     * 
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_adapter;
+    
+    /**
      * @param Zend_Db_Adapter_Abstract $adapter
+     */
+    public function __construct(Zend_Db_Adapter_Abstract $adapter)
+    {
+        $this->_adapter = $adapter;
+    }
+    
+    /**
      * @param string $field
      * @return string
      */
-    public static function getAggregateFunction($adapter, $field)
+    public function getAggregate($field)
     {
-        // post 9.0
-        return "string_agg($field, ',')";
+        $quotedField = $this->_adapter->quoteIdentifier($field);
         
-        // pre 9.0
-        return "array_to_string(ARRAY(SELECT unnest(array_agg($field))
-                                               ORDER BY 1),',')";
+        // since 9.0
+        return new Zend_Db_Expr("string_agg(DISTINCT $quotedField, ',')");
+        
+        // before 9.0
+        return new Zend_Db_Expr("array_to_string(ARRAY(SELECT unnest(array_agg($quotedField)) ORDER BY 1),',')");
     }
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $field
      * @param mixed $returnIfTrue
      * @param mixed $returnIfFalse
      * @return string
      */
-    public static function getIfIsNull($adapter, $field, $returnIfTrue, $returnIfFalse)
+    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse)
     {
-        return "CASE WHEN $field IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END";
+        $quotedField = $this->_adapter->quoteIdentifier($field);
+        
+        return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END)");
     }
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $date
      * @return string
      */
-    public static function setDate($adapter, $date)
+    public function setDate($date)
     {
         return "DATE({$date})";
     }
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $value
      * @return string
      */
-    public static function setDateValue($adapter, $value)
+    public function setDateValue($value)
     {
         return $value;
     }
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return mixed
      */
-    public static function getFalseValue($adapter = null)
+    public function getFalseValue()
     {
         return 'FALSE';
     }
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return mixed
      */
-    public static function getTrueValue($adapter = null)
+    public function getTrueValue()
     {
         return 'TRUE';
     }
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @return string
      */
-    public static function setDatabaseJokerCharacters($adapter)
+    public function setDatabaseJokerCharacters()
     {
         return array('%', '\_');
     }

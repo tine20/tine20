@@ -383,7 +383,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->order('container.name');
         
         $this->addGrantsSql($select, $accountId, $grant);
-
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -553,6 +555,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if ($meta['recordClass']) {
             $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
         }
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -711,6 +716,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $this->addGrantsSql($select, $accountId, $grant);
         
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
 
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
@@ -807,6 +814,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->group('owner.account_id');
                 
         $this->addGrantsSql($select, $accountId, $grant, 'user');
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1036,10 +1045,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
+                /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
             )
             ->group(array('container.id', 'container_acl.account_type', 'container_acl.account_id'));
-            
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1086,11 +1097,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ->join(array(
                     /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                     /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                    /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
+                    /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
                 )
                 ->group('container_acl.account_grant');
     
             $this->addGrantsSql($select, $accountId, '*');
+            
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
             
             $stmt = $this->_db->query($select);
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1130,11 +1143,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
+                /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
             )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
         
         $this->addGrantsSql($select, $accountId, '*');
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);

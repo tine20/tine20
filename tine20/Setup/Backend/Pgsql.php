@@ -28,7 +28,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                 19 => 'integer',
                 64 => 'bigint'),
             'defaultType' => 'integer',
-            'defaultLength' => self::INTEGER_DEFAULT_LENGTH),
+            'defaultLength' => Setup_Backend_Abstract::INTEGER_DEFAULT_LENGTH),
         'boolean' => array(
             'defaultType' => 'NUMERIC',
             'defaultScale' => 0,
@@ -48,10 +48,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             'defaultType' => 'numeric',
             'defaultLength' => null),
         'datetime' => array(
-            'defaultType' => 'timestamp with time zone',
+            'defaultType' => 'timestamp',
             'defaultLength' => null),
         'time' => array(
-            'defaultType' => 'time with timezone',
+            'defaultType' => 'time',
             'defaultLength' => null),
         'date' => array(
             'defaultType' => 'date',
@@ -396,12 +396,14 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         $_field->unsigned = false;
 
         $fieldDeclarations = parent::getFieldDeclarations($_field, $_tableName);
-
+        
         $fieldTypes = array ('tinyint', 'mediumint', 'bigint', 'int', 'integer');
         foreach ($fieldTypes as $fieldType) {
-            $fieldDeclarations = preg_replace('/' . $fieldType . '\([0-9][0-9]\)/', 'integer', $fieldDeclarations);
+            $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', 'integer', $fieldDeclarations);
         }
-
+        
+        $fieldDeclarations = preg_replace('/ smallint\(\d*\)/', 'smallint', $fieldDeclarations);
+        
         return $fieldDeclarations;
     }
 }

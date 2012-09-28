@@ -26,7 +26,12 @@ class Tinebase_Tags
      * @var Zend_Db_Adapter_Pdo_Mysql
      */
     protected $_db;
-
+    
+    /**
+     * @var Tinebase_Backend_Sql_Command_Interface
+     */
+    protected $_dbCommand;
+    
     /**
      * don't clone. Use the singleton.
      */
@@ -62,7 +67,8 @@ class Tinebase_Tags
      */
     private function __construct()
     {
-        $this->_db = Tinebase_Core::getDb();
+        $this->_db        = Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
     }
 
     /**
@@ -78,7 +84,10 @@ class Tinebase_Tags
         $select = $_filter->getSelect();
         
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
+        
         $_paging->appendPaginationSql($select);
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
     }
@@ -97,8 +106,12 @@ class Tinebase_Tags
         
         if (! empty($recordIds)) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->getApplicationName());
+            
             $select = $this->_getSelect($recordIds, $app->getId());
             Tinebase_Model_TagRight::applyAclSql($select);
+            
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
+            
             $tags = $this->_db->fetchAll($select);
             $tagData = $this->_getDistinctTagsAndComputeOccurrence($tags);
         } else {
@@ -141,7 +154,9 @@ class Tinebase_Tags
     {
         $select = $_filter->getSelect();
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
-
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
         return count($tags);
     }
@@ -187,13 +202,15 @@ class Tinebase_Tags
 
         if (!empty($_id)) {
             $select = $this->_db->select()
-                ->from(SQL_TABLE_PREFIX . 'tags')
+                ->from(array('tags' => SQL_TABLE_PREFIX . 'tags'))
                 ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
                 ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
             if ($_ignoreAcl !== true) {
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
 
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
+            
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
@@ -223,13 +240,16 @@ class Tinebase_Tags
     public function getTagByName($_name, $_right = Tinebase_Model_TagRight::VIEW_RIGHT, $_application = NULL, $_ignoreAcl = false)
     {
         $select = $this->_db->select()
-        ->from(SQL_TABLE_PREFIX . 'tags')
-        ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
-        ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = (?)', $_name));
+            ->from(array('tags' => SQL_TABLE_PREFIX . 'tags'))
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = (?)', $_name));
+        
         if ($_ignoreAcl !== true) {
             Tinebase_Model_TagRight::applyAclSql($select, $_right);
         }
 
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
@@ -421,6 +441,9 @@ class Tinebase_Tags
         if (!empty($recordId)) {
             $select = $this->_getSelect($recordId, Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId());
             Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
+            
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
+            
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
             }
@@ -462,6 +485,8 @@ class Tinebase_Tags
         $select->group(array('tagging.tag_id', 'tagging.record_id'));
         Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
 
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $queryResult = $this->_db->fetchAll($select);
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
 
@@ -565,6 +590,8 @@ class Tinebase_Tags
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
             ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
 
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         foreach ($this->_db->fetchAssoc($select) as $tagArray) {
             $alreadyAttachedIds[] = $tagArray['record_id'];
         }
@@ -634,6 +661,8 @@ class Tinebase_Tags
                 ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
                 ->where($this->_db->quoteIdentifier('record_id').' IN ( ' . $recordIdList . ' ) ');
 
+            Tinebase_Backend_Sql_Abstract::traitGroup($select);
+            
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $attachedIds[] = $tagArray['record_id'];
             }
@@ -754,10 +783,14 @@ class Tinebase_Tags
     public function getRights($_tagId)
     {
         $select = $this->_db->select()
-        ->from(SQL_TABLE_PREFIX . 'tags_acl', array('tag_id', 'account_type', 'account_id',
-                 'account_right' => 'GROUP_CONCAT(DISTINCT account_right)'))
-        ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
-        ->group(array('tag_id', 'account_type', 'account_id'));
+            ->from(array('tags_acl' => SQL_TABLE_PREFIX . 'tags_acl'), 
+                   array('tag_id', 'account_type', 'account_id', 'account_right' => $this->_dbCommand->getAggregate('account_right'))
+            )
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
+            ->group(array('tag_id', 'account_type', 'account_id'));
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
@@ -798,7 +831,7 @@ class Tinebase_Tags
             $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $right->tag_id),
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', $right->account_type),
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $right->account_id)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', (string) $right->account_id)
             ));
             foreach (array('view', 'use' ) as $availableRight) {
                 $rightField = $availableRight . '_right';
@@ -823,9 +856,12 @@ class Tinebase_Tags
     public function getContexts($_tagId)
     {
         $select = $this->_db->select()
-        ->from(SQL_TABLE_PREFIX . 'tags_context', array('application_id' => 'GROUP_CONCAT(DISTINCT application_id)'))
-        ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
-        ->group('tag_id');
+            ->from(array('tags_context' => SQL_TABLE_PREFIX . 'tags_context'), array('application_id' => $this->_dbCommand->getAggregate('application_id')))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
+            ->group('tag_id');
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
         $apps = $this->_db->fetchOne($select);
 
         if ($apps === '0'){

@@ -36,11 +36,11 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Only query visible lists.');
             
             $_select->join(
-                /* table  */ array('group' => $db->table_prefix . 'groups'), 
-                /* on     */ $db->quoteIdentifier('group.list_id') . ' = ' . $db->quoteIdentifier('addressbook_lists.id'),
+                /* table  */ array('groupvisibility' => $db->table_prefix . 'groups'), 
+                /* on     */ $db->quoteIdentifier('groupvisibility.list_id') . ' = ' . $db->quoteIdentifier('addressbook_lists.id'),
                 /* select */ array()
             );
-            $_select->where('group.visibility = ?', 'displayed');
+            $_select->where('groupvisibility.visibility = ?', 'displayed');
         }
     }
 }

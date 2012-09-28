@@ -18,52 +18,44 @@
 interface Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $field
      * @return string
      */
-     public static function getAggregateFunction($adapter,$field);
+     public function getAggregate($field);
 
      /**
-      *
-      * @param Zend_Db_Adapter_Abstract $adapter
       * @param string $field
       * @param mixed $returnIfTrue
       * @param mixed $returnIfFalse
       * @return string
       */
-    public static function getIfIsNull($adapter,$field,$returnIfTrue,$returnIfFalse);
+    public function getIfIsNull($field,$returnIfTrue,$returnIfFalse);
 
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param date $date
      */
-    public static function setDate($adapter, $date);
+    public function setDate($date);
+    
     /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param date $date
      */
-    public static function setDateValue($adapter, $date);
+    public function setDateValue($date);
 
     /**
      * returns the false value according to backend
      * @return mixed
      */
-    public static function getFalseValue($adapter = null);
+    public function getFalseValue();
 
     /**
      * returns the true value according to backend
      * @return mixed
      */
-    public static function getTrueValue($adapter = null);
+    public function getTrueValue();
 
     /**
-     * @param Zend_Db_Adapter_Abstract $adapter
      * @param array $field
      */
-    public static function setDatabaseJokerCharacters($adapter);
+    public function setDatabaseJokerCharacters();
 
 }

@@ -95,7 +95,7 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
             return $result;
         }
         
-        $select = $this->_getAclSelect(array('id' => 'customfield_config.id', 'account_grants' => "GROUP_CONCAT(customfield_acl.account_grant)"));
+        $select = $this->_getAclSelect(array('id' => 'customfield_config.id', 'account_grants' => $this->_dbCommand->getAggregate('customfield_acl.account_grant')));
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_config.id') . ' IN (?)', (array)$_ids))
                ->group(array('customfield_config.id', 'customfield_acl.account_type', 'customfield_acl.account_id'));
         Tinebase_Container::addGrantsSql($select, $_accountId, Tinebase_Model_CustomField_Grant::getAllGrants(), 'customfield_acl');

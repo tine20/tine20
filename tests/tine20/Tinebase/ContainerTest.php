@@ -183,7 +183,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $db = Tinebase_Core::getDb();
         $db->update(SQL_TABLE_PREFIX . 'container', array(
             'content_seq' => NULL,
-        ), "`id` = '{$container->getId()}'");
+        ), $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $container->getId()));
         $seq = $this->_instance->getContentSequence($container->getId());
         $this->assertEquals(NULL, $seq);
         
