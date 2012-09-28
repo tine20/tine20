@@ -1043,7 +1043,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
             
-            // update exdates and recurids if dtsart of an recurevent changes
+            // update exdates and recurids if dtstart of an recurevent changes
             if (! empty($_record->rrule)) {
                 $diff = $_oldRecord->dtstart->diff($_record->dtstart);
                 
@@ -1066,13 +1066,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // delete recur exceptions if update is not longer a recur series
         if (! empty($_oldRecord->rrule) && empty($_record->rrule)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleteing recur exceptions as event is no longer a recur series');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleting recur exceptions as event is no longer a recur series');
             $this->_backend->delete($this->getRecurExceptions($_record));
         }
         
-        // touch base event of a recur series if an persisten exception changes
+        // touch base event of a recur series if an persistent exception changes
         if ($_record->recurid) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' touch base event of a persisten exception');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' touch base event of a persistent exception');
             $baseEvent = $this->getRecurBaseEvent($_record);
             $this->_touch($baseEvent, TRUE);
         }
