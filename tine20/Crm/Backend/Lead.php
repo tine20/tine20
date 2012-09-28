@@ -63,7 +63,7 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
             // don't fetch deleted objects
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
         }
-                
+        
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array(
             $_field             => $_field,
             'count'             => 'COUNT(' . $_field . ')',

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>6.0</version>
+    <version>6.1</version>
     <order>20</order>
     <depends>
         <application>Admin</application>
@@ -12,12 +12,13 @@
     <tables>
         <table>
             <name>metacrm_lead</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>lead_name</name>
@@ -71,7 +72,7 @@
                 <field>
                     <name>end_scheduled</name>
                     <type>datetime</type>
-                </field>    
+                </field>
                 <field>
                     <name>lastread</name>
                     <type>datetime</type>
@@ -84,7 +85,7 @@
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                </field> 
+                </field>
                 <field>
                     <name>last_modified_by</name>
                     <type>text</type>
@@ -103,7 +104,7 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
-                </field>            
+                </field>
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
@@ -134,95 +135,6 @@
                         <field>id</field>
                     </reference>
                 </index>
-            </declaration>
-        </table>
-        <table>
-            <name>metacrm_products</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>productsource</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>price</name>
-                    <type>float</type>
-                    <notnull>false</notnull>
-                </field>
-                <index>
-                    <name>productsource_id</name>
-                    <primary>true</primary>
-                    <unique>true</unique>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>        
-        <table>
-            <name>metacrm_leads_products</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>lead_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>product_id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>product_desc</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>product_price</name>
-                    <type>float</type>
-                    <unsigned>true</unsigned>
-                    <notnull>false</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>lead_id</name>
-                    <field>
-                        <name>lead_id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>lead_id</name>
-                    <foreign>true</foreign>
-                    <field>
-                        <name>lead_id</name>
-                    </field>
-                    <reference>
-                        <table>metacrm_lead</table>
-                        <field>id</field>
-                        <ondelete>CASCADE</ondelete>
-                        <!-- add onupdate? -->
-                    </reference>
-                </index>   
             </declaration>
         </table>
     </tables>

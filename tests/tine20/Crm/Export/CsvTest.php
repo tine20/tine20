@@ -5,7 +5,7 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -76,4 +76,4 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
 
         unlink($csvFilename);
     }
-}       
+}

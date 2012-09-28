@@ -3,11 +3,10 @@
  * class to hold lead data
  * 
  * @package     Crm
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        switch to hashed ids
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -54,7 +53,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        'id'            => 'Digits',
         'lead_name'     => 'StringTrim',
         'probability'   => 'Digits',
     );

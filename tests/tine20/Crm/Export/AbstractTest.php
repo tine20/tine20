@@ -5,8 +5,8 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -35,6 +35,7 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Crm_Frontend_Json();
         
         $contact = $this->_getContact();
@@ -58,8 +59,6 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
      */
     protected function tearDown()
     {
-        $this->_json->deleteLeads($this->_objects['lead']['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($this->_objects['lead']['relations'][0]['related_id']);
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
-    
 }
