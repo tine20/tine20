@@ -147,7 +147,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     {
         $this->_resolve();
         
-        $_select->where($this->_getQuotedFieldName($_backend) .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        $_select->where($this->_getQuotedFieldName($_backend) .  ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
     }
     
     /**
