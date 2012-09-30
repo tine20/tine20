@@ -131,7 +131,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            'id'                    => 120,
+            //'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
             'container_id'                 => $addressbookContainer->id,
             'role'                  => 'Role',

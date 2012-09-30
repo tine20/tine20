@@ -23,13 +23,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Fixtures
-     * 
-     * @var array test objects
-     */
-    protected $_objects = array();
-    
-    /**
      * Testcontainer
      *
      * @var unknown_type
@@ -59,6 +52,8 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Crm', 
@@ -72,8 +67,14 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             $this->_testContainer = $personalContainer[0];
         }
         
+        $this->_backend = new Crm_Backend_Lead();
+        
+        return;
+        
+        $recordId = Tinebase_Record_Abstract::generateUID();
+        
         $this->_objects['initialLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
+            'id'            => $recordId,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -88,7 +89,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
-            'id'            => 120,
+            'id'            => $recordId,
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -102,7 +103,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             'end_scheduled' => NULL,
         ));
         
-        $this->_backend = new Crm_Backend_Lead();
+        
     }
 
     /**
@@ -112,18 +113,23 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-       #Tinebase_Container::getInstance()->deleteContainer($this->testContainer->id);
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
      * try to add a lead
+     * 
+     * @return Crm_Model_Lead
      */
     public function testAddLead()
     {
-        $lead = $this->_backend->create($this->_objects['initialLead']);
+        $testLead = self::getTestLead($this->_testContainer);
         
-        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
+        $lead = $this->_backend->create($testLead);
+        
+        $this->assertEquals($testLead->description, $lead->description);
+        
+        return $lead;
     }
 
     /**
@@ -131,10 +137,12 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLead()
     {
-        $lead = $this->_backend->get($this->_objects['initialLead']);
+        $testLead = $this->testAddLead();
         
-        $this->assertEquals($this->_objects['initialLead']->id, $lead->id);
-        $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
+        $lead = $this->_backend->get($testLead);
+        
+        $this->assertEquals($testLead->id, $lead->id);
+        $this->assertEquals($testLead->description, $lead->description);
     }
 
     /**
@@ -142,6 +150,8 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInitialLead()
     {
+        $testLead = $this->testAddLead();
+        
         $filter = $this->_getFilter();
         $leads = $this->_backend->search($filter);
         $this->assertEquals(0, count($leads), 'Closed lead should not be found.');
@@ -156,10 +166,18 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateLead()
     {
-        $lead = $this->_backend->update($this->_objects['updatedLead']);
+        $testLead = $this->testAddLead();
         
-        $this->assertEquals($this->_objects['updatedLead']->id, $lead->id);
-        $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
+        $testLead->description   = Tinebase_Record_Abstract::generateUID();
+        $testLead->end           = NULL;
+        $testLead->end_scheduled = NULL;
+        
+        $lead = $this->_backend->update($testLead);
+        
+        $this->assertEquals($testLead->id, $lead->id);
+        $this->assertEquals($testLead->description, $lead->description);
+        
+        return $lead;
     }
 
     /**
@@ -167,6 +185,8 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testGetUpdatedLead()
     {
+        $testLead = $this->testUpdateLead();
+        
         $filter = $this->_getFilter();
         $leads = $this->_backend->search($filter);
         
@@ -178,6 +198,8 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfLeads()
     {
+        $testLead = $this->testUpdateLead();
+        
         $filter = $this->_getFilter();
         $count = $this->_backend->searchCount($filter);
         
@@ -189,11 +211,11 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteLead()
     {
-        $id = $this->_objects['initialLead']->getId();
+        $testLead = $this->testAddLead();
         
-        $this->_backend->delete($id);
+        $this->_backend->delete($testLead->getId());
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_backend->get($id);
+        $this->_backend->get($testLead->getId());
     }
 
     /**
@@ -221,8 +243,32 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             ),     
         ));
     }
-}        
     
+    /**
+     * create test contact
+     *
+     * @return Addressbook_Model_Contact
+     */
+    public static function getTestLead(Tinebase_Model_Container $container)
+    {
+        $lead = new Crm_Model_Lead(array(
+            'lead_name'     => 'PHPUnit',
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'container_id'  => $container->id,
+            'start'         => Tinebase_DateTime::now(),
+            'description'   => 'Description',
+            'end'           => Tinebase_DateTime::now(),
+            'turnover'      => '200000',
+            'probability'   => 70,
+            'end_scheduled' => Tinebase_DateTime::now(),
+        ));
+        
+        return $lead;
+    }
+}
+
 
 if (PHPUnit_MAIN_METHOD == 'Crm_Backend_LeadTest::main') {
     Crm_Backend_LeadTest::main();
