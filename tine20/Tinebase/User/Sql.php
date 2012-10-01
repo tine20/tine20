@@ -69,6 +69,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     protected $_tableName = 'accounts';
     
     /**
+     * @var Tinebase_Backend_Sql_Command_Interface
+     */
+    protected $_dbCommand;
+
+    /**
      * the constructor
      *
      * @param  array $options Options used in connecting, binding, etc.
@@ -78,6 +83,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         parent::__construct($_options);
 
         $this->_db = Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
         foreach ($this->_plugins as $plugin) {
             if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
@@ -258,9 +264,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
          * WHEN (`login_failures` > 5 AND `last_login_failure_at` + INTERVAL 15 MINUTE > NOW()) 
          * THEN 'blocked' ELSE 'enabled' END) ELSE 'disabled' END
          */
-        $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN (CASE WHEN NOW() > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires']) . ' THEN ' . $this->_db->quote('expired') . 
+
+        $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN (';
+        $statusSQL .= 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires']) . ' THEN ' . $this->_db->quote('expired') .
             ' WHEN (' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$this->_maxLoginFailures} AND " . 
-                $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . " + INTERVAL '{$this->_blockTime}' MINUTE > NOW()) THEN 'blocked'" . 
+        $this->_dbCommand->setDate($this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure'])) . " + INTERVAL '{$this->_blockTime}' MINUTE > ". $this->_dbCommand->setDate('NOW()') .") THEN 'blocked'" .
             ' ELSE ' . $this->_db->quote('enabled') . ' END) ELSE ' . $this->_db->quote('disabled') . ' END';
         
         $select = $this->_db->select()

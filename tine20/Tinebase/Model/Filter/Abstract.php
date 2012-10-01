@@ -55,7 +55,12 @@ abstract class Tinebase_Model_Filter_Abstract
      * @var array special options
      */
     protected $_options = NULL;
-    
+
+    /**
+     * @var Tinebase_Backend_Sql_Command_Interface
+     */
+    protected $_dbCommand;
+
     /**
      * filter is implicit, this is returned in toArray
      * - this is only needed to detect acl filters that have been added by a controller
@@ -77,6 +82,9 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
+        $this->_db = Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
+
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
@@ -365,7 +373,7 @@ abstract class Tinebase_Model_Filter_Abstract
         $action = $this->_opSqlMap[$this->_operator];
         
         // replace wildcards from user ()
-        $returnValue = str_replace(array('*', '_'), array('%', '\_'), $value);
+        $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $value);
         
         // add wildcard to value according to operator
         $returnValue = str_replace('?', $returnValue, $action['wildcards']);

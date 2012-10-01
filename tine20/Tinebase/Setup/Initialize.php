@@ -25,6 +25,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
+        $this->_initProcedures();
+
         $this->_setupConfigOptions($_options);
         $this->_setupGroups();
         
@@ -33,6 +35,93 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         parent::_initialize($_application, $_options);
     }
     
+    /**
+     * This method is necessary only if Oracle is used.
+     * @todo discover a way to replace this code for an equivalent in Tinebase_Backend_Sql_Command
+     */
+    protected function _initProcedures()
+    {
+        $backend = Setup_Backend_Factory::factory();
+        $_db = Tinebase_Core::getDb();
+        if ($_db instanceof Zend_Db_Adapter_Oracle) {
+            $md5 = "CREATE OR REPLACE
+                function md5( input varchar2 ) return sys.dbms_obfuscation_toolkit.varchar2_checksum as
+                begin
+                    return lower(rawtohex(utl_raw.cast_to_raw(sys.dbms_obfuscation_toolkit.md5( input_string => input ))));
+                end;";
+            $backend->execQueryVoid($md5);
+
+            $now = "CREATE OR REPLACE
+                function NOW return DATE as
+                begin
+                    return SYSDATE;
+                end;";
+            $backend->execQueryVoid($now);
+
+            $typeStringAgg = "CREATE OR REPLACE TYPE t_string_agg AS OBJECT
+                    (
+                      g_string  VARCHAR2(32767),
+
+                      STATIC FUNCTION ODCIAggregateInitialize(sctx  IN OUT  t_string_agg)
+                        RETURN NUMBER,
+
+                      MEMBER FUNCTION ODCIAggregateIterate(self   IN OUT  t_string_agg, value  IN      VARCHAR2 )
+                         RETURN NUMBER,
+
+                      MEMBER FUNCTION ODCIAggregateTerminate(self         IN   t_string_agg,
+                                                             returnValue  OUT  VARCHAR2,
+                                                             flags        IN   NUMBER)
+                        RETURN NUMBER,
+
+                      MEMBER FUNCTION ODCIAggregateMerge(self  IN OUT  t_string_agg,
+                                                         ctx2  IN      t_string_agg)
+                        RETURN NUMBER
+                    );";
+            $backend->execQueryVoid($typeStringAgg);
+
+            $typeStringAgg = "CREATE OR REPLACE TYPE BODY t_string_agg IS
+                  STATIC FUNCTION ODCIAggregateInitialize(sctx  IN OUT  t_string_agg)
+                    RETURN NUMBER IS
+                  BEGIN
+                    sctx := t_string_agg(NULL);
+                    RETURN ODCIConst.Success;
+                  END;
+
+                  MEMBER FUNCTION ODCIAggregateIterate(self   IN OUT  t_string_agg,
+                                                       value  IN      VARCHAR2 )
+                    RETURN NUMBER IS
+                  BEGIN
+                    SELF.g_string := self.g_string || ',' || value;
+                    RETURN ODCIConst.Success;
+                  END;
+
+                  MEMBER FUNCTION ODCIAggregateTerminate(self         IN   t_string_agg,
+                                                         returnValue  OUT  VARCHAR2,
+                                                         flags        IN   NUMBER)
+                    RETURN NUMBER IS
+                  BEGIN
+                    returnValue := RTRIM(LTRIM(SELF.g_string, ','), ',');
+                    RETURN ODCIConst.Success;
+                  END;
+
+                  MEMBER FUNCTION ODCIAggregateMerge(self  IN OUT  t_string_agg,
+                                                     ctx2  IN      t_string_agg)
+                    RETURN NUMBER IS
+                  BEGIN
+                    SELF.g_string := SELF.g_string || ',' || ctx2.g_string;
+                    RETURN ODCIConst.Success;
+                  END;
+                END;";
+            $backend->execQueryVoid($typeStringAgg);
+
+            $group_concat = "CREATE OR REPLACE
+                FUNCTION GROUP_CONCAT (p_input VARCHAR2)
+                RETURN VARCHAR2
+                PARALLEL_ENABLE AGGREGATE USING t_string_agg;";
+            $backend->execQueryVoid($group_concat);
+        }
+    }
+
     /**
      * set config options (accounts/authentication/email/...)
      * 

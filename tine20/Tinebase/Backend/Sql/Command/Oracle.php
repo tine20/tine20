@@ -64,7 +64,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
      */
     public function getIfElse($condition, $returnIfTrue, $returnIfFalse)
     {
-        return new Zend_Db_Expr("(IF($condition, $returnIfTrue, $returnIfFalse)");
+        return new Zend_Db_Expr("(CASE WHEN $condition THEN $returnIfTrue ELSE $returnIfFalse END)");
     }
     
     /**

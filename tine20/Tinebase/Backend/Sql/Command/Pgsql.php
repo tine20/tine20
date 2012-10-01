@@ -86,7 +86,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
      */
     public function setDateValue($value)
     {
-        return $value;
+        return $this->_adapter->quote($value);
     }
 
     /**

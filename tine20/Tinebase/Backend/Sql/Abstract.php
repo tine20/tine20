@@ -489,7 +489,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        $searchCountCols = array_merge(array('count' => 'COUNT(' . $this->_defaultCountCol . ')'), $this->_additionalSearchCountCols);
+        $defaultCountCol = $this->_defaultCountCol == '*' ?  '*' : $this->_db->quoteIdentifier($this->_defaultCountCol);
+        $searchCountCols = array_merge(array('count' => 'COUNT(' . $defaultCountCol . ')'), $this->_additionalSearchCountCols);
         
         if ($this->_useSubselectForCount) {
             // use normal search query as subselect to get count -> select count(*) from (select [...]) as count

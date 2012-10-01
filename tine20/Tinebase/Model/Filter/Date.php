@@ -67,6 +67,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         
         // quote field identifier
         $field = $this->_getQuotedFieldName($_backend);
+
+        $db = Tinebase_Core::getDb();
+        $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
@@ -74,7 +77,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($this->_operator, array('isnull', 'notnull'))) {
                     $_select->where($field . $operator, $value[$num]);
                 } else {
-                    $_select->where("DATE({$field})" . $operator, $value[$num]);
+                    $_select->where($dbCommand->setDate($field). $operator, new Zend_Db_Expr($dbCommand->setDateValue($value[$num])));
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);

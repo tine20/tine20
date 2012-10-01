@@ -180,7 +180,7 @@ class Tinebase_Acl_Roles
             ->order('order', 'ASC');
         
         if ($_anyRight) {
-            $select->where($this->_db->quoteIdentifier('role_rights.right') . " != ''");
+            $select->where($this->_db->quoteIdentifier('role_rights.right') . " IS NOT NULL");
         } else {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN));
         }
