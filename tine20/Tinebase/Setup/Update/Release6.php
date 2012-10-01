@@ -98,4 +98,26 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '6.4');
     }
+    
+    /**
+     * update to 6.5
+     * - add primary key to customfield table
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>id</name>
+                <primary>true</primary>
+                <field>
+                    <name>id</name>
+                </field>
+            </index>
+        ');
+        
+        $this->_backend->addIndex('customfield', $declaration);
+        $this->setTableVersion('customfield', 2);
+        
+        $this->setApplicationVersion('Tinebase', '6.5');
+    }
 }
