@@ -99,7 +99,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
 
         new Ext.tree.TreeSorter(this, {
-            property: 'sorting',                   
+            property: 'sorting',
             sortType : function(node) {
                 return node.attributes.sorting;
             }
@@ -134,6 +134,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
 
         this.on('contextmenu', this.onContextMenu, this);
+        
+        this.currentUser = Tine.Tinebase.registry.get('currentAccount');
     },
 
     /**
@@ -277,7 +279,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }
 
         var record = this.store.getById(node.id);
-        var isHidden = record.isShipped();
+        var isHidden = ! this.hasRight(node.attributes);
     
         var menu = new Ext.menu.Menu({
             items : [{
@@ -385,11 +387,13 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }
                 
         var height = 160;
-        if ((Tine.Tinebase.common.hasRight('manage_shared_favorites', this.app.name)) && (!record.isDefault())) height = 185;
+        
+        if (this.hasRight() && (!record.isDefault())) height = 185;
         
         var newWindow = Tine.WindowFactory.getWindow({
             modal : true,
             app : this.app,
+            modelName: this.contentType,
             record : record,
             title : title,
             width : 300,
@@ -404,7 +408,20 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
         
     },
-
+    
+    /**
+     * checks right
+     * 
+     * @param {Object} filter
+     * @return {Boolean}
+     */
+    hasRight: function(filter) {
+        if(filter && filter.created_by == this.currentUser.accountId) {
+            return true;
+        }
+        return (Tine.Tinebase.common.hasRight('manage_shared_' + this.contentType.toLowerCase() + '_favorites', this.app.name))
+    },
+    
     /**
      * create or update a favorite
      * 

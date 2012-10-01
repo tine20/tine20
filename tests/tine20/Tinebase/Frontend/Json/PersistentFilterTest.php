@@ -242,6 +242,36 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
+     * test save shipped filter as not shipped
+     * 
+     * #6990: user with right "manage_shared_*_favorites" should be able to delete/edit default shared favorites
+     * https://forge.tine20.org/mantisbt/view.php?id=6990
+     */
+    public function testSaveShippedFilter()
+    {
+        $accountId = Tinebase_Core::getUser()->getId();
+        
+        $filterData = array(
+            array('field' => 'model',      'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'),
+            array('field' => 'account_id', 'operator' => 'notin', 'value' => array($accountId))
+        );
+        // search for shipped filters
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        if(count($searchResult['results']) == 0) {
+            $this->markTestSkipped('There haven\'t been found any persistenfilters.');
+        }
+        // take first found
+        $filter = $searchResult['results'][0];
+        $filter['account_id'] = $accountId;
+        $filter['name'] = 'UNITTEST';
+        
+        $savedFilter = $this->_uit->savePersistentFilter($filter);
+        $this->assertEquals($accountId, $savedFilter['created_by']);
+        $this->assertEquals($accountId, $savedFilter['account_id']);
+        $this->assertEquals('UNITTEST', $savedFilter['name']);
+    }
+    
+    /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
      * @param array $savedFilter

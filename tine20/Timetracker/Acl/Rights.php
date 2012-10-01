@@ -34,6 +34,20 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const ADD_TIMEACCOUNTS = 'add_timeaccounts';
         
     /**
+     * the right to manage shared timeaccount favorites
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_TIMEACCOUNT_FAVORITES = 'manage_shared_timeaccount_favorites';
+    
+    /**
+     * the right to manage shared timesheet favorites
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_TIMESHEET_FAVORITES = 'manage_shared_timesheet_favorites';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Timetracker_Acl_Rights
@@ -84,7 +98,8 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $addRights = array ( 
             self::MANAGE_TIMEACCOUNTS,
             self::ADD_TIMEACCOUNTS,
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
+            self::MANAGE_SHARED_TIMEACCOUNT_FAVORITES,
+            self::MANAGE_SHARED_TIMESHEET_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -109,9 +124,13 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('Add timeaccounts'),
                 'description'   => $translate->_('Add timeaccounts'),
             ),
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
-                'text'          => $translate->_('Manage shared timetracker favorites'),
-                'description'   => $translate->_('Create or update shared timetracker favorites'),
+            self::MANAGE_SHARED_TIMEACCOUNT_FAVORITES => array(
+                'text'          => $translate->_('Manage shared timeaccount favorites'),
+                'description'   => $translate->_('Create or update shared timeaccount favorites'),
+            ),
+            self::MANAGE_SHARED_TIMESHEET_FAVORITES => array(
+                'text'          => $translate->_('Manage shared timesheet favorites'),
+                'description'   => $translate->_('Create or update shared timesheet favorites'),
             ),
         );
         

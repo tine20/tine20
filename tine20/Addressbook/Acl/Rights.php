@@ -27,6 +27,13 @@
 class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
+     * the right to manage shared contact favorites
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_CONTACT_FAVORITES = 'manage_shared_contact_favorites';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Addressbook_Acl_Rights
@@ -77,7 +84,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
+            self::MANAGE_SHARED_CONTACT_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -98,7 +105,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage shared addressbooks'),
                 'description'   => $translate->_('Create new shared addressbook folders'),
             ),
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
+            self::MANAGE_SHARED_CONTACT_FAVORITES => array(
                 'text'          => $translate->_('manage shared addressbook favorites'),
                 'description'   => $translate->_('Create or update shared addressbook favorites'),
             ),

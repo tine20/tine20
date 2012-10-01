@@ -80,7 +80,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
 
         $cf = $this->_instance->addCustomField($cf);
         
-        $record = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Rupert')));
+        $record = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Ben')));
         $cfName = $cf->name;
         $record->customfields = array($cfName => $record->toArray());
         
@@ -107,19 +107,17 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         ));
 
         $cf = $this->_instance->addCustomField($cf);
-        
-        $record1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Rupert')));
-        $record2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Matt')));
+        $c = Addressbook_Controller_Contact::getInstance();
+
+        $record1 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Rupert')), false);
+        $record2 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Matt')), false);
         $contactIds = array($record1->getId(), $record2->getId());
         
-        $json = new Tinebase_Frontend_Json();
-        
-        $result = $json->updateMultipleRecords(
-            'Addressbook',
-            'Contact',
-            array(array('name' => 'customfield_' . $cf->name, 'value' => $record1->getId())),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $contactIds))
-        );
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
+            ), 'AND');
+
+        $result = $c->updateMultiple($filter, array('#' . $cf->name => $contactIds[0]));
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(1, $result['failcount']);

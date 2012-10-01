@@ -40,7 +40,8 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
     
     /**
      * the right to manage shared favorites of an application
-     * 
+     * @deprecated use each application rights class to specify the model, too
+     * (e.g. MANAGE_SHARED_LEAD_FAVORITES for crm lead in Tinebase_Acl_Rights_Abstract)
      * @staticvar string
      */
     const MANAGE_SHARED_FAVORITES = 'manage_shared_favorites';

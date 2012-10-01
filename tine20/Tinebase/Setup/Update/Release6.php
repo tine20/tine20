@@ -134,7 +134,6 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
             }
         }
         $this->setTableVersion('customfield', 2);
-        
         $this->setApplicationVersion('Tinebase', '6.5');
     }
 
@@ -183,7 +182,7 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('access_log', 4);
         $this->setApplicationVersion('Tinebase', '6.7');
     }
-
+    
     /**
      * update to 6.8
      * 

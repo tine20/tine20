@@ -24,6 +24,13 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_RESOURCES = 'manage_resources';
     
     /**
+     * the right to manage shared event favorites
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_EVENT_FAVORITES = 'manage_shared_event_favorites';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Calendar_Acl_Rights
@@ -74,7 +81,7 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
+            self::MANAGE_SHARED_EVENT_FAVORITES,
             self::MANAGE_RESOURCES,
         );
         $allRights = array_merge($allRights, $addRights);
@@ -96,7 +103,7 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage shared calendars'),
                 'description'   => $translate->_('Create new shared calendars'),
             ),
-            Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
+            self::MANAGE_SHARED_EVENT_FAVORITES => array(
                 'text'          => $translate->_('manage shared calendars favorites'),
                 'description'   => $translate->_('Create or update shared calendars favorites'),
             ),

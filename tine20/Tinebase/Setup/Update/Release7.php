@@ -107,6 +107,72 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 7.2
+     * 
+     * - set length for field (persistent)filter-model from 40 to 64
+     */
+    public function update_1()
+    {
+        $update6 = new Tinebase_Setup_Update_Release6($this->_backend);
+        $update6->update_8();
+        $this->setTableVersion('importexport_definition', 7);
+        $this->setTableVersion('filter', 5);
+        $this->setApplicationVersion('Tinebase', '7.2');
+    }
+    
+    /**
+     * update to 7.3
+     * 
+     * @see 0006990: user with right "manage_shared_*_favorites" should be able to delete/edit default shared favorites
+     * - remove manage_shared_favorites and update manage_shared_<model>_favorites accordingly
+     */
+    public function update_2()
+    {
+        $mapping = array(
+            'Timetracker' => array('Timeaccount', 'Timesheet'),
+            'Calendar'    => array('Event'),
+            'Crm'         => array('Lead'),
+            'Tasks'       => array('Task'),
+            'Addressbook' => array('Contact')
+        );
+
+        $paging = new Tinebase_Model_Pagination();
+        $filter = new Tinebase_Model_RoleFilter();
+        
+        foreach ($mapping as $appName => $modelNames) {
+            try {
+                $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
+            } catch (Tinebase_Exception_NotFound $e) {
+                continue;
+            }
+            if ($app) {
+                $roles = Tinebase_Acl_Roles::getInstance()->searchRoles($filter, $paging);
+                if ($roles) {
+                    foreach ($roles as $role) {
+                        $rights = Admin_Controller_Role::getInstance()->getRoleRights($role->getId());
+                        $hasRight = false;
+                        $newRights = array();
+                        foreach ($rights as $right) {
+                            if ($right['application_id'] == $app->getId() && $right['right'] == 'manage_shared_favorites') {
+                                $hasRight = true;
+                            } else {
+                                $newRights[] = $right;
+                            }
+                        }
+                        if ($hasRight) {
+                            foreach ($modelNames as $modelName) {
+                                $newRights[] = array('role_id' => $role->getId(), 'application_id' => $app->getId(), 'right' => 'manage_shared_' . strtolower($modelName) . '_favorites');
+                                Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $newRights);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $this->setApplicationVersion('Tinebase', '7.3');
+    }
+    
+    /**
      * get record seq xml schema
      * 
      * @return Setup_Backend_Schema_Field_Xml
@@ -195,19 +261,5 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Finished modlog sequence update for ' . $model);
-    }
-
-    /**
-     * update to 7.2
-     * 
-     * - set length for field (persistent)filter-model from 40 to 64
-     */
-    public function update_1()
-    {
-        $update6 = new Tinebase_Setup_Update_Release6($this->_backend);
-        $update6->update_8();
-        $this->setTableVersion('importexport_definition', 7);
-        $this->setTableVersion('filter', 5);
-        $this->setApplicationVersion('Tinebase', '7.2');
     }
 }
