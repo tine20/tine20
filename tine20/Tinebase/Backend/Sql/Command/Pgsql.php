@@ -56,9 +56,21 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         $quotedField = $this->_adapter->quoteIdentifier($field);
         
-        return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END)");
+        return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN $returnIfTrue ELSE $returnIfFalse END)");
     }
-
+    /**
+     *
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param string $condition
+     * @param string $returnIfTrue
+     * @param string $returnIfFalse
+     * @return string
+     */
+    public function getIfElse($condition, $returnIfTrue, $returnIfFalse)
+    {
+        return new Zend_Db_Expr("(CASE WHEN $condition THEN $returnIfTrue ELSE $returnIfFalse END)");
+    }
+    
     /**
      * @param string $date
      * @return string

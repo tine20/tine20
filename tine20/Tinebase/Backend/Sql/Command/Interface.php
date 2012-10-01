@@ -29,8 +29,17 @@ interface Tinebase_Backend_Sql_Command_Interface
       * @param mixed $returnIfFalse
       * @return string
       */
-    public function getIfIsNull($field,$returnIfTrue,$returnIfFalse);
+    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse);
 
+    /**
+     *
+     * @param string $condition
+     * @param string $returnIfTrue
+     * @param string $returnIfFalse
+     * @return string
+     */
+    public function getIfElse($condition, $returnIfTrue, $returnIfFalse);
+    
     /**
      * @param date $date
      */

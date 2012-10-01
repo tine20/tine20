@@ -54,7 +54,19 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
         
         return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN " . (string) $returnIfTrue . " ELSE " . (string) $returnIfFalse . " END)");
     }
-
+    
+    /**
+     *
+     * @param string $condition
+     * @param string $returnIfTrue
+     * @param string $returnIfFalse
+     * @return string
+     */
+    public function getIfElse($condition, $returnIfTrue, $returnIfFalse)
+    {
+        return new Zend_Db_Expr("(IF($condition, $returnIfTrue, $returnIfFalse)");
+    }
+    
     /**
      * @param string $date
      * @return string
