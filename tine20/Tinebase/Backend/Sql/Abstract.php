@@ -1264,7 +1264,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         // not needed for MySQL backends
         if ($select->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            #return;
+            return;
         }
         
         $group = $select->getPart(Zend_Db_Select::GROUP);
@@ -1279,12 +1279,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         //$column is an array where 0 is table, 1 is field and 2 is alias
         foreach($columns as $key => $column) {
             
-            if ($column[1] instanceof Zend_Db_Expr || preg_match('/\(.*\)/', $column[1])) {
-                if (strpos($column[1], '(CASE WHEN') !== false) {
+            if ($column[1] instanceof Zend_Db_Expr) {
+                if (preg_match('/^\(.*\)/', $column[1])) {
                     $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $column[1] . ")"), $column[2]);
                 } else {
                     $updatedColumns[] = $column;
                 }
+                
+                continue;
+            }
+            
+            if (preg_match('/^\(.*\)/', $column[1])) {
+                $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $column[1] . ")"), $column[2]);
                 
                 continue;
             }
@@ -1309,16 +1315,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                     }
                 }
                 
+                continue;
+            }
+            
+            $fieldName = $column[0] . '.' . $column[1];
+            
+            if (in_array($fieldName, $group)) {
+                $updatedColumns[] = $column;
             } else {
-                $fieldName = $column[0] . '.' . $column[1];
-                
-                if (in_array($fieldName, $group)) {
-                    $updatedColumns[] = $column;
-                } else {
-                    // any selected field which is not in the group by clause must have an aggregate function
-                    // we choose MIN() as default. In practice the affected columns will have only one value anyways.
-                    $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $select->getAdapter()->quoteIdentifier($fieldName) . ")"), $column[2] ? $column[2] : $column[1]);
-                }
+                // any selected field which is not in the group by clause must have an aggregate function
+                // we choose MIN() as default. In practice the affected columns will have only one value anyways.
+                $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $select->getAdapter()->quoteIdentifier($fieldName) . ")"), $column[2] ? $column[2] : $column[1]);
             }
         }
         
@@ -1343,6 +1350,5 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select->reset(Zend_Db_Select::GROUP);
         
         $select->group($group);
-        
     }
 }

@@ -38,7 +38,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @var array maps abstract operators to sql operators
      */
     protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => ' LIKE ?'),
+        'equals'     => array('sqlop' => ' = ?'),
         'within'     => array('sqlop' => array(' >= ? ', ' <= ?')),
         'before'     => array('sqlop' => ' < ?'),
         'after'      => array('sqlop' => ' > ?'),

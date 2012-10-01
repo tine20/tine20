@@ -289,7 +289,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         ));
         
         $db = Tinebase_Core::getDb();
-        $db->query("\n /* fetch relations */ \n");
+        #$db->query("\n /* fetch relations */ \n");
         $relations = $this->_object->search($filter, NULL);
         
         $this->assertEquals(count($adbFilterResult), count($relations), ' search result does not fit');

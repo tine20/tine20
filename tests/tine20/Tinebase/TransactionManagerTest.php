@@ -56,13 +56,16 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     protected function _createDbTestTable($_db)
     {
         $tableName = $_db->quoteIdentifier($this->_testTableName);
+        $createQuery = "CREATE TABLE $tableName (" .
+            $_db->quoteIdentifier('Column1') . " varchar(64)," .
+            $_db->quoteIdentifier('Column2') . " varchar(64))";
+         
+        if ($_db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $createQuery .= " ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        }
+        
         $_db->query("DROP TABLE IF EXISTS $tableName;");
-        $_db->query(
-            "CREATE TABLE $tableName (
-                " . $_db->quoteIdentifier('Column1') . " varchar(64),
-                " . $_db->quoteIdentifier('Column2') . " varchar(64)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
-        );
+        $_db->query($createQuery);
     }
     
     protected function _cleanDbTestTable($db)
@@ -119,7 +122,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         ));
         $this->_instance->commitTransaction($transactionId);
         
-        $columns = $db->fetchAll("SELECT * FROM " . $this->_testTableName . " WHERE " . $db->quoteInto('Column1 = ?', $transactionId) . ";");
+        $columns = $db->fetchAll("SELECT * FROM " . $this->_testTableName . " WHERE " . $db->quoteInto($db->quoteIdentifier('Column1') . ' = ?', $transactionId) . ";");
         $this->assertEquals(1, count($columns), 'Transaction failed');
         $this->assertEquals($transactionId, $columns[0]['Column1'], 'Transaction was not executed properly');
     }
@@ -135,7 +138,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         ));
         $this->_instance->rollBack();
         
-        $columns = $db->fetchAll("SELECT * FROM " . $this->_testTableName . " WHERE " . $db->quoteInto('Column1 = ?', $transactionId) . ";");
+        $columns = $db->fetchAll("SELECT * FROM " . $this->_testTableName . " WHERE " . $db->quoteInto($db->quoteIdentifier('Column1') . ' = ?', $transactionId) . ";");
         foreach ($columns as $column) {
             $this->assertNotEquals($transactionId, $column['Column1'], 'RollBack failed, data was inserted anyway');
         }

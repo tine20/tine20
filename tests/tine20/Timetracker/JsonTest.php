@@ -499,8 +499,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
             'field' => 'is_cleared_combined',
             'operator' => 'equals',
-            'value' => FALSE,
+            'value' => FALSE
         )), $this->_getPaging('is_billable_combined'));
+        
+        $this->assertGreaterThanOrEqual(1, count($search['results']));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
         $this->assertEquals(0, $search['results'][0]['is_cleared_combined'], 'is_cleared_combined mismatch');
         $this->assertEquals(1, $search['totalcount']);

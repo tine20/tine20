@@ -159,7 +159,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $subselect->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-            /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
+            /* select */ array('exdate' => $this->_dbCommand->getAggregate('exdate.exdate')));
         
         // this attendee join has nothing to do with grants but is here for attendee/status/... filters
         $subselect->joinLeft(
@@ -186,6 +186,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $_pagination->appendPaginationSql($subselect);
         $subselect->group($this->_tableName . '.' . 'id');
 
+        Tinebase_Backend_Sql_Abstract::traitGroup($subselect);
+        
         $stmt = $this->_db->query($subselect);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $ids = array();
@@ -223,6 +225,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $grantsFilter->appendFilterSql($select, $this);
         }
         $select->group($this->_tableName . '.' . 'id');
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = null; // solve PHP bug @see {http://bugs.php.net/bug.php?id=35793}
         $stmt = $this->_db->query($select);
@@ -320,7 +324,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-            /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
+            /* select */ array('exdate' => $this->_dbCommand->getAggregate('exdate.exdate')));
         
         $select->group($this->_tableName . '.' . 'id');
         

@@ -217,7 +217,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'nums'  => 4
         );
         $toTest[] = $testBase + array(
-            'account' => 999,
+            'account' => Tinebase_Record_Abstract::generateUID(),
             'nums'    => 0
         );
         
