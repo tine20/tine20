@@ -56,7 +56,6 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     }
     
     /**
-     *
      * @param string $condition
      * @param string $returnIfTrue
      * @param string $returnIfFalse

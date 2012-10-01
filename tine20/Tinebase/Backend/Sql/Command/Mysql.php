@@ -63,7 +63,7 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
      */
     public function getIfElse($condition, $returnIfTrue, $returnIfFalse)
     {
-        return new Zend_Db_Expr("(IF($condition, $returnIfTrue, $returnIfFalse)");
+        return new Zend_Db_Expr("(IF($condition, $returnIfTrue, $returnIfFalse))");
     }
     
     /**
