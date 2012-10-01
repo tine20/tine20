@@ -158,7 +158,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                 $intValue = (int) substr($value, 1);
                 $quotedIdentifier = $this->_db->quoteIdentifier($counter);
                 if ($value{0} == '-') {
-                    $data[$counter] = new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= ' . $intValue . ',' . $quotedIdentifier . ' - ' . $intValue . ', 0)');
+                    $data[$counter] = $this->_dbCommand->getIfElse($quotedIdentifier . ' >= ' . $intValue, $quotedIdentifier . ' - ' . $intValue, '0');
                     $folder->{$counter} = ($folder->{$counter} >= $intValue) ? $folder->{$counter} - $intValue : 0;
                 } else {
                     $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' + ' . $intValue);
