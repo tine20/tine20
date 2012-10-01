@@ -21,6 +21,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * set geodata for contacts
+     * 
+     * @var boolean
+     */
+    protected $_geodata = FALSE;
+    
+    /**
      * instance of test class
      *
      * @var Addressbook_Frontend_Json
@@ -87,6 +94,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+        
         // always resolve customfields
         Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
         
@@ -122,6 +131,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
+        
         $this->_instance->deleteContacts($this->_contactIdsToDelete);
 
         foreach ($this->_customfieldIdsToDelete as $cfd) {
@@ -523,6 +534,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContactWithGeodata()
     {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
+        
         $contact = $this->_addContact();
 
         $contact['n_family'] = 'PHPUNIT UPDATE';

@@ -20,6 +20,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * set geodata for contacts
+     * 
+     * @var boolean
+     */
+    protected $_geodata = FALSE;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -49,6 +56,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -150,9 +159,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->_instance = Addressbook_Controller_Contact::getInstance();
-        
-        return;
-        
     }
 
     /**
@@ -163,6 +169,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
+        
         if (array_key_exists('contact', $this->objects)) {
             $this->_instance->delete($this->objects['contact']);
         }
