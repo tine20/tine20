@@ -1479,9 +1479,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $select = $this->_getSelect(array('id', 'content_seq'), TRUE);
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query($select);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_GROUP | Zend_Db::FETCH_COLUMN);
+        $result = $stmt->fetchAll();
         foreach ($result as $key => $value) {
-            $result[$key] = $value[0];
+            $result[$value['id']] = $value['content_seq'];
         }
         
         $result = (is_array($containerIds)) ? $result : ((isset($result[$containerIds])) ? $result[$containerIds] : NULL);
