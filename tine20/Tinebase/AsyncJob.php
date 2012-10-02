@@ -156,7 +156,7 @@ class Tinebase_AsyncJob
     protected function _createNewJob($_name, $_sequence, $_timeout)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Creating new Job ' . $_name);
+            . ' Creating new Job ' . $_name);
         
         $date = new Tinebase_DateTime();
         $date->addSecond($_timeout);
@@ -173,6 +173,30 @@ class Tinebase_AsyncJob
     }
 
     /**
+     * only keep the last 60 jobs and purge all other
+     * 
+     * @param Tinebase_Model_AsyncJob $job
+     */
+    protected function _purgeOldJobs(Tinebase_Model_AsyncJob $job)
+    {
+        $deleteBefore = $job->seq - 60;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Purging old Jobs before sequence: ' . $deleteBefore);
+        
+        // avoid overloading by deleting old jobs in batches only
+        $idsToDelete = $this->_backend->search(new Tinebase_Model_AsyncJobFilter(array(
+            array(
+                'field'    => 'seq',
+                'operator' => 'less',
+                'value'    => $deleteBefore
+            )
+        )), new Tinebase_Model_Pagination(array('limit' => 10000)), true);
+        
+        $this->_backend->delete($idsToDelete);
+    }
+    
+    /**
      * finish job
      *
      * @param Tinebase_Model_AsyncJob $_asyncJob
@@ -184,6 +208,8 @@ class Tinebase_AsyncJob
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Finishing job ' . $_asyncJob->name . ' with status ' . $_status);
+        
+        $this->_purgeOldJobs($_asyncJob);
         
         $_asyncJob->end_time = Tinebase_DateTime::now();
         $_asyncJob->status = $_status;

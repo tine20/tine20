@@ -39,7 +39,8 @@ class Tinebase_Model_AsyncJobFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'status'        => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'status' => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'name'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'seq'    => array('filter' => 'Tinebase_Model_Filter_Int')
     );
 }
