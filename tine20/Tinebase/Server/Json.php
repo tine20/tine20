@@ -88,6 +88,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
     /**
      * get JSON from cache or new instance
      * 
+     * @param array $classes for Zend_Cache_Frontend_File
      * @return Zend_Json_Server
      */
     protected static function _getServer($classes = null)
@@ -103,13 +104,13 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         
             try {
                 $cache = new Zend_Cache_Frontend_File(array(
-                        'master_files'              => $masterFiles,
-                        'lifetime'                  => null,
-                        'automatic_serialization'   => true, // turn that off for more speed
-                        'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
-                        'write_control'             => false, // don't read cache entry after it got written
-                        'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                        'logger'                    => Tinebase_Core::getLogger(),
+                    'master_files'              => $masterFiles,
+                    'lifetime'                  => null,
+                    'automatic_serialization'   => true, // turn that off for more speed
+                    'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
+                    'write_control'             => false, // don't read cache entry after it got written
+                    'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                    'logger'                    => Tinebase_Core::getLogger(),
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
                 $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes));
@@ -121,26 +122,28 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         
         if (isset($cache) && $cache->test($cacheId)) {
             $server = $cache->load($cacheId);
-        } else {
-            $server = new Zend_Json_Server();
-            $server->setAutoEmitResponse(false);
-            $server->setAutoHandleExceptions(false);
-            //$server->setUseNamedParams(true);
-                    
-            if (is_array($classes)) {
-                foreach ($classes as $class => $namespace) {
-                    try {
-                        $server->setClass($class, $namespace);
-                    } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e);
-                    }
+            if ($server instanceof Zend_Json_Server) {
+                return $server;
+            }
+        }
+        
+        $server = new Zend_Json_Server();
+        $server->setAutoEmitResponse(false);
+        $server->setAutoHandleExceptions(false);
+        
+        if (is_array($classes)) {
+            foreach ($classes as $class => $namespace) {
+                try {
+                    $server->setClass($class, $namespace);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e);
                 }
             }
+        }
         
-            if (isset($cache)) {
-                $cache->save($server, $cacheId, array(), null);
-            }
+        if (isset($cache)) {
+            $cache->save($server, $cacheId, array(), null);
         }
         
         return $server;
