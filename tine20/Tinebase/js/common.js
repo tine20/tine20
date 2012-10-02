@@ -163,13 +163,15 @@ Tine.Tinebase.common = {
      * @param {Integer} value
      * @param {Object} metadata
      * @param {Tine.Tinebase.data.Record} record
+     * @param {Integer} decimals
+     * @param {Boolean} useDecimalValues
      * @return {String}
      */
-    byteRenderer: function (value, metadata, record) {
+    byteRenderer: function (value, metadata, record, decimals, useDecimalValues) {
         if (record && record.get('type') == 'folder') {
             return '';
         }
-        return Tine.Tinebase.common.byteFormatter(value, null, 2);
+        return Tine.Tinebase.common.byteFormatter(value, null, decimals, useDecimalValues);
     },
 
     /**

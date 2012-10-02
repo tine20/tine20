@@ -122,12 +122,9 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'integer':
                     if(config.hasOwnProperty('specialType')) {
-                        switch(config.specialType) {
-                            case 'bytes':
-                                gridRenderer = function(a,b,c) {
-                                    return Tine.Tinebase.common.byteRenderer(a,b,c);
-                                }
-                            break;
+                        var useDecimal = (config.specialType == 'bytes1000');
+                        gridRenderer = function(a,b,c) {
+                            return Tine.Tinebase.common.byteRenderer(a, b, c, 2, useDecimal);
                         }
                     }
                     break;
