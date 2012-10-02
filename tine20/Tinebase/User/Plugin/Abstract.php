@@ -23,6 +23,11 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     protected $_db = NULL;
     
     /**
+     * @var Tinebase_Backend_Sql_Command_Interface
+     */
+    protected $_dbCommand;
+    
+    /**
      * inspect data used to create user
      * 
      * @param Tinebase_Model_FullUser  $_addedUser
@@ -87,7 +92,8 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         
         if ($this->_config['host'] == $tine20DbConfig['host'] && 
             $this->_config['dbname'] == $tine20DbConfig['dbname'] &&
-            $this->_config['username'] == $tine20DbConfig['username']) {
+            $this->_config['username'] == $tine20DbConfig['username'] &&
+            Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
                 
             $this->_db = Tinebase_Core::getDb();
         } else {

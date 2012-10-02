@@ -89,11 +89,6 @@ query = SELECT destination FROM smtp_destinations WHERE source='%s'
 class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
 {
     /**
-     * @var Tinebase_Backend_Sql_Command_Interface
-     */
-    protected $_dbCommand;
-
-    /**
      * destination table name with prefix
      *
      * @var string
@@ -134,11 +129,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
      */
     public function __construct(array $_options = array())
     {
-        $this->_configKey = Tinebase_Config::SMTP;
+        $this->_configKey    = Tinebase_Config::SMTP;
         $this->_subconfigKey = 'postfix';
-
-        $this->_db        = Tinebase_Core::getDb();
-        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
 
         parent::__construct($_options);
         
@@ -187,7 +179,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
             $this->_db->quoteIdentifier('aliases.' . $this->_propertyMapping['emailUserId']) . // ON (right)
             ' AND ' . $userEmailMap . ' = ' . // AND ON (left)
             $this->_db->quoteIdentifier('aliases.' . $this->_propertyMapping['emailForwards']) . ')', // AND ON (right)
-            array($this->_propertyMapping['emailAliases'] => $this->_dbCommand->getAggregate($this->_db->quoteIdentifier('aliases.' . $this->_propertyMapping['emailAliases'])))); // Select
+            array($this->_propertyMapping['emailAliases'] => $this->_dbCommand->getAggregate('aliases.' . $this->_propertyMapping['emailAliases']))); // Select
         
         // select destination from alias table
         $select->joinLeft(
@@ -196,7 +188,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
             $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailUserId']) . // ON (right)
             ' AND ' . $userEmailMap . ' = ' . // AND ON (left)
             $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailAliases']) . ')', // AND ON (right)
-            array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate($this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailForwards'])))); // Select
+            array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate('forwards.' . $this->_propertyMapping['emailForwards']))); // Select
 
         // append domain if set or domain IS NULL
         if (! empty($this->_clientId)) {

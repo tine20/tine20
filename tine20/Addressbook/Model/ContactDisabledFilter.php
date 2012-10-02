@@ -34,27 +34,25 @@ class Addressbook_Model_ContactDisabledFilter extends Tinebase_Model_Filter_Bool
         if ($value){
             // nothing to do -> show all contacts!
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query all account contacts.');
-
+        
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Only query visible and enabled account contacts.');
             
             if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
-                $where = '/* is no user */ ' . $db->quoteIdentifier('accounts.id') . ' IS NULL OR /* is user */ ' .
-                        '(' . $db->quoteIdentifier('accounts.id') .' IS NOT NULL AND ' .
+                $where = "/* is no user */ " . $dbCommand->getIfIsNull('accounts.id', $dbCommand->getTrueValue(), $dbCommand->getFalseValue()) . " OR /* is user */ (NOT " . $dbCommand->getIfIsNull('accounts.id', $dbCommand->getTrueValue(), $dbCommand->getFalseValue()) . " AND " . 
                     $db->quoteInto($db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
                     " AND " . 
-                    '('. $db->quoteInto($db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') .   
+                    '('. $db->quoteInto($db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
                     ' OR ' . $db->quoteInto($db->quoteIdentifier('accounts.id') . ' = ?', Tinebase_Core::getUser()->getId()) . ')' .
                 ")";
             } else {
-                $where = '/* is no user */ ' . $db->quoteIdentifier('accounts.id') . ' IS NULL OR /* is user */ ' . 
-                    '(' . $db->quoteIdentifier('accounts.id') . ' AND ' . 
+                $where = "/* is no user */ " . $dbCommand->getIfIsNull('accounts.id', $dbCommand->getTrueValue(), $dbCommand->getFalseValue()) . " OR /* is user */ (NOT " . $dbCommand->getIfIsNull('accounts.id', $dbCommand->getTrueValue(), $dbCommand->getFalseValue()) . " AND " . 
                     $db->quoteInto($db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
                     " AND " . 
                     $db->quoteInto($db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
                 ")";
             }
-
+            
             $_select->where($where);
         }
     }

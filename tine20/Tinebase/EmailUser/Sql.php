@@ -81,6 +81,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         // connect to DB
         $this->_getDB($this->_config);
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
     }
