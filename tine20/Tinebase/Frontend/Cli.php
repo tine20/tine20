@@ -227,9 +227,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                     break;
                 case 'async_job':
-                    $db->query(
-                        'delete FROM ' . SQL_TABLE_PREFIX . 'async_job' .
-                        " WHERE status='success'");
+                    $where = ($dateString) ? array(
+                        $db->quoteInto($db->quoteIdentifier('end_time') . ' < ?', $dateString)
+                    ) : array();
+                    $where[] = $db->quoteInto($db->quoteIdentifier('status') . ' < ?', 'success');
+                    
+                    echo "\nRemoving all successful async_job entries " . ($dateString ? "before $dateString " : "") . "...";
+                    $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
+                    echo "\nRemoved $deleteCount records.";
                     break;
                 case 'credential_cache':
                     Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
