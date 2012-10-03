@@ -168,7 +168,8 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'addressbook_image', array('image'))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $contactId));
-        $imageData = $this->_db->fetchOne($select, 'image');
+        
+        $imageData = $this->_db->fetchOne($select);
         
         return $imageData ? base64_decode($imageData) : '';
     }

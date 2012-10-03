@@ -171,11 +171,12 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         $contact = $this->testCreateContact();
         
-        //$contact = $this->_backend->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
         $image = $this->_backend->getImage($contact->getId());
         $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
         file_put_contents($tmpPath, $image);
+        
         $this->assertFileEquals(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif', $tmpPath);
+        
         unset($tmpPath);
     }
     
