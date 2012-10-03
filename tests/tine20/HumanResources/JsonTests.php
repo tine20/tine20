@@ -92,7 +92,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $e->contracts = array($this->_getContract()->toArray());
         $savedEmployee = $this->_json->saveEmployee($e->toArray());
 
-        $r = $this->_json->searchContracts(array(), array());
+        $r = $this->_json->searchContracts(
+            array(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id'])), 
+            array()
+        );
         $this->assertEquals($r['results'][0]['employee_id']['id'], $savedEmployee['id']);
 
         $this->assertTrue(is_array($r['results'][0]['cost_center_id']));

@@ -174,7 +174,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      * returns an employee with account_id
      * @return HumanResources_Model_Employee
      */
-    protected function _getEmployee($loginName = NULL) {
+    protected function _getEmployee($loginName = NULL) 
+    {
         $a = $this->_getAccount($loginName);
         $c = $this->_getContact();
 
