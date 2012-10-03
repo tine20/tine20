@@ -267,12 +267,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
                         $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
                         break;
+                        
                     case 'sender':
                         $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
                         if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
                             $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
                         }
                         break;
+                        
                     default:
                         $this->$field = $value;
                 }

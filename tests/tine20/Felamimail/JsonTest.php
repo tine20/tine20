@@ -361,11 +361,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getSystemAccount()
     {
         $results = $this->_json->searchAccounts(array());
-
+        
         $this->assertGreaterThan(0, $results['totalcount']);
         $system = array();
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'unittest@' . $this->_mailDomain) {
+            if ($result['name'] == Tinebase_Core::getUser()->accountLoginName . '@' . $this->_mailDomain) {
                 $system = $result;
             }
         }

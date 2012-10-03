@@ -173,7 +173,7 @@ class Felamimail_Message extends Zend_Mail_Message
                     }
                     
                     $result[] = array(
-                        'email' => $email, 
+                        'email' => trim($email), 
                         'name' =>  $address['name']
                     );
                 }

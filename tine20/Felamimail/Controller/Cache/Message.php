@@ -879,19 +879,16 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessageToCache(Felamimail_Model_Message $_message)
     {
+        $_message->from_email = substr($_message->from_email, 0, 254);
+        $_message->from_name  = substr($_message->from_name,  0, 254);
+        
         try {
             $result = $this->_backend->create($_message);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-            if (preg_match("/String data, right truncated: 1406 Data too long for column 'from_(email|name)'/", $zdse->getMessage())) {
-                // try to trim email fields
-                $_message->from_email = substr($_message->from_email, 0, 254);
-                $_message->from_name = substr($_message->from_name, 0, 254);
-                $result = $this->_addMessageToCache($_message);
-            } else {
-                // perhaps we already have this message in our cache (duplicate)
-                $result = FALSE;
-            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' failed to add message to cache: ' . $zdse->getMessage());
+
+            $result = FALSE;
         }
         
         return $result;
