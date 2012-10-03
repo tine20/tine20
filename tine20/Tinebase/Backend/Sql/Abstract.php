@@ -355,18 +355,23 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function getMultiple($_id, $_containerIds = NULL) 
     {
-        if (empty($_id)) {
+        // filter out any emtpy values
+        $ids = array_filter((array) $_id, function($value) {
+            return !empty($value);
+        });
+        
+        if (empty($ids)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
         }
 
         $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' in (?)', (array) $_id);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', $ids);
         
         if ($_containerIds !== NULL && isset($this->_schema['container_id'])) {
             if (empty($_containerIds)) {
                 $select->where('1=0 /* insufficient grants */');
             } else {
-                $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' in (?) /* add acl in getMultiple */', (array) $_containerIds);
+                $select->where($this->_db->quoteIdentifier($this->_tableName . '.container_id') . ' IN (?) /* add acl in getMultiple */', (array) $_containerIds);
             }
         }
         

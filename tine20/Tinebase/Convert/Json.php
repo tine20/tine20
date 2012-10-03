@@ -66,14 +66,17 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if(! $resolveFields = $ownRecordClass::getResolveForeignIdFields()) {
             return;
         }
+        
         foreach($resolveFields as $foreignRecordClassName => $fields) {
             $foreignIds = array();
-            if(!is_array($fields)) $fields = array($fields);
-            $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            $fields = (array) $fields;
+            
             foreach($fields as $field) {
                 $foreignIds = array_unique(array_merge($foreignIds, $_records->{$field}));
             }
 
+            $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            
             $foreignRecords = $controller->getMultiple($foreignIds);
             if($foreignRecords->count()) {
                 foreach ($_records as $record) {

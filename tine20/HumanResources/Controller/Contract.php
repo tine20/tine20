@@ -75,8 +75,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _checkDates(Tinebase_Record_Interface $_record)
     {
-        if($_record->end_date) {
-            if($_record->start_date > $_record->end_date) {
+        if ($_record->start_date instanceof Tinebase_DateTime && $_record->end_date instanceof Tinebase_DateTime) {
+            if ($_record->end_date->isEarlier($_record->start_date)) {
                 throw new Tinebase_Exception_Record_Validation('The start date of the contract must be before the end date');
             }
         }
@@ -135,14 +135,17 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
         }
         $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();
+        
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_firstDayDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         $endDate = new Tinebase_Model_Filter_FilterGroup(array(), 'OR');
         $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $_firstDayDate)));
-        $endDate->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'equals', 'value' =>  '')));
+        #$endDate->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'equals', 'value' =>  '')));
         $filter->addFilterGroup($endDate);
+        
         $contracts = $this->search($filter);
+        
         if($contracts->count() < 1) {
             $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));

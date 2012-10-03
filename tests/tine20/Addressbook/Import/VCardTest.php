@@ -55,6 +55,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_filename = dirname(__FILE__) . '/files/contacts.vcf';
     }
 
@@ -66,9 +68,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (! empty($this->_contactIdsToDelete)) {
-            Addressbook_Controller_Contact::getInstance()->delete($this->_contactIdsToDelete);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
