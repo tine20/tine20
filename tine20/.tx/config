@@ -97,3 +97,8 @@ file_filter = HumanResources/translations/<lang>.po
 source_file = HumanResources/translations/template.pot
 source_lang = en
 
+[tine20.Inventory]
+file_filter = Inventory/translations/<lang>.po
+source_file = Inventory/translations/template.pot
+source_lang = en
+
