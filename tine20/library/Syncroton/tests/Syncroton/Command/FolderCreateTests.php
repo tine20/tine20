@@ -31,11 +31,10 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    /**
-     * test creation of claendar folder
-     */
-    public function testCreateCalendarFolder()
+    protected function setUp()
     {
+        parent::setUp();
+        
         // do initial sync first
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -48,8 +47,13 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $folderSync->handle();
         
         $responseDoc = $folderSync->getResponse();
-        
-        
+    }
+    
+    /**
+     * test creation of claendar folder
+     */
+    public function testCreateCalendarFolder()
+    {
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -79,26 +83,12 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
         $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']);
     }
-        
+    
     /**
      * test creation of contacts folder
      */
     public function testCreateContactsFolder()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -120,26 +110,12 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
         $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']);
     }
-        
+    
     /**
      * test creation of email folder
      */
     public function testCreateEmailFolder()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -161,26 +137,12 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
         $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Email']);
     }
-        
+    
     /**
      * test creation of tasks folder
      */
     public function testCreateTasksFolder()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -202,26 +164,12 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
         $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Tasks']);
     }
-        
+    
     /**
      * test handling of invalid SyncKey
      */
     public function testInvalidSyncKey()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -241,5 +189,23 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(Syncroton_Command_FolderSync::STATUS_INVALID_SYNC_KEY, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
-    }    
+    }
+    
+    /**
+     * test handling of invalid folder type
+     */
+    public function testCreateInvalidFolderType()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderCreate xmlns="uri:FolderHierarchy"><SyncKey>1</SyncKey><ParentId/><DisplayName>Test Folder</DisplayName><Type>1000</Type></FolderCreate>'
+        );
+        
+        $folderCreate = new Syncroton_Command_FolderCreate($doc, $this->_device, null);
+        
+        $this->setExpectedException('Syncroton_Exception_UnexpectedValue');
+        
+        $folderCreate->handle();
+    }
 }

@@ -197,6 +197,7 @@ class Syncroton_Server
             #fpassthru($stream);rewind($stream);
             
             $protocolVersion = ord(fread($stream, 1));
+            
             switch (ord(fread($stream, 1))) {
                 case 0:
                     $command = 'Sync';
@@ -262,15 +263,23 @@ class Syncroton_Server
             $deviceIdLength = ord(fread($stream, 1));
             if ($deviceIdLength > 0) {
                 $deviceId = fread($stream, $deviceIdLength);
-            } 
+                
+                // some windows devices send a device name which contains 
+                // special chars, which can't be stored in the database
+                if (!ctype_alnum($deviceId)) {
+                    $deviceId = md5($deviceId);
+                }
+            }
             
             $policyKeyLength = ord(fread($stream, 1));
             if ($policyKeyLength > 0) {
-                $policyKey = fread($stream, 4);
+                $policyKey = fread($stream, $policyKeyLength);
             }
             
             $deviceTypeLength = ord(fread($stream, 1));
-            $deviceType = fread($stream, $deviceTypeLength);
+            if ($deviceTypeLength > 0) {
+                $deviceType = fread($stream, $deviceTypeLength);
+            }
             
             // @todo parse command parameters 
             $result = array(

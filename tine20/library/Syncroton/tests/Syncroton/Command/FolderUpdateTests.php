@@ -29,25 +29,28 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        // do initial sync first
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+                <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+                <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
+        $folderSync->handle();
+        $responseDoc = $folderSync->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+    }
+    
     /**
      * test creation of claendar folder
      */
     public function testUpdateCalendarFolder()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -82,20 +85,6 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
      */
     public function testUpdateContactsFolder()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -125,24 +114,42 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
     }
     
     /**
+     * test update of invalid folder
+     */
+    public function testUpdateInvalidFolder()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderUpdate xmlns="uri:FolderHierarchy">
+                <SyncKey>1</SyncKey>
+                <ParentId/>
+                <ServerId>invalidFolderId</ServerId>
+                <DisplayName>Test Folder Update</DisplayName>
+                <Type>14</Type>
+            </FolderUpdate>'
+        );
+        
+        $folderUpdate = new Syncroton_Command_FolderUpdate($doc, $this->_device, null);
+        
+        $folderUpdate->handle();
+        
+        $responseDoc = $folderUpdate->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
+        
+        $nodes = $xpath->query('//FolderHierarchy:FolderUpdate/FolderHierarchy:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_FolderSync::STATUS_FOLDER_NOT_FOUND, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+    
+    /**
      * test handling of invalid SyncKey
      */
     public function testInvalidSyncKey()
     {
-        // do initial sync first
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
-        
-        $folderSync->handle();
-        
-        $responseDoc = $folderSync->getResponse();
-        
-        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
