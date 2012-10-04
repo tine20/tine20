@@ -278,7 +278,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->_createdMessages->addRecord($message);
         
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
-        $this->assertEquals(1, $message->has_attachment);
+        $this->assertEquals(1, $message->has_attachment, 'attachment failure');
         
         // check duplicate headers
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);

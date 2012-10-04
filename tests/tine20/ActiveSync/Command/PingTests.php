@@ -66,7 +66,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Syncroton_Command_Ping::$quietTime   = 0;
-        Syncroton_Command_Ping::$pingTimeout = 0;
+        Syncroton_Command_Ping::$pingTimeout = 1;
         
         $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
