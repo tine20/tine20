@@ -2,13 +2,13 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>0.3</version>
+    <version>6.0</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>inventory_item</name>
-            <version>3</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>

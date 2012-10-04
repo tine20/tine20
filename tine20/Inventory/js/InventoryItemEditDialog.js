@@ -174,7 +174,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'active_number',
                             value: 1,
                             minValue: 0
-                        }],
+                        }]
                         //End number
                     ]
                     
@@ -205,7 +205,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
-                },]
+                }]
             },
             {
                 title: this.app.i18n._('Accounting'),
