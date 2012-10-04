@@ -65,6 +65,9 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
+        Syncroton_Command_Ping::$quietTime   = 0;
+        Syncroton_Command_Ping::$pingTimeout = 0;
+        
         $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
         Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
@@ -178,8 +181,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         // and now we can start the ping request
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-                    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-                    <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $personalContainer->getId() . '</Id><Class>Contacts</Class></Folder></Folders></Ping>'
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $personalContainer->getId() . '</Id><Class>Contacts</Class></Folder></Folders></Ping>'
         );
         
         $ping = new Syncroton_Command_Ping($doc, $this->_device, null);
