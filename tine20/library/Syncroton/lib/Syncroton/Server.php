@@ -286,7 +286,8 @@ class Syncroton_Server
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
                 'deviceId'        => $deviceId,
-                'deviceType'      => $deviceType,
+                'deviceType'      => isset($deviceType) ? $deviceType : null,
+                'policyKey'       => isset($policyKey)  ? $policyKey  : null,
                 'saveInSent'      => null,
                 'collectionId'    => null,
                 'itemId'          => null,
@@ -298,6 +299,7 @@ class Syncroton_Server
                 'command'         => $request->getQuery('Cmd'),
                 'deviceId'        => $request->getQuery('DeviceId'),
                 'deviceType'      => $request->getQuery('DeviceType'),
+                'policyKey'       => $request->getServer('HTTP_X_MS_POLICYKEY'),
                 'saveInSent'      => $request->getQuery('SaveInSent'),
                 'collectionId'    => $request->getQuery('CollectionId'),
                 'itemId'          => $request->getQuery('ItemId'),
@@ -306,7 +308,6 @@ class Syncroton_Server
         }
         
         $result['userAgent']   = $request->getServer('HTTP_USER_AGENT', $result['deviceType']);
-        $result['policyKey']   = $request->getServer('HTTP_X_MS_POLICYKEY');
         $result['contentType'] = $request->getServer('CONTENT_TYPE');
         
         return $result;
