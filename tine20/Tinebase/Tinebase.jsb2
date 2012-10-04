@@ -690,6 +690,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "UidTriggerField.js",
+          "path": "js/widgets/form/"
+        },
+        {
           "text": "Model.js",
           "path": "js/widgets/persistentfilter/"
         },
@@ -882,6 +886,10 @@
         },
         {
           "text": "PreferencesPanel.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "UidTriggerField.css",
           "path": "css/widgets/"
         },
         {
