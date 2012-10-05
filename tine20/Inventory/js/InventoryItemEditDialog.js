@@ -42,29 +42,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     showContainerSelector: true,
     
     /**
-     * executed after record got updated from proxy
-     * 
-     * @private
-     */
-    onRecordLoad: function() {
-    // you can do something here
-        Tine.Inventory.InventoryItemEditDialog.superclass.onRecordLoad.call(this);
-        
-    },
-    
-    /**
-     * executed when record gets updated from form
-     * - add attachments to record here
-     * 
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.Inventory.InventoryItemEditDialog.superclass.onRecordUpdate.call(this);
-        
-        // you can do something here    
-    },
-    
-    /**
      * check validity of activ number field
      */
     isValid: function () {
@@ -87,6 +64,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -108,7 +86,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: .333,
+                        disabled: (this.useMultiple) ? true : false
                     },
                     items: [
                         //Start ID
@@ -228,7 +207,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: .333,
+                        disabled: (this.useMultiple) ? true : false
                     },
                     items: [
                         // Start price, costcentre and invoice
