@@ -21,16 +21,15 @@ Tine.widgets.relation.Manager = function() {
     var ignoreApplications = ['Admin', 'Setup', 'Tinebase', 'ActiveSync'];
 
     return {
-
         /**
          * returns the relations config
-         * @param {Tine.Tinebase.Application} app
-         * @param {Tine.Tinebase.data.Record} recordClass
+         * @param {String/Tine.Tinebase.Application} app
+         * @param {String/Tine.Tinebase.data.Record} recordClass
          * @param {Array} ignoreModels the php model names to ignore (they won't be returned)
          */
         get: function(app, recordClass, ignoreModels) {
-            var key = app.name + recordClass.getMeta('modelName');
-            
+            var key = this.getKey(app, recordClass);
+
             // create if not cached
             if(items[key] === undefined) {
                 this.create(recordClass, key);
@@ -54,12 +53,13 @@ Tine.widgets.relation.Manager = function() {
 
         /**
          * returns the relations config existence
-         * @param Tine.Tinebase.Application app
-         * @param Tine.Tinebase.data.Record recordClass
+         * @param {String/Tine.Tinebase.Application} app
+         * @param {String/Tine.Tinebase.data.Record} recordClass
          * @return {Boolean}
          */
         has: function(app, recordClass) {
-            var key = app.name + recordClass.getMeta('modelName');
+            var key = this.getKey(app, recordClass);
+            
             // create if not cached
             if(items[key] === undefined) this.create(recordClass, key);
             return items[key] ? true : false;
@@ -67,7 +67,6 @@ Tine.widgets.relation.Manager = function() {
 
         /**
          * creates the relations config if found in registry
-         * @param Tine.Tinebase.Application app
          * @param Tine.Tinebase.data.Record recordClass
          * @param {String} key
          * @return {Boolean}
@@ -90,6 +89,18 @@ Tine.widgets.relation.Manager = function() {
 
             // set to false, so not try again
             if(items[key].length == 0) items[key] = false;
+        },
+        
+        /**
+         * returns the key (appName + modelName)
+         * @param {String/Tine.Tinebase.Application} appName
+         * @param {String/Tine.Tinebase.data.Record} modelName
+         * @return {String}
+         */
+        getKey: function(appName, modelName) {
+            var appName = Tine.Tinebase.common.resolveApp(appName);
+            var modelName = Tine.Tinebase.common.resolveModel(modelName);
+            return appName + modelName;
         }
     };
 

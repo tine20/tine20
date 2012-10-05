@@ -79,12 +79,21 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     field: 'foreignRecord',
     
     /**
+     * ignore this php models (filter is not shown)
+     * @cfg {Array}
+     */
+    ignoreRelatedModels: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
         if (this.foreignRecordClass) {
             this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass);
         }
+        
+        // TODO: remove this when files can be searched
+        this.ignoreRelatedModels = this.ignoreRelatedModels ? this.ignoreRelatedModels.push('Filemanager_Model_Node') : ['Filemanager_Model_Node'];
         
         if (this.ownField) {
             this.field = this.ownField;
@@ -105,20 +114,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         // linkType relations automatic list
         if (this.ownRecordClass.hasField('relations')) {
-            Tine.Tinebase.data.RecordMgr.eachKey(function(key, record) {
-                if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
-                    var appName = record.getMeta('appName'),
-                        recordsName = record.getMeta('recordsName'),
-                        app = Tine.Tinebase.appMgr.get(appName),
-                        label = app ? app.i18n._hidden(recordsName) : recordsName;
-                    
-                    if (Tine.Tinebase.common.hasRight('run', appName)) {
-                        operators.push({operator: {linkType: 'relation', foreignRecordClass: record}, label: label});
-                    }
+            var operators = [];
+            Ext.each(Tine.widgets.relation.Manager.get(this.app, this.ownRecordClass, this.ignoreRelatedModels), function(relation) {
+                if (Tine.Tinebase.common.hasRight('run', relation.relatedApp)) {
+                    // TODO: leave label as it is?
+                    var label = relation.text.replace(/ \(.+\)/,'');
+                    operators.push({operator: {linkType: 'relation', foreignRecordClass: Tine.Tinebase.common.resolveModel(relation.relatedModel, relation.relatedApp)}, label: label});
                 }
             }, this);
         }
-
         // get operators from registry
         Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function(def) {
             // translate label
