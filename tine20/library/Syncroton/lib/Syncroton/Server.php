@@ -102,7 +102,7 @@ class Syncroton_Server
         // get user device
         $device = $this->_getUserDevice($this->_userId, $requestParameters);
         
-        if ($requestParameters['contentType'] == 'application/vnd.ms-sync.wbxml') {
+        if ($requestParameters['contentType'] == 'application/vnd.ms-sync.wbxml' || $requestParameters['contentType'] == 'application/vnd.ms-sync') {
             // decode wbxml request
             try {
                 $decoder = new Syncroton_Wbxml_Decoder($this->_body);
@@ -185,103 +185,91 @@ class Syncroton_Server
      */
     protected function _getRequestParameters(Zend_Controller_Request_Http $request)
     {
-        if(count($_GET) == 1) {
-            $arrayKeys = array_keys($_GET);
+        if (!isset($_GET['DeviceId'])) {
+            $commands = array(
+                0  => 'Sync',
+                1  => 'SendMail',
+                2  => 'SmartForward',
+                3  => 'SmartReply',
+                4  => 'GetAttachment',
+                9  => 'FolderSync',
+                10 => 'FolderCreate',
+                11 => 'FolderDelete',
+                12 => 'FolderUpdate',
+                13 => 'MoveItems',
+                14 => 'GetItemEstimate',
+                15 => 'MeetingResponse',
+                16 => 'Search',
+                17 => 'Settings',
+                18 => 'Ping',
+                19 => 'ItemOperations',
+                20 => 'Provision',
+                21 => 'ResolveRecipients',
+                22 => 'ValidateCert'
+            );
             
-            $base64Decoded = base64_decode($arrayKeys[0]);
+            $parameters = array(
+                0 => 'AttachmentName',
+                1 => 'CollectionId',
+                3 => 'ItemId',
+                4 => 'LongId',
+                6 => 'Occurence',
+                7 => 'Options',
+                8 => 'User'
+            );
             
-            $stream = fopen("php://temp", 'r+');
-            fwrite($stream, base64_decode($arrayKeys[0]));
-            rewind($stream);
-
-            #fpassthru($stream);rewind($stream);
-            
-            $protocolVersion = ord(fread($stream, 1));
-            
-            switch (ord(fread($stream, 1))) {
-                case 0:
-                    $command = 'Sync';
+            // find the first $_GET parameter which has a key but no value
+            // the key are the request parameters
+            foreach ($_GET as $key => $value) {
+                if (empty($value)) {
+                    $requestParameters = $key;
                     break;
-                case 1:
-                    $command = 'SendMail';
-                    break;
-                case 2:
-                    $command = 'SmartForward';
-                    break;
-                case 3:
-                    $command = 'SmartReply';
-                    break;
-                case 4:
-                    $command = 'GetAttachment';
-                    break;
-                case 9:
-                    $command = 'FolderSync';
-                    break;
-                case 10:
-                    $command = 'FolderCreate';
-                    break;
-                case 11:
-                    $command = 'FolderDelete';
-                    break;
-                case 12:
-                    $command = 'FolderUpdate';
-                    break;
-                case 13:
-                    $command = 'MoveItems';
-                    break;
-                case 14:
-                    $command = 'GetItemEstimate';
-                    break;
-                case 15:
-                    $command = 'MeetingResponse';
-                    break;
-                case 16:
-                    $command = 'Search';
-                    break;
-                case 17:
-                    $command = 'Settings';
-                    break;
-                case 18:
-                    $command = 'Ping';
-                    break;
-                case 19:
-                    $command = 'ItemOperations';
-                    break;
-                case 20:
-                    $command = 'Provision';
-                    break;
-                case 21:
-                    $command = 'ResolveRecipients';
-                    break;
-                case 22:
-                    $command = 'ValidateCert';
-                    break;
-            }
-            
-            $locale = fread($stream, 2);
-            
-            $deviceIdLength = ord(fread($stream, 1));
-            if ($deviceIdLength > 0) {
-                $deviceId = fread($stream, $deviceIdLength);
-                
-                // some windows devices send a device name which contains 
-                // special chars, which can't be stored in the database
-                if (!ctype_alnum($deviceId)) {
-                    $deviceId = md5($deviceId);
                 }
             }
             
-            $policyKeyLength = ord(fread($stream, 1));
-            if ($policyKeyLength > 0) {
-                $policyKey = fread($stream, $policyKeyLength);
+            $stream = fopen("php://temp", 'r+');
+            fwrite($stream, base64_decode($requestParameters));
+            rewind($stream);
+
+            // unpack the first 4 bytes
+            $unpacked = unpack('CprotocolVersion/Ccommand/vlocale', fread($stream, 4));
+            
+            $protocolVersion = $unpacked['protocolVersion'];
+            $command = $commands[$unpacked['command']];
+            $locale = $unpacked['locale'];
+            
+            // unpack deviceId
+            $length = ord(fread($stream, 1));
+            if ($length > 0) {
+                $unpacked = unpack('H' . $length*2 . 'string', fread($stream, $length));
+                $deviceId = $unpacked['string'];
             }
             
-            $deviceTypeLength = ord(fread($stream, 1));
-            if ($deviceTypeLength > 0) {
-                $deviceType = fread($stream, $deviceTypeLength);
+            // unpack policyKey
+            $length = ord(fread($stream, 1));
+            if ($length > 0) {
+                $unpacked  = unpack('Vstring', fread($stream, $length));
+                $policyKey = $unpacked['string'];
+            }
+
+            // unpack device type
+            $length = ord(fread($stream, 1));
+            if ($length > 0) {
+                $unpacked   = unpack('A' . $length . 'string', fread($stream, $length));
+                $deviceType = $unpacked['string'];
             }
             
-            // @todo parse command parameters 
+            // @todo parse command parameters
+            while (! feof($stream)) {
+                $tag    = ord(fread($stream, 1));
+                $length = ord(fread($stream, 1));
+                
+                $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
+
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " found unhandled command parameters");
+            }
+             
             $result = array(
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
