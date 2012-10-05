@@ -208,16 +208,6 @@ class Syncroton_Server
                 22 => 'ValidateCert'
             );
             
-            $parameters = array(
-                0 => 'AttachmentName',
-                1 => 'CollectionId',
-                3 => 'ItemId',
-                4 => 'LongId',
-                6 => 'Occurence',
-                7 => 'Options',
-                8 => 'User'
-            );
-            
             // find the first $_GET parameter which has a key but no value
             // the key are the request parameters
             foreach ($_GET as $key => $value) {
@@ -259,27 +249,53 @@ class Syncroton_Server
                 $deviceType = $unpacked['string'];
             }
             
-            // @todo parse command parameters
             while (! feof($stream)) {
                 $tag    = ord(fread($stream, 1));
                 $length = ord(fread($stream, 1));
                 
-                $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
-
-                if ($this->_logger instanceof Zend_Log)
-                    $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " found unhandled command parameters");
+                switch ($tag) {
+                    case 0:
+                        $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
+                        
+                        $attachmentName = $unpacked['string'];
+                        break;
+                        
+                    case 1:
+                        $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
+                        
+                        $collectionId = $unpacked['string'];
+                        break;
+                        
+                    case 3:
+                        $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
+                        
+                        $itemId = $unpacked['string'];
+                        break;
+                        
+                    case 7:
+                        $options = ord(fread($stream, 1));
+                        
+                        $saveInSent      = !!($options & 0x01); 
+                        $acceptMultiPart = !!($options & 0x02);
+                        break;
+                        
+                    default:
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " found unhandled command parameters");
+                        
+                }
             }
              
             $result = array(
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
                 'deviceId'        => $deviceId,
-                'deviceType'      => isset($deviceType) ? $deviceType : null,
-                'policyKey'       => isset($policyKey)  ? $policyKey  : null,
-                'saveInSent'      => null,
-                'collectionId'    => null,
-                'itemId'          => null,
-                'attachmentName'  => null
+                'deviceType'      => isset($deviceType)     ? $deviceType     : null,
+                'policyKey'       => isset($policyKey)      ? $policyKey      : null,
+                'saveInSent'      => isset($saveInSent)     ? $saveInSent     : false,
+                'collectionId'    => isset($collectionId)   ? $collectionId   : null,
+                'itemId'          => isset($itemId)         ? $itemId         : null,
+                'attachmentName'  => isset($attachmentName) ? $attachmentName : null
             );
         } else {
             $result = array(
@@ -288,7 +304,7 @@ class Syncroton_Server
                 'deviceId'        => $request->getQuery('DeviceId'),
                 'deviceType'      => $request->getQuery('DeviceType'),
                 'policyKey'       => $request->getServer('HTTP_X_MS_POLICYKEY'),
-                'saveInSent'      => $request->getQuery('SaveInSent'),
+                'saveInSent'      => $request->getQuery('SaveInSent') == 'T',
                 'collectionId'    => $request->getQuery('CollectionId'),
                 'itemId'          => $request->getQuery('ItemId'),
                 'attachmentName'  => $request->getQuery('AttachmentName'),
