@@ -174,10 +174,16 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'active_number',
                             value: 1,
                             minValue: 0
-                        }]
+                        }],
+                        [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Inventory',
+                            keyFieldName: 'inventoryStatus',
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'status',
+                            columnWidth: 0.5
+                        })]
                         //End number
                     ]
-                    
                 },
                 {
                     // activities and tags
@@ -290,21 +296,3 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         };
     }
 });
-
-/**
- * Inventory Edit Popup
- * 
- * @param   {Object} config
- * @return  {Ext.ux.Window}
- */
-Tine.Inventory.InventoryItemEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 470,
-        name: Tine.Inventory.InventoryItemEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Inventory.InventoryItemEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};
