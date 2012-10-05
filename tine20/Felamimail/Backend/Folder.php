@@ -187,7 +187,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         
         // sanitize unreadcount
         $updatedFolder = $this->get($folder->getId());
-        if ($updatedFolder->cache_totalcount === 0 && $updatedFolder->cache_unreadcount >= 0) {
+        if ($updatedFolder->cache_totalcount === 0 && $updatedFolder->cache_unreadcount > 0) {
             $this->updateFolderCounter($folder, array('cache_unreadcount' => 0));
         }
         
