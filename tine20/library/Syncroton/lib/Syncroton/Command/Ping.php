@@ -80,7 +80,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                         // does the folder exist?
                         $folder = $this->_folderBackend->getFolder($this->_device, (string)$folderXml->Id);
                         
-                        $folders[] = $folder;                
+                        $folders[$folder->id] = $folder;
                     } catch (Syncroton_Exception_NotFound $senf) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $senf->getMessage());
@@ -88,7 +88,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                         break;
                     }
                 }
-                $this->_device->pingfolder = serialize($folders);
+                $this->_device->pingfolder = serialize(array_keys($folders));
             }
             $this->_device = $this->_deviceBackend->update($this->_device);
         }
@@ -112,7 +112,9 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
-                foreach ((array) $folders as $folder) {
+                foreach ((array) $folders as $folderId) {
+                    $folder = $this->_folderBackend->get($folderId);
+                    
                     $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
                     
                     try {
