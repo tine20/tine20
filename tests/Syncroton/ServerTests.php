@@ -66,7 +66,8 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         
         $request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?jAAJBAp2MTQwRGV2aWNlAApTbWFydFBob25l'));
         #DeviceId=A81F31E18BC6F962B3674D98788A7C9A&DeviceType=WindowsPhone
-        #$request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?jAkHBBCoHzHhi8b5YrNnTZh4inyaBAAAAAACV1A'));
+        #$request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?jAkHBBCoHzHhi8b5YrNnTZh4inyaBAAAAAACV1A='));
+        #$request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?jBMHBBCoHzHhi8b5YrNnTZh4inyaBAAAAAACV1AHAQI='));
         
         $server = new Syncroton_Server('abc1234', $request, $doc);
         
