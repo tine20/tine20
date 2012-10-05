@@ -152,6 +152,9 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'container':
                     gridRenderer = Tine.Tinebase.common.containerRenderer;
                     break;
+                case 'boolean':
+                    gridRenderer = Tine.Tinebase.common.booleanRenderer;
+                    break;
                  default:
                     gridRenderer = function(value) {
                         return Ext.util.Format.htmlEncode(value);
@@ -171,13 +174,14 @@ Tine.Tinebase.ApplicationStarter = {
     getFilter: function(key, filterconfig, fieldconfig, appName, modelName) {
         // take field label if no filterlabel is defined
         var label = (filterconfig && filterconfig.label) ? filterconfig.label : (fieldconfig && fieldconfig.label) ? fieldconfig.label : null;
-
+        var app = Tine.Tinebase.appMgr.get(appName);
+        
         if (! label && (key != 'query')) {
             return null;
         }
         // prepare filter
         var filter = {
-            label: label,
+            label: app.i18n._(label),
             field: key
         };
 
@@ -194,6 +198,10 @@ Tine.Tinebase.ApplicationStarter = {
             } 
             
             switch (filterconfig.filter) {
+                case 'Tinebase_Model_Filter_Bool':
+                    filter.valueType = this.filters[filterconfig.filter];
+                    filter.defaultValue = false;
+                    break;
                 case 'Tinebase_Model_Filter_ForeignId':
                     // create generic foreign id filter
                     var filterclass = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
