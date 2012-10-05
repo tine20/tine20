@@ -30,6 +30,7 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
         $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
+        $this->_resolveCustomFields = TRUE;
     }    
     
     /**
