@@ -66,7 +66,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Syncroton_Command_Ping::$quietTime   = 0;
-        Syncroton_Command_Ping::$pingTimeout = 1;
+        Syncroton_Command_Ping::$pingTimeout = 3;
         
         $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
@@ -77,7 +77,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-
+        Syncroton_Registry::set('loggerBackend', Tinebase_Core::getLogger());
+        
         Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
         Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
@@ -357,6 +358,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
+        sleep(1);
+        
         // and now we can start the ping request
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -388,7 +391,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals($folder->serverId, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        $message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
-        Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
+        #$message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
+        #Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
     }
 }
