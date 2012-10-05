@@ -105,9 +105,11 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            case 'Admin_Event_DeleteAccount':
+            /* 
+             * deletePersonalFolder does not exists
+             * *case 'Admin_Event_DeleteAccount':
                 #$this->deletePersonalFolder($_eventObject->account);
-                break;
+                break;*/
         }
     }
 }

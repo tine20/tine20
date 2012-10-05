@@ -100,11 +100,13 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @todo have spechial controller/backend fns for this
      * @todo move to abstract json class and have tests
+     * @todo make this work
      *
      * @param  string   $property
      * @param  string   $startswith
      * @return array
      */
+    /*
     public function autoCompleteInventoryItemProperty($property, $startswith)
     {
         if (! in_array($property, Inventory_Model_InventoryItem::getValidFields())) {
@@ -131,7 +133,7 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $result;
-    }
+    }*/
 
     /**
      * Returns registry data

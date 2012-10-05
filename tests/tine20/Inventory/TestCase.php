@@ -62,6 +62,37 @@ class Inventory_TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * get filter for inventory search
+     *
+     * @return Tasks_Model_Task
+     */
+    protected function _getFilter()
+    {
+        // define filter
+        return array(
+                array('field' => 'container_id', 'operator' => 'specialNode', 'value' => 'all'),
+                array('field' => 'name'        , 'operator' => 'contains',    'value' => 'inventory item by PHPUnit'),
+                array('field' => 'due'         , 'operator' => 'within',      'value' => 'dayThis'),
+        );
+    }
+    
+    /**
+     * get default paging
+     *
+     * @return array
+     */
+    protected function _getPaging()
+    {
+        // define paging
+        return array(
+                'start' => 0,
+                'limit' => 50,
+                'sort' => 'name',
+                'dir' => 'ASC',
+        );
+    }
+    
+    /**
      * Tears down the fixture
      * This method is called after a test is executed.
      *
