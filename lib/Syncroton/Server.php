@@ -142,8 +142,6 @@ class Syncroton_Server
                 return;
             }
             
-            
-            
         } catch (Exception $e) {
             if ($this->_logger instanceof Zend_Log)
                 $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " unexpected exception occured: " . get_class($e));
@@ -162,19 +160,57 @@ class Syncroton_Server
                 $response->formatOutput = true;
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response:\n" . $response->saveXML());
             }
-        
+            
             $outputStream = fopen("php://temp", 'r+');
-        
+            
             $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
             $encoder->encode($response);
-
-            // avoid sending headers while running on cli (phpunit)
-            if (PHP_SAPI !== 'cli') {
+            
+            if ($requestParameters['acceptMultipart'] == true) {
+                header("Content-Type: application/vnd.ms-sync.multipart");
+                
+                $parts = $command->getParts();
+                
+                // output multipartheader
+                $bodyPartCount = 1 + count($parts);
+                
+                // number of parts (4 bytes)
+                $header  = pack('i', $bodyPartCount);
+                
+                $partOffset = 4 + (($bodyPartCount * 2) * 4);
+                
+                // wbxml body start and length
+                $streamStat = fstat($outputStream);
+                $header .= pack('ii', $partOffset, $streamStat['size']);
+                
+                $partOffset += $streamStat['size'];
+                
+                // calculate start and length of parts
+                foreach ($parts as $partId => $partStream) {
+                    rewind($partStream);
+                    $streamStat = fstat($partStream);
+                    
+                    // part start and length
+                    $header .= pack('ii', $partOffset, $streamStat['size']);
+                    $partOffset += $streamStat['size'];
+                }
+                
+                echo $header;
+            } else {
                 header("Content-Type: application/vnd.ms-sync.wbxml");
             }
-        
+                        
+            // output body
             rewind($outputStream);
             fpassthru($outputStream);
+            
+            // output multiparts
+            if (isset($parts)) {
+                foreach ($parts as $partStream) {
+                    rewind($partStream);
+                    fpassthru($partStream);
+                }
+            }
         }
     }
     
@@ -224,7 +260,8 @@ class Syncroton_Server
             // unpack the first 4 bytes
             $unpacked = unpack('CprotocolVersion/Ccommand/vlocale', fread($stream, 4));
             
-            $protocolVersion = $unpacked['protocolVersion'];
+            // 140 => 14.0
+            $protocolVersion = substr($unpacked['protocolVersion'], 0, -1) . '.' . substr($unpacked['protocolVersion'], -1);
             $command = $commands[$unpacked['command']];
             $locale = $unpacked['locale'];
             
@@ -290,12 +327,13 @@ class Syncroton_Server
                 'protocolVersion' => $protocolVersion,
                 'command'         => $command,
                 'deviceId'        => $deviceId,
-                'deviceType'      => isset($deviceType)     ? $deviceType     : null,
-                'policyKey'       => isset($policyKey)      ? $policyKey      : null,
-                'saveInSent'      => isset($saveInSent)     ? $saveInSent     : false,
-                'collectionId'    => isset($collectionId)   ? $collectionId   : null,
-                'itemId'          => isset($itemId)         ? $itemId         : null,
-                'attachmentName'  => isset($attachmentName) ? $attachmentName : null
+                'deviceType'      => isset($deviceType)      ? $deviceType      : null,
+                'policyKey'       => isset($policyKey)       ? $policyKey       : null,
+                'saveInSent'      => isset($saveInSent)      ? $saveInSent      : false,
+                'collectionId'    => isset($collectionId)    ? $collectionId    : null,
+                'itemId'          => isset($itemId)          ? $itemId          : null,
+                'attachmentName'  => isset($attachmentName)  ? $attachmentName  : null,
+                'acceptMultipart' => isset($acceptMultiPart) ? $acceptMultiPart : false
             );
         } else {
             $result = array(
@@ -308,6 +346,7 @@ class Syncroton_Server
                 'collectionId'    => $request->getQuery('CollectionId'),
                 'itemId'          => $request->getQuery('ItemId'),
                 'attachmentName'  => $request->getQuery('AttachmentName'),
+                'acceptMultipart' => $request->getServer('HTTP_MS_ASACCEPTMULTIPART') == 'T'
             );
         }
         

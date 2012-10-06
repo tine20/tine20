@@ -25,6 +25,16 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         $_GET = array();
     }
     
+    protected function tearDown()
+    {
+        parent::tearDown();
+        
+        header_remove();
+    }
+    
+    /**
+     * @runInSeparateProcess
+     */
     public function testServer()
     {
         $_SERVER['REQUEST_METHOD']            = 'POST';
@@ -52,6 +62,9 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         $this->assertEquals('AwFqAEVcT0sDMAABUgM0OHJ1NDdmaGY3Z2hmN2ZnaDQAAU4DMwABAQEB', base64_encode($result));
     }
     
+    /**
+     * @runInSeparateProcess
+     */
     public function testBase64EncodedParameters()
     {
         $_SERVER['REQUEST_METHOD']            = 'POST';
@@ -80,5 +93,36 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         ob_end_clean();
         
         $this->assertEquals('AwFqAEVcT0sDMAABUgM0OHJ1NDdmaGY3Z2hmN2ZnaDQAAU4DMwABAQEB', base64_encode($result));
+    }
+    
+    /**
+     * @runInSeparateProcess
+     */
+    public function testFetchMultiPart()
+    {
+        $_SERVER['REQUEST_METHOD']            = 'POST';
+        $_SERVER['HTTP_MS_ASPROTOCOLVERSION'] = '2.5';
+        $_SERVER['HTTP_USER_AGENT']           = 'Apple-iPhone/705.18';
+        $_SERVER['HTTP_MS_ASACCEPTMULTIPART'] = 'T';
+        
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1356</SyncKey><CollectionId>48ru47fhf7ghf7fgh4</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $request = new Zend_Controller_Request_Http(Zend_Uri::factory('http://localhost/Microsoft-Server-ActiveSync?User=abc1234&DeviceId=Appl7R743U8YWH8&DeviceType=iPhone&Cmd=Sync'));
+        
+        ob_start();
+        
+        $server = new Syncroton_Server('abc1234', $request, $doc);
+        
+        $server->handle();
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('AQAAAAwAAAAqAAAAAwFqAEVcT0sDMAABUgM0OHJ1NDdmaGY3Z2hmN2ZnaDQAAU4DMwABAQEB', base64_encode($result));
     }
 }
