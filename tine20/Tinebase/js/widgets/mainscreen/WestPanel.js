@@ -142,6 +142,19 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     },
     
     /**
+     * initializes the stateif no state is saved
+     * overwrites the Ext.Component initState method
+     */
+    initState: function() {
+        var state = Ext.state.Manager.get(this.stateId) ? Ext.state.Manager.get(this.stateId) : this.getState();
+        
+        if(this.fireEvent('beforestaterestore', this, state) !== false){
+            this.applyState(Ext.apply({}, state));
+            this.fireEvent('staterestore', this, state);
+        }
+    },
+    
+    /**
      * applies state to cmp
      * 
      * @param {Object} state
@@ -193,7 +206,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.Tinebase.widgets.ContentTypeTreePanel}
      */
     getContentTypeTreePanel: function() {
-        
         if (this.hasContentTypeTreePanel && !this.contentTypeTreePanel) {
             this.contentTypeTreePanel = new Tine.widgets.ContentTypeTreePanel({
                 app: this.app, 
