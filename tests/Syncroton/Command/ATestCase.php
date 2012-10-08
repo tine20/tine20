@@ -80,6 +80,10 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         Syncroton_Registry::setEmailDataClass('Syncroton_Data_Email');
         Syncroton_Registry::setTasksDataClass('Syncroton_Data_Tasks');
         Syncroton_Registry::setGALDataClass('Syncroton_Data_Contacts');
+        
+        // speed up tests
+        Syncroton_Command_Ping::$pingTimeout = 1;
+        Syncroton_Command_Ping::$quietTime   = 1;
     }
 
     /**
@@ -90,6 +94,9 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Syncroton_Command_Ping::$pingTimeout = 60;
+        Syncroton_Command_Ping::$quietTime   = 120;
+        
         Syncroton_Registry::getTransactionManager()->rollBack();
         Syncroton_Registry::getDatabase()->query('delete from syncroton_device');
     }

@@ -123,245 +123,257 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         
         $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
         
+        
         if ($this->_globalWindowSize > $this->_maxWindowSize) {
             $this->_globalWindowSize = $this->_maxWindowSize;
         }
         
-        foreach ($xml->Collections->Collection as $xmlCollection) {
-            $collectionData = new Syncroton_Model_SyncCollection($xmlCollection);
-            
-            // got the folder synchronized to the device already
-            try {
-                $collectionData->folder = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
+        // restore _collections from previous request
+        if (isset($xml->Partial)) {
+            $this->_collections = array();
+        }
+        
+        // Collections element is option when Partial element is sent
+        if (isset($xml->Collections)) {
+            foreach ($xml->Collections->Collection as $xmlCollection) {
+                $collectionData = new Syncroton_Model_SyncCollection($xmlCollection);
                 
-            } catch (Syncroton_Exception_NotFound $senf) {
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData->collectionId} not found");
-                
-                // trigger INVALID_SYNCKEY instead of OBJECT_NOTFOUND when synckey is higher than 0
-                // to avoid a syncloop for the iPhone
-                if ($collectionData->syncKey > 0) {
-                    $collectionData->folder    = new Syncroton_Model_Folder(array(
-                        'deviceId' => $this->_device,
-                        'serverId'  => $collectionData->collectionId
-                    ));
-                }
-                
-                $this->_collections[] = $collectionData;
-                
-                continue;
-            }
-            
-            if ($this->_logger instanceof Zend_Log) 
-                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " SyncKey is {$collectionData->syncKey} Class: {$collectionData->folder->class} CollectionId: {$collectionData->collectionId}");
-            
-            // initial synckey
-            if($collectionData->syncKey === 0) {
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
-                
-                // reset sync state for this folder
-                $this->_syncStateBackend->resetState($this->_device, $collectionData->folder);
-                $this->_contentStateBackend->resetState($this->_device, $collectionData->folder);
-            
-                $collectionData->syncState    = new Syncroton_Model_SyncState(array(
-                    'device_id' => $this->_device,
-                    'counter'   => 0,
-                    'type'      => $collectionData->folder,
-                    'lastsync'  => $this->_syncTimeStamp
-                ));
-                
-                $this->_collections[] = $collectionData;
-                
-                continue;
-            }
-            
-            // check for invalid sycnkey
-            if(($collectionData->syncState = $this->_syncStateBackend->validate($this->_device, $collectionData->folder, $collectionData->syncKey)) === false) {
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData->syncKey} provided");
-                
-                // reset sync state for this folder
-                $this->_syncStateBackend->resetState($this->_device, $collectionData->folder);
-                $this->_contentStateBackend->resetState($this->_device, $collectionData->folder);
-                
-                $this->_collections[] = $collectionData;
-                
-                continue;
-            }
-            
-            $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class, $this->_device, $this->_syncTimeStamp);
-            
-            switch($collectionData->folder->class) {
-                case Syncroton_Data_Factory::CLASS_CALENDAR:
-                    $dataClass = 'Syncroton_Model_Event';
+                // got the folder synchronized to the device already
+                try {
+                    $collectionData->folder = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
                     
-                    break;
-                    
-                case Syncroton_Data_Factory::CLASS_CONTACTS:
-                    $dataClass = 'Syncroton_Model_Contact';
-                    
-                    break;
-                    
-                case Syncroton_Data_Factory::CLASS_EMAIL:
-                    $dataClass = 'Syncroton_Model_Email';
-                    
-                    break;
-                    
-                case Syncroton_Data_Factory::CLASS_TASKS:
-                    $dataClass = 'Syncroton_Model_Task';
-                    
-                    break;
-                    
-                default:
-                    throw new Syncroton_Exception_UnexpectedValue('invalid class provided');
-                    
-                    break;
-            }
-            
-            $clientModifications = array(
-                'added'            => array(),
-                'changed'          => array(),
-                'deleted'          => array(),
-                'forceAdd'         => array(),
-                'forceChange'      => array(),
-                'toBeFetched'      => array(),
-            );
-            
-            // handle incoming data
-            if($collectionData->hasClientAdds()) {
-                $adds = $collectionData->getClientAdds();
-                
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
-                
-                foreach ($adds as $add) {
+                } catch (Syncroton_Exception_NotFound $senf) {
                     if ($this->_logger instanceof Zend_Log) 
-                        $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
-
-                    try {
-                        if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . " adding entry as new");
-                        
-                        $serverId = $dataController->createEntry($collectionData->collectionId, new $dataClass($add->ApplicationData));
-                        
-                        $clientModifications['added'][$serverId] = array(
-                            'clientId'     => (string)$add->ClientId,
-                            'serverId'     => $serverId,
-                            'status'       => self::STATUS_SUCCESS,
-                            'contentState' => $this->_contentStateBackend->create(new Syncroton_Model_Content(array(
-                                'device_id'        => $this->_device,
-                                'folder_id'        => $collectionData->folder,
-                                'contentid'        => $serverId,
-                                'creation_time'    => $this->_syncTimeStamp,
-                                'creation_synckey' => $collectionData->syncKey + 1
-                            )))
-                        );
-                        
-                    } catch (Exception $e) {
-                        if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
-                        $clientModifications['added'][] = array(
-                            'clientId' => (string)$add->ClientId,
-                            'status'   => self::STATUS_SERVER_ERROR
-                        );
+                        $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " folder {$collectionData->collectionId} not found");
+                    
+                    // trigger INVALID_SYNCKEY instead of OBJECT_NOTFOUND when synckey is higher than 0
+                    // to avoid a syncloop for the iPhone
+                    if ($collectionData->syncKey > 0) {
+                        $collectionData->folder    = new Syncroton_Model_Folder(array(
+                            'deviceId' => $this->_device,
+                            'serverId'  => $collectionData->collectionId
+                        ));
                     }
+                    
+                    $this->_collections[$collectionData->collectionId] = $collectionData;
+                    
+                    continue;
                 }
-            }
-            
-            // handle changes, but only if not first sync
-            if($collectionData->syncKey > 1 && $collectionData->hasClientChanges()) {
-                $changes = $collectionData->getClientChanges();
                 
                 if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " SyncKey is {$collectionData->syncKey} Class: {$collectionData->folder->class} CollectionId: {$collectionData->collectionId}");
                 
-                foreach ($changes as $change) {
-                    $serverId = (string)$change->ServerId;
+                // initial synckey
+                if($collectionData->syncKey === 0) {
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " initial client synckey 0 provided");
                     
-                    try {
-                        $dataController->updateEntry($collectionData->collectionId, $serverId, new $dataClass($change->ApplicationData));
-                        $clientModifications['changed'][$serverId] = self::STATUS_SUCCESS;
+                    // reset sync state for this folder
+                    $this->_syncStateBackend->resetState($this->_device, $collectionData->folder);
+                    $this->_contentStateBackend->resetState($this->_device, $collectionData->folder);
+                
+                    $collectionData->syncState    = new Syncroton_Model_SyncState(array(
+                        'device_id' => $this->_device,
+                        'counter'   => 0,
+                        'type'      => $collectionData->folder,
+                        'lastsync'  => $this->_syncTimeStamp
+                    ));
+                    
+                    $this->_collections[$collectionData->collectionId] = $collectionData;
+                    
+                    continue;
+                }
+                
+                // check for invalid sycnkey
+                if(($collectionData->syncState = $this->_syncStateBackend->validate($this->_device, $collectionData->folder, $collectionData->syncKey)) === false) {
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey {$collectionData->syncKey} provided");
+                    
+                    // reset sync state for this folder
+                    $this->_syncStateBackend->resetState($this->_device, $collectionData->folder);
+                    $this->_contentStateBackend->resetState($this->_device, $collectionData->folder);
+                    
+                    $this->_collections[$collectionData->collectionId] = $collectionData;
+                    
+                    continue;
+                }
+                
+                $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class, $this->_device, $this->_syncTimeStamp);
+                
+                switch($collectionData->folder->class) {
+                    case Syncroton_Data_Factory::CLASS_CALENDAR:
+                        $dataClass = 'Syncroton_Model_Event';
                         
-                    } catch (Syncroton_Exception_AccessDenied $e) {
-                        $clientModifications['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
-                        $clientModifications['forceChange'][$serverId] = $serverId;
+                        break;
                         
-                    } catch (Syncroton_Exception_NotFound $e) {
-                        // entry does not exist anymore, will get deleted automaticaly
-                        $clientModifications['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
+                    case Syncroton_Data_Factory::CLASS_CONTACTS:
+                        $dataClass = 'Syncroton_Model_Contact';
                         
-                    } catch (Exception $e) {
+                        break;
+                        
+                    case Syncroton_Data_Factory::CLASS_EMAIL:
+                        $dataClass = 'Syncroton_Model_Email';
+                        
+                        break;
+                        
+                    case Syncroton_Data_Factory::CLASS_TASKS:
+                        $dataClass = 'Syncroton_Model_Task';
+                        
+                        break;
+                        
+                    default:
+                        throw new Syncroton_Exception_UnexpectedValue('invalid class provided');
+                        
+                        break;
+                }
+                
+                $clientModifications = array(
+                    'added'            => array(),
+                    'changed'          => array(),
+                    'deleted'          => array(),
+                    'forceAdd'         => array(),
+                    'forceChange'      => array(),
+                    'toBeFetched'      => array(),
+                );
+                
+                // handle incoming data
+                if($collectionData->hasClientAdds()) {
+                    $adds = $collectionData->getClientAdds();
+                    
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($adds) . " entries to be added to server");
+                    
+                    foreach ($adds as $add) {
                         if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
-                        // something went wrong while trying to update the entry
-                        $clientModifications['changed'][$serverId] = self::STATUS_SERVER_ERROR;
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " add entry with clientId " . (string) $add->ClientId);
+    
+                        try {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . " adding entry as new");
+                            
+                            $serverId = $dataController->createEntry($collectionData->collectionId, new $dataClass($add->ApplicationData));
+                            
+                            $clientModifications['added'][$serverId] = array(
+                                'clientId'     => (string)$add->ClientId,
+                                'serverId'     => $serverId,
+                                'status'       => self::STATUS_SUCCESS,
+                                'contentState' => $this->_contentStateBackend->create(new Syncroton_Model_Content(array(
+                                    'device_id'        => $this->_device,
+                                    'folder_id'        => $collectionData->folder,
+                                    'contentid'        => $serverId,
+                                    'creation_time'    => $this->_syncTimeStamp,
+                                    'creation_synckey' => $collectionData->syncKey + 1
+                                )))
+                            );
+                            
+                        } catch (Exception $e) {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to add entry " . $e->getMessage());
+                            $clientModifications['added'][] = array(
+                                'clientId' => (string)$add->ClientId,
+                                'status'   => self::STATUS_SERVER_ERROR
+                            );
+                        }
                     }
                 }
-            }
-            
-            // handle deletes, but only if not first sync
-            if($collectionData->hasClientDeletes()) {
-                $deletes = $collectionData->getClientDeletes();
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
                 
-                foreach ($deletes as $delete) {
-                    $serverId = (string)$delete->ServerId;
+                // handle changes, but only if not first sync
+                if($collectionData->syncKey > 1 && $collectionData->hasClientChanges()) {
+                    $changes = $collectionData->getClientChanges();
                     
-                    try {
-                        // check if we have sent this entry to the phone
-                        $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData->folder, $serverId);
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($changes) . " entries to be updated on server");
+                    
+                    foreach ($changes as $change) {
+                        $serverId = (string)$change->ServerId;
                         
                         try {
-                            $dataController->deleteEntry($collectionData->collectionId, $serverId, $collectionData);
+                            $dataController->updateEntry($collectionData->collectionId, $serverId, new $dataClass($change->ApplicationData));
+                            $clientModifications['changed'][$serverId] = self::STATUS_SUCCESS;
                             
-                        } catch(Syncroton_Exception_NotFound $e) {
-                            if ($this->_logger instanceof Zend_Log) 
-                                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
+                        } catch (Syncroton_Exception_AccessDenied $e) {
+                            $clientModifications['changed'][$serverId] = self::STATUS_CONFLICT_MATCHING_THE_CLIENT_AND_SERVER_OBJECT;
+                            $clientModifications['forceChange'][$serverId] = $serverId;
                             
-                        } catch (Syncroton_Exception $e) {
+                        } catch (Syncroton_Exception_NotFound $e) {
+                            // entry does not exist anymore, will get deleted automaticaly
+                            $clientModifications['changed'][$serverId] = self::STATUS_OBJECT_NOT_FOUND;
+                            
+                        } catch (Exception $e) {
                             if ($this->_logger instanceof Zend_Log) 
-                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
-                            $clientModifications['forceAdd'][$serverId] = $serverId;
+                                $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " failed to update entry " . $e);
+                            // something went wrong while trying to update the entry
+                            $clientModifications['changed'][$serverId] = self::STATUS_SERVER_ERROR;
                         }
-                        $this->_contentStateBackend->delete($state);
+                    }
+                }
+                
+                // handle deletes, but only if not first sync
+                if($collectionData->hasClientDeletes()) {
+                    $deletes = $collectionData->getClientDeletes();
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($deletes) . " entries to be deleted on server");
+                    
+                    foreach ($deletes as $delete) {
+                        $serverId = (string)$delete->ServerId;
                         
-                    } catch (Syncroton_Exception_NotFound $senf) {
-                        if ($this->_logger instanceof Zend_Log) 
-                            $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
-                        // should we send a special status???
-                        //$collectionData->deleted[$serverId] = self::STATUS_SUCCESS;
+                        try {
+                            // check if we have sent this entry to the phone
+                            $state = $this->_contentStateBackend->getContentState($this->_device, $collectionData->folder, $serverId);
+                            
+                            try {
+                                $dataController->deleteEntry($collectionData->collectionId, $serverId, $collectionData);
+                                
+                            } catch(Syncroton_Exception_NotFound $e) {
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but entry was not found');
+                                
+                            } catch (Syncroton_Exception $e) {
+                                if ($this->_logger instanceof Zend_Log) 
+                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' tried to delete entry ' . $serverId . ' but a error occured: ' . $e->getMessage());
+                                $clientModifications['forceAdd'][$serverId] = $serverId;
+                            }
+                            $this->_contentStateBackend->delete($state);
+                            
+                        } catch (Syncroton_Exception_NotFound $senf) {
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->info(__METHOD__ . '::' . __LINE__ . ' ' . $serverId . ' should have been removed from client already');
+                            // should we send a special status???
+                            //$collectionData->deleted[$serverId] = self::STATUS_SUCCESS;
+                        }
+                        
+                        $clientModifications['deleted'][$serverId] = self::STATUS_SUCCESS;
+                    }
+                }
+                
+                // handle fetches, but only if not first sync
+                if($collectionData->syncKey > 1 && $collectionData->hasClientFetches()) {
+                    // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
+                    // some prevoius versions of iOS did not set GetChanges to 0 for fetches. Let's enforce getChanges to false here.
+                    $collectionData->getChanges = false;
+                    
+                    $fetches = $collectionData->getClientFetches();
+                    if ($this->_logger instanceof Zend_Log) 
+                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
+                    
+                    $toBeFecthed = array();
+                    
+                    foreach ($fetches as $fetch) {
+                        $serverId = (string)$fetch->ServerId;
+                        
+                        $toBeFetched[$serverId] = $serverId;
                     }
                     
-                    $clientModifications['deleted'][$serverId] = self::STATUS_SUCCESS;
-                }
-            }
-            
-            // handle fetches, but only if not first sync
-            if($collectionData->syncKey > 1 && $collectionData->hasClientFetches()) {
-                // the default value for GetChanges is 1. If the phone don't want the changes it must set GetChanges to 0
-                // some prevoius versions of iOS did not set GetChanges to 0 for fetches. Let's enforce getChanges to false here.
-                $collectionData->getChanges = false;
-                
-                $fetches = $collectionData->getClientFetches();
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found " . count($fetches) . " entries to be fetched from server");
-                
-                $toBeFecthed = array();
-                
-                foreach ($fetches as $fetch) {
-                    $serverId = (string)$fetch->ServerId;
-                    
-                    $toBeFetched[$serverId] = $serverId;
+                    $collectionData->toBeFetched = $toBeFetched;
                 }
                 
-                $collectionData->toBeFetched = $toBeFetched;
+                $this->_collections[$collectionData->collectionId] = $collectionData;
+                $this->_modifications[$collectionData->collectionId] = $clientModifications;
             }
-            
-            $this->_collections[] = $collectionData;
-            $this->_modifications[$collectionData->collectionId] = $clientModifications;
         }
+        
+        // store current value of $this->_collections for next Sync command request
+        
     }
     
     /**
@@ -381,6 +393,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             $intervalStart = time();
             
             do {
+                // take a break to save battery lifetime
+                sleep(Syncroton_Command_Ping::$pingTimeout);
+                
+                $now = new DateTime('now', new DateTimeZone('utc'));
+                
                 foreach($this->_collections as $collectionData) {
                     // countinue immediately if folder does not exist 
                     if (! ($collectionData->folder instanceof Syncroton_Model_IFolder)) {
@@ -391,6 +408,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         break 2;
                         
                     } else {
+                        // safe battery time by skipping folders which got synchronied less than Syncroton_Command_Ping::$quietTime seconds ago
+                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Command_Ping::$quietTime) {
+                            continue;
+                        }
+                        
                         $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class , $this->_device, $this->_syncTimeStamp);
                         
                         $estimate = $dataController->getCountOfChanges($this->_contentStateBackend, $collectionData->folder, $collectionData->syncState);
@@ -401,9 +423,6 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         }
                     }
                 }
-                
-                // wait some PING_TIMEOUT seconds until neext loop
-                sleep(Syncroton_Command_Ping::PING_TIMEOUT);
                 
             } while (time() - $intervalStart < $this->_heartbeatInterval);
         }
