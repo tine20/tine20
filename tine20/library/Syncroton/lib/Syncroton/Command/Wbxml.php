@@ -118,6 +118,13 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     protected $_logger;
     
     /**
+     * list of part streams
+     * 
+     * @var array
+     */
+    protected $_parts = array();
+    
+    /**
      * the constructor
      *
      * @param  mixed                   $requestBody
@@ -183,5 +190,15 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
                 }
             }
         }
+    }
+    
+    /**
+     * return array of part streams
+     * 
+     * @return array
+     */
+    public function getParts()
+    {
+        return $this->_parts;
     }
 }

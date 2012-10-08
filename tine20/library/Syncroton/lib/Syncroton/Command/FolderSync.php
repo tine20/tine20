@@ -31,7 +31,6 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
 
     /**
      * some usefull constants for working with the xml files
-     *
      */
     const FOLDERTYPE_GENERIC_USER_CREATED   = 1;
     const FOLDERTYPE_INBOX                  = 2;
@@ -115,12 +114,10 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
 
             return $this->_outputDom;
         }
-        
-        $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
-        
+
         $adds = array();
         $deletes = array();
-        
+
         foreach($this->_classes as $class) {
             try {
                 $dataController = Syncroton_Data_Factory::factory($class, $this->_device, $this->_syncTimeStamp);
@@ -130,25 +127,45 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " no data backend defined for class: " . $class);
                 continue;
             }
-            
-            // retrieve all folders available in data backend
-            $serverFolders = $dataController->getAllFolders();
-            
-            // retrieve all folders sent to client
-            $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
-            
+
+            try {
+                // retrieve all folders available in data backend
+                $serverFolders = $dataController->getAllFolders();
+
+                // retrieve all folders sent to client
+                $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
+                
+            } catch (Exception $e) {
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " Syncing folder hierarchy failed: " . $e->getMessage());
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Syncing folder hierarchy failed: " . $e->getTraceAsString());
+
+                // The Status element is global for all collections. If one collection fails,
+                // a failure status MUST be returned for all collections.
+                if ($e instanceof Syncroton_Exception_Status) {
+                    $status = $e->getCode();
+                } else {
+                    $status = Syncroton_Exception_Status_FolderSync::UNKNOWN_ERROR;
+                }
+
+                $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', $status));
+
+                return $this->_outputDom;
+            }
+
             $serverFoldersIds = array_keys($serverFolders);
-            
+
             // is this the first sync?
-            if($this->_syncState->counter == 0) {
+            if ($this->_syncState->counter == 0) {
                 $clientFoldersIds = array();
             } else {
                 $clientFoldersIds = array_keys($clientFolders);
-            } 
-            
+            }
+
             // calculate added entries
             $serverDiff = array_diff($serverFoldersIds, $clientFoldersIds);
-            foreach($serverDiff as $serverFolderId) {
+            foreach ($serverDiff as $serverFolderId) {
                 // have we created a folderObject in syncroton_folder before?
                 if (isset($clientFolders[$serverFolderId])) {
                     $add = $clientFolders[$serverFolderId];
@@ -159,17 +176,19 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
                     unset($add->id);
                 }
                 $add->class = $class;
-                
+
                 $adds[] = $add;
             }
-            
+
             // calculate deleted entries
             $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
-            foreach($serverDiff as $serverFolderId) {
+            foreach ($serverDiff as $serverFolderId) {
                 $deletes[] = $clientFolders[$serverFolderId];
             }
         }
-        
+
+        $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
+
         $count = count($adds) + /*count($changes) + */count($deletes);
         if($count > 0) {
             $this->_syncState->counter++;

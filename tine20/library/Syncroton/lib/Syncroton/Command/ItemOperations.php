@@ -105,6 +105,8 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
     
     /**
      * generate ItemOperations response
+     * 
+     * @todo add multipart support to all types of fetches
      */
     public function getResponse()
     {
@@ -151,9 +153,28 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     $fetchTag->appendChild($this->_outputDom->createElementNS('uri:AirSyncBase', 'FileReference', $fetch['fileReference']));
 
                     $properties = $this->_outputDom->createElementNS('uri:ItemOperations', 'Properties');
-                    $dataController
-                        ->getFileReference($fetch['fileReference'])
-                        ->appendXML($properties, $this->_device);
+                    
+                    $fileReference = $dataController->getFileReference($fetch['fileReference']);
+                    
+                    // unset data field and move content to stream
+                    if ($this->_requestParameters['acceptMultipart'] == true) {
+                        $partStream = fopen("php://temp", 'r+');
+                        
+                        if (is_resource($fileReference->data)) {
+                            stream_copy_to_stream($fileReference->data, $partStream);
+                        } else {
+                            fwrite($partStream, $fileReference->data);
+                        }
+                        
+                        unset($fileReference->data);
+                        
+                        $this->_parts[] = $partStream;
+                        
+                        $fileReference->part = count($this->_parts);
+                    }
+                    
+                    $fileReference->appendXML($properties, $this->_device);
+                    
                     $fetchTag->appendChild($properties);
                 }
             } catch (Syncroton_Exception_NotFound $e) {

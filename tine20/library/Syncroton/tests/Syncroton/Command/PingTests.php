@@ -32,27 +32,6 @@ class Syncroton_Command_PingTests extends Syncroton_Command_ATestCase
     }
     
     /**
-     * (non-PHPdoc)
-     * @see Syncroton_Command_ATestCase::setUp()
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        
-        // speed up tests
-        Syncroton_Command_Ping::$pingTimeout = 0;
-        Syncroton_Command_Ping::$quietTime   = 0;
-    }
-    
-    protected function tearDown()
-    {
-        Syncroton_Command_Ping::$pingTimeout = 60;
-        Syncroton_Command_Ping::$quietTime   = 120;
-        
-        parent::tearDown();
-    }
-    
-    /**
      * 
      */
     public function testPingWithNoSyncRunningBefore()

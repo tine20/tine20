@@ -26,6 +26,7 @@ class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
         ),
         'ItemOperations' => array(
             'data'        => array('type' => 'string', 'encoding' => 'base64'),
+            'part'        => array('type' => 'number')
         )
     );
         

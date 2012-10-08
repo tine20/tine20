@@ -188,9 +188,9 @@ class Syncroton_Model_SyncCollection
             'collectionId'     => (string)$xmlCollection->CollectionId,
             'deletesAsMoves'   => isset($xmlCollection->DeletesAsMoves)   && (string)$xmlCollection->DeletesAsMoves   === '0' ? false : true,
             'conversationMode' => isset($xmlCollection->ConversationMode) && (string)$xmlCollection->ConversationMode === '0' ? false : true,
-            'getChanges'       => isset($xmlCollection->GetChanges) && (string) $xmlCollection->GetChanges === '0' ? false : true,
+            'getChanges'       => isset($xmlCollection->GetChanges)       && (string) $xmlCollection->GetChanges      === '0' ? false : true,
             'windowSize'       => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
-            'class'            => isset($xmlCollection->Class) ? (string)$xmlCollection->Class : null,
+            'class'            => isset($xmlCollection->Class)      ? (string)$xmlCollection->Class   : null,
             'options'          => array(
                 'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
                 'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,

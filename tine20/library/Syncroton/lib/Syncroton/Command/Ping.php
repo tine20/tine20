@@ -108,6 +108,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
             $folderWithChanges = array();
             
             do {
+                // take a break to save battery lifetime
                 sleep(self::$pingTimeout);
                 
                 $now = new DateTime('now', new DateTimeZone('utc'));
