@@ -460,58 +460,72 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $serverModifications = $collectionData->syncState->pendingdata;
                         
                     } else {
-                        // fetch entries added since last sync
-                        $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData->folder);
-                        $allServerEntries = $dataController->getServerEntries($collectionData->collectionId, $collectionData->options['filterType']);
-                        
-                        // add entries
-                        $serverDiff = array_diff($allServerEntries, $allClientEntries);
-                        // add entries which produced problems during delete from client
-                        $serverModifications['added'] = $clientModifications['forceAdd'];
-                        // add entries not yet sent to client
-                        $serverModifications['added'] = array_unique(array_merge($serverModifications['added'], $serverDiff));
-            
-                        # @todo still needed?
-                        foreach($serverModifications['added'] as $id => $serverId) {
-                            // skip entries added by client during this sync session
-                            if(isset($clientModifications['added'][$serverId]) && !isset($clientModifications['forceAdd'][$serverId])) {
-                                if ($this->_logger instanceof Zend_Log)
-                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
-                                unset($serverModifications['added'][$id]);
+                        try {
+                            // fetch entries added since last sync
+                            $allClientEntries = $this->_contentStateBackend->getFolderState($this->_device, $collectionData->folder);
+                            $allServerEntries = $dataController->getServerEntries($collectionData->collectionId, $collectionData->options['filterType']);
+
+                            // add entries
+                            $serverDiff = array_diff($allServerEntries, $allClientEntries);
+                            // add entries which produced problems during delete from client
+                            $serverModifications['added'] = $clientModifications['forceAdd'];
+                            // add entries not yet sent to client
+                            $serverModifications['added'] = array_unique(array_merge($serverModifications['added'], $serverDiff));
+
+                            // @todo still needed?
+                            foreach($serverModifications['added'] as $id => $serverId) {
+                                // skip entries added by client during this sync session
+                                if(isset($clientModifications['added'][$serverId]) && !isset($clientModifications['forceAdd'][$serverId])) {
+                                    if ($this->_logger instanceof Zend_Log)
+                                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped added entry: " . $serverId);
+                                    unset($serverModifications['added'][$id]);
+                                }
                             }
+
+                            // entries to be deleted
+                            $serverModifications['deleted'] = array_diff($allClientEntries, $allServerEntries);
+
+                            // fetch entries changed since last sync
+                            $serverModifications['changed'] = $dataController->getChangedEntries($collectionData->collectionId, $collectionData->syncState->lastsync, $this->_syncTimeStamp);
+                            $serverModifications['changed'] = array_merge($serverModifications['changed'], $clientModifications['forceChange']);
+
+                            foreach($serverModifications['changed'] as $id => $serverId) {
+                                // skip entry, if it got changed by client during current sync
+                                if(isset($clientModifications['changed'][$serverId]) && !isset($clientModifications['forceChange'][$serverId])) {
+                                    if ($this->_logger instanceof Zend_Log)
+                                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
+                                    unset($serverModifications['changed'][$id]);
+                                }
+                                // skip entry, make sure we don't sent entries already added by client in this request
+                                else if (isset($clientModifications['added'][$serverId]) && !isset($clientModifications['forceAdd'][$serverId])) {
+                                    if ($this->_logger instanceof Zend_Log)
+                                        $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped change for added entry: " . $serverId);
+                                    unset($serverModifications['changed'][$id]);
+                                }
+                            }
+
+                            // entries comeing in scope are already in $serverModifications['added'] and do not need to
+                            // be send with $serverCanges
+                            $serverModifications['changed'] = array_diff($serverModifications['changed'], $serverModifications['added']);
+                        } catch (Exception $e) {
+                            if ($this->_logger instanceof Zend_Log)
+                                $this->_logger->crit(__METHOD__ . '::' . __LINE__ . " Folder state checking failed: " . $e->getMessage());
+                            if ($this->_logger instanceof Zend_Log)
+                                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Folder state checking failed: " . $e->getTraceAsString());
+                            
+                            // Prevent from removing client entries when getServerEntries() fails
+                            // @todo: should we set Status and break the loop here?
+                            $serverModifications = array(
+                                'added'   => array(),
+                                'changed' => array(),
+                                'deleted' => array(),
+                            );
                         }
-            
-                        // entries to be deleted
-                        $serverModifications['deleted'] = array_diff($allClientEntries, $allServerEntries);
-            
-                        // fetch entries changed since last sync
-                        $serverModifications['changed'] = $dataController->getChangedEntries($collectionData->collectionId, $collectionData->syncState->lastsync, $this->_syncTimeStamp);
-                        $serverModifications['changed'] = array_merge($serverModifications['changed'], $clientModifications['forceChange']);
-            
-                        foreach($serverModifications['changed'] as $id => $serverId) {
-                            // skip entry, if it got changed by client during current sync
-                            if(isset($clientModifications['changed'][$serverId]) && !isset($clientModifications['forceChange'][$serverId])) {
-                                if ($this->_logger instanceof Zend_Log)
-                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped changed entry: " . $serverId);
-                                unset($serverModifications['changed'][$id]);
-                            }
-                            // skip entry, make sure we don't sent entries already added by client in this request
-                            else if (isset($clientModifications['added'][$serverId]) && !isset($clientModifications['forceAdd'][$serverId])) {
-                                if ($this->_logger instanceof Zend_Log)
-                                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " skipped change for added entry: " . $serverId);
-                                unset($serverModifications['changed'][$id]);
-                            }
-                        }
-            
-                        // entries comeing in scope are already in $serverModifications['added'] and do not need to
-                        // be send with $serverCanges
-                        $serverModifications['changed'] = array_diff($serverModifications['changed'], $serverModifications['added']);
                     }
-                
+
                     if ($this->_logger instanceof Zend_Log)
                         $this->_logger->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverModifications['added']) . '/' . count($serverModifications['changed']) . '/' . count($serverModifications['deleted'])  . ' entries for sync from server to client');
                 }
-                
 
                 // collection header
                 $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
