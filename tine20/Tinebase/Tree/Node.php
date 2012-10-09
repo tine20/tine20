@@ -220,7 +220,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     /* on     */ $this->_db->quoteIdentifier("level{$level}_fileobjects.id") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.id") . ' AND ' . $this->_db->quoteIdentifier("level{$level}_fileobjects.revision") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.revision"),
                     /* select */ array("level{$level}_hash" => 'hash', "level{$level}_size" => 'size')
                 )
-                ->where("level{$level}.name = ?", $pathParts[$level]);
+                ->where($this->_db->quoteIdentifier("level{$level}.name") . ' = ?', $pathParts[$level]);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());

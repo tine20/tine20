@@ -60,7 +60,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'to'            => array('custom' => true, 'requiredCols' => array('to' => 'felamimail_cache_message_to.*')),
         'cc'            => array('custom' => true, 'requiredCols' => array('cc' => 'felamimail_cache_message_cc.*')),
         'bcc'           => array('custom' => true, 'requiredCols' => array('bcc' => 'felamimail_cache_message_bcc.*')),
-        'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_message_flag.flag')),
+        'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_msg_flag.flag')),
         'account_id'    => array('custom' => true),
     );
 

@@ -173,7 +173,7 @@ class Setup_Controller
         // check pgsql requirements
         $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
         
-        // check oracle requirements MOD
+        // check oracle requirements
         $missingOracleExtensions = array_diff(array('oci8'), $loadedExtensions);
 
         if (! empty($missingMysqlExtensions) && ! empty($missingPgsqlExtensions) && ! empty($missingOracleExtensions)) {
@@ -1396,6 +1396,7 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
         $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
         $disabledFK = FALSE;
+        $db = Tinebase_Core::getDb();
         
         do {
             $oldCount = count($applicationTables);
@@ -1428,7 +1429,9 @@ class Setup_Controller
                         unset($applicationTables[$key]);
                     } else {
                         Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Disabling foreign key checks ... ");
-                        Tinebase_Core::getDb()->query("SET FOREIGN_KEY_CHECKS=0");
+                        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                            $db->query("SET FOREIGN_KEY_CHECKS=0");
+                        }
                         $disabledFK = TRUE;
                     }
                 }
@@ -1440,7 +1443,9 @@ class Setup_Controller
         } while (count($applicationTables) > 0);
         
         if ($disabledFK) {
-            Tinebase_Core::getDb()->query("SET FOREIGN_KEY_CHECKS=1");
+            if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                $db->query("SET FOREIGN_KEY_CHECKS=1");
+            }
         }
         
         if ($_application->name != 'Tinebase') {

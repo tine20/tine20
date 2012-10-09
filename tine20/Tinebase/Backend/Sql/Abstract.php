@@ -449,7 +449,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         $this->_addSecondarySort($_pagination);
         $_pagination->appendPaginationSql($select);
-        
+
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+
         if ($getIdValuePair) {
             return $this->_fetch($select, self::FETCH_MODE_PAIR);
         } else {

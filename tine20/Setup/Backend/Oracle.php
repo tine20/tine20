@@ -34,7 +34,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             'defaultLength' => 1),
         'text' => array(
             'lengthTypes' => array(
-                256 => 'VARCHAR2', //@todo this should be 255 indeed but we have 256 in our setup.xml files
+                4000 => 'VARCHAR2',  
                 4294967295 => 'CLOB'),
             'defaultType' => 'CLOB',
             'defaultLength' => null),
@@ -50,10 +50,15 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             'defaultLength' => 25),
         'date' => array(
             'defaultType' => 'date'),
+        'time' => array(
+            'defaultType' => 'VARCHAR2',
+            'defaultLength' => 10),
         'blob' => array(
             'defaultType' => 'BLOB'),
         'clob' => array(
-            'defaultType' => 'CLOB'),
+            //'defaultType' => 'CLOB'),
+            'defaultType' => 'VARCHAR2',
+            'defaultLength' => 4000), 
         'enum' => array(
             'defaultType' => 'VARCHAR2',
             'declarationMethod' => '_getSpecialFieldDeclarationEnum')
@@ -65,10 +70,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     CONST CONSTRAINT_TYPE_UNIQUE    = 'U';
     
     protected $_table ='';
-   
+    
     protected $_autoincrementId = '';
     
-    protected static $_sequence_postfix = '_seq';
+    protected static $_sequence_postfix = '_s';
     
     /**
      * takes the xml stream and creates a table
@@ -108,7 +113,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     protected function _getIncrementSequenceName($_tableName)
     {
-        return SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . self::$_sequence_postfix;
+        return SQL_TABLE_PREFIX . substr($_tableName, 0, 25) . self::$_sequence_postfix;
+        return $this->sequencename;
     }
     
     public function getIncrementSequence($_tableName) 
@@ -129,7 +135,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     protected function _getIncrementTriggerName($_tableName) 
     {
-        return SQL_TABLE_PREFIX . substr($_tableName, 0, 20) . '_tri';
+        return SQL_TABLE_PREFIX . substr($_tableName, 0, 25) . '_t';
     }
     
     public function getIncrementTrigger($_tableName) 
@@ -138,7 +144,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             BEFORE INSERT ON "' .  SQL_TABLE_PREFIX . $_tableName . '"
             FOR EACH ROW
             BEGIN
-            SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 20) . '_seq".NEXTVAL INTO :NEW."' . $this->_autoincrementId .'" FROM DUAL;
+            SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 25) . self::$_sequence_postfix .'".NEXTVAL INTO :NEW."' . $this->_autoincrementId .'" FROM DUAL;
             END;
         ';
     
@@ -169,7 +175,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         }
         
         $statement .= implode(",\n", $statementSnippets) . "\n)";
-        
+        // remove ON DELETE RESTRICT, which is on default
+        $statement = str_replace('ON DELETE RESTRICT', '', $statement);
         // auto shutup by cweiss: echo "<pre>$statement</pre>";
         
         return $statement;

@@ -67,7 +67,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
                 . $this->_db->quoteIdentifier($this->_tableName . '.revision') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision'),
-            /* select */ array('revision', 'hash', 'size')
+            /* select */ array('hash', 'size')
         );
             
         return $select;

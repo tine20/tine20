@@ -62,7 +62,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'preserve'  => TRUE,
         ),
         'flags'    => array(
-            'table'         => 'felamimail_cache_message_flag',
+            'table'         => 'felamimail_cache_msg_flag',
             'joinOn'        => 'message_id',
             'field'         => 'flag',
             'preserve'  => TRUE,
@@ -97,7 +97,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'limit' => $_limit,
         ), TRUE) : NULL;
         
-        return $this->search($filter, $pagination, array('messageuid' => 'messageuid', 'id' => self::IDCOL, 'flags' => 'felamimail_cache_message_flag.flag'));
+        return $this->search($filter, $pagination, array('messageuid' => 'messageuid', 'id' => self::IDCOL, 'flags' => 'felamimail_cache_msg_flag.flag'));
     }
         
     /**

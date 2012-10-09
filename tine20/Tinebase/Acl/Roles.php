@@ -360,7 +360,7 @@ class Tinebase_Acl_Roles
         $newId = $this->_rolesTable->insert($data);
         
         if ($newId === NULL) {
-           $newId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'roles', 0,26) . '_seq');
+           $newId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'roles', 0,25) . '_s');
         }
         
         $role = $this->getRoleById($newId);
@@ -401,11 +401,10 @@ class Tinebase_Acl_Roles
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             // delete role acls/members first
-            $this->_roleMembersTable->delete( "role_id in ( $ids )");
-            $this->_roleRightsTable->delete( "role_id in ( $ids )");
-            
+            $this->_roleMembersTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)', $ids ));
+            $this->_roleRightsTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)',  $ids ));
             // delete role
-            $this->_rolesTable->delete( "id in ( $ids )");
+            $this->_rolesTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', $ids));
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             

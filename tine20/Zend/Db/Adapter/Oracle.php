@@ -129,11 +129,12 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         }
 
         $connectionFuncName = ($this->_config['persistent'] == true) ? 'oci_pconnect' : 'oci_connect';
+        $connectionDatabase = (($this->_config['host'] == 'localhost' || $this->_config['host'] == '127.0.0.1') ? $this->_config['dbname'] : $this->_config['host'].'/'.$this->_config['dbname']);
         
         $this->_connection = @$connectionFuncName(
                 $this->_config['username'],
                 $this->_config['password'],
-                $this->_config['host'].'/'.$this->_config['dbname'],
+                $connectionDatabase,
                 $this->_config['charset']);
 
         // check the connection
@@ -144,6 +145,13 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception(oci_error());
         }
+        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.'");
+        oci_execute($rs, OCI_DEFAULT);
+        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_SORT=BINARY_CI;");
+        oci_execute($rs, OCI_DEFAULT);
+        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_COMP=LINGUISTIC;");
+        oci_execute($rs, OCI_DEFAULT);
+
     }
 
     /**
@@ -309,8 +317,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     {
         if ($tableName !== null) {
             $sequenceName = $tableName;
-            $sequenceName = substr($sequenceName,0,22);
-            $sequenceName .= '_seq';
+            $sequenceName = substr($sequenceName,0,25);
+            $sequenceName .= '_s';
             return $this->lastSequenceId($sequenceName);
         }
 

@@ -97,4 +97,27 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($adminById instanceof Tinebase_Model_Application);
         $this->assertEquals($admin, $adminById);
     }
-}        
+
+    /**
+     * Test length name for table name and column name (Oracle Database limitation) 
+     *
+     */
+    public function testSetupXML()
+    {
+        $_applications = Tinebase_Application::getInstance()->getApplications();
+        $applications = array();
+        foreach ($_applications as $applicationName ) {
+            $xml = Setup_Controller::getInstance()->getSetupXml($applicationName);
+            if (isset($xml->tables)) {
+                foreach ($xml->tables[0] as $tableXML) {
+                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                    $currentTable = $table->name;
+                    $this->assertLessThan(29, strlen($currentTable), $applicationName." -> ". $table->name . "  (" . strlen($currentTable).")");
+                    foreach ($table->fields as $field) {
+                        $this->assertLessThan(31, strlen($field->name), $applicationName." -> ". $table->name . "  (" . strlen($field->name).")");
+                    }
+                }
+            }
+        }
+    }
+}

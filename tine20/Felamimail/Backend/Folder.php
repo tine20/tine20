@@ -56,11 +56,11 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         // get seen count
         $select = $this->_db->select()
             ->from(array(
-                'felamimail_cache_message_flag' => $this->_tablePrefix . 'felamimail_cache_message_flag'), 
-                array('cache_totalcount' => new Zend_Db_Expr('COUNT(DISTINCT(felamimail_cache_message_flag.message_id))'))
+                'felamimail_cache_msg_flag' => $this->_tablePrefix . 'felamimail_cache_msg_flag'), 
+                array('cache_totalcount' => new Zend_Db_Expr('COUNT(DISTINCT(felamimail_cache_msg_flag.message_id))'))
             )
-            ->where($this->_db->quoteIdentifier('felamimail_cache_message_flag.folder_id') . ' = ?', $folderId)
-            ->where($this->_db->quoteIdentifier('felamimail_cache_message_flag.flag') . ' = ?', '\\Seen');
+            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.folder_id') . ' = ?', $folderId)
+            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.flag') . ' = ?', '\\Seen');
         
         $stmt = $this->_db->query($select);
         $seenCount = $stmt->fetchColumn(0);

@@ -274,7 +274,6 @@
                     <name>json</name>
                     <type>text</type>
                     <length>1024</length>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>working_hours</name>

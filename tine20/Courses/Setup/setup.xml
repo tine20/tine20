@@ -91,9 +91,8 @@
                 </index>
                 <index>
                     <name>group_id</name>
-                    <unique>true</unique>
                     <field>
-                        <name>id</name>
+                       <name>group_id</name>
                     </field>
                 </index>
             </declaration>
