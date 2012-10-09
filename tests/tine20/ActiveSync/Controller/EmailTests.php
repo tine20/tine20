@@ -259,6 +259,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($completeMessage->headers['content-type']));
     }
     
+    /**
+     * forward email test
+     */
     public function testForwardEmail()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
@@ -268,7 +271,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
         $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
-                        
+        
         $controller->forwardEmail(array('collectionId' => 'foobar', 'itemdId' => $message->getId()), $email, true, false);
         
         // check if mail is in INBOX of test account

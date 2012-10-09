@@ -344,7 +344,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $sync->handle();
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-                
+        
         
         // now do the first sync
         $doc = new DOMDocument();
@@ -391,7 +391,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals($folder->serverId, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        #$message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
-        #Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
+        // message needs to be deleted after the test because other tests follow that search for 'text/plain', too
+        $message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
     }
 }
