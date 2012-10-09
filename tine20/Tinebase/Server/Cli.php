@@ -19,6 +19,25 @@
  */
 class Tinebase_Server_Cli implements Tinebase_Server_Interface
 {
+    protected static $_anonymousMethods = array(
+        'Tinebase.triggerAsyncEvents',
+        'Tinebase.executeQueueJob',
+        'Tinebase.monitoringCheckDB',
+        'Tinebase.monitoringCheckConfig',
+        'Tinebase.monitoringCheckCron',
+        'Tinebase.monitoringLoginNumber',
+    );
+    
+    /**
+     * return anonymous methods
+     * 
+     * @return array
+     */
+    public static function getAnonymousMethods()
+    {
+        return self::$_anonymousMethods;
+    }
+    
     /**
      * init tine framework
      */
@@ -73,14 +92,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         $tinebaseServer = new Tinebase_Frontend_Cli();
         
         $opts = Tinebase_Core::get('opts');
-        if (! in_array($method, array(
-            'Tinebase.triggerAsyncEvents',
-            'Tinebase.processQueue',
-            'Tinebase.monitoringCheckDB',
-            'Tinebase.monitoringCheckConfig',
-            'Tinebase.monitoringCheckCron',
-            'Tinebase.monitoringLoginNumber',
-        ))) {
+        if (! in_array($method, self::getAnonymousMethods())) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);

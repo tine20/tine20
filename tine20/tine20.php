@@ -16,18 +16,6 @@ if (php_sapi_name() != 'cli') {
 require_once 'bootstrap.php';
 
 /**
- * anonymous methods (no pw/user required)
- */
-$anonymousMethods = array(
-    'Tinebase.triggerAsyncEvents',
-    'Tinebase.processQueue',
-    'Tinebase.monitoringCheckDB',
-    'Tinebase.monitoringCheckConfig',
-    'Tinebase.monitoringCheckCron',
-    'Tinebase.monitoringLoginNumber',
-);
-
-/**
  * options
  */
 try {
@@ -63,7 +51,7 @@ if ($opts->config) {
 }
 
 // get username / password if not already set
-if (! in_array($opts->method, $anonymousMethods)) {
+if (! in_array($opts->method, Tinebase_Server_Cli::getAnonymousMethods())) {
     if (empty($opts->username)) {
         $opts->username = Tinebase_Server_Cli::promptInput('username');
     }

@@ -141,7 +141,7 @@
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
         
         try {
-            $message = serialize($decodedAction);
+            $message = Zend_Json::encode($decodedAction);
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
@@ -153,7 +153,7 @@
         } else {
             // execute action immediately if no queue service is available
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
-            $this->_executeAction($message);
+            $this->executeAction($message);
         }
     }
     
@@ -171,7 +171,7 @@
             $messages = $this->_queue->receive($numberToProcess);
  
             foreach ($messages as $i => $message) {
-                $this->_executeAction($message->body);
+                $this->executeAction($message->body);
                 $this->_queue->deleteMessage($message);
             }
         }
@@ -183,10 +183,10 @@
      * @param string $_message JSON encoded string
      * @return void
      */
-    protected function _executeAction($_message)
+    public function executeAction($_message)
     {
         try {
-            $decodedMessage = unserialize($_message);
+            $decodedMessage = Zend_Json::decode($_message);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution (" . $e->getMessage() . ')');
             return;

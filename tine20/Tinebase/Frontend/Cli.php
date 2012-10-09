@@ -167,25 +167,30 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * process queue tasks (simple queue processing, intended to be executed from system cron job)
-     *  optional --numtasks param
+     * process given queue job
+     *  --message json encoded task
      *
+     * @TODO rework user management, jobs should be executed as the right user in future
+     * 
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
      */
-    public function processQueue($_opts)
+    public function executeQueueJob($_opts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Start a worker for action queye from CLI.');
-        
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
+        
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
-        $actionQueue = Tinebase_ActionQueue::getInstance();
-        $r = $_opts->numtasks ? $actionQueue->processQueue($_opts->numtasks) : $actionQueue->processQueue();
+        if (! $_opts->message) {
+            throw new Tinebase_Exception_InvalidArgument('mandatory parameter --message is missing');
+        }
+        
+        $message = Zend_Json::decode($_opts->message);
+        Tinebase_ActionQueue::getInstance()->executeAction($message);
         
         return TRUE;
     }
