@@ -31,84 +31,88 @@ msgstr "Inventarliste"
 msgid "Inventory items lists"
 msgstr "Inventar Listen"
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:140
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:106
 msgid "Name"
 msgstr "Name"
 
-#: Model/InventoryItem.php:75
-msgid "Type"
-msgstr "Typ"
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:160
+msgid "Status"
+msgstr ""
 
-#: Model/InventoryItem.php:83
+#: Model/InventoryItem.php:85
 msgid "Inventory ID"
 msgstr ""
 
-#: Model/InventoryItem.php:91 js/InventoryItemEditDialog.js:163
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:129
 msgid "Location"
 msgstr "Standort"
 
-#: Model/InventoryItem.php:95 js/InventoryItemEditDialog.js:170
-#: js/InventoryItemEditDialog.js:265
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:136
+#: js/InventoryItemEditDialog.js:238
 msgid "Added"
 msgstr "Hinzugefügt"
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:230
 msgid "Invoice"
 msgstr ""
 
-#: Model/InventoryItem.php:110 js/InventoryItemEditDialog.js:245
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:218
 msgid "Price"
 msgstr ""
 
-#: Model/InventoryItem.php:115
+#: Model/InventoryItem.php:116
 msgid "Cost centre"
 msgstr ""
 
-#: Model/InventoryItem.php:120 js/InventoryItemEditDialog.js:271
+#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:244
 msgid "Warranty"
 msgstr ""
 
-#: Model/InventoryItem.php:125
+#: Model/InventoryItem.php:126
 msgid "Item added"
 msgstr ""
 
-#: Model/InventoryItem.php:130
+#: Model/InventoryItem.php:131
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:135 js/InventoryItemEditDialog.js:285
+#: Model/InventoryItem.php:136 js/InventoryItemEditDialog.js:258
 msgid "Depreciation"
 msgstr ""
 
-#: Model/InventoryItem.php:140 js/InventoryItemEditDialog.js:291
+#: Model/InventoryItem.php:141 js/InventoryItemEditDialog.js:264
 msgid "Amortization"
 msgstr ""
 
 #: Config.php:31
-msgid "Status Available"
-msgstr "Verfügbarkeitssatus"
+msgid "Inventory Status Available"
+msgstr ""
 
 #: Config.php:33
-msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
+msgid "Possible status."
 msgstr ""
 
 #: Setup/Initialize.php:33
-msgid "book"
-msgstr "Buch"
+msgid "ordered"
+msgstr ""
 
 #: Setup/Initialize.php:34
-msgid "server"
-msgstr "Server"
+msgid "available"
+msgstr ""
 
 #: Setup/Initialize.php:35
-msgid "monitor"
-msgstr "Monitor"
+msgid "defect"
+msgstr ""
 
 #: Setup/Initialize.php:36
-msgid "keyboard"
-msgstr "Tastatur"
+msgid "missing"
+msgstr ""
 
 #: Setup/Initialize.php:37
+msgid "removed"
+msgstr ""
+
+#: Setup/Initialize.php:38
 msgid "unkown"
 msgstr "Unbekannt"
 
@@ -129,45 +133,63 @@ msgstr ""
 msgid "%s's personal inventory items"
 msgstr "%s's persönliche Inventar Gegenstände"
 
-#: js/InventoryItemEditDialog.js:87
+#: js/InventoryItemEditDialog.js:51
 msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:110
+#: js/InventoryItemEditDialog.js:75
 msgid "General"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:130
+#: js/InventoryItemEditDialog.js:97
 msgid "ID"
 msgstr "ID"
 
-#: js/InventoryItemEditDialog.js:150
+#: js/InventoryItemEditDialog.js:116
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/InventoryItemEditDialog.js:155
+#: js/InventoryItemEditDialog.js:121
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
-#: js/InventoryItemEditDialog.js:178
+#: js/InventoryItemEditDialog.js:144
 msgid "Total number"
 msgstr "Totale Anzahl"
 
-#: js/InventoryItemEditDialog.js:186
+#: js/InventoryItemEditDialog.js:152
 msgid "Active number"
 msgstr "Ausgegebene Anzahl"
 
-#: js/InventoryItemEditDialog.js:224
+#: js/InventoryItemEditDialog.js:196
 msgid "Accounting"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:251
+#: js/InventoryItemEditDialog.js:224
 msgid "Costcentre"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:277
+#: js/InventoryItemEditDialog.js:250
 msgid "Removed"
 msgstr ""
+
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgid "Status Available"
+#~ msgstr "Verfügbarkeitssatus"
+
+#~ msgid "book"
+#~ msgstr "Buch"
+
+#~ msgid "server"
+#~ msgstr "Server"
+
+#~ msgid "monitor"
+#~ msgstr "Monitor"
+
+#~ msgid "keyboard"
+#~ msgstr "Tastatur"
 
 #~ msgid "Inventory Item"
 #~ msgstr "Inventar Gegenstand"
