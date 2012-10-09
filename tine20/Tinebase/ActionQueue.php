@@ -141,7 +141,7 @@
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
         
         try {
-            $message = Zend_Json::encode($decodedAction);
+            $message = serialize($decodedAction);
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
@@ -186,7 +186,7 @@
     public function executeAction($_message)
     {
         try {
-            $decodedMessage = Zend_Json::decode($_message);
+            $decodedMessage = unserialize($_message);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution (" . $e->getMessage() . ')');
             return;
