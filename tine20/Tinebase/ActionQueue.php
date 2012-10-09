@@ -87,7 +87,7 @@
             
             switch ($adapter) {
                 case 'Redis':
-                    $options['adapterNamespace'] = 'Rediska_Zend_Queue_Adapter';
+                    $options['adapterNamespace'] = 'Tinebase_Redis_Queue_Zend';
                     $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : array ( 'namespace' => 'Application_' );
                     break;
                     
