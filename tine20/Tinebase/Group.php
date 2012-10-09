@@ -75,7 +75,7 @@ class Tinebase_Group
         
         return self::$_instance;
     }
-        
+    
     /**
      * return an instance of the current groups backend
      *
@@ -124,13 +124,13 @@ class Tinebase_Group
      */
     public static function syncMemberships($_username)
     {
-        if($_username instanceof Tinebase_Model_FullUser) {
+        if ($_username instanceof Tinebase_Model_FullUser) {
             $username = $_username->accountLoginName;
         } else {
             $username = $_username;
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync group memberships for: " . $username);
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Sync group memberships for: " . $username);
         
         $userBackend  = Tinebase_User::getInstance();
         $groupBackend = Tinebase_Group::getInstance();
@@ -138,17 +138,24 @@ class Tinebase_Group
         $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
         
         $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
-        if(!in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
+        if (! in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
             $membershipsSyncBackend[] = $user->accountPrimaryGroup;
         }
-
-        // make sure new groups exist in sql backend
-        $membershipsSqlBackend = $groupBackend->getGroupMemberships($user);
-        $newGroupMemberships   = array_diff($membershipsSyncBackend, $membershipsSqlBackend);
         
-        foreach($newGroupMemberships as $groupId) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  add user to groupId " . $groupId);
-            // create empty group if needed
+        $membershipsSqlBackend = $groupBackend->getGroupMemberships($user);
+        
+        sort($membershipsSqlBackend);
+        sort($membershipsSyncBackend);
+        if ($membershipsSqlBackend == $membershipsSyncBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Group memberships are already in sync.');
+            return;
+        }
+        
+        $newGroupMemberships = array_diff($membershipsSyncBackend, $membershipsSqlBackend);
+        foreach ($newGroupMemberships as $groupId) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Add user to groupId " . $groupId);
+            // make sure new groups exist in sql backend / create empty group if needed
             try {
                 $groupBackend->getGroupById($groupId);
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
@@ -157,7 +164,8 @@ class Tinebase_Group
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($membershipsSyncBackend, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            .' Set new group memberships: ' . print_r($membershipsSyncBackend, TRUE));
         
         $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
         self::syncListsOfUserContact($groupIds, $user->contact_id);
