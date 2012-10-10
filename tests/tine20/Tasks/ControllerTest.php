@@ -173,6 +173,9 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         return $utask;
     }
     
+    /**
+     * testNonConcurrentUpdate
+     */
     public function testNonConcurrentUpdate()
     {
         $utask = $this->testUpdateTask();
@@ -183,7 +186,11 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         return $this->_controller->update($nonConflictTask);
     }
     
-    public function testConcurrencyResolveableSameValue() {
+    /**
+     * testConcurrencyResolveableSameValue
+     */
+    public function testConcurrencyResolveableSameValue()
+    {
         $utask = $this->testUpdateTask();
         
         sleep(1);
@@ -195,7 +202,11 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         return $this->_controller->update($resolvableConcurrencyTask);
     }
     
-    public function testConcurrencyResolveableOtherField() {
+    /**
+     * testConcurrencyResolveableOtherField
+     */
+    public function testConcurrencyResolveableOtherField()
+    {
         $utask = $this->testUpdateTask();
         
         sleep(1);
@@ -271,5 +282,38 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         $ctask->description = 'testConcurrencyFromCreatedTask';
         
         $u2task = $this->_controller->update($ctask);
+    }
+    
+    /**
+     * testConcurrencyLinebreakMismatch
+     * 
+     * @see 0007140: normalize linebreaks in concurrency check
+     */
+    public function testConcurrencyLinebreakMismatch()
+    {
+        $utask = $this->_persistantTestTask1;
+        $utask->description = 'description' . "\n";
+        $utask = $this->_controller->update($utask);
+        sleep(1);
+        
+        // change linebreak in db to \r\n
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Tasks', $utask->getId(),
+            'Tasks_Model_Task', 'Sql', Tinebase_DateTime::now()->subMinute(5), $utask->last_modified_time);
+        $this->assertEquals(1, count($loggedMods));
+        $mod = $loggedMods[0]->toArray();
+        $this->assertEquals('description', $mod['modified_attribute']);
+        $mod['new_value'] = 'description' . "\r\n";
+        
+        $modlog = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'timemachine_modlog'));
+        $modlog->update($mod, Tinebase_Core::getDb()->quoteInto('id = ?', $mod['id']));
+        
+        // this should still work as we normalize linebreaks in concurrency check
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
+        $resolvableConcurrencyTask->description = 'description'. "\n";
+        $task = $this->_controller->update($resolvableConcurrencyTask);
+        
+        $this->assertEquals('description'. "\n", $task->description);
     }
 }

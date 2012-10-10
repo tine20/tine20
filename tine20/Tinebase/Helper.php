@@ -195,3 +195,20 @@ function mbConvertTo($string, $encodingTo = 'utf-8')
     
     return $string;
 }
+
+/**
+ * converts all linebreaks to unix linebreaks
+ *
+ * @param string $string
+ * @return string
+ */
+function normalizeLineBreaks($string)
+{
+    if (is_string($string)) {
+        $result = str_replace(array("\r\n", "\r"), "\n", $string);
+    } else {
+        $result = $string;
+    }
+    
+    return $result;
+}
