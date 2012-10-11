@@ -33,7 +33,8 @@ class Tinebase_Exception_SystemGeneric extends Tinebase_Exception
      */
     protected $_appName = 'Tinebase';
     
-    public function __construct($_message, $_code=600) {
+    public function __construct($_message, $_code=600)
+    {
         parent::__construct($_message, $_code);
     }
     
