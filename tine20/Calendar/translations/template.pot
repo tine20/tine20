@@ -112,29 +112,29 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr ""
 
-#: js/AddToEventPanel.js:32
+#: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
 msgstr ""
 
-#: js/AddToEventPanel.js:108 js/AttendeeGridPanel.js:102
+#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:102
 msgid "Role"
 msgstr ""
 
-#: js/AddToEventPanel.js:109
+#: js/AddToEventPanel.js:79
 msgid "Select Role"
 msgstr ""
 
-#: js/AddToEventPanel.js:118 js/AttendeeGridPanel.js:186
-#: js/ContactEventsGridPanel.js:125 js/EventEditDialog.js:176
+#: js/AddToEventPanel.js:88 js/AttendeeGridPanel.js:186
+#: js/ContactEventsGridPanel.js:125 js/EventEditDialog.js:173
 #: js/GridView.js:171 Model/Event.php:252
 msgid "Status"
 msgstr ""
 
-#: js/AddToEventPanel.js:119
+#: js/AddToEventPanel.js:89
 msgid "Select Status"
 msgstr ""
 
-#: js/AddToEventPanel.js:139
+#: js/AddToEventPanel.js:109
 msgid "Adding {0} Attendee to event"
 msgstr ""
 
@@ -238,13 +238,13 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:79
+#: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:76
 #: js/GridView.js:143 js/Model.js:195 Model/Event.php:253
 msgid "Summary"
 msgstr ""
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:252
-#: js/EventEditDialog.js:130 js/GridView.js:109 Preference.php:91
+#: js/EventEditDialog.js:127 js/GridView.js:109 Preference.php:91
 msgid "Start Time"
 msgstr ""
 
@@ -280,7 +280,7 @@ msgstr ""
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:257 js/EventEditDialog.js:144 js/GridView.js:115
+#: js/EventDetailsPanel.js:257 js/EventEditDialog.js:141 js/GridView.js:115
 msgid "End Time"
 msgstr ""
 
@@ -288,65 +288,69 @@ msgstr ""
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:196 js/GridView.js:135
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:193 js/GridView.js:135
 #: Setup/Initialize.php:115 Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr ""
 
-#: js/EventDetailsPanel.js:272 js/EventEditDialog.js:124 js/GridView.js:148
+#: js/EventDetailsPanel.js:272 js/EventEditDialog.js:121 js/GridView.js:148
 #: js/Model.js:196 js/ResourcesGridPanel.js:52 Model/Event.php:249
 msgid "Location"
 msgstr ""
 
-#: js/EventDetailsPanel.js:276 js/EventEditDialog.js:301 js/GridView.js:154
+#: js/EventDetailsPanel.js:276 js/EventEditDialog.js:295 js/GridView.js:154
 #: js/Model.js:216 js/PerspectiveCombo.js:112 Model/Event.php:250
 msgid "Organizer"
 msgstr ""
 
-#: js/EventEditDialog.js:95
+#: js/EventEditDialog.js:92
 msgid "View"
 msgstr ""
 
-#: js/EventEditDialog.js:111
+#: js/EventEditDialog.js:108
 msgid "Details"
 msgstr ""
 
-#: js/EventEditDialog.js:138 js/GridView.js:121 js/Printer/Base.js:66
+#: js/EventEditDialog.js:135 js/GridView.js:121 js/Printer/Base.js:66
 #: js/SearchCombo.js:201
 msgid "whole day"
 msgstr ""
 
-#: js/EventEditDialog.js:160
+#: js/EventEditDialog.js:157
 msgid "Saved in"
 msgstr ""
 
-#: js/EventEditDialog.js:180 js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:177 js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr ""
 
-#: js/EventEditDialog.js:210 js/GridView.js:94
+#: js/EventEditDialog.js:207 js/GridView.js:94
 msgid "Private"
 msgstr ""
 
-#: js/EventEditDialog.js:254 js/GridView.js:161 js/Model.js:197
+#: js/EventEditDialog.js:251 js/GridView.js:161 js/Model.js:197
 #: js/ResourceEditDialog.js:72 Model/Event.php:248
 msgid "Description"
 msgstr ""
 
-#: js/EventEditDialog.js:268
+#: js/EventEditDialog.js:265
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:440
+#: js/EventEditDialog.js:475
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:443
+#: js/EventEditDialog.js:478
 msgid "End date must be after start date"
 msgstr ""
 
-#: js/EventEditDialog.js:456
+#: js/EventEditDialog.js:491
 msgid "Start date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:510
+msgid "Errors"
 msgstr ""
 
 #: js/EventUI.js:231
@@ -533,31 +537,31 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/MainScreenCenterPanel.js:945
+#: js/MainScreenCenterPanel.js:949
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:945
+#: js/MainScreenCenterPanel.js:949
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1095
+#: js/MainScreenCenterPanel.js:1099
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1097
+#: js/MainScreenCenterPanel.js:1101
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1101
+#: js/MainScreenCenterPanel.js:1105
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1102
+#: js/MainScreenCenterPanel.js:1106
 msgid "Edit Event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1103
+#: js/MainScreenCenterPanel.js:1107
 msgid "Cancel this action"
 msgstr ""
 

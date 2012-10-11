@@ -134,6 +134,14 @@ msgstr ""
 msgid "Booking deadline"
 msgstr ""
 
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr ""
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr ""
+
 #: js/TimeaccountEditDialog.js:100
 msgid "Unit"
 msgstr ""
