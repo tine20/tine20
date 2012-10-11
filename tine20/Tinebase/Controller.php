@@ -72,6 +72,8 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
+        $authResultCode = $authResult->getCode();
+        $authResultIdentity = $authResult->getIdentity();
         
         Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
         
@@ -79,13 +81,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             'sessionid'     => Tinebase_Core::get(Tinebase_Core::SESSIONID),
             'ip'            => $_ipAddress,
             'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'result'        => $authResult->getCode(),
-            'clienttype'    => $_clientIdString,   
+            'result'        => $authResultCode,
+            'clienttype'    => $_clientIdString,
         ), TRUE);
         
         $user = NULL;
         if ($accessLog->result == Tinebase_Auth::SUCCESS) {
-            $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
+            $user = $this->_getLoginUser($authResultIdentity, $accessLog);
             if ($user !== NULL) {
                 $this->_checkUserStatus($user, $accessLog);
             }
@@ -115,7 +117,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     {
         $accountsController = Tinebase_User::getInstance();
         $user = NULL;
-                
+        
         try {
             // does the user exist in the user database?
             if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
