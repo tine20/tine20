@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 21:13+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,19 +19,19 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr ""
+msgstr "Új felhasználó hozzáadása"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr ""
+msgstr "Új felhasználó résztvevőként hozzáadása a kurzushoz"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr ""
+msgstr "Meglévő felhasználó hozzáadása"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr ""
+msgstr "Meglévő felhasználó résztvevőként hozzáadása a kurzushoz"
 
 #: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
@@ -39,31 +39,31 @@ msgstr "Internet elérés"
 
 #: Config.php:77
 msgid "Internet access options."
-msgstr ""
+msgstr "Internet kapcsolat opciók."
 
 #: Config.php:84 Config.php:86
 msgid "Internet Access Group (ON)"
-msgstr ""
+msgstr "Internet elérési csoport (Be)"
 
 #: Config.php:92 Config.php:94
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Internet elérési csoport (Szűrt)"
 
 #: Config.php:100 Config.php:102
 msgid "Students Group"
-msgstr ""
+msgstr "Tanuló csoport"
 
 #: Config.php:108 Config.php:110
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Tanuló importálási leírások"
 
 #: Config.php:116
 msgid "Students login name prefix"
-msgstr ""
+msgstr "Tanulói bejelentkezési név előtag"
 
 #: Config.php:123 Config.php:125
 msgid "Samba user settings"
-msgstr ""
+msgstr "Samba felhasználó beállítások"
 
 #: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
 msgid "Course"
@@ -81,27 +81,27 @@ msgstr "Tanár felhasználó"
 
 #: Controller/Course.php:308
 msgid "My course"
-msgstr ""
+msgstr "Kurzusom"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
-msgstr ""
+msgstr "Kereszt név"
 
 #: js/AddMemberDialog.js:67
 msgid "Last Name"
-msgstr ""
+msgstr "Vezeték név"
 
 #: js/AddMemberDialog.js:86
 msgid "Add new member to course"
-msgstr ""
+msgstr "Új résztvevő hozzáadása a kurzushoz"
 
 #: js/AddMemberDialog.js:118
 msgid "Errors"
-msgstr ""
+msgstr "Hibák"
 
 #: js/AddMemberDialog.js:118
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Kérlek javítsd a jegyzett hibákat."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -109,7 +109,7 @@ msgstr "Kurzus tagok importálása"
 
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
-msgstr ""
+msgstr "Új résztvevő hozzáadása"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -186,15 +186,15 @@ msgstr "Az alapértelmezett kedvenc, amely az Osztályok indulásakor betöltőd
 
 #: Setup/Initialize.php:66
 msgid "On"
-msgstr ""
+msgstr "Be"
 
 #: Setup/Initialize.php:67
 msgid "Off"
-msgstr ""
+msgstr "Ki"
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
-msgstr ""
+msgstr "Szűrt"
 
 #: Setup/setup.xml:4
 msgid "Courses"

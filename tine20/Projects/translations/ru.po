@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 21:06+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,7 +108,7 @@ msgstr "Статус"
 
 #: js/Model.js:86
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Время последнего изменения"
 
 #: js/Model.js:87
 msgid "Last Modified By"
@@ -120,7 +120,7 @@ msgstr "Время создания"
 
 #: js/Model.js:89
 msgid "Created By"
-msgstr ""
+msgstr "Создано"
 
 #: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:82
 msgid "Attendee"

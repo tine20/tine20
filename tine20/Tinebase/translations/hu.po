@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 20:40+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -203,76 +203,76 @@ msgstr "Felhasználói fileok könyvtára, ahol a web kiszolgáló írás joggal
 
 #: Config.php:414 Config.php:416
 msgid "User may change password"
-msgstr ""
+msgstr "Felhasználó cserélhet jelszót"
 
 #: Config.php:424 Config.php:426
 msgid "Enable password policy"
-msgstr ""
+msgstr "Jelszó szabályok engedélyezése"
 
 #: Config.php:434
 msgid "Only ASCII"
-msgstr ""
+msgstr "Csak ASCII"
 
 #: Config.php:436
 msgid "Only ASCII characters are allowed in passwords."
-msgstr ""
+msgstr "Csak ASCII karakterek megengedettek a jelszóban."
 
 #: Config.php:444
 msgid "Minimum length"
-msgstr ""
+msgstr "Minimális hossz"
 
 #: Config.php:446
 msgid "Minimum password length"
-msgstr ""
+msgstr "Minimális jelszó hossz"
 
 #: Config.php:454
 msgid "Minimum word chars"
-msgstr ""
+msgstr "Minimum betű karakterek"
 
 #: Config.php:456
 msgid "Minimum word chars in password"
-msgstr ""
+msgstr "Minimum betű karakterek a jelszóban"
 
 #: Config.php:464
 msgid "Minimum uppercase chars"
-msgstr ""
+msgstr "Minimum nagy karakterek"
 
 #: Config.php:466
 msgid "Minimum uppercase chars in password"
-msgstr ""
+msgstr "Minimum nagy karakterek a jelszóban"
 
 #: Config.php:474
 msgid "Minimum special chars"
-msgstr ""
+msgstr "Minimum speciális karakterek"
 
 #: Config.php:476
 msgid "Minimum special chars in password"
-msgstr ""
+msgstr "Minimum speciális karakterek a jelszóban"
 
 #: Config.php:484
 msgid "Minimum numbers"
-msgstr ""
+msgstr "Minimum számok"
 
 #: Config.php:486
 msgid "Minimum numbers in password"
-msgstr ""
+msgstr "Minimum számok a jelszóban"
 
 #: Config.php:494
 msgid "Automatic bugreports"
-msgstr ""
+msgstr "Automatikus hibajelentés"
 
 #: Config.php:496
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
-msgstr ""
+msgstr "Mindig küldjön hibajelentést, még időtúllépés és más védelmi / hiba esetén is."
 
 #: Config.php:504
 msgid "Last sessions cleanup run"
-msgstr ""
+msgstr "Utolsó kapcsolatok takarításának futtatása"
 
 #: Config.php:506
 msgid "Stores the timestamp of the last sessions cleanup task run."
-msgstr ""
+msgstr "Tárolja az utolsó kapcsolatok takarításának futtatása feladat időbélyegét."
 
 #: Container.php:666
 #, python-format
@@ -291,15 +291,15 @@ msgstr "Rendszer konténer"
 
 #: Exception/PasswordPolicyViolation.php:22
 msgid "Password Policy Violation"
-msgstr ""
+msgstr "Jelszó szabály megsértés"
 
 #: Exception/Record/SystemContainer.php:28
 msgid "This is a system container which could not be deleted!"
-msgstr ""
+msgstr "Ez egy rendszer konténer, amely nem törölhető!"
 
 #: Exception/SystemGeneric.php:27
 msgid "Generic System Exception"
-msgstr ""
+msgstr "Általános rendszer védelmi hiba"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -357,19 +357,19 @@ msgstr "Rendben"
 
 #: js/AboutDialog.js:70
 msgid "Released under different "
-msgstr ""
+msgstr "Kiadva más"
 
 #: js/AboutDialog.js:71
 msgid "Open Source Licenses"
-msgstr ""
+msgstr "Nyílt Forráskódú Licencekkel"
 
 #: js/AboutDialog.js:78
 msgid " with the help of our "
-msgstr ""
+msgstr "és az alábbiak segítségével:"
 
 #: js/AboutDialog.js:79
 msgid "Contributors"
-msgstr ""
+msgstr "Közreműködők"
 
 #: js/AdminPanel.js:75
 msgid "Profile Information"
@@ -469,7 +469,7 @@ msgstr "Saját {0}"
 
 #: js/CreditsScreen.js:36
 msgid "Credits"
-msgstr ""
+msgstr "Stáblista"
 
 #: js/data/Record.js:168
 msgid "Task"
@@ -649,7 +649,7 @@ msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolat
 
 #: js/LicenseScreen.js:35
 msgid "License"
-msgstr ""
+msgstr "Licensz"
 
 #: js/LoginPanel.js:80 js/LoginPanel.js:118
 msgid "Login"
@@ -850,8 +850,8 @@ msgstr[1] "Címkék"
 #: js/Models.js:263
 msgid "Alarm"
 msgid_plural "Alarms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Riasztás"
+msgstr[1] "Riasztások"
 
 #: js/Models.js:302
 msgid "Import"
@@ -1374,11 +1374,11 @@ msgstr "Egyedi időpont"
 
 #: js/widgets/dialog/AlarmPanel.js:58
 msgid "Alarm Time"
-msgstr ""
+msgstr "Riasztási idő"
 
 #: js/widgets/dialog/AlarmPanel.js:170
 msgid "{0} minutes before"
-msgstr ""
+msgstr "{0} perccel előtte"
 
 #: js/widgets/dialog/CredentialsDialog.js:84
 msgid "Please enter your credentials"
@@ -1494,11 +1494,11 @@ msgstr "{0} átvitele..."
 
 #: js/widgets/dialog/EditDialog.js:647
 msgid "Relations failure"
-msgstr ""
+msgstr "Kapcsolati hiba"
 
 #: js/widgets/dialog/EditDialog.js:647
 msgid "There are invalid relations. Please check before saving."
-msgstr ""
+msgstr "Érvénytelen kapcsolatok találhatóak. Kérlek ellenőrizd mentés előtt."
 
 #: js/widgets/dialog/EditDialog.js:718
 msgid "Do you really want to delete this {0}?"
@@ -2106,7 +2106,7 @@ msgstr "Összefügg ezzel:"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr ""
+msgstr "Nem található semmi {0}. Kérlek próbáld megváltoztatni a szűrő feltételeidet, nézet opciókat vagy a {1} amiben keresel."
 
 #: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:454
 #: js/widgets/grid/GridPanel.js:455 js/widgets/grid/GridPanel.js:456
@@ -2311,43 +2311,43 @@ msgstr "Meghatároz ..."
 
 #: js/widgets/relation/GenericPickerGridPanel.js:103
 msgid "Edit record"
-msgstr ""
+msgstr "Rekord szerkesztése"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:138
 msgid "Sibling"
-msgstr ""
+msgstr "Testvér"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:139
 msgid "Parent"
-msgstr ""
+msgstr "Szülő"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:140
 msgid "Child"
-msgstr ""
+msgstr "Gyerek"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:188
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
-msgstr ""
+msgstr "A {0} maximális számát a {1} típussal elérted. Kérlek változtasd meg a kapcsolat típusát"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:349
 msgid "Record"
-msgstr ""
+msgstr "Rekord"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:351
 msgid "Remark"
-msgstr ""
+msgstr "Megjegyzés"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:352
 msgid "Dependency"
-msgstr ""
+msgstr "Függőség"
 
 #: js/widgets/relation/PickerCombo.js:93
 msgid ""
 "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
 "once!"
-msgstr ""
+msgstr "A {1} \"{2}\" már használatban az alábbi mezőben \"{0}\" és csak egyszer csatolható!"
 
 #: js/widgets/tags/TagCombo.js:48
 msgid "tag name"
@@ -2540,7 +2540,7 @@ msgstr "{0} újratöltése"
 
 #: js/widgets/tree/ContextMenu.js:109
 msgid "Edit Properties"
-msgstr ""
+msgstr "Tulajdonságok szerkesztése"
 
 #: js/widgets/tree/ContextMenu.js:124
 msgid "Download"

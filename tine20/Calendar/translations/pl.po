@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 19:27+0000\n"
+"PO-Revision-Date: 2012-09-19 19:36+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -227,15 +227,15 @@ msgstr[2] "kalendarze"
 #: js/calendarRenderer.js:30
 msgid ""
 "This event is originally stored in a calendar you don't have access to."
-msgstr ""
+msgstr "To zdarzenie jest przechowywane w kalendarzu, do którego nie masz dostępu"
 
 #: js/calendarRenderer.js:31
 msgid "This event is originally stored in {0}"
-msgstr ""
+msgstr "To zdarzenie jest przechowywane w {0}"
 
 #: js/calendarRenderer.js:33
 msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr ""
+msgstr "To zdarzenie jest dodatkowo wyświetlane w Twoim osobistym kalendarzu {0}"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
@@ -312,11 +312,11 @@ msgstr "Notes"
 
 #: js/EventEditDialog.js:95
 msgid "View"
-msgstr ""
+msgstr "Podgląd"
 
 #: js/EventEditDialog.js:111
 msgid "Details"
-msgstr ""
+msgstr "Szczegóły"
 
 #: js/EventEditDialog.js:138 js/GridView.js:121 js/Printer/Base.js:66
 #: js/SearchCombo.js:201
@@ -325,7 +325,7 @@ msgstr "cały dzień"
 
 #: js/EventEditDialog.js:160
 msgid "Saved in"
-msgstr ""
+msgstr "Zapisano w"
 
 #: js/EventEditDialog.js:180 js/PerspectiveCombo.js:84
 msgid "non-blocking"
@@ -842,19 +842,19 @@ msgstr "Odbieraj powiadomienia e-mail o własnych akcjach"
 
 #: Preference.php:111
 msgid "Enable Standard Alarm"
-msgstr ""
+msgstr "Włącz standardowe powiadomienie"
 
 #: Preference.php:112
 msgid "New events get a standard alarm as defined below"
-msgstr ""
+msgstr "Powiadamianie o nowych zdarzeniach zostało zdefiniowane jak niżej"
 
 #: Preference.php:115
 msgid "Standard Alarm Time"
-msgstr ""
+msgstr "Czas standardowego powiadomienia"
 
 #: Preference.php:116
 msgid "Minutes before the event starts"
-msgstr ""
+msgstr "Ilość minut do rozpoczęcia zdarzenia"
 
 #: Preference.php:169
 msgid "Never"

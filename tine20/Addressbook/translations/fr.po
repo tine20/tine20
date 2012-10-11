@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <c.blin@decalog.net>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-24 09:03+0000\n"
+"Last-Translator: cblin_decalog <c.blin@decalog.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,35 +35,35 @@ msgstr "Créer ou mettre à jour les favoris du carnet d'adresses partagé"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Doublons dans les champs du contact"
 
 #: Config.php:47
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "Ces champs sont vérifiés quand un nouveau contact est créé. Si un enregistrement avec les mêmes données est trouvé lors de la création, une erreur se produit."
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Signatures disponibles"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "Signatures disponibles. Attention, certaines valeurs peuvent affectés la synchronisation ou l'export dans d'autres modules que le carnet d'adresses."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr ""
+msgstr "Règles de formattage des adresses pour la récupération"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Chemin vers le fichier XML qui contient les règles de formattage des adresses"
 
 #: Controller/Contact.php:329
 msgid "Uploaded new contact image."
-msgstr ""
+msgstr "Nouvelle image téléchargée"
 
 #: Controller.php:103
 #, python-format
@@ -172,37 +173,37 @@ msgstr "Intitulé de poste"
 
 #: Import/definitions/adb_google_import_csv.xml:12
 msgid "Contact import from Google address book"
-msgstr ""
+msgstr "Import de contact depuis le carnet d'adresse Google "
 
 #: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
-msgstr ""
+msgstr "Import de contact depuis VCARD"
 
 #: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
-msgstr ""
+msgstr "Import de contact depuis CSV Apple MAc"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:14
 msgid "CSV Outlook 2007 German"
-msgstr ""
+msgstr "Import de contact depuis CSV Outlook 2007"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
-msgstr ""
+msgstr "Import de contact depuis CSV Outlook"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
-msgstr ""
+msgstr "Import de contact depuis CSV"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "Liste d'import (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "Contacts importés le ###CURRENTDATE### à ###CURRENTTIME### par ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -216,7 +217,7 @@ msgstr[1] "Carnets d'adresses"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr ""
+msgstr "URL pour CardDAV"
 
 #: js/ContactEditDialog.js:45 js/ContactEditDialog.js:51 js/MapPanel.js:40
 msgid "Map"
@@ -371,7 +372,7 @@ msgstr "Exporter en PDF"
 
 #: js/ContactEditDialog.js:408 js/ContactEditDialog.js:493
 msgid "Parse address"
-msgstr ""
+msgstr "Récupérer l'adresse"
 
 #: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
@@ -379,15 +380,15 @@ msgstr "{0} ou {1} doivent être renseignés"
 
 #: js/ContactEditDialog.js:485
 msgid "Paste address"
-msgstr ""
+msgstr "Coller l'adresse"
 
 #: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Veuillez saisir une adresse avec un format récupérable :"
 
 #: js/ContactEditDialog.js:519
 msgid "End token mode"
-msgstr ""
+msgstr "End token mode"
 
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"
@@ -462,8 +463,8 @@ msgstr "Localisation géographique"
 #: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Export {0}"
+msgstr[1] "Export {0}"
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
@@ -511,27 +512,27 @@ msgstr "Info"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
-msgstr ""
+msgstr "Lien non sécurisé"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
-msgstr ""
+msgstr "Merci de vérifier le lien dans la popup de modification"
 
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
-msgstr ""
+msgstr "Liste des membres"
 
 #: js/MapPanel.js:58
 msgid "Company address"
-msgstr ""
+msgstr "Adresse de l'entreprise"
 
 #: js/MapPanel.js:65
 msgid "Private address"
-msgstr ""
+msgstr "Adresse personnelle"
 
 #: js/Model.js:19
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -583,11 +584,11 @@ msgstr "Pays (domicile)"
 
 #: js/Model.js:51
 msgid "Company Communication"
-msgstr ""
+msgstr "Communication d'entreprise"
 
 #: js/Model.js:57
 msgid "Private Communication"
-msgstr ""
+msgstr "Communication personnelle"
 
 #: js/Model.js:65
 msgid "Web (private)"
@@ -607,11 +608,11 @@ msgstr "Recherche rapide"
 
 #: js/Model.js:161
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Dernière modification"
 
 #: js/Model.js:162
 msgid "Last Modified By"
-msgstr ""
+msgstr "Dernier modificateur"
 
 #: js/Model.js:163
 msgid "Creation Time"
@@ -619,7 +620,7 @@ msgstr "Date de création"
 
 #: js/Model.js:164
 msgid "Created By"
-msgstr ""
+msgstr "Créateur"
 
 #: js/Model.js:201
 msgid "List"
@@ -665,27 +666,27 @@ msgstr "Tous les contacts auxquels j'ai accès"
 
 #: Setup/Initialize.php:140
 msgid "My company"
-msgstr ""
+msgstr "Mon entreprise"
 
 #: Setup/Initialize.php:141
 msgid "All coworkers in my company"
-msgstr ""
+msgstr "Tous les collaborateurs de mon entreprise"
 
 #: Setup/Initialize.php:154
 msgid "My contacts"
-msgstr ""
+msgstr "Mes contacts"
 
 #: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
-msgstr ""
+msgstr "Tous les contacts de mon carnet d'adresses"
 
 #: Setup/Initialize.php:167
 msgid "Last modified by me"
-msgstr ""
+msgstr "Dernièrement modifié par moi"
 
 #: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
-msgstr ""
+msgstr "Tous les contact que j'ai dernièrement modifié"
 
 #: Setup/setup.xml:648
 msgid "Internal Contacts"

@@ -1,13 +1,14 @@
 # 
 # Translators:
 #   <arturmon82@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-07 12:06+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +21,7 @@ msgstr ""
 
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
-msgstr ""
+msgstr "управлять общими адресными книгами"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
@@ -28,31 +29,31 @@ msgstr "Создать новую общую папку адресной кни�
 
 #: Acl/Rights.php:102
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "управлять избранным в общих адресных книгах"
 
 #: Acl/Rights.php:103
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Создание или обновление избранных в общих адресных книгах"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Поля для проверки дублирования контактов"
 
 #: Config.php:47
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "Эти поля проверяются при создании нового контакта. Если запись с таким же данным в полях найдена, выводится предложение исключить дубликат."
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Доступны приветствия контакта"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "Возможные приветствия контакта. Обратите внимание, что дополнительные значения могут повлиять на другие системы адресных книг при экспорте или синхронизации."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -60,7 +61,7 @@ msgstr "Синтаксический анализ правил для адрес
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Путь к XML файлу с правилами разбора адреса."
 
 #: Controller/Contact.php:329
 msgid "Uploaded new contact image."
@@ -186,7 +187,7 @@ msgstr "Импорт контактов CSV из адресной книги mac
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:14
 msgid "CSV Outlook 2007 German"
-msgstr ""
+msgstr "CSV Outlook 2007 (немецкий)"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
@@ -204,7 +205,7 @@ msgstr "Импорт списка (###CURRENTDATE###)"
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "Контакты импортированы ###CURRENTDATE### в ###CURRENTTIME### ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
@@ -378,7 +379,7 @@ msgstr "Синтаксический анализ адреса"
 
 #: js/ContactEditDialog.js:432 js/ContactEditDialog.js:450
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "Должны быть заданы {0} или {1}"
 
 #: js/ContactEditDialog.js:485
 msgid "Paste address"
@@ -386,7 +387,7 @@ msgstr "Вставит адрес"
 
 #: js/ContactEditDialog.js:485
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Пожалуйста, вставьте адрес, который должен быть разобран:"
 
 #: js/ContactEditDialog.js:519
 msgid "End token mode"
@@ -466,9 +467,9 @@ msgstr "Координаты"
 #: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Экспорт {0}"
+msgstr[1] "Экспорт {0}"
+msgstr[2] "Экспорт {0}"
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
@@ -508,7 +509,7 @@ msgstr "Выберите контакт"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
-msgstr ""
+msgstr "Личное"
 
 #: js/ContactGridDetailsPanel.js:178
 msgid "Info"
@@ -516,7 +517,7 @@ msgstr "Информация"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
-msgstr ""
+msgstr "Небезопасная ссылка"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
@@ -596,7 +597,7 @@ msgstr "Частное сообщение"
 
 #: js/Model.js:65
 msgid "Web (private)"
-msgstr ""
+msgstr "Сайт (личный)"
 
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
@@ -612,11 +613,11 @@ msgstr "Быстрый поиск"
 
 #: js/Model.js:161
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Время последнего изменения"
 
 #: js/Model.js:162
 msgid "Last Modified By"
-msgstr ""
+msgstr "Последнее изменение"
 
 #: js/Model.js:163
 msgid "Creation Time"
@@ -624,7 +625,7 @@ msgstr "Время создания"
 
 #: js/Model.js:164
 msgid "Created By"
-msgstr ""
+msgstr "Создано "
 
 #: js/Model.js:201
 msgid "List"
@@ -651,7 +652,7 @@ msgstr "Адресная книга по умолчанию для новых к
 
 #: Preference.php:69
 msgid "Default Favorite"
-msgstr ""
+msgstr "Избранный по умолчанию"
 
 #: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
@@ -667,7 +668,7 @@ msgstr "Госпожа"
 
 #: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
-msgstr ""
+msgstr "Все контакты, для которых у меня есть право чтения"
 
 #: Setup/Initialize.php:140
 msgid "My company"
@@ -675,7 +676,7 @@ msgstr "Моя компания"
 
 #: Setup/Initialize.php:141
 msgid "All coworkers in my company"
-msgstr ""
+msgstr "Все коллеги в моей компании"
 
 #: Setup/Initialize.php:154
 msgid "My contacts"
@@ -683,7 +684,7 @@ msgstr "Мои контакты"
 
 #: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
-msgstr ""
+msgstr "Все контакты в моих адресных книгах"
 
 #: Setup/Initialize.php:167
 msgid "Last modified by me"
@@ -691,7 +692,7 @@ msgstr "Мои последние изменения"
 
 #: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
-msgstr ""
+msgstr "Все контакты, которые последним редактировал я"
 
 #: Setup/setup.xml:648
 msgid "Internal Contacts"

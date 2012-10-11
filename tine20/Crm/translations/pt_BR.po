@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <frajuto@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-09 23:14+0000\n"
+"Last-Translator: basalces <frajuto@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,19 +19,19 @@ msgstr ""
 
 #: Acl/Rights.php:106
 msgid "manage leads"
-msgstr ""
+msgstr "gerenciar responsável"
 
 #: Acl/Rights.php:107
 msgid "add, edit and delete leads"
-msgstr ""
+msgstr "adicionar, editar e apagar responsável comercial"
 
 #: Acl/Rights.php:110
 msgid "manage shared lead folders"
-msgstr ""
+msgstr "administrar pastas compartilhadas"
 
 #: Acl/Rights.php:111
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Criar nova pasta compartilhada"
 
 #: Acl/Rights.php:114
 msgid "manage shared leads favorites"
@@ -42,20 +43,20 @@ msgstr ""
 
 #: Controller/Lead.php:177
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: Controller/Lead.php:178 js/AddToLeadPanel.js:94 js/Contact.js:252
 msgid "Role"
-msgstr ""
+msgstr "Regra"
 
 #: Controller/Lead.php:179
 msgid "Source"
-msgstr ""
+msgstr "Código"
 
 #: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:394
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
-msgstr ""
+msgstr "Iniciar"
 
 #: Controller/Lead.php:181
 msgid "Scheduled end"
@@ -63,7 +64,7 @@ msgstr ""
 
 #: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:225
 msgid "End"
-msgstr ""
+msgstr "Fim"
 
 #: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:129
 #: js/Model.js:108
@@ -77,15 +78,15 @@ msgstr ""
 
 #: Controller/Lead.php:185
 msgid "Folder"
-msgstr ""
+msgstr "Pasta"
 
 #: Controller/Lead.php:186
 msgid "Updated by"
-msgstr ""
+msgstr "Atualizado por"
 
 #: Controller/Lead.php:187
 msgid "Updated Fields:"
-msgstr ""
+msgstr "Campos atualizados"
 
 #: Controller/Lead.php:188
 #, python-format
@@ -125,27 +126,27 @@ msgstr ""
 
 #: Controller.php:164
 msgid "open"
-msgstr ""
+msgstr "abrir"
 
 #: Controller.php:165
 msgid "contacted"
-msgstr ""
+msgstr "contatado"
 
 #: Controller.php:166
 msgid "waiting for feedback"
-msgstr ""
+msgstr "aguardando retorno"
 
 #: Controller.php:167
 msgid "quote sent"
-msgstr ""
+msgstr "orçamento enviado"
 
 #: Controller.php:168
 msgid "accepted"
-msgstr ""
+msgstr "aceito"
 
 #: Controller.php:169
 msgid "lost"
-msgstr ""
+msgstr "perdido"
 
 #: Controller.php:172
 msgid "Market"
@@ -153,15 +154,15 @@ msgstr ""
 
 #: Controller.php:173 Export/Pdf.php:219
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: Controller.php:174 Export/Pdf.php:218
 msgid "Telephone"
-msgstr ""
+msgstr "Telefone"
 
 #: Controller.php:175
 msgid "Website"
-msgstr ""
+msgstr "site"
 
 #: Export/Pdf.php:75
 msgid "Lead Data"
@@ -188,15 +189,15 @@ msgstr ""
 
 #: Export/Pdf.php:184
 msgid "Contacts"
-msgstr ""
+msgstr "Contatos"
 
 #: Export/Pdf.php:211 js/Contact.js:231
 msgid "Address"
-msgstr ""
+msgstr "Endereço"
 
 #: Export/Pdf.php:232 js/LeadEditDialog.js:241 js/Task.js:83
 msgid "Tasks"
-msgstr ""
+msgstr "Tarefas"
 
 #: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
@@ -204,27 +205,27 @@ msgstr ""
 
 #: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
-msgstr ""
+msgstr "Prioridade"
 
 #: Export/Pdf.php:274 js/LeadEditDialog.js:252 js/Product.js:85
 msgid "Products"
-msgstr ""
+msgstr "Produtos"
 
 #: Export/Pdf.php:315
 msgid "low"
-msgstr ""
+msgstr "baixo"
 
 #: Export/Pdf.php:316
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: Export/Pdf.php:317
 msgid "high"
-msgstr ""
+msgstr "alto"
 
 #: Export/Pdf.php:318
 msgid "urgent"
-msgstr ""
+msgstr "urgente"
 
 #: js/AddToLeadPanel.js:30
 msgid "Please choose the Lead to add the contacts to"
@@ -328,7 +329,7 @@ msgstr ""
 
 #: js/LeadEditDialog.js:294
 msgid "Enter short name"
-msgstr ""
+msgstr "Insira um nome curto"
 
 #: js/LeadEditDialog.js:378
 msgid "Expected turnover"
@@ -340,15 +341,15 @@ msgstr ""
 
 #: js/LeadEditDialog.js:432 js/Product.js:139
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: js/LeadEditDialog.js:446
 msgid "Enter description"
-msgstr ""
+msgstr "Insira a descrição"
 
 #: js/LeadGridContactFilter.js:47
 msgid "Contact"
-msgstr ""
+msgstr "Contato"
 
 #: js/LeadGridContactFilter.js:54
 msgid "CRM Role"
@@ -356,23 +357,23 @@ msgstr ""
 
 #: js/LeadGridDetailsPanel.js:51
 msgid "Mobile"
-msgstr ""
+msgstr "Móvel"
 
 #: js/LeadGridDetailsPanel.js:54
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/LeadGridDetailsPanel.js:57
 msgid "E-Mail"
-msgstr ""
+msgstr "Email"
 
 #: js/LeadGridDetailsPanel.js:60
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 #: js/LeadGridDetailsPanel.js:440 js/Task.js:218
 msgid "Status"
-msgstr ""
+msgstr "Estatus"
 
 #: js/LeadGridPanel.js:121
 msgid "Lead id"
@@ -432,7 +433,7 @@ msgstr ""
 
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
-msgstr ""
+msgstr "Exibir fechado"
 
 #: js/LeadType.js:29
 msgid "Lead Type"
@@ -446,7 +447,7 @@ msgstr ""
 
 #: js/LinkGridPanel.js:34
 msgid "Add new {0}"
-msgstr ""
+msgstr "Adicionar novo {0}"
 
 #: js/LinkGridPanel.js:56 js/Product.js:185
 msgid "Unlink {0}"
@@ -458,7 +459,7 @@ msgstr ""
 
 #: js/LinkGridPanel.js:72
 msgid "Edit {0}"
-msgstr ""
+msgstr "Editar {0}"
 
 #: js/LinkGridPanel.js:73
 msgid "Edit selected {0}"
@@ -508,15 +509,15 @@ msgstr[1] ""
 
 #: js/Product.js:134
 msgid "Product"
-msgstr ""
+msgstr "Produto"
 
 #: js/Product.js:146
 msgid "Price"
-msgstr ""
+msgstr "Preço"
 
 #: js/Product.js:158
 msgid "Quantity"
-msgstr ""
+msgstr "Quantidade"
 
 #: js/Product.js:216
 msgid "Search for Products to add ..."
@@ -524,7 +525,7 @@ msgstr ""
 
 #: js/Task.js:109
 msgid "No Tasks to display"
-msgstr ""
+msgstr "Nenhuma tarefa"
 
 #: js/Task.js:168
 msgid "Summary"
@@ -532,11 +533,11 @@ msgstr ""
 
 #: js/Task.js:172
 msgid "Add a task..."
-msgstr ""
+msgstr "Adicionar tarefa"
 
 #: js/Task.js:205
 msgid "Percent"
-msgstr ""
+msgstr "Percentual"
 
 #: Preference.php:37
 msgid "All leads"

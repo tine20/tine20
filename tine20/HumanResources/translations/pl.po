@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 09:12+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-09-19 19:49+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,13 +19,13 @@ msgstr ""
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr ""
+msgstr "Edytuj prywatne dane pracownika"
 
 #: Acl/Rights.php:94
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr ""
+msgstr "Edytuj urodziny, dane o koncie bankowym i inne, prywatne informacje pracownika"
 
 #: Config.php:42
 msgid "Freetime Type"
@@ -48,46 +49,46 @@ msgstr ""
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/AdminPanel.js:76
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AdminPanel.js:204 js/ContractGridPanel.js:104
 msgid "Calendar"
-msgstr ""
+msgstr "Kalendarz"
 
 #: js/AdminPanel.js:205 js/ContractGridPanel.js:105
 msgid "Calendars"
-msgstr ""
+msgstr "Kalendarze"
 
 #: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:218
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Umowa"
+msgstr[1] "Umowy"
+msgstr[2] "Umowy"
 
 #: js/ContractGridPanel.js:124
 msgid "Working Time Model"
-msgstr ""
+msgstr "Model czasu pracy"
 
 #: js/ContractGridPanel.js:127
 msgid "Vacation Days"
-msgstr ""
+msgstr "Dni urlopu"
 
 #: js/ContractGridPanel.js:129
 msgid "Cost Centre"
-msgstr ""
+msgstr "Centrum kosztów"
 
 #: js/ContractGridPanel.js:132
 msgid "Start Date"
-msgstr ""
+msgstr "Data rozpoczęcia"
 
 #: js/ContractGridPanel.js:135
 msgid "End Date"
-msgstr ""
+msgstr "Data zakończenia"
 
 #: js/ContractGridPanel.js:138
 msgid "Feast Calendar"
@@ -95,139 +96,139 @@ msgstr ""
 
 #: js/ContractGridPanel.js:176 js/ContractGridPanel.js:188
 msgid "undefined"
-msgstr ""
+msgstr "niezdefiniowane"
 
 #: js/DatePicker.js:42
 msgid "WK"
-msgstr ""
+msgstr "TK"
 
 #: js/DatePicker.js:63
 msgid "Loading calendar data..."
-msgstr ""
+msgstr "Ładowanie danych kalendarza..."
 
 #: js/EmployeeEditDialog.js:121 js/Models.js:293
 msgid "Free Time"
 msgid_plural "Free Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Urlop"
+msgstr[1] "Urlopy"
+msgstr[2] "Urlopy"
 
 #: js/EmployeeEditDialog.js:138 js/EmployeeEditDialog.js:151
 #: js/FreeDayGridPanel.js:113 js/FreeTimeEditDialog.js:114
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:63
 msgid "Employee"
 msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pracownik"
+msgstr[1] "Pracownicy"
+msgstr[2] "Pracownicy"
 
 #: js/EmployeeEditDialog.js:157 js/EmployeeGridPanel.js:97
 msgid "Number"
-msgstr ""
+msgstr "Numer"
 
 #: js/EmployeeEditDialog.js:167 js/Models.js:108
 msgid "Account"
-msgstr ""
+msgstr "Konto"
 
 #: js/EmployeeEditDialog.js:186
 msgid "Apply contact data on form"
-msgstr ""
+msgstr "Dodaj dane kontaktowe do formularza"
 
 #: js/EmployeeEditDialog.js:214 js/EmployeeGridPanel.js:104
 msgid "Full Name"
-msgstr ""
+msgstr "Pełne nazwisko"
 
 #: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:112
 msgid "Salutation"
-msgstr ""
+msgstr "Forma grzecznościowa"
 
 #: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:110
 msgid "Title"
-msgstr ""
+msgstr "Tytuł naukowy"
 
 #: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:109
 msgid "First Name"
-msgstr ""
+msgstr "Imię"
 
 #: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:111
 msgid "Last Name"
-msgstr ""
+msgstr "Nazwisko"
 
 #: js/EmployeeEditDialog.js:252
 msgid "Personal Information"
-msgstr ""
+msgstr "Informacje osobiste"
 
 #: js/EmployeeEditDialog.js:262
 msgid "Country"
-msgstr ""
+msgstr "Kraj"
 
 #: js/EmployeeEditDialog.js:265
 msgid "Locality"
-msgstr ""
+msgstr "Miejscowość"
 
 #: js/EmployeeEditDialog.js:268
 msgid "Postalcode"
-msgstr ""
+msgstr "Kod pocztowy"
 
 #: js/EmployeeEditDialog.js:271
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 #: js/EmployeeEditDialog.js:274
 msgid "Street"
-msgstr ""
+msgstr "Ulica"
 
 #: js/EmployeeEditDialog.js:277
 msgid "Street2"
-msgstr ""
+msgstr "Ulica 2"
 
 #: js/EmployeeEditDialog.js:280
 msgid "E-Mail"
-msgstr ""
+msgstr "E-mail"
 
 #: js/EmployeeEditDialog.js:283
 msgid "Telephone Number"
-msgstr ""
+msgstr "Numer telefonu stacjonarnego"
 
 #: js/EmployeeEditDialog.js:286
 msgid "Cell Phone Number"
-msgstr ""
+msgstr "Numer telefonu komórkowego"
 
 #: js/EmployeeEditDialog.js:290
 msgid "Birthday"
-msgstr ""
+msgstr "Urodziny"
 
 #: js/EmployeeEditDialog.js:298
 msgid "Internal Information"
-msgstr ""
+msgstr "Informacje wewnętrzne"
 
 #: js/EmployeeEditDialog.js:307 js/EmployeeGridPanel.js:152
 msgid "Supervisor"
-msgstr ""
+msgstr "Przełożony"
 
 #: js/EmployeeEditDialog.js:314 js/EmployeeGridPanel.js:165
 msgid "Division"
-msgstr ""
+msgstr "Oddział"
 
 #: js/EmployeeEditDialog.js:318 js/EmployeeGridPanel.js:159
 msgid "Health Insurance"
-msgstr ""
+msgstr "Ubezpieczenie zdrowotne"
 
 #: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138
 msgid "Employment begin"
-msgstr ""
+msgstr "Początek zatrudnienia"
 
 #: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145
 msgid "Employment end"
-msgstr ""
+msgstr "Koniec zatrudnienia"
 
 #: js/EmployeeEditDialog.js:336
 msgid "Banking Information"
-msgstr ""
+msgstr "Informacje bankowe"
 
 #: js/EmployeeEditDialog.js:345
 msgid "Account Holder"
-msgstr ""
+msgstr "Właściciel konta"
 
 #: js/EmployeeEditDialog.js:348
 msgid "Account Number"

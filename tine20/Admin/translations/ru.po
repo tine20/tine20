@@ -1,13 +1,14 @@
 # 
 # Translators:
 #   <arturmon82@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-21 19:34+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -270,15 +271,15 @@ msgstr ""
 
 #: js/Applications.js:83
 msgid "Enable Application"
-msgstr ""
+msgstr "Включить приложение"
 
 #: js/Applications.js:90
 msgid "Disable Application"
-msgstr ""
+msgstr "Отключить приложение"
 
 #: js/Applications.js:97
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #: js/Applications.js:146
 msgid "enable application"
@@ -486,7 +487,7 @@ msgstr "Длина"
 
 #: js/customfield/EditDialog.js:613
 msgid "Required"
-msgstr ""
+msgstr "Требуется"
 
 #: js/customfield/EditDialog.js:620
 msgid "Custom field additional properties"
@@ -589,15 +590,15 @@ msgstr "При удаление группы произошла ошибка."
 
 #: js/Groups.js:104
 msgid "Add Group"
-msgstr ""
+msgstr "Добавить группу"
 
 #: js/Groups.js:112
 msgid "Edit Group"
-msgstr ""
+msgstr "Изменить группу"
 
 #: js/Groups.js:120
 msgid "Delete Group"
-msgstr ""
+msgstr "Удалить группу"
 
 #: js/Groups.js:223
 msgid "Displaying groups {0} - {1} of {2}"
@@ -633,7 +634,7 @@ msgstr "Название роли"
 
 #: js/RoleEditDialog.js:361
 msgid "Role"
-msgstr ""
+msgstr "Роль"
 
 #: js/RoleEditDialog.js:371
 msgid "Add New Role"
@@ -653,15 +654,15 @@ msgstr "Удаление роли(ей)..."
 
 #: js/Roles.js:102
 msgid "Add Role"
-msgstr ""
+msgstr "Добавить роль"
 
 #: js/Roles.js:110
 msgid "Edit Role"
-msgstr ""
+msgstr "Изменить роль"
 
 #: js/Roles.js:118
 msgid "Delete Role"
-msgstr ""
+msgstr "Удалить роль"
 
 #: js/Roles.js:226
 msgid "Displaying roles {0} - {1} of {2}"
@@ -684,7 +685,7 @@ msgstr[2] "Компьютеров"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
-msgstr ""
+msgstr "Обновление тега"
 
 #: js/TagEditDialog.js:83
 msgid "Could not save tag."
@@ -736,15 +737,15 @@ msgstr "Удаление тэга(ов)..."
 
 #: js/Tags.js:97
 msgid "Add Tag"
-msgstr ""
+msgstr "Добавить тег"
 
 #: js/Tags.js:105
 msgid "Edit Tag"
-msgstr ""
+msgstr "Изменить тег"
 
 #: js/Tags.js:113
 msgid "Delete Tag"
-msgstr ""
+msgstr "Удалить тег"
 
 #: js/Tags.js:211
 msgid "Displaying tags {0} - {1} of {2}"
@@ -765,11 +766,11 @@ msgstr ""
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:726
 msgid "Passwords do not match!"
-msgstr ""
+msgstr "Пароли не совпадают!"
 
 #: js/user/EditDialog.js:240
 msgid "Passwords match!"
-msgstr ""
+msgstr "Пароли совпадают!"
 
 #: js/user/EditDialog.js:286 js/user/EditDialog.js:848
 msgid "Primary group"
@@ -880,7 +881,7 @@ msgstr "Информация"
 
 #: js/user/EditDialog.js:557
 msgid "Last Login"
-msgstr ""
+msgstr "Последний вход"
 
 #: js/user/EditDialog.js:611
 msgid "Domain not allowed"
@@ -928,7 +929,7 @@ msgstr "Подтверждение пароля"
 
 #: js/user/EditDialog.js:710
 msgid "Repeat password"
-msgstr ""
+msgstr "Повтор пароля"
 
 #: js/user/EditDialog.js:736
 msgid "Ok"
@@ -1031,7 +1032,7 @@ msgstr ""
 
 #: js/user/GridPanel.js:76
 msgid "Reset Password"
-msgstr ""
+msgstr "Сбросить пароль"
 
 #: js/user/GridPanel.js:177
 msgid "Display name"

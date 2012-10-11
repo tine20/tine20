@@ -1,13 +1,14 @@
 # 
 # Translators:
 #   <arturmon82@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-06 12:44+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -59,7 +60,7 @@ msgstr "Сервис не доступен"
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
 " Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr ""
+msgstr "Менеджер файлов не настроен правильно. Пожалуйста, обратитесь к {0} ЧАВО администратора Tine 2.0 {1} для рекомендаций по настройке  или к администратору."
 
 #: js/Filemanager.js:103
 msgid "Files already exists"
@@ -96,9 +97,9 @@ msgstr "Вы действительно хотите удалить следую
 #: js/Model.js:40
 msgid "File"
 msgid_plural "Files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Файл"
+msgstr[1] "Файла"
+msgstr[2] "Файлов"
 
 #: js/Model.js:44 js/NodeGridPanel.js:155
 msgid "Folder"
@@ -137,7 +138,7 @@ msgstr "Время создания"
 
 #: js/NodeEditDialog.js:63 js/NodeEditDialog.js:76
 msgid "Node"
-msgstr ""
+msgstr "Узел"
 
 #: js/NodeEditDialog.js:82 js/NodeGridPanel.js:133
 msgid "Name"
@@ -149,23 +150,23 @@ msgstr "Создана"
 
 #: js/NodeEditDialog.js:109
 msgid "Modified By"
-msgstr ""
+msgstr "Изменено"
 
 #: js/NodeEditDialog.js:112
 msgid "Last Modified"
-msgstr ""
+msgstr "Последнее изменение"
 
 #: js/NodeEditDialog.js:135
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: js/NodeEditDialog.js:149
 msgid "Enter description"
-msgstr ""
+msgstr "Введите описание"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: js/NodeGridPanel.js:140
 msgid "Size"
@@ -189,7 +190,7 @@ msgstr "Показать закрытые"
 
 #: js/NodeGridPanel.js:268
 msgid "The max. Upload Filesize is {0} MB"
-msgstr ""
+msgstr "Макс. размер файла для отправки - {0} MB"
 
 #: js/NodeGridPanel.js:306
 msgid "Upload"
@@ -197,7 +198,7 @@ msgstr "Загрузить"
 
 #: js/NodeGridPanel.js:330
 msgid "Edit Properties"
-msgstr ""
+msgstr "Изменить свойства"
 
 #: js/NodeGridPanel.js:341
 msgid "Create Folder"
@@ -205,7 +206,7 @@ msgstr "Создать папку"
 
 #: js/NodeGridPanel.js:352
 msgid "Folder Up"
-msgstr ""
+msgstr "Вверх на уровень"
 
 #: js/NodeGridPanel.js:373 js/NodeGridPanel.js:374 js/NodeGridPanel.js:376
 msgid "Delete"
@@ -221,7 +222,7 @@ msgstr "Введите имя новой папки:"
 
 #: js/NodeGridPanel.js:522
 msgid "No {0} added"
-msgstr ""
+msgstr "{0} не добавлен"
 
 #: js/NodeGridPanel.js:669 js/NodeGridPanel.js:821 js/NodeTreePanel.js:662
 #: js/NodeTreePanel.js:772
@@ -232,7 +233,7 @@ msgstr "Сбой загрузки"
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
-msgstr ""
+msgstr "Не удалось загрузить файл. Размер файла может быть слишком большим. Пожалуйста, сообщите администратору. Максимальный загружаемый размер:"
 
 #: js/NodeGridPanel.js:822 js/NodeTreePanel.js:773
 msgid "Putting files in this folder is not allowed!"

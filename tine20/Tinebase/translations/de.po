@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 14:13+0000\n"
+"PO-Revision-Date: 2012-09-19 20:15+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -2109,7 +2109,7 @@ msgstr "Verknüpft mit"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder den/die {1}, in dem/der Sie suchen."
+msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder die {1}, in denen Sie suchen."
 
 #: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:454
 #: js/widgets/grid/GridPanel.js:455 js/widgets/grid/GridPanel.js:456

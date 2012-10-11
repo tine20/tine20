@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 19:40+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -286,7 +286,7 @@ msgstr "Tylko do odczytu"
 
 #: js/AuthenticationPanel.js:556
 msgid "Password Settings"
-msgstr ""
+msgstr "Ustawienia hasła"
 
 #: js/AuthenticationPanel.js:571
 msgid "User can change password"
@@ -294,31 +294,31 @@ msgstr "Użytkownik może zmienić hasło"
 
 #: js/AuthenticationPanel.js:577
 msgid "Enable password policy"
-msgstr ""
+msgstr "Włącz politykę haseł"
 
 #: js/AuthenticationPanel.js:583
 msgid "Only ASCII"
-msgstr ""
+msgstr "Wyłącznie znaki ASCII"
 
 #: js/AuthenticationPanel.js:588
 msgid "Minimum length"
-msgstr ""
+msgstr "Minimalna długość"
 
 #: js/AuthenticationPanel.js:591
 msgid "Minimum word chars"
-msgstr ""
+msgstr "Minimalna ilość znaków w słowie"
 
 #: js/AuthenticationPanel.js:594
 msgid "Minimum uppercase chars"
-msgstr ""
+msgstr "Minimalna ilość wielkich liter"
 
 #: js/AuthenticationPanel.js:597
 msgid "Minimum special chars"
-msgstr ""
+msgstr "Minimalna ilość znaków specjalnych"
 
 #: js/AuthenticationPanel.js:600
 msgid "Minimum numbers"
-msgstr ""
+msgstr "Minimalna ilość cyfr"
 
 #: js/AuthenticationPanel.js:607
 msgid "Redirect Settings"
@@ -594,7 +594,7 @@ msgstr "Przygotowywanie testów środowiska..."
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr ""
+msgstr "Nie znaleziono {0}. Proszę spróbować zmienić kryteria filtrowania, opcje podglądu albo {1}, w którym szukasz."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-19 19:41+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,15 +89,15 @@ msgstr "Przeliczone"
 
 #: js/Models.js:93 js/Models.js:170
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Czas ostatniej zmiany"
 
 #: js/Models.js:94 js/Models.js:171
 msgid "Last Modified By"
-msgstr ""
+msgstr "Ostatnio zmienione przez"
 
 #: js/Models.js:95 js/Models.js:172
 msgid "Creation Time"
-msgstr ""
+msgstr "Czas utworzenia"
 
 #: js/Models.js:96 js/Models.js:173
 msgid "Created By"
@@ -195,7 +195,7 @@ msgstr "ubiegły tydzień"
 
 #: js/TimeaccountEditDialog.js:152 Model/Timeaccount.php:43
 msgid "Cost Center"
-msgstr ""
+msgstr "Centrum kosztów"
 
 #: js/TimeaccountEditDialog.js:162
 msgid "Timesheets are billable"
@@ -324,7 +324,7 @@ msgstr "Czas rozpoczęcia"
 
 #: js/TimesheetGridPanel.js:100
 msgid "Time Account (Number - Title)"
-msgstr ""
+msgstr "Konto czasu (numer - tytuł)"
 
 #: js/TimesheetGridPanel.js:102
 msgid "Time Account closed"

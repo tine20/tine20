@@ -1,11 +1,13 @@
 # 
 # Translators:
+#   <c.blin@decalog.net>, 2012.
+#   <inscription@arrakeen.net>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-08 09:57+0000\n"
+"Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,23 +36,23 @@ msgstr "Créer ou mettre a jour les favoris des tâches partagées"
 
 #: Config.php:38
 msgid "Tasks status available"
-msgstr ""
+msgstr "Statut pour une tâche"
 
 #: Config.php:40
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Statuts disponibles pour une tâche. Attention, certaines valeurs peuvent impacter d'autres modules."
 
 #: Config.php:48
 msgid "Task priorities available"
-msgstr ""
+msgstr "Priorité pour tâche"
 
 #: Config.php:50
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Priorités disponibles pour une tâche. Attention, certaines valeurs peuvent impacter d'autres modules."
 
 #: Controller/Task.php:164
 msgid "Notification for Task "
@@ -74,12 +76,12 @@ msgstr "Tâches"
 #: js/Models.js:68
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "tâche à faire"
-msgstr[1] "tâches à faire"
+msgstr[0] "liste de tâches"
+msgstr[1] "listes de tâches"
 
 #: js/Models.js:68
 msgid "to do lists"
-msgstr "tâches à faire"
+msgstr "listes de tâches"
 
 #: js/Models.js:103
 msgid "Quick search"
@@ -97,8 +99,8 @@ msgstr "Date de fin"
 #: js/TaskGridPanel.js:165 Model/Task.php:191
 msgid "Status"
 msgid_plural "Status"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Statut"
+msgstr[1] "Statuts"
 
 #: js/Models.js:116 js/TaskGridPanel.js:195
 msgid "Responsible"
@@ -106,11 +108,11 @@ msgstr "Responsable"
 
 #: js/Models.js:118
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Dernière modification"
 
 #: js/Models.js:119
 msgid "Last Modified By"
-msgstr ""
+msgstr "Modifié par"
 
 #: js/Models.js:120 js/TaskGridPanel.js:181
 msgid "Creation Time"
@@ -118,11 +120,11 @@ msgstr "Date de création"
 
 #: js/Models.js:121
 msgid "Created By"
-msgstr ""
+msgstr "Créé par"
 
 #: js/TaskEditDialog.js:131
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Vous devez indiquer une date prévue, car l'alerte est activée !"
+msgstr "Vous devez indiquer une date de fin, car l'alerte est activée !"
 
 #: js/TaskEditDialog.js:180
 msgid "Due date"
@@ -169,7 +171,7 @@ msgstr "Marqueur"
 
 #: js/TaskGridPanel.js:111 Model/Task.php:199
 msgid "Lead"
-msgstr "Propsect"
+msgstr "Prospect"
 
 #: js/TaskGridPanel.js:118
 msgid "Add a task..."
@@ -181,7 +183,7 @@ msgstr "Pourcent"
 
 #: js/TaskGridPanel.js:240
 msgid "Show closed"
-msgstr "Afficher terminées"
+msgstr "Afficher les tâches complétées"
 
 #: js/Tasks.js:24
 msgid "New Task"
@@ -189,7 +191,7 @@ msgstr "Nouvelle tâche"
 
 #: Model/Task.php:187
 msgid "Due"
-msgstr "Date de fin prévue"
+msgstr "Date de fin"
 
 #: Model/Task.php:189
 msgid "Description"
@@ -201,7 +203,7 @@ msgstr "Téléphone"
 
 #: Model/Task.php:206
 msgid "Email"
-msgstr "Courriel"
+msgstr "Adresse électronique"
 
 #: Preference.php:24
 msgid "All my tasks"
@@ -213,43 +215,43 @@ msgstr "Favoris par défaut"
 
 #: Preference.php:67
 msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Le favori par défaut qui est chargé au démarrage des Tâches"
+msgstr "Favori qui sera chargé au démarrage des Tâches"
 
 #: Preference.php:70
 msgid "Default Task List"
-msgstr "Liste par défaut des Tâches"
+msgstr "Liste de tâches par défaut"
 
 #: Preference.php:71
 msgid "The default task list to create new tasks in."
-msgstr "La liste de tâches par défaut où créer les nouvelles tâches"
+msgstr "Liste où seront créées par défaut les nouvelles tâches"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:74
 msgid "No response"
-msgstr ""
+msgstr "Pas de réponse"
 
 #: Setup/Initialize.php:36 Setup/Update/Release5.php:76
 msgid "Cancelled"
-msgstr ""
+msgstr "Annulée"
 
 #: Setup/Initialize.php:37 Setup/Update/Release5.php:77
 msgid "In process"
-msgstr ""
+msgstr "En cours"
 
 #: Setup/Initialize.php:50 Setup/Update/Release5.php:167
 msgid "low"
-msgstr ""
+msgstr "basse"
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:168
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:169
 msgid "high"
-msgstr ""
+msgstr "haute"
 
 #: Setup/Initialize.php:53 Setup/Update/Release5.php:170
 msgid "urgent"
-msgstr ""
+msgstr "urgent"
 
 #: Setup/Initialize.php:81 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
@@ -257,28 +259,28 @@ msgstr "Toutes les tâches de ma liste"
 
 #: Setup/Initialize.php:90
 msgid "My open tasks"
-msgstr ""
+msgstr "Mes tâches en cours"
 
 #: Setup/Initialize.php:99
 msgid "My open tasks this week"
-msgstr ""
+msgstr "Mes tâches en cours pour cette semaine"
 
 #: Setup/Initialize.php:108
 msgid "All tasks for me"
-msgstr ""
+msgstr "Toutes mes tâches"
 
 #: Setup/Initialize.php:109
 msgid "All tasks that I am responsible for"
-msgstr ""
+msgstr "Toutes les tâches dont je suis responsable"
 
 #: Setup/Initialize.php:116
 msgid "Last modified by me"
-msgstr ""
+msgstr "Mes dernières modifications"
 
 #: Setup/Initialize.php:117
 msgid "All tasks that I have last modified"
-msgstr ""
+msgstr "Toutes les tâches que j'ai modifié dernièrement"
 
 #: Setup/Initialize.php:126
 msgid "Tasks without responsible"
-msgstr ""
+msgstr "Tâches sans responsable"

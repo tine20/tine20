@@ -1,13 +1,14 @@
 # 
 # Translators:
 #   <arturmon82@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-09-21 19:27+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -130,7 +131,7 @@ msgstr "Узел"
 
 #: js/AccountEditDialog.js:163
 msgid "Port (Default: 143 / SSL: 993)"
-msgstr ""
+msgstr "Порт (По умолчанию: 143/SSL:993)"
 
 #: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
 #: js/AccountEditDialog.js:266
@@ -166,7 +167,7 @@ msgstr "SMTP"
 
 #: js/AccountEditDialog.js:205
 msgid "Port (Default: 25)"
-msgstr ""
+msgstr "Порт (По умолчанию: 25)"
 
 #: js/AccountEditDialog.js:226
 msgid "Authentication"
@@ -194,7 +195,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:261
 msgid "Port (Default: 2000)"
-msgstr ""
+msgstr "Порт (По умолчанию: 2000)"
 
 #: js/AccountEditDialog.js:281
 msgid "Other Settings"
@@ -210,11 +211,11 @@ msgstr "Название папки Корзина"
 
 #: js/AccountEditDialog.js:300
 msgid "Drafts Folder Name"
-msgstr ""
+msgstr "Название папки Черновики"
 
 #: js/AccountEditDialog.js:306
 msgid "Templates Folder Name"
-msgstr ""
+msgstr "Название папки Шаблоны"
 
 #: js/AccountEditDialog.js:312
 msgid "Display Format"
@@ -254,7 +255,7 @@ msgstr ""
 
 #: js/Felamimail.js:33
 msgid "New Mail"
-msgstr ""
+msgstr "Новая почта"
 
 #: js/Felamimail.js:85
 msgid "Email"
@@ -435,7 +436,7 @@ msgstr "Id"
 
 #: js/GridPanel.js:477 js/Model.js:147
 msgid "Flags"
-msgstr ""
+msgstr "Флаги"
 
 #: js/GridPanel.js:490 js/Model.js:142 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
@@ -447,7 +448,7 @@ msgstr ""
 
 #: js/GridPanel.js:502
 msgid "Sender"
-msgstr ""
+msgstr "Отправитель"
 
 #: js/GridPanel.js:509 js/Model.js:144
 msgid "To"
@@ -475,7 +476,7 @@ msgstr "Последние"
 
 #: js/GridPanel.js:1169
 msgid "{0} %"
-msgstr ""
+msgstr "{0} %"
 
 #: js/GridPanel.js:1177
 msgid "Your quota"
@@ -525,7 +526,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:293
 msgid "On {0}, {1} wrote"
-msgstr ""
+msgstr "{0}, {1} писал"
 
 #: js/MessageEditDialog.js:313
 msgid "Original message"
@@ -537,7 +538,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:541
 msgid "{0} Message"
-msgstr ""
+msgstr "{0} сообщение"
 
 #: js/MessageEditDialog.js:593 js/MessageEditDialog.js:708
 msgid "Failed"
@@ -549,7 +550,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:609
 msgid "Errors"
-msgstr ""
+msgstr "Ошибки"
 
 #: js/MessageEditDialog.js:609
 msgid "Please fix the errors noted."
@@ -581,7 +582,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:964
 msgid "Add Note"
-msgstr ""
+msgstr "Добавить заметку"
 
 #: js/MessageEditDialog.js:965
 msgid "Edit Email Note Text:"
@@ -600,7 +601,7 @@ msgstr[2] "Сообщений"
 
 #: js/Model.js:140
 msgid "Subject/From"
-msgstr ""
+msgstr "Тема/От"
 
 #: js/Model.js:145
 msgid "Cc"
@@ -619,23 +620,23 @@ msgstr[2] ""
 
 #: js/Model.js:493
 msgid "INBOX"
-msgstr ""
+msgstr "Входящие"
 
 #: js/Model.js:493
 msgid "Drafts"
-msgstr ""
+msgstr "Черновики"
 
 #: js/Model.js:493
 msgid "Templates"
-msgstr ""
+msgstr "Шаблоны"
 
 #: js/Model.js:493
 msgid "Junk"
-msgstr ""
+msgstr "Спам"
 
 #: js/Model.js:493
 msgid "Trash"
-msgstr ""
+msgstr "Корзина"
 
 #: js/Model.js:502 js/Model.js:623 js/Model.js:688
 msgid "record list"
@@ -654,23 +655,23 @@ msgstr[2] ""
 #: js/Model.js:685
 msgid "Rule"
 msgid_plural "Rules"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Правило"
+msgstr[1] "Правила"
+msgstr[2] "Правила"
 
 #: js/Model.js:811
 msgid "Flag"
 msgid_plural "Flags"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Флаг"
+msgstr[1] "Флаги"
+msgstr[2] "Флаги"
 
 #: js/Model.js:814
 msgid "Flag list"
 msgid_plural "Flag lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Список флагов"
+msgstr[1] "Списки флагов"
+msgstr[2] "Списки флагов"
 
 #: js/RecipientGrid.js:205
 msgid "Click here to set To/CC/BCC."
@@ -690,27 +691,27 @@ msgstr "Bcc:"
 
 #: js/RecipientGrid.js:340
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: js/RecipientPickerDialog.js:62
 msgid "(new message)"
-msgstr ""
+msgstr "(новое сообщение)"
 
 #: js/RecipientPickerDialog.js:63
 msgid "Select recipients for \"{0}\""
-msgstr ""
+msgstr "Выберите получателя для \"{0}\""
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
-msgstr ""
+msgstr "Фильтр получателей"
 
 #: js/RecipientPickerFavoritePanel.js:54
 msgid "All recipients"
-msgstr ""
+msgstr "Все получатели"
 
 #: js/RecipientPickerFavoritePanel.js:57
 msgid "\"{0}\" recipients"
-msgstr ""
+msgstr "\"{0}\" получателей"
 
 #: js/sieve/RuleConditionsPanel.js:70
 msgid "From (Email and Name)"
@@ -722,15 +723,15 @@ msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:74
 msgid "Header contains"
-msgstr ""
+msgstr "Заголовок содержит"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
 msgid "Header name"
-msgstr ""
+msgstr "Название заголовка"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
 msgid "Header value"
-msgstr ""
+msgstr "Значение заголовка"
 
 #: js/sieve/RuleConditionsPanel.js:76
 msgid "Header regex"
@@ -738,7 +739,7 @@ msgstr ""
 
 #: js/sieve/RuleEditDialog.js:96
 msgid "Edit Filter Rule"
-msgstr ""
+msgstr "Изменить правило фильтра"
 
 #: js/sieve/RuleEditDialog.js:254
 msgid "If all of the following conditions are met:"
@@ -746,15 +747,15 @@ msgstr ""
 
 #: js/sieve/RuleEditDialog.js:274
 msgid "Do this action:"
-msgstr ""
+msgstr "Выполнить действие:"
 
 #: js/sieve/RuleEditDialog.js:364
 msgid "Move mail to folder"
-msgstr ""
+msgstr "Переместить в папку"
 
 #: js/sieve/RuleEditDialog.js:365
 msgid "Redirect mail to address"
-msgstr ""
+msgstr "Переслать по адресу"
 
 #: js/sieve/RuleEditDialog.js:366
 msgid "Reject mail with this text"
@@ -778,19 +779,19 @@ msgstr ""
 
 #: js/sieve/RulesGridPanel.js:78
 msgid "Move up"
-msgstr ""
+msgstr "Вверх"
 
 #: js/sieve/RulesGridPanel.js:85
 msgid "Move down"
-msgstr ""
+msgstr "Вниз"
 
 #: js/sieve/RulesGridPanel.js:92
 msgid "Enable"
-msgstr ""
+msgstr "Включить"
 
 #: js/sieve/RulesGridPanel.js:99
 msgid "Disable"
-msgstr ""
+msgstr "Отключить"
 
 #: js/sieve/RulesGridPanel.js:200
 msgid "ID"
@@ -798,15 +799,15 @@ msgstr "ID"
 
 #: js/sieve/RulesGridPanel.js:207
 msgid "Conditions"
-msgstr ""
+msgstr "Условия"
 
 #: js/sieve/RulesGridPanel.js:215
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: js/sieve/RulesGridPanel.js:305
 msgid "is greater than"
-msgstr ""
+msgstr "больше чем"
 
 #: js/sieve/RulesGridPanel.js:305
 msgid "is less than"
@@ -814,11 +815,11 @@ msgstr ""
 
 #: js/sieve/RulesGridPanel.js:316
 msgid "Header \"{0}\" contains \"{1}\""
-msgstr ""
+msgstr "Заголовок \"{0}\" содержит \"{1}\""
 
 #: js/sieve/RulesGridPanel.js:316
 msgid "Header \"{0}\" matches \"{1}\""
-msgstr ""
+msgstr "Заголовок \"{0}\" равен \"{1}\""
 
 #: js/sieve/VacationEditDialog.js:77
 msgid "Vacation Message for {0}"
@@ -830,7 +831,7 @@ msgstr ""
 
 #: js/sieve/VacationEditDialog.js:121
 msgid "Advanced"
-msgstr ""
+msgstr "Расширенные"
 
 #: js/sieve/VacationEditDialog.js:132
 msgid "Only send all X days to the same sender"
@@ -854,7 +855,7 @@ msgstr ""
 
 #: js/sieve/VacationEditDialog.js:221
 msgid "Start Date"
-msgstr ""
+msgstr "Дата начала"
 
 #: js/sieve/VacationEditDialog.js:222
 msgid "Set vacation start date ..."
@@ -862,7 +863,7 @@ msgstr ""
 
 #: js/sieve/VacationEditDialog.js:227
 msgid "End Date"
-msgstr ""
+msgstr "Дата окончания"
 
 #: js/sieve/VacationEditDialog.js:228
 msgid "Set vacation end date ..."
@@ -886,11 +887,11 @@ msgstr ""
 
 #: js/sieve/VacationEditDialog.js:253
 msgid "Message Template"
-msgstr ""
+msgstr "Шаблон сообщения"
 
 #: js/sieve/VacationEditDialog.js:264
 msgid "Choose Template ..."
-msgstr ""
+msgstr "Выберите шаблон..."
 
 #: js/TreeContextMenu.js:23
 msgid "Empty Folder"
@@ -934,7 +935,7 @@ msgstr ""
 
 #: js/TreeContextMenu.js:144
 msgid "Edit Filter Rules"
-msgstr ""
+msgstr "Изменить правило фильтра"
 
 #: js/TreeContextMenu.js:158
 msgid "Mark Folder as read"
@@ -942,35 +943,35 @@ msgstr ""
 
 #: js/TreeContextMenu.js:195
 msgid "Update Folder List"
-msgstr ""
+msgstr "Обновит список папок"
 
 #: js/TreePanel.js:700
 msgid "Total Messages:"
-msgstr ""
+msgstr "Всего сообщений:"
 
 #: js/TreePanel.js:704
 msgid "Unread Messages:"
-msgstr ""
+msgstr "Непрочитанных сообщений:"
 
 #: js/TreePanel.js:708
 msgid "Name on Server:"
-msgstr ""
+msgstr "Имя на сервере:"
 
 #: js/TreePanel.js:712
 msgid "Last update:"
-msgstr ""
+msgstr "Последнее обновление:"
 
 #: js/TreePanel.js:732
 #, python-format
 msgid "Fetching messages... ({0}%% done)"
-msgstr ""
+msgstr "Получение сообщений... ({0}%% выполнено)"
 
 #: js/TreePanel.js:748
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} непрочитанное сообщение"
+msgstr[1] "{0} непрочитанных сообщения"
+msgstr[2] "{0} непрочитанных сообщений"
 
 #: Preference.php:59
 msgid "All inboxes"
@@ -986,7 +987,7 @@ msgstr "Учетная запись электронной почты испол
 
 #: Preference.php:110
 msgid "Email Update Interval"
-msgstr ""
+msgstr "Интервал обновления"
 
 #: Preference.php:111
 msgid ""
@@ -996,7 +997,7 @@ msgstr ""
 
 #: Preference.php:114
 msgid "Use in Addressbook"
-msgstr ""
+msgstr "Использовать в адресной книге"
 
 #: Preference.php:115
 msgid "Compose Emails from the Addressbook with Felamimail."
@@ -1004,7 +1005,7 @@ msgstr ""
 
 #: Preference.php:118
 msgid "Use for NOTES"
-msgstr ""
+msgstr "Использовать для заметок"
 
 #: Preference.php:119
 msgid "Save Note default Value."
@@ -1012,7 +1013,7 @@ msgstr ""
 
 #: Preference.php:122
 msgid "Confirm Delete"
-msgstr ""
+msgstr "Подтвердите удаление"
 
 #: Preference.php:123
 msgid "Show confirmation dialog when deleting mails."
@@ -1024,7 +1025,7 @@ msgstr ""
 
 #: Setup/Initialize.php:51
 msgid "All unread mail"
-msgstr ""
+msgstr "Все непрочитанные сообщения"
 
 #: Setup/Initialize.php:52
 msgid "All unread mail of my email accounts"

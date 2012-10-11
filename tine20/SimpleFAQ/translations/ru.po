@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Nikolay Parukhin <parukhin@gmail.com>, 2012.
 #   <parukhin@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-24 21:45+0000\n"
+"PO-Revision-Date: 2012-10-06 12:55+0000\n"
 "Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +153,7 @@ msgstr "Избранный по умолчанию"
 
 #: Preference.php:71
 msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
+msgstr "Статья, которая откроется при запуске ЧАВО по умолчанию"
 
 #: Preference.php:74
 msgid "Default FAQ List"
