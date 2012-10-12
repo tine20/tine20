@@ -3,97 +3,16 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:     Milan (2012/03)
-Last change: 2012-02-08
+Release:     Joye (2012/10)
+Last change: 2012-10-12
 
 Contents
 --
 
-1. CalDAV Support
-2. Filemanager
-3. Customfields administration
-4. Config changes
-5. Projects application
-6. New Addressbook features
-7. ActiveSync improvements
-8. Add or reactivate admin user
-9. Calendar Frontend JSON API change
-10. Improved search / filtering options
+- Password policies
+- New Queue management
+- Oracle / Postgresql support
+- ...
 
------------------
-
-1. CalDAV Support
-
-- PHP 5.3+ required
-- See http://www.tine20.org/wiki/index.php/Admins/Thunderbird-Synchronisation for setup instructions.
-
-2. Filemanager
------------------
-
-- A path for the files is needed in the Tine 2.0 setup. You can add it to the config.inc.php like this:
-
- 'filesdir' => '/some/path/to/tine/files',
-     
-3. Customfields administration
------------------
- 
-- Administration of customfields is now possible in Admin application.
- 
-4. Config changes
------------------
- 
-- Keyfields for attender status, task priority + status, contact salutations have been added.
-- See http://www.tine20.org/wiki/index.php/Developers/Concepts/KeyFields for background information.
-
-5. Projects application
------------------
-
-- A new application has been added to the Tine 2.0 core: Projects
-
-6. New Addressbook features
------------------
-
-- New import dialog with duplicate detection and merge features
-- Multi-edit in contact dialog
-- Add attender to Calendar event or Project
-- Address parsing in contact dialog 
-  (see http://www.tine20.org/wiki/index.php/Admin_FAQ#How_can_I_change_the_address_parsing_rules.3F)
-
-  7. ActiveSync improvements
------------------
- 
-- The handling of the synckey has been improved. Resets of the sync data should happen at a much lower rate now.
-
-8. Add or reactivate admin user
------------------
-
-- You can now add or reactivate an admin user and set or reset the password via the setup CLI.
- usage example:
- 
-     $ php setup.php --create_admin
-    Please enter a username. If the user already exists, he is reactivated and you can reset the password.
-    
-    Username> existingAdmin
-    User existingAdmin already exists.
-    Activated admin user 'existingAdmin' (expires tomorrow).
-    
-    Do you want to reset the password (default: "no", "y" or "yes" for reset)?> y
-    
-    Admin user password> 
-    
-    Confirm password> 
-    User password has been reset.
-    
-9. Calendar Frontend JSON API change
------------------
-
-- A small API change took place in Calendar/Frontend/Json.php:
- All occurrences of the function parameter "checkBusyConficts" have been replaced by the correct "checkBusyConflicts".
- 
- 10. Improved search / filtering options
- -----------------
- 
- - The filtertoolbar has been extended to support OR filtering and it is now possible to filter in related records
- and the relations themselves. For example you could search for contacts that are attender of events that are scheduled
- this week and whose attender status is 'Tentative'.
+TODO: THIS NEEDS TO BE FILLED WITH CONTENT
  
