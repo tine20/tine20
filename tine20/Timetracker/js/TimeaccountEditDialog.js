@@ -152,7 +152,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fieldLabel: this.app.i18n._('Cost Center'),
                             editDialog: this,
                             allowBlank: true,
-                            app: 'Addressbook',
+                            app: 'Sales',
                             recordClass: Tine.Sales.Model.CostCenter,
                             relationType: 'COST_CENTER',
                             relationDegree: 'sibling',

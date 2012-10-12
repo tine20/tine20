@@ -12,10 +12,10 @@
 Ext.ns('Tine.Sales');
 
 /**
- * Contract selection combo box
+ * CostCenter selection combo box
  * 
  * @namespace   Tine.Sales
- * @class       Tine.Sales.ContractSearchCombo
+ * @class       Tine.Sales.CostCenterSearchCombo
  * @extends     Ext.form.ComboBox
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -24,21 +24,22 @@ Ext.ns('Tine.Sales');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Sales.ContractSearchCombo
+ * Create a new Tine.Sales.CostCenterSearchCombo
  */
-Tine.Sales.ContractSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
+Tine.Sales.CostCenterSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     allowBlank: false,
     itemSelector: 'div.search-item',
     minListWidth: 200,
+    sortBy: 'number',
     
     //private
     initComponent: function(){
-        this.recordClass = Tine.Sales.Model.Contract;
-        this.recordProxy = Tine.Sales.contractBackend;
-        
+        this.recordClass = Tine.Sales.Model.CostCenter;
+        this.recordProxy = Tine.Sales.costcenterBackend;
         this.initTemplate();
-        Tine.Sales.ContractSearchCombo.superclass.initComponent.call(this);
+        
+        Tine.Sales.CostCenterSearchCombo.superclass.initComponent.call(this);
     },
     
     /**
@@ -59,7 +60,7 @@ Tine.Sales.ContractSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPic
                     encode: function(values) {
                         var ret = '';
                         if(values.number) ret += '<b>' + Ext.util.Format.htmlEncode(values.number) + '</b> - ';
-                        ret += Ext.util.Format.htmlEncode(values.title);
+                        ret += Ext.util.Format.htmlEncode(values.remark);
                         return ret;
                         
                     }
@@ -69,4 +70,4 @@ Tine.Sales.ContractSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPic
     }
 });
 
-Tine.widgets.form.RecordPickerManager.register('Sales', 'Contract', Tine.Sales.ContractSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Sales', 'CostCenter', Tine.Sales.CostCenterSearchCombo);

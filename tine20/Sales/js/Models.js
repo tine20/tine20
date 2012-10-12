@@ -191,7 +191,16 @@ Tine.Sales.Model.CostCenter = Tine.Tinebase.data.Record.create(Tine.Sales.Model.
     containersName: 'All CostCenters'
 });
 
-
+// costcenters filtermodel
+Tine.Sales.Model.CostCenter.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Sales');
+    
+    return [
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Number'), field: 'number' },
+        {label: app.i18n._('Remark'), field: 'remark' }
+    ];
+};
 // DIVISION
 
 Tine.Sales.Model.DivisionArray = Tine.Tinebase.Model.genericFields.concat([
@@ -218,3 +227,13 @@ Tine.Sales.Model.Division = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Di
     containerName: 'All Divisions',
     containersName: 'Divisions'
 });
+
+// divisions filtermodel
+Tine.Sales.Model.Division.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Sales');
+    
+    return [
+        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: app.i18n._('Title'), field: 'title' }
+    ];
+};

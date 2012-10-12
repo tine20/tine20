@@ -38,4 +38,5 @@ class Sales_Backend_CostCenter extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = false;
+    
 }

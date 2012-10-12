@@ -39,7 +39,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      * initializes the component
      */
     initComponent: function() {
-        this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, {recordClass: this.recordClass, allowBlank: this.allowBlank});
+        this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, Ext.applyIf({},this));
         this.items = [this.combo];
 
         this.deferredLoading();

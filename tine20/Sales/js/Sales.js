@@ -80,3 +80,21 @@ Tine.Sales.productBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Product',
     recordClass: Tine.Sales.Model.Product
 });
+
+/**
+ * default costcenter backend
+ */
+Tine.Sales.costcenterBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Sales',
+    modelName: 'CostCenter',
+    recordClass: Tine.Sales.Model.CostCenter
+});
+
+/**
+ * default division backend
+ */
+Tine.Sales.divisionBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Sales',
+    modelName: 'Division',
+    recordClass: Tine.Sales.Model.Division
+});

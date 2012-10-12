@@ -28,6 +28,10 @@
           "path": "js/"
         },
         {
+          "text": "CostCenterSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractGridPanel.js",
           "path": "js/"
         },
