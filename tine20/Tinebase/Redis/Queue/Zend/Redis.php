@@ -168,7 +168,7 @@ class Tinebase_Redis_Queue_Zend_Redis extends Zend_Queue_Adapter_AdapterAbstract
         );
 
         $this->_redis->hMset($this->_dataStructName . ':' . $id, $data);
-        $this->_redis->rPush($this->_queueStructName, $id);
+        $this->_redis->lPush($this->_queueStructName, $id);
 
         $options = array(
             'queue' => $queue,
