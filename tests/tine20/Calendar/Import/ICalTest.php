@@ -136,13 +136,12 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
         
-        $cmd = TestServer::assembleCliCommand(
-            'Calendar.import',
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
             'plugin=Calendar_Import_Ical importContainerId=' . $this->_testCalendar->getId() .
-                ' ' . dirname(__FILE__) . '/files/horde.ics',
-            get_class($this),
-            TRUE
-        );
+            ' ' . dirname(__FILE__) . '/files/horde.ics';
+        
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE);
+        
         exec($cmd, $output);
         $failMessage = print_r($output, TRUE);
         $this->_checkHordeImport($failMessage);

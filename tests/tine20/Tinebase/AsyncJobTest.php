@@ -61,7 +61,8 @@ class Tinebase_AsyncJobTest extends PHPUnit_Framework_TestCase
      */
     public static function triggerAsyncEvents($numOfParallels = 5)
     {
-        $cmd = TestServer::assembleCliCommand('Tinebase.triggerAsyncEvents');
+        $cmd = realpath(__DIR__ . "/../../../tine20/tine20.php") . ' --method Tinebase.triggerAsyncEvents';
+        $cmd = TestServer::assembleCliCommand($cmd);
         
         // start multiple cronruns at the same time
         // NOTE: we don't use pnctl as we don't need it here and it's not always available

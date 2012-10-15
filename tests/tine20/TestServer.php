@@ -114,22 +114,26 @@ class TestServer
     /**
      * assemble CLI command line call (tine20.php)
      * 
-     * @param string $method
-     * @param string $args
+     * @param string $command
+     * @param bool   $addCredentials
      * @return string
      */
-    public static function assembleCliCommand($method, $args = NULL, $className = NULL, $addCredentials = FALSE)
+    public static function assembleCliCommand($command = "", $addCredentials = FALSE)
     {
+        //$backtrace = debug_backtrace();
+        //return $backtrace[1]['class'];
+ 
         // assemble command
         $cmd = implode(' ', $_SERVER['argv']);
+        
         $cmd = preg_replace(array(
             '/\/phpunit/',
             '/--stderr /',
             '/--colors /',
             '/--verbose /',
             '/--stop-on-failure /',
-            '/' . ($className ? $className : 'Calendar_Controller_EventNotificationsTests' ) . '/',
-            '/AllTests AllTests.php/',
+            '/ \S+Tests/',
+            '/AllTests.php/',
             '/--debug /',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
@@ -149,16 +153,12 @@ class TestServer
             '',
             '',
         ), $cmd);
-        $cmd .= realpath(__DIR__ . "/../../tine20/tine20.php");
-        $cmd .= " --method $method";
+        
+        $cmd .= $command;
         
         if ($addCredentials) {
             $config = TestServer::getInstance()->getConfig();
             $cmd .= " --username {$config->username} --password {$config->password}";
-        }
-        
-        if ($args !== NULL) {
-            $cmd .= " $args";
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);
