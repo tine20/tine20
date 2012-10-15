@@ -174,12 +174,12 @@ class Tinebase_Application
             $cacheId = 'getApplicationByName_' . $_applicationName;
             if ($cache->test($cacheId)) {
                 $result = $cache->load($cacheId);
-                
-                $this->_addToClassCache($result);
-                
-                return $result;
+                if ($result instanceof Tinebase_Model_Application) {
+                    $this->_addToClassCache($result);
+                    return $result;
+                }
             }
-        } 
+        }
         
         $select = $this->_db->select();
         $select->from($this->_tableName)
