@@ -228,12 +228,10 @@ Ext.namespace('Tine.Felamimail');
         if (! this.record) {
             this.record = new Tine.Felamimail.Model.Message(this.recordDefaults, 0);
         }
-        
         this.initFrom();
         this.initRecipients();
         this.initSubject();
         this.initContent();
-        
         // legacy handling:...
         // TODO add this information to attachment(s) + flags and remove this
         if (this.replyTo) {
@@ -245,6 +243,16 @@ Ext.namespace('Tine.Felamimail');
         } else if (this.draftOrTemplate) {
             this.record.set('original_id', this.draftOrTemplate.id);
         }
+    },
+    
+    /**
+     * show loadMask (loadRecord is false in this dialog)
+     * @param {} ct
+     * @param {} position
+     */
+    onRender : function(ct, position) {
+        Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
+        this.loadMask.show();
     },
     
     /**
@@ -267,12 +275,11 @@ Ext.namespace('Tine.Felamimail');
      * inits body and attachments from reply/forward/template
      */
     initContent: function() {
-        if (! this.record.get('body')) {
+        if (this.record.get('body') === this.recordDefaults.body) {
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
             if (! this.msgBody) {
                 var message = this.getMessageFromConfig();
-                
                 if (message) {
                     if (! message.bodyIsFetched()) {
                         // self callback when body needs to be fetched
@@ -704,7 +711,9 @@ Ext.namespace('Tine.Felamimail');
      * overwrite, just hide the loadMask
      */
     onAfterRecordLoad: function() {
-//        this.loadMask.hide();
+        if(this.loadMask) {
+            this.loadMask.hide();
+        }
     },
         
     /**
@@ -980,6 +989,9 @@ Ext.namespace('Tine.Felamimail');
      */
     onApplyChanges: function(closeWindow) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges');
+        
+        this.loadMask.show();
+        
         if (this.getForm().findField('subject').getValue() == '') {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
             Ext.MessageBox.confirm(
