@@ -3,10 +3,10 @@
  * Crm csv generation class
  *
  * @package     Crm
- * @subpackage    Export
+ * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add products
  */
@@ -15,7 +15,7 @@
  * Crm csv generation class
  * 
  * @package     Crm
- * @subpackage    Export
+ * @subpackage  Export
  * 
  */
 class Crm_Export_Csv extends Tinebase_Export_Csv
@@ -39,6 +39,26 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      */
     protected $_relationsTypes = array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'TASK');
 
+    /**
+     * lead relation subfields
+     * 
+     * @var array
+     */
+    protected $_relationFields = array(
+        'CUSTOMER' => array(
+            'org_name',
+            'n_family',
+            'n_given',
+            'adr_one_street',
+            'adr_one_postalcode',
+            'adr_one_locality',
+            'adr_one_countryname',
+            'tel_work',
+            'tel_cell',
+            'email',
+        )
+    );
+    
     /**
      * special fields
      * 

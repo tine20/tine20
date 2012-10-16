@@ -28,6 +28,13 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
     protected $_instance;
     
     /**
+     * export file
+     * 
+     * @var string
+     */
+    protected $_filename;
+    
+    /**
      * @var Tinebase_Model_Container
      */
     protected $_container = NULL;
@@ -79,6 +86,8 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
             ))), TRUE);
         }
 
+        unlink($this->_filename);
+        
         parent::tearDown();
     }
     
@@ -91,21 +100,16 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     public function testExportOds()
     {
-        //$translate = Tinebase_Translation::getTranslation('Crm');
-        $odsFilename = $this->_instance->generate();
+        $this->_filename = $this->_instance->generate();
         
-        $this->assertTrue(file_exists($odsFilename));
+        $this->assertTrue(file_exists($this->_filename));
         
         $xmlBody = $this->_instance->getDocument()->asXML();
-        //echo  $xmlBody;
         $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name');
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
         $this->assertEquals(1, preg_match('/Admin Account, Tine 2\.0/',        $xmlBody), 'no creator');
         $this->assertEquals(1, preg_match('/Tine 2\.0 Admin Account/',         $xmlBody), 'no container name');
-        $this->assertEquals(1, preg_match('/personal leads/',                  $xmlBody), 'no container name');
-        
-        unlink($odsFilename);
     }
 
     /**
@@ -123,14 +127,12 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
             Tinebase_Model_Grants::GRANT_READ      => true,
         ))), TRUE, FALSE);
         
-        $odsFilename = $this->_instance->generate();
+        $this->_filename = $this->_instance->generate();
         
-        $this->assertTrue(file_exists($odsFilename));
+        $this->assertTrue(file_exists($this->_filename));
         
         $xmlBody = $this->_instance->getDocument()->asXML();
         //echo  $xmlBody;
         $this->assertEquals(0, preg_match("/PHPUnit/",      $xmlBody), 'grant not forced');
-        
-        unlink($odsFilename);
     }
 }

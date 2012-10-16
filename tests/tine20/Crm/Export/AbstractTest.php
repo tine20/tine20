@@ -44,8 +44,8 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-            array('type'  => 'TASK',    'related_record' => $task->toArray()),
-            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
+            array('type'  => 'TASK',     'related_record' => $task->toArray()),
+            array('type'  => 'CUSTOMER', 'related_record' => $contact->toArray()),
         );
         
         $this->_objects['lead'] = $this->_json->saveLead(Zend_Json::encode($leadData));

@@ -27,6 +27,13 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_relationsTypes = array();
     
     /**
+     * relation subfields
+     * 
+     * @var array
+     */
+    protected $_relationFields = array();
+    
+    /**
      * special fields
      * 
      * @var array
@@ -155,13 +162,34 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
                 $fields[] = 'tags';
             }
             $fields = array_diff($fields, $this->_skipFields);
-            $fields = array_merge($fields, $this->_relationsTypes);
+            $fields = array_merge($fields, $this->_getRelationFields());
             $this->_fields = $fields;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fields to export: ' . implode(', ', $fields));
         }
         
         return $this->_fields;
+    }
+    
+    /**
+     * get relation fields
+     * 
+     * @return array
+     */
+    protected function _getRelationFields()
+    {
+        $result = array();
+        foreach ($this->_relationsTypes as $relationType) {
+            if (isset($this->_relationFields[$relationType])) {
+                foreach ($this->_relationFields[$relationType] as $relationField) {
+                    $result[] = $relationType . '-' . $relationField;
+                }
+            } else {
+                $result[] = $relationType;
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -184,8 +212,16 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
         foreach ($_records as $record) {
             $csvArray = array();
             foreach ($this->_getFields() as $fieldName) {
-                if (in_array($fieldName, $this->_relationsTypes)) {
-                    $csvArray[] = $this->_addRelations($record, $fieldName);
+                if (in_array($fieldName, $this->_relationsTypes)
+                    || (! empty($this->_relationsTypes) && preg_match('/^' . implode('|', $this->_relationsTypes) . '-/', $fieldName))
+                ) {
+                    if (strpos($fieldName, '-') !== FALSE) {
+                        list($relationType, $recordField) = explode('-', $fieldName);
+                    } else {
+                        $relationType = $fieldName;
+                        $recordField = NULL;
+                    }
+                    $csvArray[] = $this->_addRelations($record, $relationType, $recordField);
                 } else if (in_array($fieldName, $this->_specialFields)) {
                     $arrayFlipped = array_flip($this->_specialFields);
                     $csvArray[] = $this->_addSpecialValue($record, $arrayFlipped[$fieldName]);

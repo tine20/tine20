@@ -15,10 +15,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Export_AllTests::main');
-}
-
 class Crm_Export_AllTests
 {
     public static function main ()
@@ -35,8 +31,4 @@ class Crm_Export_AllTests
         $suite->addTestSuite('Crm_Export_XlsTest');
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Export_AllTests::main') {
-    Crm_Export_AllTests::main();
 }

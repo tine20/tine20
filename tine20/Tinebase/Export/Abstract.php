@@ -385,20 +385,23 @@ abstract class Tinebase_Export_Abstract
     /**
      * add relation values from related records
      * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @param string $_recordField
+     * @param Tinebase_Record_Abstract $record
+     * @param string $relationType
+     * @param string $recordField
      * @return string
      */
-    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField = NULL)
+    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL)
     {
-        $_record->relations->addIndices(array('type'));
-        $matchingRelations = $_record->relations->filter('type', $_fieldName);
+        $record->relations->addIndices(array('type'));
+        $matchingRelations = $record->relations->filter('type', $relationType);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+            . 'Found ' . count($matchingRelations) . ' relations of type ' . $relationType . ' (' . $recordField . ')');
         
         $resultArray = array();
         foreach ($matchingRelations as $relation) {
-            if ($_recordField !== NULL) {
-                $resultArray[] = $relation->related_record->{$_recordField};
+            if ($recordField !== NULL) {
+                $resultArray[] = $relation->related_record->{$recordField};
             } else {
                 $resultArray[] = $this->_getRelationSummary($relation->related_record);
             }
