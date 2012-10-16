@@ -1151,6 +1151,41 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testSieveRulesOrder
+     * 
+     * @see 0007240: order of sieve rules changes when vacation message is saved
+     */
+    public function testSieveRulesOrder()
+    {
+        $this->_setTestScriptname();
+        $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        
+        $ruleData = $this->_getRuleData();
+        $ruleData[0]['id'] = $ruleData[2]['id'];
+        $ruleData[2]['id'] = 1;
+        $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
+        $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
+        
+        $vacationData = $this->_getVacationData();
+        $vacationData['enabled'] = FALSE;
+        $resultSet = $this->_json->saveVacation($vacationData);
+        $sieveScriptVacation = $sieveBackend->getScript($this->_testSieveScriptName);
+        
+        // compare sieve scripts
+        $this->assertEquals($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
+    }
+    
+    /**
+     * use another name for test sieve script
+     */
+    protected function _setTestScriptname()
+    {
+        $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
+        $this->_testSieveScriptName = 'Felamimail_Unittest';
+        Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+    }
+    
+    /**
      * get folder filter
      *
      * @return array
@@ -1309,11 +1344,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
     {
-        $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
-        
-        // use another name for test script
-        $this->_testSieveScriptName = 'Felamimail_Unittest';
-        Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+        $this->_setTestScriptname();
         
         // check which save fn to use
         if (array_key_exists('reason', $_sieveData)) {

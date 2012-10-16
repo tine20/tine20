@@ -89,7 +89,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      */
     protected function _getRules()
     {
-        $ruleRecords = $this->_rulesBackend->getMultipleByProperty($this->_accountId, 'account_id');
+        $ruleRecords = $this->_rulesBackend->getMultipleByProperty($this->_accountId, 'account_id', FALSE, 'id');
         
         $this->_rules = array();
         foreach ($ruleRecords as $ruleRecord) {

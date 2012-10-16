@@ -157,6 +157,7 @@ abstract class Felamimail_Sieve_Backend_Abstract
     {
         $rules = '';
         
+        ksort($this->_rules);
         foreach ($this->_rules as $rule) {
             if ($rule->isEnabled() === true) {
                 $rules .= sprintf("%s %s", (empty($rules)) ? 'if' : 'elsif', $rule);
