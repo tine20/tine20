@@ -73,7 +73,7 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
     /**
      * plugin method of Ext.grid.GridPanel
      * 
-     * @oaran {Ext.grid.GridPanel} grid
+     * @param {Ext.grid.GridPanel} grid
      */
     init: function(grid) {
         this.grid = grid;
@@ -93,9 +93,11 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
      * fires our change event
      */
     onFilterChange: function() {
+        
         if (this.getGridPanel() && typeof this.getGridPanel().getView === 'function') {
             this.getGridPanel().getView().isPagingRefresh = true;
         }
+        
         if (this.store) {
             this.store.load({});
         }

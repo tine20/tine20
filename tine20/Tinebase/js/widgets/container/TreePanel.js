@@ -581,7 +581,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             scope: this,
             success: function(result, request){
                 // update grid
-                this.filterPlugin.onFilterChange();
+                this.app.getMainScreen().getCenterPanel().loadGridData();
             }
         });
         
