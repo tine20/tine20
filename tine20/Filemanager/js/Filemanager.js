@@ -34,7 +34,7 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     text: 'Save locally',   // _('Save locally')
     iconCls: 'action_filemanager_save_all',
     requiredGrant: 'readGrant',
-    actionType: 'saveLocaly',
+    actionType: 'download',
     allowMultiple: false,
     handler: function(action) {
         var node = action.grid.store.getAt(action.gridIndex).get('related_record');
@@ -43,6 +43,7 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
             params: {
                 method: 'Filemanager.downloadFile',
                 requestType: 'HTTP',
+                id: '',
                 path: downloadPath
             }
         }).start();

@@ -359,7 +359,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_download = new Ext.Action({
             requiredGrant: 'readGrant',
             allowMultiple: false,
-            actionType: 'saveLocaly',
+            actionType: 'download',
             text: this.app.i18n._('Save locally'),
             handler: this.onDownload,
             iconCls: 'action_filemanager_save_all',
@@ -617,6 +617,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 params: {
                     method: 'Filemanager.downloadFile',
                     requestType: 'HTTP',
+                    id: '',
                     path: downloadPath
                 }
             }).start();
@@ -885,6 +886,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             params: {
                 method: 'Filemanager.downloadFile',
                 requestType: 'HTTP',
+                id: '',
                 path: downloadPath
             }
         }).start();

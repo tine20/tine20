@@ -259,6 +259,7 @@ Tine.Filemanager.GridContextMenu = {
             params: {
                 method: 'Filemanager.downloadFile',
                 requestType: 'HTTP',
+                id: '',
                 path: downloadPath
             }
         }).start();

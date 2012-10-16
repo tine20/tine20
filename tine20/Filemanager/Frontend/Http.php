@@ -22,20 +22,29 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * download file
      * 
-     * @param string $_path
+     * @param string $path
+     * @param string $id
      * 
      * @todo allow to download a folder as ZIP file
      */
-    public function downloadFile($path)
+    public function downloadFile($path, $id)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-            . ' Download file ' . $path 
-        );
+        $nodeController = Filemanager_Controller_Node::getInstance();
         
-        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Filemanager_Controller_Node::getInstance()->addBasePath($path));
-        $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+            . ' Download file ' . $path ? $path : $id
+        );
+        if ($path) {
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($path));
+            $node = $nodeController->getFileNode($pathRecord);
+        } elseif ($id) {
+            $node = $nodeController->get($id);
+            $nodeController->resolveMultipleTreeNodesPath($node);
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($node->path));
+        } else {
+            Tinebase_Exception_InvalidArgument('Either a path or id is needed to download a file.');
+        }
         
         // cache for 3600 seconds
         $maxAge = 3600;

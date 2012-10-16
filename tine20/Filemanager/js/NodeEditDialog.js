@@ -35,6 +35,37 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: false,
     
+    initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        this.downloadAction = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: false,
+            actionType: 'download',
+            text: this.app.i18n._('Save locally'),
+            handler: this.onDownload,
+            iconCls: 'action_filemanager_save_all',
+            disabled: false,
+            scope: this
+        });
+        
+        this.tbarItems.push(this.downloadAction);
+        Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * download file
+     */
+    onDownload: function() {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Filemanager.downloadFile',
+                requestType: 'HTTP',
+                path: '',
+                id: this.record.get('id')
+            }
+        }).start();
+    },
+    
     /**
      * returns dialog
      * @return {Object}
