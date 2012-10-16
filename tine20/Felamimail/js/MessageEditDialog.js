@@ -1061,7 +1061,7 @@ Ext.namespace('Tine.Felamimail');
      */
     fillRecipientGrid: function(contacts) {
         this.recipientGrid.addRecordsToStore(contacts, 'to');
-        this.recipientGrid.syncRecipientsToStore(['to']);
+        this.recipientGrid.setFixedHeight(true);
     },
     
     /**
