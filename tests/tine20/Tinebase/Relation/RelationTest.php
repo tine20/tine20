@@ -28,77 +28,27 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      * crm lead identifiers we make relations to
      * @var array
      */
-    private $_crmId = array(
-        'model'   => 'Crm_Model_Lead',
-        'backend' => 'SQL',
-        'id'      => '268d586e46aad336de8fa2530b5b8faf921e494d'
-    );
+    private $_crmId = NULL;
     
     /**
      * a second crm lead identifiers we make relations to
      * @var array
      */
-    private $_crmId2 = array(
-        'model'   => 'Crm_Model_Lead',
-        'backend' => 'SQL',
-        'id'      => '268d586e46aad336de8fa2530b5b8faf921e495f'
-    );
+    private $_crmId2 = NULL;
     
     /**
      * Relation data as they come from e.g. JSON update request
      *
      * @var array
      */
-    private $_relationData = array(
-        array(
-            'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => 'SQL',
-            'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Tasks_Model_Task',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
-            'related_id'             => '8a572723e867dd73dd68d1740dd94f586eff5432',
-            'type'                   => 'CRM_TASK'
-        ),
-        array(
-            'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => 'SQL',
-            'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
-            'related_model'          => 'Tasks_Model_Task',
-            'related_backend'        => '',
-            'related_id'             => '',
-            'related_record'           => array(
-                'summary'              => 'phpunit test task for relations from crm',
-                'description'          => 'This task was created by phpunit when testing relations',
-                'due'                  => '2010-06-11T15:47:40',
-            ),
-            'type'                   => 'CRM_TASK',
-        ),
-        array(
-            'own_model'              => '',
-            'own_backend'            => '',
-            'own_id'                 => '',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
-            'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => '',
-            'related_id'             => '',
-            'related_record'           => array(
-                'n_family'              => 'Weiss',
-                'n_given'               => 'Cornelius',
-                'bday'                  => '1979-06-05T00:00:00',
-                'container_id'                 => '',
-            ),
-            'type'                   => 'PARTNER',
-        ),
-    );
+    private $_relationData = NULL;
     
     /**
      * relation objects
      *
      * @var array
      */
-    private $_relations = array();
+    private $_relations = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -120,7 +70,68 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_object = Tinebase_Relations::getInstance();
+        $this->_relations = array();
+        
+        $this->_crmId = array(
+            'model'   => 'Crm_Model_Lead',
+            'backend' => 'SQL',
+            'id'      => Tinebase_Record_Abstract::generateUID()
+        );
+        
+        $this->_crmId2 = array(
+            'model'   => 'Crm_Model_Lead',
+            'backend' => 'SQL',
+            'id'      => Tinebase_Record_Abstract::generateUID()
+        );
+        
+        $this->_relationData = array(
+            array(
+                'own_model'              => 'Crm_Model_Lead',
+                'own_backend'            => 'SQL',
+                'own_id'                 => $this->_crmId['id'],
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Tasks_Model_Task',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => Tinebase_Record_Abstract::generateUID(),//'8a572723e867dd73dd68d1740dd94f586eff5432',
+                'type'                   => 'CRM_TASK'
+            ),
+            array(
+                'own_model'              => 'Crm_Model_Lead',
+                'own_backend'            => 'SQL',
+                'own_id'                 => $this->_crmId['id'],
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                'related_model'          => 'Tasks_Model_Task',
+                'related_backend'        => '',
+                'related_id'             => '',
+                'related_record'           => array(
+                    'summary'              => 'phpunit test task for relations from crm',
+                    'description'          => 'This task was created by phpunit when testing relations',
+                    'due'                  => '2010-06-11T15:47:40',
+                ),
+                'type'                   => 'CRM_TASK',
+            ),
+            array(
+                'own_model'              => '',
+                'own_backend'            => '',
+                'own_id'                 => '',
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'related_backend'        => '',
+                'related_id'             => '',
+                'related_record'           => array(
+                    'n_family'              => 'Weiss',
+                    'n_given'               => 'Cornelius',
+                    'bday'                  => '1979-06-05T00:00:00',
+                    'container_id'                 => '',
+                ),
+                'type'                   => 'PARTNER',
+            ),
+        );
+        
+        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $this->_relationData);
     }
 
     /**
@@ -131,7 +142,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -140,12 +151,6 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     public function testGetInstance()
     {
         $this->assertTrue($this->_object instanceof Tinebase_Relations);
-    }
-    
-    public function testSetRelations()
-    {
-        // relations data is decoded to array from frontend server atm.
-        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $this->_relationData);
     }
     
     public function testGetRelations()
@@ -167,8 +172,8 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests if updateing succseeds when setting Relations
-     *
+     * Tests if updating succeeds when setting relations
+     * 
      */
     public function testSetRelationsUpdate()
     {
@@ -188,7 +193,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Test if updateing a related record works
+     * Test if updating a related record works
      *
      */
     public function testSetRelationUpdateRelatedRecord()
