@@ -839,7 +839,12 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 continue;
             }
             
-            list($hours, $minutes, $seconds) = explode(":", $_data[$field]);
+            $hhmmss = explode(":", $_data[$field]);
+            if (count($hhmmss) === 2) {
+                // seconds missing
+                $hhmmss[] = '00';
+            }
+            list($hours, $minutes, $seconds) = $hhmmss;
             if (preg_match('/AM|PM/', $minutes)) {
                 list($minutes, $notation) = explode(" ", $minutes);
                 switch($notation) {
@@ -850,11 +855,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         $hours = $hours + 12;
                         break;
                 }
-                $_data[$field] = $hours. ':' . $minutes . ':' . (($seconds) ? $seconds : '00');
+                $_data[$field] = implode(':', $hhmmss);
             }
-        }        
+        }
     }
-
+    
     /**
      * returns the default filter group for this model
      * @return string
