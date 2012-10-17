@@ -8,12 +8,11 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
-// TODO moved this to helper script, where is the right place for this?
-/*
+// TODO move this to helper script? where is the right place for this?
 set_time_limit(0);
 ob_implicit_flush();
 declare(ticks = 1);
-*/
+
 
 /**
  * Base class for console daemons
@@ -24,15 +23,21 @@ abstract class Console_Daemon
 {
     protected $_defaultConfigPath;
     
+    protected $_pidFile = '/var/run/tine20/daemon.pid';
+    
     protected $_children = array();
     
     protected $_verbose = FALSE;
     
     /**
-     * 
      * @var Zend_Config
      */
     protected $_config;
+    
+    /**
+     * @var array $_defaultConfig
+     */
+    protected static $_defaultConfig = array();
     
     /**
      * @var array
@@ -41,8 +46,14 @@ abstract class Console_Daemon
         'help|h'        => 'Display this help Message',
         'verbose|v'     => 'Output messages',
         'config=s'      => 'path to configuration file',
-        'daemonize|d'   => 'become a daemon (fork to background)'
+        'daemonize|d'   => 'become a daemon (fork to background)',
+        'pidfile|p=s'   => 'deamon pid file path',
     );
+    
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
     
     /**
      * constructor
@@ -55,11 +66,12 @@ abstract class Console_Daemon
         pcntl_signal(SIGINT,  array($this, "handleSigINT"));
         pcntl_signal(SIGCHLD, array($this, "handleSigCHLD"));
         
+        // @TODO config or ini should be able to configure deamon
         if ($config === NULL) {
             $options = $this->_getOptions();
             if (isset($options->d)) {
-                $pid = $this->_becomeDaemon();
-                // @todo write pid file
+                $this->_pidFile = isset($options->p) ? $options->p : $this->_pidFile;
+                $pid = $this->_becomeDaemon($options->p);
             }
             
             if (isset($options->v)) {
@@ -88,6 +100,21 @@ abstract class Console_Daemon
         return $this->_config;
     }
     
+    /**
+     * get default config 
+     * 
+     * @return array
+     */
+    public static function getDefaultConfig()
+    {
+        return static::$_defaultConfig;
+    }
+    
+    public function getPidFile()
+    {
+        return $this->_pidFile;
+    }
+    
     protected function _changeIdentity($_username, $_groupname)
     {
         if(($userInfo = posix_getpwnam($_username)) === false) {
@@ -114,18 +141,23 @@ abstract class Console_Daemon
      */
     protected function _loadConfig($_path)
     {
+        $config = new Zend_Config(self::getDefaultConfig(), TRUE);
+        
         try {
-            $config = new Zend_Config_Ini($_path);
+            $configFromFile = new Zend_Config_Ini($_path);
         } catch (Zend_Config_Exception $e) {
             fwrite(STDERR, "Error while parsing config file($_path) " .  $e->getMessage() . PHP_EOL);
             exit(1);
         }
+        
+        $config->merge($configFromFile);
         
         return $config;
     }
       
     protected function _forkChildren()
     {
+        $this->_beforeFork();
         $childPid = pcntl_fork();
         
         if($childPid < 0) {
@@ -134,6 +166,8 @@ abstract class Console_Daemon
         }
         
         // fork was successfull
+        $this->_afterFork($childPid);
+        
         // add childPid to internal scoreboard
         if($childPid > 0) {
             $this->_children[$childPid] = $childPid;
@@ -146,11 +180,34 @@ abstract class Console_Daemon
     }
     
     /**
+     * template function intended to do cleanups before forking (e.g. disconnect database)
+     */
+    protected function _beforeFork()
+    {
+        
+    }
+    
+    /**
+     * template function intended to do init after forking (e.g. reconnect database)
+     * 
+     * @param $childPid
+     */
+    protected function _afterFork($childPid)
+    {
+        
+    }
+    
+    /**
      * function fork into background (become a daemon)
      * @return void|number
      */
     protected function _becomeDaemon()
     {
+        if (! is_writable(dirname($this->_pidFile))) {
+            fwrite(STDERR, "cannot write pidfile '{$this->_pidFile}'" . PHP_EOL);
+            exit(1);
+        }
+        
         $childPid = pcntl_fork();
         
         if ($childPid < 0) {
@@ -162,6 +219,7 @@ abstract class Console_Daemon
         // we can finish the main process
         if ($childPid > 0) {
             echo "We are master. Exiting main process now..." . PHP_EOL;
+            file_put_contents($this->getPidFile(), $childPid);
             exit;
         }
         
@@ -211,6 +269,10 @@ abstract class Console_Daemon
         
         foreach($this->_children as $pid) {
             posix_kill($pid, SIGTERM);
+        }
+        
+        if ($this->_pidFile) {
+            @unlink($this->_pidFile);
         }
         exit(0);
     }

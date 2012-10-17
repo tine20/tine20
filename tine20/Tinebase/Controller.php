@@ -395,4 +395,32 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             Tinebase_Config::getInstance()->set(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN, Tinebase_DateTime::now()->toString());
         }
     }
+    
+    /**
+     * spy function for unittesting of queue workers
+     * 
+     * this function writes the number of executions of itself in the given 
+     * file and optionally sleeps a given time
+     * 
+     * @param string  $filename
+     * @param int     $sleep
+     * @param int     $fail
+     */
+    public function testSpy($filename=NULL, $sleep=0, $fail=NULL)
+    {
+        $filename = $filename ? $filename : ('/tmp/'.__METHOD__);
+        $counter = file_exists($filename) ? (int) file_get_contents($filename) : 0;
+        
+        file_put_contents($filename, ++$counter);
+        
+        if ($sleep) {
+            sleep($sleep);
+        }
+        
+        if ($fail && (int) $counter <= $fail) {
+            throw new Exception('spy failed on request');
+        }
+        
+        return;
+    }
 }
