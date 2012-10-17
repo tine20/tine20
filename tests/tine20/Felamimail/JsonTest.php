@@ -1158,6 +1158,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testSieveRulesOrder()
     {
         $this->_setTestScriptname();
+        
+        // disable vacation first
+        $this->_setDisabledVacation();
+        
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
         
         $ruleData = $this->_getRuleData();
@@ -1166,13 +1170,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
         $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
         
-        $vacationData = $this->_getVacationData();
-        $vacationData['enabled'] = FALSE;
-        $resultSet = $this->_json->saveVacation($vacationData);
+        $this->_setDisabledVacation();
         $sieveScriptVacation = $sieveBackend->getScript($this->_testSieveScriptName);
         
         // compare sieve scripts
-        $this->assertEquals($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
+        $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
     
     /**
@@ -1183,6 +1185,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_oldActiveSieveScriptName = Felamimail_Controller_Sieve::getInstance()->getActiveScriptName($this->_account->getId());
         $this->_testSieveScriptName = 'Felamimail_Unittest';
         Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
+    }
+    
+    /**
+     * set disabled vacation message
+     */
+    protected function _setDisabledVacation()
+    {
+        $vacationData = $this->_getVacationData();
+        $vacationData['enabled'] = FALSE;
+        $resultSet = $this->_json->saveVacation($vacationData);
     }
     
     /**
