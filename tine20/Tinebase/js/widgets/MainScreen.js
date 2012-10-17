@@ -84,7 +84,6 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
             try {
                 this[contentType + this.centerPanelClassNameSuffix] = new Tine[this.app.appName][contentType + this.centerPanelClassNameSuffix]({
                     app: this.app,
-                    //plugins: [this.getContainerTreePanel().getFilterPlugin()]
                     plugins: [this.getWestPanel().getFilterPlugin(contentType)]
                 });
             } catch (e) {

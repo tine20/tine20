@@ -148,8 +148,11 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                             if (this.lastFocusEl) {
                                 var scroller = Ext.fly(this.lastFocusEl).up('div[class$=-scroller]'),
                                     scrollTop = scroller ? scroller.dom.scrollTop : null;
+                                // TODO: is this needed (the element is already focused, atm. IE breaks (https://forge.tine20.org/mantisbt/view.php?id=6916))?
+                                if(!Ext.isIE) {
+                                    Ext.fly(this.lastFocusEl).focus();
+                                }
                                 
-                                Ext.fly(this.lastFocusEl).focus();
                                 if (scrollTop) scroller.dom.scrollTop = scrollTop;
                             }
                             
