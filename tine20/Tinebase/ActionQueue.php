@@ -153,7 +153,11 @@
         } else {
             // execute action immediately if no queue service is available
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
-            $this->executeAction($message);
+            try {
+                $this->executeAction($message);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
+            }
         }
     }
     
@@ -171,7 +175,11 @@
             $messages = $this->_queue->receive($numberToProcess);
  
             foreach ($messages as $i => $message) {
-                $this->executeAction($message->body);
+                try {
+                    $this->executeAction($message->body);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
+                }
                 $this->_queue->deleteMessage($message);
             }
         }
@@ -180,17 +188,12 @@
     /**
      * execute action defined in queue message
      * 
-     * @param string $_message JSON encoded string
+     * @param string $_message serialized action
      * @return void
      */
     public function executeAction($_message)
     {
-        try {
-            $decodedMessage = unserialize($_message);
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution (" . $e->getMessage() . ')');
-            return;
-        }
+        $decodedMessage = unserialize($_message);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " executing action: '{$decodedMessage['action']}'");
         
@@ -205,19 +208,13 @@
      */
     protected function _executeDecodedAction($_decodedMessage)
     {
-        try {
-            list($appName, $actionName) = explode('.', $_decodedMessage['action']);
-            $controller = Tinebase_Core::getApplicationInstance($appName);
-        
-            if (! method_exists($controller, $actionName)) {
-                throw new Exception('Could not execute action, requested action does not exist');
-            }
-            
-            call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
-            
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
-            return;
+        list($appName, $actionName) = explode('.', $_decodedMessage['action']);
+        $controller = Tinebase_Core::getApplicationInstance($appName);
+    
+        if (! method_exists($controller, $actionName)) {
+            throw new Exception('Could not execute action, requested action does not exist');
         }
+        
+        call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
     }
 }

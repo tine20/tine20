@@ -303,7 +303,7 @@ class Tinebase_Core
         }
         
         $controllerName = ucfirst((string) $appName);
-        if ($appName !== 'Tinebase') {
+        if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && !$modelName)) {
             // only app controllers are called "App_Controller_Model"
             $controllerName .= '_Controller';
         }

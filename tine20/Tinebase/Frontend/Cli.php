@@ -185,11 +185,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
-        if (! $_opts->message) {
-            throw new Tinebase_Exception_InvalidArgument('mandatory parameter --message is missing');
+        $args = $_opts->getRemainingArgs();
+        $message = preg_replace('/^message=/', '', $args[0]);
+        
+        if (! $message) {
+            throw new Tinebase_Exception_InvalidArgument('mandatory parameter "message" is missing');
         }
         
-        $message = Zend_Json::decode($_opts->message);
         Tinebase_ActionQueue::getInstance()->executeAction($message);
         
         return TRUE;
