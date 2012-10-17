@@ -221,7 +221,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
                         $relationType = $fieldName;
                         $recordField = NULL;
                     }
-                    $csvArray[] = $this->_addRelations($record, $relationType, $recordField);
+                    $csvArray[] = $this->_addRelations($record, $relationType, $recordField, TRUE);
                 } else if (in_array($fieldName, $this->_specialFields)) {
                     $arrayFlipped = array_flip($this->_specialFields);
                     $csvArray[] = $this->_addSpecialValue($record, $arrayFlipped[$fieldName]);

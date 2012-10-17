@@ -388,9 +388,10 @@ abstract class Tinebase_Export_Abstract
      * @param Tinebase_Record_Abstract $record
      * @param string $relationType
      * @param string $recordField
+     * @param boolean $onlyFirstRelation
      * @return string
      */
-    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL)
+    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE)
     {
         $record->relations->addIndices(array('type'));
         $matchingRelations = $record->relations->filter('type', $relationType);
@@ -404,6 +405,10 @@ abstract class Tinebase_Export_Abstract
                 $resultArray[] = $relation->related_record->{$recordField};
             } else {
                 $resultArray[] = $this->_getRelationSummary($relation->related_record);
+            }
+            
+            if ($onlyFirstRelation) {
+                break;
             }
         }
         
