@@ -162,7 +162,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_containerId = NULL)
     {
         if (! $this->_checkACLContainer($this->_backend->getNodeContainer($_id), 'get')) {
-            throw new Tinebase_Exception_AccessDenied('No permission to update nodes.');
+            throw new Tinebase_Exception_AccessDenied('No permission to get node');
         }
         $record = parent::get($_id);
         if($record) {
