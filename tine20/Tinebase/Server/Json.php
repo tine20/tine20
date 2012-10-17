@@ -153,6 +153,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
      * handler for JSON api requests
      * @todo session expire handling
      * 
+     * @param $request
      * @return JSON
      */
     protected function _handle($request)
@@ -213,7 +214,6 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
     /**
      * handle exceptions
      * 
-     * @param Zend_Json_Server $server
      * @param Zend_Json_Server_Request_Http $request
      * @param Exception $exception
      * @return Zend_Json_Server_Response

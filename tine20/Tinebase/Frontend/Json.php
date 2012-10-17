@@ -972,9 +972,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         if (count($_records) == 0) {
             return array();
@@ -997,7 +998,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
         }
 
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        $result = parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
         return $result;
     }
 }

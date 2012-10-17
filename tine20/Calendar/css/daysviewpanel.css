@@ -428,12 +428,14 @@
 }
 
 .cal-daysviewpanel-wholedayevent-body {
-	position: absolute;
-    width: 100%;
     top: 1px;
     cursor: move;
     padding: 0px 4px;
     white-space: normal;
+}
+
+.cal-daysviewpanel-wholedayevent-tags {
+    padding: 1px 2px 0 3px;
 }
 
 .cal-daysviewpanel-event-cropleft {

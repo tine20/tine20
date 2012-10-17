@@ -64,11 +64,14 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * 
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        $result = parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
         
         // get groups + types (departments) and merge data
         $groupIds = $_records->group_id;

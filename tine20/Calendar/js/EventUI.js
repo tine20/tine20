@@ -305,6 +305,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         var eventEl = view.templates.wholeDayEvent.insertFirst(view.wholeDayArea, {
             id: domId,
+            tagsHtml: Tine.Tinebase.common.tagsRenderer(this.event.get('tags')),
             summary: this.event.get('summary'),
             startTime: this.dtStart.format('H:i'),
             extraCls: extraCls,

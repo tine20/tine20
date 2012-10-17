@@ -356,7 +356,7 @@ class Tinebase_User_Registration
     /**
      * activate user
      *
-     * @param   string $_login_hash
+     * @param   string $_loginHash
      * @return  Tinebase_Model_FullUser
      * 
      */

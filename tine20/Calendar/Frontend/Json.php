@@ -22,7 +22,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * creates an exception instance of a recurring event
      *
-     * NOTE: deleting persistent exceptions is done via a normal delte action
+     * NOTE: deleting persistent exceptions is done via a normal delete action
      *       and handled in the controller
      * 
      * @param  array       $recordData
@@ -276,51 +276,5 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $iMIPFrontend->process($iMIPMessage, $status);
         
         return $this->iMIPPrepare($iMIPMessage);
-    }
-    
-    /**
-     * returns multiple records prepared for json transport
-     *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination needed for sorting
-     * @return array data
-     * 
-     * @todo perhaps we need to resolveContainerTagsUsers() before  mergeAndRemoveNonMatchingRecurrences(), but i'm not sure about that
-     * @todo use Calendar_Convert_Event_Json
-     */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
-    {
-        if ($_records->getRecordClassName() == 'Calendar_Model_Event') {
-            if (is_null($_filter)) {
-                throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
-            }
-            
-            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
-            
-            Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
-            Calendar_Convert_Event_Json::resolveOrganizer($_records);
-            Calendar_Convert_Event_Json::resolveRrule($_records);
-            Calendar_Controller_Event::getInstance()->getAlarms($_records);
-            
-            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
-            $_records->sortByPagination($_pagination);
-            $eventsData = parent::_multipleRecordsToJson($_records);
-            foreach ($eventsData as $idx => $eventData) {
-                if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
-                       $eventsData[$idx] = array_intersect_key($eventsData[$idx], array_flip(array(
-                           'id', 
-                            'dtstart', 
-                            'dtend',
-                            'transp',
-                            'is_all_day_event',
-                       )));
-                }
-            }
-            
-            return $eventsData;
-        }
-          
-        return parent::_multipleRecordsToJson($_records);
     }
 }

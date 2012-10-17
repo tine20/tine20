@@ -1143,9 +1143,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_AccessLog':
@@ -1172,7 +1173,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
         }
         
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
-        return $result;
+        return parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
     }
 }

@@ -142,21 +142,22 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if($this->_models) {
             return $this->_models[0];
         }
-        return null;
+        return NULL;
     }
     
     /**
      * resolve containers and tags
      *
      * @param Tinebase_Record_RecordSet $_records
+     * @param array $_resolveProperties
      */
-    public static function resolveContainerTags(Tinebase_Record_RecordSet $_records)
+    public static function resolveContainerTagsUsers(Tinebase_Record_RecordSet $_records, $_resolveProperties = array('container_id', 'tags'))
     {
-        if ($_records->getFirstRecord()->has('container_id')) {
+        if ($_records->getFirstRecord()->has('container_id') && in_array('container_id', $_resolveProperties)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
     
-        if ($_records->getFirstRecord()->has('tags')) {
+        if ($_records->getFirstRecord()->has('tags') && in_array('tags', $_resolveProperties)) {
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
     }
@@ -427,15 +428,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         $result = array();
 
         if ($_records->getFirstRecord()) {
             $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
-            $result = $converter->fromTine20RecordSet($_records);
+            $result = $converter->fromTine20RecordSet($_records, $_filter, $_pagination);
         }
 
         return $result;

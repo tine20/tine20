@@ -24,7 +24,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param  Tinebase_Record_Abstract  $_record  update existing record
      * @return Tinebase_Record_Abstract
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = NULL)
     {
         throw new Tinebase_Exception_NotImplemented('From json to record is not implemented yet');
     }
@@ -44,7 +44,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // for resolving we'll use recordset
         $records = new Tinebase_Record_RecordSet(get_class($_record), array($_record));
         
-        Tinebase_Frontend_Json_Abstract::resolveContainerTags($records);
+        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
         $this->_resolveMultipleIdFields($records);
         
         $_record = $records->getFirstRecord();
@@ -54,7 +54,6 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         return $_record->toArray();
     }
-    
 
     /**
      * resolves multiple records
@@ -97,15 +96,18 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * converts Tinebase_Record_RecordSet to external format
      * 
      * @param  Tinebase_Record_RecordSet  $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         if (count($_records) == 0) {
             return array();
         }
 
-        Tinebase_Frontend_Json_Abstract::resolveContainerTags($_records);
+        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records);
 
         $this->_resolveMultipleIdFields($_records);
 

@@ -89,9 +89,12 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      * converts Tinebase_Record_RecordSet to external format
      * 
      * @param  Tinebase_Record_RecordSet  $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         foreach ($_records as $record) {
             $this->_convertOptions($record);

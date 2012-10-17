@@ -199,11 +199,12 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup
+     * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
-        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        $result = parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
         
         foreach ($result as &$contact) {
             $contact['jpegphoto'] = $this->_getImageLink($contact);

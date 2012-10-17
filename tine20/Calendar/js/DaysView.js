@@ -1472,6 +1472,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         ts.wholeDayEvent = new Ext.XTemplate(
             '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">' +
+            '<div class="cal-daysviewpanel-wholedayevent-tags">{tagsHtml}</div>' +
                 '<div class="cal-daysviewpanel-wholedayevent-body">{[Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(values.summary))]}</div>' +
                 '<div class="cal-daysviewpanel-event-header-icons" style="background-color: {bgColor};" >' +
                     '<tpl for="statusIcons">' +

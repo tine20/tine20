@@ -350,6 +350,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $searchResultData = $this->_uit->searchEvents($filter, array());
     
         $this->assertEquals(6, $searchResultData['totalcount']);
+        
+        // test appending tags to recurring instances
+        $this->assertEquals('phpunit-', substr($searchResultData['results'][4]['tags'][0]['name'], 0, 8));
     
         return $searchResultData;
     }

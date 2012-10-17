@@ -89,7 +89,7 @@ class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
         ), TRUE);
         
         // add container
-        $contract->container_id = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared')->getId();
+        $contract->container_id = Sales_Controller_Contract::getSharedContractsContainer();
         
         // add number
         $numberBackend = new Sales_Backend_Number();
