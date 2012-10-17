@@ -187,7 +187,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         return $updatedEventData;
     }
-    
+
     /**
      * testDeleteEvent
      */
@@ -439,7 +439,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $persistentException['dtend']   = '2009-04-01 20:30:00';
         
         // create persistent exception
-        $this->_uit->createRecurException($persistentException, FALSE, FALSE);
+        $recurResult = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // update recurseries 
         $someRecurInstance = $recurSet[2];
@@ -447,6 +447,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
         
+        $someRecurInstance['last_modified_time'] = $recurResult['creation_time'];
         $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
         $from = $recurSet[0]['dtstart'];

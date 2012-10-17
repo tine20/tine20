@@ -475,15 +475,18 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
     
         unset($syncrotonEvent->recurrence);
         unset($syncrotonEvent->exceptions);
-    
+        
+        // need to creaate new controller to set new sync timestamp for concurrency handling
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
-    
+        
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
     
         $this->assertFalse($syncrotonEvent->recurrence instanceof Syncroton_Model_EventRecurrence);

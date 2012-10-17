@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_MSEventFacadeTest::main');
-}
 
 /**
  * Test class for Calendar_Controller_MSEventFacade
@@ -158,10 +154,11 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         
         // fake what the client does
         $event->alarms->setId(NULL);
-        foreach($event->exdate->alarms as $alarms) {
+        foreach ($event->exdate->alarms as $alarms) {
             $alarms->setId(NULL);
         }
         
+        $this->_fixConcurrencyTimestamp($event);
         $event = $this->_uit->update($event);
         $this->_assertTestEvent($event);
         
@@ -179,6 +176,16 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(1, $event->alarms->filter('minutes_before', 15)->count(), '15 min. before is not present');
         $this->assertEquals(1, $event->alarms->filter('minutes_before', 60)->count(), '60 min. before is not present');
         $this->assertEquals(1, $event->alarms->filter('minutes_before', 90)->count(), '90 min. before is not present');
+    }
+    
+    /**
+     * adjusts last_modified_time for event to prevent concurrency errors
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _fixConcurrencyTimestamp($event)
+    {
+        $event->last_modified_time = ($event->exdate && count($event->exdate) > 1) ? $event->exdate[1]->last_modified_time : Tinebase_DateTime::now();
     }
     
     /**
@@ -211,7 +218,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     public function testUpdateRemoveExceptions()
     {
         $event = $this->testCreate();
-        
+
+        $this->_fixConcurrencyTimestamp($event);
         $event->exdate = NULL;
         $updatedEvent = $this->_uit->update($event);
         
@@ -237,6 +245,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $newDeletedInstance->is_deleted = TRUE;
         $event->exdate->addRecord($newDeletedInstance);
         
+        $this->_fixConcurrencyTimestamp($event);
         $updatedEvent = $this->_uit->update($event);
         
         $this->assertEquals(4, $updatedEvent->exdate->count());
@@ -251,6 +260,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentException->dtend->addHour(2);
         $persistentException->summary = 'updated exception';
         
+        $this->_fixConcurrencyTimestamp($event);
         $updatedEvent = $this->_uit->update($event);
         
         $this->assertEquals(2, $updatedEvent->exdate->count());
@@ -332,10 +342,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
                 )
         ))));
         
+        $this->_fixConcurrencyTimestamp($event);
         $event = $this->_uit->update($event);
-        
-        //$persistentSClever->status = Calendar_Model_Attender::STATUS_DECLINED;
-        //$this->_uit->attenderStatusUpdate($event, $persistentSClever);
         
         $event = $this->_uit->get($event->getId());
         $this->_uit->setCalendarUser($currUser);
@@ -344,6 +352,11 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertNull($persistentException);
     }
     
+    /**
+     * asserts tested event
+     * 
+     * @param Calendar_Model_Event $persistentEvent
+     */
     protected function _assertTestEvent($persistentEvent)
     {
         $this->assertEquals(2, $persistentEvent->exdate->count());
@@ -365,8 +378,4 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $deletedInstance = $persistentEvent->exdate->filter('is_deleted', 1)->getFirstRecord();
         $this->assertEquals('2009-03-27 06:00:00', $deletedInstance->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_MSEventFacadeTest::main') {
-    Calendar_Controller_MSEventFacadeTest::main();
 }

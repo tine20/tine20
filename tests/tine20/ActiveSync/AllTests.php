@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'ActiveSync_AllTests::main');
-}
-
 class ActiveSync_AllTests
 {
     public static function main ()
@@ -35,8 +31,4 @@ class ActiveSync_AllTests
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_AllTests::main') {
-    ActiveSync_AllTests::main();
 }

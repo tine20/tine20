@@ -93,10 +93,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persistentEvent = $this->_controller->create($event);
         
-        foreach($persistentEvent->attendee as $attender) {
+        foreach ($persistentEvent->attendee as $attender) {
             $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
             $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
         }
+        
+        
+        $persistentEvent->last_modified_time = $this->_controller->get($persistentEvent->getId())->last_modified_time;
         
         // update time
         $persistentEvent->dtstart->addHour(2);
@@ -780,7 +783,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(0, count($user), 'deleted user is attender of new event, but should not be');
     }
     
-    
     public function testRruleUntil()
     {
         $event = $this->_getEvent();
@@ -871,6 +873,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $from->addDay(5); //31
         $until->addDay(5); //08
         
+        $currentPersistentEvent = $this->_controller->get($persistentEvent);
+        $persistentEvent->last_modified_time = $currentPersistentEvent->last_modified_time;
         $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(

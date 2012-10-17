@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_RecurTest::main');
-}
-
 /**
  * Test class for Calendar_Controller_Event
  * 
@@ -383,7 +379,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedPersistentSClever->status, 'status must change');
     }
     
-    public function testCreateRecurExceptionAllFollowing()
+    public function testCreateRecurExceptionAllFollowingGeneral()
     {
         $from = new Tinebase_DateTime('2011-04-21 00:00:00');
         $until = new Tinebase_DateTime('2011-04-28 23:59:59');
@@ -399,6 +395,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_controller->create($event);
+        sleep(1); // wait for modlog
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
@@ -683,9 +680,4 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_EDIT    => true,
         ));
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_RecurTest::main') {
-    Calendar_Controller_RecurTest::main();
 }

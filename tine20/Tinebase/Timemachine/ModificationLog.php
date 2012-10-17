@@ -140,7 +140,8 @@ class Tinebase_Timemachine_ModificationLog
      * @param int _modifierId optional
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
-    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, DateTime $_from, DateTime $_until,  $_modifierId = NULL ) {
+    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, DateTime $_from, DateTime $_until,  $_modifierId = NULL )
+    {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $isoDef = 'Y-m-d\TH:i:s';
@@ -248,7 +249,11 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @param  Tinebase_Record_Interface $_newRecord record from user data
      * @param  Tinebase_Record_Interface $_curRecord record from storage
+     * @param  string $_model
+     * @param  string $_backend
+     * @param  string $_id
      * @return Tinebase_Record_RecordSet with resolved concurrent updates (Tinebase_Model_ModificationLog records)
+     * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
      */
     public function manageConcurrentUpdates(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_curRecord, $_model, $_backend, $_id)
     {
