@@ -1402,7 +1402,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             $updatedAttender->status              = $_attender->status;
-            $updatedAttender->displaycontainer_id = $_attender->displaycontainer_id;
+            $updatedAttender->displaycontainer_id = isset($_attender->displaycontainer_id) ? $_attender->displaycontainer_id : $updatedAttender->displaycontainer_id;
             $updatedAttender->alarm_ack_time      = isset($_attender->alarm_ack_time) ? $_attender->alarm_ack_time : $updatedAttender->alarm_ack_time;
             $updatedAttender->alarm_snooze_time   = isset($_attender->alarm_snooze_time) ? $_attender->alarm_snooze_time : $updatedAttender->alarm_snooze_time;
             $updatedAttender->transp              = isset($_attender->transp) ? $_attender->transp : Calendar_Model_Event::TRANSP_OPAQUE;

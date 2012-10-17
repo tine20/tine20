@@ -171,16 +171,20 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             
             $wantedFolders = null;
             
-            // @todo review wantedFolders block
-            
             // check if contentfilter has a container limitation
             $filter = $this->_getContentFilter(0);
+            
+            // @TODO work with multiple container filters?
             $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
             if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
-                $wantedFolders = array_flip($containerFilter->getContainerIds());
+                $wantedFolders = $containerFilter->getContainerIds();
+                
+                foreach($allowedFolders as $allowedFolder) {
+                    if (! in_array($allowedFolder->getId(), $wantedFolders)) {
+                        $allowedFolders->removeRecord($allowedFolder);
+                    }
+                }
             }
-            
-            #$folders = $wantedFolders === null ? $allowedFolders : array_intersect_key($allowedFolders, $wantedFolders);
             $folders = $allowedFolders;
             
             foreach ($folders as $container) {
@@ -264,6 +268,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => Tinebase_Core::getUser(),
             'backend'           => 'Sql',
+            'model'             => $this->_applicationName . '_Model_' . $this->_modelName,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
         )));
         
@@ -424,12 +429,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     /**
      * get syncable folders
      * 
-     * @return array
+     * @return Tinebase_Record_RecordSet
      */
     protected function _getSyncableFolders()
     {
-        $folders = array();
-        
         $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
         
         return $containers;

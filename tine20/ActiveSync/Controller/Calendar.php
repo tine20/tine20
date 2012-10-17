@@ -859,8 +859,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $statusFilter = $filter->createFilter('attender_status', 'notin', array(
                 Calendar_Model_Attender::STATUS_DECLINED
             ));
+            $containerFilter = $filter->createFilter('container_id', 'equals', array(
+                'path' => '/personal/' . Tinebase_Core::getUser()->getId()
+            ));
+            
             $filter->addFilter($attendeeFilter);
             $filter->addFilter($statusFilter);
+            $filter->addFilter($containerFilter);
         }
         
         if(in_array($_filterType, $this->_filterArray)) {

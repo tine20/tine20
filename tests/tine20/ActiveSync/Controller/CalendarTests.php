@@ -334,7 +334,7 @@ Zeile 3</AirSyncBase:Data>
     
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
-        $this->assertEquals(0,         $syncrotonEvent->allDayEvent);
+        $this->assertEquals(0,         $syncrotonEvent->allDayEvent, 'alldayEvent');
         $this->assertEquals(2,         $syncrotonEvent->busyStatus);
         $this->assertEquals('Repeat',  $syncrotonEvent->subject);
         $this->assertEquals(15,        $syncrotonEvent->reminder);
@@ -359,7 +359,7 @@ Zeile 3</AirSyncBase:Data>
         // Exceptions
         $this->assertEquals(2, count($syncrotonEvent->exceptions));
         $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
-        $this->assertEquals(0, $syncrotonEvent->exceptions[0]->deleted);
+        $this->assertEquals(0, $syncrotonEvent->exceptions[0]->deleted, 'exception deleted');
         $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
         $this->assertEquals('20121125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
         $this->assertEquals('20121125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
@@ -541,8 +541,9 @@ Zeile 3</AirSyncBase:Data>
         
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        // container im syncroton event?
-        // exdate hat keine id und kein uid
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        
+        // how to validate container / it's not present in syncroton event?
         $this->assertEquals(1, $syncrotonEvent->exceptions[0]->busyStatus);
         $this->assertNotEquals('do not update', $syncrotonEvent->exceptions[0]->subject);
     }
