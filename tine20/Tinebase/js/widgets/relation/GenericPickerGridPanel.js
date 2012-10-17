@@ -169,7 +169,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
         // update from relationsPanel if any
         if(this.isValid()) {
-            delete record.data.relations;
+            if(record.data.hasOwnProperty('relations')) {
+                delete record.data.relations;
+            }
             record.set('relations', this.getData());
         } else {
             Ext.Msg.alert(_('Relations failure'), _('There are invalid relations. Please check before saving.'));
