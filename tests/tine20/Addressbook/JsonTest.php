@@ -741,14 +741,18 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
     * test import with mergeTheirs resolve strategy
+    * 
+    * @see 0007226: tag handling and other import problems
     */
     public function testImportWithResolveStrategyMergeTheirs()
     {
         $result = $this->_importHelper(array('dryrun' => 0));
+        $this->assertEquals(2, count($result['results']), 'no import results');
         $fritz = $result['results'][1];
         $fritz['tags'][] = array(
             'name'        => 'new import tag'
         );
+        $fritz['tel_work'] = '04040';
 
         $clientRecords = array(array(
             'recordData'        => $fritz,
@@ -760,6 +764,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result['results'][0]['tags']), 'Should merge tags');
         $this->assertEquals(0, $result['failcount'], 'no failures expected');
         $this->assertEquals(1, $result['duplicatecount'], 'klaus should still be a duplicate');
+        
+        $fritz = $result['results'][0];
+        $fritz['tel_work'] = '04040';
+        $clientRecords = array(array(
+            'recordData'        => $fritz,
+            'resolveStrategy'   => 'mergeTheirs',
+            'index'             => 1,
+        ));
+        $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
+        $this->assertEquals(1, $result['totalcount'], 'Should merge fritz: ' . print_r($result, TRUE));
     }
 
     /**

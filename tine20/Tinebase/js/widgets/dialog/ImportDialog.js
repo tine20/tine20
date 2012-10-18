@@ -101,7 +101,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 
                 defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
                 
-                this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
+                if (this.allowedFileExtensions.indexOf(extension) == -1) {
+                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
+                }
                 
                 this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
             }, this);

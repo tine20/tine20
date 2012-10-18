@@ -563,8 +563,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         try {
             $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, NULL, TRUE);
         
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Added existing tag ' . $name . ' to record.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                ' Found existing tag ' . $name);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -736,6 +736,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
             case 'mergeMine':
+                // we have to adjust modified timestamp for concurrency handling
+                $_record->last_modified_time = Tinebase_DateTime::now();
                 $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $_record, FALSE);
                 break;
             case 'keep':
@@ -763,7 +765,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _handleImportException(Exception $_e, $_recordIndex, $_record = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getMessage());
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
         
         if ($_e instanceof Tinebase_Exception_Duplicate) {
             $this->_importResult['duplicatecount']++;
