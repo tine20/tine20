@@ -281,9 +281,4 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         
         return $user;
     }
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_LdapTest::main') {
-    Tinebase_Group_SqlTest::main();
 }

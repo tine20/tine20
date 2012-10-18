@@ -154,14 +154,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testSavingDuplicateAccount()
     {
-        $user =  $user = Tinebase_User_LdapTest::getTestRecord();
-        $user->imapUser = new Tinebase_Model_EmailUser(array(
-            'emailPassword' => Tinebase_Record_Abstract::generateUID(),
-            'emailUID'      => '1000',
-            'emailGID'      => '1000'
-        ));
-        $user = Tinebase_User::getInstance()->addUser($user);
-        $this->_objects['fullUsers'] = array($user);
+        $user = $this->_addUser();
         $userId = $user->getId();
         
         // delete user in tine accounts table
@@ -178,7 +171,30 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     }
     
     /**
-     * try to update an email account
+     * add user with email data
+     * 
+     * @param string $username
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _addUser($username = NULL)
+    {
+        $user = Tinebase_User_LdapTest::getTestRecord();
+        if ($username) {
+            $user->accountLoginName = $username;
+        }
+        $user->imapUser = new Tinebase_Model_EmailUser(array(
+            'emailPassword' => Tinebase_Record_Abstract::generateUID(),
+            'emailUID'      => '1000',
+            'emailGID'      => '1000'
+        ));
+        $user = Tinebase_User::getInstance()->addUser($user);
+        $this->_objects['fullUsers'] = array($user);
+        
+        return $user;
+    }
+    
+    /**
+     * try to set password
      */
     public function testSetPassword()
     {
@@ -188,16 +204,49 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->_backend->inspectSetPassword($this->_objects['user']->getId(), $newPassword);
         
         // fetch email pw from db
+        $queryResult = $this->_fetchUserFromDovecotUsersTable($user->getId());
+        $hashPw = new Hash_Password();
+        $this->assertTrue($hashPw->validate($queryResult[0]['password'], $newPassword), 'password mismatch');
+    }
+    
+    /**
+     * fetch dovecot user data
+     *
+     * @param string $userId
+     * @return array
+     */
+    protected function _fetchUserFromDovecotUsersTable($userId)
+    {
         $db = $this->_backend->getDb();
         $select = $db->select()
             ->from(array('dovecot_users'))
-            ->where($db->quoteIdentifier('userid') . ' = ?', $user->getId());
+            ->where($db->quoteIdentifier('userid') . ' = ?', $userId);
         $stmt = $db->query($select);
-        $queryResult = $stmt->fetch();
+        $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();
-        $this->assertTrue(! empty($queryResult), 'user not found in dovecot users table');
         
-        $hashPw = new Hash_Password();
-        $this->assertTrue($hashPw->validate($queryResult['password'], $newPassword), 'password mismatch');
+        $this->assertTrue(! empty($queryResult), 'user not found in dovecot users table');
+        $this->assertEquals(1, count($queryResult));
+        
+        return $queryResult;
+    }
+    
+    /**
+     * testDuplicateUserId
+     * 
+     * @see 0007218: Duplicate userid in dovecot_users
+     */
+    public function testDuplicateUserId()
+    {
+        $config = Zend_Registry::get('testConfig');
+        $emailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $user = $this->_addUser('testuser@' . $emailDomain);
+        
+        // update user loginname
+        $user->accountLoginName = 'testuser';
+        $user = Tinebase_User::getInstance()->updateUser($user);
+        
+        $queryResult = $this->_fetchUserFromDovecotUsersTable($user->getId());
+        $this->assertEquals('testuser@' . $emailDomain, $queryResult[0]['username'], 'username has not been updated in dovecot user table');
     }
 }

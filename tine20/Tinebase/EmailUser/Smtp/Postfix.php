@@ -486,7 +486,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
     {
         $rawData = array();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->toArray(), true));
         
         if (isset($_newUserProperties->smtpUser)) {
             foreach ($_newUserProperties->smtpUser as $key => $value) {
@@ -539,7 +539,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         
         $rawData['client_idnr'] = $this->_clientId;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         
         return $rawData;
     }

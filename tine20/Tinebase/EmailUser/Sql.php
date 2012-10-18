@@ -126,6 +126,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id)
         );
         $this->_appendClientIdOrDomain($where);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . print_r($where, TRUE));
     
         $this->_db->delete($this->_userTable, $where);
     }
