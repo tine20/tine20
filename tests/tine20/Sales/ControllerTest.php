@@ -29,6 +29,13 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
     protected $_backend = array();
     
     /**
+     * the costcenter number used for the tests
+     * 
+     * @var string
+     */
+    protected $_costCenterNumber;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -329,6 +336,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    
     /**
      * tests for the costcenter controller
      */
@@ -343,24 +351,28 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
 
         // check uniquity
         $cc1 = $this->_getCostCenter();
+        
         try {
             Sales_Controller_CostCenter::getInstance()->create($cc1);
+            $this->fail('A duplicate exception should have been thrown!');
         } catch (Zend_Db_Statement_Exception $e) {
+            $this->assertEquals(0, $e->getCode());
+            $this->assertEquals("SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '" . $this->_costCenterNumber . "' for key 'number'", $e->getMessage());
         }
-        $this->assertEquals($e->getCode(), 0);
-        $this->assertEquals($e->getMessage(), "SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'wks-14' for key 'number'");
     }
     
     /**
-     * get contract
+     * get cost center
      *
      * @return Sales_Model_CostCenter
      */
     protected function _getCostCenter()
     {
+        $this->_costCenterNumber = $this->_costCenterNumber ? $this->_costCenterNumber : Tinebase_Record_Abstract::generateUID();
+        
         $cc = new Sales_Model_CostCenter(array(
             'id'      => Tinebase_Record_Abstract::generateUID(),
-            'number'  => 'wks-14',
+            'number'  => $this->_costCenterNumber,
             'remark'  => 'blabla'
         ), TRUE);
         return $cc;

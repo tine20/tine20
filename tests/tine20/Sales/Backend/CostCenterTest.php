@@ -32,6 +32,13 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
     protected $_backend;
     
     /**
+     * the costcenter number used for the tests
+     * 
+     * @var string
+     */
+    protected $_costCenterNumber;
+    
+    /**
      * Runs the test methods of this class.
      */
     public static function main()
@@ -62,7 +69,7 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * create new contract
+     * create new cost center
      *
      */
     public function testCreateCostCenter()
@@ -83,8 +90,9 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
      */
     protected function _getCostCenter()
     {
+        $this->_costCenterNumber = Tinebase_Record_Abstract::generateUID();
         $cc = new Sales_Model_CostCenter(array(
-            'number'  => 'wks-14',
+            'number'  => $this->_costCenterNumber,
             'remark'  => 'blabla'
         ), TRUE);
         

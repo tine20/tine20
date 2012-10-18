@@ -395,14 +395,18 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
                 'related_record'    => array(
                     'org_name'         => 'phpunit erp test customer',
                     'container_id'  => $personalContainer[0]->getId(),
-                )
+                ),
+                'related_model' => 'Addressbook_Model_Contact',
+                'own_degree'    => 'sibling'
             ),
             array(
                 'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
                 'related_record'    => array(
                     'org_name'         => 'phpunit erp test responsible',
                     'container_id'  => $personalContainer[0]->getId(),
-                )
+                ),
+                'related_model' => 'Addressbook_Model_Contact',
+                'own_degree'    => 'sibling'
             ),
         );
     }

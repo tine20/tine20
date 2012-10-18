@@ -103,41 +103,4 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             )
         ),
     );
-    
-    /**
-     * fill record from json data
-     *
-     * @param  array &$data
-     * @return void
-     */
-    protected function _setFromJson(array &$data)
-    {
-        /************* add new relations *******************/
-        
-        if (array_key_exists('relations', $data)) {
-            foreach ((array)$data['relations'] as $key => $relation) {
-                
-                if (!isset($relation['id'])) {
-                    $relationData = array(
-                        'own_model'              => 'Sales_Model_Contract',
-                        'own_backend'            => 'Sql',
-                        'own_id'                 => (array_key_exists('id', $data)) ? $data['id'] : 0,
-                        'own_degree'             => (array_key_exists('own_degree', $relation)) ? $relation['own_degree'] : 'sibling',
-                        'type'                   => (array_key_exists('type', $relation)) ? $relation['type'] : '',
-                        'related_record'         => (array_key_exists('related_record', $relation)) ? $relation['related_record'] : array(),
-                        'related_id'             => (array_key_exists('related_id', $relation)) ? $relation['related_id'] : NULL,
-                    );
-                    $relationData['related_model'] = 'Addressbook_Model_Contact';
-                    $relationData['related_backend'] = Addressbook_Backend_Factory::SQL;
-                    
-                    // sanitize container id
-                    if (isset($relation['related_record']['container_id']) && is_array($relation['related_record']['container_id'])) {
-                        $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];
-                    }
-                    
-                    $data['relations'][$key] = $relationData;
-                }
-            }
-        }
-    }
 }
