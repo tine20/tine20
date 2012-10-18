@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -165,7 +165,7 @@ class Tinebase_Relations
     
         $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type);
         $this->resolveAppRecords($result, $_ignoreACL);
-            
+        
         return $result;
     }
     
@@ -307,6 +307,11 @@ class Tinebase_Relations
                     $appController = Tinebase_Core::getApplicationInstance($modelName);
                     if (method_exists($appController, $getMultipleMethod)) {
                         $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
+                        
+                        // resolve record alarms
+                        if (count($records) > 0 && $records->getFirstRecord()->has('alarms')) {
+                            $appController->getAlarms($records);
+                        }
                     } else {
                         throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
                     }

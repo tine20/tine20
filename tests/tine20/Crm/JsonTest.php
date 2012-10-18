@@ -139,7 +139,9 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
-     * try to add a lead and link a contact
+     * try to add/search/delete a lead with linked contact, task and product
+     * 
+     * @see 0007214: if lead with linked task is saved, alarm is discarded
      */
     public function testAddGetSearchDeleteLead()
     {
@@ -166,8 +168,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         $savedLead = $this->_instance->saveLead($leadData);
         $getLead = $this->_instance->getLead($savedLead['id']);
         $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
-        
-        //print_r($searchLeads);
         
         // assertions
         $this->assertEquals($getLead, $savedLead);
@@ -202,9 +202,11 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($task->summary, $relatedTask['summary'], 'task summary does not match');
         $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
         $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
+        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
+        
         $this->assertTrue(isset($relatedProduct), 'product not found');
         $this->assertEquals($product->name, $relatedProduct['name'], 'product name does not match');
-         
+        
         // delete all
         $this->_instance->deleteLeads($savedLead['id']);
         Addressbook_Controller_Contact::getInstance()->delete($relatedContact['id']);
@@ -421,6 +423,9 @@ class Crm_JsonTest extends Crm_AbstractTest
             'percent'              => 70,
             'due'                  => Tinebase_DateTime::now()->addMonth(1),
             'summary'              => 'phpunit: crm test task',
+            'alarms'               => new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(array(
+                'minutes_before'    => 0
+            )), TRUE),
         ));
     }
     
