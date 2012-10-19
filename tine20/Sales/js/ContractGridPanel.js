@@ -60,6 +60,7 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            recordClass: this.recordClass,
             filterModels: Tine.Sales.Model.Contract.getFilterModel(),
             defaultFilter: 'query',
             filters: [],
