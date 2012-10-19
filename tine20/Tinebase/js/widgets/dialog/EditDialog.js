@@ -224,9 +224,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 recordClass: this.recordClass
             });
         }
-        
         // init plugins
         this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? this.plugins.concat(Ext.decode(this.initialConfig.plugins)) : [];
+        
         this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
         

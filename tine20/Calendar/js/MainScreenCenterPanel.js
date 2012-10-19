@@ -886,7 +886,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         Tine.Calendar.EventEditDialog.openWindow({
-            plugins: Ext.encode(plugins),
+            plugins: plugins ? Ext.encode(plugins) : null,
             record: Ext.encode(event.data),
             recordId: event.data.id,
             listeners: {
