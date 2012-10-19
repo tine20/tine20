@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -919,7 +919,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         Tinebase_Core::getCache()->save($_messageData['header'], $cacheId, array('getMessageHeaders'));
     
         // prefetch body to cache
-        if ($_message->size < $this->_maxMessageSizeToCacheBody) {
+        if (Felamimail_Config::getInstance()->get(Felamimail_Config::CACHE_EMAIL_BODY, TRUE) && $_message->size < $this->_maxMessageSizeToCacheBody) {
             $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
             $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
                 ? Zend_Mime::TYPE_HTML

@@ -30,6 +30,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const VACATION_CUSTOM_MESSAGE_ALLOWED = 'vacationMessageCustomAllowed';
     
     /**
+     * is email body cached
+     * 
+     * @var string
+     */
+    const CACHE_EMAIL_BODY = 'cacheEmailBody';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -52,6 +59,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+            'default'               => 1,
+        ),
+        self::CACHE_EMAIL_BODY => array(
+        //_('Cache email body')
+            'label'                 => 'Cache email body',
+        // _('Should the email body be cached (recommended for slow IMAP server connections)')
+            'description'           => 'Should the email body be cached (recommended for slow IMAP server connections)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
             'default'               => 1,
         ),
     );

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
  */
@@ -513,18 +513,23 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Get Message body of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
         
-        $cache = Tinebase_Core::getCache();
-        $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
-        
-        if ($cache->test($cacheId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
-            return $cache->load($cacheId);
+        $cacheBody = Felamimail_Config::getInstance()->get(Felamimail_Config::CACHE_EMAIL_BODY, TRUE);
+        if ($cacheBody) {
+            $cache = Tinebase_Core::getCache();
+            $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
+            
+            if ($cache->test($cacheId)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
+                return $cache->load($cacheId);
+            }
         }
         
         $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put message body into Tinebase cache (for 24 hours).');
-        $cache->save($messageBody, $cacheId, array('getMessageBody'), 86400);
+        if ($cacheBody) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put message body into Tinebase cache (for 24 hours).');
+            $cache->save($messageBody, $cacheId, array('getMessageBody'), 86400);
+        }
         
         return $messageBody;
     }
