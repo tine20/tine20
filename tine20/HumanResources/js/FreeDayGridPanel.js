@@ -85,6 +85,7 @@ Tine.HumanResources.FreeDayGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: this.recordClass.getFilterModel(),
+            recordClass: this.recordClass,
             defaultFilter: 'query',
             filters: filters,
             plugins: plugins

@@ -37,6 +37,7 @@ Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            recordClass: this.recordClass,
             filterModels: [
                 {label: this.app.i18n._('Ticket'), field: 'query', operators: ['contains']},
                 {label: this.app.i18n._('Ticket ID'), field: 'id', valueType: 'number'},

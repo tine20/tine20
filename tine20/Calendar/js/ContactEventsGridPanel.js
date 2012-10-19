@@ -85,6 +85,7 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            recordClass: this.recordClass,
             neverAllowSaving: true,
             filterModels: Tine.Calendar.Model.Event.getFilterModel(),
             defaultFilter: 'query',

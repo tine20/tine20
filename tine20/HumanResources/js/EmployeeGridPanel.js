@@ -76,6 +76,7 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: Tine.HumanResources.Model.Employee.getFilterModel(),
             defaultFilter: 'query',
+            recordClass: this.recordClass,
             filters: [],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
