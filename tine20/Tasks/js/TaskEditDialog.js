@@ -59,6 +59,11 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     initComponent: function() {
+        
+        if(!this.record) {
+            this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+        }
+        
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);
     },
