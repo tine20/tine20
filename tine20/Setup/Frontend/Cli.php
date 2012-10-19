@@ -362,7 +362,7 @@ class Setup_Frontend_Cli
         if (empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
         }
-        if (empty($options['configvalue'])) {
+        if (! isset($options['configvalue'])) {
             $errors[] = 'Missing argument: configvalue';
         }
         $configKey = (string)$options['configkey'];
@@ -371,7 +371,7 @@ class Setup_Frontend_Cli
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
         
         if (empty($errors)) {
-           Setup_Controller::setConfigOption($configKey, $configValue, $applicationName);
+           Setup_Controller::getInstance()->setConfigOption($configKey, $configValue, $applicationName);
            echo "OK - Updated configuration option $configKey for application $applicationName\n";
         } else {
             echo "ERRORS - The following errors occured: \n";
