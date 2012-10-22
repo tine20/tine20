@@ -522,7 +522,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 scope: this,
                 fn: function() {
                     // focus ok btn
-                    if (this.action_saveAndClose.items) {
+                    if (this.action_saveAndClose.items && this.action_saveAndClose.items.length > 0) {
                         this.action_saveAndClose.items[0].focus();
                     }
                     this.onSaveAndClose();

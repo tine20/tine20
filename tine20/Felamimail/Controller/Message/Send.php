@@ -401,6 +401,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting mail headers');
+        
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
         
@@ -418,16 +420,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         if ($_message !== NULL) {
             if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
-                $this->_addReplyHeaders($_mail, $_message);
+                $this->_addReplyHeaders($_message);
             }
             
             // add other headers
             if (! empty($_message->headers) && is_array($_message->headers)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
                 foreach ($_message->headers as $key => $value) {
-                    if (strlen(trim($value)) > 998) {
-                        $value = substr($value, 0, 997);
-                    }
+                    $value = $this->_trimHeader($key, $value);
                     $_mail->addHeader($key, $value);
                 }
             }
@@ -435,22 +436,44 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
     
     /**
+     * trim message headers (Zend_Mail only supports < 998 chars)
+     * 
+     * @param string $value
+     * @return string
+     */
+    protected function _trimHeader($key, $value)
+    {
+        if (strlen($value) + strlen($key) > 998) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Trimming header ' . $key);
+            
+            $value = substr(trim($value), 0, (995 - strlen($key)));
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . $value);
+        }
+        
+        return $value;
+    }
+    
+    /**
      * set In-Reply-To and References headers
      * 
-     * @param Zend_Mail $mail
      * @param Felamimail_Model_Message $message
      * 
      * @see http://www.faqs.org/rfcs/rfc2822.html / Section 3.6.4.
      */
-    protected function _addReplyHeaders(Zend_Mail $mail, Felamimail_Model_Message $message)
+    protected function _addReplyHeaders(Felamimail_Model_Message $message)
     {
         $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
         if (! isset($originalHeaders['message-id'])) {
             // no message-id -> skip this
             return;
         }
+
+        $messageHeaders = is_array($message->headers) ? $message->headers : array();
+        $messageHeaders['In-Reply-To'] = $originalHeaders['message-id'];
         
-        $mail->addHeader('In-Reply-To', $originalHeaders['message-id']);
         $references = '';
         if (isset($originalHeaders['references'])) {
             $references = $originalHeaders['references'] . ' ';
@@ -458,14 +481,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $references = $originalHeaders['in-reply-to'] . ' ';
         }
         $references .= $originalHeaders['message-id'];
+        $messageHeaders['References'] = $references;
         
-        while (strlen($references) > 998) {
-            // Very long references header, need to cut some chars off
-            $pos = strpos($references, ' ');
-            $references = substr($references, (($pos !== FALSE) ? $pos : 80));
-        }
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $references);
-        $mail->addHeader('References', $references);
+        $message->headers = $messageHeaders;
     }
     
     /**
