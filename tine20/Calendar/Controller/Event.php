@@ -1388,12 +1388,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             Calendar_Controller_Alarm::enforceACL($_event, $event);
             
+            $currentAttenderDisplayContainerId = $currentAttender->displaycontainer_id instanceof Tinebase_Model_Container ? 
+                $currentAttender->displaycontainer_id->getId() : 
+                $currentAttender->displaycontainer_id;
+            
+            $attenderDisplayContainerId = $_attender->displaycontainer_id instanceof Tinebase_Model_Container ? 
+                $_attender->displaycontainer_id->getId() : 
+                $_attender->displaycontainer_id;
+            
             // check if something what can be set as user has changed
             if ($currentAttender->status == $_attender->status &&
-                $currentAttender->displaycontainer_id == $_attender->displaycontainer_id &&
-                $currentAttender->alarm_ack_time == $_attender->alarm_ack_time &&
+                $currentAttenderDisplayContainerId  == $attenderDisplayContainerId   &&
+                $currentAttender->alarm_ack_time    == $_attender->alarm_ack_time    &&
                 $currentAttender->alarm_snooze_time == $_attender->alarm_snooze_time &&
-                $currentAttender->transp == $_attender->transp &&
+                $currentAttender->transp            == $_attender->transp            &&
                 ! Calendar_Controller_Alarm::hasUpdates($_event, $event)
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
