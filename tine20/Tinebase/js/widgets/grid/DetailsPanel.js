@@ -193,7 +193,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     onDetailsUpdate: function(sm) {
         var count = sm.getCount();
         if (count === 0 || sm.isFilterSelect) {
-            if(this.layout.hasOwnProperty('setActiveItem') && Ext.isFunction(this.layout.setActiveItem)) {
+            if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
                 this.layout.setActiveItem(this.getDefaultInfosPanel());
             }
             this.showDefault(this.getDefaultInfosPanel().body);
