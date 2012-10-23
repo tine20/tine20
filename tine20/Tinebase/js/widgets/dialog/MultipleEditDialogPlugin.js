@@ -529,10 +529,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 ff.setValue(this.interRecord.get(ff.name));
             } else if (ff.isXType('tinerecordpickercombobox')) {
                 var val = this.interRecord.get(field.recordKey);
-                if(!ff.isXType('addressbookcontactpicker')) {
-                    ff.startRecord = new ff.recordClass(val);
-                } else {
-                    ff.startRecord = val;
+                if(val) {
+                    if(!ff.isXType('addressbookcontactpicker')) {
+                        ff.startRecord = new ff.recordClass(val);
+                    } else {
+                        ff.startRecord = val;
+                    }
                 }
             } else {
                 ff.setValue(this.interRecord.get(field.recordKey));
