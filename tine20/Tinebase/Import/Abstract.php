@@ -736,8 +736,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
             case 'mergeMine':
-                // we have to adjust modified timestamp for concurrency handling
-                $_record->last_modified_time = Tinebase_DateTime::now();
                 $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $_record, FALSE);
                 break;
             case 'keep':

@@ -767,6 +767,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $fritz = $result['results'][0];
         $fritz['tel_work'] = '04040';
+        // need to adjust user TZ
+        $lastModified = new Tinebase_DateTime($fritz['last_modified_time']);
+        $fritz['last_modified_time'] = $lastModified->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->toString();
         $clientRecords = array(array(
             'recordData'        => $fritz,
             'resolveStrategy'   => 'mergeTheirs',

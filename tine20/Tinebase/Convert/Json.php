@@ -51,7 +51,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_record->bypassFilters = true;
-                
+        
         return $_record->toArray();
     }
     
