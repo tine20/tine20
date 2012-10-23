@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>6.1</version>
+    <version>6.2</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -214,7 +214,7 @@
         </table>
         <table>
             <name>acsync_device</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -336,6 +336,11 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>lastsynccollection</name>
+                    <type>blob</type>
+                    <default>null</default>
                 </field>
                 <index>
                     <name>id</name>
@@ -491,7 +496,7 @@
             <name>acsync_folder</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -542,6 +547,11 @@
                     <name>type</name>
                     <type>integer</type>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>supportedfields</name>
+                    <type>blob</type>
+                    <default>null</default>
                 </field>
                 <index>
                     <name>id</name>

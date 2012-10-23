@@ -308,4 +308,43 @@ class ActiveSync_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '6.1');
     }
+    
+    /**
+     * update to 6.2
+     * - add new column lastsynccollection
+     * - add new column supportedfields
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->validateTableVersion('acsync_device', 4);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lastsynccollection</name>
+                <type>blob</type>
+                <default>null</default>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+        
+        $this->setTableVersion('acsync_device', 5);
+        
+        
+        $this->validateTableVersion('acsync_folder', 2);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>supportedfields</name>
+                <type>blob</type>
+                <default>null</default>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_folder', $declaration);
+        
+        $this->setTableVersion('acsync_folder', 3);
+        
+        $this->setApplicationVersion('ActiveSync', '6.2');
+    }
 }
