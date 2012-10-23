@@ -386,16 +386,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {}
      */
     isContainerSelectorDisabled: function() {
-        var cp = this.recordClass.getMeta('containerProperty'),
-            container = this.record.data[cp],
-            grants = (container && container.hasOwnProperty('account_grants')) ? container.account_grants : null,
-            cond = false;
+        if(this.record) {
+            var cp = this.recordClass.getMeta('containerProperty'),
+                container = this.record.data[cp],
+                grants = (container && container.hasOwnProperty('account_grants')) ? container.account_grants : null,
+                cond = false;
+                
+            // check grants if record already exists and grants should be evaluated
+            if(this.evalGrants && this.record.data.id && grants) {
+                cond = ! (grants.hasOwnProperty('editGrant') && grants.editGrant);
+            }
             
-        // check grants if record already exists and grants should be evaluated
-        if(this.evalGrants && this.record.data.id && grants) {
-            cond = ! (grants.hasOwnProperty('editGrant') && grants.editGrant);
+            return cond;
+        } else {
+            return false;
         }
-        return cond;
+        
     },
     
     /**
