@@ -47,11 +47,11 @@ Ext.ux.WindowFactory = function (config) {
  * @class Ext.ux.WindowFactory
  */
 Ext.ux.WindowFactory.prototype = {
+    
     /**
      * @private
      */
     windowClass: null,
-    
     /**
      * @private
      */
@@ -84,15 +84,13 @@ Ext.ux.WindowFactory.prototype = {
         c.height = Math.min(Ext.getBody().getBox().height, c.height);
         c.width = Math.min(Ext.getBody().getBox().width, c.width);
         
-        var centerPanel = this.getCenterPanel(c);
-        
         c.layout = c.layout || 'fit';
         c.items = {
             layout: 'card',
             border: false,
             activeItem: 0,
             isWindowMainCardPanel: true,
-            items: [centerPanel]
+            items: [this.getCenterPanel(c)]
         }
         
         // we can only handle one window yet
@@ -101,13 +99,10 @@ Ext.ux.WindowFactory.prototype = {
         var win = new Ext.Window(c);
         c.items.items[0].window = win;
         
-        // relay events from center panel to window
-        this.relayEvents(win, centerPanel, c.listeners);
-        
         // if initShow property is present and it is set to false don't show window, just return reference
         if (c.hasOwnProperty('initShow') && c.initShow === false) {
-            return win;
-        }
+    return win;
+    }
         
         win.show();
         return win;
@@ -121,6 +116,39 @@ Ext.ux.WindowFactory.prototype = {
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
+            /*
+             * IE fix for listeners
+             * 
+             * In IE we have two problems when dealing with listeners across windows
+             * 1. listeners (functions) are defined in the parent window. a typeof (some function from parent) returns object in IE
+             *    the Ext.Observable code can't deal with this
+             * 2. listeners get executed by fn.apply(scope, arguments). For some reason in IE this dosn't work with functions defined
+             *    in an other window.
+             *    
+             * To work around this, we create new fresh listeners in the new window and proxy the event calls
+             * 
+             * TODO there is a bug in this function -> it does not work correctly if scope is defined in listeners object and is not the first entry ... :(
+             */
+            var ls = config.contentPanelConstructorConfig.listeners;
+            if (ls /* && Ext.isIE */) {
+                var lsProxy = {};
+                for (var p in ls) {
+                    if (ls.hasOwnProperty(p) && p !== 'scope') {
+                        // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
+                        if (ls[p].fn) {
+lsProxy[p] = function () {
+ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+};
+                        } else {
+lsProxy[p] = function () {
+ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+};
+                        }
+                    }
+                }
+                config.contentPanelConstructorConfig.listeners = lsProxy;
+            }
+            
             // place a reference to current window class in the itemConstructor.
             // this may be overwritten depending on concrete window implementation
             config.contentPanelConstructorConfig.window = config;
@@ -144,27 +172,6 @@ Ext.ux.WindowFactory.prototype = {
         }
         
         return items;
-    },
-    
-    /**
-     * Relay event from panel to window
-     * 
-     * @param {Ext.Window} win
-     * @param {Ext.Panel} panel
-     * @param {Object} listeners
-     */
-    relayEvents: function (win, panel, listeners) {
-        if (! listeners) {
-            return;
-        }
-        
-        var events = [];
-        for (var event in listeners) {
-           if (event !== 'scope') {
-               events.push(event);
-           }
-        }
-        win.relayEvents.call(win, panel, events);
     },
     
     /**
