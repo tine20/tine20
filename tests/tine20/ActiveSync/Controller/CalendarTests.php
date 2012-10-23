@@ -293,6 +293,16 @@ Zeile 3</AirSyncBase:Data>
       </Collections>
     </Sync>';
     
+    protected $_testXMLMeetingResponse = '<?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+    <MeetingResponse xmlns="uri:MeetingResponse" xmlns:Search="uri:Search">
+        <Request>
+            <UserResponse>2</UserResponse>
+            <CollectionId>17</CollectionId>
+            <RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>
+        </Request>
+    </MeetingResponse>';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -546,6 +556,31 @@ Zeile 3</AirSyncBase:Data>
         // how to validate container / it's not present in syncroton event?
         $this->assertEquals(1, $syncrotonEvent->exceptions[0]->busyStatus);
         $this->assertNotEquals('do not update', $syncrotonEvent->exceptions[0]->subject);
+    }
+    
+    public function testMeetingResponse()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $XMLMeetingResponse = $this->_testXMLMeetingResponse;
+        
+        $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
+        
+        $xml = new SimpleXMLElement($XMLMeetingResponse);
+        
+        $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
+        
+        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        
+        $this->assertEquals($ownAttendee->status, Calendar_Model_Attender::STATUS_TENTATIVE);
     }
     
     /**

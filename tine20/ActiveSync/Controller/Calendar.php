@@ -15,7 +15,7 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
-class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
+class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataCalendar
 {
     /**
      * available filters
@@ -194,6 +194,27 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         parent::__construct($_device, $_syncTimeStamp);
         
         $this->_contentController->setEventFilter($this->_getContentFilter(0));
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataCalendar::setAttendeeStatus()
+     */
+    public function setAttendeeStatus(Syncroton_Model_MeetingResponse $reponse)
+    {
+        $event = $instance = $this->_contentController->get($reponse->requestId);
+        if ($reponse->instanceId instanceof DateTime) {
+            $instance = $event->exdate->filter('recurid', $event->uid . '-' . $reponse->instanceId->format(Tinebase_Record_Abstract::ISO8601LONG))->getFirstRecord();
+        }
+        $attendee = Calendar_Model_Attender::getOwnAttender($instance->attendee);
+        if (! $attendee) {
+            throw new Syncroton_Exception_Status_MeetingResponse("party crushing not allowed", Syncroton_Exception_Status_MeetingResponse::INVALID_REQUEST);
+        }
+        $attendee->status = $this->_attendeeStatusMapping[$reponse->userResponse];
+        $this->_contentController->attenderStatusUpdate($event, $attendee);
+        
+        // return id of calendar event
+        return $reponse->requestId;
     }
     
     /**
