@@ -358,7 +358,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVcal($cardData);
         foreach ($vobject->children() as $component) {
             if (isset($component->{'X-TINE20-CONTAINER'})) {
-                $xContainerId = $component->{'X-TINE20-CONTAINER'};
+                $xTine20Container = $component->{'X-TINE20-CONTAINER'};
                 break;
             }
         }
@@ -386,8 +386,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
         
         // client sends CalDAV event -> handle a container move
-        else if (isset($xContainerId)) {
-            if ($xContainerId == $currentContainer->getId()) {
+        else if (isset($xTine20Container)) {
+            if ($xTine20Container->value == $currentContainer->getId()) {
                 $event->container_id = $this->_container->getId();
             } else {
                 // @TODO allow organizer to move original cal when he edits the displaycal event?
