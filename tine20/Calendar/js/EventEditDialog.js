@@ -129,7 +129,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     name: 'dtstart',
                                     requiredGrant: 'editGrant'
                                 }, {
-                                    columnWidth: .17,
+                                    columnWidth: .19,
                                     xtype: 'checkbox',
                                     hideLabel: true,
                                     boxLabel: this.app.i18n._('whole day'),
@@ -522,7 +522,7 @@ Tine.Calendar.EventEditDialog.openWindow = function (config) {
     var id = config.recordId ? config.recordId : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 500,
+        height: 505,
         name: Tine.Calendar.EventEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Calendar.EventEditDialog',
         contentPanelConstructorConfig: config
