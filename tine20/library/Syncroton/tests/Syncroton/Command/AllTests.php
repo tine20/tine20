@@ -33,6 +33,7 @@ class Syncroton_Command_AllTests
         $suite->addTestSuite('Syncroton_Command_GetAttachmentTests');
         $suite->addTestSuite('Syncroton_Command_GetItemEstimateTests');
         $suite->addTestSuite('Syncroton_Command_ItemOperationsTests');
+        $suite->addTestSuite('Syncroton_Command_MeetingResponseTests');
         $suite->addTestSuite('Syncroton_Command_MoveItemsTests');
         $suite->addTestSuite('Syncroton_Command_PingTests');
         $suite->addTestSuite('Syncroton_Command_ProvisionTests');

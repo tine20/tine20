@@ -9,7 +9,7 @@
  */
 
 /**
- * intace for email backend
+ * interface for extended email backend
  *
  * @package     Model
  */
@@ -26,7 +26,7 @@ interface Syncroton_Data_IDataEmail
     /**
      * forward an email
      * 
-     * @param  string|array  $source       is either a string(LongId) or an arrey with following properties collectionId, itemId and instanceId
+     * @param  string|array  $source       is either a string(LongId) or an array with following properties collectionId, itemId and instanceId
      * @param  string        $inputStream
      * @param  string        $saveInSent
      */
@@ -35,7 +35,7 @@ interface Syncroton_Data_IDataEmail
     /**
      * reply to an email
      * 
-     * @param  string|array  $source       is either a string(LongId) or an arrey with following properties collectionId, itemId and instanceId
+     * @param  string|array  $source       is either a string(LongId) or an array with following properties collectionId, itemId and instanceId
      * @param  string        $inputStream
      * @param  string        $saveInSent
      */
