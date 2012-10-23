@@ -7,7 +7,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -62,15 +62,16 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             if ($part instanceof Zend_Mime_Part) {
                 
-                $filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
                 $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
+                $filename = $this->_getDownloadFilename($part, $_messageId, $contentType);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                    . ' filename: ' . $filename 
-                    . ' content type' . $contentType 
-                    //. print_r($part, TRUE)
+                    . ' filename: '    . $filename
+                    . ' content type ' . $contentType
                     //. ' ' . stream_get_contents($part->getDecodedStream())
                 );
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '. print_r($part, TRUE));
                 
                 // cache for 3600 seconds
                 $maxAge = 3600;
@@ -94,5 +95,30 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         exit;
+    }
+    
+    /**
+     * get download filename from part
+     * 
+     * @param Zend_Mime_Part $part
+     * @param string $messageId
+     * @param string $contentType
+     * @return string
+     * 
+     * @see 0007264: attachment download does not detect content-type
+     */
+    protected function _getDownloadFilename($part, $messageId, $contentType)
+    {
+        if (! empty($part->filename)) {
+            return $part->filename;
+        }
+        
+        if ($contentType != Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && preg_match('@[a-z]+/([a-z]+)@', $contentType, $extensionMatch)) {
+            $extension = '.' . $extensionMatch[1];
+        } else {
+            $extension = '.eml';
+        }
+        
+        return $messageId . $extension;
     }
 }
