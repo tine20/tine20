@@ -154,7 +154,7 @@ msgid "Host"
 msgstr ""
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
 msgstr ""
@@ -164,7 +164,7 @@ msgid "Login name"
 msgstr ""
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/ConfigManagerPanel.js:175 js/ConfigManagerPanel.js:206
+#: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
 #: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Парола"
@@ -181,8 +181,8 @@ msgstr ""
 msgid "Search filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
-#: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Име на Host"
@@ -339,7 +339,7 @@ msgstr ""
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:359
+#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:360
 msgid "Save config"
 msgstr "Запаметяване на конфигурацията"
 
@@ -361,91 +361,91 @@ msgstr ""
 msgid "Adapter"
 msgstr "Адаптор"
 
-#: js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:160
 msgid "Setup Authentication"
 msgstr "Идентификация на настройките"
 
-#: js/ConfigManagerPanel.js:166 js/EmailPanel.js:186
+#: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
 msgid "Username"
 msgstr "Потребителско име"
 
-#: js/ConfigManagerPanel.js:180 js/ConfigManagerPanel.js:198
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
 msgid "Database"
 msgstr "Банка данни"
 
-#: js/ConfigManagerPanel.js:202
+#: js/ConfigManagerPanel.js:203
 msgid "User"
 msgstr "Потрибител"
 
-#: js/ConfigManagerPanel.js:210
+#: js/ConfigManagerPanel.js:211
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerPanel.js:214
+#: js/ConfigManagerPanel.js:215
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerPanel.js:224
+#: js/ConfigManagerPanel.js:225
 msgid "Filename"
 msgstr "Име на файла"
 
-#: js/ConfigManagerPanel.js:227
+#: js/ConfigManagerPanel.js:228
 msgid "Priority"
 msgstr "Приоритет"
 
-#: js/ConfigManagerPanel.js:231
+#: js/ConfigManagerPanel.js:232
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerPanel.js:241 js/ConfigManagerPanel.js:295
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
 msgid "Path"
 msgstr "Директория"
 
-#: js/ConfigManagerPanel.js:245 js/ConfigManagerPanel.js:270
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (секунди)"
 
-#: js/ConfigManagerPanel.js:250
+#: js/ConfigManagerPanel.js:251
 msgid "Temporary files"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:258
+#: js/ConfigManagerPanel.js:259
 msgid "Temporary Files Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:262
+#: js/ConfigManagerPanel.js:263
 msgid "Session"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:322
+#: js/ConfigManagerPanel.js:323
 msgid "Filestore directory"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:330
+#: js/ConfigManagerPanel.js:331
 msgid "Filestore Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:335
+#: js/ConfigManagerPanel.js:336
 msgid "Addressbook Map panel"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:343
+#: js/ConfigManagerPanel.js:344
 msgid "Map panel"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:345
+#: js/ConfigManagerPanel.js:346
 msgid "disabled"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:345
+#: js/ConfigManagerPanel.js:346
 msgid "enabled"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:357
+#: js/ConfigManagerPanel.js:358
 msgid "Config file is not writable"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:375
+#: js/ConfigManagerPanel.js:376
 msgid "Download config file"
 msgstr "Сваляне на конфигурационният файл"
 

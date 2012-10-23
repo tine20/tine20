@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 09:12+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-10-11 16:14+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,45 +54,45 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: js/AdminPanel.js:204 js/ContractGridPanel.js:104
+#: js/AdminPanel.js:204 js/ContractGridPanel.js:111
 msgid "Calendar"
 msgstr ""
 
-#: js/AdminPanel.js:205 js/ContractGridPanel.js:105
+#: js/AdminPanel.js:205 js/ContractGridPanel.js:112
 msgid "Calendars"
 msgstr ""
 
-#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:218
+#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:222
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ContractGridPanel.js:124
+#: js/ContractGridPanel.js:131
 msgid "Working Time Model"
 msgstr ""
 
-#: js/ContractGridPanel.js:127
+#: js/ContractGridPanel.js:134
 msgid "Vacation Days"
 msgstr ""
 
-#: js/ContractGridPanel.js:129
+#: js/ContractGridPanel.js:136
 msgid "Cost Centre"
 msgstr ""
 
-#: js/ContractGridPanel.js:132
+#: js/ContractGridPanel.js:139
 msgid "Start Date"
 msgstr ""
 
-#: js/ContractGridPanel.js:135
+#: js/ContractGridPanel.js:142
 msgid "End Date"
 msgstr ""
 
-#: js/ContractGridPanel.js:138
+#: js/ContractGridPanel.js:145
 msgid "Feast Calendar"
 msgstr ""
 
-#: js/ContractGridPanel.js:176 js/ContractGridPanel.js:188
+#: js/ContractGridPanel.js:183 js/ContractGridPanel.js:195
 msgid "undefined"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Loading calendar data..."
 msgstr ""
 
-#: js/EmployeeEditDialog.js:121 js/Models.js:293
+#: js/EmployeeEditDialog.js:121 js/Models.js:297
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] ""
@@ -112,7 +112,7 @@ msgstr[1] ""
 
 #: js/EmployeeEditDialog.js:138 js/EmployeeEditDialog.js:151
 #: js/FreeDayGridPanel.js:113 js/FreeTimeEditDialog.js:114
-#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:63
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:64
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] ""
@@ -122,7 +122,7 @@ msgstr[1] ""
 msgid "Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:167 js/Models.js:108
+#: js/EmployeeEditDialog.js:167 js/Models.js:111
 msgid "Account"
 msgstr ""
 
@@ -134,19 +134,19 @@ msgstr ""
 msgid "Full Name"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:112
+#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:116
 msgid "Salutation"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:110
+#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:113
 msgid "Title"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:109
+#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:112
 msgid "First Name"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:111
+#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:115
 msgid "Last Name"
 msgstr ""
 
@@ -210,39 +210,43 @@ msgstr ""
 msgid "Health Insurance"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138
+#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138 js/Models.js:108
 msgid "Employment begin"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145
+#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145 js/Models.js:109
 msgid "Employment end"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:336
+#: js/EmployeeEditDialog.js:331 js/Models.js:114
+msgid "Profession"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:339
 msgid "Banking Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:345
+#: js/EmployeeEditDialog.js:348
 msgid "Account Holder"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:348
+#: js/EmployeeEditDialog.js:351
 msgid "Account Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:351
+#: js/EmployeeEditDialog.js:354
 msgid "Bank Name"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:354
+#: js/EmployeeEditDialog.js:357
 msgid "Code Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:375 js/FreeTimeEditDialog.js:237
+#: js/EmployeeEditDialog.js:378 js/FreeTimeEditDialog.js:237
 msgid "Description"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:389 js/FreeTimeEditDialog.js:251
+#: js/EmployeeEditDialog.js:392 js/FreeTimeEditDialog.js:251
 msgid "Enter description"
 msgstr ""
 
@@ -259,7 +263,7 @@ msgid "Please create a contract for this employee!"
 msgstr ""
 
 #: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:179
-#: js/FreeTimeGridPanel.js:144 js/Models.js:327
+#: js/FreeTimeGridPanel.js:144 js/Models.js:331
 msgid "Type"
 msgstr ""
 
@@ -268,7 +272,7 @@ msgid "Date Start"
 msgstr ""
 
 #: js/FreeDayGridPanel.js:116 js/FreeTimeEditDialog.js:208
-#: js/FreeTimeGridPanel.js:147 js/Models.js:341
+#: js/FreeTimeGridPanel.js:147 js/Models.js:345
 msgid "Remark"
 msgstr ""
 
@@ -276,7 +280,7 @@ msgstr ""
 msgid "FreeTime"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:335
+#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:339
 msgid "Status"
 msgstr ""
 
@@ -296,61 +300,61 @@ msgstr ""
 msgid "Human Resources"
 msgstr ""
 
-#: js/Models.js:67
+#: js/Models.js:68
 msgid "Employees"
 msgid_plural "Employees"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:101 js/Models.js:183 js/Models.js:256 js/Models.js:325
+#: js/Models.js:102 js/Models.js:187 js/Models.js:260 js/Models.js:329
 msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:102
+#: js/Models.js:103
 msgid "Employee name"
 msgstr ""
 
-#: js/Models.js:104 js/Models.js:342
+#: js/Models.js:105 js/Models.js:346
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Models.js:105 js/Models.js:343
+#: js/Models.js:106 js/Models.js:347
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Models.js:106 js/Models.js:344
+#: js/Models.js:107 js/Models.js:348
 msgid "Creation Time"
 msgstr ""
 
-#: js/Models.js:107 js/Models.js:345
+#: js/Models.js:110 js/Models.js:349
 msgid "Created By"
 msgstr ""
 
-#: js/Models.js:145
+#: js/Models.js:149
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:149
+#: js/Models.js:153
 msgid "Working Times"
 msgid_plural "Working Times"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:222
+#: js/Models.js:226
 msgid "Contracts"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:377
+#: js/Models.js:381
 msgid "Free Day"
 msgid_plural "Free Days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:380
+#: js/Models.js:384
 msgid "Free Days"
 msgid_plural "Free Days"
 msgstr[0] ""

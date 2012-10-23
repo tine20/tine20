@@ -25,15 +25,15 @@ msgstr "administrar pastas compartilhadas"
 msgid "Create new shared folders"
 msgstr "Criar novas pastas compartilhadas"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "Minhas pastas"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "Pastas compartilhadas"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Pastas de outros usuários"
 

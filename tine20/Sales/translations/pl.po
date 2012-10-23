@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-13 11:32+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,45 +27,45 @@ msgstr "dodaj, edytuj i usuń produkty"
 
 #: Config.php:49
 msgid "Contract Number Creation"
-msgstr ""
+msgstr "Utworzenie numeru umowy"
 
 #: Config.php:51
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr ""
+msgstr "Czy numer umowy ma zostać utworzony ręcznie czy automatycznie?"
 
 #: Config.php:54
 msgid "automatically"
-msgstr ""
+msgstr "automatycznie"
 
 #: Config.php:55
 msgid "manually"
-msgstr ""
+msgstr "ręcznie"
 
 #: Config.php:62
 msgid "Contract Number Validation"
-msgstr ""
+msgstr "Walidacja numeru umowy"
 
 #: Config.php:64
 msgid "The Number can be validated as text or number."
-msgstr ""
+msgstr "Numer może być walidowany jako tekst albo liczba."
 
 #: Config.php:67 js/ContractEditDialog.js:136
 msgid "Number"
-msgstr ""
+msgstr "Liczba"
 
 #: Config.php:68
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: Config.php:75
 msgid "Contract Status Available"
-msgstr ""
+msgstr "Status umowy Dostępna"
 
 #: Config.php:77
 msgid ""
 "Possible Contract status. Please note that additional contract status might "
 "impact other Sales systems on export or syncronisation."
-msgstr ""
+msgstr "Możliwe statusy kontraktów. Pamiętaj proszę, że dodatkowe statusy kontraktów mogą wpływać na inne systemy sprzedaży, na synchronizację albo eksport."
 
 #: Config.php:85
 msgid "Contract Cleared State Available"
@@ -76,55 +77,55 @@ msgstr ""
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
-msgstr ""
+msgstr "Wprowadzona liczba jest już używana!"
 
 #: Controller.php:83 Controller.php:103
 msgid "You do not have admin rights on Sales"
-msgstr ""
+msgstr "Nie masz uprawnień administratora do Działu Sprzedaży"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: js/AdminPanel.js:69
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AdminPanel.js:90
 msgid "Loading..."
-msgstr ""
+msgstr "Wczytywanie..."
 
 #: js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"
-msgstr ""
+msgstr "Proszę użyć liczby dziesiętnej!"
 
-#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:84
+#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:87
 msgid "Title"
 msgstr "Tytuł"
 
 #: js/ContractEditDialog.js:149
 msgid "Contact Customer"
-msgstr ""
+msgstr "Kontakt do klienta"
 
 #: js/ContractEditDialog.js:161
 msgid "Contact Responsible"
-msgstr ""
+msgstr "Kontakt do "
 
 #: js/ContractEditDialog.js:170
 msgid "Company"
-msgstr ""
+msgstr "Firma"
 
-#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:90 js/Models.js:147
+#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:93 js/Models.js:147
 msgid "Status"
 msgstr "Status"
 
-#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:97 js/Models.js:154
+#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:100 js/Models.js:154
 msgid "Cleared"
-msgstr ""
+msgstr "Wyczyszczone"
 
-#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:104 js/Models.js:160
+#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:107 js/Models.js:160
 msgid "Cleared in"
-msgstr ""
+msgstr "Wyczyszczono"
 
 #: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
 #: js/ProductGridPanel.js:123
@@ -135,7 +136,7 @@ msgstr "Opis"
 msgid "Enter description..."
 msgstr "Proszę wprowadzić opis..."
 
-#: js/ContractGridPanel.js:78
+#: js/ContractGridPanel.js:81
 msgid "Contract number"
 msgstr "Numer kontraktu"
 
@@ -186,23 +187,23 @@ msgstr "Nazwa kontraktu"
 #: js/Models.js:186
 msgid "CostCenter"
 msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Centrum kosztów"
+msgstr[1] "centra kosztów"
+msgstr[2] "centra kosztów"
 
 #: js/Models.js:189
 msgid "All CostCenters"
 msgid_plural "All CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Wszystkie centra kosztów"
+msgstr[1] "wszystkie centra kosztów"
+msgstr[2] "wszystkie centra kosztów"
 
 #: js/Models.js:214
 msgid "Division"
 msgid_plural "Divisions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Oddział"
+msgstr[1] "oddział"
+msgstr[2] "oddział"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:120
 msgid "Name"
@@ -226,15 +227,15 @@ msgstr "Znaczniki"
 
 #: Model/Contract.php:92
 msgid "Responsible"
-msgstr ""
+msgstr "Osoba odpowiedzialna"
 
 #: Model/Contract.php:93
 msgid "Customer"
-msgstr ""
+msgstr "Klient"
 
 #: Model/Contract.php:94
 msgid "Partner"
-msgstr ""
+msgstr "Wspólnik"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:63
 msgid "My Products"

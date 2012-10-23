@@ -25,15 +25,15 @@ msgstr "halda jagatud kaustasid"
 msgid "Create new shared folders"
 msgstr "Loo uus jagatud kaust"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "Minu kaustad"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "Jagatud kaustad"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Muud kasutajate kaustad"
 

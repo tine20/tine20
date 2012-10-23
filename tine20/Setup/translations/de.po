@@ -155,7 +155,7 @@ msgid "Host"
 msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:313
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
 msgstr "Port"
@@ -165,7 +165,7 @@ msgid "Login name"
 msgstr "Loginname"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/ConfigManagerPanel.js:175 js/ConfigManagerPanel.js:206
+#: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
 #: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Kennwort"
@@ -182,8 +182,8 @@ msgstr "Base DN"
 msgid "Search filter"
 msgstr "Suchfilter"
 
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:190
-#: js/ConfigManagerPanel.js:309 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Hostname"
@@ -340,7 +340,7 @@ msgstr "Weiterleitung an die Herkunftsseite, falls eine existiert"
 msgid "Save config and install"
 msgstr "Konfiguration speichern und installieren"
 
-#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:359
+#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:360
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
@@ -362,91 +362,91 @@ msgstr "Datei"
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:160
 msgid "Setup Authentication"
 msgstr "Setup Authentifizierung"
 
-#: js/ConfigManagerPanel.js:166 js/EmailPanel.js:186
+#: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/ConfigManagerPanel.js:180 js/ConfigManagerPanel.js:198
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
 msgid "Database"
 msgstr "Datenbank"
 
-#: js/ConfigManagerPanel.js:202
+#: js/ConfigManagerPanel.js:203
 msgid "User"
 msgstr "Benutzer"
 
-#: js/ConfigManagerPanel.js:210
+#: js/ConfigManagerPanel.js:211
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerPanel.js:214
+#: js/ConfigManagerPanel.js:215
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerPanel.js:224
+#: js/ConfigManagerPanel.js:225
 msgid "Filename"
 msgstr "Dateiname"
 
-#: js/ConfigManagerPanel.js:227
+#: js/ConfigManagerPanel.js:228
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/ConfigManagerPanel.js:231
+#: js/ConfigManagerPanel.js:232
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerPanel.js:241 js/ConfigManagerPanel.js:295
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
 msgid "Path"
 msgstr "Pfad"
 
-#: js/ConfigManagerPanel.js:245 js/ConfigManagerPanel.js:270
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (sekunden)"
 
-#: js/ConfigManagerPanel.js:250
+#: js/ConfigManagerPanel.js:251
 msgid "Temporary files"
 msgstr "Flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:258
+#: js/ConfigManagerPanel.js:259
 msgid "Temporary Files Path"
 msgstr "Pfad für flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:262
+#: js/ConfigManagerPanel.js:263
 msgid "Session"
 msgstr "Session"
 
-#: js/ConfigManagerPanel.js:322
+#: js/ConfigManagerPanel.js:323
 msgid "Filestore directory"
 msgstr "Datei-Ablage Verzeichnis"
 
-#: js/ConfigManagerPanel.js:330
+#: js/ConfigManagerPanel.js:331
 msgid "Filestore Path"
 msgstr "Datei-Ablage Verzeichnis"
 
-#: js/ConfigManagerPanel.js:335
+#: js/ConfigManagerPanel.js:336
 msgid "Addressbook Map panel"
 msgstr "Kartenfenster im Adressbuch"
 
-#: js/ConfigManagerPanel.js:343
+#: js/ConfigManagerPanel.js:344
 msgid "Map panel"
 msgstr "Kartenfenster"
 
-#: js/ConfigManagerPanel.js:345
+#: js/ConfigManagerPanel.js:346
 msgid "disabled"
 msgstr "deaktiviert"
 
-#: js/ConfigManagerPanel.js:345
+#: js/ConfigManagerPanel.js:346
 msgid "enabled"
 msgstr "aktiviert"
 
-#: js/ConfigManagerPanel.js:357
+#: js/ConfigManagerPanel.js:358
 msgid "Config file is not writable"
 msgstr "Konfigurationsdatei nicht schreibbar"
 
-#: js/ConfigManagerPanel.js:375
+#: js/ConfigManagerPanel.js:376
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
 

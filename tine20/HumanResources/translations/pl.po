@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 19:49+0000\n"
+"PO-Revision-Date: 2012-10-13 11:02+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -29,23 +29,23 @@ msgstr "Edytuj urodziny, dane o koncie bankowym i inne, prywatne informacje prac
 
 #: Config.php:42
 msgid "Freetime Type"
-msgstr ""
+msgstr "Typ wolnego"
 
 #: Config.php:44
 msgid "Possible free time definitions."
-msgstr ""
+msgstr "Definicje wolnego"
 
 #: Config.php:52
 msgid "Freetime Status"
-msgstr ""
+msgstr "Status wolnego"
 
 #: Config.php:54
 msgid "Possible free time status definitions."
-msgstr ""
+msgstr "Definicje statusu wolnego"
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
-msgstr ""
+msgstr "Nie masz dostępu do działu HR"
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
@@ -55,46 +55,46 @@ msgstr "Anuluj"
 msgid "OK"
 msgstr "OK"
 
-#: js/AdminPanel.js:204 js/ContractGridPanel.js:104
+#: js/AdminPanel.js:204 js/ContractGridPanel.js:111
 msgid "Calendar"
 msgstr "Kalendarz"
 
-#: js/AdminPanel.js:205 js/ContractGridPanel.js:105
+#: js/AdminPanel.js:205 js/ContractGridPanel.js:112
 msgid "Calendars"
 msgstr "Kalendarze"
 
-#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:218
+#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:222
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Umowa"
 msgstr[1] "Umowy"
 msgstr[2] "Umowy"
 
-#: js/ContractGridPanel.js:124
+#: js/ContractGridPanel.js:131
 msgid "Working Time Model"
 msgstr "Model czasu pracy"
 
-#: js/ContractGridPanel.js:127
+#: js/ContractGridPanel.js:134
 msgid "Vacation Days"
 msgstr "Dni urlopu"
 
-#: js/ContractGridPanel.js:129
+#: js/ContractGridPanel.js:136
 msgid "Cost Centre"
 msgstr "Centrum kosztów"
 
-#: js/ContractGridPanel.js:132
+#: js/ContractGridPanel.js:139
 msgid "Start Date"
 msgstr "Data rozpoczęcia"
 
-#: js/ContractGridPanel.js:135
+#: js/ContractGridPanel.js:142
 msgid "End Date"
 msgstr "Data zakończenia"
 
-#: js/ContractGridPanel.js:138
+#: js/ContractGridPanel.js:145
 msgid "Feast Calendar"
-msgstr ""
+msgstr "Kalendarz świąt"
 
-#: js/ContractGridPanel.js:176 js/ContractGridPanel.js:188
+#: js/ContractGridPanel.js:183 js/ContractGridPanel.js:195
 msgid "undefined"
 msgstr "niezdefiniowane"
 
@@ -106,7 +106,7 @@ msgstr "TK"
 msgid "Loading calendar data..."
 msgstr "Ładowanie danych kalendarza..."
 
-#: js/EmployeeEditDialog.js:121 js/Models.js:293
+#: js/EmployeeEditDialog.js:121 js/Models.js:297
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] "Urlop"
@@ -115,7 +115,7 @@ msgstr[2] "Urlopy"
 
 #: js/EmployeeEditDialog.js:138 js/EmployeeEditDialog.js:151
 #: js/FreeDayGridPanel.js:113 js/FreeTimeEditDialog.js:114
-#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:63
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:64
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "Pracownik"
@@ -126,7 +126,7 @@ msgstr[2] "Pracownicy"
 msgid "Number"
 msgstr "Numer"
 
-#: js/EmployeeEditDialog.js:167 js/Models.js:108
+#: js/EmployeeEditDialog.js:167 js/Models.js:111
 msgid "Account"
 msgstr "Konto"
 
@@ -138,19 +138,19 @@ msgstr "Dodaj dane kontaktowe do formularza"
 msgid "Full Name"
 msgstr "Pełne nazwisko"
 
-#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:112
+#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:116
 msgid "Salutation"
 msgstr "Forma grzecznościowa"
 
-#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:110
+#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:113
 msgid "Title"
 msgstr "Tytuł naukowy"
 
-#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:109
+#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:112
 msgid "First Name"
 msgstr "Imię"
 
-#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:111
+#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:115
 msgid "Last Name"
 msgstr "Nazwisko"
 
@@ -214,178 +214,182 @@ msgstr "Oddział"
 msgid "Health Insurance"
 msgstr "Ubezpieczenie zdrowotne"
 
-#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138
+#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138 js/Models.js:108
 msgid "Employment begin"
 msgstr "Początek zatrudnienia"
 
-#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145
+#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145 js/Models.js:109
 msgid "Employment end"
 msgstr "Koniec zatrudnienia"
 
-#: js/EmployeeEditDialog.js:336
+#: js/EmployeeEditDialog.js:331 js/Models.js:114
+msgid "Profession"
+msgstr "Zawód"
+
+#: js/EmployeeEditDialog.js:339
 msgid "Banking Information"
 msgstr "Informacje bankowe"
 
-#: js/EmployeeEditDialog.js:345
+#: js/EmployeeEditDialog.js:348
 msgid "Account Holder"
 msgstr "Właściciel konta"
 
-#: js/EmployeeEditDialog.js:348
-msgid "Account Number"
-msgstr ""
-
 #: js/EmployeeEditDialog.js:351
-msgid "Bank Name"
-msgstr ""
+msgid "Account Number"
+msgstr "Numer konta"
 
 #: js/EmployeeEditDialog.js:354
+msgid "Bank Name"
+msgstr "Nazwa banku"
+
+#: js/EmployeeEditDialog.js:357
 msgid "Code Number"
-msgstr ""
+msgstr "Kod"
 
-#: js/EmployeeEditDialog.js:375 js/FreeTimeEditDialog.js:237
+#: js/EmployeeEditDialog.js:378 js/FreeTimeEditDialog.js:237
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
-#: js/EmployeeEditDialog.js:389 js/FreeTimeEditDialog.js:251
+#: js/EmployeeEditDialog.js:392 js/FreeTimeEditDialog.js:251
 msgid "Enter description"
-msgstr ""
+msgstr "Wprowadź opis"
 
 #: js/EmployeeGridPanel.js:94 js/FreeDayGridPanel.js:112
 msgid "Tags"
-msgstr ""
+msgstr "Znaczniki"
 
 #: js/ExceptionHandler.js:47
 msgid "No contract could be found."
-msgstr ""
+msgstr "Nie znaleziono umowy"
 
 #: js/ExceptionHandler.js:48
 msgid "Please create a contract for this employee!"
-msgstr ""
+msgstr "Proszę utworzyć umowę dla niniejszego pracownika!"
 
 #: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:179
-#: js/FreeTimeGridPanel.js:144 js/Models.js:327
+#: js/FreeTimeGridPanel.js:144 js/Models.js:331
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: js/FreeDayGridPanel.js:115 js/FreeTimeGridPanel.js:146
 msgid "Date Start"
-msgstr ""
+msgstr "Data rozpoczęcia"
 
 #: js/FreeDayGridPanel.js:116 js/FreeTimeEditDialog.js:208
-#: js/FreeTimeGridPanel.js:147 js/Models.js:341
+#: js/FreeTimeGridPanel.js:147 js/Models.js:345
 msgid "Remark"
-msgstr ""
+msgstr "Komentarz"
 
 #: js/FreeTimeEditDialog.js:150 js/FreeTimeEditDialog.js:162
 msgid "FreeTime"
-msgstr ""
+msgstr "Wolne"
 
-#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:335
+#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:339
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/FreeTimeEditDialog.js:194
 msgid "First Day Length"
-msgstr ""
+msgstr "Długość pierwszego dnia"
 
 #: js/FreeTimeEditDialog.js:201
 msgid "Last Day Length"
-msgstr ""
+msgstr "Długość ostatniego dnia"
 
 #: js/FreeTimeEditDialog.js:220
 msgid "Select Days"
-msgstr ""
+msgstr "Wybierz dni"
 
 #: js/HumanResources.js:25
 msgid "Human Resources"
-msgstr ""
+msgstr "HR"
 
-#: js/Models.js:67
+#: js/Models.js:68
 msgid "Employees"
 msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pracownik"
+msgstr[1] "pracownicy"
+msgstr[2] "pracownicy"
 
-#: js/Models.js:101 js/Models.js:183 js/Models.js:256 js/Models.js:325
+#: js/Models.js:102 js/Models.js:187 js/Models.js:260 js/Models.js:329
 msgid "Quick search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
-#: js/Models.js:102
+#: js/Models.js:103
 msgid "Employee name"
-msgstr ""
+msgstr "Nazwa pracownika"
 
-#: js/Models.js:104 js/Models.js:342
+#: js/Models.js:105 js/Models.js:346
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Czas ostatniej zmiany"
 
-#: js/Models.js:105 js/Models.js:343
+#: js/Models.js:106 js/Models.js:347
 msgid "Last Modified By"
-msgstr ""
+msgstr "Zmienione przez"
 
-#: js/Models.js:106 js/Models.js:344
+#: js/Models.js:107 js/Models.js:348
 msgid "Creation Time"
-msgstr ""
+msgstr "Czas utworzenia"
 
-#: js/Models.js:107 js/Models.js:345
+#: js/Models.js:110 js/Models.js:349
 msgid "Created By"
-msgstr ""
-
-#: js/Models.js:145
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr "Utworzone przez"
 
 #: js/Models.js:149
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] "Czas pracy"
+msgstr[1] "czasy pracy"
+msgstr[2] "czasy pracy"
+
+#: js/Models.js:153
 msgid "Working Times"
 msgid_plural "Working Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Czasy pracy"
+msgstr[1] "czasy pracy"
+msgstr[2] "czasy pracy"
 
-#: js/Models.js:222
+#: js/Models.js:226
 msgid "Contracts"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Umowa"
+msgstr[1] "umowy"
+msgstr[2] "umowy"
 
-#: js/Models.js:377
+#: js/Models.js:381
 msgid "Free Day"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Wolny dzień"
+msgstr[1] "wolne dni"
+msgstr[2] "wolne dni"
 
-#: js/Models.js:380
+#: js/Models.js:384
 msgid "Free Days"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Wolne dni"
+msgstr[1] "wolne dni"
+msgstr[2] "wolne dni"
 
 #: Setup/Initialize.php:34
 msgid "Sickness"
-msgstr ""
+msgstr "Chorobowe"
 
 #: Setup/Initialize.php:35
 msgid "Vacation"
-msgstr ""
+msgstr "Urlop"
 
 #: Setup/Initialize.php:49
 msgid "Requested"
-msgstr ""
+msgstr "Na żądanie"
 
 #: Setup/Initialize.php:50
 msgid "In process"
-msgstr ""
+msgstr "W opracowaniu"
 
 #: Setup/Initialize.php:51
 msgid "Accepted"
-msgstr ""
+msgstr "Zaakceptowany"
 
 #: Setup/Initialize.php:52
 msgid "Declined"
-msgstr ""
+msgstr "Odrzucony"

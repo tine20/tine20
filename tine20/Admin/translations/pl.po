@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-11 18:48+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -126,7 +126,7 @@ msgstr "edytuj osobiste i współdzielone kontenery"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
-msgstr ""
+msgstr "Domyśle ustawienia IMAP dla użytkownika"
 
 #: Controller/Container.php:198
 msgid "Your container has been changed"
@@ -269,15 +269,15 @@ msgstr "Ustawienia {0}"
 
 #: js/Applications.js:83
 msgid "Enable Application"
-msgstr ""
+msgstr "Włącz aplikację"
 
 #: js/Applications.js:90
 msgid "Disable Application"
-msgstr ""
+msgstr "Wyłącz aplikację"
 
 #: js/Applications.js:97
 msgid "Settings"
-msgstr ""
+msgstr "Ustawienia"
 
 #: js/Applications.js:146
 msgid "enable application"
@@ -485,7 +485,7 @@ msgstr "Długość"
 
 #: js/customfield/EditDialog.js:613
 msgid "Required"
-msgstr ""
+msgstr "Wymagane"
 
 #: js/customfield/EditDialog.js:620
 msgid "Custom field additional properties"
@@ -588,15 +588,15 @@ msgstr "Podczas próby usunięcia grupy wystąpił błąd."
 
 #: js/Groups.js:104
 msgid "Add Group"
-msgstr ""
+msgstr "Dodaj grupę"
 
 #: js/Groups.js:112
 msgid "Edit Group"
-msgstr ""
+msgstr "Edytuj grupę"
 
 #: js/Groups.js:120
 msgid "Delete Group"
-msgstr ""
+msgstr "Usuń grupę"
 
 #: js/Groups.js:223
 msgid "Displaying groups {0} - {1} of {2}"
@@ -652,15 +652,15 @@ msgstr "Usuwanie roli/ról…"
 
 #: js/Roles.js:102
 msgid "Add Role"
-msgstr ""
+msgstr "Dodaj rolę"
 
 #: js/Roles.js:110
 msgid "Edit Role"
-msgstr ""
+msgstr "Edytuj rolę"
 
 #: js/Roles.js:118
 msgid "Delete Role"
-msgstr ""
+msgstr "Usuń rolę"
 
 #: js/Roles.js:226
 msgid "Displaying roles {0} - {1} of {2}"
@@ -735,15 +735,15 @@ msgstr "Usuwanie znacznika / znaczników…"
 
 #: js/Tags.js:97
 msgid "Add Tag"
-msgstr ""
+msgstr "Dodaj znacznik"
 
 #: js/Tags.js:105
 msgid "Edit Tag"
-msgstr ""
+msgstr "Edytuj znacznik"
 
 #: js/Tags.js:113
 msgid "Delete Tag"
-msgstr ""
+msgstr "Usuń znacznik"
 
 #: js/Tags.js:211
 msgid "Displaying tags {0} - {1} of {2}"
@@ -883,13 +883,13 @@ msgstr "Ostatnie logowanie o"
 
 #: js/user/EditDialog.js:611
 msgid "Domain not allowed"
-msgstr ""
+msgstr "Niedozwolona domena"
 
 #: js/user/EditDialog.js:612
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
 "primary domain nor set as a secondary domain in the setup."
-msgstr ""
+msgstr "Domena {0} aliasu {1}, którą chciałeś dodać nie jest skonfigurowana jako domena domyślna ani jako druga."
 
 #: js/user/EditDialog.js:621
 msgid "Email Alias"
@@ -901,13 +901,13 @@ msgstr "Dodaj alias dla adresu e-mail..."
 
 #: js/user/EditDialog.js:645
 msgid "Forwarding to self"
-msgstr ""
+msgstr "Przekazanie do siebie"
 
 #: js/user/EditDialog.js:646
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
-msgstr ""
+msgstr "Nie masz uprawnień ani do nadawania docelowego adresu pocztowego identycznego z domyślnymi adresami użytkowników ani ich aliasami."
 
 #: js/user/EditDialog.js:655
 msgid "Email Forward"
@@ -948,7 +948,7 @@ msgstr "Nazwisko"
 #: js/user/EditDialog.js:801 js/user/EditDialog.js:843
 #: js/user/GridPanel.js:178
 msgid "Login name"
-msgstr ""
+msgstr "Login"
 
 #: js/user/EditDialog.js:806
 msgid "Password"
@@ -1022,19 +1022,19 @@ msgstr "SMTP"
 
 #: js/user/GridPanel.js:56
 msgid "Enable Account"
-msgstr ""
+msgstr "Włącz konto"
 
 #: js/user/GridPanel.js:66
 msgid "Disable Account"
-msgstr ""
+msgstr "Wyłącz konto"
 
 #: js/user/GridPanel.js:76
 msgid "Reset Password"
-msgstr ""
+msgstr "Zresetuj hasło"
 
 #: js/user/GridPanel.js:177
 msgid "Display name"
-msgstr ""
+msgstr "Wyświetl nazwę"
 
 #: js/user/GridPanel.js:185
 msgid "Password changed"

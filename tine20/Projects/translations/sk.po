@@ -42,31 +42,31 @@ msgstr ""
 msgid "%s's personal Projects"
 msgstr ""
 
-#: js/AddToProjectPanel.js:32
+#: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-#: js/AddToProjectPanel.js:36
+#: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
 msgstr ""
 
-#: js/AddToProjectPanel.js:89
+#: js/AddToProjectPanel.js:79
 msgid "Select Project"
 msgstr ""
 
-#: js/AddToProjectPanel.js:91 js/ProjectEditDialog.js:83
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
 msgid "Role"
 msgstr ""
 
-#: js/AddToProjectPanel.js:92
+#: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr ""
 
-#: js/AddToProjectPanel.js:112
+#: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
 msgstr ""
 
-#: js/Model.js:33 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
@@ -88,19 +88,19 @@ msgstr ""
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:73 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:95
+#: js/Model.js:73 js/ProjectEditDialog.js:129 js/ProjectGridPanel.js:95
 msgid "Title"
 msgstr ""
 
-#: js/Model.js:74 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:88
+#: js/Model.js:74 js/ProjectEditDialog.js:134 js/ProjectGridPanel.js:88
 msgid "Number"
 msgstr ""
 
-#: js/Model.js:75 js/ProjectEditDialog.js:173
+#: js/Model.js:75 js/ProjectEditDialog.js:170
 msgid "Description"
 msgstr ""
 
-#: js/Model.js:77 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:101
+#: js/Model.js:77 js/ProjectEditDialog.js:140 js/ProjectGridPanel.js:101
 msgid "Status"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:82
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
 msgid "Attendee"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgstr ""
 msgid "Attendee Role"
 msgstr ""
 
-#: js/ProjectEditDialog.js:187
+#: js/ProjectEditDialog.js:184
 msgid "Enter description"
 msgstr ""
 

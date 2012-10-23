@@ -25,15 +25,15 @@ msgstr "hantera delade mappar"
 msgid "Create new shared folders"
 msgstr "Skapa nya delade mappar"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "Mina mappar"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "Delade mappar"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Andra användares mappar"
 

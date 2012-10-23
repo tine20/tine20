@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
+"PO-Revision-Date: 2012-10-11 16:13+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "State"
 msgstr "Состояние"
 
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:94 js/Contact.js:252
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:78 js/Contact.js:252
 msgid "Role"
 msgstr "Роль"
 
@@ -54,7 +54,7 @@ msgstr "Роль"
 msgid "Source"
 msgstr "Источник"
 
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:394
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:396
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
 msgstr "Начать"
@@ -63,7 +63,7 @@ msgstr "Начать"
 msgid "Scheduled end"
 msgstr "Запланированный конец"
 
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:225
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:227
 msgid "End"
 msgstr "Конец"
 
@@ -72,7 +72,7 @@ msgstr "Конец"
 msgid "Turnover"
 msgstr "Оборот"
 
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:218
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:220
 #: js/LeadGridPanel.js:128 js/Model.js:107
 msgid "Probability"
 msgstr "Вероятность"
@@ -111,7 +111,7 @@ msgstr "%s личные предложения"
 
 #: Controller.php:159 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
 #: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:488
-#: js/LeadGridPanel.js:126 Model/Lead.php:119
+#: js/LeadGridPanel.js:126 Model/Lead.php:117
 msgid "Customer"
 msgstr "Клиент"
 
@@ -169,17 +169,17 @@ msgstr "Веб сайт"
 msgid "Lead Data"
 msgstr "Данные предложения"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:336
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:338
 #: js/LeadGridPanel.js:127 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Состояние предложения"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:355
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:357
 #: js/LeadGridDetailsPanel.js:455
 msgid "Leadtype"
 msgstr "Тип предложения"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:362
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:364
 #: js/LeadGridDetailsPanel.js:460
 msgid "Leadsource"
 msgstr "Источник предложения"
@@ -196,7 +196,7 @@ msgstr "Контакты"
 msgid "Address"
 msgstr "Адрес"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:241 js/Task.js:83
+#: Export/Pdf.php:232 js/LeadEditDialog.js:243 js/Task.js:83
 msgid "Tasks"
 msgstr "Задания"
 
@@ -208,7 +208,7 @@ msgstr "До даты"
 msgid "Priority"
 msgstr "Приоритет"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:252 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:254 js/Product.js:85
 msgid "Products"
 msgstr "Продукты"
 
@@ -228,31 +228,31 @@ msgstr "высокий"
 msgid "urgent"
 msgstr "срочный"
 
-#: js/AddToLeadPanel.js:30
+#: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"
 msgstr ""
 
-#: js/AddToLeadPanel.js:35
+#: js/AddToLeadPanel.js:36
 msgid "Please select the attenders' role"
 msgstr ""
 
-#: js/AddToLeadPanel.js:89 js/LeadEditDialog.js:267 js/Model.js:49
+#: js/AddToLeadPanel.js:73 js/LeadEditDialog.js:269 js/Model.js:49
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/AddToLeadPanel.js:90
+#: js/AddToLeadPanel.js:74
 msgid "Select Lead"
 msgstr ""
 
-#: js/AddToLeadPanel.js:95
+#: js/AddToLeadPanel.js:79
 msgid "Select Role"
 msgstr "Выберите роль"
 
-#: js/AddToLeadPanel.js:109
-msgid "Adding {0} Contacts to lead"
+#: js/AddToLeadPanel.js:93
+msgid "Adding {0} contacts to lead"
 msgstr ""
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
@@ -277,7 +277,7 @@ msgid "Change type to Customer"
 msgstr "Поменять тип на клиента"
 
 #: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:124 Model/Lead.php:118
+#: js/LeadGridPanel.js:124 Model/Lead.php:116
 msgid "Responsible"
 msgstr "Ответственный"
 
@@ -317,35 +317,35 @@ msgstr "Сотовый телефон"
 msgid "New Lead"
 msgstr ""
 
-#: js/LeadEditDialog.js:242
+#: js/LeadEditDialog.js:244
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:253
+#: js/LeadEditDialog.js:255
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:294
+#: js/LeadEditDialog.js:296
 msgid "Enter short name"
 msgstr "Введите короткое имя"
 
-#: js/LeadEditDialog.js:378
+#: js/LeadEditDialog.js:380
 msgid "Expected turnover"
 msgstr "Ожидаемый оборот"
 
-#: js/LeadEditDialog.js:400 js/LeadGridDetailsPanel.js:450
+#: js/LeadEditDialog.js:402 js/LeadGridDetailsPanel.js:450
 msgid "Estimated end"
 msgstr "Предполагаемый конец"
 
-#: js/LeadEditDialog.js:432 js/Product.js:139
+#: js/LeadEditDialog.js:434 js/Product.js:139
 msgid "Description"
 msgstr "Описание"
 
-#: js/LeadEditDialog.js:446
+#: js/LeadEditDialog.js:448
 msgid "Enter description"
 msgstr "Введите описание"
 

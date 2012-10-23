@@ -25,15 +25,15 @@ msgstr "megosztott könyvtárak kezelése"
 msgid "Create new shared folders"
 msgstr "Új megosztott könyvtár létrehozása"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "Saját könyvtárak"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "Megosztott könyvtárak"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Többi felhasználó megosztott könyvtárai"
 

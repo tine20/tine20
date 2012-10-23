@@ -27,15 +27,15 @@ msgstr "управление общими папками"
 msgid "Create new shared folders"
 msgstr "Создание новых  общих папок"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "Мои папки"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "Общие папки"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Папки других пользователей"
 

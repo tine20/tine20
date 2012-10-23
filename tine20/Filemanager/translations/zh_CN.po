@@ -25,15 +25,15 @@ msgstr "管理共享文件夹"
 msgid "Create new shared folders"
 msgstr "创建共享文件夹"
 
-#: Controller/Node.php:304
+#: Controller/Node.php:318
 msgid "My folders"
 msgstr "我的文件夹"
 
-#: Controller/Node.php:311
+#: Controller/Node.php:325
 msgid "Shared folders"
 msgstr "共享文件夹"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "其他用户文件夹"
 

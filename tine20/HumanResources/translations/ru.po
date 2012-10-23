@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-06 14:16+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2012-10-11 16:14+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,46 +55,46 @@ msgstr "Отмена"
 msgid "OK"
 msgstr "OK"
 
-#: js/AdminPanel.js:204 js/ContractGridPanel.js:104
+#: js/AdminPanel.js:204 js/ContractGridPanel.js:111
 msgid "Calendar"
 msgstr "Календарь"
 
-#: js/AdminPanel.js:205 js/ContractGridPanel.js:105
+#: js/AdminPanel.js:205 js/ContractGridPanel.js:112
 msgid "Calendars"
 msgstr "Календари"
 
-#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:218
+#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:222
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Контракт"
 msgstr[1] "Контракты"
 msgstr[2] "Контракты"
 
-#: js/ContractGridPanel.js:124
+#: js/ContractGridPanel.js:131
 msgid "Working Time Model"
 msgstr "Режим рабочего времени"
 
-#: js/ContractGridPanel.js:127
+#: js/ContractGridPanel.js:134
 msgid "Vacation Days"
 msgstr "Дни отпуска"
 
-#: js/ContractGridPanel.js:129
+#: js/ContractGridPanel.js:136
 msgid "Cost Centre"
 msgstr ""
 
-#: js/ContractGridPanel.js:132
+#: js/ContractGridPanel.js:139
 msgid "Start Date"
 msgstr "Дата начала"
 
-#: js/ContractGridPanel.js:135
+#: js/ContractGridPanel.js:142
 msgid "End Date"
 msgstr "Дата окончания"
 
-#: js/ContractGridPanel.js:138
+#: js/ContractGridPanel.js:145
 msgid "Feast Calendar"
 msgstr "Календарь праздников"
 
-#: js/ContractGridPanel.js:176 js/ContractGridPanel.js:188
+#: js/ContractGridPanel.js:183 js/ContractGridPanel.js:195
 msgid "undefined"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgstr ""
 msgid "Loading calendar data..."
 msgstr "Загрузка данных календаря..."
 
-#: js/EmployeeEditDialog.js:121 js/Models.js:293
+#: js/EmployeeEditDialog.js:121 js/Models.js:297
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] ""
@@ -115,7 +115,7 @@ msgstr[2] ""
 
 #: js/EmployeeEditDialog.js:138 js/EmployeeEditDialog.js:151
 #: js/FreeDayGridPanel.js:113 js/FreeTimeEditDialog.js:114
-#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:63
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:64
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "Сотрудник"
@@ -126,7 +126,7 @@ msgstr[2] "Сотрудников"
 msgid "Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:167 js/Models.js:108
+#: js/EmployeeEditDialog.js:167 js/Models.js:111
 msgid "Account"
 msgstr ""
 
@@ -138,19 +138,19 @@ msgstr ""
 msgid "Full Name"
 msgstr "Полное имя"
 
-#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:112
+#: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:116
 msgid "Salutation"
 msgstr "Приветствие"
 
-#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:110
+#: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:113
 msgid "Title"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:109
+#: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:112
 msgid "First Name"
 msgstr "Имя"
 
-#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:111
+#: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:115
 msgid "Last Name"
 msgstr "Фамилия"
 
@@ -214,39 +214,43 @@ msgstr ""
 msgid "Health Insurance"
 msgstr "Медицинская страховка"
 
-#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138
+#: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138 js/Models.js:108
 msgid "Employment begin"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145
+#: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145 js/Models.js:109
 msgid "Employment end"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:336
+#: js/EmployeeEditDialog.js:331 js/Models.js:114
+msgid "Profession"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:339
 msgid "Banking Information"
 msgstr "Банковская информация"
 
-#: js/EmployeeEditDialog.js:345
+#: js/EmployeeEditDialog.js:348
 msgid "Account Holder"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:348
+#: js/EmployeeEditDialog.js:351
 msgid "Account Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:351
+#: js/EmployeeEditDialog.js:354
 msgid "Bank Name"
 msgstr "Название банка"
 
-#: js/EmployeeEditDialog.js:354
+#: js/EmployeeEditDialog.js:357
 msgid "Code Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:375 js/FreeTimeEditDialog.js:237
+#: js/EmployeeEditDialog.js:378 js/FreeTimeEditDialog.js:237
 msgid "Description"
 msgstr "Описание"
 
-#: js/EmployeeEditDialog.js:389 js/FreeTimeEditDialog.js:251
+#: js/EmployeeEditDialog.js:392 js/FreeTimeEditDialog.js:251
 msgid "Enter description"
 msgstr "Введите описание"
 
@@ -263,7 +267,7 @@ msgid "Please create a contract for this employee!"
 msgstr ""
 
 #: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:179
-#: js/FreeTimeGridPanel.js:144 js/Models.js:327
+#: js/FreeTimeGridPanel.js:144 js/Models.js:331
 msgid "Type"
 msgstr "Тип"
 
@@ -272,7 +276,7 @@ msgid "Date Start"
 msgstr "Дата начала"
 
 #: js/FreeDayGridPanel.js:116 js/FreeTimeEditDialog.js:208
-#: js/FreeTimeGridPanel.js:147 js/Models.js:341
+#: js/FreeTimeGridPanel.js:147 js/Models.js:345
 msgid "Remark"
 msgstr ""
 
@@ -280,7 +284,7 @@ msgstr ""
 msgid "FreeTime"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:335
+#: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:339
 msgid "Status"
 msgstr ""
 
@@ -300,66 +304,66 @@ msgstr ""
 msgid "Human Resources"
 msgstr ""
 
-#: js/Models.js:67
+#: js/Models.js:68
 msgid "Employees"
 msgid_plural "Employees"
 msgstr[0] "Сотрудник"
 msgstr[1] "Сотрудника"
 msgstr[2] "Сотрудников"
 
-#: js/Models.js:101 js/Models.js:183 js/Models.js:256 js/Models.js:325
+#: js/Models.js:102 js/Models.js:187 js/Models.js:260 js/Models.js:329
 msgid "Quick search"
 msgstr "Быстрый поиск"
 
-#: js/Models.js:102
+#: js/Models.js:103
 msgid "Employee name"
 msgstr "Имя сотрудника"
 
-#: js/Models.js:104 js/Models.js:342
+#: js/Models.js:105 js/Models.js:346
 msgid "Last Modified Time"
 msgstr "Время последнего изменения"
 
-#: js/Models.js:105 js/Models.js:343
+#: js/Models.js:106 js/Models.js:347
 msgid "Last Modified By"
 msgstr "Последнее изменение"
 
-#: js/Models.js:106 js/Models.js:344
+#: js/Models.js:107 js/Models.js:348
 msgid "Creation Time"
 msgstr "Время создания"
 
-#: js/Models.js:107 js/Models.js:345
+#: js/Models.js:110 js/Models.js:349
 msgid "Created By"
 msgstr "Создано"
 
-#: js/Models.js:145
+#: js/Models.js:149
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] "Рабочее время"
 msgstr[1] "Рабочее время"
 msgstr[2] "Рабочее время"
 
-#: js/Models.js:149
+#: js/Models.js:153
 msgid "Working Times"
 msgid_plural "Working Times"
 msgstr[0] "Рабочее время"
 msgstr[1] "Рабочее время"
 msgstr[2] "Рабочее время"
 
-#: js/Models.js:222
+#: js/Models.js:226
 msgid "Contracts"
 msgid_plural "Contracts"
 msgstr[0] "Контракты"
 msgstr[1] "Контракты"
 msgstr[2] "Контракты"
 
-#: js/Models.js:377
+#: js/Models.js:381
 msgid "Free Day"
 msgid_plural "Free Days"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:380
+#: js/Models.js:384
 msgid "Free Days"
 msgid_plural "Free Days"
 msgstr[0] ""

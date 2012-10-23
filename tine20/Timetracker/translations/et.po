@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
+"PO-Revision-Date: 2012-10-11 16:14+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
@@ -137,6 +137,14 @@ msgstr "Staatus"
 #: js/TimeaccountGridPanel.js:122
 msgid "Booking deadline"
 msgstr "Broneerimise tähtaeg"
+
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr ""
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr ""
 
 #: js/TimeaccountEditDialog.js:100
 msgid "Unit"

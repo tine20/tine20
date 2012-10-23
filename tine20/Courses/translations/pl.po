@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-11 18:54+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,19 +19,19 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr ""
+msgstr "Dodaj nowego użytkownika"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr ""
+msgstr "Dodaj nowego użytkownika jako uczestnika kursu"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr ""
+msgstr "Dodaj istniejącego użytkownika"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr ""
+msgstr "Dodaj istniejącego użytkownika jako uczestnika kursu"
 
 #: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
@@ -39,31 +39,31 @@ msgstr "Internet"
 
 #: Config.php:77
 msgid "Internet access options."
-msgstr ""
+msgstr "Opcje dostępu do Internetu."
 
 #: Config.php:84 Config.php:86
 msgid "Internet Access Group (ON)"
-msgstr ""
+msgstr "Grupa dostępu do Internetu (ON)"
 
 #: Config.php:92 Config.php:94
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Grupa dostępu do Internetu (FILTERED)"
 
 #: Config.php:100 Config.php:102
 msgid "Students Group"
-msgstr ""
+msgstr "Grupa studentów"
 
 #: Config.php:108 Config.php:110
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Definicja importu studentów"
 
 #: Config.php:116
 msgid "Students login name prefix"
-msgstr ""
+msgstr "Prefiks loginu studentów"
 
 #: Config.php:123 Config.php:125
 msgid "Samba user settings"
-msgstr ""
+msgstr "Ustawienia użytkownika Samby"
 
 #: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
 msgid "Course"
@@ -82,27 +82,27 @@ msgstr "Konto nauczyciela"
 
 #: Controller/Course.php:308
 msgid "My course"
-msgstr ""
+msgstr "Moje lekcje"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
-msgstr ""
+msgstr "Imię"
 
 #: js/AddMemberDialog.js:67
 msgid "Last Name"
-msgstr ""
+msgstr "Nazwisko"
 
 #: js/AddMemberDialog.js:86
 msgid "Add new member to course"
-msgstr ""
+msgstr "Dodaj nowego uczestnika do kursu"
 
 #: js/AddMemberDialog.js:118
 msgid "Errors"
-msgstr ""
+msgstr "Błędy"
 
 #: js/AddMemberDialog.js:118
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Proszę poprawić zgłoszone błędy"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -110,7 +110,7 @@ msgstr "Importuj uczestników kursu"
 
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
-msgstr ""
+msgstr "Dodaj nowego użytkownika"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -189,15 +189,15 @@ msgstr "Domyślny ulubiony, wczytywany podczas uruchamiania klas"
 
 #: Setup/Initialize.php:66
 msgid "On"
-msgstr ""
+msgstr "Wł"
 
 #: Setup/Initialize.php:67
 msgid "Off"
-msgstr ""
+msgstr "Wył"
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
-msgstr ""
+msgstr "Przefiltrowana"
 
 #: Setup/setup.xml:4
 msgid "Courses"
