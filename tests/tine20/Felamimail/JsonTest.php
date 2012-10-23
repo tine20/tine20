@@ -92,6 +92,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected $_testSieveScriptName = NULL;
 
     /**
+     * sieve vacation template file name
+     * 
+     * @var string
+     */
+    protected $_sieveVacationTemplateFile = 'vacation_template_test.tpl';
+    
+    /**
      * test email domain
      * 
      * @var string
@@ -1088,7 +1095,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['totalcount'] > 0, 'no templates found');
         $found = FALSE;
         foreach ($result['results'] as $template) {
-            if ($template['name'] === 'vacation_template_test.tpl') {
+            if ($template['name'] === $this->_sieveVacationTemplateFile) {
                 $found = TRUE;
                 break;
             }
@@ -1107,14 +1114,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
-        $this->_pathsToDelete[] = $path . '/vacation_template_test.tpl';
-        $node->createFile('vacation_template_test.tpl', fopen(dirname(__FILE__) . '/files/vacation_template.tpl', 'r'));
+        $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;
+        $node->createFile($this->_sieveVacationTemplateFile, fopen(dirname(__FILE__) . '/files/' . $this->_sieveVacationTemplateFile, 'r'));
     }
     
     /**
      * testGetVacationMessage
      */
     public function testGetVacationMessage()
+    {
+        $result = $this->_getVacationMessageWithTemplate();
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (" .
+            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (" .
+            $sclever->accountEmailAddress . ") instead.<br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
+    }
+    
+    /**
+     * get vacation message with template
+     * 
+     * @return array
+     */
+    protected function _getVacationMessageWithTemplate()
     {
         $template = $this->testGetVacationTemplates();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
@@ -1126,12 +1147,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $sclever->contact_id,
             ),
             'template_id' => $template['id'],
+            'signature' => $this->_account->signature
         ));
         
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (" .
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (" .
-            $sclever->accountEmailAddress . ") instead.<br /><br />" .
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
+        return $result;
+    }
+    
+    /**
+     * testGetVacationWithSignature
+     * 
+     * @see 0006866: check signature linebreaks in vacation message from template
+     */
+    public function testGetVacationWithSignature()
+    {
+        $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
+        
+        // set signature with <br> + linebreaks
+        $this->_account->signature = "llalala<br>\nxyz<br>\nblubb<br>";
+        
+        $result = $this->_getVacationMessageWithTemplate();
+        $this->assertContains('-- <br />llalala<br />xyz<br />blubb<br />', $result['message'], 'wrong linebreaks or missing signature');
     }
     
     /**

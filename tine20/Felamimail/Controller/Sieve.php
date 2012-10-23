@@ -601,7 +601,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : 'unknown phone',
             (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : 'unknown phone',
             ($ownContact) ? $ownContact->n_fn : '',
-            ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes($vacation->signature) : '',
+            ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes(
+                preg_replace("/\\r|\\n/", '', $vacation->signature)) : '',
         );
         
         $result = str_replace($search, $replace, $message);
