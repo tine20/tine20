@@ -96,7 +96,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @var string
      */
-    protected $_sieveVacationTemplateFile = 'vacation_template_test.tpl';
+    protected $_sieveVacationTemplateFile = 'vacation_template.tpl';
     
     /**
      * test email domain
@@ -1124,6 +1124,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetVacationMessage()
     {
         $result = $this->_getVacationMessageWithTemplate();
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (pwulf@tine20.org) oder Susan Clever (" .
             $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(pwulf@tine20.org) or Susan Clever (" .
             $sclever->accountEmailAddress . ") instead.<br /><br />" .
