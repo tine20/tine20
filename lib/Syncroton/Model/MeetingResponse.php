@@ -37,7 +37,7 @@ class Syncroton_Model_MeetingResponse extends Syncroton_Model_AEntry
             'collectionId'  => array('type' => 'string'),
             'calendarId'    => array('type' => 'string'),
             'requestId'     => array('type' => 'string'),
-            'instanceId'    => array('type' => 'string'),
+            'instanceId'    => array('type' => 'datetime'),
         ),
         'Search' => array(
             'longId'        => array('type' => 'string')
