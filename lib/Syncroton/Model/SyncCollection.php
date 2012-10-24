@@ -22,7 +22,10 @@
 
 class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
 {
-    protected $_elements = array();
+    protected $_elements = array(
+        'syncState' => null,
+        'folder'    => null
+    );
     
     protected $_xmlCollection;
     
@@ -34,6 +37,22 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
             $this->setFromSimpleXMLElement($properties);
         } elseif (is_array($properties)) {
             $this->setFromArray($properties);
+        }
+        
+        if (!isset($this->_elements['options'])) {
+            $this->_elements['options'] = array();
+        }
+        if (!isset($this->_elements['options']['filterType'])) {
+            $this->_elements['options']['filterType'] = Syncroton_Command_Sync::FILTER_NOTHING;
+        }
+        if (!isset($this->_elements['options']['mimeSupport'])) {
+            $this->_elements['options']['mimeSupport'] = Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME;
+        }
+        if (!isset($this->_elements['options']['mimeTruncation'])) {
+            $this->_elements['options']['mimeTruncation'] = Syncroton_Command_Sync::TRUNCATE_NOTHING;
+        }
+            if (!isset($this->_elements['options']['bodyPreferences'])) {
+            $this->_elements['options']['bodyPreferences'] = array();
         }
     }
     
@@ -153,26 +172,9 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
         return isset($this->_xmlCollection->Commands->Fetch);
     }
     
-    public function setFromArray(array $properties)
-    {
-        $this->_elements = array('options' => array(
-            'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
-            'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
-            'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
-            'bodyPreferences' => array()
-        ));
-    
-        foreach($properties as $key => $value) {
-            try {
-                $this->$key = $value; //echo __LINE__ . PHP_EOL;
-            } catch (InvalidArgumentException $iae) {
-                //ignore invalid properties
-                //echo __LINE__ . PHP_EOL;
-            }
-        }
-    }
-    
     /**
+     * this functions does not only set from SimpleXMLElement but also does merge from SimpleXMLElement
+     * to support partial sync requests
      * 
      * @param SimpleXMLElement $properties
      * @throws InvalidArgumentException
@@ -185,24 +187,55 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
         
         $this->_xmlCollection = $properties;
         
-        $this->_elements = array(
-            'syncKey'          => (int)$properties->SyncKey,
-            'collectionId'     => (string)$properties->CollectionId,
-            'deletesAsMoves'   => isset($properties->DeletesAsMoves)   && (string)$properties->DeletesAsMoves   === '0' ? false : true,
-            'conversationMode' => isset($properties->ConversationMode) && (string)$properties->ConversationMode === '0' ? false : true,
-            'getChanges'       => isset($properties->GetChanges)       && (string) $properties->GetChanges      === '0' ? false : true,
-            'windowSize'       => isset($properties->WindowSize) ? (int)$properties->WindowSize : 100,
-            'class'            => isset($properties->Class)      ? (string)$properties->Class   : null,
-            'options'          => array(
-                'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
-                'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
-                'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
-                'bodyPreferences' => array()
-            ),
-            
-            'syncState'        => null,
-            'folder'           => null
-        );
+        if (isset($properties->CollectionId)) {
+            $this->_elements['collectionId'] = (string)$properties->CollectionId;
+        }
+        
+        if (isset($properties->SyncKey)) {
+            $this->_elements['syncKey'] = (int)$properties->SyncKey;
+        }
+        
+        if (isset($properties->Class)) {
+            $this->_elements['class'] = (string)$properties->Class;
+        } elseif (!array_key_exists('class', $this->_elements)) {
+            $this->_elements['class'] = null;
+        }
+        
+        if (isset($properties->WindowSize)) {
+            $this->_elements['windowSize'] = (string)$properties->WindowSize;
+        } elseif (!array_key_exists('windowSize', $this->_elements)) {
+            $this->_elements['windowSize'] = 100;
+        }
+        
+        if (isset($properties->DeletesAsMoves)) {
+            if ((string)$properties->DeletesAsMoves === '0') {
+                $this->_elements['deletesAsMoves'] = false;
+            } else {
+                $this->_elements['deletesAsMoves'] = true;
+            }
+        } elseif (!array_key_exists('deletesAsMoves', $this->_elements)) {
+            $this->_elements['deletesAsMoves'] = true;
+        }
+        
+        if (isset($properties->ConversationMode)) {
+            if ((string)$properties->ConversationMode === '0') {
+                $this->_elements['conversationMode'] = false;
+            } else {
+                $this->_elements['conversationMode'] = true;
+            }
+        } elseif (!array_key_exists('conversationMode', $this->_elements)) {
+            $this->_elements['conversationMode'] = true;
+        }
+        
+        if (isset($properties->GetChanges)) {
+            if ((string)$properties->GetChanges === '0') {
+                $this->_elements['getChanges'] = false;
+            } else {
+                $this->_elements['getChanges'] = true;
+            }
+        } elseif (!array_key_exists('getChanges', $this->_elements)) {
+            $this->_elements['getChanges'] = true;
+        }
         
         if (isset($properties->Supported)) {
             // @todo collected supported elements
@@ -266,7 +299,7 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
         if (array_key_exists($name, $this->_elements)) {
             return $this->_elements[$name];
         }
-        //echo $name . PHP_EOL;
+        echo $name . PHP_EOL;
         return null; 
     }
     

@@ -129,9 +129,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         }
         
         $collections = array();
+        $isPartialRequest = isset($xml->Partial);
         
         // try to restore collections from previous request
-        if (isset($xml->Partial)) {
+        if ($isPartialRequest) {
             $decodedCollections = Zend_Json::decode($this->_device->lastsynccollection);
             
             if (is_array($decodedCollections)) {
@@ -144,10 +145,17 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         // Collections element is optional when Partial element is sent
         if (isset($xml->Collections)) {
             foreach ($xml->Collections->Collection as $xmlCollection) {
-                $collections[(string)$xmlCollection->CollectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
+                $collectionId = (string)$xmlCollection->CollectionId;
+                
+                // do we have to update a collection sent in previous sync request?
+                if ($isPartialRequest && isset($collections[$collectionId])) {
+                    $collections[$collectionId] = $collections[$collectionId]->setFromSimpleXMLElement($xmlCollection);
+                } else {
+                    $collections[$collectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
+                }
             }
         }
-                
+        
         foreach ($collections as $collectionData) {
             // has the folder been synchronised to the device already
             try {
@@ -383,7 +391,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         }
         
         // store current value of $this->_collections for next Sync command request
-        if (!isset($xml->Partial)) {
+        if (!$isPartialRequest) {
             $collections = array();
             
             foreach ($this->_collections as $collection) {
@@ -643,7 +651,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $newContentStates = array();
                 
                 foreach($serverModifications['added'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
+                    if($collectionChanges == $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -700,7 +708,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                  * process entries changed on server side
                  */
                 foreach($serverModifications['changed'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
+                    if($collectionChanges == $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
@@ -732,7 +740,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 $deletedContentStates = array();
                 
                 foreach($serverModifications['deleted'] as $id => $serverId) {
-                    if($collectionChanges === $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
+                    if($collectionChanges == $collectionData->windowSize || $totalChanges + $collectionChanges >= $this->_globalWindowSize) {
                         break;
                     }
                     
