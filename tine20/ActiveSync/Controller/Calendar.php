@@ -44,6 +44,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
     );
     
     /**
+     * mapping of attendee status in meeting response
+     * @var array
+     */
+    protected $_meetingResponseAttendeeStatusMapping = array(
+        Syncroton_Model_MeetingResponse::RESPONSE_ACCEPTED    => Calendar_Model_Attender::STATUS_ACCEPTED,
+        Syncroton_Model_MeetingResponse::RESPONSE_TENTATIVE   => Calendar_Model_Attender::STATUS_TENTATIVE,
+        Syncroton_Model_MeetingResponse::RESPONSE_DECLINED    => Calendar_Model_Attender::STATUS_DECLINED,
+    );
+    
+    /**
      * mapping of busy status
      *
      * NOTE: not surjektive
@@ -210,7 +220,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         if (! $attendee) {
             throw new Syncroton_Exception_Status_MeetingResponse("party crushing not allowed", Syncroton_Exception_Status_MeetingResponse::INVALID_REQUEST);
         }
-        $attendee->status = $this->_attendeeStatusMapping[$reponse->userResponse];
+        $attendee->status = $this->_meetingResponseAttendeeStatusMapping[$reponse->userResponse];
         $this->_contentController->attenderStatusUpdate($event, $attendee);
         
         // return id of calendar event
