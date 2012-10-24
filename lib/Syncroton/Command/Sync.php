@@ -149,7 +149,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 
                 // do we have to update a collection sent in previous sync request?
                 if ($isPartialRequest && isset($collections[$collectionId])) {
-                    $collections[$collectionId] = $collections[$collectionId]->setFromSimpleXMLElement($xmlCollection);
+                    $collections[$collectionId]->setFromSimpleXMLElement($xmlCollection);
                 } else {
                     $collections[$collectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
                 }
@@ -413,6 +413,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     public function getResponse()
     {
         $sync = $this->_outputDom->documentElement;
+        
+        if (count($this->_collections) == 0) {
+            $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_RESEND_FULL_XML));
+            
+            return $this->_outputDom;
+        }
         
         $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
 
