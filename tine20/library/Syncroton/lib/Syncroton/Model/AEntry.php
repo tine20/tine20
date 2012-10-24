@@ -129,8 +129,6 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
      */
     public function setFromArray(array $properties)
     {
-        $this->_elements = array();
-        
         foreach($properties as $key => $value) {
             try {
                 $this->$key = $value; //echo __LINE__ . PHP_EOL;
@@ -152,8 +150,6 @@ abstract class Syncroton_Model_AEntry implements Syncroton_Model_IEntry, Iterato
         if (!in_array($properties->getName(), (array) $this->_xmlBaseElement)) {
             throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
         }
-    
-        $this->_elements = array();
     
         foreach (array_keys($this->_properties) as $namespace) {
             if ($namespace == 'Internal') {

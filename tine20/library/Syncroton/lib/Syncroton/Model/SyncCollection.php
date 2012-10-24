@@ -20,11 +20,16 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_SyncCollection
+class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
 {
-    protected $_collection = array();
+    protected $_elements = array(
+        'syncState' => null,
+        'folder'    => null
+    );
     
     protected $_xmlCollection;
+    
+    protected $_xmlBaseElement = 'Collection';
     
     public function __construct($properties = null)
     {
@@ -32,6 +37,22 @@ class Syncroton_Model_SyncCollection
             $this->setFromSimpleXMLElement($properties);
         } elseif (is_array($properties)) {
             $this->setFromArray($properties);
+        }
+        
+        if (!isset($this->_elements['options'])) {
+            $this->_elements['options'] = array();
+        }
+        if (!isset($this->_elements['options']['filterType'])) {
+            $this->_elements['options']['filterType'] = Syncroton_Command_Sync::FILTER_NOTHING;
+        }
+        if (!isset($this->_elements['options']['mimeSupport'])) {
+            $this->_elements['options']['mimeSupport'] = Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME;
+        }
+        if (!isset($this->_elements['options']['mimeTruncation'])) {
+            $this->_elements['options']['mimeTruncation'] = Syncroton_Command_Sync::TRUNCATE_NOTHING;
+        }
+            if (!isset($this->_elements['options']['bodyPreferences'])) {
+            $this->_elements['options']['bodyPreferences'] = array();
         }
     }
     
@@ -100,7 +121,7 @@ class Syncroton_Model_SyncCollection
     public function hasClientAdds()
     {
         if (! $this->_xmlCollection instanceof SimpleXMLElement) {
-            throw new InvalidArgumentException('no collection xml element set');
+            return false;
         }
         
         return isset($this->_xmlCollection->Commands->Add);
@@ -115,7 +136,7 @@ class Syncroton_Model_SyncCollection
     public function hasClientChanges()
     {
         if (! $this->_xmlCollection instanceof SimpleXMLElement) {
-            throw new InvalidArgumentException('no collection xml element set');
+            return false;
         }
         
         return isset($this->_xmlCollection->Commands->Change);
@@ -130,7 +151,7 @@ class Syncroton_Model_SyncCollection
     public function hasClientDeletes()
     {
         if (! $this->_xmlCollection instanceof SimpleXMLElement) {
-            throw new InvalidArgumentException('no collection xml element set');
+            return false;
         }
         
         return isset($this->_xmlCollection->Commands->Delete);
@@ -145,97 +166,111 @@ class Syncroton_Model_SyncCollection
     public function hasClientFetches()
     {
         if (! $this->_xmlCollection instanceof SimpleXMLElement) {
-            throw new InvalidArgumentException('no collection xml element set');
+            return false;
         }
         
         return isset($this->_xmlCollection->Commands->Fetch);
     }
     
-    public function setFromArray(array $properties)
-    {
-        $this->_collection = array('options' => array(
-            'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
-            'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
-            'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
-            'bodyPreferences' => array()
-        ));
-    
-        foreach($properties as $key => $value) {
-            try {
-                $this->$key = $value; //echo __LINE__ . PHP_EOL;
-            } catch (InvalidArgumentException $iae) {
-                //ignore invalid properties
-                //echo __LINE__ . PHP_EOL;
-            }
-        }
-    }
-    
     /**
+     * this functions does not only set from SimpleXMLElement but also does merge from SimpleXMLElement
+     * to support partial sync requests
      * 
-     * @param SimpleXMLElement $xmlCollection
+     * @param SimpleXMLElement $properties
      * @throws InvalidArgumentException
      */
-    public function setFromSimpleXMLElement(SimpleXMLElement $xmlCollection)
+    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
     {
-        if ($xmlCollection->getName() !== 'Collection') {
-            throw new InvalidArgumentException('Unexpected element name: ' . $xmlCollection->getName());
+        if (!in_array($properties->getName(), (array) $this->_xmlBaseElement)) {
+            throw new InvalidArgumentException('Unexpected element name: ' . $properties->getName());
         }
         
-        $this->_xmlCollection = $xmlCollection;
+        $this->_xmlCollection = $properties;
         
-        $this->_collection = array(
-            'syncKey'          => (int)$xmlCollection->SyncKey,
-            'collectionId'     => (string)$xmlCollection->CollectionId,
-            'deletesAsMoves'   => isset($xmlCollection->DeletesAsMoves)   && (string)$xmlCollection->DeletesAsMoves   === '0' ? false : true,
-            'conversationMode' => isset($xmlCollection->ConversationMode) && (string)$xmlCollection->ConversationMode === '0' ? false : true,
-            'getChanges'       => isset($xmlCollection->GetChanges)       && (string) $xmlCollection->GetChanges      === '0' ? false : true,
-            'windowSize'       => isset($xmlCollection->WindowSize) ? (int)$xmlCollection->WindowSize : 100,
-            'class'            => isset($xmlCollection->Class)      ? (string)$xmlCollection->Class   : null,
-            'options'          => array(
-                'filterType'      => Syncroton_Command_Sync::FILTER_NOTHING,
-                'mimeSupport'     => Syncroton_Command_Sync::MIMESUPPORT_DONT_SEND_MIME,
-                'mimeTruncation'  => Syncroton_Command_Sync::TRUNCATE_NOTHING,
-                'bodyPreferences' => array()
-            ),
-            
-            'syncState'        => null,
-            'folder'           => null
-        );
+        if (isset($properties->CollectionId)) {
+            $this->_elements['collectionId'] = (string)$properties->CollectionId;
+        }
         
-        if (isset($xmlCollection->Supported)) {
+        if (isset($properties->SyncKey)) {
+            $this->_elements['syncKey'] = (int)$properties->SyncKey;
+        }
+        
+        if (isset($properties->Class)) {
+            $this->_elements['class'] = (string)$properties->Class;
+        } elseif (!array_key_exists('class', $this->_elements)) {
+            $this->_elements['class'] = null;
+        }
+        
+        if (isset($properties->WindowSize)) {
+            $this->_elements['windowSize'] = (string)$properties->WindowSize;
+        } elseif (!array_key_exists('windowSize', $this->_elements)) {
+            $this->_elements['windowSize'] = 100;
+        }
+        
+        if (isset($properties->DeletesAsMoves)) {
+            if ((string)$properties->DeletesAsMoves === '0') {
+                $this->_elements['deletesAsMoves'] = false;
+            } else {
+                $this->_elements['deletesAsMoves'] = true;
+            }
+        } elseif (!array_key_exists('deletesAsMoves', $this->_elements)) {
+            $this->_elements['deletesAsMoves'] = true;
+        }
+        
+        if (isset($properties->ConversationMode)) {
+            if ((string)$properties->ConversationMode === '0') {
+                $this->_elements['conversationMode'] = false;
+            } else {
+                $this->_elements['conversationMode'] = true;
+            }
+        } elseif (!array_key_exists('conversationMode', $this->_elements)) {
+            $this->_elements['conversationMode'] = true;
+        }
+        
+        if (isset($properties->GetChanges)) {
+            if ((string)$properties->GetChanges === '0') {
+                $this->_elements['getChanges'] = false;
+            } else {
+                $this->_elements['getChanges'] = true;
+            }
+        } elseif (!array_key_exists('getChanges', $this->_elements)) {
+            $this->_elements['getChanges'] = true;
+        }
+        
+        if (isset($properties->Supported)) {
             // @todo collected supported elements
         }
         
         // process options
-        if (isset($xmlCollection->Options)) {
+        if (isset($properties->Options)) {
             // optional parameters
-            if (isset($xmlCollection->Options->FilterType)) {
-                $this->_collection['options']['filterType'] = (int)$xmlCollection->Options->FilterType;
+            if (isset($properties->Options->FilterType)) {
+                $this->_elements['options']['filterType'] = (int)$properties->Options->FilterType;
             }
-            if (isset($xmlCollection->Options->MIMESupport)) {
-                $this->_collection['options']['mimeSupport'] = (int)$xmlCollection->Options->MIMESupport;
+            if (isset($properties->Options->MIMESupport)) {
+                $this->_elements['options']['mimeSupport'] = (int)$properties->Options->MIMESupport;
             }
-            if (isset($xmlCollection->Options->MIMETruncation)) {
-                $this->_collection['options']['mimeTruncation'] = (int)$xmlCollection->Options->MIMETruncation;
+            if (isset($properties->Options->MIMETruncation)) {
+                $this->_elements['options']['mimeTruncation'] = (int)$properties->Options->MIMETruncation;
             }
-            if (isset($xmlCollection->Options->Class)) {
-                $this->_collection['options']['class'] = (string)$xmlCollection->Options->Class;
+            if (isset($properties->Options->Class)) {
+                $this->_elements['options']['class'] = (string)$properties->Options->Class;
             }
             
             // try to fetch element from AirSyncBase:BodyPreference
-            $airSyncBase = $xmlCollection->Options->children('uri:AirSyncBase');
+            $airSyncBase = $properties->Options->children('uri:AirSyncBase');
             
             if (isset($airSyncBase->BodyPreference)) {
                 
                 foreach ($airSyncBase->BodyPreference as $bodyPreference) {
                     $type = (int) $bodyPreference->Type;
-                    $this->_collection['options']['bodyPreferences'][$type] = array(
+                    $this->_elements['options']['bodyPreferences'][$type] = array(
                         'type' => $type
                     );
                     
                     // optional
                     if (isset($bodyPreference->TruncationSize)) {
-                        $this->_collection['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
+                        $this->_elements['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
                     }
                 }
             }
@@ -246,27 +281,30 @@ class Syncroton_Model_SyncCollection
         }
     }
     
+    public function toArray()
+    {
+        $result = array();
+        
+        foreach (array('syncKey', 'collectionId', 'deletesAsMoves', 'conversationMode', 'getChanges', 'windowSize', 'class', 'options') as $key) {
+            if (isset($this->$key)) {
+                $result[$key] = $this->$key;
+            }
+        }
+        
+        return $result;
+    }
+    
     public function &__get($name)
     {
-        if (array_key_exists($name, $this->_collection)) {
-            return $this->_collection[$name];
+        if (array_key_exists($name, $this->_elements)) {
+            return $this->_elements[$name];
         }
-        //echo $name . PHP_EOL;
+        echo $name . PHP_EOL;
         return null; 
     }
     
     public function __set($name, $value)
     {
-        $this->_collection[$name] = $value;
-    }
-    
-    public function __isset($name)
-    {
-        return isset($this->_collection[$name]);
-    }
-    
-    public function __unset($name)
-    {
-        unset($this->_collection[$name]);
+        $this->_elements[$name] = $value;
     }
 }

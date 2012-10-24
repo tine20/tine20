@@ -36,6 +36,7 @@
  * @property    string   calendarfilter_id
  * @property    string   tasksfilter_id
  * @property    string   emailfilter_id
+ * @property    string   lastsynccollection
  */
 interface Syncroton_Model_IDevice
 {
