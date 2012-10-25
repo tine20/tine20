@@ -24,7 +24,18 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
     buttonAlign : null,
     bufferResize : 500,
 
-    // private
+    /**
+     * the contact to send number to if any
+     * @type Addressbook.Model.Contact
+     */
+    contact: null,
+    
+    /**
+     * the number to send to if any
+     * @type {String}
+     */
+    number: null,
+
     initComponent : function() {
         this.addEvents('cancel', 'send', 'close');
         if (!this.app) {
@@ -32,7 +43,7 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
         }
         Tine.log.debug('initComponent: appName: ', this.appName);
         Tine.log.debug('initComponent: app: ', this.app);
-        Tine.log.debug(this.number);
+        Tine.log.debug(this.contact, this.number);
 
         // init actions
         this.initActions();
@@ -40,10 +51,14 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
         this.initButtons();
         // get items for this dialog
         this.items = this.getFormItems();
-
+        
         Tine.Sipgate.SmsEditDialog.superclass.initComponent.call(this);
+        
+        if (this.contact) {
+            this.onRecordLoad();
+        }
     },
-
+    
     /**
      * init actions
      */
@@ -53,7 +68,6 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler : this.onSend,
-            id : 'action-send-sms',
             iconCls : 'SmsIconCls'
         });
         this.action_cancel = new Ext.Action({
@@ -61,7 +75,6 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
-            id : 'action-cancel-sms',
             iconCls : 'action_cancel'
         });
         this.action_close = new Ext.Action({
@@ -69,17 +82,22 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
-            id : 'action-close-sms',
             iconCls : 'action_saveAndClose',
             // x-btn-text
             hidden : true
         });
     },
 
+    /**
+     * initializes the buttons
+     */
     initButtons : function() {
         this.fbar = [ '->', this.action_cancel, this.action_send, this.action_close ];
     },
 
+    /**
+     * see parent
+     */
     onRender : function(ct, position) {
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
 
@@ -89,80 +107,181 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
             ctrl : true,
             fn : this.onSend,
             scope : this
-        } ]);
-
+        }]);
+        
+        this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Loading contact...')});
+        this.sendMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Sending message...')});
     },
-
+    
+    /**
+     * is called on sending the message
+     */
     onSend : function() {
+        if (this.getForm().isValid()) {
 
-        Tine.log.debug('SMS Text:', this.textEditor.getValue());
-
-        if (this.textEditor.isValid()) {
-            // Tine.Sipgate.sendSms(this.number,this.textEditor.getValue(),this.window);
+            this.loadMask.show();
 
             Ext.Ajax.request({
                 url : 'index.php',
-
+                scope: this,
                 params : {
-                    method : 'Sipgate.sendSms',
-                    _number : this.number,
-                    _content : this.textEditor.getValue()
-
+                    method : 'Sipgate.sendMessage',
+                    values : this.getForm().getValues(),
+                    lineId: Tine.Sipgate.registry.get('preferences').get('phoneId')
                 },
                 success : function(_result, _request) {
-                    Tine.log.debug('SMS Send Result: ', _result);
+                    this.sendMask.hide();
                     var result = Ext.decode(_result.responseText);
-                    Tine.log.debug('SMS Send Result2: ', result);
-                    if (result.response.StatusCode == 200) {
-                        Ext.getCmp('sipgate-sms-form').update('<div class="SipgateSendSms ok">' + result.response.StatusString + '</div>');
-                        Ext.getCmp('action-send-sms').hide();
-                        Ext.getCmp('action-cancel-sms').hide();
-                        Ext.getCmp('action-close-sms').show();
-                    }
-                    else {
+                    if(result.success) {
 
-                        Ext.getCmp('action-send-sms').hide();
-                        Ext.getCmp('sipgate-sms-form').update('<div class="SipgateSendSms error">' + result.response.StatusString + '</div>');
-                    }                    
+                        this.action_send.hide();
+                        this.action_cancel.hide();
+                        this.action_close.show();
+
+                        Ext.each(['message', 'recipient_number', 'contact', 'own_number'], function(p) {
+                            this.getForm().findField(p).disable();
+                        }, this);
+
+                        this.window.setTitle('The message was successfully sent to "' + this.contactPicker.selectedRecord.get('n_fn') + '"');
+                    }
 
                 },
                 failure : function(result, request) {
-                    Tine.log.debug('SMS Send Result: ', _result);
+                    this.sendMask.hide();
+                    Tine.Sipgate.handleRequestException(result);
                 }
             });
-
         }
-
     },
 
-    onCancel : function() {
+    /**
+     * returns the value pair number -> label for the combo box
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {String} property
+     * @param {String} label
+     * 
+     * @return {Array}
+     */
+    getRecipientNumber: function(record, property, label) {
+        label = record.get(property) + ' (' + Tine.Tinebase.appMgr.get('Addressbook').i18n._(label) + ')';
+        return [record.get(property), label];
+    },
+    
+    /**
+     * update combo boxes if another contact is choosen
+     * @param {Object} combo
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Int} index
+     * @param {String} number
+     */
+    updateRecipientCombo: function(combo, record, index, number) {
+        var foreignNumbers = [];
+        
+        if(record.get('tel_car')) {
+            foreignNumbers.push(this.getRecipientNumber(record, 'tel_car', 'Car Phone'));
+        }
+        if(record.get('tel_cell')) {
+            foreignNumbers.push(this.getRecipientNumber(record, 'tel_cell', 'Mobile'));
+        }
+        if(record.get('tel_cell_private')) {
+            foreignNumbers.push(this.getRecipientNumber(record, 'tel_cell_private', 'Mobile (private)'));
+        }
+
+        this.foreignNumberChooser.getStore().removeAll();
+        this.foreignNumberChooser.getStore().loadData(foreignNumbers);
+        
+        if(number) {
+            this.foreignNumberChooser.setValue(number);
+        } else if (foreignNumbers.length > 0) {
+            this.foreignNumberChooser.setValue(foreignNumbers[0][0]);
+        }
+    },
+    
+    /**
+     * if a contact is given, use this and the corresponding number
+     */
+    onRecordLoad: function() {
+        if(!this.rendered) {
+            this.onRecordLoad.defer(100, this);
+            return;
+        }
+        this.loadMask.show();
+        
+        this.contactPicker.suspendEvents();
+        this.contactPicker.selectedRecord = this.contact;
+        this.contactPicker.setValue(this.contact);
+        this.contactPicker.getStore().resumeEvents();
+        this.updateRecipientCombo(null, this.contact, null, this.number);
+        
+        this.loadMask.hide();
+    },
+    
+    /**
+     * called on cancel
+     */
+    onCancel: function() {
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
     },
 
-    getFormItems : function() {
-
-        this.textEditor = new Ext.form.TextArea({
-//            fieldLabel : '',
-            width: 264,
-            height: 126,
-            id : 'sipgate-sms-textarea'
-        });
-
+    /**
+     * returns he form items
+     * @return {Object}
+     */
+    getFormItems: function() {
         return {
-            border : false,
-            id : 'sipgate-sms-form',
-            frame : true,
-            layout : 'border',
-            items : [ {
-                region : 'center',
-                layout : {
-                    align : 'stretch',
-                    type : 'vbox'
-                }
-
-            }, this.textEditor ]
+            border: false,
+            frame: true,
+            layout: 'border',
+            items: [{
+                region: 'center',
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    anchor: '100%',
+                    columnWidth: 1,
+                    allowBlank: false
+                },
+                items : [[
+                    Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', { 
+                        ref: '../../../../contactPicker',
+                        fieldLabel: this.app.i18n._('Recipient'),
+                        listeners: {
+                            scope: this,
+                            select: this.updateRecipientCombo
+                            },
+                        name: 'contact'
+                        })
+                        
+                    ],[{
+                        fieldLabel: this.app.i18n._("Recipient's phone number"),
+                        xtype: 'combo',
+                        store: [],
+                        mode: 'local',
+                        emptyText: this.app.i18n._("please choose the recipient's phone number..."),
+                        ref: '../../../../foreignNumberChooser',
+                        name: 'recipient_number'
+                    }], [{
+                        fieldLabel: this.app.i18n._('Your phone number'),
+                        xtype: 'extuxclearablecombofield',
+                        store: [],
+                        emptyText: this.app.i18n._('please choose your phone number...'),
+                        ref: '../../../../ownNumberChooser',
+                        name: 'own_number',
+                        allowBlank: true,
+                        disabled: true
+                    }], [{
+                        fieldLabel: this.app.i18n._('The message'),
+                        xtype: 'textarea',
+                        ref: '../../../../textEditor',
+                        emptyText: this.app.i18n._('enter the text...'),
+                        height: 125,
+                        name: 'message'
+                    }]
+                ]
+            }]
         };
     }
 
@@ -176,13 +295,15 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
  * 
  * @return {Ext.ux.Window}
  */
-Tine.Sipgate.SmsEditDialog.openWindow = function(number) {
+Tine.Sipgate.SmsEditDialog.openWindow = function(config) {
+    var recipient = (config && config.hasOwnProperty('contact')) ? config.contact.get('n_fn') : null;
+    var t = Tine.Tinebase.appMgr.get('Sipgate').i18n;
     var window = Tine.WindowFactory.getExtWindow({
-        title : Tine.Tinebase.appMgr.get('Sipgate').i18n._('Send'),
-        width : 300,
-        height : 200,
+        title : recipient ? String.format(t._('Send message to "{0}"'), recipient) : t._('Send message'),
+        width : 390,
+        height : 350,
         contentPanelConstructor : 'Tine.Sipgate.SmsEditDialog',
-        contentPanelConstructorConfig : number
+        contentPanelConstructorConfig : config
     });
     return window;
 };

@@ -1,14 +1,127 @@
-<?xml version="1.0" encoding="utf-8"?>
-<application>
-    <name>Sipgate</name>
-    <version>2.0</version>
-    <order>25</order>
-    <depends>
-        <application>Admin</application>
-        <application>Addressbook</application>
-    </depends>
-    <tables>
-        <table>
+<?php
+/**
+ * Tine 2.0
+ *
+ * @package     Sipgate
+ * @subpackage  Setup
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ */
+
+/**
+ * Sipgate updates for version 1.1
+ *
+ * @package     Sipgate
+ * @subpackage  Setup
+ */
+class Sipgate_Setup_Update_Release1 extends Setup_Update_Abstract
+{
+
+    /**
+     * update 0.1 -> 1.0
+     */
+    public function update_0()
+    {
+        $this->setApplicationVersion('Sipgate', '1.0');
+    }
+
+
+    /**
+     * update 1.0 -> 1.1
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Sipgate', '1.1');
+    }
+
+    public function update_2()
+    {
+        // create status config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sipgate')->getId();
+
+        $connectionStatusConfig = array(
+            'name'    => Sipgate_Config::CONNECTION_STATUS,
+            'records' => array(
+                array('id' => 'accepted', 'value' => 'accepted', 'icon' => "../../images/../Sipgate/res/call_accepted.png", 'system' => true),  //_('accepted')
+                array('id' => 'outgoing', 'value' => 'outgoing', 'icon' => "../../images/../Sipgate/res/call_outgoing.png", 'system' => true),  //_('outgoing')
+                array('id' => 'missed',   'value' => 'missed',   'icon' => "../../images/../Sipgate/res/call_missed.png", 'system' => true),  //_('missed')
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sipgate_Config::CONNECTION_STATUS,
+            'value'             => json_encode($connectionStatusConfig),
+        )));
+
+        // create tos config
+        $connectionTos = array(
+            'name'    => Sipgate_Config::CONNECTION_TOS,
+            'records' => array(
+                array('id' => 'voice', 'value' => 'Telephone Call',  'icon' => "../../images/oxygen/16x16/apps/kcall.png",   'system' => true),  //_('Telephone Call')
+                array('id' => 'fax',   'value' => 'Facsimile',       'icon' => "../../images/../Sipgate/res/16x16/kfax.png", 'system' => true),  //_('Facsimile')
+
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sipgate_Config::CONNECTION_TOS,
+            'value'             => json_encode($connectionTos),
+        )));
+        $this->setApplicationVersion('Sipgate', '1.2');
+    }
+    
+    public function update_3()
+    {
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sipgate')->getId();
+
+        $c = array(
+            'name'    => Sipgate_Config::ACCOUNT_ACCOUNT_TYPE,
+            'records' => array(
+                array('id' => 'plus', 'value' => 'basic/plus', 'icon' => "../../images/oxygen/16x16/places/user-identity.png", 'system' => true),  //_('basic/plus')
+                array('id' => 'team', 'value' => 'team',       'icon' => "../../images/oxygen/16x16/apps/system-users.png",    'system' => true),  //_('team')
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sipgate_Config::ACCOUNT_ACCOUNT_TYPE,
+            'value'             => json_encode($c),
+        )));
+
+        // create tos config
+        $c = array(
+            'name'    => Sipgate_Config::ACCOUNT_TYPE,
+            'records' => array(
+                array('id' => 'private', 'value' => 'private', 'icon' => "../../images/oxygen/16x16/places/user-identity.png", 'system' => true),  //_('private')
+                array('id' => 'shared',     'value' => 'shared',   'icon' => "../../images/oxygen/16x16/apps/system-users.png",    'system' => true),  //_('shared')
+
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sipgate_Config::ACCOUNT_TYPE,
+            'value'             => json_encode($c),
+        )));
+
+        $this->setApplicationVersion('Sipgate', '1.4');
+    }
+    /**
+     * creates the new tables
+     */
+    public function update_4() {
+        $tableDefinition = '<table>
             <name>sipgate_account</name>
             <version>0</version>
             <declaration>
@@ -23,7 +136,6 @@
                     <type>text</type>
                     <length>10</length>
                     <notnull>true</notnull>
-                    <default>plus</default>
                 </field>
                 <field>
                     <name>type</name>
@@ -106,8 +218,11 @@
                     </field>
                 </index>
             </declaration>
-        </table>
-        <table>
+        </table>';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        $tableDefinition = '<table>
             <name>sipgate_line</name>
             <version>0</version>
             <declaration>
@@ -192,8 +307,11 @@
                     </reference>
                 </index>
             </declaration>
-        </table>
-        <table>
+        </table>';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        $tableDefinition = '<table>
             <name>sipgate_connection</name>
             <version>0</version>
             <declaration>
@@ -348,6 +466,18 @@
                     </reference>
                 </index>
             </declaration>
-        </table>
-    </tables>
-</application>
+        </table>';
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        $this->setApplicationVersion('Sipgate', '1.5');
+    }
+    /**
+     * creates an account if previous config was found
+     */
+    public function update_5()
+    {
+        
+        $this->setApplicationVersion('Sipgate', '2.0');
+    }
+}

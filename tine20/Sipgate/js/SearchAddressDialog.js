@@ -36,7 +36,6 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
         }
         Tine.log.debug('initComponent: appName: ', this.appName);
         Tine.log.debug('initComponent: app: ', this.app);
-        Tine.log.debug(this.number);
 
         // init actions
         this.initActions();
@@ -183,8 +182,6 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
              displayField: 'text'
         });
         
-        
-        
         return {
             border : false,
             id : 'sipgate-addnumber-form',
@@ -209,13 +206,13 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
  * @param {Object} number
  * @return {Ext.ux.Window}
  */
-Tine.Sipgate.SearchAddressDialog.openWindow = function(number) {
+Tine.Sipgate.SearchAddressDialog.openWindow = function(config) {
     var window = Tine.WindowFactory.getExtWindow({
-        title : Tine.Tinebase.appMgr.get('Sipgate').i18n._('Choose Address'),
+        title : String.format(Tine.Tinebase.appMgr.get('Sipgate').i18n._('Add number {0} to the addressbook'), config.number),
         width : 300,
         height : 200,
         contentPanelConstructor : 'Tine.Sipgate.SearchAddressDialog',
-        contentPanelConstructorConfig : number
+        contentPanelConstructorConfig : config
     });
     return window;
 };

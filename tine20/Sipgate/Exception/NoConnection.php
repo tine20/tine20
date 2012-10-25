@@ -16,7 +16,7 @@
  * @package     Sipgate
  * @subpackage  Exception
  */
-class Sipgate_Exception_Backend extends Sipgate_Exception
+class Sipgate_Exception_NoConnection extends Sipgate_Exception
 {
     /**
      * construct
@@ -25,8 +25,8 @@ class Sipgate_Exception_Backend extends Sipgate_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'General Backend Exception.', $_code = 950) {
-        // _('General Backend Exception.')
+    public function __construct($_message = 'Could not connect to sipgate.', $_code = 951) {
+        // _('Could not connect to sipgate.')
         parent::__construct($_message, $_code);
     }
 }

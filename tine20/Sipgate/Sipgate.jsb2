@@ -20,7 +20,47 @@
           "path": "js/"
         },
         {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "LineSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccountFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccountGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LineFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LineGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccountEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ConnectionGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },
+        {
+          "text": "AssignLinesGrid.js",
           "path": "js/"
         },
         {

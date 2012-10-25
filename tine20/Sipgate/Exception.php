@@ -1,9 +1,9 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Sipgate
- * @subpackage    Exception
+ * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Alexander Stintzing <alex@stintzing.net>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
 
 /**
  * Sipgate exception
- * 
+ *
  * @package     Sipgate
  * @subpackage  Exception
  */

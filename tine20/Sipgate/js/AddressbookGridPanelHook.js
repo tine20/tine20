@@ -55,7 +55,6 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
 
 
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
-//    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', '-', 120);
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.callContactAction, 130);
      
     this.composeSmsAction = new Ext.Action({
@@ -118,7 +117,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
      * @type Ext.Button
      * @private
      */
-    composeSmsBtn: null,    
+    composeSmsBtn: null,
     
     /**
      * @property ContactGridPanel
@@ -139,7 +138,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
      * @type Ext.menu.Menu
      * @private
      */
-    smsMenu: null,    
+    smsMenu: null,
     
     /**
      * get addressbook contact grid panel
@@ -176,8 +175,12 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
         } else if (!Ext.isEmpty(contact.data.tel_home)) {
             number = contact.data.tel_home;
         }
-
-        Tine.Sipgate.dialPhoneNumber(number,contact);
+        var lineId = Tine.Sipgate.registry.get('preferences').get('phoneId');
+        if(lineId) {
+            Tine.Sipgate.lineBackend.dialNumber(lineId, number, contact);
+        } else {
+            Tine.Sipgate.DialNumberDialog.openWindow({number: number, contact: contact});
+        }
     },
 
     /**
@@ -207,6 +210,7 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
         }
         
         var popUpWindow = Tine.Sipgate.SmsEditDialog.openWindow({
+            contact: contact,
             number: number
         });
         

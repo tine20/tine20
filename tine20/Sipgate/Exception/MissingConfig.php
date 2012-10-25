@@ -16,7 +16,7 @@
  * @package     Sipgate
  * @subpackage  Exception
  */
-class Sipgate_Exception_Backend extends Sipgate_Exception
+class Sipgate_Exception_MissingConfig extends Sipgate_Exception
 {
     /**
      * construct
@@ -25,8 +25,8 @@ class Sipgate_Exception_Backend extends Sipgate_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'General Backend Exception.', $_code = 950) {
-        // _('General Backend Exception.')
+    public function __construct($_message = 'The sipgate configuration is missing.', $_code = 954) {
+        // _('The configuration is missing.')
         parent::__construct($_message, $_code);
     }
 }
