@@ -232,23 +232,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },    
 
     /**
-     * return additional tb items
-     * @private
-     */
-    getToolbarItems: function(){
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        
-        return [
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
-        ];
-    },
-    
-    /**
      * Return CSS class to apply to rows depending upon due status
      * 
      * @param {Tine.Tasks.Model.Task} record

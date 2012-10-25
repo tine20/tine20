@@ -161,22 +161,26 @@ Tine.Timetracker.Model.Timeaccount.getDefaultData = function() {
 
 Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
+
     var filters = [
-        {label: _('Quick search'),          field: 'query',       operators: ['contains']},
-        {label: app.i18n._('Number'),       field: 'number'       },
-        {label: app.i18n._('Title'),        field: 'title'        },
-        {label: app.i18n._('Description'),  field: 'description', operators: ['contains']},
-        {label: app.i18n._('Status'),       field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+        {label: _('Quick search'),              field: 'query',       operators: ['contains']},
+        {label: app.i18n._('Number'),           field: 'number'       },
+        {label: app.i18n._('Title'),            field: 'title'        },
+        {label: app.i18n._('Description'),      field: 'description', operators: ['contains']},
+        {label: app.i18n._('Billed'),           field: 'status',      filtertype: 'timetracker.timeaccountbilled'},
+        {label: app.i18n._('Status'),           field: 'is_open',     filtertype: 'timetracker.timeaccountstatus'},
+        {label: _('Last Modified Time'),        field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'),          field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'),             field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'),                field: 'created_by',         valueType: 'user'},
         {label: app.i18n._('Booking deadline'), field: 'deadline'},
         {filtertype: 'tinebase.tag', app: app}
     ];
+    
     if(Tine.Tinebase.appMgr.get('Sales')) {
         filters.push({filtertype: 'timetracker.timeaccountcontract'});
     }
+    
     return filters;
 };
 

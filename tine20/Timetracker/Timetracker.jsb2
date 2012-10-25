@@ -36,6 +36,10 @@
           "path": "js/"
         },
         {
+          "text": "TimeAccountBilledFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "TimeAccountContractFilterModel.js",
           "path": "js/"
         },

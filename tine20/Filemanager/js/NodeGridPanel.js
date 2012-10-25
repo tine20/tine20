@@ -225,25 +225,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * return additional tb items
-     * @private
-     */
-    getToolbarItems: function(){
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        
-        return [
-            
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
-            
-        ];
-    },
-    
-    /**
      * init ext grid panel
      * @private
      */

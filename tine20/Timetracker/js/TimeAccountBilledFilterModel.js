@@ -9,19 +9,19 @@
  
 Ext.ns('Tine.Timetracker');
 
-Tine.Timetracker.TimeAccountStatusFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
-    field: 'is_open',
-    valueType: 'bool',
-    defaultValue: 1,
+Tine.Timetracker.TimeAccountBilledFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
+    field: 'timeaccount_status',
+    valueType: 'string',
+    defaultValue: 'to bill',
     
     /**
      * @private
      */
     initComponent: function() {
-        Tine.Timetracker.TimeAccountStatusFilterModel.superclass.initComponent.call(this);
+        Tine.Timetracker.TimeAccountBilledFilterModel.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Timetracker');
-        this.label = this.label ? this.label : this.app.i18n._("Time Account - Status");
+        this.label = this.label ? this.label : this.app.i18n._("Time Account - Billed");
         this.operators = ['equals'];
     },
    
@@ -43,7 +43,11 @@ Tine.Timetracker.TimeAccountStatusFilterModel = Ext.extend(Tine.widgets.grid.Fil
             forceSelection: true,
             blurOnSelect: true,
             triggerAction: 'all',
-            store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
+            store: [
+                ['not yet billed', this.app.i18n._('not yet billed')], 
+                ['to bill', this.app.i18n._('to bill')],
+                ['billed', this.app.i18n._('billed')]
+            ]
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
@@ -54,4 +58,4 @@ Tine.Timetracker.TimeAccountStatusFilterModel = Ext.extend(Tine.widgets.grid.Fil
         return value;
     }
 });
-Tine.widgets.grid.FilterToolbar.FILTERS['timetracker.timeaccountstatus'] = Tine.Timetracker.TimeAccountStatusFilterModel;
+Tine.widgets.grid.FilterToolbar.FILTERS['timetracker.timeaccountbilled'] = Tine.Timetracker.TimeAccountBilledFilterModel;

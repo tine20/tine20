@@ -52,7 +52,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'showClosed'     => array('filter' => 'Timetracker_Model_TimeaccountClosedFilter'),
+        'is_open'              => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'contract'    => array('filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord', 'options' => array(
             'controller' => 'Sales_Controller_Contract',
             'filtergroup' => 'Sales_Model_ContractFilter',
@@ -84,7 +84,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     protected function _setOptions(array $_options)
     {
         $_options['useTimesheetAcl']    = array_key_exists('useTimesheetAcl', $_options) ? $_options['useTimesheetAcl'] : FALSE;
-        $_options['showClosed']         = array_key_exists('showClosed', $_options)      ? $_options['showClosed']      : 0;
         parent::_setOptions($_options);
     }
     
@@ -107,23 +106,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      * @return void
      */
     public function appendFilterSql($_select, $_backend)
-    {
-        if (! $this->isFilterSet('showClosed')) {
-            // add show closed filter if not already set
-            $showClosedFilter = $this->createFilter('showClosed', 'equals', $this->_options['showClosed']);
-            $showClosedFilter->setIsImplicit(TRUE);
-            $this->addFilter($showClosedFilter);
-        }
-        
-        $this->_appendAclSqlFilter($_select);
-    }
-    
-    /**
-     * append acl filter
-     *
-     * @param Zend_Db_Select $_select
-     */
-    protected function _appendAclSqlFilter($_select)
     {
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             return;

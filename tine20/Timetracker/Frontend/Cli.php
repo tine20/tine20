@@ -77,9 +77,9 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function searchDuplicateTimeaccounts()
     {
         $filter = new Timetracker_Model_TimeaccountFilter(array(array(
-            'field' => 'showClosed', 
+            'field' => 'is_open', 
             'operator' => 'equals', 
-            'value' => FALSE
+            'value' => TRUE
         )));
         
         $duplicates = parent::_searchDuplicates(Timetracker_Controller_Timeaccount::getInstance(), $filter, 'title');

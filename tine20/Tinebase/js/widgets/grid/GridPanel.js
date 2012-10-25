@@ -161,7 +161,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @cfg {Bool} hasFavoritesPanel 
      */
     hasFavoritesPanel: true,
-
+    
     /**
      * @cfg {Bool} hasQuickSearchFilterToolbarPlugin 
      */
@@ -288,7 +288,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
 
         this.editDialogConfig = this.editDialogConfig || {};
-
+        
         this.editBuffer = [];
         this.deleteQueue = [];
         
@@ -894,7 +894,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initGrid: function() {
         // init sel model
         this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
-            store: this.store
+            store: this.store,
+            gridPanel: this
         });
         this.selectionModel.on('selectionchange', function(sm) {
             //Tine.widgets.actionUpdater(sm, this.actions, this.recordClass.getMeta('containerProperty'), !this.evalGrants);

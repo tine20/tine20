@@ -100,7 +100,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // search & check
         $timeaccountFilter = $this->_getTimeaccountFilter();
         $search = $this->_json->searchTimeaccounts($timeaccountFilter, $this->_getPaging());
-        $this->assertEquals(0, $search['totalcount'], 'show closed filter not working');
+        $this->assertEquals(0, $search['totalcount'], 'is_open filter not working');
 
         $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(TRUE), $this->_getPaging());
         $this->assertEquals(1, $search['totalcount']);
@@ -676,7 +676,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ExpliciteForeignIdFilter filter');
         $this->assertEquals(':id', $result['filter'][0]['value'][0]['field']);
         $this->assertTrue(is_array($result['filter'][0]['value'][0]['value']), 'timeaccount should be resolved');
-        $this->assertEquals(TRUE, $result['filter'][0]['value'][1]['implicit'], 'showClosed should be implicit');
     }
 
     /**

@@ -21,6 +21,11 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
     store: null,
     
     /**
+     * @cfg {Tine.widgets.grid.GridPanel}
+     */
+    gridPanel: null,
+    
+    /**
      * @property {Bool}
      */
     isFilterSelect: false,
@@ -32,7 +37,7 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
      */
     getSelectionFilter: function() {
         if(! this.isFilterSelect) {
-            return this.getFilterOfRowSelection();
+            var filter = this.getFilterOfRowSelection();
         } else {
             /* cruide hack lets save it as comment, maybe we need it some time ;-)
             var opts = {}
@@ -44,9 +49,9 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
             //console.log(opts.params.filter);
             return opts.params.filter;
             */
-            var filterData = this.getAllFilterData();
-            return filterData;
+            var filter = this.getAllFilterData();
         }
+        return filter;
     },
     
     /**

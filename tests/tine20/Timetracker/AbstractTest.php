@@ -212,9 +212,9 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        if ($_showClosed) {
+        if (! $_showClosed) {
             $result[] = array(
-                'field' => 'showClosed',
+                'field' => 'is_open',
                 'operator' => 'equals',
                 'value' => TRUE
             );

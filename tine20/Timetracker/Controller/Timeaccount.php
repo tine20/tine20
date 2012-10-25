@@ -122,8 +122,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         $this->_checkRight('get');
         
         $filter = new Timetracker_Model_TimeaccountFilter(array(
-            array('field' => 'id',          'operator' => 'in',     'value' => $_ids),
-            array('field' => 'showClosed',  'operator' => 'equals', 'value' => TRUE),
+            array('field' => 'id',          'operator' => 'in',     'value' => $_ids)
         ));
         $records = $this->search($filter);
 
