@@ -956,7 +956,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 grid.onUploadComplete(upload, fileRecord);
             }
             else if(change == 'uploadfinished') {
-                rowsToUpdate.get(0).set('size', upload.fileSize);
+                rowsToUpdate.get(0).set('size', fileRecord.get('size'));
                 rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));
             }
             rowsToUpdate.get(0).afterEdit();
