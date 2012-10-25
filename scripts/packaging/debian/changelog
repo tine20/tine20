@@ -1,3 +1,9 @@
+tine20 (2012.10.1-1) natty; urgency=low
+
+  * Add missing bootstrap.php
+
+ -- Lars Kneschke <l.kneschke@metaways.de>  Thu, 25 Oct 2012 12:00:21 +0200
+
 tine20 (2012.10.1-0) natty; urgency=low
 
   * New upstream release Joey (2012.10) 
