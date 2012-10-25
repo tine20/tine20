@@ -211,7 +211,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         // if already initialized, dont't repeat setting start values and inserting button
         if(! ff.multipleInitialized) {
-            this.createMultiButton(ff);
+            if (! ff.isXType('checkbox')) {
+                this.createMultiButton(ff);
+            }
             
             var startValue = this.interRecord.get(ff.name);
             
