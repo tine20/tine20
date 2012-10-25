@@ -119,6 +119,27 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
+     * returns operators of this filter model
+     * @return array
+     */
+    public function getOperators()
+    {
+        return $this->_operators;
+    }
+    
+    /**
+     * returns operator sql mapping
+     * @return array
+     */
+    public function getOpSqlMap()
+    {
+        if($this->_opSqlMap) {
+            return $this->_opSqlMap;
+        }
+        return NULL;
+    }
+    
+    /**
      * set options 
      *
      * @param array $_options

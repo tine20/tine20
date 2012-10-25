@@ -34,16 +34,26 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         this.cfDefinition = this.cfConfig.get('definition');
         this.label =  this.cfDefinition.label;
         
-        
-        Tine.widgets.customfields.FilterModel.superclass.initComponent.call(this);
-        
-        // @todo map cf types to valueType
-        if (['keyfield', 'bool', 'boolean'].indexOf(Ext.util.Format.lowercase(this.cfDefinition.type)) > -1) {
-            this.operators = ['equals', 'not'];
-            this.defaultOperator = 'equals';
-            this.valueRenderer = this.cfValueRenderer;
+        switch (this.cfDefinition.type) {
+            case 'record':
+            case 'keyField':
+                this.operators = ['equals', 'not'];
+                this.defaultOperator = 'equals';
+                this.valueRenderer = this.cfValueRenderer;
+                break;
+            case 'bool':
+            case 'boolean':
+                this.valueType = 'bool';
+                this.defaultOperator = 'equals';
+                this.defaultValue = '0';
+                break;
+            case 'date':
+            case 'datetime':
+                this.valueType = 'date';
+                this.defaultOperator = 'within';
         }
         
+        Tine.widgets.customfields.FilterModel.superclass.initComponent.call(this);
     },
     
     /**
@@ -53,7 +63,6 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     cfValueRenderer: function(filter, el) {
-        
         // value
         var value = Tine.widgets.customfields.Field.get(this.app, this.cfConfig, {
             filter: filter,
@@ -67,8 +76,6 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                  this.onFiltertrigger();
              }
         }, this);
-        //value.on('select', this.onFiltertrigger, this);
-        
         return value;
     }
 });
