@@ -67,7 +67,16 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 }
                 
                 if (field) {
-                    field.setValue(this.customfieldsValue[name]);
+                    if(field.isXType('combo') && Ext.isObject(this.customfieldsValue[name])) {
+                        var phpClassName = cfConfig.get('model').split('_'),
+                            recordClass = Tine[phpClassName[0]].Model[phpClassName[2]],
+                            record = new recordClass(this.customfieldsValue[name]);
+                            
+                        field.setValue(record.getId());
+                        field.selectedRecord = record.data; 
+                    } else {
+                        field.setValue(this.customfieldsValue[name]);
+                    }
                 }
             }
         }
