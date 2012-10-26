@@ -161,7 +161,7 @@ Tine.Timetracker.Model.Timeaccount.getDefaultData = function() {
 
 Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
-    return [
+    var filters = [
         {label: _('Quick search'),          field: 'query',       operators: ['contains']},
         {label: app.i18n._('Number'),       field: 'number'       },
         {label: app.i18n._('Title'),        field: 'title'        },
@@ -172,9 +172,12 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
         {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {label: app.i18n._('Booking deadline'), field: 'deadline'},
-        {filtertype: 'tinebase.tag', app: app},
-        {filtertype: 'timetracker.timeaccountcontract'}
+        {filtertype: 'tinebase.tag', app: app}
     ];
+    if(Tine.Tinebase.appMgr.get('Sales')) {
+        filters.push({filtertype: 'timetracker.timeaccountcontract'});
+    }
+    return filters;
 };
 
 /**

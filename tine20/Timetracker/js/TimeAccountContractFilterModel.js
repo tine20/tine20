@@ -28,7 +28,7 @@ Tine.Timetracker.TimeaccountContractFilterModel = Ext.extend(Tine.widgets.grid.F
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Timetracker');
         this.label = this.app.i18n._('Contract');
-        this.foreignRecordClass = Tine.Sales.Model.Contract;
+        this.foreignRecordClass = 'Sales.Contract',
         this.pickerConfig = {emptyText: this.app.i18n._('without contract'), allowBlank: true};
 
         Tine.Timetracker.TimeaccountContractFilterModel.superclass.initComponent.call(this);
