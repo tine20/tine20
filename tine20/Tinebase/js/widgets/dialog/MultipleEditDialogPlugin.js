@@ -59,14 +59,20 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     isFilterSelect: null,
     
     /**
+     * holds the fields which have been changed
+     * @type {array} changedFields
+     */
+    changedFields: null,
+    
+    /**
      * count of all handled records
-     * @type 
+     * @type {Integer} totalRecordCount
      */
     totalRecordCount: null,
     
     /**
      * component registry to skip on multiple edit
-     * @type 
+     * @type {Array} skipItems
      */
     skipItems: [],
     
@@ -92,6 +98,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.form = ed.getForm();
         this.handleFields = [];
         this.interRecord = ed.interRecord;
+        
+        if (ed.action_saveAndClose) {
+            ed.action_saveAndClose.disable();
+        }
+        ed.on('fieldchange', this.findChangedFields, this);
         
         if (ed.hasOwnProperty('isMultipleValid') && Ext.isFunction(ed.isMultipleValid)) {
             ed.isValid = ed.isMultipleValid;
@@ -124,7 +135,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         // disable container selector - just container_id
         var field = this.form.findField('container_id');
-        if(field) {
+        if (field) {
             field.disable();
         }
         
@@ -154,7 +165,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }
         
         // get relationpickerfields to handle
-        if(this.editDialog.relationPickers) {
+        if (this.editDialog.relationPickers) {
             Ext.each(this.editDialog.relationPickers, function(picker) {
                 Tine.log.info('RelationPicker found. Using "' + '%' + picker.relationType + '-' + picker.fullModelName + '" as key.');
                 keys.push({key: picker.relationType + '-' + picker.fullModelName, type: 'relation', formField: picker.combo, recordKey: '%' + picker.relationType + '-' + picker.fullModelName});
@@ -171,7 +182,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 return true;
             }
             // remove empty text
-            if(ff.hasOwnProperty('emptyText')) {
+            if (ff.hasOwnProperty('emptyText')) {
                 ff.emptyText = '';
             }
             
@@ -181,11 +192,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             ff.triggerEvents = ['blur'];
             
             // special events for special field types
-            if(ff.isXType('tinedurationspinner')) {
+            if (ff.isXType('tinedurationspinner')) {
                 ff.emptyOnZero = true;
                 ff.startEvents = ['focus', 'spin'];
                 ff.triggerEvents = ['spin', 'blur'];
-            } else if(ff.isXType('tinerecordpickercombobox')) {
+            } else if (ff.isXType('tinerecordpickercombobox')) {
                 ff.startEvents = ['focus', 'expand'];
                 ff.triggerEvents = ['select', 'blur'];
             }
@@ -210,25 +221,25 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.info('Init handler called for field "' + ff.name + '".');
         
         // if already initialized, dont't repeat setting start values and inserting button
-        if(! ff.multipleInitialized) {
+        if (! ff.multipleInitialized) {
             if (! ff.isXType('checkbox')) {
                 this.createMultiButton(ff);
             }
             
             var startValue = this.interRecord.get(ff.name);
             
-            if(ff.isXType('addressbookcontactpicker') && ff.useAccountRecord) {
+            if (ff.isXType('addressbookcontactpicker') && ff.useAccountRecord) {
                 ff.startRecord = startValue ? startValue : null;
                 startValue = startValue['accountId'] ? startValue['accountId'] : null;
             } else if (ff.isXType('timefield')) {
-                if(startValue.length) {
+                if (startValue.length) {
                     startValue = startValue.replace(/\d{4}-\d{2}-\d{2}\s/, '').replace(/:\d{2}$/, '');
                 }
             } else if (ff.isXType('trigger') && ff.triggers) {
                 ff.on('blur', this.hideTriggerClearer);
                 ff.on('focus', this.hideTriggerClearer);
                 ff.on('select', this.hideTriggerClearer);
-            } else if(Ext.isObject(startValue)) {
+            } else if (Ext.isObject(startValue)) {
                 startValue = startValue[ff.recordClass.getMeta('idProperty')];
                 ff.startRecord = new ff.recordClass(startValue);
             }
@@ -238,15 +249,19 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             
             Ext.each(ff.triggerEvents, function(triggerEvent) {
                 ff.on(triggerEvent, this.onTriggerField, ff);
+                ff.on('fieldchange', function() {
+                    this.editDialog.fireEvent('fieldchange');
+                }, this);
             }, this);
     
             ff.multipleInitialized = true;
 
-            if(ff.isXType('tinedurationspinner')) {
+            if (ff.isXType('tinedurationspinner')) {
                 ff.fireEvent(ff.triggerEvents[1]);
             }
+            
         } else {
-            if(ff.multiButton) {
+            if (ff.multiButton) {
                 ff.multiButton.removeClass('hidden');
             }
         }
@@ -264,18 +279,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     createMultiButton: function(formField) {
         var subLeft = 18;
-        if(formField.isXType('tinerecordpickercombobox')) {
+        if (formField.isXType('tinerecordpickercombobox')) {
             formField.disableClearer = true;
             subLeft += 19;
         } else if (formField.isXType('extuxclearabledatefield')) {
             formField.disableClearer = true;
-            if(!formField.multi) {
+            if (!formField.multi) {
                 subLeft += 17;
             }
-        } else if(formField.isXType('tine.widget.field.AutoCompleteField')) {
+        } else if (formField.isXType('tine.widget.field.AutoCompleteField')) {
             // is trigger, but without button, so do nothing
         } else if (formField.isXType('trigger')) {
-            if(! formField.hideTrigger) {
+            if (! formField.hideTrigger) {
                 subLeft += 17;
             }
         } else if (formField.isXType('datetimefield')) {
@@ -316,9 +331,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     onMultiButton: function() {
         Tine.log.debug('Multibutton called.');
         // scope: formField
-        if(this.multiButton.hasClass('undo')) {
+        if (this.multiButton.hasClass('undo')) {
             Tine.log.debug('Resetting value to "' + this.startingValue + '".');
-            if(this.startRecord) {
+            if (this.startRecord) {
                 this.store.removeAll();
                 this.setValue(this.startRecord);
                 this.value = this.startingValue;
@@ -327,7 +342,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
             this.clearInvalid();
             
-            if(this.isXType('extuxclearabledatefield') && this.multi) {
+            if (this.isXType('extuxclearabledatefield') && this.multi) {
                 var startLeft = this.startLeft ? this.startLeft : 0;
                 var parent = this.el.parent().select('.tinebase-editmultipledialog-clearer');
                 parent.setStyle('left', startLeft + 'px');
@@ -337,7 +352,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
         } else {
             Tine.log.debug('Clearing value.');
-            if(this.isXType('extuxclearabledatefield') && this.multi) {
+            if (this.isXType('extuxclearabledatefield') && this.multi) {
                 var startLeft = this.startLeft ? this.startLeft : 0;
                 startLeft -= 17;
                 var parent = this.el.parent().select('.tinebase-editmultipledialog-clearer');
@@ -374,7 +389,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
         if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
             // Create or set arrow
-            if(ar.elements.length > 0) {
+            if (ar.elements.length > 0) {
                 ar.setStyle('display','block');
             } else {
                 var arrow = new Ext.Element(document.createElement('img'));
@@ -399,7 +414,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             
         } else {    // If set back
             // Set arrow
-            if(ar.elements.length > 0) {
+            if (ar.elements.length > 0) {
                 ar.setStyle('display','none');
             }
             // Set field
@@ -414,6 +429,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.multiButton.addClass('hidden');
             this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records'))});
         }
+        this.fireEvent('fieldchange');
     },
     /**
      * waits until the dialog is rendered and fetches real records by the filter on filter selection
@@ -438,11 +454,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Ext.each(this.handleFields, function(field) {
             var refData = false;
             Ext.each(records, function(record, index) {
-                if(field.type == 'relation') {
+                if (field.type == 'relation') {
                     this.setFieldValue(field, false);
                 } else {
                     // the first record of the selected is the reference
-                    if(index === 0) {
+                    if (index === 0) {
                         refData = record.get(field.recordKey);
                     }
                     if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData))) {
@@ -462,7 +478,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         // TODO: grantsProperty not handled here, not needed at the moment but sometimes, perhaps.
 //        var cp = this.editDialog.recordClass.getMeta('containerProperty') ? this.editDialog.recordClass.getMeta('containerProperty') : 'container_id';
-//        if(this.interRecord.get(cp) !== undefined) {
+//        if (this.interRecord.get(cp) !== undefined) {
 //            this.interRecord.set(cp, {account_grants: {editGrant: true}});
 //        }
         this.interRecord.dirty = false;
@@ -474,9 +490,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.debug(this.interRecord);
         
         this.editDialog.updateToolbars(this.interRecord, this.editDialog.recordClass.getMeta('containerProperty'));
-        if(this.editDialog.tbarItems) {
+        if (this.editDialog.tbarItems) {
             Ext.each(this.editDialog.tbarItems, function(item) {
-                if(Ext.isFunction(item.setDisabled)) item.setDisabled(true);
+                if (Ext.isFunction(item.setDisabled)) item.setDisabled(true);
                 item.multiEditable = false;
             });
         }
@@ -486,9 +502,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         // some field sanitizing
         Ext.each(this.handleFields, function(field) {
             // handle TimeFields to set original value (not possible before)
-            if(field.formField.isXType('timefield')) {
+            if (field.formField.isXType('timefield')) {
                 var value = this.interRecord.get(field.key);
-                if(value) {
+                if (value) {
                     field.formField.setValue(new Date(value));
                 }
             }
@@ -535,8 +551,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 ff.setValue(this.interRecord.get(ff.name));
             } else if (ff.isXType('tinerecordpickercombobox')) {
                 var val = this.interRecord.get(field.recordKey);
-                if(val) {
-                    if(!ff.isXType('addressbookcontactpicker')) {
+                if (val) {
+                    if (!ff.isXType('addressbookcontactpicker')) {
                         ff.startRecord = new ff.recordClass(val);
                     } else {
                         ff.startRecord = val;
@@ -560,7 +576,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      * @param {Ext.form.Field} checkbox
      */
     wrapCheckbox: function(checkbox) {
-        if(checkbox.rendered !== true) {
+        if (checkbox.rendered !== true) {
             this.wrapCheckbox.defer(100, this, [checkbox]);
             return;
         }
@@ -569,92 +585,96 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         checkbox.setValue(false);
     },
     
+    findChangedFields: function() {
+        this.changedFields = [];
+        Ext.each(this.handleFields, function(field) {
+            if (field.formField.edited === true) {
+                this.changedFields.push(field);
+            }
+        }, this);
+        
+        if (this.editDialog.action_saveAndClose) {
+            this.editDialog.action_saveAndClose.setDisabled(! this.changedFields.length);
+        }
+    },
+    
     /**
      * is called when the form is submitted. only fieldvalues with edited=true are committed 
      * @return {Boolean}
      */
-    onRecordUpdate : function() {
+    onRecordUpdate: function() {
+        if (!this.editDialog.isMultipleValid()) {
+            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.each(this.handleFields, function(item) {
+                if (item.activeError) {
+                    if (!item.edited) item.activeError = null;
+                }
+            });
+            return false;
+        }
+        
+        
         this.changedHuman = '<br /><br /><ul>';
         var changes = [];
-
-        Ext.each(this.handleFields, function(field) {
+        
+        Ext.each(this.changedFields, function(field) {
             var ff = field.formField,
                 renderer = Ext.util.Format.htmlEncode;
-
-            if (ff.edited === true) {
-                var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel ? ff.boxLabel : ff.ownerCt.fieldLabel;
-                    label = label ? label : ff.ownerCt.title;
-
-                changes.push({name: (field.type == 'relation') ? field.recordKey : ff.getName(), value: ff.getValue()});
-                this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
                 
-                if(ff.isXType('checkbox')) {
+            var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel ? ff.boxLabel : ff.ownerCt.fieldLabel;
+                    label = label ? label : ff.ownerCt.title;
+                    
+            changes.push({name: (field.type == 'relation') ? field.recordKey : ff.getName(), value: ff.getValue()});
+                    
+            this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
+            if (ff.isXType('checkbox')) {
                     renderer = Tine.Tinebase.common.booleanRenderer;
-                } else if(ff.isXType('tinedurationspinner')) {
+                } else if (ff.isXType('tinedurationspinner')) {
                     renderer = Tine.Tinebase.common.minutesRenderer;
                 }
                 
                 this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());
                 this.changedHuman += '</li>';
-            }
         }, this);
-        
         this.changedHuman += '</ul>';
-
-        if (changes.length == 0) {
-            this.editDialog.onCancel();
-            return false;
-        }
+        var filter = this.selectionFilter;
         
-        if(!this.editDialog.isMultipleValid()) {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
-            Ext.each(this.handleFields, function(item) {
-                if(item.activeError) {
-                    if(!item.edited) item.activeError = null;
-                }
-            });
-            return false;
-
-        } else {
-            var filter = this.selectionFilter;
-            
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
-                function(_btn) {
-                if (_btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
-                    Ext.Ajax.request({
-                        url: 'index.php',
-                        timeout: 3600000, // 1 hour
-                        params: {
-                            method: 'Tinebase.updateMultipleRecords',
-                            appName: this.editDialog.recordClass.getMeta('appName'),
-                            modelName: this.editDialog.recordClass.getMeta('modelName'),
-                            changes: changes,
-                            filter: filter
-                        },
-                        success: function(_result, _request) {
-                            Ext.MessageBox.hide();
-                            var resp = Ext.decode(_result.responseText);
-                            if(resp.failcount > 0) {
-                                var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
-                                    response: _result.responseText,
-                                    appName: this.app.appName,
-                                    recordClass: this.editDialog.recordClass
-                                });
-                                window.on('close', function() {
-                                    this.editDialog.fireEvent('update');
-                                    this.editDialog.onCancel();
-                                },this);
-                            } else {
+        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
+            function(_btn) {
+            if (_btn == 'yes') {
+                Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
+                Ext.Ajax.request({
+                    url: 'index.php',
+                    timeout: 3600000, // 1 hour
+                    params: {
+                        method: 'Tinebase.updateMultipleRecords',
+                        appName: this.editDialog.recordClass.getMeta('appName'),
+                        modelName: this.editDialog.recordClass.getMeta('modelName'),
+                        changes: changes,
+                        filter: filter
+                    },
+                    success: function(_result, _request) {
+                        Ext.MessageBox.hide();
+                        var resp = Ext.decode(_result.responseText);
+                        if (resp.failcount > 0) {
+                            var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
+                                response: _result.responseText,
+                                appName: this.app.appName,
+                                recordClass: this.editDialog.recordClass
+                            });
+                            window.on('close', function() {
                                 this.editDialog.fireEvent('update');
                                 this.editDialog.onCancel();
-                            }
-                        },
-                        scope: this
-                    });
-                }
-            }, this);
-         }
+                            }, this);
+                        } else {
+                            this.editDialog.fireEvent('update');
+                            this.editDialog.onCancel();
+                        }
+                    },
+                    scope: this
+                });
+            }
+        }, this);
          return false;
     },
     
