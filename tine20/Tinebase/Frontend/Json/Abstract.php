@@ -59,15 +59,19 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     /**
      * Returns all relatable models for this app
+     * 
      * @return array
      */
     public function getRelatableModels()
     {
         $ret = array();
         
-        if(property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
-            $i=0;
-            foreach($this->_relatableModels as $model) {
+        if (property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
+            $i = 0;
+            foreach ($this->_relatableModels as $model) {
+                if (! class_exists($model)) {
+                    continue;
+                }
                 $cItems = $model::getRelatableConfig();
                 $ownModel = explode('_Model_', $model);
                 $ownModel = $ownModel[1];
@@ -81,8 +85,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                         if($cItem['keyfieldConfig']['from']) $ret[$cItem['relatedApp']][$i]['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
                     }
                     $j=0;
-                    if(array_key_exists('config', $cItem)) {
-                        foreach($cItem['config'] as $conf) {
+                    if (array_key_exists('config', $cItem)) {
+                        foreach ($cItem['config'] as $conf) {
                             $max = explode(':',$conf['max']);
                             $ret[$this->_applicationName][$i]['config'][$j]['max'] = $max[0];
                             $ret[$cItem['relatedApp']][$i]['config'][$j] = $conf;
