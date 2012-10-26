@@ -288,6 +288,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         if (!empty($_data['n_given'])) {
             $_data['n_fileas'] .= ', ' . $_data['n_given'];
+            
+            // to change n_fileas to "ngiven nfamily" use this line instead of the above
+            //$_data['n_fileas'] = $_data['n_given'] . ' ' . $_data['n_fileas'];
         }
         
         $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
