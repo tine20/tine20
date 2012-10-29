@@ -15,6 +15,11 @@
  */
 class Syncroton_Server
 {
+    const PARAMETER_ATTACHMENTNAME = 0;
+    const PARAMETER_COLLECTIONID   = 1;
+    const PARAMETER_ITEMID         = 3;
+    const PARAMETER_OPTIONS        = 7;
+    
     protected $_body;
     
     /**
@@ -212,7 +217,7 @@ class Syncroton_Server
                 }
             }
         }
-    }
+    }    
     
     /**
      * return request params
@@ -221,7 +226,7 @@ class Syncroton_Server
      */
     protected function _getRequestParameters(Zend_Controller_Request_Http $request)
     {
-        if (!isset($_GET['DeviceId'])) {
+        if (strpos($request->getRequestUri(), '&') === false) {
             $commands = array(
                 0  => 'Sync',
                 1  => 'SendMail',
@@ -244,15 +249,8 @@ class Syncroton_Server
                 22 => 'ValidateCert'
             );
             
-            // find the first $_GET parameter which has a key but no value
-            // the key are the request parameters
-            foreach ($_GET as $key => $value) {
-                if (empty($value)) {
-                    $requestParameters = $key;
-                    break;
-                }
-            }
-            
+            $requestParameters = substr($request->getRequestUri(), strpos($request->getRequestUri(), '?'));
+
             $stream = fopen("php://temp", 'r+');
             fwrite($stream, base64_decode($requestParameters));
             rewind($stream);
@@ -268,7 +266,9 @@ class Syncroton_Server
             // unpack deviceId
             $length = ord(fread($stream, 1));
             if ($length > 0) {
-                $unpacked = unpack('H' . $length*2 . 'string', fread($stream, $length));
+                $toUnpack = fread($stream, $length);
+                
+                $unpacked = unpack("H" . ($length * 2) . "string", $toUnpack);
                 $deviceId = $unpacked['string'];
             }
             
@@ -278,7 +278,7 @@ class Syncroton_Server
                 $unpacked  = unpack('Vstring', fread($stream, $length));
                 $policyKey = $unpacked['string'];
             }
-
+            
             // unpack device type
             $length = ord(fread($stream, 1));
             if ($length > 0) {
@@ -289,27 +289,27 @@ class Syncroton_Server
             while (! feof($stream)) {
                 $tag    = ord(fread($stream, 1));
                 $length = ord(fread($stream, 1));
-                
+
                 switch ($tag) {
-                    case 0:
+                    case self::PARAMETER_ATTACHMENTNAME:
                         $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
                         
                         $attachmentName = $unpacked['string'];
                         break;
                         
-                    case 1:
+                    case self::PARAMETER_COLLECTIONID:
                         $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
                         
                         $collectionId = $unpacked['string'];
                         break;
                         
-                    case 3:
+                    case self::PARAMETER_ITEMID:
                         $unpacked = unpack('A' . $length . 'string', fread($stream, $length));
                         
                         $itemId = $unpacked['string'];
                         break;
                         
-                    case 7:
+                    case self::PARAMETER_OPTIONS:
                         $options = ord(fread($stream, 1));
                         
                         $saveInSent      = !!($options & 0x01); 
