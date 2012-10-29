@@ -75,10 +75,10 @@ class Sipgate_Controller_Account extends Tinebase_Controller_Record_Abstract
         if($cfg->shared_credential_key) {
             $this->_credential_key = $cfg->shared_credential_key;
             if(strlen($this->_credential_key) != 24) {
-                throw new Exception('The shared_credential_key must have a length of 24. Your key has a length of '. strlen($this->_credential_key));
+                throw new Sipgate_Exception_ResolveCredentials('The shared_credential_key must have a length of 24. Your key has a length of '. strlen($this->_credential_key));
             }
         } else {
-            throw new Exception('You must configure a shared_credential_key in config.inc.php');
+            throw new Sipgate_Exception_ResolveCredentials('You must configure a shared_credential_key in config.inc.php');
         }
     }
 
