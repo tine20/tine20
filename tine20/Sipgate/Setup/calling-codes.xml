@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- http://www.itu.int/itudoc/itu-t/ob-lists/icc/e164_763.html -->
 <options>
     <option>
         <value>+93</value>
@@ -889,51 +890,6 @@
         <value>+974</value>
         <!-- _("+974 (Qatar (State of))") -->
         <label>+974 (Qatar (State of))</label>
-    </option>
-    <option>
-        <value>+886</value>
-        <!-- _("+886 (Reserved)") -->
-        <label>+886 (Reserved)</label>
-    </option>
-    <option>
-        <value>+970</value>
-        <!-- _("+970 (Reserved)") -->
-        <label>+970 (Reserved)</label>
-    </option>
-    <option>
-        <value>+875</value>
-        <!-- _("+875 (Reserved - Maritime Mobile Service Applications)") -->
-        <label>+875 (Reserved - Maritime Mobile Service Applications)</label>
-    </option>
-    <option>
-        <value>+876</value>
-        <!-- _("+876 (Reserved - Maritime Mobile Service Applications)") -->
-        <label>+876 (Reserved - Maritime Mobile Service Applications)</label>
-    </option>
-    <option>
-        <value>+877</value>
-        <!-- _("+877 (Reserved - Maritime Mobile Service Applications)") -->
-        <label>+877 (Reserved - Maritime Mobile Service Applications)</label>
-    </option>
-    <option>
-        <value>+969</value>
-        <!-- _("+969 (Reserved - reservation currently under investigation)") -->
-        <label>+969 (Reserved - reservation currently under investigation)</label>
-    </option>
-    <option>
-        <value>+888</value>
-        <!-- _("+888 (Reserved for future global service)") -->
-        <label>+888 (Reserved for future global service)</label>
-    </option>
-    <option>
-        <value>+879</value>
-        <!-- _("+879 (Reserved for national non-commercial purposes)") -->
-        <label>+879 (Reserved for national non-commercial purposes)</label>
-    </option>
-    <option>
-        <value>+999</value>
-        <!-- _("+999 (Reserved for possible future use within the Telecommunications for Disaster Relief (TDR) concept)") -->
-        <label>+999 (Reserved for possible future use within the Telecommunications for Disaster Relief (TDR) concept)</label>
     </option>
     <option>
         <value>+262</value>
