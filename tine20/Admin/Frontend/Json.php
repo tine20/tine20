@@ -359,6 +359,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $result;
         }
         
+        // this needs long 3execution time because cache invalidation may take long
+        // @todo remove this when "0007266: make groups / group memberships cache cleaning more efficient" is resolved 
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
         if ($account->getId() == NULL) {
             $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         } else {
@@ -390,6 +394,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'         => $userRoles,
             'totalcount'     => count($userRoles)
         );
+        
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $result;
     }
@@ -455,7 +461,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         return $result;
     }
-    
     
     /**
      * adds the name of the account to each item in the name property
@@ -634,16 +639,21 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $group = new Tinebase_Model_Group($groupData);
         $group->members = $groupMembers;
         
+        // this needs long 3execution time because cache invalidation may take long
+        // @todo remove this when "0007266: make groups / group memberships cache cleaning more efficient" is resolved 
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
         if ( empty($group->id) ) {
             $group = Admin_Controller_Group::getInstance()->create($group);
         } else {
             $group = Admin_Controller_Group::getInstance()->update($group);
         }
-
+        
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+        
         return $this->getGroup($group->getId());
-        
-    }    
-        
+    }
+   
     /**
      * delete multiple groups
      *
