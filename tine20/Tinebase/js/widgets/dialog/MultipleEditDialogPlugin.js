@@ -272,8 +272,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if(!formField.multi) {
                 subLeft += 17;
             }
+        } else if(formField.isXType('tine.widget.field.AutoCompleteField')) {
+            // is trigger, but without button, so do nothing
         } else if (formField.isXType('trigger')) {
-            subLeft += 17;
+            if(! formField.hideTrigger) {
+                subLeft += 17;
+            }
         } else if (formField.isXType('datetimefield')) {
             subLeft += 17; 
         }
