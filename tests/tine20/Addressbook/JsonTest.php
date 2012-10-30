@@ -148,6 +148,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         if ($this->_groupIdsToDelete) {
             Admin_Controller_Group::getInstance()->delete($this->_groupIdsToDelete);
         }
+        
+        if (! empty($this->objects['createdTagIds'])) {
+            Tinebase_Tags::getInstance()->deleteTags($this->objects['createdTagIds']);
+        }
     }
 
     /**
@@ -635,14 +639,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get tag
      * 
-     * @param string $_tagType
+     * @param string $tagType
+     * @param string $tagName
      * @return Tinebase_Model_Tag
      */
-    protected function _getTag($_tagType = Tinebase_Model_Tag::TYPE_SHARED)
+    protected function _getTag($tagType = Tinebase_Model_Tag::TYPE_SHARED, $tagName = NULL)
     {
-        $tagName = Tinebase_Record_Abstract::generateUID();
+        if ($tagName) {
+            try {
+                $tag = Tinebase_Tags::getInstance()->getTagByName($tagName);
+                return $tag;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        } else {
+            $tagName = Tinebase_Record_Abstract::generateUID();
+        }
+        
         return new Tinebase_Model_Tag(array(
-            'type'          => $_tagType,
+            'type'          => $tagType,
             'name'          => $tagName,
             'description'   => 'testTagDescription',
             'color'         => '#009B31',
@@ -782,22 +796,24 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * import helper
      *
-     * @param array $_additionalOptions
-     * @param array $_clientRecords
+     * @param array $additionalOptions
+     * @param array $clientRecords
+     * @param string $filename
      * @return array
      */
-    protected function _importHelper($_additionalOptions = array('dryrun' => 1), $_clientRecords = array())
+    protected function _importHelper($additionalOptions = array('dryrun' => 1), $clientRecords = array(), $filename = NULL)
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
         $definitionOptions = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($definition);
         
         $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example);
-        $options = array_merge($_additionalOptions, array(
+        $importFile = ($filename) ? $filename : dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/' . $definitionOptions->example;
+        $tempFile = $tempFileBackend->createTempFile($importFile);
+        $options = array_merge($additionalOptions, array(
             'container_id'  => $this->container->getId(),
         ));
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $_clientRecords);
-        if (isset($_additionalOptions['dryrun']) && $_additionalOptions['dryrun'] === 0) {
+        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
+        if (isset($additionalOptions['dryrun']) && $additionalOptions['dryrun'] === 0) {
             foreach ($result['results'] as $contact) {
                 $this->_contactIdsToDelete[] = $contact['id'];
             }
@@ -956,6 +972,31 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $klaus = $this->_tagImportHelper('keep');
         $this->assertEquals(1, count($klaus['tags']), 'klaus should have only one tag: ' . print_r($klaus['tags'], TRUE));
+    }
+    
+    /**
+     * testImportTagWithLongName
+     * 
+     * @see 0007276: import re-creates tags that have names with more than 40 chars
+     */
+    public function testImportTagWithLongName()
+    {
+        // import records with long tag name
+        $result = $this->_importHelper(array('dryrun' => 0), array(), dirname(__FILE__) . '/Import/files/adb_tine_import_with_tag.csv');
+        
+        $this->assertEquals(2, $result['totalcount'], 'should import 2 records: ' . print_r($result, TRUE));
+        $this->assertEquals(2, count($result['results'][0]['tags']), 'record should have 2 tags: ' . print_r($result['results'][0], TRUE));
+        
+        // check that tag is only created and added once + remove
+        $tagName = '2202_Netzwerk_national_potentielle_Partn';
+        $tags = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter(array(
+            'name'  => $tagName,
+            'grant' => Tinebase_Model_TagRight::VIEW_RIGHT,
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED
+        )));
+        $this->objects['createdTagIds'] = $tags->getArrayOfIds();
+        $this->assertEquals(1, count($tags));
+        $this->assertEquals(2, $tags->getFirstRecord()->occurrence);
     }
     
     /**

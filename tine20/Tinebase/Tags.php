@@ -79,13 +79,15 @@ class Tinebase_Tags
      * @param  Tinebase_Model_Pagination  $_paging
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
      */
-    public function searchTags($_filter, $_paging)
+    public function searchTags($_filter, $_paging = NULL)
     {
         $select = $_filter->getSelect();
         
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         
-        $_paging->appendPaginationSql($select);
+        if ($_paging !== NULL) {
+            $_paging->appendPaginationSql($select);
+        }
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
@@ -199,28 +201,37 @@ class Tinebase_Tags
     public function getTagsById($_id, $_right = Tinebase_Model_TagRight::VIEW_RIGHT, $_ignoreAcl = false)
     {
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
-
-        if (!empty($_id)) {
+        
+        if (is_string($_id)) {
+            $ids = array($_id);
+        } else if ($_id instanceof Tinebase_Record_RecordSet) {
+            $ids = $_id->getArrayOfIds();
+        } else if (is_array($_id)) {
+            $ids = $_id;
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Expectd string|array|Tinebase_Record_RecordSet of tags');
+        }
+        
+        if (! empty($ids)) {
             $select = $this->_db->select()
                 ->from(array('tags' => SQL_TABLE_PREFIX . 'tags'))
                 ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
-                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_id));
+                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $ids));
             if ($_ignoreAcl !== true) {
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
 
             Tinebase_Backend_Sql_Abstract::traitGroup($select);
             
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
             }
-        }
-        if (count($tags) === 0 && ! empty($_id)) {
-            //if (is_string($_id)) {
-            //    throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found: ' . print_r($_id, true));
+            if (count($tags) !== count($ids)) {
+                $missingIds = array_diff($ids, $tags->getArrayOfIds());
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tag(s) not found or insufficient rights: ' . print_r($missingIds, true));
+            }
         }
         return $tags;
     }
@@ -696,7 +707,7 @@ class Tinebase_Tags
     /**
      * Creates missing tags on the fly and returns complete list of tags the current
      * user has use rights for.
-     * Allways respects the current acl of the current user!
+     * Always respects the current acl of the current user!
      *
      * @param   array|Tinebase_Record_RecordSet set of string|array|Tinebase_Model_Tag with existing and non-existing tags
      * @return  Tinebase_Record_RecordSet       set of all tags
@@ -704,7 +715,8 @@ class Tinebase_Tags
      */
     protected function _createTagsOnTheFly($_mixedTags)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating tags on the fly: ' . print_r($_mixedTags, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Creating tags on the fly: ' . print_r(($_mixedTags instanceof Tinebase_Record_RecordSet ? $_mixedTags->toArray() : $_mixedTags), TRUE));
         
         $tagIds = array();
         foreach ($_mixedTags as $tag) {
@@ -840,6 +852,8 @@ class Tinebase_Tags
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting ' . count($rights) . ' tag right(s).');
 
         foreach ($rights as $right) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($right->toArray(), TRUE));
+            
             if (! ($right instanceof Tinebase_Model_TagRight && $right->isValid())) {
                 throw new Tinebase_Exception_Record_Validation('The given right is not valid!');
             }

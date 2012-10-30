@@ -543,6 +543,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $result->addRecord($tagToAdd);
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . print_r($result->toArray(), TRUE));
     
         return $result;
     }
@@ -557,31 +560,40 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _getSingleTag($_name, $_tagData = array(), $_create = TRUE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Tag name: ' . $_name . ' / data: ' . print_r($_tagData, TRUE));
+        
+        // sanitize tag name length
         $name = (strlen($_name) > 40) ? substr($_name, 0, 40) : $_name;
+        if (isset($_tagData['name'])) {
+            $_tagData['name'] = $name;
+        }
         
         $tag = NULL;
-        try {
-            $tag = Tinebase_Tags::getInstance()->getTagByName($name, NULL, NULL, TRUE);
         
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                ' Found existing tag ' . $name);
-            
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' ' . $tenf->getMessage());
-            
-            if ($_create) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ' . print_r($_tagData, TRUE));
-                
-                $tagData = (! empty($_tagData)) ? $_tagData : array(
-                    'name'          => $name,
-                );
-                $tag = $this->_createTag($tagData);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Do not create shared tag (option not set)');
+        if (isset($_tagData['id'])) {
+            try {
+                $tag = Tinebase_Tags::getInstance()->get($_tagData['id']);
+                return $tag;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Could not find tag by id: ' . $_tagData['id']);
             }
+        }
+        
+        try {
+            $tag = Tinebase_Tags::getInstance()->getTagByName($name, Tinebase_Model_TagRight::USE_RIGHT, NULL);
+            return $tag;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Could not find tag by name: ' . $name);
+        }
+        
+        if ($_create) {
+            $tagData = (! empty($_tagData)) ? $_tagData : array(
+                'name' => $name,
+            );
+            $tag = $this->_createTag($tagData);
         }
         
         return $tag;
@@ -601,7 +613,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $description  = substr((isset($_tagData['description'])) ? $_tagData['description'] : $_tagData['name'] . ' (imported)', 0, 50);
         $type         = (isset($_tagData['type']) && ! empty($_tagData['type'])) ? $_tagData['type'] : Tinebase_Model_Tag::TYPE_SHARED;
         $color        = (isset($_tagData['color'])) ? $_tagData['color'] : '#ffffff';
-                
+        
         $newTag = new Tinebase_Model_Tag(array(
             'name'          => $_tagData['name'],
             'description'   => $description,
@@ -663,6 +675,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
         }
         $_record->tags = $tags;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($tags->toArray(), TRUE));
     }
     
     /**
@@ -732,6 +746,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveStrategy = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolveStrategy: ' . $_resolveStrategy);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
         
         switch ($_resolveStrategy) {
             case 'mergeTheirs':
