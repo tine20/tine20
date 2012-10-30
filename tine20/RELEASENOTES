@@ -4,7 +4,7 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Joey (2012/10)
-Last change: 2012-10-23
+Last change: 2012-10-30
 
 Contents
 --
@@ -19,6 +19,7 @@ Contents
 8. PostgreSQL support
 9. Felamimail vacation templates
 10. Felamimail body caching
+11. PHP 5.3 required
 
 1. New Queue management
 -----------------
@@ -105,4 +106,8 @@ servers and is done by switching the value of the Felamimail config "cacheEmailB
 This can be done by calling the following CLI command:
 
  php setup.php --setconfig -- configkey=cacheEmailBody configvalue=0 app=Felamimail
+
+11. PHP 5.3 required
+--------------------
+Tine 2.0 now requires a minimal PHP version of 5.3.0.
 
