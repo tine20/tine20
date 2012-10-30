@@ -24,8 +24,7 @@ Ext.ns('Tine.widgets.persistentfilter');
  * @param {Object} config
  */
 
-Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(
-        Ext.FormPanel, {
+Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPanel, {
 
             layout : 'fit',
             border : false,

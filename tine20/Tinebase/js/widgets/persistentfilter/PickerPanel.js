@@ -507,8 +507,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
  *            config
  * @constructor Create a new Tine.widgets.persistentfilter.PickerTreePanelLoader
  */
-Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(
-        Tine.widgets.tree.Loader, {
+Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tree.Loader, {
 
             /**
              * @cfg {Ext.util.MixedCollection} recordCollection
