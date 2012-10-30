@@ -31,7 +31,7 @@ class Syncroton_AllTests
         $suite->addTestSuite('Syncroton_Data_AllTests');
         $suite->addTestSuite('Syncroton_Model_AllTests');
         $suite->addTestSuite('Syncroton_Wbxml_AllTests');
-        $suite->addTestSuite('Syncroton_ServerTests');
+        #$suite->addTestSuite('Syncroton_ServerTests'); #Disabled because it breaks CodeCoverage on build server
         
         return $suite;
     }

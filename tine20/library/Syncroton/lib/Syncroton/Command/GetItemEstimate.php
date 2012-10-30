@@ -45,9 +45,9 @@ class Syncroton_Command_GetItemEstimate extends Syncroton_Command_Wbxml
             
             $collectionData = array(
                 'syncKey'       => (int)$airSyncValues->SyncKey,
-                'class'         => (string) $xmlCollection->Class,
                 'collectionId'  => (string) $xmlCollection->CollectionId,
-                'filterType'    => isset($airSyncValues->FilterType) ? (int)$airSyncValues->FilterType : 0
+                'class'         => isset($xmlCollection->Class) ? (string) $xmlCollection->Class : null,
+                'filterType'    => isset($airSyncValues->Options) && isset($airSyncValues->Options->FilterType) ? (int)$airSyncValues->Options->FilterType : 0
             );
             
             if ($this->_logger instanceof Zend_Log) 
