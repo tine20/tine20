@@ -232,7 +232,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 startValue = startValue[ff.recordClass.getMeta('idProperty')];
                 ff.startRecord = new ff.recordClass(startValue);
             }
-            ff.startingValue = startValue;
+            ff.startingValue = (startValue == undefined || startValue == null) ? '' : startValue;
             
             Tine.log.info('Setting start value to "' + startValue + '".');
             
