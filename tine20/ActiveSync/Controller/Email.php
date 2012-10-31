@@ -262,7 +262,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         );
         
         if ($replaceMime === false) {
-            $messageId = is_array($source) ? $source['itemdId'] : $source;
+            $messageId = is_array($source) ? $source['itemId'] : $source;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
