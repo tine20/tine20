@@ -220,5 +220,48 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }
         
         return this.loadMask;
+    },
+    
+    /**
+     * Wraps the items with default layout
+     * 
+     * @param {Array} items
+     * @return {Object}
+     */
+    wrapPanel: function(items, labelWidth) {
+        return {
+            layout: 'fit',
+            border: false,
+            items: [{
+                layout: 'vbox',
+                border: false,
+                layoutConfig: {
+                    align:'stretch'
+                },
+                items: [{
+                    layout: 'hbox',
+                    flex: 1,
+                    border: false,
+                    layoutConfig: {
+                        padding:'5',
+                        align:'stretch'
+                    },
+                    defaults:{
+                        margins:'0 5 0 0'
+                    },
+                    items: [{
+                        flex: 2,
+                        layout: 'ux.display',
+                        labelWidth: labelWidth,
+                        padding: 10,
+                        layoutConfig: {
+                            background: 'solid',
+                            margins: '0 5 0 0'
+                        },
+                        items: items
+                    }]
+                }]
+            }]
+        }
     }
 });
