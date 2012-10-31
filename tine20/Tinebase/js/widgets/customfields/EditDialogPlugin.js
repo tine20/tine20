@@ -150,7 +150,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         cfConfigs.each(function(cfConfig) {
             try {
                 definition = cfConfig.get('definition');
-                fieldObj = Tine.widgets.customfields.Field.get(this.app, cfConfig, {anchor: '95%'});
+                fieldObj = Tine.widgets.customfields.Field.get(this.app, cfConfig, {anchor: '95%'}, this.editDialog);
                 uiConfig = definition.uiconfig ? definition.uiconfig : {};
                 group = uiConfig.group ? uiConfig.group : _('General');
                 

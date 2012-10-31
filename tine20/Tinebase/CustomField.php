@@ -367,12 +367,19 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $value = $_record->customfields[$customField->name];
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 
-                // we need to resolve record value if array is given (e.g. on updating customfield)
-                if (strtolower($customField->definition['type']) == 'record' && is_array($value)) {
+                // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
+                if (strtolower($customField->definition['type']) == 'record') {
                     $modelParts = explode('.', $customField->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
                     $modelName  = $modelParts[1] . '_Model_' . $modelParts[3];
-                    $model = new $modelName(array(), TRUE);
-                    $value = $value[$model->getIdProperty()];
+                    
+                    if(is_array($value)) {
+                        $model = new $modelName(array(), TRUE);
+                        $value = $value[$model->getIdProperty()];
+                    }
+                    // check if customfield value is the record itself
+                    if(get_class($_record) == $modelName && $_record->getId() == $value) {
+                        throw new Tinebase_Exception_Record_Validation('It is not allowed to add the same record as customfield record!');
+                    }
                 }
                 
                 switch (count($filtered)) {
@@ -382,7 +389,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting cf value for ' . $customField->name);
                             $this->_backendValue->delete($cf);
                         } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updateing value for ' . $customField->name . ' to ' . $value);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating value for ' . $customField->name . ' to ' . $value);
                             $cf->value = $value;
                             $this->_backendValue->update($cf);
                         }

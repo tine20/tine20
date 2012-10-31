@@ -70,6 +70,21 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     lastStoreTransactionId: null,
     
+    /**
+     * if set to false, it is not possible to add the same record handled in this.editDialog
+     * this.editDialog must also be set
+     * 
+     * @cfg {Boolean} allowLinkingItself
+     */
+    allowLinkingItself: null,
+    
+    /**
+     * the editDialog, the form is nested in. Just needed if this.allowLinkingItself is set to false
+     * 
+     * @cfg Tine.widgets.dialog.EditDialog editDialog
+     */
+    editDialog: null,
+    
     triggerAction: 'all',
     pageSize: 10,
     minChars: 3,
@@ -79,7 +94,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
-        
         this.disableClearer = ! this.allowBlank;
         
         this.loadingText = _('Searching...');
@@ -246,7 +260,20 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         if(r){
             text = r.getTitle();
-        }else if(Ext.isDefined(this.valueNotFoundText)){
+            
+            if (this.allowLinkingItself === false) {
+                if(r.getId() == this.editDialog.record.getId()) {
+                    Ext.MessageBox.show({
+                        title: _('Failure'),
+                        msg: _('You tried to link a record with itself. This is not allowed!'),
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.ERROR  
+                    });
+                    return;
+                }
+            }
+            
+        } else if(Ext.isDefined(this.valueNotFoundText)){
             text = this.valueNotFoundText;
         }
         this.lastSelectionText = text;

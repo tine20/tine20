@@ -29,11 +29,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     protected $_instance;
 
     /**
-     * @var array test objects
-     */
-    protected $_objects = array();
-
-    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -53,6 +48,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_CustomField::getInstance();
     }
 
@@ -64,12 +60,61 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (count($this->_objects) > 0) {
-            foreach($this->_objects as $cf) {
-                $this->_instance->deleteCustomField($cf);
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
+    
+    /**
+     * test add customfield to the same record
+     * #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
+     */
+    public function testAddSelfCustomField()
+    {
+        $cf = $this->_getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
+            ));
+
+        $cf = $this->_instance->addCustomField($cf);
+        
+        $record = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Rupert')));
+        $cfName = $cf->name;
+        $record->customfields = array($cfName => $record->toArray());
+        
+        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $newRecord = Addressbook_Controller_Contact::getInstance()->update($record);
+    }
+    
+    /**
+     * test add customfield to the same record by multiple update
+     * #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
+     */
+    public function testAddSelfCustomFieldByMultipleUpdate()
+    {
+        $cf = $this->_getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
+            ));
+
+        $cf = $this->_instance->addCustomField($cf);
+        
+        $record1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Rupert')));
+        $record2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Matt')));
+        
+        $json = new Tinebase_Frontend_Json();
+        
+        $result = $json->updateMultipleRecords(
+            'Addressbook',
+            'Contact',
+            array(array('name' => 'customfield_' . $cf->name, 'value' => $record1->getId())),
+            array(array('field' => 'id', 'operator' => 'in', 'value' => array($record1->getId(), $record2->getId())))
+        );
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(1, $result['failcount']);
+    }
+    
     
     /**
      * test custom fields
@@ -83,7 +128,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         // create
         $customField = $this->_getCustomField();
         $createdCustomField = $this->_instance->addCustomField($customField);
-        $this->_objects[] = $createdCustomField;
         $this->assertEquals($customField->name, $createdCustomField->name);
         $this->assertNotNull($createdCustomField->getId());
         
@@ -113,7 +157,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $this->_instance->deleteCustomField($createdCustomField);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_instance->getCustomField($createdCustomField->getId());
-        $this->_objects = array();
     }
     
     /**
@@ -126,7 +169,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     public function testCustomFieldAcl()
     {
         $createdCustomField = $this->_instance->addCustomField($this->_getCustomField());
-        $this->_objects[] = $createdCustomField;
         $this->_instance->setGrants($createdCustomField);
         
         $application = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
@@ -140,16 +182,17 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     /**
      * get custom field record
      *
+     * @param array $config 
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _getCustomField()
+    protected function _getCustomField($config = array())
     {
-        return new Tinebase_Model_CustomField_Config(array(
+        return new Tinebase_Model_CustomField_Config(array_replace_recursive(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'model'             => Tinebase_Record_Abstract::generateUID(),
             'definition'        => array(
-                'label' => Tinebase_Record_Abstract::generateUID(),        
+                'label' => Tinebase_Record_Abstract::generateUID(),
                 'type'  => 'string',
                 'uiconfig' => array(
                     'xtype'  => Tinebase_Record_Abstract::generateUID(),
@@ -158,6 +201,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
                     'order'  => 100,
                 )
             )  
-        ));
+        ), $config));
     }
 }
