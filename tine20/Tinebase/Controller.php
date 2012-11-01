@@ -378,7 +378,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             $path = ini_get('session.save_path');
             
             $unlinked = 0;
-            $dir = new DirectoryIterator($path);
+            try {
+                $dir = new DirectoryIterator($path);
+            } catch (UnexpectedValueException $uve) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . " Could not cleanup sessions: " . $e->getMessage());
+                return;
+            }
             
             foreach ($dir as $fileinfo) {
                 if (!$fileinfo->isDot() && !$fileinfo->isLink() && $fileinfo->isFile()) {
