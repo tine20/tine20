@@ -332,7 +332,6 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $syncDoc = $folderSync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
-        
         // request initial synckey
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -344,7 +343,6 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $sync->handle();
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-        
         
         // now do the first sync
         $doc = new DOMDocument();
@@ -371,8 +369,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $emailTest = new Felamimail_Controller_MessageTest();
         $emailTest->setUp();
         $inbox = $emailTest->getFolder('INBOX');
-        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
-        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $email);
+        $emailTest->messageTestHelper('multipart_alternative.eml', 'multipart/alternative', $inbox);
         
         $ping = new Syncroton_Command_Ping($doc, $this->_device, null);
         $ping->handle();
