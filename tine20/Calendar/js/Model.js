@@ -67,6 +67,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
     containerName: 'Calendar',
     containersName: 'Calendars',
+    copyOmitFields: ['uid', 'recurid'],
     
     /**
      * returns displaycontainer with orignialcontainer as fallback
@@ -108,7 +109,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * @return {Boolean}
      */
     isRecurException: function() {
-        return !!this.get('recurid') && !( this.idProperty && this.id.match(/^fakeid/));
+        return !! this.get('recurid') && ! this.isRecurInstance();
     },
     
     /**

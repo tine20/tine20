@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -563,7 +563,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     setDisabled: function(v) {
         this.disabled = v;
         if (v) {
-            this.store.filterBy(function(r) {return ! r.id.match(/^new-/)});
+            // remove "add new attender" row
+            this.store.filterBy(function(r) {return ! (r.id && r.id.match(/^new-/))});
         } else {
             this.store.clearFilter();
         }

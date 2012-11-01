@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -151,9 +151,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     disabled: true,
                                     name: 'originator_tz',
                                     requiredGrant: 'editGrant'
-                                }], [ new Tine.widgets.container.selectionComboBox({
+                                }], [ this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
                                     columnWidth: 1,
-                                    id: this.app.appName + 'EditDialogContainerSelector',
+                                    id: this.app.appName + 'EditDialogContainerSelector' + Ext.id(),
                                     fieldLabel: _('Saved in'),
                                     ref: '../../../../../../../../containerSelect',
                                     //width: 300,
@@ -382,6 +382,27 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
+    
+    /**
+     * copy record
+     * 
+     * TODO change attender status?
+     */
+    doCopyRecord: function() {
+        Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
+        
+        // remove attender ids
+        Ext.each(this.record.data.attendee, function(attender) {
+            delete attender.id;
+        }, this);
+        
+        // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
+        this.record.set('editGrant', true);
+        
+        Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
+        Tine.log.debug(this.record);
+    },
+    
     /**
      * handles attendee
      */
@@ -443,10 +464,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }, this);
         }
+        
         this.perspectiveCombo.loadPerspective();
         // disable container selection combo if user has no right to edit
         this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);
-        
     },
     
     onRecordUpdate: function() {
@@ -455,7 +476,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.rrulePanel.onRecordUpdate(this.record);
         this.alarmPanel.onRecordUpdate(this.record);
         this.perspectiveCombo.updatePerspective();
-
     },
 
     setTabHeight: function() {
@@ -496,6 +516,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
     },
+    
     /**
      * is called from onApplyChanges
      * @param {Boolean} closeWindow

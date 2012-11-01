@@ -129,6 +129,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     
     /**
+     * @property containerSelectCombo {Tine.widgets.container.selectionComboBox}
+     */
+    containerSelectCombo: null,
+    
+    /**
      * If set, these fields are readOnly (when called dependent to related record)
      * json-encoded Array of Object
      * @type String
@@ -344,7 +349,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initContainerSelector: function() {
         if (this.showContainerSelector) {
-            var ContainerForm = new Tine.widgets.container.selectionComboBox({
+            this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector-' + Ext.id(),
                 fieldLabel: _('Saved in'),
                 width: 300,
@@ -360,7 +365,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     scope: this,
                     select: function() {    
                         // enable or disable save button dependent to containers account grants
-                        var grants = ContainerForm.selectedContainer ? ContainerForm.selectedContainer.account_grants : {};
+                        var grants = this.containerSelectCombo.selectedContainer ? this.containerSelectCombo.selectedContainer.account_grants : {};
                         // on edit check editGrant, on add check addGrant
                         if (this.record.data.id) {  // edit if record has already an id
                             var disable = grants.hasOwnProperty('editGrant') ? ! grants.editGrant : false;
@@ -371,11 +376,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     }
                 }
             });
-            this.on('render', function() { this.getForm().add(ContainerForm); }, this);
+            this.on('render', function() { this.getForm().add(this.containerSelectCombo); }, this);
             
             this.fbar = [
                 _('Saved in'),
-                ContainerForm
+                this.containerSelectCombo
             ].concat(this.fbar);
         }
         
@@ -466,7 +471,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        Tine.log.debug('loading of the following record completed:');
+        Tine.log.debug('Tine.widgets.dialog.EditDialog::onRecordLoad() - Loading of the following record completed:');
         Tine.log.debug(this.record);
         
         if (this.copyRecord) {

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /* global Ext, Tine */
@@ -402,6 +402,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return this.getCalendarPanel(this.activeView).getStore();
     },
     
+    /**
+     * onContextMenu
+     * 
+     * @param {Event} e
+     */
     onContextMenu: function (e) {
         e.stopEvent();
         
@@ -409,7 +414,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var event = view.getTargetEvent(e);
         var datetime = view.getTargetDateTime(e);
         
-        var addAction, responseAction;
+        var addAction, responseAction, copyAction;
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
             if (dtStart.format('H:i') === '00:00') {
@@ -422,32 +427,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 iconCls: 'action_add'
             };
             
-            // assemble response action
+            // assemble event actions
             if (event) {
-                var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus'),
-                    myAttenderRecord = event.getMyAttenderRecord(),
-                    myAttenderStatus = myAttenderRecord ? myAttenderRecord.get('status') : null,
-                    myAttenderStatusRecord = statusStore.getById(myAttenderStatus);
-                    
-                    
-                if (myAttenderRecord) {
-                    responseAction = {
-                        text: this.app.i18n._('Set my response'),
-                        icon: myAttenderStatusRecord ? myAttenderStatusRecord.get('icon') : false,
-                        menu: []
-                    };
-                    
-                    statusStore.each(function(status) {
-                        responseAction.menu.push({
-                            text: status.get('i18nValue'),
-                            handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
-                            icon: status.get('icon'),
-                            disabled: myAttenderRecord.get('status') === status.id
-                        });
-                    }, this);
-                }
+                responseAction = this.getResponseAction(event);
+                copyAction = this.getCopyAction(event);
             }
-
+        
         } else {
             addAction = this.action_addInNewWindow;
         }
@@ -457,11 +442,60 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         } else {
             view.getSelectionModel().clearSelections();
         }
-           
+        
         var ctxMenu = new Ext.menu.Menu({
-            items: this.recordActions.concat(addAction, responseAction || [])
+            items: this.recordActions.concat(addAction, responseAction || [], copyAction || [])
         });
         ctxMenu.showAt(e.getXY());
+    },
+    
+    /**
+     * get response action
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @return {Object}
+     */
+    getResponseAction: function(event) {
+        var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus'),
+            myAttenderRecord = event.getMyAttenderRecord(),
+            myAttenderStatus = myAttenderRecord ? myAttenderRecord.get('status') : null,
+            myAttenderStatusRecord = statusStore.getById(myAttenderStatus),
+            responseAction = null;
+        
+        if (myAttenderRecord) {
+            responseAction = {
+                text: this.app.i18n._('Set my response'),
+                icon: myAttenderStatusRecord ? myAttenderStatusRecord.get('icon') : false,
+                menu: []
+            };
+            
+            statusStore.each(function(status) {
+                responseAction.menu.push({
+                    text: status.get('i18nValue'),
+                    handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
+                    icon: status.get('icon'),
+                    disabled: myAttenderRecord.get('status') === status.id
+                });
+            }, this);
+        }
+        
+        return responseAction;
+    },
+
+    /**
+     * get copy action
+     * 
+     * @param {Tine.Calendar.Model.Event} event
+     * @return {Object}
+     */
+    getCopyAction: function(event) {
+        var copyAction = {
+            text: String.format(_('Copy {0}'), this.i18nRecordName),
+            handler: this.onEditInNewWindow.createDelegate(this, ["copy", event]),
+            iconCls: 'action_editcopy'
+        };
+        
+        return copyAction;
     },
     
     checkPastEvent: function(event, checkBusyConflicts, actionType) {
@@ -474,7 +508,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     optionYes = this.app.i18n._('Update this event'),
                     optionNo = this.app.i18n._('Do not update this event');
                 break;
-            case 'add':            
+            case 'add':
             default:
                 var title = this.app.i18n._('Creating event in the past'),
                     optionYes = this.app.i18n._('Create this event'),
@@ -853,15 +887,17 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * open event in new window
      * 
-     * @param {String} action  add|edit
+     * @param {String} action  add|edit|copy
      * @param {String} event   edit given event instead of selected event
-     * @param {Object} addRelC has information about relations to create
+     * @param {Object} plugins event dlg plugins
      * @param {Object} default properties for new items
      */
     onEditInNewWindow: function (action, event, plugins, defaults) {
-        if(!event) event = null;
+        if (! event) {
+            event = null;
+        }
         // needed for addToEventPanel
-        if(Ext.isObject(action)) {
+        if (Ext.isObject(action)) {
             action = action.actionType;
         }
         
@@ -873,7 +909,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         }
 
-        if (action === 'edit' && (!event || event.dirty)) {
+        if (action === 'edit' && (! event || event.dirty)) {
             return;
         }
         
@@ -885,10 +921,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         }
         
+        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::onEditInNewWindow() - Opening event edit dialog with action: ' + action);
+        
         Tine.Calendar.EventEditDialog.openWindow({
             plugins: plugins ? Ext.encode(plugins) : null,
             record: Ext.encode(event.data),
             recordId: event.data.id,
+            copyRecord: (action == 'copy'),
             listeners: {
                 scope: this,
                 update: function (eventJson) {
@@ -901,8 +940,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     var store = panel.getStore();
                     event = store.getById(event.id);
                     
-                    if (event) store.replaceRecord(event, updatedEvent);
-                    else store.add(updatedEvent);
+                    if (event && action !== 'copy') {
+                        store.replaceRecord(event, updatedEvent);
+                    } else {
+                        store.add(updatedEvent);
+                    }
                     
                     this.onUpdateEvent(updatedEvent, false, action);
                 }
