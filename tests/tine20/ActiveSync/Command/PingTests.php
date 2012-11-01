@@ -373,7 +373,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $inbox = $emailTest->getFolder('INBOX');
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
         Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $email);
-                
+        
         $ping = new Syncroton_Command_Ping($doc, $this->_device, null);
         $ping->handle();
         $responseDoc = $ping->getResponse();
@@ -392,7 +392,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($folder->serverId, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         // message needs to be deleted after the test because other tests follow that search for 'text/plain', too
-        $message = $emailTest->searchAndCacheMessage('text/plain', $inbox);
-        Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($message->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
+        $emailTest->tearDown();
+        Felamimail_Controller_Cache_Message::getInstance()->clear($inbox);
     }
 }
