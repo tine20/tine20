@@ -1150,7 +1150,7 @@ class Tinebase_Core
     /**
      * get config from the registry
      *
-     * @return Zend_Config|Zend_Config_Ini
+     * @return Zend_Config|Zend_Config_Ini|Tinebase_Config
      */
     public static function getConfig()
     {

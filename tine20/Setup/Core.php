@@ -92,8 +92,8 @@ class Setup_Core extends Tinebase_Core
     /**
      * setups global config
      * 
-     * NOTE a config object will be intanciated regardless of the existance of 
-     *      the conffile!
+     * NOTE a config object will be instantiated regardless of the existance of 
+     *      the config file!
      *
      * @return void
      */

@@ -110,7 +110,11 @@ abstract class Tinebase_Config_Abstract
     public static function factory($applicationName)
     {
         if ($applicationName === 'Tinebase') {
-            return Tinebase_Core::getConfig();
+            $config = Tinebase_Core::getConfig();
+            // NOTE: this is a Zend_Config object in the Setup
+            if ($config instanceof Tinebase_Config_Abstract) {
+                return $config;
+            }
         }
         
         $configClassName = $applicationName . '_Config';
