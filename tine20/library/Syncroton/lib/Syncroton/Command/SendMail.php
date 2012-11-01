@@ -37,9 +37,9 @@ class Syncroton_Command_SendMail extends Syncroton_Command_Wbxml
             $this->_replaceMime   = false;
             
             $this->_source = array(
-                    'collectionId' => $this->_requestParameters['collectionId'],
-                    'itemId'       => $this->_requestParameters['itemId'],
-                    'instanceId'   => null
+                'collectionId' => $this->_requestParameters['collectionId'],
+                'itemId'       => $this->_requestParameters['itemId'],
+                'instanceId'   => null
             );
             
         } else {

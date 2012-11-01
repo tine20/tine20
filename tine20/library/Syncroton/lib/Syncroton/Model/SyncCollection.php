@@ -238,11 +238,13 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
         }
         
         if (isset($properties->Supported)) {
-            // @todo collected supported elements
+            // @todo collect supported elements
         }
         
         // process options
         if (isset($properties->Options)) {
+            $this->_elements['options'] = array();
+            
             // optional parameters
             if (isset($properties->Options->FilterType)) {
                 $this->_elements['options']['filterType'] = (int)$properties->Options->FilterType;

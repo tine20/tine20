@@ -39,7 +39,7 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><AirSync:FilterType>0</AirSync:FilterType><AirSync:SyncKey>0</AirSync:SyncKey><Class>Contacts</Class><CollectionId>1212</CollectionId></Collection></Collections></GetItemEstimate>'
+            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><Options xmlns="uri:AirSync"><AirSync:FilterType>4</AirSync:FilterType></Options><AirSync:SyncKey>0</AirSync:SyncKey><Class>Contacts</Class><CollectionId>1212</CollectionId></Collection></Collections></GetItemEstimate>'
         );
         
         $search = new Syncroton_Command_GetItemEstimate($doc, $this->_device, null);
@@ -76,7 +76,7 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><AirSync:FilterType>0</AirSync:FilterType><AirSync:SyncKey>10</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
+            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><Options xmlns="uri:AirSync"><AirSync:FilterType>0</AirSync:FilterType></Options><AirSync:SyncKey>10</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
         );
         
         $search = new Syncroton_Command_GetItemEstimate($doc, $this->_device, null);
@@ -113,7 +113,7 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><AirSync:FilterType>0</AirSync:FilterType><AirSync:SyncKey>0</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
+            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><Options xmlns="uri:AirSync"><AirSync:FilterType>0</AirSync:FilterType></Options><AirSync:SyncKey>0</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
         );
         
         $search = new Syncroton_Command_GetItemEstimate($doc, $this->_device, null);
@@ -180,7 +180,7 @@ class Syncroton_Command_GetItemEstimateTests extends Syncroton_Command_ATestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><AirSync:FilterType>0</AirSync:FilterType><AirSync:SyncKey>2</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
+            <GetItemEstimate xmlns="uri:ItemEstimate" xmlns:AirSync="uri:AirSync"><Collections><Collection><Options xmlns="uri:AirSync"><AirSync:FilterType>0</AirSync:FilterType></Options><AirSync:SyncKey>2</AirSync:SyncKey><Class>Contacts</Class><CollectionId>addressbookFolderId</CollectionId></Collection></Collections></GetItemEstimate>'
         );
         
         $search = new Syncroton_Command_GetItemEstimate($doc, $this->_device, null);
