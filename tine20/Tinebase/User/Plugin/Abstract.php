@@ -97,10 +97,12 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
             $this->_config['dbname'] == $tine20DbConfig['dbname'] &&
             $this->_config['username'] == $tine20DbConfig['username'] &&
             Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-                
+            
             $this->_db = Tinebase_Core::getDb();
         } else {
-            $this->_db = Zend_Db::factory('Pdo_Mysql', $_config);
+            Zend_Session::start();
+            $dbConfig = array_intersect_key($_config, array_flip(array('host', 'dbname', 'username', 'password', 'prefix')));
+            $this->_db = Zend_Db::factory('Pdo_Mysql', $dbConfig);
         }
     }
     
