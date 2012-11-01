@@ -216,21 +216,25 @@ Ext.namespace('Tine.Felamimail.sieve');
         Tine.log.debug('Tine.Felamimail.sieve.VacationEditDialog::getTemplateItems()');
         Tine.log.debug(templates);
         
-        var items = [[{
-            columnWidth: 0.5,
+        var commonConfig = {
+                listeners: {
+                    scope: this,
+                    select: this.onSelectTemplateField
+                },
+                columnWidth: 0.5,
+            },
+            items = [[Ext.apply({
             fieldLabel: this.app.i18n._('Start Date'),
             emptyText: this.app.i18n._('Set vacation start date ...'),
             name: 'start_date',
             xtype: 'datefield'
-        }, {
-            columnWidth: 0.5,
+        }, commonConfig), Ext.apply({
             fieldLabel: this.app.i18n._('End Date'),
             emptyText: this.app.i18n._('Set vacation end date ...'),
             name: 'end_date',
             xtype: 'datefield'
-        }], [
-            new Tine.Addressbook.SearchCombo({
-                columnWidth: 0.5,
+        }, commonConfig)], [
+            new Tine.Addressbook.SearchCombo(Ext.apply({
                 fieldLabel: this.app.i18n._('Representative #1'),
                 emptyText: this.app.i18n._('Choose first Representative ...'),
                 blurOnSelect: true,
@@ -238,9 +242,8 @@ Ext.namespace('Tine.Felamimail.sieve');
                 selectOnFocus: true,
                 forceSelection: false,
                 allowBlank: true
-            }),
-            new Tine.Addressbook.SearchCombo({
-                columnWidth: 0.5,
+            }, commonConfig)),
+            new Tine.Addressbook.SearchCombo(Ext.apply({
                 fieldLabel: this.app.i18n._('Representative #2'),
                 emptyText: this.app.i18n._('Choose second Representative ...'),
                 blurOnSelect: true,
@@ -248,7 +251,7 @@ Ext.namespace('Tine.Felamimail.sieve');
                 selectOnFocus: true,
                 forceSelection: false,
                 allowBlank: true
-            })
+            }, commonConfig))
         ], [{
             fieldLabel: this.app.i18n._('Message Template'),
             xtype: 'combo',
@@ -277,6 +280,16 @@ Ext.namespace('Tine.Felamimail.sieve');
     },
     
     /**
+     * template field has been selected, check if new vacation message needs to be fetched
+     * - do this only if template has already been selected
+     */
+    onSelectTemplateField: function() {
+        if (this.record.get('template_id') !== '') {
+            this.getVacationMessage();
+        }
+    },
+    
+    /**
      * template combo select event handler
      * 
      * @param {} combo
@@ -288,12 +301,19 @@ Ext.namespace('Tine.Felamimail.sieve');
         Tine.log.debug(record);
         
         if (record.data && record.get('type') === 'file') {
-            this.loadMask.show();
-            this.onRecordUpdate();
-            Tine.Felamimail.getVacationMessage(this.record.data, this.onGetVacationMessage.createDelegate(this));
+            this.getVacationMessage();
         } else {
             // TODO do something?
         }
+    },
+    
+    /**
+     * get vacation with template replacements message from server
+     */
+    getVacationMessage: function() {
+        this.loadMask.show();
+        this.onRecordUpdate();
+        Tine.Felamimail.getVacationMessage(this.record.data, this.onGetVacationMessage.createDelegate(this));
     },
     
     /**
