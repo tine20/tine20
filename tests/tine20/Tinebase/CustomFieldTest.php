@@ -4,18 +4,14 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_CustomFieldTest::main();
-}
 
 /**
  * Test class for Tinebase_CustomField
@@ -28,6 +24,11 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected $_instance;
 
+    /**
+     * transaction id if test is wrapped in an transaction
+     */
+    protected $_transactionId = NULL;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -48,7 +49,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_CustomField::getInstance();
     }
 
@@ -60,7 +61,9 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+        }
     }
     
     /**
@@ -87,20 +90,27 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     
     /**
      * test add customfield to the same record by multiple update
-     * #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
+     * 
+     * @see #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
+     * @see 0007350: multipleUpdate - record not found
      */
     public function testAddSelfCustomFieldByMultipleUpdate()
     {
+        // test needs transaction because Controller does rollback when exception is thrown
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = NULL;
+        
         $cf = $this->_getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
             'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
-            ));
+        ));
 
         $cf = $this->_instance->addCustomField($cf);
         
         $record1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Rupert')));
         $record2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Matt')));
+        $contactIds = array($record1->getId(), $record2->getId());
         
         $json = new Tinebase_Frontend_Json();
         
@@ -108,13 +118,16 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
             'Addressbook',
             'Contact',
             array(array('name' => 'customfield_' . $cf->name, 'value' => $record1->getId())),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => array($record1->getId(), $record2->getId())))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contactIds))
         );
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(1, $result['failcount']);
+        
+        // cleanup required because we do not have the tearDown() rollback here
+        $this->_instance->deleteCustomField($cf);
+        Addressbook_Controller_Contact::getInstance()->delete($contactIds);
     }
-    
     
     /**
      * test custom fields
