@@ -375,7 +375,15 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $syncrotonEmail->contentClass = 'urn:content-classes:message';
         
         // read flag
-        $syncrotonEmail->read = in_array('\Seen', $entry->flags) ? 1 : 0;
+        $syncrotonEmail->read = in_array(Zend_Mail_Storage::FLAG_SEEN, $entry->flags) ? 1 : 0;
+        
+        if (in_array(Zend_Mail_Storage::FLAG_ANSWERED, $entry->flags)) {
+            $syncrotonEmail->lastVerbExecuted = Syncroton_Model_Email::LASTVERB_REPLYTOSENDER;
+            $syncrotonEmail->lastVerbExecutionTime = new DateTime('now', new DateTimeZone('utc'));
+        #} elseif (in_array('\Forwarded', $entry->flags)) {
+        #    $syncrotonEmail->lastVerbExecuted = Syncroton_Model_Email::LASTVERB_FORWARD;
+        #    $syncrotonEmail->lastVerbExecutionTime = new DateTime('now', new DateTimeZone('utc'));
+        }
         
         $syncrotonEmail->flag = in_array('\Flagged', $entry->flags) ? 
             new Syncroton_Model_EmailFlag(array(

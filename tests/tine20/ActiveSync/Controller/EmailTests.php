@@ -207,6 +207,10 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message->flags = array(
+            Zend_Mail_Storage::FLAG_SEEN, 
+            Zend_Mail_Storage::FLAG_ANSWERED
+        );
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
         
@@ -217,6 +221,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(9606, $syncrotonEmail->body->estimatedDataSize);
         // size of the attachment
         $this->assertEquals(2787, $syncrotonEmail->attachments[0]->estimatedDataSize);
+
+        $this->assertEquals(Syncroton_Model_Email::LASTVERB_REPLYTOSENDER, $syncrotonEmail->lastVerbExecuted);
     }
     
     /**
