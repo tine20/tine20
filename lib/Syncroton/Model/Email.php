@@ -24,6 +24,11 @@
  */
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
 {
+    const LASTVERB_UNKNOWN       = 0;
+    const LASTVERB_REPLYTOSENDER = 1;
+    const LASTVERB_REPLYTOALL    = 2;
+    const LASTVERB_FORWARD       = 3;
+    
     protected $_xmlBaseElement = 'ApplicationData';
     
     protected $_properties = array(
