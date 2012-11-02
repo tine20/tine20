@@ -128,7 +128,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                  __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
         
-             //replace original stream wirh debug stream, as php://input can't be rewinded
+             //replace original stream with debug stream, as php://input can't be rewinded
              $inputStream = $debugStream;
              rewind($inputStream);
          }
@@ -139,7 +139,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             )
         );
         
-        $messageId = is_array($source) ? $source['itemdId'] : $source;
+        $messageId = is_array($source) ? $source['itemId'] : $source;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
