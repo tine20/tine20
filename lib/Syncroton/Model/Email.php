@@ -12,13 +12,15 @@
  * class to handle ActiveSync email
  *
  * @package     Model
- * @property    array    attachments
- * @property    string   contentType
- * @property    array    flag
+ * @property    array     attachments
+ * @property    string    contentType
+ * @property    array     flag
  * @property    Syncroton_Model_EmailBody    body
- * @property    array    cc
- * @property    array    to
- * @property    int      read
+ * @property    array     cc
+ * @property    array     to
+ * @property    int       lastVerbExecuted
+ * @property    DateTime  lastVerbExecutionTime
+ * @property    int       read
  */
 class Syncroton_Model_Email extends Syncroton_Model_AEntry
 {
