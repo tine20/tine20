@@ -139,7 +139,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             )
         );
         
-        $messageId = is_array($source) ? $source['itemId'] : $source;
+        $messageId = is_array($source) ? $source['itemdId'] : $source;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
@@ -154,7 +154,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $mail->addAttachment($rfc822);
         }
         
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent);        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent);
     }
     
     /**
