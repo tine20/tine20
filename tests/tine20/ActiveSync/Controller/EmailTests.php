@@ -278,7 +278,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
         $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
         
-        $controller->forwardEmail(array('collectionId' => 'foobar', 'itemdId' => $message->getId()), $email, true, false);
+        $controller->forwardEmail(array('collectionId' => 'foobar', 'itemId' => $message->getId()), $email, true, false);
         
         // check if mail is in INBOX of test account
         $inbox = $this->_emailTestClass->getFolder('INBOX');
