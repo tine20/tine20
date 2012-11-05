@@ -115,7 +115,24 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
             </index>
         ');
         
-        $this->_backend->addIndex('customfield', $declaration);
+        try {
+            $this->_backend->addIndex('customfield', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // looks like we have duplicate ids ... try a normal index
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>id</name>
+                <field>
+                    <name>id</name>
+                </field>
+            </index>
+            ');
+            try {
+                $this->_backend->addIndex('customfield', $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // no index could be added
+            }
+        }
         $this->setTableVersion('customfield', 2);
         
         $this->setApplicationVersion('Tinebase', '6.5');
