@@ -372,7 +372,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         }
         
         if ($result === NULL) {
-            throw new Felamimail_Exception("Structure for partId $_partId not found!");
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . "Structure for partId $_partId not found!");
         }
         
         return $result;
