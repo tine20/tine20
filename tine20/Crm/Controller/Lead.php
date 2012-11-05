@@ -215,8 +215,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         try {
             Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $subject, $plain, $html, array($attachment));
-        } catch (Tinebase_Exception $te) {
-            Tinebase_Core::getLogger()->warn(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
         }
     }
     
