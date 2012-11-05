@@ -26,12 +26,12 @@
 # Zend/         - there is php-ZendFramework, strip it out
 
 %global vyear 2012
-%global vmonth 03
-%global vmin 5
+%global vmonth 10
+%global vmin 1
 
 Name:           tine20
 Version:        %{vyear}.%{vmonth}.%{vmin}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Open Source Groupware and CRM
 
 License:        AGPLv3, GPLv3, BSD, LGPLv2.1+, LGPLv2.1
@@ -212,6 +212,8 @@ fi
 %{_datadir}/%{name}/Zend/
 %{_datadir}/%{name}/LICENSE
 %{_datadir}/%{name}/PRIVACY
+%{_datadir}/%{name}/bootstrap.php
+%{_datadir}/%{name}/CREDITS
 
 %dir %{_sysconfdir}/%{name}/
 %config(noreplace) %attr(0640,root,apache) %{_sysconfdir}/%{name}/config.inc.php
@@ -257,6 +259,9 @@ fi
 
 
 %changelog
+* Mon Nov 05 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.10.1-1
+- new upstream release 2012.10.1
+
 * Thu Aug 02 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.03.5-2
 - re-enable the Tine 2.0 delivered Zend Framework
   
