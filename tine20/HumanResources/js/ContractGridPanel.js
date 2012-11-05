@@ -132,9 +132,9 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                      quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer', header: this.app.i18n._('Vacation Days'),
-                     quickaddField: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/ }), width: 90, editor: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/})
+                     quickaddField: new Ext.form.NumberField({allowBlank: false, maxValue: 255, minValue: 0}), width: 90, editor: new Ext.form.NumberField({allowBlank: false, maxValue: 255, minValue: 0})
                 }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Centre'),
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), renderer: this.renderCostCenter,
+                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {allowBlank: true}), renderer: this.renderCostCenter,
                      editor: this.costCenterEditor
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
@@ -177,23 +177,16 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * @return {String}
      */
     renderWorkingTime: function(value) {
-        if(value && Ext.isObject(value)) {
-            return Ext.util.Format.htmlEncode(value.title);
-        } else {
-            return _('undefined');
-        }
+        return value && Ext.isObject(value) ? Ext.util.Format.htmlEncode(value.title) : '';
     },
+    
     /**
      * renders the cost center
      * @param {Object} value
      * return {String}
      */
     renderCostCenter: function(value) {
-        if(value && Ext.isObject(value)) {
-            return Ext.util.Format.htmlEncode(value.number);
-        } else {
-            return _('undefined');
-        }
+        return value && Ext.isObject(value) ? Ext.util.Format.htmlEncode(value.number) : '';
     }
 });
 
