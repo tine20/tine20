@@ -1248,15 +1248,22 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        if (   !$this->_doContainerACLChecks
-            || !$_record->has('container_id')
-            // admin grant includes all others
-            || Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
+        if (   ! $this->_doContainerACLChecks
+            || ! $_record->has('container_id')) {
             return TRUE;
         }
-
+        
+        if (! is_object(Tinebase_Core::getUser())) {
+            throw new Tinebase_Exception_AccessDenied('User object required to check grants');
+        }
+        
+        // admin grant includes all others
+        if (Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            return TRUE;
+        }
+        
         $hasGrant = FALSE;
-
+        
         switch ($_action) {
             case 'get':
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_READ);
