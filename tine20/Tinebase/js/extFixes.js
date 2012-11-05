@@ -172,7 +172,8 @@ Ext.form.TimeField.prototype.getValue = function(){
     // return the value that was set (has time information when unchanged in client) 
     // and not just the date part!
     var value =  this.fullDateTime;
-    return value || "";
+
+    return value ? this.parseDate(value).dateFormat('H:i') : "";
 };
 
 /**
