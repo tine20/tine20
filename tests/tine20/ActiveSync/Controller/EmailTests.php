@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -124,7 +124,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         
         $fileReference = $message->getId() . ActiveSync_Controller_Abstract::LONGID_DELIMITER . '2';
         
@@ -147,6 +147,25 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * create test message with $this->_emailTestClass->messageTestHelper()
+     * 
+     * @return Felamimail_Model_Message
+     */
+    protected function _createTestMessage()
+    {
+        $testMessageId = Tinebase_Record_Abstract::generateUID();
+        
+        $message = $this->_emailTestClass->messageTestHelper(
+            'multipart_mixed.eml',
+            $testMessageId,
+            null,
+            array('X-Tine20TestMessage: multipart/mixed', 'X-Tine20TestMessage: ' . $testMessageId)
+        );
+        
+        return $message;
+    }
+    
+    /**
      * test seen flag
      * 
      * @see 0007008: add test for seen flag
@@ -155,7 +174,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         
         $controller->updateEntry(null, $message->getId(), new Syncroton_Model_Email(array('read' => 1)));
         
@@ -206,7 +225,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         $message->flags = array(
             Zend_Mail_Storage::FLAG_SEEN, 
             Zend_Mail_Storage::FLAG_ANSWERED
@@ -214,15 +233,12 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
         
-        #foreach ($syncrotonEmail as $key => $value) {echo "$key => "; var_dump($value);}
-        
         $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $syncrotonEmail->subject);
         // size of the body
-        $this->assertEquals(9606, $syncrotonEmail->body->estimatedDataSize);
+        $this->assertEquals(9631, $syncrotonEmail->body->estimatedDataSize);
         // size of the attachment
         $this->assertEquals(2787, $syncrotonEmail->attachments[0]->estimatedDataSize);
-
-        $this->assertEquals(Syncroton_Model_Email::LASTVERB_REPLYTOSENDER, $syncrotonEmail->lastVerbExecuted);
+        $this->assertEquals(Syncroton_Model_Email::LASTVERB_REPLYTOSENDER, $syncrotonEmail->lastVerbExecuted, 'reply flag missing');
     }
     
     /**
@@ -232,7 +248,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4, 'truncationSize' => 2000))));
         
@@ -272,7 +288,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
@@ -315,7 +331,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
-        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_createTestMessage();
         
         $request = new Syncroton_Model_StoreRequest(array(
             'query' => array(
@@ -338,8 +354,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         ));
         
         $result = $controller->search($request);
-        
-        #var_dump($result);
     }
     
     /**
