@@ -82,19 +82,19 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     protected function _createSharedTag()
     {
         $sharedTag = new Tinebase_Model_Tag(array(
-                    'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                    'name'  => 'tag::shared',
-                    'description' => 'this is a shared tag',
-                    'color' => '#009B31',
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tag::shared',
+            'description' => 'this is a shared tag',
+            'color' => '#009B31',
         ));
         $savedSharedTag = $this->_instance->createTag($sharedTag);
 
         $right = new Tinebase_Model_TagRight(array(
-                    'tag_id'        => $savedSharedTag->getId(),
-                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    'account_id'    => Setup_Core::getUser()->getId(),
-                    'view_right'    => true,
-                    'use_right'     => true,
+            'tag_id'        => $savedSharedTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Setup_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true,
         ));
         $this->_instance->setRights($right);
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
@@ -252,5 +252,40 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
         $this->assertTrue($sharedTagInResult instanceof Tinebase_Model_Tag, 'shared tag not found');
         $this->assertEquals(Addressbook_Controller_Contact::getInstance()->searchCount($filter), $sharedTagInResult->selection_occurrence);
+    }
+    
+    /**
+     * testMergeDuplicateTags
+     * 
+     * @see 0007354: function for merging duplicate tags
+     */
+    public function testMergeDuplicateTags()
+    {
+        $sharedTag1 = $this->_createSharedTag();
+        // sleep to make sure, $sharedTag1 is always chosen as 'master'
+        sleep(1);
+        $sharedTag2 = $this->_createSharedTag();
+        
+        $contactIds = Addressbook_Controller_Contact::getInstance()->getAll()->getArrayOfIds();
+        $contactFilter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 0, 3))
+        ));
+        $sharedTag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag1);
+        // sleep modlog
+        sleep(1);
+        $contactFilter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 3, 3))
+        ));
+        $sharedTag2 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag2);
+        // sleep modlog
+        sleep(1);
+        
+        $this->_instance->mergeDuplicateSharedTags('Addressbook_Model_Contact');
+        
+        $sharedTag1AfterMerge = $this->_instance->get($sharedTag1);
+        $this->assertEquals($sharedTag1->occurrence + 3, $sharedTag1AfterMerge->occurrence,
+            'occurrence should have been increased by three: ' . print_r($sharedTag1AfterMerge->toArray(), TRUE));
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_instance->get($sharedTag2);
     }
 }

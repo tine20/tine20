@@ -209,7 +209,7 @@ class Tinebase_Tags
         } else if (is_array($_id)) {
             $ids = $_id;
         } else {
-            throw new Tinebase_Exception_InvalidArgument('Expectd string|array|Tinebase_Record_RecordSet of tags');
+            throw new Tinebase_Exception_InvalidArgument('Expected string|array|Tinebase_Record_RecordSet of tags');
         }
         
         if (! empty($ids)) {
@@ -629,7 +629,7 @@ class Tinebase_Tags
         
         $this->_addOccurrence($tagId, count($toAttachIds));
         
-        return $tags->getFirstRecord();
+        return $this->get($tagId);
     }
 
     /**
@@ -980,5 +980,72 @@ class Tinebase_Tags
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
         return $select;
+    }
+
+    /**
+     * merge duplicate shared tags
+     * 
+     * @param string $model record model for which tags should be merged
+     * @param boolean $deleteObsoleteTags
+     * 
+     * @see 0007354: function for merging duplicate tags
+     */
+    public function mergeDuplicateSharedTags($model, $deleteObsoleteTags = TRUE)
+    {
+        $select = $this->_db->select()
+            ->from(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'name')
+            ->where($this->_db->quoteIdentifier('type') . ' = ?', Tinebase_Model_Tag::TYPE_SHARED)
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+            ->group('name')
+            ->having('COUNT(' . $this->_db->quoteIdentifier('name') . ') > 1');
+        $queryResult = $this->_db->fetchAll($select);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Found ' . count($queryResult) . ' duplicate tag names.');
+        
+        $controller = Tinebase_Core::getApplicationInstance($model);
+        $recordFilterModel = $model . 'Filter';
+        
+        foreach ($queryResult as $duplicateTag) {
+            $filter = new Tinebase_Model_TagFilter(array(
+                'name' => $duplicateTag['name'],
+                'type' => Tinebase_Model_Tag::TYPE_SHARED,
+            ));
+            $paging = new Tinebase_Model_Pagination(array('sort' => 'creation_time'));
+            $tagsWithSameName = $this->searchTags($filter, $paging);
+            $targetTag = $tagsWithSameName->getFirstRecord();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Merging tag ' . $duplicateTag['name'] . '. Found ' . count($tagsWithSameName) . ' tags with this name.');
+            
+            foreach ($tagsWithSameName as $tag) {
+                if ($tag->getId() === $targetTag->getId()) {
+                    // skip target (oldest) tag
+                    continue;
+                }
+
+                $recordFilter = new $recordFilterModel(array(
+                    array('field' => 'tag', 'operator' => 'in', 'value' => array($tag->getId()))
+                ));
+                $recordIdsWithTagToMerge = $controller->search($recordFilter, NULL, FALSE, TRUE);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Found ' . count($recordIdsWithTagToMerge) . ' ' . $model . '(s) with tags to be merged.');
+                
+                $recordFilter = new $recordFilterModel(array(
+                    array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsWithTagToMerge)
+                ));
+                $this->attachTagToMultipleRecords($recordFilter, $targetTag);
+                // modlog sleep :(
+                // @todo can be removed when this is resolved -> 0000554: modlog: records can't be updated in less than 1 second intervals
+                sleep(1);
+                $this->detachTagsFromMultipleRecords($recordFilter, $tag->getId());
+                
+                // check occurrence of the merged tag and remove it if obsolete
+                $tag = $this->get($tag);
+                if ($deleteObsoleteTags && $tag->occurrence == 0) {
+                    $this->deleteTags($tag->getId());
+                }
+            }
+        }
     }
 }
