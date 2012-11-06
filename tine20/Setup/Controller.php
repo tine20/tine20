@@ -1054,20 +1054,20 @@ class Setup_Controller
     protected function _getPasswordSettings()
     {
         $configs = array(
-            Tinebase_Config::PASSWORD_CHANGE,
-            Tinebase_Config::PASSWORD_POLICY_ACTIVE,
-            Tinebase_Config::PASSWORD_POLICY_ONLYASCII,
-            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH,
-            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS,
-            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS,
-            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS,
-            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS,
+            Tinebase_Config::PASSWORD_CHANGE                     => 1,
+            Tinebase_Config::PASSWORD_POLICY_ACTIVE              => 0,
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII           => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH          => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS      => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
         );
 
         $result = array();
         $tinebaseInstalled = $this->isInstalled('Tinebase');
-        foreach ($configs as $config) {
-            $result[$config] = ($tinebaseInstalled) ? Tinebase_Config::getInstance()->get($config, 0) : 0;
+        foreach ($configs as $config => $default) {
+            $result[$config] = ($tinebaseInstalled) ? Tinebase_Config::getInstance()->get($config, $default) : $default;
         }
         
         return $result;
