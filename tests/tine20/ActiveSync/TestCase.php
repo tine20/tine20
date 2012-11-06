@@ -373,6 +373,39 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * returns a test event
+     * 
+     * @param Tinebase_Model_Container $personalContainer
+     * @return Calendar_Model_Event
+     */
+    public static function getTestEvent($personalContainer = NULL)
+    {
+        $personalContainer = ($personalContainer) ? $personalContainer : Tinebase_Container::getInstance()->getPersonalContainer(
+            Tinebase_Core::getUser(),
+            'Calendar', 
+            Tinebase_Core::getUser(),
+            Tinebase_Model_Grants::GRANT_EDIT
+        )->getFirstRecord();
+        
+        return new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'SyncTest',
+            'dtstart'       => Tinebase_DateTime::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
+            'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'container_id'  => $personalContainer->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id' => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
+                )
+            ))
+        ));
+    }
+    
+    /**
      *
      * @return Syncroton_Model_Device
      */

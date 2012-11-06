@@ -419,9 +419,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     
                     break;
                     
-                // @todo validate tags are working
                 case 'tags':
-                    $syncrotonEvent->$syncrotonProperty = (array) $entry->$tine20Property;
+                    $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property->name;;
                     
                     break;
                     

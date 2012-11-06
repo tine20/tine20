@@ -154,7 +154,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     
                 // @todo validate tags are working
                 case 'tags':
-                    $syncrotonTask->$syncrotonProperty = (array) $entry->$tine20Property;
+                    $syncrotonTask->$syncrotonProperty = $entry->$tine20Property->name;
                     
                     break;
                     

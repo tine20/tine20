@@ -167,7 +167,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     
                 // @todo validate tags are working
                 case 'tags':
-                    $syncrotonContact->$syncrotonProperty = (array) $entry->$tine20Property;
+                    $syncrotonContact->$syncrotonProperty = $entry->$tine20Property->name;
                     
                     break;
                     

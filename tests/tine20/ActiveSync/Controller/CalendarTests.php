@@ -333,7 +333,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), Tinebase_DateTime::now());
     
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
@@ -387,7 +387,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     
         $xml = new SimpleXMLElement($this->_testXMLInput_palmPreV12);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
@@ -413,7 +413,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     
         $xml = new SimpleXMLElement($this->_testXMLInput_DailyRepeatingEvent);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
@@ -446,7 +446,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_SMASUNGGALAXYS2), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_SMASUNGGALAXYS2), Tinebase_DateTime::now());
     
         $xml = new SimpleXMLElement($this->_testXMLInput_SamsungGalaxyStatus);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
@@ -468,7 +468,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), Tinebase_DateTime::now());
     
         $xml = new SimpleXMLElement($this->_testXMLInputOutlook13);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
@@ -510,7 +510,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
         
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
         
@@ -533,7 +533,7 @@ Zeile 3</AirSyncBase:Data>
             $syncrotonFolder = $this->testCreateFolder();
         }
         
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
         
@@ -564,7 +564,7 @@ Zeile 3</AirSyncBase:Data>
         
         list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
         
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
         $XMLMeetingResponse = $this->_testXMLMeetingResponse;
         
@@ -605,5 +605,26 @@ Zeile 3</AirSyncBase:Data>
         $events = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         $this->assertEquals(0, count($events));
+    }
+    
+    /**
+     * testEventWithTags
+     * 
+     * @see 0007346: events with tags are not synced
+     */
+    public function testEventWithTags()
+    {
+        $event = ActiveSync_TestCase::getTestEvent();
+        $event->tags = array(array(
+            'name' => 'test tag',
+            'type' => Tinebase_Model_Tag::TYPE_PERSONAL
+        ));
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $syncrotonEvent = $controller->toSyncrotonModel($event);
+        
+        $this->assertTrue(is_array($syncrotonEvent->categories));
+        $this->assertTrue(in_array('test tag', $syncrotonEvent->categories), 'tag not found in categories: ' . print_r($syncrotonEvent->categories, TRUE));
     }
 }

@@ -254,23 +254,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         sleep(1);
         
         // add a test event
-        $event = new Calendar_Model_Event(array(
-            'uid'           => Tinebase_Record_Abstract::generateUID(),
-            'summary'       => 'SyncTest',
-            'dtstart'       => Tinebase_DateTime::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
-            'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
-            'originator_tz' => 'Europe/Berlin',
-            'container_id'  => $personalContainer->getId(),
-            Tinebase_Model_Grants::GRANT_EDIT     => true,
-            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-                array(
-                    'user_id' => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
-                )
-            ))
-        ));
-        
+        $event = ActiveSync_TestCase::getTestEvent($personalContainer);
         $event = Calendar_Controller_Event::getInstance()->create($event);
         
         // and now we can start the ping request
