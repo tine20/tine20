@@ -109,8 +109,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }, this);
             this.definitionsStore.sort('label');
         }
-        if (! this.selectedDefinition && Tine.Addressbook.registry.get('defaultImportDefinition')) {
-            this.selectedDefinition = this.definitionsStore.getById(Tine.Addressbook.registry.get('defaultImportDefinition').id);
+        if (! this.selectedDefinition && Tine[this.appName].registry.get('defaultImportDefinition')) {
+            this.selectedDefinition = this.definitionsStore.getById(Tine[this.appName].registry.get('defaultImportDefinition').id);
         }
 
         // init exception store
