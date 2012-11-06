@@ -415,8 +415,9 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Create new ' . $this->_modelName);
 
+        $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
+        
         try {
-            $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             // add personal container id if container id is missing in record
