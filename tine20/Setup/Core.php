@@ -48,7 +48,7 @@ class Setup_Core extends Tinebase_Core
         
         Setup_Core::setupSession();
         
-        Setup_Core::startSession('tine20setup');
+        Setup_Core::startSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout

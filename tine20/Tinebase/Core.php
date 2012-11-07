@@ -697,10 +697,9 @@ class Tinebase_Core
      * start session helper function
      * 
      * @param array $_options
-     * @param string $_namespace
      * @throws Exception
      */
-    public static function startSession($_namespace)
+    public static function startSession()
     {
         try {
             $session = new Zend_Session_Namespace('TinebaseCore');
@@ -790,26 +789,28 @@ class Tinebase_Core
                     'gc_maxlifetime'     => $maxLifeTime
                 ));
                 
-                $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
+                $sessionSavepath = self::getSessionDir();
+                if (ini_set('session.save_path', $sessionSavepath) !== FALSE) {
+                    if (!is_dir($sessionSavepath)) {
+                        mkdir($sessionSavepath, 0700);
+                    }
+                }
                 
+                $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
                 if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {
                     Zend_Session::setOptions(array(
                         'gc_probability' => 0,
                         'gc_divisor'     => 100
                     ));
-                } else {
+                } else if (@opendir(ini_get('session.save_path')) !== FALSE) {
                     Zend_Session::setOptions(array(
                         'gc_probability' => 1,
                         'gc_divisor'     => 100
                     ));
+                } else {
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Unable to initialize automatic session cleanup. Check permissions to " . ini_get('session.save_path'));
                 }
                 
-                $sessionSavepath = self::getSessionDir();
-                if (ini_set('session.save_path', $sessionSavepath) !== false) {
-                    if (!is_dir($sessionSavepath)) {
-                        mkdir($sessionSavepath, 0700);
-                    }
-                }
                 break;
                 
             case 'Redis':
