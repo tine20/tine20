@@ -137,4 +137,26 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '6.5');
     }
+
+    /**
+     * update to 6.6
+     * 
+     * @see 0007356: increase tag name size to 256 chars
+     */
+    public function update_5()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <length>256</length>
+                <default>NULL</default>
+            </field>
+        ');
+        
+        $this->_backend->alterCol('tags', $declaration);
+        $this->setTableVersion('tags', 5);
+        
+        $this->setApplicationVersion('Tinebase', '6.6');
+    }
 }

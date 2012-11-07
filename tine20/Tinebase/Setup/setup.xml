@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>6.5</version>
+    <version>6.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1227,7 +1227,7 @@
 
         <table>
             <name>tags</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1249,7 +1249,7 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>256</length>
                     <default>NULL</default>
                 </field>
                 <field>

@@ -978,6 +978,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * testImportTagWithLongName
      * 
      * @see 0007276: import re-creates tags that have names with more than 40 chars
+     * @see 0007356: increase tag name size to 256 chars
      */
     public function testImportTagWithLongName()
     {
@@ -988,14 +989,14 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result['results'][0]['tags']), 'record should have 2 tags: ' . print_r($result['results'][0], TRUE));
         
         // check that tag is only created and added once + remove
-        $tagName = '2202_Netzwerk_national_potentielle_Partn';
+        $tagName = '2202_Netzwerk_national_potentielle_Partner';
         $tags = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter(array(
             'name'  => $tagName,
             'grant' => Tinebase_Model_TagRight::VIEW_RIGHT,
             'type'  => Tinebase_Model_Tag::TYPE_SHARED
         )));
         $this->objects['createdTagIds'] = $tags->getArrayOfIds();
-        $this->assertEquals(1, count($tags));
+        $this->assertEquals(1, count($tags), 'tag not found');
         $this->assertEquals(2, $tags->getFirstRecord()->occurrence);
     }
     

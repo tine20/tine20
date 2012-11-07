@@ -563,8 +563,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Tag name: ' . $_name . ' / data: ' . print_r($_tagData, TRUE));
         
-        // sanitize tag name length
-        $name = (strlen($_name) > 40) ? substr($_name, 0, 40) : $_name;
+        $name = $_name;
         if (isset($_tagData['name'])) {
             $_tagData['name'] = $name;
         }
