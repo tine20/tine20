@@ -153,16 +153,6 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
      
     /**
-     * we need to clear the cache because of container grants cache and membership cache
-     */
-    protected function _clearCache()
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Clearing the cache (group memberships have changed) ...');
-        Tinebase_Core::getCache()->clean();
-    }
-    
-    /**
      * replace all current groupmembers with the new groupmembers list
      *
      * @param  mixed  $_groupId
@@ -185,10 +175,25 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                     'group_id'    => $groupId,
                     'account_id'  => $accountId
                 ));
+                
+                $this->_clearCache(array('groupMemberships' => $accountId));
             }
         }
         
-        $this->_clearCache();
+        $this->_clearCache(array('groupMembers' => $groupId));
+    }
+    
+    /**
+     * invalidate cache by type/id
+     * 
+     * @param array $cacheIds
+     */
+    protected function _clearCache($cacheIds = array())
+    {
+        foreach ($cacheIds as $type => $id) {
+            $cacheId = convertCacheId($type . $id);
+            Tinebase_Core::getCache()->remove($cacheId);
+        }
     }
     
     /**
@@ -201,13 +206,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function setGroupMemberships($_userId, $_groupIds)
     {
-        if (count($_groupIds) === 0) {
+        if(count($_groupIds) === 0) {
             throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
         }
         
-        if ($this instanceof Tinebase_Group_Interface_SyncAble) {
+        if($this instanceof Tinebase_Group_Interface_SyncAble) {
             $this->setGroupMembershipsInSyncBackend($_userId, $_groupIds);
         }
+        
         return $this->setGroupMembershipsInSqlBackend($_userId, $_groupIds);
     }
     
@@ -255,8 +261,6 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         ));
         Tinebase_Event::fireEvent($event);
         
-        $this->_clearCache();
-        
         return $this->getGroupMemberships($userId);
     }
     
@@ -293,7 +297,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         try {
             $this->groupMembersTable->insert($data);
-            $this->_clearCache();
+            
+            $this->_clearCache(array(
+                'groupMembers'     => $groupId,
+                'groupMemberships' => $accountId,
+            ));
         } catch (Zend_Db_Statement_Exception $e) {
             // account is already member of this group
         }
@@ -331,7 +339,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         );
          
         $this->groupMembersTable->delete($where);
-        $this->_clearCache();
+        
+        $this->_clearCache(array(
+            'groupMembers'     => $groupId,
+            'groupMemberships' => $accountId,
+        ));
     }
     
     /**
@@ -401,7 +413,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         unset($data['container_id']);
         
         $this->groupsTable->insert($data);
-        
+                
         return $_group;
     }
     
@@ -471,7 +483,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         } else {
             $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         }
-        
+                        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             

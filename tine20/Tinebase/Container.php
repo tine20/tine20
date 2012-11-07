@@ -80,6 +80,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     protected $_defaultCountCol = 'id';
 
     /**
+     * cache timeout for ACL related cache entries (in seconds)
+     * 
+     * @see 0007266: make groups / group memberships cache cleaning more efficient
+     * @var integer
+     */
+    const ACL_CACHE_TIMEOUT = 30;
+    
+    /**
      * the singleton pattern
      *
      * @return Tinebase_Container
@@ -1017,7 +1025,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $result = ! empty($grants);
             
             // save result and tag it with 'container'
-            $cache->save($result, $cacheId, array('container'));
+            $cache->save($result, $cacheId, array('container'), self::ACL_CACHE_TIMEOUT);
         }
         
         return $result;
@@ -1109,7 +1117,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
             
-            $cache->save($grants, $cacheKey, array('container'));
+            $cache->save($grants, $cacheKey, array('container'), self::ACL_CACHE_TIMEOUT);
         }
         return $grants;
     }
