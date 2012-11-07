@@ -403,26 +403,30 @@ class Tinebase_Tags
     }
 
     /**
-     * Deletes (set stated deleted) tags identified by their identifiers
+     * Deletes (set state "deleted") tags identified by their ids
      *
-     * @param  string|array id(s) to delete
+     * @param  string|array $ids to delete
+     * @param  boolean $ignoreAcl
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function deleteTags($_ids)
+    public function deleteTags($ids, $ignoreAcl = FALSE)
     {
-        $tags = $this->getTagsById($_ids);
-        if (count($tags) != count((array)$_ids)) {
+        $tags = $this->getTagsById($ids, Tinebase_Model_TagRight::VIEW_RIGHT, $ignoreAcl);
+        if (count($tags) != count((array)$ids)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
         }
 
-        $currentAccountId = Tinebase_Core::getUser()->getId();
-        $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
-        foreach ($tags as $tag) {
-            if ( ($tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
-            ($tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
-                continue;
-            } else {
-                throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
+        $currentAccountId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'setupuser';
+        
+        if (! $ignoreAcl) {
+            $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
+            foreach ($tags as $tag) {
+                if ( ($tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $tag->owner == $currentAccountId) ||
+                ($tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
+                    continue;
+                } else {
+                    throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
+                }
             }
         }
         
@@ -987,10 +991,11 @@ class Tinebase_Tags
      * 
      * @param string $model record model for which tags should be merged
      * @param boolean $deleteObsoleteTags
+     * @param boolean $ignoreAcl
      * 
      * @see 0007354: function for merging duplicate tags
      */
-    public function mergeDuplicateSharedTags($model, $deleteObsoleteTags = TRUE)
+    public function mergeDuplicateSharedTags($model, $deleteObsoleteTags = TRUE, $ignoreAcl = FALSE)
     {
         $select = $this->_db->select()
             ->from(array('tags'    => SQL_TABLE_PREFIX . 'tags'), 'name')
@@ -1004,6 +1009,9 @@ class Tinebase_Tags
             ' Found ' . count($queryResult) . ' duplicate tag names.');
         
         $controller = Tinebase_Core::getApplicationInstance($model);
+        if ($ignoreAcl) {
+            $containerChecks = $controller->doContainerACLChecks(FALSE);
+        }
         $recordFilterModel = $model . 'Filter';
         
         foreach ($queryResult as $duplicateTag) {
@@ -1027,6 +1035,7 @@ class Tinebase_Tags
                 $recordFilter = new $recordFilterModel(array(
                     array('field' => 'tag', 'operator' => 'in', 'value' => array($tag->getId()))
                 ));
+                
                 $recordIdsWithTagToMerge = $controller->search($recordFilter, NULL, FALSE, TRUE);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' Found ' . count($recordIdsWithTagToMerge) . ' ' . $model . '(s) with tags to be merged.');
@@ -1043,9 +1052,13 @@ class Tinebase_Tags
                 // check occurrence of the merged tag and remove it if obsolete
                 $tag = $this->get($tag);
                 if ($deleteObsoleteTags && $tag->occurrence == 0) {
-                    $this->deleteTags($tag->getId());
+                    $this->deleteTags($tag->getId(), $ignoreAcl);
                 }
             }
+        }
+        
+        if ($ignoreAcl) {
+            $controller->doContainerACLChecks($containerChecks);
         }
     }
 }

@@ -832,7 +832,7 @@ abstract class Tinebase_Controller_Record_Abstract
         );
         $this->_backend->updateMultiple($ids, $updateMetaData);
         
-        if ($this->_omitModLog !== TRUE) {
+        if ($this->_omitModLog !== TRUE && is_object(Tinebase_Core::getUser())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
@@ -1321,7 +1321,9 @@ abstract class Tinebase_Controller_Record_Abstract
         $aclFilters = $_filter->getAclFilters();
 
         if (! $aclFilters) {
-            // force a standard containerFilter as ACL filter
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
+            
             $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $_filter->getApplicationName()));
             $_filter->addFilter($containerFilter);
         }
