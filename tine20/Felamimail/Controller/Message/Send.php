@@ -287,31 +287,40 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * send Zend_Mail message via smtp
      * 
-     * @param  mixed      $_accountId
-     * @param  Zend_Mail  $_message
-     * @param  bool       $_saveInSent
+     * @param  mixed      $accountId
+     * @param  Zend_Mail  $mail
+     * @param  boolean    $saveInSent
+     * @param  Felamimail_Model_Message $originalMessage
      * @return Zend_Mail
      */
-    public function sendZendMail($_accountId, Zend_Mail $_mail, $_saveInSent = false)
+    public function sendZendMail($accountId, Zend_Mail $mail, $saveInSent = false, $originalMessage = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Sending message with subject ' . $_mail->getSubject() 
+            ' Sending message with subject ' . $mail->getSubject() 
         );
-
+        if ($originalMessage !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Original Message subject: ' . $originalMessage->subject . ' / Flag to set: ' . var_export($originalMessage->flags, TRUE)
+            );
+            
+            // this is required for adding the reply/forward flag in _sendMailViaTransport()
+            $originalMessage->original_id = $originalMessage;
+        }
+        
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // get account
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($accountId instanceof Felamimail_Model_Account) ? $accountId : Felamimail_Controller_Account::getInstance()->get($accountId);
         
-        $this->_setMailFrom($_mail, $account);
-        $this->_setMailHeaders($_mail, $account);
-        $this->_sendMailViaTransport($_mail, $account, NULL, $_saveInSent);
+        $this->_setMailFrom($mail, $account);
+        $this->_setMailHeaders($mail, $account);
+        $this->_sendMailViaTransport($mail, $account, $originalMessage, $saveInSent);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
-        return $_mail;
+        return $mail;
     }
     
     /**

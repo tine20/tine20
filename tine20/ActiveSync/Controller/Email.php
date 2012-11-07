@@ -128,7 +128,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                  __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
         
-             //replace original stream with debug stream, as php://input can't be rewinded
+             // replace original stream with debug stream, as php://input can't be rewinded
              $inputStream = $debugStream;
              rewind($inputStream);
          }
@@ -140,6 +140,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         );
         
         $messageId = is_array($source) ? $source['itemId'] : $source;
+        $fmailMessage = Felamimail_Controller_Message::getInstance()->get($messageId);
+        $fmailMessage->flags = Zend_Mail_Storage::FLAG_PASSED;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
@@ -147,14 +149,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $mail = Tinebase_Mail::createFromZMM($incomingMessage);
         
         if ($replaceMime === false) {
-            $rfc822 = Felamimail_Controller_Message::getInstance()->getMessagePart($messageId);
+            $rfc822 = Felamimail_Controller_Message::getInstance()->getMessagePart($fmailMessage);
             $rfc822->type = Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
             $rfc822->filename = 'forwarded email.eml';
             $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
             $mail->addAttachment($rfc822);
         }
         
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent);
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent, $fmailMessage);
     }
     
     /**
@@ -262,19 +264,21 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         );
         
         $messageId = is_array($source) ? $source['itemId'] : $source;
+        $fmailMessage = Felamimail_Controller_Message::getInstance()->get($messageId);
+        $fmailMessage->flags = Zend_Mail_Storage::FLAG_ANSWERED;
         
         if ($replaceMime === false) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " attach source: " . $messageId . " saveInSent: " . $saveInSent);
             
-            $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($messageId, null, 'text/plain');
+            $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($fmailMessage, null, 'text/plain');
         } else {
             $replyBody = null;
         }
         
         $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
         
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
     
     public function sendEmail($inputStream, $saveInSent)

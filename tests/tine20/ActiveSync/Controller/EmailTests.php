@@ -283,18 +283,20 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     
     /**
      * forward email test
+     * 
+     * @see 0007328: Answered flags were not synced by activesync
      */
     public function testForwardEmail()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
-        $message = $this->_createTestMessage();
+        $originalMessage = $this->_createTestMessage();
         
         $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
         $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
         $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
         
-        $controller->forwardEmail(array('collectionId' => 'foobar', 'itemId' => $message->getId()), $email, true, false);
+        $controller->forwardEmail(array('collectionId' => 'foobar', 'itemId' => $originalMessage->getId()), $email, true, false);
         
         // check if mail is in INBOX of test account
         $inbox = $this->_emailTestClass->getFolder('INBOX');
@@ -309,6 +311,10 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         $this->assertEquals(1, count($completeMessage->headers['mime-version']));
         $this->assertEquals(1, count($completeMessage->headers['content-type']));
+        
+        // check forward flag
+        $originalMessage = Felamimail_Controller_Message::getInstance()->get($originalMessage->getId());
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $originalMessage->flags), 'forward flag missing in original message: ' . print_r($originalMessage->toArray(), TRUE));
     }
     
     /**
