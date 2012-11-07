@@ -15,7 +15,7 @@
  * @package     ActiveSync
  * @subpackage  Controller
  */
-class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract 
+class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataSearch
 {
     protected $_mapping = array(
         #'Anniversary'           => 'anniversary',
@@ -123,6 +123,23 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     protected $_sortField = 'n_fileas';
 
+    /**
+     * Search command handler
+     * 
+     * the search command is only a stub to make the AS Search command happy
+     * Tine 2.0 sync's the GAL entries as normal adddressbooks 
+     *
+     * @param Syncroton_Model_StoreRequest $store   Search query parameters
+     * @return Syncroton_Model_StoreResponse
+     */
+    public function search(Syncroton_Model_StoreRequest $store)
+    {
+        $storeResponse = new Syncroton_Model_StoreResponse();
+        $storeResponse->total = 0;
+        
+        return $storeResponse;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Controller_Abstract::toSyncrotonModel()

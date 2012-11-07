@@ -151,6 +151,7 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         
         if (Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN) === true) {
             Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
+            Syncroton_Registry::setGALDataClass('ActiveSync_Controller_Contacts');
         }
         if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN) === true) {
             Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
