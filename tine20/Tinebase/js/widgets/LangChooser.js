@@ -3,11 +3,9 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
-/*global Ext, Tine, google*/
 
 Ext.ns('Tine.widgets');
 
@@ -28,6 +26,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     displayField: 'language',
     valueField: 'locale',
     triggerAction: 'all',
+    editable: false,
     width: 100,
     listWidth: 200,
     
