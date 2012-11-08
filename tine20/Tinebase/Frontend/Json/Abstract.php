@@ -153,11 +153,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     public static function resolveContainerTagsUsers(Tinebase_Record_RecordSet $_records, $_resolveProperties = array('container_id', 'tags'))
     {
-        if ($_records->getFirstRecord()->has('container_id') && in_array('container_id', $_resolveProperties)) {
+        $firstRecord = $_records->getFirstRecord();
+        if ($firstRecord === NULL) {
+            return;
+        }
+        
+        if ($firstRecord->has('container_id') && in_array('container_id', $_resolveProperties)) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
     
-        if ($_records->getFirstRecord()->has('tags') && in_array('tags', $_resolveProperties)) {
+        if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties)) {
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
     }
