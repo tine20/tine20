@@ -243,6 +243,9 @@ Ext.namespace('Tine.Felamimail');
         } else if (this.draftOrTemplate) {
             this.record.set('original_id', this.draftOrTemplate.id);
         }
+        
+        Tine.log.debug('Tine.Felamimail.MessageEditDialog::initRecord() -> record:');
+        Tine.log.debug(this.record);
     },
     
     /**

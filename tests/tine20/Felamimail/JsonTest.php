@@ -893,19 +893,25 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * save message in folder test
+     * save message in folder (draft) test
+     * 
+     * @see 0007178: BCC does not save the draft message
      */
     public function testSaveMessageInFolder()
     {
         $messageToSave = $this->_getMessageData();
+        $messageToSave['bcc'] = array('bccaddress@email.org');
+        
         $draftsFolder = $this->_getFolder($this->_account->drafts_folder);
         $returned = $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
         $this->_foldersToClear = array($this->_account->drafts_folder);
         
         // check if message is in drafts folder
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
-        $this->assertEquals($message['subject'],  $messageToSave['subject']);
-        $this->assertEquals($message['to'][0],    $messageToSave['to'][0], 'recipient not found');
+        $this->assertEquals($messageToSave['subject'],  $message['subject']);
+        $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
+        $this->assertEquals(1, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        $this->assertEquals($messageToSave['bcc'][0],   $message['bcc'][0], 'bcc recipient not found');
     }
     
     /*********************** sieve tests ****************************/

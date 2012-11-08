@@ -163,7 +163,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         
         // init recipients (on reply/reply to all)
-        this.syncRecipientsToStore(['to', 'cc']);
+        this.syncRecipientsToStore(['to', 'cc', 'bcc']);
         
         this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
         

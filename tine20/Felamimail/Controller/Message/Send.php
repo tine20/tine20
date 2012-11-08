@@ -129,16 +129,31 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $mailToAppend = $this->createMailForSending($_message, $sourceAccount);
         
         $transport = new Felamimail_Transport();
-        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $mailAsString = $transport->getRawMessage($mailToAppend, $this->_getAdditionalHeaders($_message));
         $flags = ($folder->globalname === $targetAccount->drafts_folder) ? array(Zend_Mail_Storage::FLAG_DRAFT) : null;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+            ' ' . $mailAsString);
+        
         Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage($mailAsString, $folder->globalname, $flags);
         
         return $_message;
     }
-
+    
+    /**
+     * Bcc recipients need to be added separately because they are removed by default
+     * 
+     * @param Felamimail_Model_Message $message
+     * @return array
+     */
+    protected function _getAdditionalHeaders($message)
+    {
+        $additionalHeaders = ($message && ! empty($message->bcc)) ? array('Bcc' => $message->bcc) : array();
+        return $additionalHeaders;
+    }
+    
     /**
      * create new mail for sending via SMTP
      * 
@@ -185,7 +200,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             // append mail to sent folder
             if ($_saveInSent) {
-                $this->_saveInSent($transport, $_account, ($_message !== NULL) ? array('Bcc' => $_message->bcc) : array());
+                $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
             }
             
             if ($_message !== NULL) {
@@ -380,6 +395,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 foreach((array) $_message->{$type} as $address) {
                     
                     $address = $punycodeConverter->encode($address);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Add ' . $type . ' address: ' . $address);
                     
                     switch($type) {
                         case 'to':
