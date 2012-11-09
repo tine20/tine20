@@ -300,6 +300,7 @@ Zeile 3</AirSyncBase:Data>
             <UserResponse>2</UserResponse>
             <CollectionId>17</CollectionId>
             <RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>
+            <InstanceId>20121125T130000Z</InstanceId>
         </Request>
     </MeetingResponse>';
     
@@ -570,6 +571,7 @@ Zeile 3</AirSyncBase:Data>
         
         $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '', $XMLMeetingResponse);
         
         $xml = new SimpleXMLElement($XMLMeetingResponse);
         
@@ -580,7 +582,61 @@ Zeile 3</AirSyncBase:Data>
         $event = Calendar_Controller_Event::getInstance()->get($serverId);
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
         
-        $this->assertEquals($ownAttendee->status, Calendar_Model_Attender::STATUS_TENTATIVE);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $ownAttendee->status);
+    }
+    
+    public function testMeetingResponseWithExistingInstanceId()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $XMLMeetingResponse = $this->_testXMLMeetingResponse;
+        
+        $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
+        
+        $xml = new SimpleXMLElement($XMLMeetingResponse);
+        
+        $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
+        
+        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        
+        $event = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
+        $instance = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($instance->attendee);
+        
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $ownAttendee->status);
+    }
+    
+    public function testMeetingResponseWithNewInstanceId()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $XMLMeetingResponse = $this->_testXMLMeetingResponse;
+        
+        $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '<InstanceId>20121126T130000Z</InstanceId>', $XMLMeetingResponse);
+        
+        $xml = new SimpleXMLElement($XMLMeetingResponse);
+        
+        $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
+        
+        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        
+        $event = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
+        $event->exdate->sort('dtstart', 'DESC');
+        $instance = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($instance->attendee);
+        
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $ownAttendee->status);
     }
     
     /**

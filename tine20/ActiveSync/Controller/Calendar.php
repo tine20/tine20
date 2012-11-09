@@ -210,21 +210,33 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
      * (non-PHPdoc)
      * @see Syncroton_Data_IDataCalendar::setAttendeeStatus()
      */
-    public function setAttendeeStatus(Syncroton_Model_MeetingResponse $reponse)
+    public function setAttendeeStatus(Syncroton_Model_MeetingResponse $response)
     {
-        $event = $instance = $this->_contentController->get($reponse->requestId);
-        if ($reponse->instanceId instanceof DateTime) {
-            $instance = $event->exdate->filter('recurid', $event->uid . '-' . $reponse->instanceId->format(Tinebase_Record_Abstract::ISO8601LONG))->getFirstRecord();
+        $event = $instance = $this->_contentController->get($response->requestId);
+        $method = 'attenderStatusUpdate';
+        
+        if ($response->instanceId instanceof DateTime) {
+            $instance = $event->exdate->filter('recurid', $event->uid . '-' . $response->instanceId->format(Tinebase_Record_Abstract::ISO8601LONG))->getFirstRecord();
+            if (! $instance) {
+                $exceptions = $event->exdate;
+                $event->exdate = $exceptions->getOriginalDtStart();
+                
+                $instance = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, new Tinebase_DateTime($response->instanceId));
+            }
+            
+            $method = 'attenderStatusCreateRecurException';
         }
+        
         $attendee = Calendar_Model_Attender::getOwnAttender($instance->attendee);
         if (! $attendee) {
             throw new Syncroton_Exception_Status_MeetingResponse("party crushing not allowed", Syncroton_Exception_Status_MeetingResponse::INVALID_REQUEST);
         }
-        $attendee->status = $this->_meetingResponseAttendeeStatusMapping[$reponse->userResponse];
-        $this->_contentController->attenderStatusUpdate($event, $attendee);
+        $attendee->status = $this->_meetingResponseAttendeeStatusMapping[$response->userResponse];
+        
+        Calendar_Controller_Event::getInstance()->$method($instance, $attendee, $attendee->status_authkey);
         
         // return id of calendar event
-        return $reponse->requestId;
+        return $response->requestId;
     }
     
     /**
