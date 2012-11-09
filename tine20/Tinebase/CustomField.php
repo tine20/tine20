@@ -473,7 +473,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
         $configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_records->getFirstRecord()->getApplication()));
-        $customFields = $this->_getCustomFields($_records->getArrayOfIds(), $configs->getArrayOfIds());
+        $customFields = $this->_getCustomFields($_records->getArrayOfIdsAsString(), $configs->getArrayOfIds());
         $customFields->addIndices(array('record_id'));
         
         foreach ($_records as $record) {
@@ -492,10 +492,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     protected function _getCustomFields($_recordId, $_configIds = NULL)
     {
+        $recordIds = is_array($_recordId) ? $_recordId : array((string) $_recordId);
+        
         $filterValues = array(array(
             'field'     => 'record_id', 
             'operator'  => 'in', 
-            'value'     => (array) $_recordId
+            'value'     => $recordIds
         ));
         if ($_configIds) {
             $filterValues[] = array(
