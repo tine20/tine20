@@ -426,7 +426,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             
             do {
                 // take a break to save battery lifetime
-                sleep(Syncroton_Command_Ping::$pingTimeout);
+                sleep(Syncroton_Registry::getPingTimeout());
                 
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
@@ -440,8 +440,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         break 2;
                         
                     } else {
-                        // safe battery time by skipping folders which got synchronied less than Syncroton_Command_Ping::$quietTime seconds ago
-                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Command_Ping::$quietTime) {
+                        // safe battery time by skipping folders which got synchronied less than Syncroton_Registry::getQuietTime() seconds ago
+                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
                             continue;
                         }
                         
