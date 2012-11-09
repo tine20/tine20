@@ -82,6 +82,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             }
         }
         
+        header('Content-type: application/json');
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
     }
     
