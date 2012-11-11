@@ -347,4 +347,29 @@ class ActiveSync_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '6.2');
     }
+    
+    /**
+     * update to 6.3
+     * 
+     * @see 0007394: Index missing for id column in acsync_synckey
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>id</name>
+                <unique>true</unique>
+                <field>
+                    <name>id</name>
+                </field>
+            </index>
+        ');
+        try {
+            $this->_backend->addIndex('acsync_synckey', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // no index could be added
+        }
+        $this->setTableVersion('acsync_synckey', 4);
+        $this->setApplicationVersion('ActiveSync', '6.3');
+    }
 }

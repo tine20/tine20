@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>6.2</version>
+    <version>6.3</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -431,7 +431,7 @@
             <name>acsync_synckey</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -489,6 +489,13 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
+                </index>
+                <index>
+                    <name>id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>id</name>
+                    </field>
                 </index>
             </declaration>
         </table>
