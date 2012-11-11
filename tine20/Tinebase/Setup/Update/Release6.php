@@ -159,4 +159,28 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '6.6');
     }
+
+    /**
+     * update to 6.7
+     * 
+     * @see 0007396: add index for 'li' in access_log table
+     */
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>li</name>
+                <field>
+                    <name>li</name>
+                </field>
+            </index>
+        ');
+        try {
+            $this->_backend->addIndex('access_log', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // no index could be added
+        }
+        $this->setTableVersion('access_log', 4);
+        $this->setApplicationVersion('Tinebase', '6.7');
+    }
 }
