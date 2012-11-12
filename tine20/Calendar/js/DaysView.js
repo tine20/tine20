@@ -931,8 +931,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         var rzInfo = event.ui.getRzInfo(rz, width, height);
+
         if (rzInfo.diff != 0) {
-            event.set('dtend', rzInfo.dtend);
+            if (rzInfo.duration > 0) {
+                event.set('dtend', rzInfo.dtend);
+            } else {
+                // force event length to at least 1 minute
+                var date = new Date(event.get('dtstart').getTime());
+                date.setMinutes(date.getMinutes() + 1);
+                event.set('dtend', date);
+            }
         }
         
         if (event.summaryEditor) {
