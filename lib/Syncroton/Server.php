@@ -76,16 +76,25 @@ class Syncroton_Server
     }
     
     /**
-    * handle options request
-    *
-    */
+     * handle options request
+     */
     protected function _handleOptions()
     {
         $command = new Syncroton_Command_Options();
     
-        $command->getResponse();
+        $this->_sendHeaders($command->getHeaders());
     }
     
+    protected function _sendHeaders(array $headers)
+    {
+        foreach ($headers as $name => $value) {
+            header($name . ': ' . $value);
+        }
+    } 
+    
+    /**
+     * handle post request
+     */
     protected function _handlePost()
     {
         $requestParameters = $this->_getRequestParameters($this->_request);
@@ -123,9 +132,7 @@ class Syncroton_Server
             $requestBody = $this->_body;
         }
         
-        if (PHP_SAPI !== 'cli') {
-            header("MS-Server-ActiveSync: 14.00.0536.000");
-        }
+        header("MS-Server-ActiveSync: 14.00.0536.000");
 
         try {
             $command = new $className($requestBody, $device, $requestParameters);
@@ -164,7 +171,10 @@ class Syncroton_Server
             if ($this->_logger instanceof Zend_Log) {
                 $response->formatOutput = true;
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response:\n" . $response->saveXML());
+                $response->formatOutput = false;
             }
+            
+            $this->_sendHeaders($command->getHeaders());
             
             $outputStream = fopen("php://temp", 'r+');
             
@@ -172,8 +182,6 @@ class Syncroton_Server
             $encoder->encode($response);
             
             if ($requestParameters['acceptMultipart'] == true) {
-                header("Content-Type: application/vnd.ms-sync.multipart");
-                
                 $parts = $command->getParts();
                 
                 // output multipartheader
@@ -201,8 +209,6 @@ class Syncroton_Server
                 }
                 
                 echo $header;
-            } else {
-                header("Content-Type: application/vnd.ms-sync.wbxml");
             }
                         
             // output body
