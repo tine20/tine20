@@ -152,7 +152,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
     /**
      * get timeaccounts by grant
      *
-     * @param integer $_grant
+     * @param array|string $_grant
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
@@ -170,11 +170,9 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
         
         $filter = new Tinebase_Model_Filter_FilterGroup(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Container('container_id', 'in', $containerIds, array(
-            'applicationName' => 'Timetracker',
-            'ignoreAcl' => true
-        )));
-                
+        // NOTE: use id filter instead of container filter because of poor performance of container filter (setValue)
+        $filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'in', $containerIds));
+
         $backend = new Timetracker_Backend_Timeaccount();
         $result = $backend->search($filter);
         

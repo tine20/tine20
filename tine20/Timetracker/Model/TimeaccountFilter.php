@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -112,13 +112,15 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         }
         
         if (! $this->_isResolved) {
-            // get all timeaccounts user has required grants for
-            $result = array();
-            foreach ($this->_requiredGrants as $grant) {
-                $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
-            }
-            $this->_validTimeaccounts = array_unique($result);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . " Get all timeaccounts for user with required grants: " . print_r($this->_requiredGrants, TRUE));
+            
+            $result = Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($this->_requiredGrants, TRUE);
+            $this->_validTimeaccounts = $result;
             $this->_isResolved = TRUE;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . " Got " . count($this->_validTimeaccounts) . ' valid timeaccounts');
         }
         
         $db = Tinebase_Core::getDb();
