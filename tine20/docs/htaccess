@@ -1,0 +1,44 @@
+DirectoryIndex index.php
+
+<IfModule mod_php5.c>
+    php_value max_input_time 120
+    php_value session.gc_maxlifetime 86400
+    php_value memory_limit 128M
+    php_value upload_max_filesize 20M
+    php_value post_max_size 20M
+    php_value safe_mode off
+    php_flag display_errors off
+    php_flag log_errors on
+    php_flag magic_quotes_gpc off
+    php_flag magic_quotes_runtime off
+    php_flag register_globals off
+    php_value max_execution_time 90
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+    # ActiveSync
+    RewriteRule ^Microsoft-Server-ActiveSync index.php?frontend=activesync         [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    
+    # OpenID
+    RewriteRule ^users/(.*)                  index.php?frontend=openid&username=$1 [L,QSA]
+
+    # WebDAV / CalDAV / CardDAV
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
+    RewriteRule ^$                           index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+
+    RewriteRule ^addressbooks                index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule ^calendars                   index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule ^webdav                      index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule ^principals                  index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive on
+
+    ExpiresByType image/gif "access plus 1 month 1 days"
+    ExpiresByType image/jpeg "access plus 1 month 1 days"
+    ExpiresByType image/png "access plus 1 month 1 days" 
+</IfModule>

@@ -4,7 +4,7 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Joey (2012/10)
-Last change: 2012-10-30
+Last change: 2012-11-12
 
 Contents
 --
@@ -20,6 +20,7 @@ Contents
 9. Felamimail vacation templates
 10. Felamimail body caching
 11. PHP 5.3 required
+12. Example .htaccess
 
 1. New Queue management
 -----------------
@@ -111,3 +112,8 @@ This can be done by calling the following CLI command:
 --------------------
 Tine 2.0 now requires a minimal PHP version of 5.3.0.
 
+12. Example .htaccess
+--------------------
+
+We added an example .htaccess file for Apache 2 webservers. You can activate it by moving the file 
+docs/htaccess to the Tine 2.0 root and renaming it to .htaccess.

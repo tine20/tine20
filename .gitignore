@@ -18,3 +18,4 @@ scripts/weeklyevents
 scripts/custom
 scripts/syncuuids/conf.php
 tine20/*/translations/*.mo
+tine20/.htaccess
