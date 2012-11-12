@@ -25,32 +25,27 @@
  *      - container: GRANT the USER has to the calender of the event
  *      - implicit:  Additional READ GRANT for an attender and READ,EDIT
  *                   GRANT for the organizer.
- *      - inherited: GRANT the USER has to a the "display calendar" of an ATTENDER 
- *                   of the event, LIMITED by the maximum GRANT the ATTENDER has 
- *                   to the event. NOTE: that the ATTENDERS 'event' and _not_ 
- *                   'calendar' is important to also inherit implicit GRANTS.
+*       - inherited: FREEBUSY, READ, PRIVATE, SYNC, EXPORT can be inherited
+*                    from the GRANTS USER has to the a display calendar
  * 
  * When Applying/Asuring grants, we have to deal with two differnt situations:
  *  A: Check: Check individual grants on a event (record) basis.
- *            This is required for CRUD actions and done by this controllers 
- *            _checkGrant method.
- *  B: Seach: From the grants perspective this is a multy step process
- *            1. limiting the query (mixture of grants and filter)
- *            2. transform event set (all events user has only free/busy grant 
- *               for need to be cleaned)
+ *            This is required for create/update/delete actions and done by 
+ *            this controllers _checkGrant method.
+ *  B: Seach: From the grants perspective this is a multi step process
+ *            1. fetch all records with appropriate grants from backend
+ *            2. cleanup records user has only free/busy grant for
  * 
  *  NOTE: To empower the client for enabling/disabling of actions based on the 
  *        grants a user has to an event, we need to compute the "effective GRANT"
- *        also for read/search operations.
- *        For performance reasons only filter related attendee are taken into
- *        account for grant computations in search operations.
+ *        for read/search operations.
  *                  
- * Case A is not critical, as the amount of data is low and for CRUD operations
- * performace is less important. Case B however is the hard one, as lots of
- * calendars and events may be involved and performance is an issue.
+ * Case A is not critical, as the amount of data is low. 
+ * Case B however is the hard one, as lots of events and calendars may be
+ * involved.
  * 
- * 
- * @todo add handling to fetch all exceptions of a given event set (ActiveSync Frontend)
+ * NOTE: the backend always fetches full records for grant calculations.
+ *       searching ids only does not hlep with performance
  * 
  * @package Calendar
  */
@@ -1147,6 +1142,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if (! $hasGrantsFilter) {
             // force a grant filter
+            // NOTE: actual grants are set via setRequiredGrants later
             $grantsFilter = $_filter->createFilter('grants', 'in', '@setRequiredGrants');
             $_filter->addFilter($grantsFilter);
         }

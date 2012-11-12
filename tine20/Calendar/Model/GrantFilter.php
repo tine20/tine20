@@ -76,6 +76,16 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
     }
     
     /**
+     * get required grants
+     * 
+     * @return array
+     */
+    public function getRequiredGrants()
+    {
+        return $this->_requiredGrants;
+    }
+    
+    /**
      * set required grants
      * 
      * @param array $_grants

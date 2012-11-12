@@ -125,6 +125,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'originator_tz'         => array('allowEmpty' => true         ),
     
         // grant helper fields
+        Tinebase_Model_Grants::GRANT_FREEBUSY  => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_READ    => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_SYNC    => array('allowEmpty' => true),
         Tinebase_Model_Grants::GRANT_EXPORT  => array('allowEmpty' => true),
