@@ -440,11 +440,56 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         break 2;
                         
                     } else {
-                        // safe battery time by skipping folders which got synchronied less than Syncroton_Registry::getQuietTime() seconds ago
-                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
+                        if ($collectionData->getChanges !== true) {
                             continue;
                         }
                         
+                        try {
+                            // just check if the folder still exists
+                            $this->_folderBackend->get($collectionData->folder);
+                        } catch (Syncroton_Exception_NotFound $senf) {
+                            if ($this->_logger instanceof Zend_Log)
+                                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " collection does not exist anymore: " . $collectionData->collectionId);
+                            
+                            $collectionData->getChanges = false;
+                            
+                            // make sure this is the last while loop
+                            // no break 2 here, as we like to check the other folders too
+                            $intervalStart -= $this->_heartbeatInterval;
+                        }
+                        
+                        // check that the syncstate still exists and is still valid
+                        try {
+                            $syncState = $this->_syncStateBackend->getSyncState($this->_device, $collectionData->folder);
+                            
+                            // another process synchronized data of this folder already. let's skip it
+                            if ($syncState->id !== $collectionData->syncState->id) {
+                                if ($this->_logger instanceof Zend_Log)
+                                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " syncstate changed during heartbeat interval for collection: " . $collectionData->folder->serverId);
+                                
+                                $collectionData->getChanges = false;
+                                
+                                // make sure this is the last while loop
+                                // no break 2 here, as we like to check the other folders too
+                                $intervalStart -= $this->_heartbeatInterval;
+                            }
+                        } catch (Syncroton_Exception_NotFound $senf) {
+                            if ($this->_logger instanceof Zend_Log)
+                                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " no syncstate found anymore for collection: " . $collectionData->folder->serverId);
+                            
+                            $collectionData->syncState = null;
+                            
+                            // make sure this is the last while loop
+                            // no break 2 here, as we like to check the other folders too
+                            $intervalStart -= $this->_heartbeatInterval;
+                        }
+                        
+                        
+                        // safe battery time by skipping folders which got synchronied less than Syncroton_Command_Ping::$quietTime seconds ago
+                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
+                            continue;
+                        }
+                                                
                         $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class , $this->_device, $this->_syncTimeStamp);
                         
                         $estimate = $dataController->getCountOfChanges($this->_contentStateBackend, $collectionData->folder, $collectionData->syncState);
@@ -708,7 +753,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         'creation_time'    => $this->_syncTimeStamp,
                         'creation_synckey' => $collectionData->syncState->counter + 1
                     ));
-                    unset($serverModifications['added'][$id]);    
+                    unset($serverModifications['added'][$id]);
                 }
 
                 /**
