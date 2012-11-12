@@ -200,8 +200,8 @@
 
         var defaultGrant = records.length == 0 ? false : true;
         var grants = {
-            //addGrant:    defaultGrant,
-            //adminGrant:  defaultGrant,
+            addGrant:       defaultGrant,
+            adminGrant:     defaultGrant,
             deleteGrant:    defaultGrant,
             editGrant:      defaultGrant,
             readGrant:      defaultGrant,
@@ -225,10 +225,16 @@
                 }
             }
         }
+        // if calculated admin right is true, overwrite all grants with true
+        if(grants.adminGrant) {
+            for (var grant in grants) {
+                grants[grant] = true;
+            }
+        }
         
         return grants;
     }
- };
+};
  
 /**
  * sets text and disabled status of a set of actions according to the grants 
@@ -258,7 +264,9 @@ Tine.widgets.actionUpdater = function(records, actions, containerField, skipGran
         adminGrant:  defaultGrant,
         deleteGrant: defaultGrant,
         editGrant:   defaultGrant,
-        readGrant:   defaultGrant
+        exportGrant: defaultGrant,
+        readGrant:   defaultGrant,
+        syncGrant:   defaultGrant
     };
     
     // calculate sum of grants
