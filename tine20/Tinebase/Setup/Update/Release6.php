@@ -183,4 +183,28 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('access_log', 4);
         $this->setApplicationVersion('Tinebase', '6.7');
     }
+
+    /**
+     * update to 6.8
+     * 
+     * @see 0007232: Index customfield table
+     */
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>customfield_id</name>
+                <field>
+                    <name>customfield_id</name>
+                </field>
+            </index>
+        ');
+        try {
+            $this->_backend->addIndex('customfield', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // no index could be added
+        }
+        $this->setTableVersion('customfield', 3);
+        $this->setApplicationVersion('Tinebase', '6.8');
+    }
 }

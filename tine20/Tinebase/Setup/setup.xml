@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>6.7</version>
+    <version>6.8</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1942,7 +1942,7 @@
         </table>
         <table>
             <name>customfield</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1979,6 +1979,12 @@
                     <field>
                         <name>record_id</name>
                     </field>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>customfield_id</name>
                     <field>
                         <name>customfield_id</name>
                     </field>
