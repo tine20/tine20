@@ -163,7 +163,7 @@ Ext.form.DateField.prototype.getValue = function(){
  */
  Ext.form.TimeField.prototype.setValue = function(time){
     this.fullDateTime = time;
-    Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(time)));
+    Ext.form.TimeField.superclass.setValue.call(this, this.formatDate(this.parseDate(time)));
 };
 /**
  * @private
@@ -172,7 +172,7 @@ Ext.form.TimeField.prototype.getValue = function(){
     // return the value that was set (has time information when unchanged in client) 
     // and not just the date part!
     var value =  this.fullDateTime;
-
+    
     return value ? this.parseDate(value).dateFormat('H:i') : "";
 };
 

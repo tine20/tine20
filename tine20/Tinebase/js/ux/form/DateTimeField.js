@@ -114,7 +114,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         
         // this is odd, why doesn't Ext.form.TimeField a Date datatype?
         if (! Ext.isDate(time)) {
-            time = Date.parseDate(time, this.timeField.format);
+            time = Date.parseDate(time, 'H:i');
         }
         
         if (Ext.isDate(date)) {
