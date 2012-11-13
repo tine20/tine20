@@ -144,7 +144,16 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     html: '<ul>' + 
                         '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
                         '<li><a target="_blank" href="' + Tine.weburl + 'forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
-                    '</ul>'
+                    '</ul><br/>'
+                }, {
+                    cls: 'tb-login-big-label',
+                    html: _('Translations')
+                }, {
+                    html: '<p>' + _('If you miss a language, or your language is not supported completely, feel free to add you own translations!') + '</p>'
+                }, {
+                    html: '<br/><ul>' +
+                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + _('Tine 2.0 Translation Portal') + '</a></li>'
+                    + '</ul>'
                 }]
             });
         }
