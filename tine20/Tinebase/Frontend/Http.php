@@ -29,7 +29,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $smdArray = $smd->toArray();
         unset($smdArray['methods']);
         
-        return $smdArray;
+        if (! isset($_REQUEST['method']) || $_REQUEST['method'] != 'Tinebase.getServiceMap') {
+            return $smdArray;
+        }
+        
+        header('Content-type: application/json');
+        echo '_smd = ' . json_encode($smdArray);
+        die();
     }
     
     /**
