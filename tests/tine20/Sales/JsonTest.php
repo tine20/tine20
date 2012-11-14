@@ -315,6 +315,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     public function testNoteConcurrencyManagement()
     {
         $savedProduct = $this->_addProduct(FALSE);
+        sleep(1);
         $savedProduct['notes'][] = array(
             'note' => 'another phpunit test note',
         );
@@ -322,6 +323,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $savedProduct['name'] = 'changed name';
         $savedProductNameChanged = $this->_instance->saveProduct($savedProduct);
+        sleep(1);
         
         $savedProductNameChanged['name'] = 'PHPUnit test product';
         $savedProductNameChangedAgain = $this->_instance->saveProduct($savedProductNameChanged);

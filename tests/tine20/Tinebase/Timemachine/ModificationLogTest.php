@@ -197,8 +197,6 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     
     /**
      * get modifications test
-     * 
-     * @see 0000554: modlog: records can't be updated in less than 1 second intervals
      */
     public function testGetModifications()
     {
@@ -246,12 +244,6 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             }
             $this->assertEquals($params['nums'], $count);
         }
-        
-        $db = Tinebase_Core::getDb();
-        $select = $db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog', array('MAX(seq)'))
-            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $testBase['record_id']));
-        $seq = $db->fetchOne($select);
-        $this->assertEquals(6, $seq, '6 modifications expected, seq wrong');
     }
     
     /**
@@ -269,6 +261,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         // change something using the record controller
         $contact->tel_cell = NULL;
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        
+        // needs sleeping because of modlog/concurrency restrictions
+        sleep(1);
         
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),

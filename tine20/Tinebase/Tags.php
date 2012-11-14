@@ -651,6 +651,9 @@ class Tinebase_Tags
         
         if(!is_array($_tag)) $_tag = array($_tag);
 
+        // @todo remove this when we have record seq for modlog
+        $recordIds = array();
+        
         foreach ($_tag as $dirtyTagId) {
             $tag = $this->getTagsById($dirtyTagId, Tinebase_Model_TagRight::USE_RIGHT)->getFirstRecord();
             
@@ -689,6 +692,11 @@ class Tinebase_Tags
                 $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
             }
             
+            // @todo use record seq for modlog instead of sleeping
+            if (count(array_intersect($recordIds, $attachedIds)) > 0) {
+                // sleep due to current modlog restrictions
+                sleep(1);
+            }
             $recordIds = array_merge($recordIds, $attachedIds);
             $controller->concurrencyManagementAndModlogMultiple(
                 $attachedIds,
@@ -1036,6 +1044,9 @@ class Tinebase_Tags
                     array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsWithTagToMerge)
                 ));
                 $this->attachTagToMultipleRecords($recordFilter, $targetTag);
+                // modlog sleep :(
+                // @todo can be removed when this is resolved -> 0000554: modlog: records can't be updated in less than 1 second intervals
+                sleep(1);
                 $this->detachTagsFromMultipleRecords($recordFilter, $tag->getId());
                 
                 // check occurrence of the merged tag and remove it if obsolete

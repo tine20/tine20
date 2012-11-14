@@ -1316,6 +1316,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         
+        //sleep(10);
         $result = $this->_getMessages($folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
         
