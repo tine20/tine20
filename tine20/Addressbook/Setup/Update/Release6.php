@@ -27,4 +27,14 @@ class Addressbook_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '6.1');
     }
+    
+    /**
+    * update to 7.0
+    *
+    * @return void
+    */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Addressbook', '7.0');
+    }
 }

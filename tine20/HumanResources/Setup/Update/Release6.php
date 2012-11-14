@@ -127,4 +127,14 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '5');
         $this->setApplicationVersion('HumanResources', '6.5');
     }
+    
+    /**
+     * update to 7.0
+     * 
+     * @return void
+     */
+    public function update_5()
+    {
+        $this->setApplicationVersion('HumanResources', '7.0');
+    }
 }
