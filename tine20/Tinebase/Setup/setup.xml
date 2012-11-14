@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>6.8</version>
+    <version>6.9</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1139,7 +1139,7 @@
 
         <table>
             <name>timemachine_modlog</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1196,6 +1196,11 @@
                     <name>new_value</name>
                     <type>clob</type>
                 </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <length>64</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1226,6 +1231,9 @@
                     </field>
                     <field>
                         <name>modified_attribute</name>
+                    </field>
+                    <field>
+                        <name>seq</name>
                     </field>
                 </index>
             </declaration>

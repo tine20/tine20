@@ -218,30 +218,49 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * Saves a logbook record
      * 
-     * @param   Tinebase_Model_ModificationLog _modification 
-     * @return  string id;
-     * @throws  Tinebase_Exception_Record_Validation
+     * @param Tinebase_Model_ModificationLog $modification
+     * @param array $recordSequences
+     * @return string id;
      */
-    public function setModification(Tinebase_Model_ModificationLog $_modification) {
-        if ($_modification->isValid()) {
-            $id = $_modification->generateUID();
-            $_modification->setId($id);
-            $_modification->convertDates = true;
-            $modificationArray = $_modification->toArray();
-            if (is_array($modificationArray['new_value'])) {
-                throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . " Inserting modlog: " . print_r($modificationArray, TRUE));
-            
-            $this->_table->insert($modificationArray);
-        } else {
-            throw new Tinebase_Exception_Record_Validation(
-                "_modification data is not valid! \n" . 
-                print_r($_modification->getValidationErrors(), true)
-            );
+    public function setModification(Tinebase_Model_ModificationLog $modification, &$recordSequences = array())
+    {
+        $modification->isValid(TRUE);
+        
+        $id = $modification->generateUID();
+        $modification->setId($id);
+        $modification->convertDates = true;
+        $modificationArray = $modification->toArray();
+        if (is_array($modificationArray['new_value'])) {
+            throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
         }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " Inserting modlog: " . print_r($modificationArray, TRUE));
+        $modificationArray['seq'] = $this->_getNextRecordSequence($modification, $recordSequences);
+        $this->_table->insert($modificationArray);
+        
         return $id;
+    }
+    
+    /**
+     * get next record sequence number
+     * 
+     * @param Tinebase_Model_ModificationLog $modification
+     * @param array $recordSequences
+     * @return integer
+     */
+    protected function _getNextRecordSequence(Tinebase_Model_ModificationLog $modification, &$recordSequences = array())
+    {
+        if (isset($recordSequences[$modification->record_id])) {
+            $currentSequence = $recordSequences[$modification->record_id];
+        } else {
+            $db = $this->_table->getAdapter();
+            $select = $db->select()->from($this->_tablename, array('MAX(seq)'))
+                ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $modification->record_id));
+            $currentSequence = $db->fetchOne($select);
+        }
+        
+        $recordSequences[$modification->record_id] = ($currentSequence) ? $currentSequence + 1 : 1;
+        return $recordSequences[$modification->record_id];
     }
     
     /**
@@ -388,6 +407,7 @@ class Tinebase_Timemachine_ModificationLog
     protected function _loopModifications($_newData, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
     {
         $toOmit = array_merge($this->_metaProperties, $_toOmit);
+        $recordSequences = array();
         foreach ($_newData as $field => $newValue) {
             if (in_array($field, $toOmit)) {
                 continue;
@@ -419,7 +439,7 @@ class Tinebase_Timemachine_ModificationLog
             $modLogEntry->modified_attribute = $field;
             $modLogEntry->old_value = $curValue;
             $modLogEntry->new_value = $newValue;
-            $modLogEntry->setId($this->setModification($modLogEntry));
+            $modLogEntry->setId($this->setModification($modLogEntry, $recordSequences));
     
             $_modifications->addRecord($modLogEntry);
         }

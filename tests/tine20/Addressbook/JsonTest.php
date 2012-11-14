@@ -477,7 +477,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $contact = $this->testTagsModlog();
         $contact['tags'] = array();
-        sleep(1);
+        sleep(1); // make sure that the second change always gets last when fetching notes
         $result = $this->_instance->saveContact($contact);
         $this->_checkChangedNote($result['id'], array('tags ([{"id":', ' -> {"removed":[{'), 4);
     }
@@ -603,8 +603,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'value'    =>  Tinebase_Core::getUser()->accountDisplayName
         )));
         $sharedTagName = $this->_createAndAttachTag($filter);
-        // need to sleep for 1 second because modlog does not allow to change the same attribute twice in the same second ...
-        sleep(1);
         $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array
@@ -867,9 +865,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'resolveStrategy'   => 'mergeMine',
             'index'             => 1,
         ));
-        
-        // need to sleep for 1 second because modlog does not allow to change the same attribute twice in the same second ...
-        sleep(1);
         
         $result = $this->_importHelper(array('dryrun' => 0), $clientRecords);
         $this->assertEquals(1, $result['totalcount'], 'Should merge fritz: ' . print_r($result['exceptions'], TRUE));
@@ -1413,7 +1408,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                     'description' => 'testImport',
                     'color' => '#009B31',
         ));
-        sleep(1);
         $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
         $filter = array(array(
             'field'    => 'tag',
