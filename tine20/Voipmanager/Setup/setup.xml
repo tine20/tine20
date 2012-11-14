@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>6.0</version>
+    <version>7.0</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -23,7 +23,7 @@
                     <name>name</name>
                     <type>text</type>
                     <length>200</length>
-                </field>                
+                </field>
                 <field>
                     <name>softwareimage_snom300</name>
                     <type>text</type>

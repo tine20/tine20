@@ -372,4 +372,14 @@ class ActiveSync_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('acsync_synckey', 4);
         $this->setApplicationVersion('ActiveSync', '6.3');
     }
+    
+    /**
+    * update to 7.0
+    *
+    * @return void
+    */
+    public function update_3()
+    {
+        $this->setApplicationVersion('ActiveSync', '7.0');
+    }
 }

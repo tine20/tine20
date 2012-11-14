@@ -207,4 +207,14 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('customfield', 3);
         $this->setApplicationVersion('Tinebase', '6.8');
     }
+    
+    /**
+    * update to 7.0
+    *
+    * @return void
+    */
+    public function update_8()
+    {
+        $this->setApplicationVersion('Tinebase', '7.0');
+    }
 }

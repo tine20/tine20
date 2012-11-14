@@ -64,4 +64,14 @@ class Sales_Setup_Update_Release6 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Sales', '6.2');
     }
+    
+    /**
+    * update to 7.0
+    *
+    * @return void
+    */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Sales', '7.0');
+    }
 }

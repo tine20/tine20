@@ -34,4 +34,14 @@ class Inventory_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setApplicationVersion('Inventory', '6.1');
         $this->setTableVersion('inventory_item', '2');
     }
+    
+    /**
+     * update to 7.0
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Inventory', '7.0');
+    }
 }
