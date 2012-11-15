@@ -40,9 +40,10 @@
                 <include name="*/*" />
                 <exclude name=".tx/*" />
                 <exclude name="build/*" />
+                <exclude name="docs/*" />
                 <exclude name="images/*" />
-                <exclude name="styles/*" />
                 <exclude name="library/*" />
+                <exclude name="styles/*" />
                 <exclude name="Zend/*" />
             </fileset>
         </foreach>
