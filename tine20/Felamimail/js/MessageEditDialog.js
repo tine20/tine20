@@ -217,7 +217,6 @@ Ext.namespace('Tine.Felamimail');
         this.decodeMsgs();
         
         this.recordDefaults = Tine.Felamimail.Model.Message.getDefaultData();
-        this.recordDefaults.body = Tine.Felamimail.getSignature();
         
         if (this.mailAddresses) {
             this.recordDefaults.to = Ext.decode(this.mailAddresses);
@@ -278,7 +277,7 @@ Ext.namespace('Tine.Felamimail');
      * inits body and attachments from reply/forward/template
      */
     initContent: function() {
-        if (this.record.get('body') === this.recordDefaults.body) {
+        if (! this.record.get('body')) {
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
             if (! this.msgBody) {
