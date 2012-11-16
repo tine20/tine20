@@ -278,7 +278,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                     
                 case 'email':
                 case 'email_home':
-                    // android send email address as
+                    // android sends email address as
                     // Lars Kneschke <l.kneschke@metaways.de>
                     if (preg_match('/(.*)<(.+@[^@]+)>/', $data->$fieldName, $matches)) {
                         $contact->$value = trim($matches[2]);
@@ -290,7 +290,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                 case 'note':
                     // @todo check $data->$fieldName->Type and convert to/from HTML if needed
                     if ($data->$fieldName instanceof Syncroton_Model_EmailBody) {
-                        $contact->$value = $data->$fieldName->Data;
+                        $contact->$value = $data->$fieldName->data;
                     } else {
                         $contact->$value = null;
                     }

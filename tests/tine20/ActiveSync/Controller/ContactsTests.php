@@ -58,7 +58,7 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
                         <Contacts:LastName>asdfasdfaasd</Contacts:LastName>
                         <Contacts:WebPage>fb://some.dumb.fb.url</Contacts:WebPage>
                         <Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber>
-                        <Contacts:Body>&#13;</Contacts:Body>
+                        <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
                         <Contacts:Categories>
                             <Contacts:Category>1234</Contacts:Category>
                             <Contacts:Category>5678</Contacts:Category>
