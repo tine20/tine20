@@ -202,6 +202,47 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * add current user to attendee if he's organizer
+     * 
+     * @param bool $ifOrganizer      only add current user if he's organizer
+     * @param bool $ifNoOtherAttendee  only add current user if no other attendee are present
+     */
+    public function assertCurrentUserAsAttendee($ifOrganizer = TRUE, $ifNoOtherAttendee = FALSE)
+    {
+        if ($ifNoOtherAttendee && $this->attendee instanceof Tinebase_Record_RecordSet && $this->attendee->count() > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as other attendee are present.");
+            return;
+        }
+        
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($this->attendee);
+        
+        if (! $ownAttender) {
+            if ($ifOrganizer && $this->organizer && $this->organizer != Tinebase_Core::getUser()->contact_id) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as current user is not organizer.");
+            }
+            
+            else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " adding current user as attendee.");
+                
+                $newAttender = new Calendar_Model_Attender(array(
+                    'user_id'   => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+                ));
+                
+                if (! $this->attendee instanceof Tinebase_Record_RecordSet) {
+                    $this->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                }
+                $this->attendee->addRecord($newAttender);
+            }
+        }
+    }
+    
+    /**
      * returns the original dtstart of a recur series exception event 
      *  -> when the event should have started with no exception
      * 
