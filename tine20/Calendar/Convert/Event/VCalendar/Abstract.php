@@ -43,7 +43,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     {
         $this->_version = $_version;
     }
-        
+    
     /**
      * convert Calendar_Model_Event to Sabre_VObject_Component
      *
@@ -52,7 +52,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' event ' . print_r($_record->toArray(), true));
         
         $vcalendar = new Sabre_VObject_Component('VCALENDAR');
         
@@ -413,7 +414,71 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             if (is_resource($_blob)) {
                 $_blob = stream_get_contents($_blob);
             }
-            $vcalendar = Sabre_VObject_Reader::read($_blob);
+            $vcalendar = self::readVCalBlob($_blob);
+        }
+        
+        return $vcalendar;
+    }
+    
+    /**
+     * reads vcal blob and tries to repair some parsing problems that Sabre has
+     * 
+     * @param string $blob
+     * @param integer $failcount
+     * @param integer $spacecount
+     * @param integer $lastBrokenLineNumber
+     * @param array $lastLines
+     * @throws Sabre_VObject_ParseException
+     * @return Sabre_VObject_Component
+     * 
+     * @see 0006110: handle iMIP messages from outlook
+     * @see 0007438: update Sabre library
+     * 
+     * @todo maybe we can remove this when #7438 is resolved
+     */
+    public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' ' . $blob);
+        
+        try {
+            $vcalendar = Sabre_VObject_Reader::read($blob);
+        } catch (Sabre_VObject_ParseException $svpe) {
+            // NOTE: we try to repair Sabre_VObject_Reader as it fails to detect followup lines that do not begin with a space or tab
+            if ($failcount < 10 && preg_match(
+                '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
+            )) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' ' . $svpe->getMessage() .
+                    ' lastBrokenLineNumber: ' . $lastBrokenLineNumber);
+                
+                $brokenLineNumber = $matches[1] - 1 + $spacecount;
+                
+                if ($lastBrokenLineNumber === $brokenLineNumber) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Try again: concat this line to previous line.');
+                    $lines = $lastLines;
+                    $brokenLineNumber--;
+                    // increase spacecount because one line got removed
+                    $spacecount++;
+                } else {
+                    $lines = preg_split('/[\r\n]*\n/', $blob);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Concat next line to this one.');
+                    $lastLines = $lines; // for retry
+                }
+                $lines[$brokenLineNumber] .= $lines[$brokenLineNumber + 1];
+                unset($lines[$brokenLineNumber + 1]);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                    ' failcount: ' . $failcount .
+                    ' brokenLineNumber: ' . $brokenLineNumber .
+                    ' spacecount: ' . $spacecount);
+                
+                $vcalendar = self::readVCalBlob(implode("\n", $lines), $failcount + 1, $spacecount, $brokenLineNumber, $lastLines);
+            } else {
+                throw $svpe;
+            }
         }
         
         return $vcalendar;
@@ -489,7 +554,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (isset($_attendee['EMAIL']) && !empty($_attendee['EMAIL']->value)) {
             $email = $_attendee['EMAIL']->value;
         } else {
-            if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/', $_attendee->value, $matches)) {
+            if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $_attendee->value, $matches)) {
                 throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $_attendee->value);
             }
             $email = $matches['email'];
@@ -719,11 +784,21 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 case 'VALARM':
                     foreach($property as $valarm) {
                         
-                        // we can't cope with action NONE
-                        // iCal 6.0 send default alarms in the year 1976 with action NONE
-                        if ($valarm->ACTION == 'NONE') continue;
+                        if ($valarm->ACTION == 'NONE') {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                                . ' We can\'t cope with action NONE: iCal 6.0 sends default alarms in the year 1976 with action NONE. Skipping alarm.');
+                            continue;
+                        }
                         
-                        switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
+                        if (! is_object($valarm->TRIGGER['VALUE'])) {
+                            // @see 0006110: handle iMIP messages from outlook
+                            // @todo fix 0007446: handle broken alarm in outlook invitation message
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                                . ' Alarm has no TRIGGER value. Skipping it.');
+                            continue;
+                        }
+                        
+                        switch (strtoupper($valarm->TRIGGER['VALUE']->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
                                 //@TODO fixme

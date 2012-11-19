@@ -1148,20 +1148,31 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     */
     public function testEmailInvitation()
     {
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $email = $this->_getTestEmailAddress();
         $cachedMessage = $this->messageTestHelper('invitation.eml', NULL, NULL, array('unittest@tine20.org', $email));
+        $this->_testInvitationMessage($cachedMessage, 'pwulf@tine20.org', 'testevent', 2);
+    }
     
+    /**
+     * _testInvitationMessage
+     * 
+     * @param Felamimail_Model_Message $cachedMessage
+     * @param string $expectedOriginator
+     * @param string $expectedEventSummary
+     * @param integer $expectedAttendeeCount
+     */
+    protected function _testInvitationMessage($cachedMessage, $expectedOriginator, $expectedEventSummary, $expectedAttendeeCount)
+    {
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertEquals(1, count($message->preparedParts));
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
-        $this->assertEquals('pwulf@tine20.org', $preparediMIPPart->originator);
+        $this->assertEquals($expectedOriginator, $preparediMIPPart->originator);
         $event = $preparediMIPPart->getEvent();
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
-        $this->assertEquals('testevent', $event->summary);
-        $this->assertEquals(2, count($event->attendee));
+        $this->assertEquals($expectedEventSummary, $event->summary);
+        $this->assertEquals($expectedAttendeeCount, count($event->attendee));
     }
 
    /**
@@ -1177,6 +1188,42 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
         $this->assertEquals('pwulf@tine20.org', $preparediMIPPart->originator);
+    }
+
+   /**
+    * validate email invitation from outlook
+    * 
+    * @see 0006110: handle iMIP messages from outlook
+    */
+    public function testEmailInvitationFromOutlook()
+    {
+        $email = $this->_getTestEmailAddress();
+        $cachedMessage = $this->messageTestHelper('outlookimip.eml', NULL, NULL, array('name@example.net', $email));
+        $this->_testInvitationMessage($cachedMessage, 'name@example.com', 'test', 1);
+    }
+    
+   /**
+    * validate email invitation from outlook (base64 encoded ics)
+    * 
+    * @see 0006110: handle iMIP messages from outlook
+    */
+    public function testEmailInvitationFromOutlookBase64()
+    {
+        $email = $this->_getTestEmailAddress();
+        $cachedMessage = $this->messageTestHelper('invite_outlook.eml', NULL, NULL, array('oliver@example.org', $email));
+        $this->_testInvitationMessage($cachedMessage, 'user@telekom.ch', 'Test von Outlook an Tine20', 1);
+    }
+    
+    /**
+     * get test email address
+     * 
+     * @return string
+     */
+    protected function _getTestEmailAddress()
+    {
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        return $email;
     }
     
     /**

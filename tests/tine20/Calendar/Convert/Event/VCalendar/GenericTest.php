@@ -64,10 +64,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20Model()
     {
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendar);
-        
+        $event = $this->_convertHelper(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         //var_dump($event->toArray());
         
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
@@ -80,6 +77,21 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and :", $event->description);
         $this->assertEquals(2, count($event->attendee));
         $this->assertEquals(1, count($event->alarms));
+        
+        return $event;
+    }
+    
+    /**
+     * convert helper
+     * 
+     * @param string $filename
+     * @return Calendar_Model_Event
+     */
+    protected function _convertHelper($filename)
+    {
+        $vcalendar = $this->_getVCalendar($filename);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $converter->toTine20Model($vcalendar);
         
         return $event;
     }
@@ -340,7 +352,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
         return $event;
     }
-        
+    
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event 
      */
@@ -367,7 +379,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }    
 
     /**
-     * @ddepends testConvertToTine20Model
+     * @depends testConvertToTine20Model
      */
     public function testConvertFromTine20Model()
     {
@@ -400,7 +412,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }
     
     /**
-     * @ddepends testConvertToTine20Model
+     * @depends testConvertToTine20Model
      */
     public function testConvertFromTine20ModelWithCurrentUserAsAttendee()
     {
@@ -580,5 +592,18 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
     
         return $vcalendar;
+    }
+
+    /**
+     * testConvertFromGoogleToTine20Model
+     * 
+     * @see 0006110: handle iMIP messages from outlook
+     */
+    public function testConvertFromGoogleToTine20Model()
+    {
+        $event = $this->_convertHelper(dirname(__FILE__) . '/../../../Import/files/invite_google.ics');
+        
+        $this->assertEquals('133st5tjius426l9n1k1sil5rk@google.com', $event->uid);
+        $this->assertEquals('Test-Termin aus Google an Tine20', $event->summary);
     }
 }
