@@ -456,7 +456,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
     },
     
     checkEditGrant: function() {
-        var grant = this.duplicates[this.duplicateIdx].get('container_id') ? this.duplicates[this.duplicateIdx].get('container_id').account_grants['editGrant'] : false;
+        var grant = ! this.recordClass.getMeta('containerProperty') ? true : this.duplicates[this.duplicateIdx].get('container_id') ? this.duplicates[this.duplicateIdx].get(this.recordClass.getMeta('containerProperty')).account_grants['editGrant'] : false;
 
         // change strategy from merge to keep if user has no rights to merge
         if (this.resolveStrategy.match(/^merge/) && ! grant) {

@@ -7,10 +7,10 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
 Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 
-Tine.Tinebase.data.Record = function(data, id){
+Tine.Tinebase.data.Record = function(data, id) {
     if (id || id === 0) {
         this.id = id;
     } else if (data[this.idProperty]) {
@@ -105,14 +105,14 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         var encode = Ext.isPrimitive(value) ? String : Ext.encode,
             current = this.get(name);
             
-        if(encode(current) == encode(value)) {
+        if (encode(current) == encode(value)) {
             return;
         }
         this.dirty = true;
-        if(!this.modified){
+        if (!this.modified) {
             this.modified = {};
         }
-        if(this.modified[name] === undefined){
+        if (this.modified[name] === undefined) {
             this.modified[name] = current;
         }
         
@@ -123,7 +123,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             this.data[name] = value;
         }
         
-        if(!this.editing){
+        if (!this.editing) {
             this.afterEdit();
         }
     },
@@ -186,13 +186,13 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     var f = Ext.extend(Tine.Tinebase.data.Record, {});
     var p = f.prototype;
     Ext.apply(p, meta);
-    p.fields = new Ext.util.MixedCollection(false, function(field){
+    p.fields = new Ext.util.MixedCollection(false, function(field) {
         return field.name;
     });
-    for(var i = 0, len = o.length; i < len; i++){
+    for(var i = 0, len = o.length; i < len; i++) {
         p.fields.add(new Ext.data.Field(o[i]));
     }
-    f.getField = function(name){
+    f.getField = function(name) {
         return p.fields.get(name);
     };
     f.getMeta = function(name) {
@@ -257,7 +257,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
      */
     f.getPhpClassName = function(app, model) {
         // without arguments the php class name of the this is returned
-        if(!app && !model) {
+        if (!app && !model) {
             return f.getMeta('phpClassName');
         }
         // if var app is a record class, the getMeta method is called
@@ -267,7 +267,16 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
 
         var appName = (Ext.isObject(app) && app.hasOwnProperty('name')) ? app.name : app;
         return appName + '_Model_' + model;
-    },
+    };
+    
+    // sanitize containerProperty label
+    var containerProperty = f.getMeta('containerProperty');
+    if (containerProperty) {
+        var field = p.fields.get(containerProperty);
+        if (field) {
+            field.label = p.containerName;
+        }
+    }
     Tine.Tinebase.data.RecordMgr.add(f);
     return f;
 };

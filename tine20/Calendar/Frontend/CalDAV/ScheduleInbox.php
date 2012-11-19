@@ -41,54 +41,79 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre_DAV_Collection implem
      */
     public function getChild($_name)
     {
-        $modelName = 'Calendar_Model_Event';
-    
         try {
-            $object = $_name instanceof $modelName ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
+            $event = $_name instanceof Calendar_Model_Event ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('Object not found');
         }
-    
-        $objectClass = 'Calendar_Frontend_WebDAV_Event';
-    
-        return new $objectClass($object);
+        
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        $displayContainer = $ownAttendee->displaycontainer_id instanceof Tinebase_Model_Container ? 
+            $ownAttendee->displaycontainer_id :
+            Tinebase_Container::getInstance()->get($ownAttendee->displaycontainer_id);
+        
+        return new Calendar_Frontend_WebDAV_Event($displayContainer, $event);
     }
     
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * NOTE: We have not found a client which uses the schedule inbox yet.
+     * NOTE: The inbox concept seems not to fit the Tine 2.0 concept where
+     *       invitations are directly stored in a display calendar.
+     *       => to be on the safe side we don't use inbox yet
+     * 
+     * @see Sabre_DAV_Collection::getChildren()
      */
     function getChildren()
     {
-        $filterClass = 'Calendar_Model_EventFilter';
-
-        $filter = new $filterClass(array(
-            array(
-                'field'     => 'attender',
-                'operator'  => 'equals',
-                'value'     => array(
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'   => $this->_user->contact_id,
-                )
-            ),
-            array(
-                'field'     => 'attender_status',
-                'operator'  => 'equals',
-                'value'     => Calendar_Model_Attender::STATUS_NEEDSACTION
-            ),
-            // period filter
-        ));
+        return array();
         
-        $objects = $this->_getController()->search($filter);
+//         $filter = new Calendar_Model_EventFilter(array(
+//             array(
+//                 'field'     => 'attender',
+//                 'operator'  => 'equals',
+//                 'value'     => array(
+//                     'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+//                     'user_id'   => $this->_user->contact_id,
+//                 )
+//             ),
+//             array(
+//                 'field'     => 'container_id',
+//                 'operator'  => 'equals',
+//                 'value'     => array(
+//                     'path' => '/personal/' . $this->_user->getId()
+//                 )
+//             ),
+//             array(
+//                 'field'     => 'attender_status',
+//                 'operator'  => 'equals',
+//                 'value'     => Calendar_Model_Attender::STATUS_NEEDSACTION
+//             ),
+//             array(
+//                 'field'     => 'period',
+//                 'operator'  => 'within',
+//                 'value'     => array(
+//                     'from'    => Tinebase_DateTime::now()->subWeek(1),
+//                     'until'   => Tinebase_DateTime::now()->addYear(10),
+//                 )
+//             ),
+//         ));
         
-        $children = array();
+//         $objects = $this->_getController()->search($filter);
+//         $ownAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+//         foreach ($object as $event) {
+//             $ownAttendee->addRecord(Calendar_Model_Attender::getOwnAttender($event->attendee));
+//         }
+//         Tinebase_Container::getInstance()->getGrantsOfRecords($ownAttendee, $this->_user, 'displaycontainer_id');
+        
+//         $children = array();
     
-        foreach ($objects as $object) {
-            #$children[] = $this->getChild($object);
-        }
+//         foreach ($objects as $object) {
+//             $children[] = $this->getChild($object);
+//         }
     
-        return $children;
+//         return $children;
     }
     
     /**

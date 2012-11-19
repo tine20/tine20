@@ -79,6 +79,20 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
             return;
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' requestUri:' . $this->_request->getRequestUri());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            // NOTE inputstream can not be rewinded
+            $debugStream = fopen('php://temp','r+');
+            stream_copy_to_stream($this->_body, $debugStream);
+            rewind($debugStream);
+            $this->_body = $debugStream;
+            
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
+            rewind($this->_body);
+        }
+        
         self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
         self::$_server->httpRequest->setBody($this->_body);
         
@@ -105,7 +119,16 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         self::$_server->addPlugin(new Sabre_CalDAV_Schedule_Plugin());
         self::$_server->addPlugin(new Sabre_DAV_Browser_Plugin());
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            ob_start();
+        }
+        
         self::$_server->exec();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
+            ob_end_flush();
+        }
         
         Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
     }
