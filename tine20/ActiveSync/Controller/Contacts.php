@@ -44,11 +44,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
         'fileAs'                => 'n_fileas',
         'firstName'             => 'n_given',
         'home2PhoneNumber'      => 'tel_cell_private',
-        'homeAddressCity'              => 'adr_two_locality',
-        'homeAddressCountry'           => 'adr_two_countryname',
-        'homeAddressPostalCode'        => 'adr_two_postalcode',
-        'homeAddressState'             => 'adr_two_region',
-        'homeAddressStreet'            => 'adr_two_street',
+        'homeAddressCity'       => 'adr_two_locality',
+        'homeAddressCountry'    => 'adr_two_countryname',
+        'homeAddressPostalCode' => 'adr_two_postalcode',
+        'homeAddressState'      => 'adr_two_region',
+        'homeAddressStreet'     => 'adr_two_street',
         'homeFaxNumber'         => 'tel_fax_home',
         'homePhoneNumber'       => 'tel_home',
         'jobTitle'              => 'title', 
@@ -265,6 +265,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                 case 'adr_one_countryname':
                 case 'adr_two_countryname':
                     $contact->$value = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
+                    
                     break;
                     
                 case 'adr_one_street':
@@ -274,23 +275,25 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                     } else {
                         $contact->$value = $data->$fieldName;
                     }
+                    
                     break;
                     
                 case 'email':
                 case 'email_home':
-                    // android send email address as
+                    // android sends email address as
                     // Lars Kneschke <l.kneschke@metaways.de>
                     if (preg_match('/(.*)<(.+@[^@]+)>/', $data->$fieldName, $matches)) {
                         $contact->$value = trim($matches[2]);
                     } else {
                         $contact->$value = $data->$fieldName;
                     }
+                    
                     break;
                 
                 case 'note':
                     // @todo check $data->$fieldName->Type and convert to/from HTML if needed
                     if ($data->$fieldName instanceof Syncroton_Model_EmailBody) {
-                        $contact->$value = $data->$fieldName->Data;
+                        $contact->$value = $data->$fieldName->data;
                     } else {
                         $contact->$value = null;
                     }
@@ -302,6 +305,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                     if (! preg_match('/^fb:\/\//', $data->$fieldName)) {
                         $contact->$value = $data->$fieldName;
                     }
+                    
                     break;
                     
                 default:

@@ -56,9 +56,13 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
                         <Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs>
                         <Contacts:FirstName>asdf</Contacts:FirstName>
                         <Contacts:LastName>asdfasdfaasd</Contacts:LastName>
+                        <Contacts:Birthday>2000-12-25T23:00:00.000Z</Contacts:Birthday>
                         <Contacts:WebPage>fb://some.dumb.fb.url</Contacts:WebPage>
                         <Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber>
-                        <Contacts:Body>&#13;</Contacts:Body>
+                        <Contacts:BusinessAddressStreet>Pickhuben 2</Contacts:BusinessAddressStreet>
+                        <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
+                        <Contacts:Email1Address>l.kneschke@example.com</Contacts:Email1Address>
+                        <Contacts:Email2Address>Cornelius Weiß &lt;c.weiss@example.de&gt;</Contacts:Email2Address>
                         <Contacts:Categories>
                             <Contacts:Category>1234</Contacts:Category>
                             <Contacts:Category>5678</Contacts:Category>
@@ -127,9 +131,12 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $this->assertEquals('asdf',         $syncrotonContact->firstName);
-        $this->assertEquals('asdfasdfaasd', $syncrotonContact->lastName);
-        $this->assertEquals(NULL,           $syncrotonContact->webPage, 'facebook url should be removed');
+        $this->assertEquals('asdf',                   $syncrotonContact->firstName);
+        $this->assertEquals('asdfasdfaasd',           $syncrotonContact->lastName);
+        $this->assertEquals('l.kneschke@example.com', $syncrotonContact->email1Address);
+        $this->assertEquals('c.weiss@example.de',     $syncrotonContact->email2Address);
+        $this->assertEquals('20001224T230000Z',       $syncrotonContact->birthday->format('Ymd\THis\Z'));
+        $this->assertEquals(NULL,                     $syncrotonContact->webPage, 'facebook url should be removed');
         
         return array($serverId, $syncrotonContact);
     }

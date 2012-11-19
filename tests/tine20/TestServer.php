@@ -132,16 +132,14 @@ class TestServer
             '/--colors /',
             '/--verbose /',
             '/--stop-on-failure /',
+            '/[\S]+\.php$/',
             '/ \S+Tests/',
-            '/AllTests.php/',
             '/--debug /',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
             '/-c [\S]+\D/',
-            '/[\S]+\.php$/'
         ), array(
             '/php',
-            '',
             '',
             '',
             '',

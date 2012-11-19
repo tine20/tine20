@@ -743,14 +743,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
         
         if (empty($defaultAccountId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
+            
             return array();
         }
         
         try {
             $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
         } catch (Tinebase_Exception_NotFound $ten) {
-            // no folders
+            // return no folders
             return array();
         }
         
@@ -759,12 +761,16 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         
         try {
             Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+            
         } catch (Felamimail_Exception_IMAPServiceUnavailable $feisu) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feisu);
-            return array();
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feisu);
+            throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
+            
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feiic);
-            return array();
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feiic);
+            throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
         }
         
         // get folders

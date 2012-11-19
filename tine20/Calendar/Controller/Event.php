@@ -1542,6 +1542,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if ($displayCalId) {
                     $_attender->displaycontainer_id = $displayCalId;
                 }
+                // else -> attach to first container of user?
             }
         }
         

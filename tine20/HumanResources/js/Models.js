@@ -9,45 +9,48 @@
 Ext.namespace('Tine.HumanResources', 'Tine.HumanResources.Model');
 
 // Employee model fields
-Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.genericFields.concat([
-    {name: 'id',                  type: 'string'},
-    {name: 'number',              type: 'string'},
-    {name: 'account_id',          type: Tine.Tinebase.Model.Account},
-    {name: 'countryname',         type: 'string'},
-    {name: 'locality',            type: 'string'},
-    {name: 'postalcode',          type: 'string'},
-    {name: 'region',              type: 'string'},
-    {name: 'street',              type: 'string'},
-    {name: 'street2',             type: 'string'},
-    {name: 'email',               type: 'string'},
-    {name: 'tel_home',            type: 'string'},
-    {name: 'tel_cell',            type: 'string'},
-    {name: 'title',               type: 'string'},
-    {name: 'n_given',             type: 'string'},
-    {name: 'n_family',            type: 'string'},
-    {name: 'salutation',          type: 'string'},
-    {name: 'title',               type: 'string'},
-    {name: 'n_fn',                type: 'string'},
-    {name: 'bday',                type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'bank_account_holder', type: 'string'},
-    {name: 'bank_account_number', type: 'string'},
-    {name: 'bank_name',           type: 'string'},
-    {name: 'bank_code_number',    type: 'string'},
-    {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account },
-    {name: 'division_id',         type: 'Sales.Division' },
-    {name: 'health_insurance',    type: 'string' },
-    {name: 'profession',          type: 'string' },
+Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.modlogFields.concat([
+    {name: 'id',                  type: 'string',                    label: null, omitDuplicateResolving: true},
+    {name: 'number',              type: 'string', group: 'Employee', label: 'Number' },
+    {name: 'account_id',          type: Tine.Tinebase.Model.Account, group: 'Employee', label: 'Account'},
+    {name: 'countryname',         type: 'string', group: 'Personal Information', label: 'Country'},
+    {name: 'locality',            type: 'string', group: 'Personal Information', label: 'Locality'},
+    {name: 'postalcode',          type: 'string', group: 'Personal Information', label: 'Postalcode'},
+    {name: 'region',              type: 'string', group: 'Personal Information', label: 'Region'},
+    {name: 'street',              type: 'string', group: 'Personal Information', label: 'Street'},
+    {name: 'street2',             type: 'string', group: 'Personal Information', label: 'Street 2'},
+    {name: 'email',               type: 'string', group: 'Personal Information', label: 'E-Mail'},
+    {name: 'tel_home',            type: 'string', group: 'Personal Information', label: 'Telephone Number'},
+    {name: 'tel_cell',            type: 'string', group: 'Personal Information', label: 'Cell Phone Number'},
+    {name: 'bday',                type: 'date',   group: 'Personal Information', label: 'Birthday', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'n_given',             type: 'string', group: 'Employee', label: 'First Name'},
+    {name: 'n_family',            type: 'string', group: 'Employee', label: 'Last Name'},
+    {name: 'salutation',          type: 'string', group: 'Employee', label: 'Salutation'},
+    {name: 'title',               type: 'string', group: 'Employee', label: 'Title'},
+    {name: 'n_fn',                type: 'string', group: 'Employee', label: 'Employee name'},
+    {name: 'bank_account_holder', type: 'string', group: 'Banking Information', label: 'Account Holder'},
+    {name: 'bank_account_number', type: 'string', group: 'Banking Information', label: 'Account Number'},
+    {name: 'bank_name',           type: 'string', group: 'Banking Information', label: 'Bank Name'},
+    {name: 'bank_code_number',    type: 'string', group: 'Banking Information', label: 'Code Number'},
+    {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account, group: 'Internal Information', label: 'Supervisor' },
+    {name: 'division_id',         type: 'Sales.Division', group: 'Internal Information', label: 'Division' },
+    {name: 'health_insurance',    type: 'string', group: 'Internal Information', label: 'Health Insurance' },
+    {name: 'profession',          type: 'string', group: 'Internal Information', label: 'Profession' },
 
-    {name: 'employment_begin',    type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    {name: 'employment_end',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'employment_begin',    type: 'date', group: 'Internal Information', label: 'Employment begin', dateFormat: Date.patterns.ISO8601Long },
+    {name: 'employment_end',      type: 'date', group: 'Internal Information', label: 'Employment end', dateFormat: Date.patterns.ISO8601Long},
     // tine 2.0 tags and notes
-    {name: 'tags'},
-    {name: 'notes'},
+    {name: 'tags', label: 'Tags'},
+    {name: 'notes', omitDuplicateResolving: true},
     // relations with other objects
-    { name: 'relations'},
-    { name: 'contracts'},
-    { name: 'customfields'}
+    { name: 'relations', omitDuplicateResolving: true},
+    { name: 'contracts', omitDuplicateResolving: true},
+    { name: 'customfields', isMetaField: true}
 ]);
+
+Tine.widgets.grid.RendererManager.register('HumanResources', 'Employee', 'account_id', function(value){
+    return value.accountDisplayName;
+});
 
 /**
  * @namespace Tine.HumanResources.Model
@@ -64,7 +67,7 @@ Tine.HumanResources.Model.Employee = Tine.Tinebase.data.Record.create(Tine.Human
     // ngettext('Employee', 'Employees', n);
     recordName: 'Employee',
     recordsName: 'Employees',
-//    containerProperty: 'container_id',
+    containerProperty: null,
     // ngettext('Employees', 'Employees', n);
     containerName: 'Employees',
     containersName: 'Employees',
@@ -151,7 +154,7 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     // ngettext('Working Time', 'Working Times', n);
     recordName: 'Working Time',
     recordsName: 'Working Times',
-//    containerProperty: 'container_id',
+    containerProperty: null,
     // ngettext('Working Times', 'Working Times', n);
     containerName: 'Working Times',
     containersName: 'Working Times',
@@ -205,7 +208,7 @@ Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
 
 // ELayer
 
-Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
     {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
@@ -224,7 +227,7 @@ Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Human
     // ngettext('Contract', 'Contracts', n);
     recordName: 'Contract',
     recordsName: 'Contracts',
-//    containerProperty: 'container_id',
+    containerProperty: null,
     // ngettext('Contracts', 'Contracts', n);
     containerName: 'Contracts',
     containersName: 'Contracts',
@@ -280,7 +283,7 @@ Tine.HumanResources.contractBackend = new Tine.Tinebase.data.RecordProxy({
 /*
  * Vacation
  */
-Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id',          type: 'string'},
     {name: 'employee_id', type: Tine.HumanResources.Model.Employee},
     {name: 'type', type: 'string'},
@@ -296,6 +299,7 @@ Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.Human
     modelName: 'FreeTime',
     idProperty: 'id',
     titleProperty: 'remark',
+    containerProperty: null,
     // ngettext('Free Time', 'Free Times', n);
     recordName: 'Free Time',
     recordsName: 'Free Times',
@@ -380,6 +384,7 @@ Tine.HumanResources.Model.FreeDay = Tine.Tinebase.data.Record.create(Tine.HumanR
     modelName: 'FreeDay',
     idProperty: 'id',
     titleProperty: 'name',
+    containerProperty: null,
     // ngettext('Free Day', 'Free Days', n);
     recordName: 'Free Day',
     recordsName: 'Free Days',

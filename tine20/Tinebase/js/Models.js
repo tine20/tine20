@@ -9,10 +9,11 @@ Ext.ns('Tine.Tinebase.Model');
 
 /**
  * @type {Array}
- * generic Record fields
+ * 
+ * modlog Fields
  */
-Tine.Tinebase.Model.genericFields = [
-    { name: 'container_id', header: 'Container',                                       isMetaField: false},
+
+Tine.Tinebase.Model.modlogFields = [
     { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
     { name: 'created_by',                                                              isMetaField: true },
     { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
@@ -21,6 +22,14 @@ Tine.Tinebase.Model.genericFields = [
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
     { name: 'deleted_by',                                                              isMetaField: true }
 ];
+
+/**
+ * @type {Array}
+ * generic Record fields
+ */
+Tine.Tinebase.Model.genericFields = Tine.Tinebase.Model.modlogFields.concat([
+    { name: 'container_id', header: 'Container',                                       isMetaField: false}
+]);
     
 /**
  * Model of a language

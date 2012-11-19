@@ -68,7 +68,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     /**
      * @cfg {String} startDefinitionText untranslated start definition button text
      */
-    startDefinitionText: 'Start defintion', // _('Start defintion')
+    startDefinitionText: 'Start definition', // _('Start definition')
     
     /**
      * @property this filterModel is the generic filterRow
@@ -190,7 +190,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     /**
      * get related record value data
      * 
-     * NOTE: generic filters have their foreign record defintion in the values
+     * NOTE: generic filters have their foreign record definition in the values
      */
     getRelatedRecordValue: function(filter) {
         var filters = filter.toolbar ? filter.toolbar.getValue() : [],

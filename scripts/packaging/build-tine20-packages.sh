@@ -312,8 +312,10 @@ function prepareDebianPackaging()
     
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2
+    tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig.tar.bz2
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig-Courses.tar.bz2
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig-HumanResources.tar.bz2
     cp -r $BASEDIR/temp/debian $PACKAGEDIR/tine20-$DEBIANVERSION
 
     echo "done"
@@ -333,8 +335,10 @@ function prepareUniventionPackaging()
     
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2
+    tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig.tar.bz2
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig-Courses.tar.bz2
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2 $PACKAGEDIR/tine20_$DEBIANVERSION.orig-HumanResources.tar.bz2
     cp -r $BASEDIR/temp/Univention/* $PACKAGEDIR/tine20-$DEBIANVERSION
 
     echo "done"
