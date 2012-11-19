@@ -62,4 +62,18 @@ class Felamimail_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '6.2');
     }
+
+    /**
+     * update to 6.3
+     * - rename "All inboxes" persistent filter
+     * 
+     * @see 0007280: "All INBOXES" favorite not translated 
+     */
+    public function update_2()
+    {
+        // rename "all inboxes" filter
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . "filter SET name = 'All inboxes' WHERE name = 'All INBOXES'");
+        
+        $this->setApplicationVersion('Felamimail', '6.3');
+    }
 }
