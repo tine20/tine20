@@ -135,7 +135,9 @@ class Syncroton_Command_FolderDeleteTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(3, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        $this->assertArrayNotHasKey($this->_testFolderId, Syncroton_Data_Contacts::$folders);
+        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CALENDAR, $this->_device, new DateTime('now'))->getAllFolders();
+        
+        $this->assertArrayNotHasKey($this->_testFolderId, $allFolders);
     }
     
     /**

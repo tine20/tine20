@@ -36,6 +36,8 @@ class Syncroton_Registry extends ArrayObject
     const GAL_DATA_CLASS      = 'gal_data_class';
     
     const DEFAULT_POLICY      = 'default_policy';
+    const PING_TIMEOUT        = 'ping_timeout';
+    const QUIET_TIME          = 'quiet_time';
     
     const DATABASE            = 'database';
     const TRANSACTIONMANAGER  = 'transactionmanager';
@@ -241,6 +243,22 @@ class Syncroton_Registry extends ArrayObject
     }
 
     /**
+     * return ping timeout 
+     * 
+     * sleep "ping timeout" seconds between folder checks in Ping and Sync command 
+     * 
+     * @return int
+     */
+    public static function getPingTimeout()
+    {
+        if (!self::isRegistered(self::PING_TIMEOUT)) {
+            return 60;
+        }
+        
+        return self::get(self::PING_TIMEOUT);
+    }
+    
+    /**
      * returns policy backend
      * 
      * creates Syncroton_Backend_Policy on the fly if not set before via
@@ -257,6 +275,22 @@ class Syncroton_Registry extends ArrayObject
         return self::get(self::POLICYBACKEND);
     }
 
+    /**
+     * return quiet time 
+     * 
+     * don't check folders if last sync was "quiet time" seconds ago 
+     * 
+     * @return int
+     */
+    public static function getQuietTime()
+    {
+        if (!self::isRegistered(self::QUIET_TIME)) {
+            return 180;
+        }
+        
+        return self::get(self::QUIET_TIME);
+    }
+    
     /**
      * returns syncstate backend
      * 

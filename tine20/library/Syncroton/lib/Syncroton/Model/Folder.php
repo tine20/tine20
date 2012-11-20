@@ -29,6 +29,7 @@ class Syncroton_Model_Folder extends Syncroton_Model_AEntry implements Syncroton
         'Internal' => array(
             'id'             => array('type' => 'string'),
             'deviceId'       => array('type' => 'string'),
+            'ownerId'        => array('type' => 'string'),
             'class'          => array('type' => 'string'),
             'creationTime'   => array('type' => 'datetime'),
             'lastfiltertype' => array('type' => 'number')
