@@ -21,6 +21,7 @@
  * @property    string   displayName
  * @property    string   creationTime
  * @property    string   lastfiltertype
+ * @property    string   type
  */
 
 interface Syncroton_Model_IFolder

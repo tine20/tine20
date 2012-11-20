@@ -82,8 +82,8 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
         Syncroton_Registry::setGALDataClass('Syncroton_Data_Contacts');
         
         // speed up tests
-        Syncroton_Command_Ping::$pingTimeout = 1;
-        Syncroton_Command_Ping::$quietTime   = 1;
+        Syncroton_Registry::set(Syncroton_Registry::PING_TIMEOUT, 1);
+        Syncroton_Registry::set(Syncroton_Registry::QUIET_TIME, 1);
     }
 
     /**
@@ -94,8 +94,8 @@ abstract class Syncroton_Command_ATestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Syncroton_Command_Ping::$pingTimeout = 60;
-        Syncroton_Command_Ping::$quietTime   = 120;
+        Syncroton_Registry::set(Syncroton_Registry::PING_TIMEOUT, 60);
+        Syncroton_Registry::set(Syncroton_Registry::QUIET_TIME, 120);
         
         Syncroton_Registry::getTransactionManager()->rollBack();
         Syncroton_Registry::getDatabase()->query('delete from syncroton_device');

@@ -31,18 +31,6 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
     protected $_changesDetected = false;
     
     /**
-     * 
-     * @var int
-     */
-    public static $pingTimeout = 60;
-    
-    /**
-     * 
-     * @var int
-     */
-    public static $quietTime = 180;
-    
-    /**
      * @var Syncroton_Backend_StandAlone_Abstract
      */
     protected $_dataBackend;
@@ -109,7 +97,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
             
             do {
                 // take a break to save battery lifetime
-                sleep(self::$pingTimeout);
+                sleep(Syncroton_Registry::getPingTimeout());
                 
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
@@ -126,8 +114,8 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                             continue;
                         }
                         
-                        // safe battery time by skipping folders which got synchronied less than self::$quietTime seconds ago
-                        if (($now->getTimestamp() - $syncState->lastsync->getTimestamp()) < self::$quietTime) {
+                        // safe battery time by skipping folders which got synchronied less than Syncroton_Registry::getQuietTime() seconds ago
+                        if (($now->getTimestamp() - $syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
                             continue;
                         }
                         

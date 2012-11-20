@@ -17,6 +17,8 @@
  */
 class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
 {
+    #protected $_logPriority = Zend_Log::DEBUG;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -74,13 +76,14 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
     {
         $this->testGetFoldersSyncKey0();
         
-        Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['addressbookFolderId2'] = new Syncroton_Model_Folder(array(
-            'id'          => sha1(mt_rand(). microtime()),
-            'serverId'    => 'addressbookFolderId2',
-            'parentId'    => 0,
-            'displayName' => 'User created Contacts Folder',
-            'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
-        ));
+        Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime('now'))->createFolder(
+            new Syncroton_Model_Folder(array(
+                'serverId'    => 'addressbookFolderId2',
+                'parentId'    => null,
+                'displayName' => 'User created Contacts Folder',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+            ))
+        );
         
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -91,7 +94,7 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
         $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
     
         $folderSync->handle();
-    
+        
         $responseDoc = $folderSync->getResponse();
         #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
@@ -147,12 +150,13 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
     {
         $this->testGetFoldersSyncKey0();
         $clientFolders1 = Syncroton_Registry::getFolderBackend()->getFolderState($this->_device, 'Contacts');
+        $testFolderIds = array_keys($clientFolders1);
         
         $this->testGetFoldersInvalidSyncKey();
         
         $this->testGetFoldersSyncKey0();
         $clientFolders2 = Syncroton_Registry::getFolderBackend()->getFolderState($this->_device, 'Contacts');
         
-        $this->assertEquals($clientFolders1["addressbookFolderId"], $clientFolders2["addressbookFolderId"]);
+        $this->assertEquals($clientFolders1[$testFolderIds[0]], $clientFolders2[$testFolderIds[0]]);
     }
 }

@@ -22,11 +22,13 @@ class Syncroton_Command_Options
      * 
      * @return void
      */
-    public function getResponse()
+    public function getHeaders()
     {
         // same header like Exchange 2xxx???
-        header('MS-Server-ActiveSync:  14.00.0536.000');
-        header("MS-ASProtocolVersions: 2.5,12.0,12.1,14.0,14.1");
-        header("MS-ASProtocolCommands: CreateCollection,DeleteCollection,FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetAttachment,GetHierarchy,GetItemEstimate,ItemOperations,MeetingResponse,MoveCollection,MoveItems,Provision,ResolveRecipients,Ping,SendMail,Search,Settings,SmartForward,SmartReply,Sync,ValidateCert");
+        return array(
+            'MS-Server-ActiveSync'  => '14.00.0536.000',
+            "MS-ASProtocolVersions' => '2.5,12.0,12.1,14.0,14.1",
+            "MS-ASProtocolCommands' => 'CreateCollection,DeleteCollection,FolderCreate,FolderDelete,FolderSync,FolderUpdate,GetAttachment,GetHierarchy,GetItemEstimate,ItemOperations,MeetingResponse,MoveCollection,MoveItems,Provision,ResolveRecipients,Ping,SendMail,Search,Settings,SmartForward,SmartReply,Sync,ValidateCert"
+        );
     }    
 }

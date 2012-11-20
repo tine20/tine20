@@ -35,4 +35,11 @@ interface Syncroton_Command_ICommand
      * create the response
      */
     public function getResponse();
+    
+    /**
+     * return headers of command
+     * 
+     * @return array list of headers
+     */
+    public function getHeaders();
 }

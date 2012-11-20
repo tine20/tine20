@@ -115,6 +115,12 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             return $this->_outputDom;
         }
 
+        // send headers from options command also when FolderSync SyncKey is 0
+        if ($this->_syncState->counter == 0) {
+            $optionsCommand = new Syncroton_Command_Options();
+            $this->_headers = array_merge($this->_headers, $optionsCommand->getHeaders());
+        }
+        
         $adds = array();
         $deletes = array();
 
