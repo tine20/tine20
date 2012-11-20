@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>7.1</version>
+    <version>7.0</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -79,7 +79,7 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>allow_smime_encr_algor_negoti</name>
+                    <name>allow_s_m_i_m_e_encryption_algorithm_negotiation</name>
                     <type>boolean</type>
                 </field>
                 <field>
@@ -99,7 +99,7 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>allow_unsigned_install_packag</name>
+                    <name>allow_unsigned_installation_packages</name>
                     <type>boolean</type>
                 </field>
                 <field>
@@ -107,7 +107,7 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>alpnumeric_device_pass_req</name>
+                    <name>alphanumeric_device_password_required</name>
                     <type>boolean</type>
                 </field>
                 <field>
@@ -139,7 +139,7 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>max_device_pass_fail_attempts</name>
+                    <name>max_device_password_failed_attempts</name>
                     <type>boolean</type>
                 </field>
                 <field>
@@ -151,15 +151,15 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>max_email_htmlbody_trunc_size</name>
+                    <name>max_email_h_t_m_l_body_truncation_size</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>max_inactiv_time_device_lock</name>
+                    <name>max_inactivity_time_device_lock</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>min_device_pass_complex_char</name>
+                    <name>min_device_password_complex_characters</name>
                     <type>boolean</type>
                 </field>
                 <field>
@@ -175,31 +175,31 @@
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_encrypt_smime_messages</name>
+                    <name>require_encrypted_s_m_i_m_e_messages</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_encrypt_smime_algorithm</name>
+                    <name>require_encryption_s_m_i_m_e_algorithm</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_manual_sync_when_roaming</name>
+                    <name>require_manual_sync_when_roaming</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_signed_smime_algorithm</name>
+                    <name>require_signed_s_m_i_m_e_algorithm</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_signed_smime_messages</name>
+                    <name>require_signed_s_m_i_m_e_messages</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>req_storage_card_encryption</name>
+                    <name>require_storage_card_encryption</name>
                     <type>boolean</type>
                 </field>
                 <field>
-                    <name>unapproved_in_rom_app_list</name>
+                    <name>unapproved_in_r_o_m_application_list</name>
                     <type>blob</type>
                 </field>
                 <index>
@@ -698,7 +698,7 @@
             </table>
             <field>
                 <name>id</name>
-                <value special="uid"/>
+                <value special='uid'/>
             </field>
             <field>
                 <name>name</name>
@@ -712,7 +712,7 @@
             </field>
             <field>
                 <name>policy_key</name>
-                <value special="uid"/>
+                <value special='uid'/>
             </field>
             <field>
                 <name>device_password_enabled</name>
