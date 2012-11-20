@@ -120,9 +120,17 @@ CREATE TABLE IF NOT EXISTS `syncroton_content` (
 
 CREATE TABLE IF NOT EXISTS `syncroton_data` (
     `id` varchar(40) NOT NULL,
-    `type` varchar(40) NOT NULL,
+    `class` varchar(40) NOT NULL,
     `folder_id` varchar(40) NOT NULL,
     `data` longblob,
     PRIMARY KEY (`id`)
 );
-  
+
+CREATE TABLE IF NOT EXISTS `syncroton_data_folder` (
+    `id` varchar(40) NOT NULL,
+    `type` int(11) NOT NULL,
+    `name` varchar(255) NOT NULL,
+    `owner_id` varchar(40) NOT NULL,
+    `parent_id` varchar(40) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);
