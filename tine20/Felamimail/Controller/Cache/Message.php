@@ -1194,11 +1194,23 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param string $messageUid
      * @param string $accountId
+     * @param string $folderId
      * @return array
      */
-    public function getMessageSummary($messageUid, $accountId)
+    public function getMessageSummary($messageUid, $accountId, $folderId = NULL)
     {
         $imap = Felamimail_Backend_ImapFactory::factory($accountId);
+        
+        if ($folderId !== NULL) {
+            try {
+                $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
+                $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not select folder ' . $folder->globalname . ': ' . $e->getMessage());
+            }
+        }
+        
         $summary = $imap->getSummary($messageUid, NULL, TRUE);
         
         return $summary;

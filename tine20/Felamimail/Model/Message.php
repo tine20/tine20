@@ -13,7 +13,8 @@
  * class to hold message cache data
  * 
  * @package     Felamimail
- * @subpackage    Model
+ * @subpackage  Model
+ * @property    string  $folder_id      the folder id
  * @property    string  $subject        the subject of the email
  * @property    string  $from_email     the address of the sender (from)
  * @property    string  $from_name      the name of the sender (from)
@@ -184,7 +185,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
             
             try {
-                $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id);
+                $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
                 $result = $summary['structure'];
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 // imap server might have gone away
