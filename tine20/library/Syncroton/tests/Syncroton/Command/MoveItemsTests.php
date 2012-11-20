@@ -33,6 +33,22 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
     {
         parent::setUp();
         
+        Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId']['moveItem'] = array(
+        	'FirstName' => 'Lars', 
+        	'LastName'  => 'Kneschke'
+        );
+    }
+    
+    protected function tearDown()
+    {
+        parent::tearDown();
+        unset(Syncroton_Data_AData::$entries['Syncroton_Data_Contacts']['addressbookFolderId']['moveItem']);
+    }
+    
+    /**
+     */
+    public function testMoveInvalidSrcFolder()
+    {
         // do initial sync first
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -43,13 +59,8 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
         $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
         $folderSync->handle();
         $responseDoc = $folderSync->getResponse();
-        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
-    }
-    
-    /**
-     */
-    public function testMoveInvalidSrcFolder()
-    {
+        
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -73,6 +84,18 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
      */
     public function testMoveInvalidDstFolder()
     {
+        // do initial sync first
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:ItemOperations"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
+        $folderSync->handle();
+        $responseDoc = $folderSync->getResponse();
+        
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -96,6 +119,18 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
      */
     public function testMoveSameDstAndSrcFolder()
     {
+        // do initial sync first
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:ItemOperations"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
+        $folderSync->handle();
+        $responseDoc = $folderSync->getResponse();
+        
+        
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -119,11 +154,22 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
      */
     public function testMove()
     {
+        // do initial sync first
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:ItemOperations"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, null);
+        $folderSync->handle();
+        $responseDoc = $folderSync->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Moves xmlns="uri:Move"><Move><SrcMsgId>contact1</SrcMsgId><SrcFldId>addressbookFolderId</SrcFldId><DstFldId>anotherAddressbookFolderId</DstFldId></Move></Moves>'
+            <Moves xmlns="uri:Move"><Move><SrcMsgId>moveItem</SrcMsgId><SrcFldId>addressbookFolderId</SrcFldId><DstFldId>anotherAddressbookFolderId</DstFldId></Move></Moves>'
         );
         
         $moveItems = new Syncroton_Command_MoveItems($doc, $this->_device, null);
@@ -140,10 +186,10 @@ class Syncroton_Command_MoveItemsTests extends Syncroton_Command_ATestCase
         
         $nodes = $xpath->query('//Move:Moves/Move:Response/Move:SrcMsgId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals('contact1', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals('moveItem', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
         $nodes = $xpath->query('//Move:Moves/Move:Response/Move:DstMsgId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals('contact1', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals('moveItem', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }    
 }

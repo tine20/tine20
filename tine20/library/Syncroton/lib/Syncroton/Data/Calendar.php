@@ -13,13 +13,9 @@
  *
  * @package     Model
  */
+
 class Syncroton_Data_Calendar extends Syncroton_Data_AData implements Syncroton_Data_IDataCalendar
 {
-    protected $_supportedFolderTypes = array(
-        Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
-        Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED
-    );
-    
     /**
      * set attendee status for meeting
      * 
@@ -29,6 +25,22 @@ class Syncroton_Data_Calendar extends Syncroton_Data_AData implements Syncroton_
     public function setAttendeeStatus(Syncroton_Model_MeetingResponse $reponse)
     {
         return $reponse->requestId;
+    }
+    
+    protected function _initData()
+    {
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        Syncroton_Data_AData::$folders[get_class($this)] = array(
+            'calendarFolderId' => new Syncroton_Model_Folder(array(
+                'id'          => sha1(mt_rand(). microtime()),
+                'serverId'    => 'calendarFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Default Contacts Folder',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR
+            ))
+        );
     }
 }
 

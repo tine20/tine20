@@ -16,18 +16,13 @@
 
 class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_Data_IDataSearch
 {
-    protected $_supportedFolderTypes = array(
-        Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-        Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
-    );
-    
     /**
      * (non-PHPdoc)
      * @see Syncroton_Data_IDataSearch::getSearchEntry()
      */
     public function getSearchEntry($longId, $options)
     {
-        list($collectionId, $serverId) = explode(Syncroton_Data_AData::LONGID_DELIMITER, $longId, 2);
+        list($collectionId, $serverId) = explode('-', $longId, 2);
         
         $contact = $this->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $collectionId)), $serverId);
         
@@ -61,8 +56,8 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
                     continue;
                 }
                 $found[] = new Syncroton_Model_StoreResponseResult(array(
-                    'longId' => 'addressbookFolderId' . Syncroton_Data_AData::LONGID_DELIMITER .  $serverId,
-                    'properties' => $this->getSearchEntry('addressbookFolderId' . Syncroton_Data_AData::LONGID_DELIMITER .  $serverId, $store->options)
+                    'longId' => 'addressbookFolderId-' .  $serverId,
+                    'properties' => $this->getSearchEntry('addressbookFolderId-' .  $serverId, $store->options)
                 ));
             }
         }
@@ -76,6 +71,132 @@ class Syncroton_Data_Contacts extends Syncroton_Data_AData implements Syncroton_
         }
         
         return $storeResponse;
+    }
+    
+    protected function _initData()
+    {
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        if (!isset(Syncroton_Data_AData::$folders[get_class($this)])) {
+            Syncroton_Data_AData::$folders[get_class($this)] = array(
+                'addressbookFolderId' => new Syncroton_Model_Folder(array(
+                    'id'          => sha1(mt_rand(). microtime()),
+                    'serverId'    => 'addressbookFolderId',
+                    'parentId'    => 0,
+                    'displayName' => 'Default Contacts Folder',
+                    'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT
+                )),
+                'anotherAddressbookFolderId' => new Syncroton_Model_Folder(array(
+                    'id'          => sha1(mt_rand(). microtime()),
+                    'serverId'    => 'anotherAddressbookFolderId',
+                    'parentId'    => 0,
+                    'displayName' => 'Another Contacts Folder',
+                    'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+                ))
+            );
+        }
+        
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        $entries = $this->getServerEntries('addressbookFolderId', 1);
+        
+        if (count($entries) == 0) {
+            $testData = array(
+                'addressbookFolderId' => array(
+                    'contact1' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact2' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact3' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact4' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact5' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact6' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact7' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact8' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact9' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact10' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    ))
+                ),
+                'anotherAddressbookFolderId' => array(
+                    'contact1' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact2' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact3' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact4' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact5' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact6' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact7' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact8' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    )),
+                    'contact9' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Lars', 
+                        'lastName'  => 'Kneschke'
+                    )),
+                    'contact10' => new Syncroton_Model_Contact(array(
+                        'firstName' => 'Cornelius', 
+                        'lastName'  => 'Weiß'
+                    ))
+                )
+            );
+            
+            foreach ($testData['addressbookFolderId'] as $data) {
+                $this->createEntry('addressbookFolderId', $data);
+            }
+            foreach ($testData['anotherAddressbookFolderId'] as $data) {
+                $this->createEntry('anotherAddressbookFolderId', $data);
+            }
+        }
     }
 }
 

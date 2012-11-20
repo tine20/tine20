@@ -642,8 +642,6 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     
-        //we have to sleep on second here
-        sleep(1);
     
         // now do the first sync windowsize of collection = 2
         $doc = new DOMDocument();

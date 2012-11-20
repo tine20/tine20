@@ -260,7 +260,7 @@ class Syncroton_Data_ContactsTests extends Syncroton_Command_ATestCase
         Syncroton_Data_AData::$changedEntries['Syncroton_Data_Contacts'][] = 'contact1';
         
         $entries = $dataController->getChangedEntries('addressbook-root', new DateTime(null, new DateTimeZone('UTC')));
-        
+        #var_dump($entries);
         $this->assertContains('contact1', $entries);
         $this->assertNotContains('contact2', $entries);
     }

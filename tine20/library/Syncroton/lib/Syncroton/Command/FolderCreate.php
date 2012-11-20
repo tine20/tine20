@@ -70,13 +70,12 @@ class Syncroton_Command_FolderCreate extends Syncroton_Command_Wbxml
                 break;
         }
         
+        $folder->deviceId     = $this->_device;
+        $folder->creationTime = $this->_syncTimeStamp;
         
         $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
         
         $this->_folder = $dataController->createFolder($folder);
-        $this->_folder->class        = $folder->class;
-        $this->_folder->deviceId     = $this->_device;
-        $this->_folder->creationTime = $this->_syncTimeStamp;
         
         $this->_folderBackend->create($this->_folder);
     }

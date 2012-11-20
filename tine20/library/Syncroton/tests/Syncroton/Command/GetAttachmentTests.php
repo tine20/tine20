@@ -36,7 +36,7 @@ class Syncroton_Command_GetAttachmentTests extends Syncroton_Command_ATestCase
      */
     public function testGetAttachment()
     {
-        $getAttachment = new Syncroton_Command_GetAttachment(null, $this->_device, array('attachmentName'  => 'FooBar' . Syncroton_Data_AData::LONGID_DELIMITER . '1', 'policyKey' => null));
+        $getAttachment = new Syncroton_Command_GetAttachment(null, $this->_device, array('attachmentName'  => 'FooBar-1', 'policyKey' => null));
         
         $getAttachment->handle();
         

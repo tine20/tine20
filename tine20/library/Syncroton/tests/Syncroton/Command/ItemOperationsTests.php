@@ -114,7 +114,7 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
-            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>emailInboxFolderId' . Syncroton_Data_AData::LONGID_DELIMITER . 'email1</AirSyncBase:FileReference></Fetch>
+            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>emailInboxFolderId-email1</AirSyncBase:FileReference></Fetch>
             </ItemOperations>'
         );
         
@@ -169,7 +169,7 @@ class Syncroton_Command_ItemOperationsTests extends Syncroton_Command_ATestCase
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
             <ItemOperations xmlns="uri:ItemOperations" xmlns:AirSync="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase">
-            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>emailInboxFolderId' . Syncroton_Data_AData::LONGID_DELIMITER . 'email1</AirSyncBase:FileReference></Fetch>
+            <Fetch><Store>Mailbox</Store><AirSyncBase:FileReference>emailInboxFolderId-email1</AirSyncBase:FileReference></Fetch>
             </ItemOperations>'
         );
         

@@ -16,9 +16,28 @@
 
 class Syncroton_Data_Tasks extends Syncroton_Data_AData
 {
-    protected $_supportedFolderTypes = array(
-        Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
-        Syncroton_Command_FolderSync::FOLDERTYPE_TASK_USER_CREATED
-    );
+    protected function _initData()
+    {
+        /**
+        * used by unit tests only to simulated added folders
+        */
+        Syncroton_Data_AData::$folders[get_class($this)] = array(
+            'tasksFolderId' => new Syncroton_Model_Folder(array(
+                'id'          => sha1(mt_rand(). microtime()),
+                'serverId'    => 'tasksFolderId',
+                'parentId'    => 0,
+                'displayName' => 'Default Tasks Folder',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_TASK
+            ))
+        );
+        
+        /**
+         * used by unit tests only to simulated added folders
+         */
+        #Syncroton_Data_AData::$entries[get_class($this)] = array(
+        #    'tasksFolderId' => array(
+        #    )
+        #);
+    }
 }
 

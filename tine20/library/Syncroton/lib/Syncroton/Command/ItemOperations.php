@@ -158,8 +158,6 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
                     
                     // unset data field and move content to stream
                     if ($this->_requestParameters['acceptMultipart'] == true) {
-                        $this->_headers['Content-Type'] = 'application/vnd.ms-sync.multipart';
-                        
                         $partStream = fopen("php://temp", 'r+');
                         
                         if (is_resource($fileReference->data)) {

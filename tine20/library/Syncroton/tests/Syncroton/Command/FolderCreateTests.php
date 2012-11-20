@@ -78,12 +78,10 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CALENDAR, $this->_device, new DateTime('now'))->getAllFolders();
-        
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:ServerId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
-        $this->assertArrayHasKey($nodes->item(0)->nodeValue, $allFolders);
+        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']);
     }
     
     /**
@@ -107,12 +105,10 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
         
-        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime('now'))->getAllFolders();
-        
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:ServerId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
-        $this->assertArrayHasKey($nodes->item(0)->nodeValue, $allFolders);
+        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']);
     }
     
     /**
@@ -136,12 +132,10 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
         
-        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_EMAIL, $this->_device, new DateTime('now'))->getAllFolders();
-        
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:ServerId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
-        $this->assertArrayHasKey($nodes->item(0)->nodeValue, $allFolders);
+        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Email']);
     }
     
     /**
@@ -165,12 +159,10 @@ class Syncroton_Command_FolderCreateTests extends Syncroton_Command_ATestCase
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('FolderHierarchy', 'uri:FolderHierarchy');
         
-        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_TASKS, $this->_device, new DateTime('now'))->getAllFolders();
-        
         $nodes = $xpath->query('//FolderHierarchy:FolderCreate/FolderHierarchy:ServerId');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertFalse(empty($nodes->item(0)->nodeValue), $responseDoc->saveXML());
-        $this->assertArrayHasKey($nodes->item(0)->nodeValue, $allFolders);
+        $this->assertArrayHasKey($nodes->item(0)->nodeValue, Syncroton_Data_AData::$folders['Syncroton_Data_Tasks']);
     }
     
     /**

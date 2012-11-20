@@ -125,13 +125,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
     protected $_parts = array();
     
     /**
-     * list of headers
-     * 
-     * @var array
-     */
-    protected $_headers = array();
-    
-    /**
      * the constructor
      *
      * @param  mixed                   $requestBody
@@ -155,9 +148,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         }
         
         $this->_syncTimeStamp = new DateTime(null, new DateTimeZone('UTC'));
-        
-        // set default content type
-        $this->_headers['Content-Type'] = 'application/vnd.ms-sync.wbxml';
         
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->format('Y-m-d H:i:s'));
@@ -202,14 +192,6 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
         }
     }
     
-    /**
-     * (non-PHPdoc)
-     * @see Syncroton_Command_ICommand::getHeaders()
-     */
-    public function getHeaders()
-    {
-        return $this->_headers;
-    }
     /**
      * return array of part streams
      * 
