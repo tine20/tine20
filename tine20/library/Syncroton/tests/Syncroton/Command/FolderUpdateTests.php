@@ -75,8 +75,10 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        $this->assertArrayHasKey('calendarFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']);
-        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Calendar']['calendarFolderId']->displayName);
+        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CALENDAR, $this->_device, new DateTime('now'))->getAllFolders();
+        
+        $this->assertArrayHasKey('calendarFolderId', $allFolders);
+        $this->assertEquals('Test Folder Update', $allFolders['calendarFolderId']->displayName);
         
     }
         
@@ -109,8 +111,10 @@ class Syncroton_Command_FolderUpdateTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals(2, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
-        $this->assertArrayHasKey('anotherAddressbookFolderId', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']);
-        $this->assertEquals('Test Folder Update', Syncroton_Data_AData::$folders['Syncroton_Data_Contacts']['anotherAddressbookFolderId']->displayName);
+        $allFolders = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime('now'))->getAllFolders();
+        
+        $this->assertArrayHasKey('anotherAddressbookFolderId', $allFolders);
+        $this->assertEquals('Test Folder Update', $allFolders['anotherAddressbookFolderId']->displayName);
     }
     
     /**

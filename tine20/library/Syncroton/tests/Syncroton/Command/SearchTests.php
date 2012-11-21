@@ -73,5 +73,5 @@ class Syncroton_Command_SearchTests extends Syncroton_Command_ATestCase
         $nodes = $xpath->query('//Search:Search/Search:Response/Search:Store/Search:Result');
         $this->assertEquals(4, $nodes->length, $responseDoc->saveXML());
         #$this->assertEquals(Syncroton_Command_Search::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
-    }    
+    }
 }
