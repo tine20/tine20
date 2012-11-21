@@ -264,10 +264,15 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $group = $this->get($_groupId);
             $user  = Tinebase_User::getInstance()->getUserById($_userId);
             
-            if (!empty($user->contact_id) && !empty($group->list_id)) {
-                $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
-                Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id);
-                Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
+            if (! empty($user->contact_id) && ! empty($group->list_id)) {
+                if (! Addressbook_Controller_List::getInstance()->exists($group->list_id)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' Could not add member to list ' . $group->list_id . ' (it does not exist)');
+                } else {
+                    $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
+                    Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id);
+                    Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
+                }
             }
         }
         
