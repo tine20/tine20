@@ -16,6 +16,11 @@ Ext.ux.file.BrowsePlugin = function(config) {
     Ext.apply(this, config);
 };
 
+/**
+ * @TODO: 
+ *         
+ *         proxy mouse events
+ */
 Ext.ux.file.BrowsePlugin.prototype = {
     /**
      * @cfg {Boolean} multiple
@@ -82,225 +87,166 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @see Ext.Button.initComponent
      */
     init: function(cmp){
+        this.component = cmp;
         if(cmp.handler) this.handler = cmp.handler;
         this.scope = cmp.scope || window;
         cmp.handler = null;
         cmp.scope = null;
         
-        this.component = cmp;
-        
         cmp.on('afterrender', this.onRender, this);
-        cmp.on('show', this.syncWrap, this);
-        cmp.on('resize', this.syncWrap, this);
-        cmp.on('afterlayout', this.syncWrap, this);
-        
-        // chain fns
-        if (typeof cmp.setDisabled == 'function') {
-            cmp.setDisabled = cmp.setDisabled.createSequence(function(disabled) {
-                if (this.input_file) {
-                    this.input_file.dom.disabled = disabled;
-                }
-            }, this);
-        }
-        
-        if (typeof cmp.enable == 'function') {
-            cmp.enable = cmp.enable.createSequence(function() {
-                if (this.input_file) {
-                    this.input_file.dom.disabled = false;
-                }
-            }, this);
-        }
-        
-        if (typeof cmp.disable == 'function') {
-            cmp.disable = cmp.disable.createSequence(function() {
-                if (this.input_file) {
-                    this.input_file.dom.disabled = true;
-                }
-            }, this);
-        }
-        
-        if (typeof cmp.destroy == 'function') {
-            cmp.destroy = cmp.destroy.createSequence(function() {
-                var input_file = this.detachInputFile(true);
-                if (input_file) {
-                    input_file.remove();
-                }
-                input_file = null;
-            }, this);
-        }
-        
+        cmp.on('destroy', this.onDestroy, this);
     },
     
     /**
-     * @see Ext.Button.onRender
-     */
-    onRender: function() {
-       
-        this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
-        this.button_container.position('relative');
-        this.wrap = this.component.el.wrap({cls:'tbody'});
-
-        // NOTE: wrap a button is complex, its doLayout moves the wrap
-        if (this.component.ownerCt && this.component.btnEl/* && this.component.ownerCt.el.hasClass('x-toolbar')*/) {
-            this.component.ownerCt.on('afterlayout', function() {
-                if (this.wrap.first() !== this.component.el) {
-                    this.wrap.insertBefore(this.component.el);
-                    this.wrap.insertFirst(this.component.el);
-                }
-                this.syncWrap();
-            }, this);
-            
-            this.component.ownerCt.on('show', this.syncWrap, this);
-            this.component.ownerCt.on('resize', this.syncWrap, this);
-        }
-        
-        if (this.enableFileDialog) this.createInputFile();
-      
-        if (this.enableFileDrop && !Ext.isIE) {
-            if (! this.dropEl) {
-                if (this.dropElSelector) {
-                    this.dropEl = this.wrap.up(this.dropElSelector);
-                } else {
-                    this.dropEl = this.button_container;
-                }
-            }
-            
-            this.dropEl.on('dragleave', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-
-                this.createMouseEvent(e, 'mouseout');
-            }, this);
-
-            // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
-            this.dropEl.on('dragover', function(e) {
-
-                e.stopPropagation();
-                e.preventDefault();
-                                         
-                this.createMouseEvent(e, 'mouseover');
-                
-            }, this);
-            
-            this.dropEl.on('drop', function(e, target) {
-               
-                e.stopPropagation();
-                e.preventDefault();
-                
-                // a bit hackish, I know...
-                this.onBrowseButtonClick();
-                
-                var dt = e.browserEvent.dataTransfer;
-                var files = dt.files;
-                
-                this.onInputFileChange(e, null, null, files);
-            }, this);
+    * hide floatingLayer when the mouse leaves the layer
+    */
+    hideLayerIf: function(e) {
+        if (! e.within(this.floatingLayer, false, true)) {
+            this.hideLayer();
         }
     },
     
-    syncWrap: function() {
-        if (this.button_container) {
-            var button_size = this.button_container.getSize();
-            this.wrap.setSize(button_size);
+    hideLayer: function() {
+        Ext.getDoc().un('mousemove', this.hideLayerIf, this);
+        this.floatingLayer.hide();
+        this.layerVisisble = false;
+    },
+    
+    /**
+    * show floatingLayer and start to check whether the mouse is in it
+    */
+    showLayer: function() {
+        if (! this.layerVisisble) {
+            this.syncFloatingLayer();
+            this.floatingLayer.show();
+            
+            this.component.mon(Ext.getDoc(), {
+                scope: this,
+                mousemove: this.hideLayerIf,
+                buffer: 250
+            });
+            
+            this.layerVisisble = true;
         }
+    },
+    
+    /**
+    * drag and drop
+    */
+    imageDragleave: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.component.el.applyStyles(' background-color: transparent');
+        this.hideLayer();
+    },
+    
+    imageDragover: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.component.el.applyStyles(' background-color: #ebf0f5');
+    },
+    
+    imageDrop: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.component.el.applyStyles(' background-color: transparent');
+        this.onBrowseButtonClick();
+        var dt = e.browserEvent.dataTransfer;
+        var files = dt.files;
+        this.onInputFileChange(e, null, null, files);
+    },
+    
+    /**
+    * returns z-index
+    * If the component has no z-index: 100
+    * If the component has a z-index: this z-index + 100
+    */
+    getNextZindex: function() {
+        var zElement = this.component.getEl().up('div[style*=z-index]');
+        var zIndex = zElement === null ? 0 : parseInt(zElement.getStyle('z-index'));
+        
+        return zIndex + 100;
+    },
+    
+    /**
+     * @TODO proxy mouse events from layer to cmp
+     */
+    onRender: function() {
+        if (this.enableFileDialog) {
+            this.floatingLayer = new Ext.Layer({constrain: false, shadow: false, shim: false, zindex: this.getNextZindex()});
+            this.component.on('enable', this.onEnable, this);
+            this.component.on('disable', this.onDisable, this);
+            
+            this.component.mon(this.component.getEl(), {
+                scope: this,
+                'mouseover': this.showLayer
+            });
+            this.floatingLayer.applyStyles('overflow: hidden; position: relative; background-image:url('+Ext.BLANK_IMAGE_URL+'); background-repeat:repeat;');
+            this.floatingLayer.on('mousemove', function(e) {
+                var xy = e.getXY();
+                this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+            }, this, {buffer: 20});
+            
+            if (this.component.handleMouseEvents) {
+                this.floatingLayer.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
+                this.floatingLayer.on('mousedown', this.component.onMouseDown || Ext.emptyFn, this.component);
+                this.floatingLayer.on('contextmenu', this.component.onContextMenu || Ext.emptyFn, this.component);
+            }
+            
+            this.createInputFile();
+        }
+        if (this.enableFileDrop && !Ext.isIE) {
+            this.dropEl = this.component.el;
+            this.dropEl.on('dragleave', this.imageDragleave, this);
+            this.dropEl.on('dragover', this.imageDragover, this);
+            this.dropEl.on('drop', this.imageDrop, this);
+        }
+    },
+    
+    /**
+    * clean up
+    */
+    onDestroy: function() {
+        this.floatingLayer.remove();
+        this.floatingLayer = null;
+        this.input_file = null;
+        this.dropEl.un('dragleave', this.imageDragleave, this);
+        this.dropEl.un('dragover', this.imageDragover, this);
+        this.dropEl.un('drop', this.imageDrop, this);
+        this.dropEl = null;
+    },
+    
+    onEnable: function() {
+        this.setDisabled(false);
+    },
+    
+    onDisable: function() {
+        this.setDisabled(true);
+    },
+    
+    setDisabled: function(disabled) {
+        this.input_file.dom.disabled = disabled;
+    },
+    
+    syncFloatingLayer: function() {
+        this.floatingLayer.setBox(this.component.el.getBox());
     },
     
     createInputFile: function() {
-        this.input_file = this.wrap.createChild(Ext.apply({
+        this.input_file = this.floatingLayer.createChild(Ext.apply({
             tag: 'input',
             type: 'file',
             size: 1,
             name: this.inputFileName || Ext.id(this.component.el),
             style: "position: absolute; display: block; border: none; cursor: pointer;"
         }, this.multiple ? {multiple: true} : {}));
-
         this.input_file.dom.disabled = this.component.disabled;
         
-        var button_box = this.button_container.getBox();
-        
-        this.wrap.setBox(button_box);
-
-        this.wrap.applyStyles('overflow: hidden; position: relative;');
-        
-        // ALL but IE
-        this.wrap.on('mousemove', function(e) {
-            var xy = e.getXY();
-            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-            
-            // if split button
-            if(this.component.btnEl) {
-                var buttonEl = Ext.get(this.wrap.dom);
-                var buttonX = buttonEl.getX(),
-                    buttonWidth = buttonEl.getWidth(),
-                    mouseX = xy[0];
-                
-                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
-                    this.input_file.dom.style.zIndex = -1;
-                }
-                else {
-                    this.input_file.dom.style.zIndex = '';
-                }
-            }
-            
-        }, this, {buffer: 20});
-        
-        
-        // IE
-        this.button_container.on('mousemove', function(e) {
-            var xy = e.getXY();
-            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-            
-            // if split button
-            if(this.component.btnEl) {
-                var buttonEl = Ext.get(this.button_container.dom);
-                var buttonX = buttonEl.getX(),
-                    buttonWidth = buttonEl.getWidth(),
-                    mouseX = xy[0];
-                
-                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
-                    this.input_file.dom.style.zIndex = -1;
-                }
-                else {
-                    this.input_file.dom.style.zIndex = '';
-                }
-            }
-        }, this, {buffer: 30});
-        
         this.input_file.setOpacity(0.0);
-
+        
         Ext.fly(this.input_file).on('click', function(e) {
             this.onBrowseButtonClick();
         }, this);
-        
-        // FIX mouseover / out
-        if (! this.supressOverFix && Ext.isFunction(this.component.onMouseOut)) {
-            this.component.onMouseOut = this.component.onMouseOut.createInterceptor(function(e) {
-                if (this.isMouseOver) {
-                    return false;
-                }
-                this.isMouseOver = false;
-            }, this);
-            
-            this.wrap.on('mouseover', function(e) {
-                this.isMouseOver = true;
-                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
-                    this.component.el.addClass('x-btn-over');
-                }
-            }, this);
-    
-            this.wrap.on('mouseout', function(e) {
-                this.isMouseOver = false;
-                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
-                    this.component.el.removeClass('x-btn-over');
-                }
-            }, this);
-        }
-        
-        if (this.component.handleMouseEvents) {
-            this.wrap.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
-            this.wrap.on('mousedown', this.component.onMouseDown || Ext.emptyFn, this.component);
-            this.wrap.on('contextmenu', this.component.onContextMenu || Ext.emptyFn, this.component);
-        }
         
         if(this.component.tooltip){
             if(typeof this.component.tooltip == 'object'){
@@ -356,6 +302,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             }
             this.input_file.removeAllListeners();
         }
+        
         this.input_file = null;
         
         if (this.enableFileDialog && !no_create) {
@@ -388,7 +335,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @return {String} class to use for file type icon
      */
     getFileCls: function() {
-
+    
         var fparts = this.getFileName().split('.');
         if(fparts.length === 1) {
             return '';

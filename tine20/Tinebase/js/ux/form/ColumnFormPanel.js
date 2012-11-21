@@ -82,7 +82,8 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                     layout: 'form',
                     labelAlign: this.labelAlign,
                     defaults: this.formDefaults,
-                    bodyStyle: 'padding-right: 5px;',
+                    //Is n the last column object? Then no padding.
+                    bodyStyle: n+1>=m ? 'padding-right: 0px;' : 'padding-right: 5px;',
                     border: false,
                     items: column
                 });

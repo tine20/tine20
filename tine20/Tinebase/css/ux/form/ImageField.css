@@ -1,6 +1,13 @@
-.x-ux-from-imagefield-text {
-    text-align: center;
+.ux-imagefield-ct {
+     border:1px solid #B5B8C8;
+}
+.ux-imagefield-button{
+     position:absolute;
+     top:0px;
+     width: 100%;
+     height: 100%;
+}
+.ux-imagefield-text{
     position: absolute;
-    top: 0px;
-    left: 0px;
+    text-align:center;
 }
