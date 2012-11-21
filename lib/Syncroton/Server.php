@@ -174,7 +174,9 @@ class Syncroton_Server
                 $response->formatOutput = false;
             }
             
-            $this->_sendHeaders($command->getHeaders());
+            if (isset($command) && $command instanceof Syncroton_Command_ICommand) {
+                $this->_sendHeaders($command->getHeaders());
+            }
             
             $outputStream = fopen("php://temp", 'r+');
             
