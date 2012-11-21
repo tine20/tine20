@@ -1,12 +1,14 @@
 # 
 # Translators:
+#   <ivana.horvat@globalnet.hr>, 2012.
 #   <onebeat.hr@gmail.com>, 2012.
+#   <visicfilip@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-17 17:13+0000\n"
+"Last-Translator: fvisic <visicfilip@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,675 +25,675 @@ msgstr "upravljanje djeljenim adresarom"
 
 #: Acl/Rights.php:99
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Kreiraj nove zajedničke mape adresara"
 
 #: Acl/Rights.php:102
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "upravljaj favoritima u zajedničkim adresarima"
 
 #: Acl/Rights.php:103
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Kreiraj ili ažuriraj zajedničke favorite adresara"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Provjeri duple kontakte"
 
 #: Config.php:47
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "Ova polja se provjeravaju kod unosa novog kontakta. Ukoliko već postoji jednak zapis u ovom polju, iznimka o duplom zapisu se neće poštivati."
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Pozdravni kontakt dostupan"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "Mogući kontaktni pozdrav. Imajte na umu da dodatna vrijednosti mogu utjecati druge sustave adresara ili na izvoz ili sinkronizaciju."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr ""
+msgstr "Pravila za raščlanjivanje adresa"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Putanja do XML datoteke sa pravilima za raščlanjivanje adrese."
 
 #: Controller/Contact.php:329
 msgid "Uploaded new contact image."
-msgstr ""
+msgstr "Učitaj novu sliku kontakta."
 
 #: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
-msgstr ""
+msgstr "%s osobni adresar"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
-msgstr ""
+msgstr "Poslovni kontakt podaci"
 
 #: Export/Pdf.php:39
 msgid "Organisation / Unit"
-msgstr ""
+msgstr "Organizacija/ Jedinica"
 
 #: Export/Pdf.php:44
 msgid "Business Address"
-msgstr ""
+msgstr "Poslovna adresa"
 
 #: Export/Pdf.php:52 js/ContactGrid.js:127
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: Export/Pdf.php:55
 msgid "Telephone Work"
-msgstr ""
+msgstr "Poslovni telefon"
 
 #: Export/Pdf.php:58
 msgid "Telephone Cellphone"
-msgstr ""
+msgstr "Mobilni telefon"
 
 #: Export/Pdf.php:61
 msgid "Telephone Car"
-msgstr ""
+msgstr "Telefon u autu"
 
 #: Export/Pdf.php:64
 msgid "Telephone Fax"
-msgstr ""
+msgstr "Faks"
 
 #: Export/Pdf.php:67
 msgid "Telephone Page"
-msgstr ""
+msgstr "Telefon stranica"
 
 #: Export/Pdf.php:70
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: Export/Pdf.php:73
 msgid "Role"
-msgstr ""
+msgstr "Uloga"
 
 #: Export/Pdf.php:76 js/ContactEditDialog.js:179 js/ContactGrid.js:116
 #: js/Model.js:33
 msgid "Room"
-msgstr ""
+msgstr "Soba"
 
 #: Export/Pdf.php:79
 msgid "Assistant"
-msgstr ""
+msgstr "Asistent"
 
 #: Export/Pdf.php:82
 msgid "Assistant Telephone"
-msgstr ""
+msgstr "Telefon asistenta"
 
 #: Export/Pdf.php:86
 msgid "Private Contact Data"
-msgstr ""
+msgstr "Privatni kontakt podaci"
 
 #: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
 #: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
 #: js/Model.js:159
 msgid "Private Address"
-msgstr ""
+msgstr "Privatna adresa"
 
 #: Export/Pdf.php:96
 msgid "Email Home"
-msgstr ""
+msgstr "Privatni e-mail"
 
 #: Export/Pdf.php:99
 msgid "Telephone Home"
-msgstr ""
+msgstr "Privatni telefon"
 
 #: Export/Pdf.php:102
 msgid "Telephone Cellphone Private"
-msgstr ""
+msgstr "Privatni mobilni telefon"
 
 #: Export/Pdf.php:105
 msgid "Telephone Fax Home"
-msgstr ""
+msgstr "Privatni faks"
 
 #: Export/Pdf.php:108
 msgid "URL Home"
-msgstr ""
+msgstr "URL privatno"
 
 #: Export/Pdf.php:112
 msgid "Other Data"
-msgstr ""
+msgstr "Ostali podaci"
 
 #: Export/Pdf.php:114 js/ContactEditDialog.js:167 js/ContactGrid.js:142
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
-msgstr ""
+msgstr "Datum rođenja"
 
 #: Export/Pdf.php:117 js/ContactEditDialog.js:161 js/ContactGrid.js:114
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
-msgstr ""
+msgstr "Naziv radnog mjesta"
 
 #: Import/definitions/adb_google_import_csv.xml:12
 msgid "Contact import from Google address book"
-msgstr ""
+msgstr "Učitavanje kontakta iz Google adresara"
 
 #: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
-msgstr ""
+msgstr "Učitavanje VCARD Kontakta"
 
 #: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
-msgstr ""
+msgstr "Učitavanje kontakta CSV datotekom iz mac adresara"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:14
 msgid "CSV Outlook 2007 German"
-msgstr ""
+msgstr "CSV Outlook 2007 German"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
-msgstr ""
+msgstr "Učitavanje kontakta CSV datotekom iz Outlook adresara"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
-msgstr ""
+msgstr "Učitavanje kontakata CSV datotekom"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "Lista za učitavanje (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "Kontakti učitani ###CURRENTDATE### u ###CURRENTTIME### sa ###USERFULLNAME###"
 
 #: js/Addressbook.js:22
 msgid "New Contact"
-msgstr ""
+msgstr "Dodaj Kontakt"
 
 #: js/Addressbook.js:32 js/Model.js:98 js/Model.js:205
 msgid "Addressbook"
 msgid_plural "Addressbooks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Adresar"
+msgstr[1] "Adresari"
+msgstr[2] "Adresara"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr ""
+msgstr "CardDAV URL"
 
 #: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
 msgid "Map"
-msgstr ""
+msgstr "Karta"
 
 #: js/ContactEditDialog.js:76
 msgid "Personal Information"
-msgstr ""
+msgstr "Osobne informacije"
 
 #: js/ContactEditDialog.js:97 js/ContactGrid.js:107 js/Model.js:29
 msgid "Salutation"
-msgstr ""
+msgstr "Oslovljavanje"
 
 #: js/ContactEditDialog.js:115 js/Model.js:22
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: js/ContactEditDialog.js:123 js/ContactGrid.js:109 js/Model.js:20
 #: js/Model.js:139
 msgid "First Name"
-msgstr ""
+msgstr "Ime"
 
 #: js/ContactEditDialog.js:128 js/Model.js:21
 msgid "Middle Name"
-msgstr ""
+msgstr "Srednje ime"
 
 #: js/ContactEditDialog.js:133 js/ContactEditDialog.js:431
 #: js/ContactEditDialog.js:449 js/ContactGrid.js:108 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
-msgstr ""
+msgstr "Prezime"
 
 #: js/ContactEditDialog.js:142 js/ContactEditDialog.js:431
 #: js/ContactEditDialog.js:449 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
 #: Setup/Initialize.php:65 Setup/Update/Release5.php:196
 msgid "Company"
-msgstr ""
+msgstr "Tvrtka"
 
 #: js/ContactEditDialog.js:147 js/ContactGrid.js:113 js/Model.js:28
 #: js/Model.js:142
 msgid "Unit"
-msgstr ""
+msgstr "Organizacijska jedinica"
 
 #: js/ContactEditDialog.js:156 js/ContactGrid.js:111 js/Model.js:24
 msgid "Display Name"
-msgstr ""
+msgstr "Naziv klijenta/ puno ime"
 
 #: js/ContactEditDialog.js:171 js/Model.js:23
 msgid "Suffix"
-msgstr ""
+msgstr "Sufiks"
 
 #: js/ContactEditDialog.js:175 js/ContactGrid.js:115 js/Model.js:31
 #: js/Model.js:145
 msgid "Job Role"
-msgstr ""
+msgstr "Poslovna uloga"
 
 #: js/ContactEditDialog.js:186
 msgid "Contact Information"
-msgstr ""
+msgstr "Kontakt informacije"
 
 #: js/ContactEditDialog.js:191 js/ContactGrid.js:128
 #: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
 #: js/Model.js:51 js/Model.js:143
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/ContactEditDialog.js:196 js/ContactGrid.js:129
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
 #: js/Model.js:52
 msgid "Mobile"
-msgstr ""
+msgstr "Mobitel"
 
 #: js/ContactEditDialog.js:201 js/ContactGrid.js:130
 #: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
 #: js/Model.js:53
 msgid "Fax"
-msgstr ""
+msgstr "Faks"
 
 #: js/ContactEditDialog.js:206 js/ContactGrid.js:133 js/Model.js:57
 msgid "Phone (private)"
-msgstr ""
+msgstr "Telefon (privatni)"
 
 #: js/ContactEditDialog.js:211 js/ContactGrid.js:135 js/Model.js:59
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Mobitel (privatni)"
 
 #: js/ContactEditDialog.js:216 js/ContactGrid.js:134 js/Model.js:58
 msgid "Fax (private)"
-msgstr ""
+msgstr "Fax (privatni)"
 
 #: js/ContactEditDialog.js:221 js/ContactGridDetailsPanel.js:142
 #: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
-msgstr ""
+msgstr "E-mail"
 
 #: js/ContactEditDialog.js:227 js/Model.js:63
 msgid "E-Mail (private)"
-msgstr ""
+msgstr "E-mail (privatni)"
 
 #: js/ContactEditDialog.js:234 js/ContactGrid.js:137
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
 #: js/Model.js:64
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 #: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
 #: js/Model.js:152 js/Model.js:153 js/Model.js:154
 msgid "Company Address"
-msgstr ""
+msgstr "Adresa tvrtke"
 
 #: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
 #: js/ContactGrid.js:117 js/Model.js:150 js/Model.js:155
 msgid "Street"
-msgstr ""
+msgstr "Ulica"
 
 #: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 msgid "Street 2"
-msgstr ""
+msgstr "Ulica 2"
 
 #: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
 #: js/ContactGrid.js:119 js/Model.js:151 js/Model.js:156
 msgid "Region"
-msgstr ""
+msgstr "Regija"
 
 #: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
-msgstr ""
+msgstr "Poštanski broj"
 
 #: js/ContactEditDialog.js:286 js/ContactEditDialog.js:315
 #: js/ContactGrid.js:118 js/Model.js:153 js/Model.js:158
 msgid "City"
-msgstr ""
+msgstr "Grad"
 
 #: js/ContactEditDialog.js:291 js/ContactEditDialog.js:320
 #: js/ContactGrid.js:121 js/Model.js:154 js/Model.js:159
 msgid "Country"
-msgstr ""
+msgstr "Država"
 
 #: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:146
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/ContactEditDialog.js:355
 msgid "Enter description"
-msgstr ""
+msgstr "Unesi opis"
 
 #: js/ContactEditDialog.js:399
 msgid "Export as pdf"
-msgstr ""
+msgstr "Izvezi kao PDF"
 
 #: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
 msgid "Parse address"
-msgstr ""
+msgstr "Raščlanjena adresa"
 
 #: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "Mora biti dodijeljen ili {0} ili {1}"
 
 #: js/ContactEditDialog.js:484
 msgid "Paste address"
-msgstr ""
+msgstr "Unesi adresu"
 
 #: js/ContactEditDialog.js:484
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Molimo unesite adresu koju treba raščlaniti:"
 
 #: js/ContactEditDialog.js:518
 msgid "End token mode"
-msgstr ""
+msgstr "Kraj tokena"
 
 #: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakta"
+msgstr[2] "Kontakata"
 
 #: js/ContactGrid.js:105 js/Model.js:160
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #: js/ContactGrid.js:106
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 #: js/ContactGrid.js:110
 msgid "Full Name"
-msgstr ""
+msgstr "Puno ime"
 
 #: js/ContactGrid.js:120
 msgid "Postalcode"
-msgstr ""
+msgstr "Poštanski broj"
 
 #: js/ContactGrid.js:122
 msgid "Street (private)"
-msgstr ""
+msgstr "Ulica (privatno)"
 
 #: js/ContactGrid.js:123
 msgid "City (private)"
-msgstr ""
+msgstr "Grad (privatno)"
 
 #: js/ContactGrid.js:124
 msgid "Region (private)"
-msgstr ""
+msgstr "Regija (privatno)"
 
 #: js/ContactGrid.js:125
 msgid "Postalcode (private)"
-msgstr ""
+msgstr "Poštanski broj (privatno)"
 
 #: js/ContactGrid.js:126
 msgid "Country (private)"
-msgstr ""
+msgstr "Država (privatno)"
 
 #: js/ContactGrid.js:131
 msgid "Car phone"
-msgstr ""
+msgstr "Telefon u vozilu"
 
 #: js/ContactGrid.js:132
 msgid "Pager"
-msgstr ""
+msgstr "Pager"
 
 #: js/ContactGrid.js:136
 msgid "Email (private)"
-msgstr ""
+msgstr "E-mail (privatni)"
 
 #: js/ContactGrid.js:138
 msgid "URL (private)"
-msgstr ""
+msgstr "URL (privatno)"
 
 #: js/ContactGrid.js:139
 msgid "Note"
-msgstr ""
+msgstr "Bilješka"
 
 #: js/ContactGrid.js:140
 msgid "Timezone"
-msgstr ""
+msgstr "Vremenska zona"
 
 #: js/ContactGrid.js:141
 msgid "Geo"
-msgstr ""
+msgstr "Geo"
 
 #: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Izvoz"
+msgstr[1] "Izvozi"
+msgstr[2] "Izvoza"
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
-msgstr ""
+msgstr "Izvezi kao PDF"
 
 #: js/ContactGrid.js:170
 msgid "Export as CSV"
-msgstr ""
+msgstr "Izvezi kao CSV"
 
 #: js/ContactGrid.js:177
 msgid "Export as ODS"
-msgstr ""
+msgstr "Izvezi kao ODS"
 
 #: js/ContactGrid.js:184
 msgid "Export as XLS"
-msgstr ""
+msgstr "Izvezi kao XLS"
 
 #: js/ContactGrid.js:191
 msgid "Export as ..."
-msgstr ""
+msgstr "Izvezi kao ..."
 
 #: js/ContactGrid.js:203
 msgid "Import contacts"
-msgstr ""
+msgstr "Uvezi kontakte"
 
 #: js/ContactGrid.js:292
 msgid "Internal Contact"
-msgstr ""
+msgstr "Interni kontakt"
 
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakti"
 
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
-msgstr ""
+msgstr "Označi kontakt"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
-msgstr ""
+msgstr "Privatno"
 
 #: js/ContactGridDetailsPanel.js:178
 msgid "Info"
-msgstr ""
+msgstr "Informacije"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
-msgstr ""
+msgstr "Nesiguran link"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
-msgstr ""
+msgstr "Molimo pogledajte ovaj link u prozoru za ažuriranje"
 
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
-msgstr ""
+msgstr "Član Liste"
 
 #: js/MapPanel.js:58
 msgid "Company address"
-msgstr ""
+msgstr "Adresa tvrtke"
 
 #: js/MapPanel.js:65
 msgid "Private address"
-msgstr ""
+msgstr "Privatna adresa"
 
 #: js/Model.js:19
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
-msgstr ""
+msgstr "Ulica (tvrtka)"
 
 #: js/Model.js:35
 msgid "Street 2 (Company Address)"
-msgstr ""
+msgstr "Ulica 2 (tvrtka)"
 
 #: js/Model.js:36
 msgid "City (Company Address)"
-msgstr ""
+msgstr "Grad (tvrtka)"
 
 #: js/Model.js:37
 msgid "Region (Company Address)"
-msgstr ""
+msgstr "Regija (tvrtka)"
 
 #: js/Model.js:38
 msgid "Postal Code (Company Address)"
-msgstr ""
+msgstr "Poštanski broj (tvrtka)"
 
 #: js/Model.js:39
 msgid "Country (Company Address)"
-msgstr ""
+msgstr "Zemlja (tvrtka)"
 
 #: js/Model.js:43
 msgid "Street (Private Address)"
-msgstr ""
+msgstr "Ulica (privatno)"
 
 #: js/Model.js:44
 msgid "Street 2 (Private Address)"
-msgstr ""
+msgstr "Ulica 2 (privatno)"
 
 #: js/Model.js:45
 msgid "City (Private Address)"
-msgstr ""
+msgstr "Grad (privatno)"
 
 #: js/Model.js:46
 msgid "Region (Private Address)"
-msgstr ""
+msgstr "Regija (privatno)"
 
 #: js/Model.js:47
 msgid "Postal Code (Private Address)"
-msgstr ""
+msgstr "Poštanski broj (privatno)"
 
 #: js/Model.js:48
 msgid "Country (Private Address)"
-msgstr ""
+msgstr "Zemlja (privatno)"
 
 #: js/Model.js:51
 msgid "Company Communication"
-msgstr ""
+msgstr "Kompanija"
 
 #: js/Model.js:57
 msgid "Private Communication"
-msgstr ""
+msgstr "Privatan"
 
 #: js/Model.js:65
 msgid "Web (private)"
-msgstr ""
+msgstr "Web (privatno)"
 
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
-msgstr ""
+msgstr "Adresari"
 
 #: js/Model.js:133
 msgid "User Account"
-msgstr ""
+msgstr "Korisnički račun"
 
 #: js/Model.js:136
 msgid "Quick search"
-msgstr ""
+msgstr "Brza pretraga"
 
 #: js/Model.js:161
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Datum zadnje izmjene"
 
 #: js/Model.js:162
 msgid "Last Modified By"
-msgstr ""
+msgstr "Zadnji izmijenio"
 
 #: js/Model.js:163
 msgid "Creation Time"
-msgstr ""
+msgstr "Datum kreiranja"
 
 #: js/Model.js:164
 msgid "Created By"
-msgstr ""
+msgstr "Kreirao"
 
 #: js/Model.js:201
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Lista"
+msgstr[1] "Liste"
+msgstr[2] "Listi"
 
 #: js/Model.js:201
 msgid "Lists"
-msgstr ""
+msgstr "Liste"
 
 #: Preference.php:28
 msgid "All contacts"
-msgstr ""
+msgstr "Svi kontakti"
 
 #: Preference.php:65
 msgid "Default Addressbook"
-msgstr ""
+msgstr "Zadani adresar"
 
 #: Preference.php:66
 msgid "The default addressbook for new contacts"
-msgstr ""
+msgstr "Zadani adresar za nove kontakte"
 
 #: Preference.php:69
 msgid "Default Favorite"
-msgstr ""
+msgstr "Zadani favorit"
 
 #: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+msgstr "Zadani favorit koji je učitan pri pokretanju adresara"
 
 #: Setup/Initialize.php:63 Setup/Update/Release5.php:194
 msgid "Mr"
-msgstr ""
+msgstr "Gospodin"
 
 #: Setup/Initialize.php:64 Setup/Update/Release5.php:195
 msgid "Ms"
-msgstr ""
+msgstr "Gospođa/ica"
 
 #: Setup/Initialize.php:135 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
-msgstr ""
+msgstr "Svi kontakti na koje imam pravo uvida"
 
 #: Setup/Initialize.php:140
 msgid "My company"
-msgstr ""
+msgstr "CPM Korisnici"
 
 #: Setup/Initialize.php:141
 msgid "All coworkers in my company"
-msgstr ""
+msgstr "Svi CPM korisnici"
 
 #: Setup/Initialize.php:154
 msgid "My contacts"
-msgstr ""
+msgstr "Moji kontakti"
 
 #: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
-msgstr ""
+msgstr "Svi kontakti u mojim adresarima"
 
 #: Setup/Initialize.php:167
 msgid "Last modified by me"
-msgstr ""
+msgstr "Koje sam ja zadnje izmijenio"
 
 #: Setup/Initialize.php:168
 msgid "All contacts that I have last modified"
-msgstr ""
+msgstr "Svi kontakti koje sam ja zadnje izmijenio"
 
 #: Setup/setup.xml:648
 msgid "Internal Contacts"
-msgstr ""
+msgstr "Interni kontakti"

@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <brankablag@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-24 15:13+0000\n"
+"Last-Translator: brankablag <brankablag@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,180 +19,180 @@ msgstr ""
 
 #: Config.php:38
 msgid "Project Status Available"
-msgstr ""
+msgstr "Raspoloživi status projekta"
 
 #: Config.php:40
 msgid ""
 "Possible Project status. Please note that additional project status might "
 "impact other Projects systems on export or syncronisation."
-msgstr ""
+msgstr "Mogući statusi projekta. Napomena da dodatni statusi projekta mogu utjecati na ostale projekte prilikom izvoza ili sinkronizacije."
 
 #: Config.php:48
 msgid "Project Attendee Role Available"
-msgstr ""
+msgstr "Raspoloživa uloga sudionika projekta"
 
 #: Config.php:50
 msgid ""
 "Possible Project attendee roles. Please note that additional project "
 "attendee roles might impact other Projects systems on export or "
 "syncronisation."
-msgstr ""
+msgstr "Moguće uloge sudionika projekta. Napomena da dodatne uloge sudionika projekta mogu utjecati na ostale projekte prilikom izvoza ili sinkronizacije."
 
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
-msgstr ""
+msgstr "%s osobni projekti"
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
+msgstr "Odaberite projekt kojem će se dodati kontakti"
 
 #: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
-msgstr ""
+msgstr "Odaberite uloge sudionika"
 
 #: js/AddToProjectPanel.js:79
 msgid "Select Project"
-msgstr ""
+msgstr "Odaberite projekt"
 
 #: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
 msgid "Role"
-msgstr ""
+msgstr "Uloga"
 
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
-msgstr ""
+msgstr "Odaberite ulogu"
 
 #: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
-msgstr ""
+msgstr "Dodavanje {0} sudionika projekta"
 
 #: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
 msgid "Project"
 msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Projekt"
+msgstr[1] "Projekta"
+msgstr[2] "Projekta"
 
 #: js/Model.js:37
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Lista projekta"
+msgstr[1] "Liste projekta"
+msgstr[2] "Listi projekta"
 
 #: js/Model.js:40
 msgid "Project lists"
-msgstr ""
+msgstr "Liste projekta"
 
 #: js/Model.js:72
 msgid "Quick search"
-msgstr ""
+msgstr "Brzo pretraživanje"
 
 #: js/Model.js:73 js/ProjectEditDialog.js:129 js/ProjectGridPanel.js:95
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: js/Model.js:74 js/ProjectEditDialog.js:134 js/ProjectGridPanel.js:88
 msgid "Number"
-msgstr ""
+msgstr "Broj"
 
 #: js/Model.js:75 js/ProjectEditDialog.js:170
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/Model.js:77 js/ProjectEditDialog.js:140 js/ProjectGridPanel.js:101
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/Model.js:86
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Vrijeme zadnje izmjene"
 
 #: js/Model.js:87
 msgid "Last Modified By"
-msgstr ""
+msgstr "Zadnji izmijenio"
 
 #: js/Model.js:88
 msgid "Creation Time"
-msgstr ""
+msgstr "Vrijeme kreiranja"
 
 #: js/Model.js:89
 msgid "Created By"
-msgstr ""
+msgstr "Kreirao"
 
 #: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
 msgid "Attendee"
-msgstr ""
+msgstr "Sudionik"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
-msgstr ""
+msgstr "Uloga sudionika"
 
 #: js/ProjectEditDialog.js:184
 msgid "Enter description"
-msgstr ""
+msgstr "Unesi opis"
 
 #: js/ProjectGridPanel.js:85
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
-msgstr ""
+msgstr "Projekti"
 
 #: Preference.php:24
 msgid "All my projects"
-msgstr ""
+msgstr "Moji projekti"
 
 #: Preference.php:60
 msgid "Default Favorite"
-msgstr ""
+msgstr "Zadani favorit"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
+msgstr "Zadani favorit prilikom pokretanja Projekata"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
-msgstr ""
+msgstr "Na čekanju"
 
 #: Setup/Initialize.php:35
 msgid "Completed"
-msgstr ""
+msgstr "Završeno"
 
 #: Setup/Initialize.php:36
 msgid "Cancelled"
-msgstr ""
+msgstr "Prekinuto"
 
 #: Setup/Initialize.php:37
 msgid "In process"
-msgstr ""
+msgstr "U tijeku"
 
 #: Setup/Initialize.php:50
 msgid "Coworker"
-msgstr ""
+msgstr "Suradnik"
 
 #: Setup/Initialize.php:51
 msgid "Responsible"
-msgstr ""
+msgstr "Zadužen"
 
 #: Setup/Initialize.php:79
 msgid "All my open projects"
-msgstr ""
+msgstr "Moji otvoreni projekti"
 
 #: Setup/Initialize.php:99
 msgid "My projects that I'm responsible for"
-msgstr ""
+msgstr "Moji projekti za koje sam zadužen"
 
 #: Setup/Initialize.php:100
 msgid "All my open projects that I am responsible for"
-msgstr ""
+msgstr "Moji otvoreni projekti za koje sam zadužen"
 
 #: Setup/Initialize.php:120
 msgid "My waiting projects"
-msgstr ""
+msgstr "Moji projekti na čekanju"
 
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
-msgstr ""
+msgstr "Moji projekti na čekanju"

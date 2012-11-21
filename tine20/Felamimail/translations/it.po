@@ -1,12 +1,13 @@
 # 
 # Translators:
+#   <v.anzisi@gurusys.it>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: 2012-11-04 01:30+0000\n"
+"Last-Translator: gurusys <v.anzisi@gurusys.it>\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -50,19 +51,19 @@ msgstr "Risposta"
 
 #: Controller/Message/Flags.php:25
 msgid "Seen"
-msgstr ""
+msgstr "Visto"
 
 #: Controller/Message/Flags.php:26
 msgid "Deleted"
-msgstr ""
+msgstr "Cancellato"
 
 #: Controller/Message/Flags.php:27
 msgid "Draft"
-msgstr ""
+msgstr "Bozza"
 
 #: Controller/Message/Flags.php:28
 msgid "Flagged"
-msgstr ""
+msgstr "Contrassegnato"
 
 #: Controller/Message/Send.php:235 js/GridDetailsPanel.js:245
 #: js/GridPanel.js:485 js/MessageEditDialog.js:926 js/Model.js:141
@@ -106,15 +107,15 @@ msgstr "Organizzazione"
 
 #: js/AccountEditDialog.js:135
 msgid "Signature position"
-msgstr ""
+msgstr "Posizione Firma"
 
 #: js/AccountEditDialog.js:146
 msgid "Above the quote"
-msgstr ""
+msgstr "Sopra la citazione"
 
 #: js/AccountEditDialog.js:147
 msgid "Below the quote"
-msgstr ""
+msgstr "Sotto la citazione"
 
 #: js/AccountEditDialog.js:152
 msgid "IMAP"
@@ -191,7 +192,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:261
 msgid "Port (Default: 2000)"
-msgstr ""
+msgstr "Porta (Predefinita: 2000)"
 
 #: js/AccountEditDialog.js:281
 msgid "Other Settings"
@@ -207,11 +208,11 @@ msgstr "Nome Cartella Cestino"
 
 #: js/AccountEditDialog.js:300
 msgid "Drafts Folder Name"
-msgstr ""
+msgstr "Nome Cartella Bozze"
 
 #: js/AccountEditDialog.js:306
 msgid "Templates Folder Name"
-msgstr ""
+msgstr "Nome Cartella Templates"
 
 #: js/AccountEditDialog.js:312
 msgid "Display Format"
@@ -227,31 +228,31 @@ msgstr "Testo Non formattato"
 
 #: js/AccountEditDialog.js:325
 msgid "Depending on content type (experimental)"
-msgstr ""
+msgstr "Dipendente dal tipo di contenuto (sperimentale)"
 
 #: js/ContactGrid.js:254
 msgid "Add as \"To\""
-msgstr ""
+msgstr "Aggiungi come \"Destinatario\""
 
 #: js/ContactGrid.js:265
 msgid "Add as \"Cc\""
-msgstr ""
+msgstr "Aggiungi come \"Destinatario in copia\""
 
 #: js/ContactGrid.js:276
 msgid "Add as \"Bcc\""
-msgstr ""
+msgstr "Aggiungi come \"Destinatario nascosto\""
 
 #: js/ContactGrid.js:287
 msgid "Remove from recipients"
-msgstr ""
+msgstr "Rimuovi dai destinatari"
 
 #: js/ContactGrid.js:341 js/MessageEditDialog.js:520
 msgid "Loading Mail Addresses"
-msgstr ""
+msgstr "Caricamento Indirizzi Mail"
 
 #: js/Felamimail.js:33
 msgid "New Mail"
-msgstr ""
+msgstr "Nuova email"
 
 #: js/Felamimail.js:85
 msgid "Email"
@@ -487,7 +488,7 @@ msgstr ""
 
 #: js/GridPanelHook.js:34
 msgid "Compose email"
-msgstr ""
+msgstr "Scrivi email"
 
 #: js/MessageDisplayDialog.js:65
 msgid "Save"

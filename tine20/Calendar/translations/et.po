@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-04 20:42+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,21 +122,21 @@ msgstr ""
 
 #: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:102
 msgid "Role"
-msgstr ""
+msgstr "Roll"
 
 #: js/AddToEventPanel.js:79
 msgid "Select Role"
-msgstr ""
+msgstr "Vali roll"
 
 #: js/AddToEventPanel.js:88 js/AttendeeGridPanel.js:186
 #: js/ContactEventsGridPanel.js:125 js/EventEditDialog.js:173
 #: js/GridView.js:171 Model/Event.php:252
 msgid "Status"
-msgstr ""
+msgstr "Staatus"
 
 #: js/AddToEventPanel.js:89
 msgid "Select Status"
-msgstr ""
+msgstr "Vali staatus"
 
 #: js/AddToEventPanel.js:109
 msgid "Adding {0} Attendee to event"
@@ -144,20 +144,20 @@ msgstr ""
 
 #: js/AdminPanel.js:45
 msgid "Manage Resources"
-msgstr ""
+msgstr "Halda resursse"
 
 #: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
 #: js/EventDetailsPanel.js:294 js/Model.js:362
 msgid "Attendee"
-msgstr ""
+msgstr "Osaleja"
 
 #: js/AttendeeFilterModel.js:101
 msgid "Select Attendee"
-msgstr ""
+msgstr "Vali osaleja"
 
 #: js/AttendeeGridPanel.js:116
 msgid "Quantity"
-msgstr ""
+msgstr "Kogus"
 
 #: js/AttendeeGridPanel.js:125
 msgid "This is the calendar where the attender has saved this event in"
@@ -165,34 +165,34 @@ msgstr ""
 
 #: js/AttendeeGridPanel.js:161
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 #: js/AttendeeGridPanel.js:168
 msgid "User"
-msgstr ""
+msgstr "Kasutaja"
 
 #: js/AttendeeGridPanel.js:169
 msgid "Group"
-msgstr ""
+msgstr "Grupp"
 
 #: js/AttendeeGridPanel.js:170 js/Model.js:555
 msgid "Resource"
 msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Resurss"
+msgstr[1] "Resurssi"
 
 #: js/AttendeeGridPanel.js:171
 msgid "Member of group"
-msgstr ""
+msgstr "Kliendigrupp"
 
 #: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
 #: js/ResourcesGridPanel.js:41
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: js/AttendeeGridPanel.js:333
 msgid "Remove Attender"
-msgstr ""
+msgstr "Eemalda osaleja"
 
 #: js/AttendeeGridPanel.js:430
 msgid "Click here to invite another attender..."
@@ -202,7 +202,7 @@ msgstr ""
 #: js/AttendeeGridPanel.js:485 js/AttendeeGridPanel.js:497
 #: js/EventDetailsPanel.js:28 js/Model.js:378
 msgid "No Information"
-msgstr ""
+msgstr "Infot pole"
 
 #: js/AttendeeGridPanel.js:455
 msgid "(as a group member)"
@@ -214,13 +214,13 @@ msgstr ""
 
 #: js/Calendar.js:29 js/DaysView.js:88 js/MonthView.js:81
 msgid "New Event"
-msgstr ""
+msgstr "Uus sündmus"
 
 #: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kalender"
+msgstr[1] "Kalendrit"
 
 #: js/calendarRenderer.js:30
 msgid ""
@@ -237,7 +237,7 @@ msgstr ""
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
-msgstr ""
+msgstr "Algne"
 
 #: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:366
 msgid "Events"
@@ -246,12 +246,12 @@ msgstr ""
 #: js/ContactEventsGridPanel.js:112 js/EventEditDialog.js:76
 #: js/GridView.js:143 js/Model.js:195 Model/Event.php:253
 msgid "Summary"
-msgstr ""
+msgstr "Kokkuvõte"
 
 #: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:252
 #: js/EventEditDialog.js:127 js/GridView.js:109 Preference.php:91
 msgid "Start Time"
-msgstr ""
+msgstr "Alguse aeg"
 
 #: js/DaysView.js:93
 msgid "{0}, the {1}. of {2}"
@@ -436,27 +436,27 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:149
 msgid "Print Page"
-msgstr ""
+msgstr "Prindi leht"
 
 #: js/MainScreenCenterPanel.js:162
 msgid "Sheet"
-msgstr ""
+msgstr "Leht"
 
 #: js/MainScreenCenterPanel.js:177
 msgid "Grid"
-msgstr ""
+msgstr "Võrgustik"
 
 #: js/MainScreenCenterPanel.js:187
 msgid "Day"
-msgstr ""
+msgstr "Päev"
 
 #: js/MainScreenCenterPanel.js:196 js/PagingToolbar.js:300
 msgid "Week"
-msgstr ""
+msgstr "Nädal"
 
 #: js/MainScreenCenterPanel.js:205
 msgid "Month"
-msgstr ""
+msgstr "Kuu"
 
 #: js/MainScreenCenterPanel.js:435
 msgid "Set my response"

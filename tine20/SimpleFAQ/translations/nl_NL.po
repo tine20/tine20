@@ -1,0 +1,171 @@
+# 
+# Translators:
+#   <bertjan.meinders@bjsoft.nl>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-15 13:30+0000\n"
+"Last-Translator: BJ <bertjan.meinders@bjsoft.nl>\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:114
+#, python-format
+msgid "%s's personal FAQs"
+msgstr "%s's  persoonlijke FAQs"
+
+#: Controller.php:164
+msgid "Draft"
+msgstr "Concept"
+
+#: Controller.php:165
+msgid "released"
+msgstr "vrijgegeven"
+
+#: Controller.php:166
+msgid "obsolete"
+msgstr "overbodig"
+
+#: Controller.php:169
+msgid "Internal"
+msgstr "Intern"
+
+#: Controller.php:170
+msgid "Public"
+msgstr "Openbaar"
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
+#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
+#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Type"
+msgstr[1] "FAQ Types"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Standaarden"
+
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
+#: js/FaqGridPanel.js:120
+msgid "Question"
+msgstr "Vraag"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Stel een vraag...."
+
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
+#: js/FaqGridPanel.js:127
+msgid "Answer"
+msgstr "Antwoord"
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Geen een antwoord..."
+
+#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr "Type"
+
+#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "FAQ Infos"
+
+#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
+msgid "Tags"
+msgstr "Tags"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Tijdstip aanmaken"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Aangemaakt door"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Nog geen antwoord"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "FAQ id"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Voer een nieuwe FAQ status in..."
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Voer een nieuw FAQ type in..."
+
+#: js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "FAQ Overzicht"
+msgstr[1] "FAQ Overzichten"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "FAQ Overzichten"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Snel zoeken"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Al mijn FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Standaard favoriet"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "De standaard favoriet bij het starten van de FAQ"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Standaard FAQ overzicht"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Het standaard FAQ overzich waar nieuwe FAQs komen"
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Al mijn FAQs"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Laatst gewijzigd door mij"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Alle FAQs die ik het laatst heb gewijzigd"

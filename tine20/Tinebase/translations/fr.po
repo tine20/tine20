@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-22 09:06+0000\n"
+"PO-Revision-Date: 2012-10-24 07:59+0000\n"
 "Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,11 @@ msgstr "Vérifier les nouvelles versions de ce logiciel."
 
 #: Acl/Rights.php:155
 msgid "Manage own profile"
-msgstr "Gérer son profile"
+msgstr "Gérer son profil"
 
 #: Acl/Rights.php:156
 msgid "The right to manage the own profile (selected contact data)."
-msgstr "Le droit de gérer son propre profile (certaines informations de contact)"
+msgstr "Droit de gérer son propre profil (certaines informations seulement)"
 
 #: Acl/Rights.php:159
 msgid "Manage own client state"
@@ -374,7 +374,7 @@ msgstr "Contributors"
 
 #: js/AdminPanel.js:75
 msgid "Profile Information"
-msgstr "Informations du profile"
+msgstr "Informations de profil"
 
 #: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:294
 #: js/widgets/EditRecord.js:168
@@ -792,7 +792,7 @@ msgstr "Préférences"
 
 #: js/MainMenu.js:131
 msgid "Edit Profile"
-msgstr "Modifier le profile"
+msgstr "Modifier le profil"
 
 #: js/MainMenu.js:138
 msgid "Change password"
@@ -1796,7 +1796,7 @@ msgstr "Préférences générales"
 
 #: js/widgets/dialog/PreferencesTreePanel.js:87
 msgid "My Profile"
-msgstr "Mon profile"
+msgstr "Mon profil"
 
 #: js/widgets/dialog/WizardPanel.js:173
 msgid "Back"

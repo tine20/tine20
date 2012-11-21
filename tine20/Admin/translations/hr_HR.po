@@ -1,13 +1,15 @@
 # 
 # Translators:
 #   <AirMike23@gmail.com>, 2012.
+#   <ivana.horvat@globalnet.hr>, 2012.
 #   <onebeat.hr@gmail.com>, 2012.
+#   <visicfilip@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-16 15:05+0000\n"
+"Last-Translator: fvisic <visicfilip@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,11 +39,11 @@ msgstr "dodaj i uredi korisnike i grupe, dodaj članove grupa, promijeni korisni
 
 #: Acl/Rights.php:193
 msgid "manage applications"
-msgstr "upravljanje aplikacijama"
+msgstr "upravljanje modulima"
 
 #: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
-msgstr "omogući i onemogući aplikacije, uredi postavke aplikacija"
+msgstr "omogući i onemogući module, uredi postavke modula"
 
 #: Acl/Rights.php:197
 msgid "manage roles"
@@ -51,11 +53,11 @@ msgstr "upravljanje ulogama"
 msgid ""
 "add and edit roles, add new members to roles, add application rights to "
 "roles"
-msgstr "dodaj i uredi uloge, dodijeli uloge novim korisnicima, dodijeli ulogama prava na rad s aplikacijama "
+msgstr "dodaj i uredi uloge, dodijeli uloge novim korisnicima, dodijeli ulogama prava na rad s modulima"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
-msgstr "uredi zajedničke oznake"
+msgstr "upravljanje zajedničkim oznakama"
 
 #: Acl/Rights.php:202
 msgid "add, delete and edit shared tags"
@@ -95,11 +97,11 @@ msgstr "pregled detalja svih korisničkih računa"
 
 #: Acl/Rights.php:221
 msgid "view applications"
-msgstr "pregled aplikacija"
+msgstr "pregled modula"
 
 #: Acl/Rights.php:222
 msgid "view applications list and details"
-msgstr "pregled detalja aplikacija"
+msgstr "pregled detalja modula"
 
 #: Acl/Rights.php:225
 msgid "view roles"
@@ -127,7 +129,7 @@ msgstr "pregled privatnih i dijeljenih spremnika"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
-msgstr ""
+msgstr "Glavne IMAP korisničke postavke"
 
 #: Controller/Container.php:198
 msgid "Your container has been changed"
@@ -232,7 +234,7 @@ msgstr "Računala"
 
 #: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
-msgstr "Aplikacije"
+msgstr "Moduli"
 
 #: js/Admin.js:100
 msgid "Shared Tags"
@@ -260,9 +262,9 @@ msgstr "Početni adresar za nove kontakte i grupe"
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] "Aplikacija"
-msgstr[1] "Aplikacije"
-msgstr[2] "Aplikacija"
+msgstr[0] "Modul"
+msgstr[1] "Moduli"
+msgstr[2] "Modula"
 
 #: js/Applications.js:43
 msgid "{0} Settings"
@@ -270,23 +272,23 @@ msgstr "{0} Postavke"
 
 #: js/Applications.js:83
 msgid "Enable Application"
-msgstr ""
+msgstr "Omogući Modul"
 
 #: js/Applications.js:90
 msgid "Disable Application"
-msgstr ""
+msgstr "Onemogući Modul"
 
 #: js/Applications.js:97
 msgid "Settings"
-msgstr ""
+msgstr "Postavke"
 
 #: js/Applications.js:146
 msgid "enable application"
-msgstr "Omogući Aplikaciju"
+msgstr "Omogući Modul"
 
 #: js/Applications.js:147
 msgid "disable application"
-msgstr "Onemogući Aplikaciju"
+msgstr "Onemogući Modul"
 
 #: js/Applications.js:148
 msgid "settings"
@@ -310,11 +312,11 @@ msgstr "Nepoznat status ({0})"
 
 #: js/Applications.js:269
 msgid "Displaying application {0} - {1} of {2}"
-msgstr "Prikaz aplikacija {0} - {1} od {2}"
+msgstr "Prikaz modula {0} - {1} od {2}"
 
 #: js/Applications.js:270
 msgid "No applications to display"
-msgstr "Nema aplikacija za prikaz"
+msgstr "Nema modula za prikaz"
 
 #: js/Applications.js:279 js/customfield/EditDialog.js:630
 msgid "Order"
@@ -438,7 +440,7 @@ msgstr "Postavite spremanje"
 
 #: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
-msgstr ""
+msgstr "Definicija Dodatnog polja"
 
 #: js/customfield/EditDialog.js:572
 msgid "Text"
@@ -466,15 +468,15 @@ msgstr "Boolean"
 
 #: js/customfield/EditDialog.js:578
 msgid "Search Combo"
-msgstr ""
+msgstr "Polje za pretragu"
 
 #: js/customfield/EditDialog.js:579
 msgid "Key Field"
-msgstr ""
+msgstr "Polje vrijednosti"
 
 #: js/customfield/EditDialog.js:580
 msgid "Record"
-msgstr ""
+msgstr "Zapis"
 
 #: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
@@ -486,11 +488,11 @@ msgstr "Dužina"
 
 #: js/customfield/EditDialog.js:613
 msgid "Required"
-msgstr ""
+msgstr "Obavezno"
 
 #: js/customfield/EditDialog.js:620
 msgid "Custom field additional properties"
-msgstr ""
+msgstr "Dodatne opcije Dodatnih polja"
 
 #: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
@@ -510,7 +512,7 @@ msgstr "Potvrdi"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
-msgstr ""
+msgstr "Osvježiti modul kako bi se primijenila nova Dodatna polja?"
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
 msgid "Please wait"
@@ -589,15 +591,15 @@ msgstr "Pojavila se greška tijekom brisanja grupe."
 
 #: js/Groups.js:104
 msgid "Add Group"
-msgstr ""
+msgstr "Dodaj grupu"
 
 #: js/Groups.js:112
 msgid "Edit Group"
-msgstr ""
+msgstr "Uredi grupu"
 
 #: js/Groups.js:120
 msgid "Delete Group"
-msgstr ""
+msgstr "Izbriši grupu"
 
 #: js/Groups.js:223
 msgid "Displaying groups {0} - {1} of {2}"
@@ -653,15 +655,15 @@ msgstr "Brisanje uloge(a)..."
 
 #: js/Roles.js:102
 msgid "Add Role"
-msgstr ""
+msgstr "Dodaj Rolu"
 
 #: js/Roles.js:110
 msgid "Edit Role"
-msgstr ""
+msgstr "Uredi Rolu"
 
 #: js/Roles.js:118
 msgid "Delete Role"
-msgstr ""
+msgstr "Obriši Rolu"
 
 #: js/Roles.js:226
 msgid "Displaying roles {0} - {1} of {2}"
@@ -736,15 +738,15 @@ msgstr "Brisanje oznake(a)..."
 
 #: js/Tags.js:97
 msgid "Add Tag"
-msgstr ""
+msgstr "Dodaj Oznaku"
 
 #: js/Tags.js:105
 msgid "Edit Tag"
-msgstr ""
+msgstr "Uredi Oznaku"
 
 #: js/Tags.js:113
 msgid "Delete Tag"
-msgstr ""
+msgstr "Obriši Oznaku"
 
 #: js/Tags.js:211
 msgid "Displaying tags {0} - {1} of {2}"
@@ -756,11 +758,11 @@ msgstr "Nema oznaka za prikaz"
 
 #: js/Tags.js:223
 msgid "Usage:&#160;"
-msgstr ""
+msgstr "Iskorišteno:&#160;"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
+msgstr "Domena nije dopuštena. Provjerite konfiguraciju Vašeg SMTP servera."
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:726
@@ -793,7 +795,7 @@ msgstr "Windows"
 
 #: js/user/EditDialog.js:401
 msgid "Home Drive"
-msgstr ""
+msgstr "Početni disk"
 
 #: js/user/EditDialog.js:406
 msgid "Logon Time"
@@ -806,7 +808,7 @@ msgstr "Nikada prijavljen"
 
 #: js/user/EditDialog.js:411
 msgid "Home Path"
-msgstr ""
+msgstr "Početna lokacija"
 
 #: js/user/EditDialog.js:416
 msgid "Logoff Time"
@@ -818,7 +820,7 @@ msgstr "Nikada odjavljen"
 
 #: js/user/EditDialog.js:421
 msgid "Profile Path"
-msgstr ""
+msgstr "Lokacija profila"
 
 #: js/user/EditDialog.js:426
 msgid "Password Last Set"
@@ -831,7 +833,7 @@ msgstr "nikada"
 
 #: js/user/EditDialog.js:431
 msgid "Logon Script"
-msgstr ""
+msgstr "Skripta prijave"
 
 #: js/user/EditDialog.js:436
 msgid "Password Can Change"
@@ -852,7 +854,7 @@ msgstr "Vrijeme početka"
 
 #: js/user/EditDialog.js:466
 msgid "IMAP Quota (MB)"
-msgstr ""
+msgstr "IMAP Ogranićenje (MB)"
 
 #: js/user/EditDialog.js:485 js/user/EditDialog.js:523
 msgid "Quota"
@@ -860,19 +862,19 @@ msgstr "Ograničenje"
 
 #: js/user/EditDialog.js:486 js/user/EditDialog.js:524
 msgid "no quota set"
-msgstr ""
+msgstr "ograničenje nije postavljeno"
 
 #: js/user/EditDialog.js:496
 msgid "Current Mailbox size"
-msgstr ""
+msgstr "Trenutna veličina Sandučića"
 
 #: js/user/EditDialog.js:504
 msgid "Sieve Quota (MB)"
-msgstr ""
+msgstr "Sieve kvota (MB)"
 
 #: js/user/EditDialog.js:534
 msgid "Current Sieve size"
-msgstr ""
+msgstr "Trenutna veličina Sieve"
 
 #: js/user/EditDialog.js:543 js/user/EditDialog.js:942
 msgid "Information"
@@ -884,13 +886,13 @@ msgstr "Zadnja prijava"
 
 #: js/user/EditDialog.js:611
 msgid "Domain not allowed"
-msgstr ""
+msgstr "Domena nije dozvoljena"
 
 #: js/user/EditDialog.js:612
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
 "primary domain nor set as a secondary domain in the setup."
-msgstr ""
+msgstr "Domena {0} aliasa {1} koju pokušavate dodati u postavkama nije zadana kao primarna, niti je postavljena kao sekundarna domena."
 
 #: js/user/EditDialog.js:621
 msgid "Email Alias"
@@ -902,13 +904,13 @@ msgstr "Dodaj alias adresu..."
 
 #: js/user/EditDialog.js:645
 msgid "Forwarding to self"
-msgstr ""
+msgstr "Prosjediti na sebe"
 
 #: js/user/EditDialog.js:646
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
-msgstr ""
+msgstr "Nije dopušteno postaviti adresu za prosljeđivanje ukoliko je ona identična korisničkoj primarnoj adresi ili bilo kojem aliasu."
 
 #: js/user/EditDialog.js:655
 msgid "Email Forward"
@@ -949,7 +951,7 @@ msgstr "Prezime"
 #: js/user/EditDialog.js:801 js/user/EditDialog.js:843
 #: js/user/GridPanel.js:178
 msgid "Login name"
-msgstr ""
+msgstr "Korisničko ime"
 
 #: js/user/EditDialog.js:806
 msgid "Password"
@@ -973,13 +975,13 @@ msgstr "Blokiran"
 
 #: js/user/EditDialog.js:882
 msgid "Invalid Status"
-msgstr ""
+msgstr "Status ne postoji"
 
 #: js/user/EditDialog.js:883
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr ""
+msgstr "Status Blokiran je moguć samo ukoliko se korisnik pokuša prijaviti sa krivom lozinkom prevelik broj puta. Taj status nije moguće ovdje postaviti."
 
 #: js/user/EditDialog.js:905 js/user/GridPanel.js:186
 msgid "Expires"
@@ -1023,19 +1025,19 @@ msgstr "SMTP"
 
 #: js/user/GridPanel.js:56
 msgid "Enable Account"
-msgstr ""
+msgstr "Omogući račun"
 
 #: js/user/GridPanel.js:66
 msgid "Disable Account"
-msgstr ""
+msgstr "Onemogući račun"
 
 #: js/user/GridPanel.js:76
 msgid "Reset Password"
-msgstr ""
+msgstr "Resetiraj lozinku"
 
 #: js/user/GridPanel.js:177
 msgid "Display name"
-msgstr ""
+msgstr "Prikaz imena"
 
 #: js/user/GridPanel.js:185
 msgid "Password changed"

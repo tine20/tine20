@@ -1,12 +1,13 @@
 # 
 # Translators:
+#   <hezmars@gmail.com>, 2012.
 #   <r.zemblys@svako.lt>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-11 20:59+0000\n"
+"Last-Translator: d3r <hezmars@gmail.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/projects/p/tine20/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,38 +20,38 @@ msgstr ""
 
 #: Acl/Rights.php:185
 msgid "manage access log"
-msgstr ""
+msgstr "valdyti prisijungimo įrašus"
 
 #: Acl/Rights.php:186
 msgid "delete access log entries"
-msgstr ""
+msgstr "ištrinti prisijungimo įrašų informaciją"
 
 #: Acl/Rights.php:189
 msgid "manage accounts"
-msgstr ""
+msgstr "valdyti paskyras"
 
 #: Acl/Rights.php:190
 msgid ""
 "add and edit users and groups, add group members, change user passwords"
-msgstr ""
+msgstr "pridėti ir redaguoti vartotojus ir grupes, pridėti grupės narius, pakeisti vartotojų slaptažodžius"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
-msgstr ""
+msgstr "valdyti programėles"
 
 #: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
-msgstr ""
+msgstr "įjungti ir išjungti programėles, redaguoti programėles nustatymus"
 
 #: Acl/Rights.php:197
 msgid "manage roles"
-msgstr ""
+msgstr "valdyti roles"
 
 #: Acl/Rights.php:198
 msgid ""
 "add and edit roles, add new members to roles, add application rights to "
 "roles"
-msgstr ""
+msgstr "pridėti ir redaguoti funkcijas, priskirti naujus narius funkcijoms, priskirti programėlėms teises"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
@@ -265,7 +266,7 @@ msgstr[2] ""
 
 #: js/Applications.js:43
 msgid "{0} Settings"
-msgstr ""
+msgstr "Nustatymai"
 
 #: js/Applications.js:83
 msgid "Enable Application"
@@ -281,15 +282,15 @@ msgstr ""
 
 #: js/Applications.js:146
 msgid "enable application"
-msgstr ""
+msgstr "įjungti programėlę"
 
 #: js/Applications.js:147
 msgid "disable application"
-msgstr ""
+msgstr "išjungti programėlę"
 
 #: js/Applications.js:148
 msgid "settings"
-msgstr ""
+msgstr "nustatymai"
 
 #: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
 msgid "Search:"

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-04 20:37+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,43 +19,43 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: js/ApplicationGridPanel.js:64
 msgid "Enabled"
-msgstr ""
+msgstr "Sisse lülitatud"
 
 #: js/ApplicationGridPanel.js:65
 msgid "Order"
-msgstr ""
+msgstr "Järjekord"
 
 #: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
-msgstr ""
+msgstr "Paigaldatud versioon"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Available Version"
-msgstr ""
+msgstr "Saadaolev versioon"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Status"
-msgstr ""
+msgstr "Staatus"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Depends on"
-msgstr ""
+msgstr "Sõltub"
 
 #: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
 msgid "Install application"
-msgstr ""
+msgstr "Paigalda rakendus"
 
 #: js/ApplicationGridPanel.js:87
 msgid "Uninstall application"
-msgstr ""
+msgstr "Eemalda rakendus"
 
 #: js/ApplicationGridPanel.js:96
 msgid "Update application"
-msgstr ""
+msgstr "Uuenda rakendust"
 
 #: js/ApplicationGridPanel.js:105
 msgid "Go to {0} login"
@@ -62,7 +63,7 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:175
 msgid "uninstall"
-msgstr ""
+msgstr "eemalda"
 
 #: js/ApplicationGridPanel.js:175
 msgid "Do you really want to uninstall the application(s)?"
@@ -70,11 +71,11 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:235
 msgid "This may take a while"
-msgstr ""
+msgstr "See võib veidi aega võtta"
 
 #: js/ApplicationGridPanel.js:267
 msgid "Dependency Violation"
-msgstr ""
+msgstr "Sõltuvuse rikkumine"
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
@@ -123,7 +124,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "Yes"
-msgstr ""
+msgstr "Jah"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
@@ -132,7 +133,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "No"
-msgstr ""
+msgstr "Ei"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
@@ -142,7 +143,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
 #: js/AuthenticationPanel.js:409
 msgid "Account domain name "
-msgstr ""
+msgstr "Konto domeeni nimi"
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
 #: js/AuthenticationPanel.js:414
@@ -151,23 +152,23 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
 msgid "Login name"
-msgstr ""
+msgstr "Kasutajanimi"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
 #: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
 #: js/EmailPanel.js:190
 msgid "Password"
-msgstr ""
+msgstr "Parool"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
 msgid "Bind requires DN"
@@ -185,27 +186,27 @@ msgstr ""
 #: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:390
 msgid "Hostname"
-msgstr ""
+msgstr "Hostinimi"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
 #: js/EmailPanel.js:398
 msgid "Secure Connection"
-msgstr ""
+msgstr "Turvaline ühendus"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
-msgstr ""
+msgstr "Pole"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
 msgid "Append domain to login name"
@@ -355,11 +356,11 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:135
 msgid "File"
-msgstr ""
+msgstr "Fail"
 
 #: js/ConfigManagerPanel.js:145
 msgid "Adapter"
-msgstr ""
+msgstr "Adapter"
 
 #: js/ConfigManagerPanel.js:160
 msgid "Setup Authentication"
@@ -367,39 +368,39 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
 msgid "Username"
-msgstr ""
+msgstr "Kasutajanimi"
 
 #: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
 msgid "Database"
-msgstr ""
+msgstr "Andmebaas"
 
 #: js/ConfigManagerPanel.js:203
 msgid "User"
-msgstr ""
+msgstr "Kasutaja"
 
 #: js/ConfigManagerPanel.js:211
 msgid "Prefix"
-msgstr ""
+msgstr "Eesliide"
 
 #: js/ConfigManagerPanel.js:215
 msgid "Logging"
-msgstr ""
+msgstr "Logimine"
 
 #: js/ConfigManagerPanel.js:225
 msgid "Filename"
-msgstr ""
+msgstr "Failinimi"
 
 #: js/ConfigManagerPanel.js:228
 msgid "Priority"
-msgstr ""
+msgstr "Tähtsus"
 
 #: js/ConfigManagerPanel.js:232
 msgid "Caching"
-msgstr ""
+msgstr "Puhverdamine"
 
 #: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
 msgid "Path"
-msgstr ""
+msgstr "Asukoht"
 
 #: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
 msgid "Lifetime (seconds)"
@@ -415,7 +416,7 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:263
 msgid "Session"
-msgstr ""
+msgstr "Sessioon"
 
 #: js/ConfigManagerPanel.js:323
 msgid "Filestore directory"
@@ -435,11 +436,11 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:346
 msgid "disabled"
-msgstr ""
+msgstr "välja lülitatud"
 
 #: js/ConfigManagerPanel.js:346
 msgid "enabled"
-msgstr ""
+msgstr "sisse lülitatud"
 
 #: js/ConfigManagerPanel.js:358
 msgid "Config file is not writable"
@@ -459,7 +460,7 @@ msgstr ""
 
 #: js/EmailPanel.js:174
 msgid "Imap"
-msgstr ""
+msgstr "Imap"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -475,11 +476,11 @@ msgstr ""
 
 #: js/EmailPanel.js:278
 msgid "Smtp"
-msgstr ""
+msgstr "Smtp"
 
 #: js/EmailPanel.js:300
 msgid "Authentication"
-msgstr ""
+msgstr "Autentimine"
 
 #: js/EmailPanel.js:303
 msgid "Login"
@@ -519,31 +520,31 @@ msgstr ""
 
 #: js/EmailPanel.js:425
 msgid "MySql Hostname"
-msgstr ""
+msgstr "MySql hostinimi"
 
 #: js/EmailPanel.js:428
 msgid "MySql Database"
-msgstr ""
+msgstr "MySql andmebaas"
 
 #: js/EmailPanel.js:431
 msgid "MySql User"
-msgstr ""
+msgstr "MySql kasutaja"
 
 #: js/EmailPanel.js:434
 msgid "MySql Password"
-msgstr ""
+msgstr "MySql parool"
 
 #: js/EmailPanel.js:438
 msgid "MySql Port"
-msgstr ""
+msgstr "MySql port"
 
 #: js/EmailPanel.js:454
 msgid "User or UID"
-msgstr ""
+msgstr "Kasutaja või UID"
 
 #: js/EmailPanel.js:457
 msgid "Group or GID"
-msgstr ""
+msgstr "Grupp või GID"
 
 #: js/EmailPanel.js:460
 msgid "Home Template"
@@ -555,27 +556,27 @@ msgstr ""
 
 #: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
-msgstr ""
+msgstr "PLAIN-MD5"
 
 #: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
-msgstr ""
+msgstr "MD5-CRYPT"
 
 #: js/EmailPanel.js:475
 msgid "SHA1"
-msgstr ""
+msgstr "SHA1"
 
 #: js/EmailPanel.js:476
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: js/EmailPanel.js:477
 msgid "SSHA256"
-msgstr ""
+msgstr "SSHA256"
 
 #: js/EmailPanel.js:478
 msgid "SHA512"
-msgstr ""
+msgstr "SHA512"
 
 #: js/EmailPanel.js:479
 msgid "SSHA512"

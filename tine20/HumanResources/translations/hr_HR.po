@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <brankablag@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:14+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-24 14:31+0000\n"
+"Last-Translator: brankablag <brankablag@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,377 +19,377 @@ msgstr ""
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr ""
+msgstr "Uredi privatne podatke zaposlenika"
 
 #: Acl/Rights.php:94
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr ""
+msgstr "Uredi datum rođenja, račun i ostale privatne informacije zaposlenika"
 
 #: Config.php:42
 msgid "Freetime Type"
-msgstr ""
+msgstr "Tip slobodnih dana"
 
 #: Config.php:44
 msgid "Possible free time definitions."
-msgstr ""
+msgstr "Moguće definicije slobodnih dana."
 
 #: Config.php:52
 msgid "Freetime Status"
-msgstr ""
+msgstr "Status slobodnih dana"
 
 #: Config.php:54
 msgid "Possible free time status definitions."
-msgstr ""
+msgstr "Moguće definicije statusa slobodnih dana."
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
-msgstr ""
+msgstr "Nemate admin prava na Ljudske resurse."
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
-msgstr ""
+msgstr "Odustani"
 
 #: js/AdminPanel.js:76
 msgid "OK"
-msgstr ""
+msgstr "Potvrdi"
 
 #: js/AdminPanel.js:204 js/ContractGridPanel.js:111
 msgid "Calendar"
-msgstr ""
+msgstr "Kalendar"
 
 #: js/AdminPanel.js:205 js/ContractGridPanel.js:112
 msgid "Calendars"
-msgstr ""
+msgstr "Kalendari"
 
 #: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:124 js/Models.js:222
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ugovor"
+msgstr[1] "Ugovora"
+msgstr[2] "Ugovora"
 
 #: js/ContractGridPanel.js:131
 msgid "Working Time Model"
-msgstr ""
+msgstr "Model radnog vremena"
 
 #: js/ContractGridPanel.js:134
 msgid "Vacation Days"
-msgstr ""
+msgstr "Godišnji odmor"
 
 #: js/ContractGridPanel.js:136
 msgid "Cost Centre"
-msgstr ""
+msgstr "Centar troška"
 
 #: js/ContractGridPanel.js:139
 msgid "Start Date"
-msgstr ""
+msgstr "Datum početka"
 
 #: js/ContractGridPanel.js:142
 msgid "End Date"
-msgstr ""
+msgstr "Datum završetka"
 
 #: js/ContractGridPanel.js:145
 msgid "Feast Calendar"
-msgstr ""
+msgstr "Neradni dani"
 
 #: js/ContractGridPanel.js:183 js/ContractGridPanel.js:195
 msgid "undefined"
-msgstr ""
+msgstr "nedefinirano"
 
 #: js/DatePicker.js:42
 msgid "WK"
-msgstr ""
+msgstr "tjedan"
 
 #: js/DatePicker.js:63
 msgid "Loading calendar data..."
-msgstr ""
+msgstr "Učitavanje kalendara.."
 
 #: js/EmployeeEditDialog.js:121 js/Models.js:297
 msgid "Free Time"
 msgid_plural "Free Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Slobodan dan"
+msgstr[1] "Slobodna dana"
+msgstr[2] "Slobodnih dana"
 
 #: js/EmployeeEditDialog.js:138 js/EmployeeEditDialog.js:151
 #: js/FreeDayGridPanel.js:113 js/FreeTimeEditDialog.js:114
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:143 js/Models.js:64
 msgid "Employee"
 msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zaposlenik"
+msgstr[1] "Zaposlenika"
+msgstr[2] "Zaposlenika"
 
 #: js/EmployeeEditDialog.js:157 js/EmployeeGridPanel.js:97
 msgid "Number"
-msgstr ""
+msgstr "Broj"
 
 #: js/EmployeeEditDialog.js:167 js/Models.js:111
 msgid "Account"
-msgstr ""
+msgstr "Račun"
 
 #: js/EmployeeEditDialog.js:186
 msgid "Apply contact data on form"
-msgstr ""
+msgstr "Postaviti kontakt podatke"
 
 #: js/EmployeeEditDialog.js:214 js/EmployeeGridPanel.js:104
 msgid "Full Name"
-msgstr ""
+msgstr "Naziv"
 
 #: js/EmployeeEditDialog.js:219 js/EmployeeGridPanel.js:110 js/Models.js:116
 msgid "Salutation"
-msgstr ""
+msgstr "Oslovljavanje"
 
 #: js/EmployeeEditDialog.js:227 js/EmployeeGridPanel.js:117 js/Models.js:113
 msgid "Title"
-msgstr ""
+msgstr "Titula"
 
 #: js/EmployeeEditDialog.js:231 js/EmployeeGridPanel.js:124 js/Models.js:112
 msgid "First Name"
-msgstr ""
+msgstr "Ime"
 
 #: js/EmployeeEditDialog.js:239 js/EmployeeGridPanel.js:131 js/Models.js:115
 msgid "Last Name"
-msgstr ""
+msgstr "Prezime"
 
 #: js/EmployeeEditDialog.js:252
 msgid "Personal Information"
-msgstr ""
+msgstr "Osobne informacije"
 
 #: js/EmployeeEditDialog.js:262
 msgid "Country"
-msgstr ""
+msgstr "Država"
 
 #: js/EmployeeEditDialog.js:265
 msgid "Locality"
-msgstr ""
+msgstr "Mjesto"
 
 #: js/EmployeeEditDialog.js:268
 msgid "Postalcode"
-msgstr ""
+msgstr "Poštanski broj"
 
 #: js/EmployeeEditDialog.js:271
 msgid "Region"
-msgstr ""
+msgstr "Regija"
 
 #: js/EmployeeEditDialog.js:274
 msgid "Street"
-msgstr ""
+msgstr "Ulica"
 
 #: js/EmployeeEditDialog.js:277
 msgid "Street2"
-msgstr ""
+msgstr "Ulica2"
 
 #: js/EmployeeEditDialog.js:280
 msgid "E-Mail"
-msgstr ""
+msgstr "Email"
 
 #: js/EmployeeEditDialog.js:283
 msgid "Telephone Number"
-msgstr ""
+msgstr "Telefon"
 
 #: js/EmployeeEditDialog.js:286
 msgid "Cell Phone Number"
-msgstr ""
+msgstr "Mobitel"
 
 #: js/EmployeeEditDialog.js:290
 msgid "Birthday"
-msgstr ""
+msgstr "Datum rođenja"
 
 #: js/EmployeeEditDialog.js:298
 msgid "Internal Information"
-msgstr ""
+msgstr "Interne informacije"
 
 #: js/EmployeeEditDialog.js:307 js/EmployeeGridPanel.js:152
 msgid "Supervisor"
-msgstr ""
+msgstr "Nadređeni"
 
 #: js/EmployeeEditDialog.js:314 js/EmployeeGridPanel.js:165
 msgid "Division"
-msgstr ""
+msgstr "Odjel"
 
 #: js/EmployeeEditDialog.js:318 js/EmployeeGridPanel.js:159
 msgid "Health Insurance"
-msgstr ""
+msgstr "Zdravstveno osiguranje"
 
 #: js/EmployeeEditDialog.js:323 js/EmployeeGridPanel.js:138 js/Models.js:108
 msgid "Employment begin"
-msgstr ""
+msgstr "Datum zaposlenja"
 
 #: js/EmployeeEditDialog.js:328 js/EmployeeGridPanel.js:145 js/Models.js:109
 msgid "Employment end"
-msgstr ""
+msgstr "Prekid radnog odnosa"
 
 #: js/EmployeeEditDialog.js:331 js/Models.js:114
 msgid "Profession"
-msgstr ""
+msgstr "Struka"
 
 #: js/EmployeeEditDialog.js:339
 msgid "Banking Information"
-msgstr ""
+msgstr "Bankarske informacije"
 
 #: js/EmployeeEditDialog.js:348
 msgid "Account Holder"
-msgstr ""
+msgstr "Vlasnik računa"
 
 #: js/EmployeeEditDialog.js:351
 msgid "Account Number"
-msgstr ""
+msgstr "Broj računa"
 
 #: js/EmployeeEditDialog.js:354
 msgid "Bank Name"
-msgstr ""
+msgstr "Naziv banke"
 
 #: js/EmployeeEditDialog.js:357
 msgid "Code Number"
-msgstr ""
+msgstr "Kod"
 
 #: js/EmployeeEditDialog.js:378 js/FreeTimeEditDialog.js:237
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/EmployeeEditDialog.js:392 js/FreeTimeEditDialog.js:251
 msgid "Enter description"
-msgstr ""
+msgstr "Unesi opis"
 
 #: js/EmployeeGridPanel.js:94 js/FreeDayGridPanel.js:112
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 #: js/ExceptionHandler.js:47
 msgid "No contract could be found."
-msgstr ""
+msgstr "Nema pronađenih ugovora."
 
 #: js/ExceptionHandler.js:48
 msgid "Please create a contract for this employee!"
-msgstr ""
+msgstr "Kreirajte ugovor za odabranog zaposlenika."
 
 #: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:179
 #: js/FreeTimeGridPanel.js:144 js/Models.js:331
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #: js/FreeDayGridPanel.js:115 js/FreeTimeGridPanel.js:146
 msgid "Date Start"
-msgstr ""
+msgstr "Datum početka"
 
 #: js/FreeDayGridPanel.js:116 js/FreeTimeEditDialog.js:208
 #: js/FreeTimeGridPanel.js:147 js/Models.js:345
 msgid "Remark"
-msgstr ""
+msgstr "Opaska"
 
 #: js/FreeTimeEditDialog.js:150 js/FreeTimeEditDialog.js:162
 msgid "FreeTime"
-msgstr ""
+msgstr "Slobodni dani"
 
 #: js/FreeTimeEditDialog.js:187 js/FreeTimeGridPanel.js:145 js/Models.js:339
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/FreeTimeEditDialog.js:194
 msgid "First Day Length"
-msgstr ""
+msgstr "Duljina prvog dana"
 
 #: js/FreeTimeEditDialog.js:201
 msgid "Last Day Length"
-msgstr ""
+msgstr "Duljina zadnjeg dana"
 
 #: js/FreeTimeEditDialog.js:220
 msgid "Select Days"
-msgstr ""
+msgstr "Odaberi dane"
 
 #: js/HumanResources.js:25
 msgid "Human Resources"
-msgstr ""
+msgstr "Ljudski resursi"
 
 #: js/Models.js:68
 msgid "Employees"
 msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zaposlenik"
+msgstr[1] "Zaposlenika"
+msgstr[2] "Zaposlenika"
 
 #: js/Models.js:102 js/Models.js:187 js/Models.js:260 js/Models.js:329
 msgid "Quick search"
-msgstr ""
+msgstr "Brzo pretraživanje"
 
 #: js/Models.js:103
 msgid "Employee name"
-msgstr ""
+msgstr "Naziv zaposlenika"
 
 #: js/Models.js:105 js/Models.js:346
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Vrijeme zadnje izmjene"
 
 #: js/Models.js:106 js/Models.js:347
 msgid "Last Modified By"
-msgstr ""
+msgstr "Zadnji izmijenio"
 
 #: js/Models.js:107 js/Models.js:348
 msgid "Creation Time"
-msgstr ""
+msgstr "Vrijeme kreiranja"
 
 #: js/Models.js:110 js/Models.js:349
 msgid "Created By"
-msgstr ""
+msgstr "Kreirao"
 
 #: js/Models.js:149
 msgid "Working Time"
 msgid_plural "Working Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Radno vrijeme"
+msgstr[1] "Radna vremena"
+msgstr[2] "Radnih vremena"
 
 #: js/Models.js:153
 msgid "Working Times"
 msgid_plural "Working Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Radna vremena"
+msgstr[1] "Radna vremena"
+msgstr[2] "Radna vremena"
 
 #: js/Models.js:226
 msgid "Contracts"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ugovori"
+msgstr[1] "Ugovori"
+msgstr[2] "Ugovori"
 
 #: js/Models.js:381
 msgid "Free Day"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Slobodan dan"
+msgstr[1] "Slobodna dana"
+msgstr[2] "Slobodnih dana"
 
 #: js/Models.js:384
 msgid "Free Days"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Slobodni dani"
+msgstr[1] "Slobodni dani"
+msgstr[2] "Slobodni dani"
 
 #: Setup/Initialize.php:34
 msgid "Sickness"
-msgstr ""
+msgstr "Bolovanje"
 
 #: Setup/Initialize.php:35
 msgid "Vacation"
-msgstr ""
+msgstr "Godišnji odmor"
 
 #: Setup/Initialize.php:49
 msgid "Requested"
-msgstr ""
+msgstr "Zahtjevi"
 
 #: Setup/Initialize.php:50
 msgid "In process"
-msgstr ""
+msgstr "U tijeku"
 
 #: Setup/Initialize.php:51
 msgid "Accepted"
-msgstr ""
+msgstr "Prihvaćeno"
 
 #: Setup/Initialize.php:52
 msgid "Declined"
-msgstr ""
+msgstr "Odbijeno"
