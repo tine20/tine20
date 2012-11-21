@@ -212,8 +212,13 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             getPeriod: function() {
                 return this.grid.getTopToolbar().periodPicker.getPeriod();
             },
-            updatePeriod: function() {
-                //this.getStore().load();
+            updatePeriod: function(period) {
+                this.startDate = period.from;
+                var tbar = this.grid.getTopToolbar();
+                if (tbar) {
+                    tbar.periodPicker.update(this.startDate);
+                    this.startDate = tbar.periodPicker.getPeriod().from;
+                }
             },
             getTargetEvent: function(e) {
                 var idx = this.findRowIndex(e.getTarget());

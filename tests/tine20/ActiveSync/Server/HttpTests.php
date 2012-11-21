@@ -54,6 +54,9 @@ class ActiveSync_Server_HttpTests extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
+    /**
+     * @runInSeparateProcess
+     */
     public function testServer()
     {
         $_SERVER['REQUEST_METHOD']            = 'POST';

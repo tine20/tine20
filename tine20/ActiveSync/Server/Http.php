@@ -36,10 +36,13 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
 
-        Tinebase_Core::initFramework();
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
+        
+        // make sure that no session is created
+        unset($_COOKIE['TINE20SESSID']);
+        
+        Tinebase_Core::initFramework();
         
         // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
         $loginName = $this->_request->getServer('PHP_AUTH_USER');
@@ -68,7 +71,7 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
             return;
         }
         
-        if($this->_authenticate($loginName, $password, $_SERVER['REMOTE_ADDR']) !== true) {
+        if($this->_authenticate($loginName, $password, $this->_request->getClientIp()) !== true) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;

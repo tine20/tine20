@@ -1,0 +1,127 @@
+Return-Path: <name@example.com>
+Received: from host.home.example.net ([unix socket])
+    by host.home.example.net (Cyrus v2.2.13-Debian-2.2.13-13ubuntu3) with LMTPA;
+    Fri, 16 Mar 2012 17:31:20 +0100
+X-Sieve: CMU Sieve 2.2
+Received: from mx (unknown [33.22.11.2])
+   by host.home.example.net (Postfix) with ESMTP id 193CD10131
+   for <name@example.net>; Fri, 16 Mar 2012 17:31:20 +0100 (CET)
+X-MimeOLE: Produced By Microsoft Exchange V6.5
+Content-class: urn:content-classes:calendarmessage
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+   boundary="----_=_NextPart_001_01CD0392.3034721E"
+Subject: test
+Date: Fri, 16 Mar 2012 17:31:07 +0100
+Message-ID: <2F1EC7FC90C31544A3920A6ABA3BBA8F02AD66A1@GSX300B.xx>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Thread-Topic: test
+Thread-Index: Ac0DkjA+Rdzj6ieJR4SD5sf7NvA4OQ==
+From: "Name" <name@example.com>
+X-Tine20TestMessage: outlookimip.eml
+To: <name@example.net>
+X-OriginalArrivalTime: 16 Mar 2012 16:31:07.0606 (UTC) FILETIME=[306B4F60:01CD0392]
+
+This is a multi-part message in MIME format.
+
+------_=_NextPart_001_01CD0392.3034721E
+Content-Type: text/plain;
+   charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+When: Freitag, 16. M=E4rz 2012 18:00-18:30 (GMT+01:00) Amsterdam, =
+Berlin, Bern, Rome, Stockholm, Vienna.
+
+*~*~*~*~*~*~*~*~*~*
+
+
+
+------_=_NextPart_001_01CD0392.3034721E
+Content-Type: text/html;
+   charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
+charset=3Diso-8859-1">
+<META NAME=3D"Generator" CONTENT=3D"MS Exchange Server version =
+6.5.7655.4">
+<TITLE>test</TITLE>
+
+</HEAD>
+<BODY>
+<!-- Converted from text/rtf format -->
+
+<P><FONT SIZE=3D2 FACE=3D"Arial">When: Freitag, 16. M=E4rz 2012 =
+18:00-18:30 (GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, =
+Vienna.</FONT>
+</P>
+
+<P><FONT SIZE=3D2 FACE=3D"Arial">*~*~*~*~*~*~*~*~*~*</FONT>
+</P>
+<BR>
+
+</BODY>
+</HTML>
+------_=_NextPart_001_01CD0392.3034721E
+Content-class: urn:content-classes:calendarmessage
+Content-Type: text/calendar;
+   method=REQUEST;
+   name="meeting.ics"
+Content-Transfer-Encoding: 8bit
+
+BEGIN:VCALENDAR
+METHOD:REQUEST
+PRODID:Microsoft CDO for Microsoft Exchange
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:(GMT+01.00) Sarajevo/Warsaw/Zagreb
+X-MICROSOFT-CDO-TZID:2
+BEGIN:STANDARD
+DTSTART:16010101T030000
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T020000
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+RRULE:FREQ=YEARLY;WKST=MO;INTERVAL=1;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20120316T163107Z
+DTSTART;TZID="(GMT+01.00) Sarajevo/Warsaw/Zagreb":20120316T180000
+SUMMARY:test
+UID:040000008200E00074C5B7101A82E00800000000F04200929A03CD01000000000000000
+010000000A9E90330A8A0F547903AAFDBDD6A0D26
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN="'name
+@example.net'":MAILTO:name@example.net
+ORGANIZER;CN="Name":MAILTO:name@example.com
+LOCATION:
+DTEND;TZID="(GMT+01.00) Sarajevo/Warsaw/Zagreb":20120316T183000
+DESCRIPTION:\N
+SEQUENCE:0
+PRIORITY:5
+CLASS:
+CREATED:20120316T163107Z
+LAST-MODIFIED:20120316T163107Z
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-INSTTYPE:0
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-OWNERAPPTID:661665756
+X-MICROSOFT-CDO-APPT-SEQUENCE:0
+X-MICROSOFT-CDO-ATTENDEE-CRITICAL-CHANGE:20120316T163107Z
+X-MICROSOFT-CDO-OWNER-CRITICAL-CHANGE:20120316T163107Z
+END:VEVENT
+END:VCALENDAR
+
+------_=_NextPart_001_01CD0392.3034721E--
