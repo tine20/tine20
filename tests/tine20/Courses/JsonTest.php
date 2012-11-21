@@ -300,7 +300,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $userId = $courseData['members'][0]['id'];
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
-        sleep(1); // modlog issue
         
         // filtered internet access
         $courseData['internet'] = 'FILTERED';
@@ -309,7 +308,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_FILTERED]->getId(), $groupMemberships), 'not member of the filtered internet group ' . print_r($groupMemberships, TRUE));
         $this->assertFalse(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), 'member of the internet group ' . print_r($groupMemberships, TRUE));
-        sleep(1); // modlog issue
         
         // remove internet access
         $courseData['internet'] = 'OFF';

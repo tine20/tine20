@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>7.0</version>
+    <version>7.1</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>18</version>
+            <version>19</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -204,6 +204,12 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>

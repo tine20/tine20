@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -22,7 +22,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -62,6 +62,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

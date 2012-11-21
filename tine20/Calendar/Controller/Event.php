@@ -1226,7 +1226,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  $_event
      * @return void
      */
-    protected function _touch($_event, $_setModifier = FALSE) {
+    protected function _touch($_event, $_setModifier = FALSE)
+    {
         $_event->last_modified_time = Tinebase_DateTime::now();
         //$_event->last_modified_time = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         $_event->seq = (int)$_event->seq + 1;

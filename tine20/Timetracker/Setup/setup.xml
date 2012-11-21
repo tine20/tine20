@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>7.0</version>
+    <version>7.1</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -11,7 +11,7 @@
     <tables>
         <table>
             <name>timetracker_timeaccount</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -23,7 +23,7 @@
                     <name>container_id</name>
                     <type>integer</type>
                     <notnull>false</notnull>
-                </field>                
+                </field>
                 <field>
                     <name>title</name>
                     <type>text</type>
@@ -116,10 +116,16 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
-                </field>            
+                </field>
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>
@@ -133,13 +139,13 @@
                     <field>
                         <name>title</name>
                     </field>
-                </index>                
+                </index>
                 <index>
                     <name>number</name>
                     <field>
                         <name>number</name>
                     </field>
-                </index>                
+                </index>
                 <index>
                     <name>timeaccount::container_id--container::id</name>
                     <field>
@@ -150,12 +156,12 @@
                         <table>container</table>
                         <field>id</field>
                     </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
         <table>
             <name>timetracker_timesheet</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -238,10 +244,16 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
-                </field>            
+                </field>
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>
@@ -255,7 +267,7 @@
                     <field>
                         <name>start_date</name>
                     </field>
-                </index>                
+                </index>
                 <index>
                     <name>timesheet::timeaccount_id--timeaccount::id</name>
                     <field>

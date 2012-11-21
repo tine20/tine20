@@ -99,6 +99,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // relations (linked Timetracker_Model_Timeaccount records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -111,7 +112,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
      * name of fields containing datetime or an array of datetime information
      *
      * @var array list of datetime fields
-     */    
+     */
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',

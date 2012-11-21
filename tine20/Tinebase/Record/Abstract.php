@@ -615,25 +615,36 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _autoModeling()
     {
-        if(static::$_meta) {
-            if(! $this->_identifier) {
+        if (static::$_meta) {
+            if (! $this->_identifier) {
                 $this->_identifier = (array_key_exists('idProperty', static::$_meta))  ? static::$_meta['idProperty'] : 'id';
             }
-            if(static::$_fields) {
-                foreach(static::$_fields as $k => $f) {
-                    if(array_key_exists('filters', $f)) $this->_filters[$k] = $f['filters'];
-                    if(array_key_exists('validators', $f)) $this->_validators[$k] = $f['validators'];
-                    if(array_key_exists('modlogOmit', $f)) $this->_modlogOmitFields[] = $k;
-                    if(! array_key_exists('type', $f)) $f['type'] = 'string';
+            if (static::$_fields) {
+                foreach (static::$_fields as $k => $f) {
+                    if (array_key_exists('filters', $f)) {
+                        $this->_filters[$k] = $f['filters'];
+                    }
+                    if (array_key_exists('validators', $f)) {
+                        $this->_validators[$k] = $f['validators'];
+                    }
+                    if (array_key_exists('modlogOmit', $f)) {
+                        $this->_modlogOmitFields[] = $k;
+                    }
+                    if (! array_key_exists('type', $f)) {
+                        $f['type'] = 'string';
+                    }
                     switch ($f['type']) {
                         case 'string':
                         case 'integer':
                         case 'float':
                         case 'boolean':
+                        case 'bool':
                             break;
                         case 'date':
                         case 'datetime':
-                            if(array_key_exists('alarm', $f)) $this->_alarmDateTimeField = $k;
+                            if (array_key_exists('alarm', $f)) {
+                                $this->_alarmDateTimeField = $k;
+                            }
                             $this->_datetimeFields[] = $k;
                             break;
                         case 'time':
@@ -661,21 +672,21 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static function _autoModelingStatic()
     {
-        if(static::$_meta) {
-            if(static::_checkMetaProperty('hasCustomFields')) {
+        if (static::$_meta) {
+            if (static::_checkMetaProperty('hasCustomFields')) {
                 static::$_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            if(static::_checkMetaProperty('hasRelations')) {
+            if (static::_checkMetaProperty('hasRelations')) {
                 static::$_fields['relations'] = array('label' => NULL, 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            if(static::_checkMetaProperty('hasNotes')) {
+            if (static::_checkMetaProperty('hasNotes')) {
                 static::$_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            if(static::_checkMetaProperty('hasTags')) {
+            if (static::_checkMetaProperty('hasTags')) {
                 static::$_fields['tags'] = array('label' => 'Tags', 'type' => 'tag', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
             
-            if(static::_checkMetaProperty('containerProperty')) {
+            if (static::_checkMetaProperty('containerProperty')) {
                 static::$_fields[static::$_meta['containerProperty']] = array('label' => 'Container', 'hidden' => true, 'type' => 'container', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
             }
             
@@ -684,14 +695,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 static::$_fields['creation_time']      = array('label' => 'Creation Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['last_modified_by']   = array('label' => 'Last Modified By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['last_modified_time'] = array('label' => 'Last Modification Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                // don't show deleted information
+                // don't show deleted and sequence information
                 static::$_fields['deleted_by']         = array('label' => NULL, 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['is_deleted']         = array('label' => NULL, 'type' => 'bool', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['seq']                = array('label' => NULL, 'type' => 'integer', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0));
             }
         }
-
-        
     }
     
     /**
@@ -700,7 +710,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static function _checkMetaProperty($property)
     {
-        if(static::$_meta) {
+        if (static::$_meta) {
             return array_key_exists($property, static::$_meta) && static::$_meta[$property];
         }
         return false;

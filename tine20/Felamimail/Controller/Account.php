@@ -62,7 +62,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_modelName = 'Felamimail_Model_Account';
         $this->_doContainerACLChecks = FALSE;
         $this->_doRightChecks = TRUE;

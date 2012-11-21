@@ -95,7 +95,8 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'last_modified_time'     => array('allowEmpty' => true),
         'is_deleted'             => array('allowEmpty' => true),
         'deleted_time'           => array('allowEmpty' => true),
-        'deleted_by'             => array('allowEmpty' => true),    
+        'deleted_by'             => array('allowEmpty' => true),
+        'seq'                    => array('allowEmpty' => true),
     );
     
     /**

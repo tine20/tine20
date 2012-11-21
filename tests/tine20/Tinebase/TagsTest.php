@@ -184,7 +184,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             $contact->tags = array();
             $this->_instance->setTagsOfRecord($contact);
         }
-        sleep(1);
 
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $personasContactIds)
@@ -198,7 +197,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         );
         $tag1 = $this->_instance->attachTagToMultipleRecords($filter, $tagData1);
         $tagIds[] = $tag1->getId();
-        sleep(1);
 
         $tagData2 = array(
             'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -217,7 +215,6 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         }
         
         // Try to remove the created Tags
-        sleep(1);
         try {
             $this->_instance->detachTagsFromMultipleRecords($filter, $tagIds);
         } catch (Zend_Db_Statement_Exception $zdse) {
@@ -271,14 +268,10 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 0, 3))
         ));
         $sharedTag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag1);
-        // sleep modlog
-        sleep(1);
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 3, 3))
         ));
         $sharedTag2 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag2);
-        // sleep modlog
-        sleep(1);
         
         $this->_instance->mergeDuplicateSharedTags('Addressbook_Model_Contact');
         

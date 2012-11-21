@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -81,6 +81,7 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
         'is_deleted'             => array('allowEmpty' => true),
         'deleted_time'           => array('allowEmpty' => true),
         'deleted_by'             => array('allowEmpty' => true),
+        'seq'                    => array('allowEmpty' => true),
     );
     
     /**

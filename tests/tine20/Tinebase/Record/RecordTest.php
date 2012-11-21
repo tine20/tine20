@@ -356,7 +356,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $crtime->addYear(2);
         $auto->creation_time = $crtime; 
         
-        $this->assertEquals(14, count($auto->getFields()));
+        $this->assertEquals(15, count($auto->getFields()));
         
         $autoArray = $auto->toArray();
         

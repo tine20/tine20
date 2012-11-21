@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>7.0</version>
+    <version>7.1</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -123,10 +123,16 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
-                </field>            
+                </field>
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <field>
                     <name>cleared_in</name>
@@ -139,7 +145,7 @@
                     <type>text</type>
                     <length>64</length>
                     <default>not yet cleared</default>
-                </field>                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -168,7 +174,7 @@
         </table>
         <table>
             <name>sales_products</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -231,10 +237,16 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
-                </field>            
+                </field>
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>

@@ -619,7 +619,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
-
+            
             $currentRecord = $this->get($_record->getId());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
@@ -703,7 +703,7 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing concurrency check ...');
 
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-        $modLog->manageConcurrentUpdates($_record, $_currentRecord, $this->_modelName, $this->_getBackendType(), $_record->getId());
+        $modLog->manageConcurrentUpdates($_record, $_currentRecord);
         $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
     }
     
@@ -814,6 +814,9 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * update modlog / metadata / add systemnote for multiple records defined by filter
      * 
+     * NOTE: this should be done in a transaction because of the concurrency handling as
+     *  we want the same seq in the record and in the modlog
+     * 
      * @param Tinebase_Model_Filter_FilterGroup|array $_filterOrIds
      * @param array $_oldData
      * @param array $_newData
@@ -825,11 +828,20 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
-        list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
-        $updateMetaData = array(
-            'last_modified_by'   => $currentAccountId,
-            'last_modified_time' => $currentTime,
-        );
+        if ($this->_omitModLog !== TRUE) {
+            $recordSeqs = $this->_backend->getPropertyByIds($ids, 'seq');
+            
+            list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            $updateMetaData = array(
+                'last_modified_by'   => $currentAccountId,
+                'last_modified_time' => $currentTime,
+                'seq'                => new Zend_Db_Expr('seq + 1'),
+                'recordSeqs'         => $recordSeqs, // is not written to DB yet
+            );
+        } else {
+            $updateMetaData = array();
+        }
+        
         $this->_backend->updateMultiple($ids, $updateMetaData);
         
         if ($this->_omitModLog !== TRUE && is_object(Tinebase_Core::getUser())) {
@@ -950,6 +962,12 @@ abstract class Tinebase_Controller_Record_Abstract
         return $this->_updateMultipleResult;
     }
     
+    /**
+     * iterate relations
+     * 
+     * @param Tinebase_Record_Abstract $currentRecord
+     * @return array
+     */
     protected function _iterateRelations($currentRecord)
     {
         if(! $currentRecord->relations || get_class($currentRecord->relations) != 'Tinebase_Record_RecordSet') {
@@ -1089,7 +1107,6 @@ abstract class Tinebase_Controller_Record_Abstract
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getTraceAsString(), true));
             throw $e;
         }
 
@@ -1192,7 +1209,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $this->_deleteLinkedObjects($_record);
 
-        if (!$this->_purgeRecords && $_record->has('created_by')) {
+        if (! $this->_purgeRecords && $_record->has('created_by')) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'delete', $_record);
             $this->_backend->update($_record);
         } else {

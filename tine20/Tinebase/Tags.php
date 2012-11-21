@@ -573,6 +573,8 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return Tinebase_Model_Tag
+     * 
+     * @todo maybe this could be done in a more generic way (in Tinebase_Controller_Record_Abstract)
      */
     public function attachTagToMultipleRecords($_filter, $_tag)
     {
@@ -614,24 +616,35 @@ class Tinebase_Tags
         $toAttachIds = array_diff($recordIds, $alreadyAttachedIds);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attaching 1 Tag to ' . count($toAttachIds) . ' records.');
-        foreach ($toAttachIds as $recordId) {
-            $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
-                'tag_id'         => $tagId,
-                'application_id' => $appId,
-                'record_id'      => $recordId,
-            // backend property not supported by record yet
-                'record_backend_id' => ''
-                )
+        
+        try {
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+            
+            foreach ($toAttachIds as $recordId) {
+                $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
+                    'tag_id'         => $tagId,
+                    'application_id' => $appId,
+                    'record_id'      => $recordId,
+                // backend property not supported by record yet
+                    'record_backend_id' => ''
+                    )
+                );
+            }
+            
+            $controller->concurrencyManagementAndModlogMultiple(
+                $toAttachIds, 
+                array('tags' => array()), 
+                array('tags' => array($tag->toArray()))
             );
+            
+            $this->_addOccurrence($tagId, count($toAttachIds));
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
+            throw $e;
         }
-        
-        $controller->concurrencyManagementAndModlogMultiple(
-            $toAttachIds, 
-            array('tags' => array()), 
-            array('tags' => array($tag->toArray()))
-        );
-        
-        $this->_addOccurrence($tagId, count($toAttachIds));
         
         return $this->get($tagId);
     }
@@ -642,6 +655,8 @@ class Tinebase_Tags
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
      * @return void
+     * 
+     * @todo maybe this could be done in a more generic way (in Tinebase_Controller_Record_Abstract)
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
@@ -649,65 +664,74 @@ class Tinebase_Tags
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
         $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
         
-        if(!is_array($_tag)) $_tag = array($_tag);
-
-        // @todo remove this when we have record seq for modlog
-        $recordIds = array();
+        // only get records user has update rights to
+        $controller->checkFilterACL($_filter, 'update');
+        $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
         
-        foreach ($_tag as $dirtyTagId) {
-            $tag = $this->getTagsById($dirtyTagId, Tinebase_Model_TagRight::USE_RIGHT)->getFirstRecord();
-            
-            if (empty($tag)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No use right for tag, detaching not possible.');
-                return;
+        foreach ((array) $_tag as $dirtyTagId) {
+            try {
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+                $this->_detachSingleTag($recordIds, $dirtyTagId, $appId, $controller);
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            } catch (Exception $e) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
+                throw $e;
             }
-            $tagId = $tag->getId();
-            
-            // only get records user has update rights to
-            $controller->checkFilterACL($_filter, 'update');
-
-            $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
-            $recordIdList = '\'' . implode('\',\'',$recordIds) . '\'';
-            
-            $attachedIds = array();
-            $select = $this->_db->select()
-                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
-                ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
-                ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
-                ->where($this->_db->quoteIdentifier('record_id').' IN ( ' . $recordIdList . ' ) ');
-
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
-            
-            foreach ($this->_db->fetchAssoc($select) as $tagArray){
-                $attachedIds[] = $tagArray['record_id'];
-            }
-            
-            if (empty($attachedIds)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could detach the tag(s) from');
-                return;
-            }
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Detaching 1 Tag from ' . count($attachedIds) . ' records.');
-            foreach ($attachedIds as $recordId) {
-                $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
-            }
-            
-            // @todo use record seq for modlog instead of sleeping
-            if (count(array_intersect($recordIds, $attachedIds)) > 0) {
-                // sleep due to current modlog restrictions
-                sleep(1);
-            }
-            $recordIds = array_merge($recordIds, $attachedIds);
-            $controller->concurrencyManagementAndModlogMultiple(
-                $attachedIds,
-                array('tags' => array($tag->toArray())),
-                array('tags' => array())
-            );
-            
-            $this->_deleteOccurrence($tagId, count($attachedIds));
         }
     }
+    
+    /**
+     * detach a single tag from records
+     * 
+     * @param array $recordIds
+     * @param string $dirtyTagId
+     * @param string $appId
+     * @param Tinebase_Controller_Record_Abstract $controller
+     */
+    protected function _detachSingleTag($recordIds, $dirtyTagId, $appId, $controller)
+    {
+        $tag = $this->getTagsById($dirtyTagId, Tinebase_Model_TagRight::USE_RIGHT)->getFirstRecord();
+        
+        if (empty($tag)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No use right for tag, detaching not possible.');
+            return;
+        }
+        $tagId = $tag->getId();
+        
+        $attachedIds = array();
+        $select = $this->_db->select()
+            ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
+            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
+            ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('record_id').' IN (?)', $recordIds));
 
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
+        foreach ($this->_db->fetchAssoc($select) as $tagArray){
+            $attachedIds[] = $tagArray['record_id'];
+        }
+        
+        if (empty($attachedIds)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could detach the tag(s) from');
+            return;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Detaching 1 Tag from ' . count($attachedIds) . ' records.');
+        foreach ($attachedIds as $recordId) {
+            $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
+        }
+        
+        $recordIds = array_merge($recordIds, $attachedIds);
+        $controller->concurrencyManagementAndModlogMultiple(
+            $attachedIds,
+            array('tags' => array($tag->toArray())),
+            array('tags' => array())
+        );
+        
+        $this->_deleteOccurrence($tagId, count($attachedIds));
+    }
+    
     /**
      * Creates missing tags on the fly and returns complete list of tags the current
      * user has use rights for.
@@ -1044,9 +1068,6 @@ class Tinebase_Tags
                     array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsWithTagToMerge)
                 ));
                 $this->attachTagToMultipleRecords($recordFilter, $targetTag);
-                // modlog sleep :(
-                // @todo can be removed when this is resolved -> 0000554: modlog: records can't be updated in less than 1 second intervals
-                sleep(1);
                 $this->detachTagsFromMultipleRecords($recordFilter, $tag->getId());
                 
                 // check occurrence of the merged tag and remove it if obsolete
