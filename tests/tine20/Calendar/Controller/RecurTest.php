@@ -395,7 +395,6 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_controller->create($event);
-        sleep(1); // wait for modlog
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -22,7 +22,7 @@ class Tinebase_Model_Department extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -63,6 +63,7 @@ class Tinebase_Model_Department extends Tinebase_Record_Abstract
         'is_deleted'             => array('allowEmpty' => true),
         'deleted_time'           => array('allowEmpty' => true),
         'deleted_by'             => array('allowEmpty' => true),
+        'seq'                    => array('allowEmpty' => true),
     );
     
     /**

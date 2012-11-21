@@ -250,6 +250,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      * test modlog undo
      * 
      * @see 0006252: allow to undo history items (modlog)
+     * @see 0000554: modlog: records can't be updated in less than 1 second intervals
      */
     public function testUndo()
     {
@@ -262,8 +263,12 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $contact->tel_cell = NULL;
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
         
-        // needs sleeping because of modlog/concurrency restrictions
-        sleep(1);
+        // fetch modlog and test seq
+        $modlog = $this->_modLogClass->getModifications('Addressbook', $contact->getId(), NULL, 'Sql',
+            Tinebase_DateTime::now()->subSecond(5), Tinebase_DateTime::now())->getFirstRecord();
+        $this->assertTrue($modlog !== NULL);
+        $this->assertEquals(1, $modlog->seq);
+        $this->assertEquals('+491234', $modlog->old_value);
         
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
@@ -271,7 +276,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
         ));
         $result = $this->_modLogClass->undo($filter);
-        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(1, $result['totalcount'], 'did not get 1 undone modlog: ' . print_r($result, TRUE));
         $this->assertEquals('+491234', $result['undoneModlogs']->getFirstRecord()->old_value);
         
         // check record after undo

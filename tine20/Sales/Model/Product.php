@@ -4,8 +4,8 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        get categories from settings/config
  */
@@ -54,6 +54,7 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // linked objects
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    

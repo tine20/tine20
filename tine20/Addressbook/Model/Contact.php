@@ -198,6 +198,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // tine 2.0 generic fields
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),

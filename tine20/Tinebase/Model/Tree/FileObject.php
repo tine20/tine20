@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -70,6 +70,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         // model specific fields
         'revision'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

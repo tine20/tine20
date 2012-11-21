@@ -67,7 +67,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     /**
      * list of zend validator
      * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * these validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
      */
@@ -81,6 +81,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // model specific fields
         'parent_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'object_id'      => array('presence' => 'required'),

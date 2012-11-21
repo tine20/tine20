@@ -192,6 +192,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

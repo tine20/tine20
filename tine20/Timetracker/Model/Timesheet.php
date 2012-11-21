@@ -21,7 +21,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -63,10 +63,11 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // other related data
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),   
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

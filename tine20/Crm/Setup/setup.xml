@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Crm</name>
-    <version>7.0</version>
+    <version>7.1</version>
     <order>20</order>
     <depends>
         <application>Admin</application>
@@ -12,7 +12,7 @@
     <tables>
         <table>
             <name>metacrm_lead</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -59,7 +59,7 @@
                 <field>
                     <name>lastreader</name>
                     <type>integer</type>
-                </field>                
+                </field>
                 <field>
                     <name>start</name>
                     <type>datetime</type>
@@ -109,7 +109,12 @@
                     <name>deleted_time</name>
                     <type>datetime</type>
                 </field>
-                 
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>

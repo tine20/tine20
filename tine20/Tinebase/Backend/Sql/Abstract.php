@@ -266,6 +266,30 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
+     * fetch a single property for all records defined in array of $ids
+     * 
+     * @param array|string $ids
+     * @param string $property
+     * @return array (key = id, value = property value)
+     */
+    public function getPropertyByIds($ids, $property)
+    {
+        $select = $this->_getSelect(array($property, $this->_identifier));
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', (array) $ids);
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
+        
+        $result = array();
+        foreach($queryResult as $row) {
+            $result[$row[$this->_identifier]] = $row[$property];
+        }
+        return $result;
+    }
+    
+    /**
      * converts raw data from adapter into a single record
      *
      * @param  array $_rawData

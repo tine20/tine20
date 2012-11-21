@@ -817,8 +817,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function update(Tinebase_Model_Tree_Node $_node)
     {
         $currentNodeObject = $this->get($_node->getId());
-        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-        $modLog->setRecordMetaData($_node, 'update', $currentNodeObject);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_node, 'update', $currentNodeObject);
         
         // update file object
         $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -18,15 +18,11 @@
 class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract 
 {
     /**
-     * @property String $application_id
-     */
-    
-    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -48,7 +44,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'application_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence'=>'required'),
+        'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
@@ -59,6 +55,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

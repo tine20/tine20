@@ -51,6 +51,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'is_deleted'           => array('allowEmpty' => true         ),
         'deleted_time'         => array('allowEmpty' => true         ),
         'deleted_by'           => array('allowEmpty' => true         ),
+        'seq'                  => array('allowEmpty' => true         ),
         // task only fields
         'id'                   => array('allowEmpty' => true, 'Alnum'),
         'percent'              => array('allowEmpty' => true, 'default' => 0),

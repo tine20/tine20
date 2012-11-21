@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Tinebase.Model');
 
@@ -20,7 +20,8 @@ Tine.Tinebase.Model.modlogFields = [
     { name: 'last_modified_by',                                                        isMetaField: true },
     { name: 'is_deleted',         type: 'boolean',                                     isMetaField: true },
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
-    { name: 'deleted_by',                                                              isMetaField: true }
+    { name: 'deleted_by',                                                              isMetaField: true },
+    { name: 'seq',                                                                     isMetaField: true }
 ];
 
 /**

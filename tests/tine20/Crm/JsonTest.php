@@ -320,6 +320,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      * testConcurrentRelationSetting
      * 
      * @see 0007108: inspect and solve concurrency conflicts when setting lead relations
+     * @see 0000554: modlog: records can't be updated in less than 1 second intervals
      */
     public function testConcurrentRelationSetting()
     {
@@ -333,7 +334,6 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'type'  => 'TASK',
                 'own_model' => 'Tasks_Model_Task',
                 'own_backend' => 'Sql',
-                //'own_id' => 'c0096f3d78edb82a9670931f0f5f575a76b656f0',
                 'own_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
@@ -342,17 +342,15 @@ class Crm_JsonTest extends Crm_AbstractTest
             ),
         );
         $taskData = $taskJson->saveTask($taskData);
-        
-        sleep(1);
         $taskData['description'] = 1;
         $taskData = $taskJson->saveTask($taskData);
-        sleep(1);
         
         $savedLead = $this->_instance->getLead($leadData['id']);
         $savedLead['relations'][0]['related_record']['description'] = '2';
         $savedLead['relations'][0]['related_record']['due'] = '2012-10-18 12:54:33';
-        // client may ommit last_modified time -> this should cause a concurrency conflict
-        $savedLead['relations'][0]['related_record']['last_modified_time'] = '';
+        
+        // client may send wrong seq -> this should cause a concurrency conflict
+        $savedLead['relations'][0]['related_record']['seq'] = 0;
         try {
             $savedLead = $this->_instance->saveLead($savedLead);
             $this->fail('expected concurrency exception');
