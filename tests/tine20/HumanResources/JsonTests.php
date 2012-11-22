@@ -48,7 +48,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $savedEmployee = $this->_json->saveEmployee($savedEmployee);
         $this->assertEquals(2, count($savedEmployee['contracts']));
 
-        $this->assertEquals(null, $savedEmployee['contracts'][1]['end_date']);
+        $this->assertEquals(null, $savedEmployee['contracts'][1]['end_date'], 'The end_date should have a null value.');
         $date1 = new Tinebase_DateTime($savedEmployee['contracts'][0]['end_date']);
         $date2 = new Tinebase_DateTime($savedEmployee['contracts'][1]['start_date']);
 

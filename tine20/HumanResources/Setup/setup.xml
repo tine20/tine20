@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.5</version>
+    <version>6.6</version>
     <order>51</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -446,7 +446,7 @@
         </table>
         <table>
             <name>humanresources_contract</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -529,6 +529,13 @@
                     <name>deleted_time</name>
                     <type>datetime</type>
                 </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
                 <index>
                     <name>contract::employee_id--employee::id</name>
                     <field>
