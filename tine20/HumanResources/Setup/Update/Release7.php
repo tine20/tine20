@@ -38,4 +38,21 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('HumanResources', '7.1');
     }
+    
+    /**
+     * update 7.1 -> 7.2
+     * 
+     * - add index to contracts table
+     *   @see 0007474: add primary key to humanresources_contract
+     * - remove sales constrains
+     */
+    public function update_1()
+    {
+        $update6 = new HumanResources_Setup_Update_Release6($this->_backend);
+        $update6->update_5();
+        
+        $this->setTableVersion('humanresources_employee', '7');
+        $this->setTableVersion('humanresources_contract', '4');
+        $this->setApplicationVersion('HumanResources', '7.2');
+    }
 }
