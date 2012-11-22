@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-04 20:45+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,20 +51,20 @@ msgstr ""
 
 #: Controller/Lead.php:179
 msgid "Source"
-msgstr ""
+msgstr "Allikas"
 
 #: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:396
 #: js/LeadGridDetailsPanel.js:445
 msgid "Start"
-msgstr ""
+msgstr "Algus"
 
 #: Controller/Lead.php:181
 msgid "Scheduled end"
-msgstr ""
+msgstr "Planeeritud lõpp"
 
 #: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:227
 msgid "End"
-msgstr ""
+msgstr "Lõpp"
 
 #: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:129
 #: js/Model.js:108
@@ -77,11 +78,11 @@ msgstr ""
 
 #: Controller/Lead.php:185
 msgid "Folder"
-msgstr ""
+msgstr "Kaust"
 
 #: Controller/Lead.php:186
 msgid "Updated by"
-msgstr ""
+msgstr "Uuendatud"
 
 #: Controller/Lead.php:187
 msgid "Updated Fields:"
@@ -111,21 +112,21 @@ msgstr ""
 #: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:488
 #: js/LeadGridPanel.js:126 Model/Lead.php:117
 msgid "Customer"
-msgstr ""
+msgstr "Klient"
 
 #: Controller.php:160 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 #: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:471
 #: js/LeadGridPanel.js:125
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #: Controller.php:161
 msgid "Reseller"
-msgstr ""
+msgstr "Edasimüüja"
 
 #: Controller.php:164
 msgid "open"
-msgstr ""
+msgstr "ava"
 
 #: Controller.php:165
 msgid "contacted"
@@ -153,15 +154,15 @@ msgstr ""
 
 #: Controller.php:173 Export/Pdf.php:219
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: Controller.php:174 Export/Pdf.php:218
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: Controller.php:175
 msgid "Website"
-msgstr ""
+msgstr "Veebileht"
 
 #: Export/Pdf.php:75
 msgid "Lead Data"
@@ -188,43 +189,43 @@ msgstr ""
 
 #: Export/Pdf.php:184
 msgid "Contacts"
-msgstr ""
+msgstr "Kontaktid"
 
 #: Export/Pdf.php:211 js/Contact.js:231
 msgid "Address"
-msgstr ""
+msgstr "Aadress"
 
 #: Export/Pdf.php:232 js/LeadEditDialog.js:243 js/Task.js:83
 msgid "Tasks"
-msgstr ""
+msgstr "Ülesanded"
 
 #: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
-msgstr ""
+msgstr "Tähtaeg"
 
 #: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
-msgstr ""
+msgstr "Tähtsus"
 
 #: Export/Pdf.php:274 js/LeadEditDialog.js:254 js/Product.js:85
 msgid "Products"
-msgstr ""
+msgstr "Tooted"
 
 #: Export/Pdf.php:315
 msgid "low"
-msgstr ""
+msgstr "madal"
 
 #: Export/Pdf.php:316
 msgid "normal"
-msgstr ""
+msgstr "tavaline"
 
 #: Export/Pdf.php:317
 msgid "high"
-msgstr ""
+msgstr "kõrge"
 
 #: Export/Pdf.php:318
 msgid "urgent"
-msgstr ""
+msgstr "ülioluline"
 
 #: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"

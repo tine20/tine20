@@ -217,10 +217,12 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $tempFileId
      * @param string $groupId
      * @param string $courseName
+     * 
+     * @todo remove obsolete $groupId param
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
-        $this->_controller->importMembers($tempFileId, $groupId, $courseId);
+        $this->_controller->importMembers($tempFileId, $courseId);
         
         // return members to update members grid
         return array(

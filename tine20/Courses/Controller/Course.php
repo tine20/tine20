@@ -431,11 +431,10 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     * import course members
     *
     * @param string $tempFileId
-    * @param string $groupId
-    * @param string $courseName
+    * @param string $courseId
     * @return array
     */
-    public function importMembers($tempFileId, $groupId, $courseId)
+    public function importMembers($tempFileId, $courseId)
     {
         $this->checkRight(Courses_Acl_Rights::ADD_NEW_USER);
         
@@ -449,6 +448,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
         
         $course = $this->get($courseId);
+        // check if group exists, too
+        $group = $this->_groupController->get($course->group_id);
+        
         $importer = Admin_Import_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
         $result = $importer->importFile($tempFile->path);
         

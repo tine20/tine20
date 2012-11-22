@@ -131,6 +131,20 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
     );
 
     /**
+     * returns the foreignId fields (used in Tinebase_Convert_Json)
+     * @return array
+     */
+    public static function getResolveForeignIdFields()
+    {
+        $rf = static::$_resolveForeignIdFields;
+        if (! Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
+            unset($rf['Sales_Model_Division']);
+        }
+        
+        return $rf;
+    }
+    
+    /**
      * the constructor
      * @see Tinebase_Record_Abstract
      */

@@ -992,4 +992,16 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $containers = Tinebase_Container::getInstance()->getContainerByACL($this->objects['user']->accountId, 'Addressbook', Tinebase_Model_Grants::GRANT_ADD);
         $this->assertTrue(count($containers->filter('name', 'testcontainer')) === 1, 'testcontainer ' . print_r($containerUpdated, TRUE) . ' not found: ' . print_r($containers->toArray(), TRUE));
     }
+    
+    /**
+     * testPhpinfo
+     * 
+     * @see 0007182: add "server info" section to admin
+     */
+    public function testPhpinfo()
+    {
+        $info = $this->_json->getServerInfo();
+        $this->assertContains("phpinfo()
+PHP Version =>", $info['html']);
+    }
 }

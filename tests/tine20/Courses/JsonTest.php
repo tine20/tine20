@@ -4,7 +4,7 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -288,6 +288,17 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testImportWithMissingList
+     * 
+     * @see 0007460: check existence of group/list before user import
+     */
+    public function testImportWithMissingList()
+    {
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/tah2a.txt', $this->_getCourseImportDefinition3('iso-8859-1'), TRUE, TRUE);
+        $this->assertEquals(3, count($result['members']), 'import failed');
+    }
+    
+    /**
      * test internet access on/off/filtered
      * 
      * @todo remove some code duplication
@@ -449,14 +460,21 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param string $_filename
      * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param boolean $_useJsonImportFn
+     * @param boolean $removeGroupList
      * @return array course data
      */
-    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition = NULL, $_useJsonImportFn = FALSE)
+    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition = NULL, $_useJsonImportFn = FALSE, $removeGroupList = FALSE)
     {
         $definition = ($_definition !== NULL) ? $_definition : $this->_getCourseImportDefinition();
         
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        
+        if ($removeGroupList) {
+            $group = Admin_Controller_Group::getInstance()->get($courseData['group_id']);
+            Addressbook_Controller_List::getInstance()->delete($group->list_id);
+        }
         
         $this->_coursesToDelete[] = $courseData['id'];
         

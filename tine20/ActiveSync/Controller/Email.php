@@ -80,7 +80,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
      * @var string
      */
     protected $_filterProperty = 'emailfilterId';
-            
+    
     /**
      * field to sort search results by
      * 
@@ -146,13 +146,22 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage);
-        
-        if ($replaceMime === false) {
+        if ($replaceMime === FALSE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                 __METHOD__ . '::' . __LINE__ . " Adding RFC822 attachment and appending body to forward message.");
+            
             $rfc822 = Felamimail_Controller_Message::getInstance()->getMessagePart($fmailMessage);
             $rfc822->type = Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
-            $rfc822->filename = 'forwarded email.eml';
+            $rfc822->filename = 'forwarded_email.eml';
             $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
+            $replyBody = Felamimail_Controller_Message::getInstance()->getMessageBody($fmailMessage, NULL, 'text/plain');
+        } else {
+            $rfc822 = NULL;
+            $replyBody = NULL;
+        }
+        
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        if ($rfc822) {
             $mail->addAttachment($rfc822);
         }
         

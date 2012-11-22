@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-12 17:28+0000\n"
+"PO-Revision-Date: 2012-10-25 09:57+0000\n"
 "Last-Translator: Alexander Stintzing <a.stintzing@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr "Abbrechen"
 
 #: js/AdminPanel.js:76
 msgid "OK"
-msgstr "KO"
+msgstr "OK"
 
 #: js/AdminPanel.js:204 js/ContractGridPanel.js:111
 msgid "Calendar"

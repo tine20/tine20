@@ -815,11 +815,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                             Ext.each(selection, function (event) {
                                                 panel.getStore().remove(event);
                                             });
-                                            panel.getTopToolbar().onLoad();
-                                        } else {
-                                            this.refresh(true);
                                         }
-                                        
+                                        this.refresh(true);
                                     }
                                 };
                                 

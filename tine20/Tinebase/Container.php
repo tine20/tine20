@@ -898,17 +898,18 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * set records belonging to the given container deleted
+     * set delete flag of records belonging to the given container
+     * 
      * @param Tinebase_Model_Container $container
      */
     public function deleteContainerContents($container)
     {
         // set records belonging to this container to deleted
         $model = $container->model;
-        if($model) {
+        if ($model) {
             $controller = Tinebase_Core::getApplicationInstance($model);
-            if($controller) {
-                $filterName = $model . 'Filter';
+            $filterName = $model . 'Filter';
+            if ($controller && class_exists($filterName)) {
                 $filter = new $filterName(array(
                     array(
                         'field'    => 'container_id',

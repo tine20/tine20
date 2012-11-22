@@ -490,7 +490,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             handler: function() {
                 Ext.ux.Printer.print(this.getGrid());
             },
-            iconCls:'action_print',
+            iconCls: 'action_print',
             scope: this,
             allowMultiple: true
         });

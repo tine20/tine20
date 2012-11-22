@@ -77,4 +77,18 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'start_date',
         'end_date'
     );
+    
+    /**
+     * returns the foreignId fields (used in Tinebase_Convert_Json)
+     * @return array
+     */
+    public static function getResolveForeignIdFields()
+    {
+        $rf = static::$_resolveForeignIdFields;
+        if (! Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
+            unset($rf['Sales_Model_CostCenter']);
+        }
+        
+        return $rf;
+    }
 }

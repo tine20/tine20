@@ -1,11 +1,13 @@
 # 
 # Translators:
+#   <ivana.horvat@globalnet.hr>, 2012.
+#   <visicfilip@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-17 11:21+0000\n"
+"Last-Translator: fvisic <visicfilip@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,103 +20,103 @@ msgstr ""
 
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: js/ApplicationGridPanel.js:64
 msgid "Enabled"
-msgstr ""
+msgstr "Omogućeno"
 
 #: js/ApplicationGridPanel.js:65
 msgid "Order"
-msgstr ""
+msgstr "Poredak"
 
 #: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
-msgstr ""
+msgstr "Instalirana verzija"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Available Version"
-msgstr ""
+msgstr "Dostupna verzija"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Depends on"
-msgstr ""
+msgstr "Ovisi o"
 
 #: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
 msgid "Install application"
-msgstr ""
+msgstr "Instaliraj aplikaciju"
 
 #: js/ApplicationGridPanel.js:87
 msgid "Uninstall application"
-msgstr ""
+msgstr "Ukloni aplikaciju"
 
 #: js/ApplicationGridPanel.js:96
 msgid "Update application"
-msgstr ""
+msgstr "Ažuriraj aplikaciju"
 
 #: js/ApplicationGridPanel.js:105
 msgid "Go to {0} login"
-msgstr ""
+msgstr "Idi na {0} prijavu"
 
 #: js/ApplicationGridPanel.js:175
 msgid "uninstall"
-msgstr ""
+msgstr "ukloni"
 
 #: js/ApplicationGridPanel.js:175
 msgid "Do you really want to uninstall the application(s)?"
-msgstr ""
+msgstr "Želite li stvarno ukloniti aplikaciju(e)?"
 
 #: js/ApplicationGridPanel.js:235
 msgid "This may take a while"
-msgstr ""
+msgstr "Ovo bi moglo potrajati"
 
 #: js/ApplicationGridPanel.js:267
 msgid "Dependency Violation"
-msgstr ""
+msgstr "Kršenje ovisnosti"
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Izbriši sve postojeće korisnike i grupe"
 
 #: js/AuthenticationPanel.js:127
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
 "and Roles. Do you really want to switch the accounts storage backend to LDAP"
 " ?"
-msgstr ""
+msgstr "Prijelaz sa SQL na  LDAP će izbrisati sve postojeće korisničke račune, grupe i uloge. Želite li stvarno zamjeniti pozadinu pohrane računa na LDAP? "
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
 msgid "Backend"
-msgstr ""
+msgstr "Pozadina"
 
 #: js/AuthenticationPanel.js:233
 msgid "Initial Admin User"
-msgstr ""
+msgstr "Inicijalni admin korisnik"
 
 #: js/AuthenticationPanel.js:246
 msgid "Initial admin login name"
-msgstr ""
+msgstr "Inicijalno ime za prijavu admin korisnika"
 
 #: js/AuthenticationPanel.js:251
 msgid "Initial admin Password"
-msgstr ""
+msgstr "Inicijalna admin zaporka"
 
 #: js/AuthenticationPanel.js:255
 msgid "Password confirmation"
-msgstr ""
+msgstr "Potvrda zaporke"
 
 #: js/AuthenticationPanel.js:263
 msgid "Authentication provider"
-msgstr ""
+msgstr "Pružatelj autentikacije"
 
 #: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
 msgid "Try to split username"
-msgstr ""
+msgstr "Pokušajte razdvojiti korisničko ime"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
@@ -123,7 +125,7 @@ msgstr ""
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
@@ -132,536 +134,536 @@ msgstr ""
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
 msgid "Account canonical form"
-msgstr ""
+msgstr "Kanonski oblik računa"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
 #: js/AuthenticationPanel.js:409
 msgid "Account domain name "
-msgstr ""
+msgstr "Domensko ime računa"
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
 #: js/AuthenticationPanel.js:414
 msgid "Account domain short name"
-msgstr ""
+msgstr "Skraćeno domensko ime računa"
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
 #: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
 msgid "Login name"
-msgstr ""
+msgstr "Ime za prijavu"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
 #: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
 #: js/EmailPanel.js:190
 msgid "Password"
-msgstr ""
+msgstr "Zaporka"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
 msgid "Bind requires DN"
-msgstr ""
+msgstr "Zahtjev vezanja DN"
 
 #: js/AuthenticationPanel.js:334
 msgid "Base DN"
-msgstr ""
+msgstr "Baza DN"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr ""
+msgstr "Filter pretraživanja"
 
 #: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
 #: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:390
 msgid "Hostname"
-msgstr ""
+msgstr "Poslužitelj"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
 #: js/EmailPanel.js:398
 msgid "Secure Connection"
-msgstr ""
+msgstr "Sigurna konekcija"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
-msgstr ""
+msgstr "Ništa"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
 msgid "Append domain to login name"
-msgstr ""
+msgstr "Dodaj domenu imenu za prijavu"
 
 #: js/AuthenticationPanel.js:426
 msgid "Accounts storage"
-msgstr ""
+msgstr "Pohrana računa"
 
 #: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
 msgid "Default user group name"
-msgstr ""
+msgstr "Zadano ime korisničke grupe"
 
 #: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:542
 msgid "Default admin group name"
-msgstr ""
+msgstr "Zadano ime admin grupe"
 
 #: js/AuthenticationPanel.js:483
 msgid "User DN"
-msgstr ""
+msgstr "Korisnik DN"
 
 #: js/AuthenticationPanel.js:486
 msgid "User Filter"
-msgstr ""
+msgstr "Korisnički filter"
 
 #: js/AuthenticationPanel.js:490
 msgid "User Search Scope"
-msgstr ""
+msgstr "Područje traženja korisnika"
 
 #: js/AuthenticationPanel.js:496
 msgid "Groups DN"
-msgstr ""
+msgstr "Grupa DN"
 
 #: js/AuthenticationPanel.js:499
 msgid "Group Filter"
-msgstr ""
+msgstr "Filter grupe"
 
 #: js/AuthenticationPanel.js:503
 msgid "Group Search Scope"
-msgstr ""
+msgstr "Područje traženja grupe"
 
 #: js/AuthenticationPanel.js:509
 msgid "Password encoding"
-msgstr ""
+msgstr "Kodiranje zaporke"
 
 #: js/AuthenticationPanel.js:515
 msgid "Use Rfc 2307 bis"
-msgstr ""
+msgstr "Koristi Rfc 2307 bis"
 
 #: js/AuthenticationPanel.js:521
 msgid "Min User Id"
-msgstr ""
+msgstr "Minimalan korisnički ID"
 
 #: js/AuthenticationPanel.js:524
 msgid "Max User Id"
-msgstr ""
+msgstr "Maksimalan korisnički ID"
 
 #: js/AuthenticationPanel.js:527
 msgid "Min Group Id"
-msgstr ""
+msgstr "Minimalan ID grupe"
 
 #: js/AuthenticationPanel.js:530
 msgid "Max Group Id"
-msgstr ""
+msgstr "Maksimalan ID grupe"
 
 #: js/AuthenticationPanel.js:533
 msgid "Group UUID Attribute name"
-msgstr ""
+msgstr "Naziv atributa za UUID grupe"
 
 #: js/AuthenticationPanel.js:536
 msgid "User UUID Attribute name"
-msgstr ""
+msgstr "Naziv atributa za UUID korisnika"
 
 #: js/AuthenticationPanel.js:546
 msgid "Readonly access"
-msgstr ""
+msgstr "Pristup samo za čitanja"
 
 #: js/AuthenticationPanel.js:556
 msgid "Password Settings"
-msgstr ""
+msgstr "Postavke Lozinki"
 
 #: js/AuthenticationPanel.js:571
 msgid "User can change password"
-msgstr ""
+msgstr "Korisnik može promijeniti zaporku"
 
 #: js/AuthenticationPanel.js:577
 msgid "Enable password policy"
-msgstr ""
+msgstr "Omogući politiku lozinki"
 
 #: js/AuthenticationPanel.js:583
 msgid "Only ASCII"
-msgstr ""
+msgstr "Samo ASCII"
 
 #: js/AuthenticationPanel.js:588
 msgid "Minimum length"
-msgstr ""
+msgstr "Minimalna duljina"
 
 #: js/AuthenticationPanel.js:591
 msgid "Minimum word chars"
-msgstr ""
+msgstr "Minimalan broj znakova u riječi"
 
 #: js/AuthenticationPanel.js:594
 msgid "Minimum uppercase chars"
-msgstr ""
+msgstr "Minimalan broj velikih slova"
 
 #: js/AuthenticationPanel.js:597
 msgid "Minimum special chars"
-msgstr ""
+msgstr "Minimalan broj spedijalnih znakova"
 
 #: js/AuthenticationPanel.js:600
 msgid "Minimum numbers"
-msgstr ""
+msgstr "Minimalan broj znamenki"
 
 #: js/AuthenticationPanel.js:607
 msgid "Redirect Settings"
-msgstr ""
+msgstr "Preusmjeravanje postavki"
 
 #: js/AuthenticationPanel.js:615
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr ""
+msgstr "Preusmjeravanje Url (preusmjeriti na zaslon prijave ukoliko je prazan)"
 
 #: js/AuthenticationPanel.js:619
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr ""
+msgstr "Preusmjeri uvijek (ako ne, preusmjeri samo nakon odjave)"
 
 #: js/AuthenticationPanel.js:625
 msgid "Redirect to referring site, if exists"
-msgstr ""
+msgstr "Preusmjeravanje na web-lokaciju s koje dolazi, ako postoji"
 
 #: js/AuthenticationPanel.js:639
 msgid "Save config and install"
-msgstr ""
+msgstr "Spremi i instaliraj konfiguraciju"
 
 #: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:360
 msgid "Save config"
-msgstr ""
+msgstr "Spremi konfiguraciju"
 
 #: js/AuthenticationPanel.js:666
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Zaporke nisu jednake"
 
 #: js/AuthenticationPanel.js:676 js/AuthenticationPanel.js:683
 #: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:699
 #: js/AuthenticationPanel.js:710
 msgid "Should not be empty"
-msgstr ""
+msgstr "Ne bi trebalo biti prazno"
 
 #: js/ConfigManagerPanel.js:135
 msgid "File"
-msgstr ""
+msgstr "Datoteka"
 
 #: js/ConfigManagerPanel.js:145
 msgid "Adapter"
-msgstr ""
+msgstr "Adapter"
 
 #: js/ConfigManagerPanel.js:160
 msgid "Setup Authentication"
-msgstr ""
+msgstr "Podešavanje autentikacije"
 
 #: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 #: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
 msgid "Database"
-msgstr ""
+msgstr "Baza podataka"
 
 #: js/ConfigManagerPanel.js:203
 msgid "User"
-msgstr ""
+msgstr "Korisnik"
 
 #: js/ConfigManagerPanel.js:211
 msgid "Prefix"
-msgstr ""
+msgstr "Prefiks"
 
 #: js/ConfigManagerPanel.js:215
 msgid "Logging"
-msgstr ""
+msgstr "Logiranje"
 
 #: js/ConfigManagerPanel.js:225
 msgid "Filename"
-msgstr ""
+msgstr "Ime datoteke"
 
 #: js/ConfigManagerPanel.js:228
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #: js/ConfigManagerPanel.js:232
 msgid "Caching"
-msgstr ""
+msgstr "Keširanje"
 
 #: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
 msgid "Path"
-msgstr ""
+msgstr "Putanja"
 
 #: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
 msgid "Lifetime (seconds)"
-msgstr ""
+msgstr "Životni vijek (sekunde)"
 
 #: js/ConfigManagerPanel.js:251
 msgid "Temporary files"
-msgstr ""
+msgstr "Privremene datoteke"
 
 #: js/ConfigManagerPanel.js:259
 msgid "Temporary Files Path"
-msgstr ""
+msgstr "Putanja privremenih datoteka"
 
 #: js/ConfigManagerPanel.js:263
 msgid "Session"
-msgstr ""
+msgstr "Sesija"
 
 #: js/ConfigManagerPanel.js:323
 msgid "Filestore directory"
-msgstr ""
+msgstr "Direktorij za spremanje datoteka"
 
 #: js/ConfigManagerPanel.js:331
 msgid "Filestore Path"
-msgstr ""
+msgstr "Putanja do direktorija za spremanje datoteka"
 
 #: js/ConfigManagerPanel.js:336
 msgid "Addressbook Map panel"
-msgstr ""
+msgstr "Mapa imenika"
 
 #: js/ConfigManagerPanel.js:344
 msgid "Map panel"
-msgstr ""
+msgstr "Mapa"
 
 #: js/ConfigManagerPanel.js:346
 msgid "disabled"
-msgstr ""
+msgstr "isključeno"
 
 #: js/ConfigManagerPanel.js:346
 msgid "enabled"
-msgstr ""
+msgstr "uključeno"
 
 #: js/ConfigManagerPanel.js:358
 msgid "Config file is not writable"
-msgstr ""
+msgstr "Upis u konfiguracijsku datoteku nije moguć"
 
 #: js/ConfigManagerPanel.js:376
 msgid "Download config file"
-msgstr ""
+msgstr "Preuzmi konfiguracijsku datoteku"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
-msgstr ""
+msgstr "Standardni IMAP"
 
 #: js/EmailPanel.js:160
 msgid "Standard SMTP"
-msgstr ""
+msgstr "Standardni SMTP"
 
 #: js/EmailPanel.js:174
 msgid "Imap"
-msgstr ""
+msgstr "Imap"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
-msgstr ""
+msgstr "Koristi sistemski račun"
 
 #: js/EmailPanel.js:258
 msgid "Cyrus Admin"
-msgstr ""
+msgstr "Cyrus administator"
 
 #: js/EmailPanel.js:261
 msgid "Cyrus Admin Password"
-msgstr ""
+msgstr "Cyrus lozinka administratora"
 
 #: js/EmailPanel.js:278
 msgid "Smtp"
-msgstr ""
+msgstr "Smtp"
 
 #: js/EmailPanel.js:300
 msgid "Authentication"
-msgstr ""
+msgstr "Autentikacija"
 
 #: js/EmailPanel.js:303
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: js/EmailPanel.js:303
 msgid "Plain"
-msgstr ""
+msgstr "Jednostavno"
 
 #: js/EmailPanel.js:307
 msgid "Primary Domain"
-msgstr ""
+msgstr "Primarna domena"
 
 #: js/EmailPanel.js:311
 msgid "Secondary Domains (comma separated)"
-msgstr ""
+msgstr "Sekundarna domena (odvojena zarezom)"
 
 #: js/EmailPanel.js:315
 msgid "Notifications service address"
-msgstr ""
+msgstr "Servisna adresa notifikacija"
 
 #: js/EmailPanel.js:319
 msgid "Notification Username"
-msgstr ""
+msgstr "Korisničko ime notifikacija"
 
 #: js/EmailPanel.js:323
 msgid "Notification Password"
-msgstr ""
+msgstr "Zaporka notifikacija"
 
 #: js/EmailPanel.js:328
 msgid "Notifications local client (hostname or IP address)"
-msgstr ""
+msgstr "Obavijesti lokalno klijenta (poslužitelj ili IP adresa)"
 
 #: js/EmailPanel.js:384
 msgid "SIEVE"
-msgstr ""
+msgstr "SIEVE"
 
 #: js/EmailPanel.js:425
 msgid "MySql Hostname"
-msgstr ""
+msgstr "MySql Hostname"
 
 #: js/EmailPanel.js:428
 msgid "MySql Database"
-msgstr ""
+msgstr "MySql Database"
 
 #: js/EmailPanel.js:431
 msgid "MySql User"
-msgstr ""
+msgstr "MySql User"
 
 #: js/EmailPanel.js:434
 msgid "MySql Password"
-msgstr ""
+msgstr "MySql Password"
 
 #: js/EmailPanel.js:438
 msgid "MySql Port"
-msgstr ""
+msgstr "MySql Port"
 
 #: js/EmailPanel.js:454
 msgid "User or UID"
-msgstr ""
+msgstr "Korisnik ili UID"
 
 #: js/EmailPanel.js:457
 msgid "Group or GID"
-msgstr ""
+msgstr "Grupa ili GID"
 
 #: js/EmailPanel.js:460
 msgid "Home Template"
-msgstr ""
+msgstr "Početni predložak"
 
 #: js/EmailPanel.js:462
 msgid "Password Scheme"
-msgstr ""
+msgstr "Shema lozinke"
 
 #: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
-msgstr ""
+msgstr "PLAIN-MD5"
 
 #: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
-msgstr ""
+msgstr "MD5-CRYPT"
 
 #: js/EmailPanel.js:475
 msgid "SHA1"
-msgstr ""
+msgstr "SHA1"
 
 #: js/EmailPanel.js:476
 msgid "SHA256"
-msgstr ""
+msgstr "SHA256"
 
 #: js/EmailPanel.js:477
 msgid "SSHA256"
-msgstr ""
+msgstr "SSHA256"
 
 #: js/EmailPanel.js:478
 msgid "SHA512"
-msgstr ""
+msgstr "SHA512"
 
 #: js/EmailPanel.js:479
 msgid "SSHA512"
-msgstr ""
+msgstr "SSHA512"
 
 #: js/EmailPanel.js:480
 msgid "PLAIN"
-msgstr ""
+msgstr "PLAIN"
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
-msgstr ""
+msgstr "Izvršavam provjere okruženja..."
 
 #: js/EnvCheckGridPanel.js:130
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr ""
+msgstr "{0} ne može biti pronađeno. Pokušajte promijeniti svoje filter-kriterije, opcije pregleda ili što traži u {1}. "
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
-msgstr ""
+msgstr "Provjeri"
 
 #: js/EnvCheckGridPanel.js:161
 msgid "Result"
-msgstr ""
+msgstr "Rezultat"
 
 #: js/EnvCheckGridPanel.js:162
 msgid "Error"
-msgstr ""
+msgstr "Greška"
 
 #: js/EnvCheckGridPanel.js:180
 msgid "Run setup tests"
-msgstr ""
+msgstr "Pokreni testove podešavanja"
 
 #: js/EnvCheckGridPanel.js:189
 msgid "Ignore setup tests"
-msgstr ""
+msgstr "Ignoriraj testove podešavanja"
 
 #: js/Setup.js:53
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Uvjeti i odredbe"
 
 #: js/Setup.js:58
 msgid "Setup Checks"
-msgstr ""
+msgstr "Provjere postavki"
 
 #: js/Setup.js:64
 msgid "Config Manager"
-msgstr ""
+msgstr "Uređivač konfiguracije"
 
 #: js/Setup.js:70
 msgid "Authentication/Accounts"
-msgstr ""
+msgstr "Autentikacija/Računi"
 
 #: js/Setup.js:76
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: js/Setup.js:82
 msgid "Application Manager"
-msgstr ""
+msgstr "Uređivač aplikacija"
 
 #: js/Setup.js:185
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Aplikacija"
+msgstr[1] "Aplikacije"
+msgstr[2] "Aplikacija"
 
 #: js/TermsPanel.js:30
 msgid "I have read the license agreement and accept it"
-msgstr ""
+msgstr "Pročitao sam ugovor o korištenju i prihvaćam ga"
 
 #: js/TermsPanel.js:37
 msgid "License Agreement"
-msgstr ""
+msgstr "Ugovor o korištenju"
 
 #: js/TermsPanel.js:56
 msgid "I have read the privacy agreement and accept it"
-msgstr ""
+msgstr "Pročitao sam ugovor o privatnosti i prihvaćam ga"
 
 #: js/TermsPanel.js:63
 msgid "Privacy Agreement"
-msgstr ""
+msgstr "Ugovor o privatnosti"
 
 #: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
-msgstr ""
+msgstr "Prihvaćam uvjete korištenja"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-22 08:59+0000\n"
+"PO-Revision-Date: 2012-10-24 08:03+0000\n"
 "Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgstr "Cet évènement appartient à {0}"
 
 #: js/calendarRenderer.js:33
 msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Cet évènement est égalemetn affiché dans votre calendrier {0}"
+msgstr "Cet évènement est également affiché dans votre calendrier {0}"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"

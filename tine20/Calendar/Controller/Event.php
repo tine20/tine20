@@ -987,6 +987,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_alarm->setOption('minutes_before', $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 : $_alarm->minutes_before);
         
         $_alarm->setTime($eventStart);
+        
+        // don't repeat same alarm @see bug #7430
+        if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
+            $this->adoptAlarmTime($_record, $_alarm, 'instance');
+        }
     }
     
     /****************************** overwritten functions ************************/

@@ -100,27 +100,30 @@ Tine.HumanResources.Model.Employee.getDefaultData = function() {
  */ 
 Tine.HumanResources.Model.Employee.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
-    
-    return [
-        { label: _('Quick search'),               field: 'query', operators: ['contains']},
-        { label: app.i18n._('Employee name'),     field: 'n_fn' },
-        { label: _('Last Modified Time'),         field: 'last_modified_time', valueType: 'date'},
-        { label: _('Last Modified By'),           field: 'last_modified_by',   valueType: 'user'},
-        { label: _('Creation Time'),              field: 'creation_time',      valueType: 'date'},
-        { label: app.i18n._('Employment begin'),  field: 'employment_begin',   valueType: 'date'},
-        { label: app.i18n._('Employment end'),    field: 'employment_end',     valueType: 'date'},
-        { label: _('Created By'),                 field: 'created_by',         valueType: 'user'},
-        { label: app.i18n._('Account'),           field: 'account_id',         valueType: 'user'},
-        { label: app.i18n._('First Name'),        field: 'n_given'},
-        { label: _('Title'),                      field: 'title'},
-        { label: app.i18n._('Profession'),        field: 'profession'},
-        { label: app.i18n._('Last Name'),         field: 'n_family'},
-        { label: app.i18n._('Salutation'),        field: 'salutation'},
-        { label: app.i18n._('Health Insurance'),  field: 'health_insurance'},
-        
-        { filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Sales.Model.Division, ownField: 'division_id'},
-        { filtertype: 'tinebase.tag',  app: app}
+
+    var filters = [
+        { label: _('Quick search'),           field: 'query', operators: ['contains']},
+        { label: app.i18n._('Employee name'), field: 'n_fn' },
+        { filtertype: 'tinebase.tag', app: app},
+        { label: _('Last Modified Time'),     field: 'last_modified_time', valueType: 'date'},
+        { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
+        { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
+        { label: _('Employment begin'),       field: 'employment_begin',   valueType: 'date'},
+        { label: _('Employment end'),         field: 'employment_end',     valueType: 'date'},
+        { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
+        { label: _('Account'),                field: 'account_id',         valueType: 'user'},
+        { label: _('First Name'),             field: 'n_given'},
+        { label: _('Title'),                  field: 'title'},
+        { label: _('Profession'),             field: 'profession'},
+        { label: _('Last Name'),              field: 'n_family'},
+        { label: _('Salutation'),             field: 'salutation'},
+        { label: app.i18n._('Health Insurance'),  field: 'health_insurance'}
     ];
+    
+    if (Tine.Tinebase.appMgr.get('Sales')) {
+        filters.push({ filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Sales.Model.Division, ownField: 'division_id'});
+    }
+    return filters;
 };
 
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-15 06:17+0000\n"
+"PO-Revision-Date: 2012-10-24 08:34+0000\n"
 "Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -619,7 +619,7 @@ msgstr[1] "Comptes messagerie"
 
 #: js/Model.js:500
 msgid "INBOX"
-msgstr "Boite de réception"
+msgstr "Boîte de réception"
 
 #: js/Model.js:500
 msgid "Drafts"
@@ -968,7 +968,7 @@ msgstr[1] "{0} messages non lus"
 
 #: Preference.php:59
 msgid "All inboxes"
-msgstr "Tous les boites de réception"
+msgstr "Tous les boîtes de réception"
 
 #: Preference.php:106
 msgid "Default Email Account"
@@ -1014,7 +1014,7 @@ msgstr "Demander confirmation avant de supprimer des messages."
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
-msgstr "Tous les boites de réception de mes comptes"
+msgstr "Tous les boîtes de réception de mes comptes"
 
 #: Setup/Initialize.php:51
 msgid "All unread mail"
@@ -1026,11 +1026,11 @@ msgstr "Tous les messages non lus de mes comptes"
 
 #: Setup/Initialize.php:59
 msgid "All highlighted mail"
-msgstr "Tous les messages sélectionnés"
+msgstr "Tous les messages importants"
 
 #: Setup/Initialize.php:60
 msgid "All highlighted mail of my email accounts"
-msgstr "Tous les messages sélectionnés de mes comptes"
+msgstr "Tous les messages importants de mes comptes"
 
 #: Setup/Initialize.php:67
 msgid "All drafts"

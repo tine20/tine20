@@ -1,12 +1,13 @@
 # 
 # Translators:
 #   <c.blin@decalog.net>, 2012.
+#   <inscription@arrakeen.net>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-24 11:26+0000\n"
-"Last-Translator: cblin_decalog <c.blin@decalog.net>\n"
+"PO-Revision-Date: 2012-10-24 15:36+0000\n"
+"Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +59,7 @@ msgstr "Service indisponible"
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
 " Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Le gestionnaire de fichier est mal configuré. Se référer à {0} Tine2.0 Admin FQ {1} ou contacter votre administrateur."
+msgstr "Le gestionnaire de fichier est mal configuré. Se référer à {0} Tine2.0 Admin FAQ {1} ou contacter votre administrateur."
 
 #: js/Filemanager.js:103
 msgid "Files already exists"
@@ -101,16 +102,16 @@ msgstr[1] "Fichiers"
 #: js/Model.js:44 js/NodeGridPanel.js:155
 msgid "Folder"
 msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] "Dossier"
+msgstr[0] "Dossier"
+msgstr[1] "Dossiers"
 
 #: js/Model.js:282 js/Model.js:298
 msgid "Copying data .. {0}"
-msgstr "Copie en cours ... {0}"
+msgstr "Copie en cours... {0}"
 
 #: js/Model.js:285 js/Model.js:300
 msgid "Moving data .. {0}"
-msgstr "Déplacement en cours ... {0}"
+msgstr "Déplacement en cours... {0}"
 
 #: js/Model.js:304
 msgid "Please wait"

@@ -109,6 +109,28 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             columnWidth: .333
         };
         
+        var firstRow = [
+            Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                    name: 'supervisor_id',
+                    fieldLabel: this.app.i18n._('Supervisor'),
+                    useAccountRecord: true,
+                    userOnly: true,
+                    allowBlank: true
+            })];
+        if (Tine.Tinebase.appMgr.get('Sales')) {
+            firstRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Division', {
+                    name: 'division_id',
+                    fieldLabel: this.app.i18n._('Division'),
+                    allowBlank: true
+            }));
+        }
+       
+        firstRow.push({
+            name: 'health_insurance',
+            fieldLabel: this.app.i18n._('Health Insurance'),
+            allowBlank: true
+        });
+        
         this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
             app: this.app,
             editDialog: this,
@@ -300,24 +322,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             xtype: 'columnform',
                             labelAlign: 'top',
                             formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {}),
-                            items: [
-                                [
-                                Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                        name: 'supervisor_id',
-                                        fieldLabel: this.app.i18n._('Supervisor'),
-                                        useAccountRecord: true,
-                                        userOnly: true,
-                                        allowBlank: true
-                                }),
-                                Tine.widgets.form.RecordPickerManager.get('Sales', 'Division', {
-                                        name: 'division_id',
-                                        fieldLabel: this.app.i18n._('Division'),
-                                        allowBlank: true
-                                }), {
-                                    name: 'health_insurance',
-                                    fieldLabel: this.app.i18n._('Health Insurance'),
-                                    allowBlank: true
-                                }], [{
+                            items: [ firstRow
+                                , [{
                                     xtype: 'extuxclearabledatefield',
                                     name: 'employment_begin',
                                     fieldLabel: this.app.i18n._('Employment begin')

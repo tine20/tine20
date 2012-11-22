@@ -1129,6 +1129,39 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Admin_Controller_Customfield::getInstance());
     }   
 
+    /****************************** other *******************************/
+    
+    /**
+     * returns phpinfo() output
+     * 
+     * @return array
+     */
+    public function getServerInfo()
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::RUN)) {
+            return FALSE;
+        }
+        
+        ob_start();
+        phpinfo();
+        $out = ob_get_clean();
+        
+        // only return body
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        try {
+            $dom->loadHTML($out);
+            $body = $dom->getElementsByTagName('body');
+            $phpinfo = $dom->saveXml($body->item(0));
+        } catch (Exception $e) {
+            // no html (CLI)
+            $phpinfo = $out;
+        }
+        
+        return array(
+            'html' => $phpinfo
+        );
+    }
+    
     /****************************** common ******************************/
     
     /**

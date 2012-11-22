@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Rivo Zängov <eraser@eraser.ee>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-04 20:49+0000\n"
+"Last-Translator: Rivo Zängov <eraser@eraser.ee>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,12 +65,12 @@ msgstr ""
 #: js/Models.js:64
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ülesanne"
+msgstr[1] "Ülesannet"
 
 #: js/Models.js:64
 msgid "Tasks"
-msgstr ""
+msgstr "Ülesanded"
 
 #: js/Models.js:68
 msgid "to do list"
@@ -83,11 +84,11 @@ msgstr ""
 
 #: js/Models.js:103
 msgid "Quick search"
-msgstr ""
+msgstr "Kiirotsing"
 
 #: js/Models.js:105 js/TaskEditDialog.js:173 js/TaskGridPanel.js:114
 msgid "Summary"
-msgstr ""
+msgstr "Kokkuvõte"
 
 #: js/Models.js:106 js/TaskGridPanel.js:122
 msgid "Due Date"
@@ -102,7 +103,7 @@ msgstr[1] ""
 
 #: js/Models.js:116 js/TaskGridPanel.js:195
 msgid "Responsible"
-msgstr ""
+msgstr "Vastutav"
 
 #: js/Models.js:118
 msgid "Last Modified Time"
@@ -114,7 +115,7 @@ msgstr ""
 
 #: js/Models.js:120 js/TaskGridPanel.js:181
 msgid "Creation Time"
-msgstr ""
+msgstr "Loomise aeg"
 
 #: js/Models.js:121
 msgid "Created By"
@@ -130,11 +131,11 @@ msgstr ""
 
 #: js/TaskEditDialog.js:184 js/TaskGridPanel.js:136 Model/Task.php:190
 msgid "Priority"
-msgstr ""
+msgstr "Tähtsus"
 
 #: js/TaskEditDialog.js:192 Model/Task.php:188
 msgid "Organizer"
-msgstr ""
+msgstr "Organiseerija"
 
 #: js/TaskEditDialog.js:193
 msgid "Add Responsible ..."
@@ -142,7 +143,7 @@ msgstr ""
 
 #: js/TaskEditDialog.js:200
 msgid "Notes"
-msgstr ""
+msgstr "Märkmed"
 
 #: js/TaskEditDialog.js:201
 msgid "Enter description..."
@@ -150,12 +151,12 @@ msgstr ""
 
 #: js/TaskEditDialog.js:207
 msgid "Percentage"
-msgstr ""
+msgstr "Protsent"
 
 #: js/TaskEditDialog.js:221 js/TaskGridPanel.js:188 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:75
 msgid "Completed"
-msgstr ""
+msgstr "Lõpetatud"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -165,7 +166,7 @@ msgstr[1] ""
 
 #: js/TaskGridPanel.js:110
 msgid "Tags"
-msgstr ""
+msgstr "Sildid"
 
 #: js/TaskGridPanel.js:111 Model/Task.php:199
 msgid "Lead"
@@ -173,11 +174,11 @@ msgstr ""
 
 #: js/TaskGridPanel.js:118
 msgid "Add a task..."
-msgstr ""
+msgstr "Lisa ülesanne..."
 
 #: js/TaskGridPanel.js:152 Model/Task.php:192
 msgid "Percent"
-msgstr ""
+msgstr "Protsent"
 
 #: js/TaskGridPanel.js:240
 msgid "Show closed"
@@ -185,7 +186,7 @@ msgstr ""
 
 #: js/Tasks.js:24
 msgid "New Task"
-msgstr ""
+msgstr "Uus ülesanne"
 
 #: Model/Task.php:187
 msgid "Due"
@@ -193,19 +194,19 @@ msgstr ""
 
 #: Model/Task.php:189
 msgid "Description"
-msgstr ""
+msgstr "Kirjeldus"
 
 #: Model/Task.php:205
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: Model/Task.php:206
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: Preference.php:24
 msgid "All my tasks"
-msgstr ""
+msgstr "Kõik minu ülesanded"
 
 #: Preference.php:66
 msgid "Default Favorite"
@@ -225,23 +226,23 @@ msgstr ""
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:74
 msgid "No response"
-msgstr ""
+msgstr "Vastust pole"
 
 #: Setup/Initialize.php:36 Setup/Update/Release5.php:76
 msgid "Cancelled"
-msgstr ""
+msgstr "Tühistatud"
 
 #: Setup/Initialize.php:37 Setup/Update/Release5.php:77
 msgid "In process"
-msgstr ""
+msgstr "Töös"
 
 #: Setup/Initialize.php:50 Setup/Update/Release5.php:167
 msgid "low"
-msgstr ""
+msgstr "madal"
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:168
 msgid "normal"
-msgstr ""
+msgstr "tavaline"
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:169
 msgid "high"

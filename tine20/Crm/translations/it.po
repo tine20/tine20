@@ -1,12 +1,14 @@
 # 
 # Translators:
+#   <ctplate@gmail.com>, 2012.
+#   <v.anzisi@gurusys.it>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: 2012-11-03 23:50+0000\n"
+"Last-Translator: gurusys <v.anzisi@gurusys.it>\n"
+"Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,11 +36,11 @@ msgstr "Crea nuove cartelle condivise per clienti potenziali"
 
 #: Acl/Rights.php:114
 msgid "manage shared leads favorites"
-msgstr ""
+msgstr "gestisci i leads condivisi preferiti"
 
 #: Acl/Rights.php:115
 msgid "Create or update shared leads favorites"
-msgstr ""
+msgstr "Crea o aggiorna i leads condivisi preferiti"
 
 #: Controller/Lead.php:177
 msgid "State"
@@ -100,7 +102,7 @@ msgstr "Il cliente potenziale %s è stato modificato"
 #: Controller/Lead.php:196
 #, python-format
 msgid "Lead %s has been created"
-msgstr ""
+msgstr "Il lead %s è stato creato"
 
 #: Controller.php:117
 #, python-format
@@ -228,7 +230,7 @@ msgstr "urgente"
 
 #: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
+msgstr "Si prega di scegliere il Lead da aggiungere ai contatti"
 
 #: js/AddToLeadPanel.js:36
 msgid "Please select the attenders' role"
@@ -242,15 +244,15 @@ msgstr[1] "Clienti potenziali"
 
 #: js/AddToLeadPanel.js:74
 msgid "Select Lead"
-msgstr ""
+msgstr "Seleziona Lead"
 
 #: js/AddToLeadPanel.js:79
 msgid "Select Role"
-msgstr ""
+msgstr "Seleziona Ruolo"
 
 #: js/AddToLeadPanel.js:93
 msgid "Adding {0} contacts to lead"
-msgstr ""
+msgstr "Aggiunti {0} contatti al lead"
 
 #: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
 #: js/LeadGridDetailsPanel.js:227
@@ -312,19 +314,19 @@ msgstr "Cellulare"
 
 #: js/Crm.js:24
 msgid "New Lead"
-msgstr ""
+msgstr "Nuovo Lead"
 
 #: js/LeadEditDialog.js:244
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
-msgstr ""
+msgstr "Non si ha il diritto di esecuzione per l'applicazione Attività o non è attivato."
 
 #: js/LeadEditDialog.js:255
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
-msgstr ""
+msgstr "Non si ha il diritto di esecuzione per l'applicazione Vendite o non è attivato."
 
 #: js/LeadEditDialog.js:296
 msgid "Enter short name"
@@ -413,8 +415,8 @@ msgstr "Esporta come XLS"
 #: js/LeadSource.js:29
 msgid "Lead Source"
 msgid_plural "Lead Sources"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Origine Lead"
+msgstr[1] "Origine Leads"
 
 #: js/LeadSource.js:136
 msgid "Add a Leadsource..."
@@ -423,8 +425,8 @@ msgstr "Aggiungi una sorgente cliente potenziale..."
 #: js/LeadState.js:32
 msgid "Lead State"
 msgid_plural "Lead States"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stato del Lead"
+msgstr[1] "Stati dei Leads"
 
 #: js/LeadState.js:166
 msgid "Add a Leadstate..."
@@ -437,8 +439,8 @@ msgstr "Mostra chiusi"
 #: js/LeadType.js:29
 msgid "Lead Type"
 msgid_plural "Lead Types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tipo di Lead"
+msgstr[1] "Tipi di Leads"
 
 #: js/LeadType.js:134
 msgid "Add a Leadtype..."
@@ -467,12 +469,12 @@ msgstr "Modifica {0} selezionato"
 #: js/Model.js:53
 msgid "lead list"
 msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lista dei Lead"
+msgstr[1] "Liste dei Leads"
 
 #: js/Model.js:53
 msgid "lead lists"
-msgstr ""
+msgstr "Liste dei Leads"
 
 #: js/Model.js:103
 msgid "Quick search"
@@ -480,11 +482,11 @@ msgstr "Ricerca veloce"
 
 #: js/Model.js:110
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Data di ultima modifica"
 
 #: js/Model.js:111
 msgid "Last Modified By"
-msgstr ""
+msgstr "Ultima modifica di"
 
 #: js/Model.js:112
 msgid "Creation Time"
@@ -492,7 +494,7 @@ msgstr "Data creazione"
 
 #: js/Model.js:113
 msgid "Created By"
-msgstr ""
+msgstr "Creato da"
 
 #: js/Model.js:152
 msgid "Settings"
@@ -540,11 +542,11 @@ msgstr "Percentuale"
 
 #: Preference.php:37
 msgid "All leads"
-msgstr ""
+msgstr "Tutti i leads"
 
 #: Preference.php:81
 msgid "Default Lead List"
-msgstr ""
+msgstr "Lista dei lead di default"
 
 #: Preference.php:82
 msgid "The default list for new leads"
@@ -568,11 +570,11 @@ msgstr "Ricevi notifiche email per le azione compiute da te stesso"
 
 #: Preference.php:95
 msgid "Default Favorite"
-msgstr ""
+msgstr "Preferito di Default"
 
 #: Preference.php:96
 msgid "The default favorite which is loaded on crm startup"
-msgstr ""
+msgstr "Il preferito di default che è caricato all'apertura del crm"
 
 #: Setup/Initialize.php:55 Setup/Update/Release3.php:37
 msgid "All leads I have read grants for"
@@ -580,20 +582,20 @@ msgstr ""
 
 #: Setup/Initialize.php:62
 msgid "Last modified by me"
-msgstr ""
+msgstr "Ultimo modificato da me"
 
 #: Setup/Initialize.php:63
 msgid "All leads that I have last modified"
-msgstr ""
+msgstr "Tutti i leads che ho modificato"
 
 #: Setup/Initialize.php:72
 msgid "My leads"
-msgstr ""
+msgstr "Miei Leads"
 
 #: Setup/Initialize.php:73
 msgid "All leads that I am responsible for"
-msgstr ""
+msgstr "Tutti i leads di cui sono responsabile"
 
 #: Setup/Initialize.php:86
 msgid "Leads with overdue tasks"
-msgstr ""
+msgstr "Leads con attività scadute"

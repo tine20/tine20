@@ -301,7 +301,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
         
-        if (!$_id) { // yes, we mean 0, null, false, ''
+        if (! $_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
             
             if ($this->_doContainerACLChecks) {
@@ -324,6 +324,26 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         return $record;
+    }
+    
+    /**
+     * check if record with given $id exists
+     * 
+     * @param string $id
+     * @return boolean
+     */
+    public function exists($id)
+    {
+        $this->_checkRight('get');
+        
+        try {
+            $record = $this->_backend->get($id);
+            $result = $this->_checkGrant($record, 'get', FALSE);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $result = FALSE;
+        }
+        
+        return $result;
     }
     
     /**

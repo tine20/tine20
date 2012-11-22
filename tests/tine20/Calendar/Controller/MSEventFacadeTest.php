@@ -269,6 +269,45 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals('2009-03-26 10:00:00', $updatedPersistentException->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * testUpdatePreserveAlarmProperties
+     * 
+     * @see #7430: Calendar sends too much alarms for recurring events
+     */
+    public function testUpdatePreserveAlarmProperties()
+    {
+        $alarm30 = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            array('minutes_before' => 30),
+        ), TRUE);
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addHour(2);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;COUNT=3';
+        $event->alarms = clone $alarm30;
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $event->dtstart, Tinebase_DateTime::now()->addDay(1));
+        $exceptionEvent = Calendar_Controller_Event::getInstance()->createRecurException($recurSet->getFirstRecord());
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        
+        $event = $this->_uit->get($event->getId());
+        $persistentAlarm = $event->exdate[0]->alarms->getFirstRecord();
+        $event->alarms = $event->alarms = clone $alarm30;
+        foreach ($event->exdate as $exdate) {
+            $exdate->alarms = clone $alarm30;
+        }
+        $updatedEvent = $this->_uit->update($event);
+        $updatedAlarm = $updatedEvent->exdate[0]->alarms->getFirstRecord();
+        
+        $diff = $persistentAlarm->diff($updatedAlarm);
+        $this->assertTrue(empty($diff));
+    }
+    
     public function testAttendeeStatusUpdate()
     {
         $event = $this->testCreate();

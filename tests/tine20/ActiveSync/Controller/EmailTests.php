@@ -285,6 +285,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      * forward email test
      * 
      * @see 0007328: Answered flags were not synced by activesync
+     * @see 0007456: add mail body on Forward via ActiveSync
      */
     public function testForwardEmail()
     {
@@ -315,6 +316,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         // check forward flag
         $originalMessage = Felamimail_Controller_Message::getInstance()->get($originalMessage->getId());
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $originalMessage->flags), 'forward flag missing in original message: ' . print_r($originalMessage->toArray(), TRUE));
+        
+        // check body
+        $this->assertContains("The attached list notes all of the packages that were added or removed", $completeMessage->body);
     }
     
     /**

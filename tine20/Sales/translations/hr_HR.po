@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <brankablag@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-10-24 13:59+0000\n"
+"Last-Translator: brankablag <brankablag@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,236 +19,236 @@ msgstr ""
 
 #: Acl/Rights.php:103
 msgid "manage products"
-msgstr ""
+msgstr "Upravljanje proizvodima"
 
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
-msgstr ""
+msgstr "Dodaj, uredi i obriši proizvode"
 
 #: Config.php:49
 msgid "Contract Number Creation"
-msgstr ""
+msgstr "Kreiranje broja ugovora"
 
 #: Config.php:51
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr ""
+msgstr "Potrebno broj ugovora kreirati ručno ili automatski?"
 
 #: Config.php:54
 msgid "automatically"
-msgstr ""
+msgstr "automatski"
 
 #: Config.php:55
 msgid "manually"
-msgstr ""
+msgstr "ručno"
 
 #: Config.php:62
 msgid "Contract Number Validation"
-msgstr ""
+msgstr "Validacija broja ugovora"
 
 #: Config.php:64
 msgid "The Number can be validated as text or number."
-msgstr ""
+msgstr "Broj ugovora može biti validiran kao tekst ili kao broj."
 
 #: Config.php:67 js/ContractEditDialog.js:136
 msgid "Number"
-msgstr ""
+msgstr "Broj"
 
 #: Config.php:68
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #: Config.php:75
 msgid "Contract Status Available"
-msgstr ""
+msgstr "Dostupan status ugovora"
 
 #: Config.php:77
 msgid ""
 "Possible Contract status. Please note that additional contract status might "
 "impact other Sales systems on export or syncronisation."
-msgstr ""
+msgstr "Mogući statusi ugovora. Napomena da dodatni statusi ugovora mogu utjecati na sustav Prodaje prilikom izvoza ili sinkronizacije."
 
 #: Config.php:85
 msgid "Contract Cleared State Available"
-msgstr ""
+msgstr "Raspoloživo izvršeno stanje ugovora"
 
 #: Config.php:87
 msgid "Possible Contract cleared states."
-msgstr ""
+msgstr "Moguća izvršena stanja ugovora."
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
-msgstr ""
+msgstr "Broj koji želite postaviti je upotrijebljen."
 
 #: Controller.php:83 Controller.php:103
 msgid "You do not have admin rights on Sales"
-msgstr ""
+msgstr "Nemate admin prava na Prodaju."
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
-msgstr ""
+msgstr "Odustani"
 
 #: js/AdminPanel.js:69
 msgid "OK"
-msgstr ""
+msgstr "Potvrdi"
 
 #: js/AdminPanel.js:90
 msgid "Loading..."
-msgstr ""
+msgstr "Učitavanje.."
 
 #: js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"
-msgstr ""
+msgstr "Potrebno koristiti decimalni broj."
 
 #: js/ContractEditDialog.js:143 js/ContractGridPanel.js:87
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: js/ContractEditDialog.js:149
 msgid "Contact Customer"
-msgstr ""
+msgstr "Kontaktiraj klijenta"
 
 #: js/ContractEditDialog.js:161
 msgid "Contact Responsible"
-msgstr ""
+msgstr "Kontaktiraj zaduženog"
 
 #: js/ContractEditDialog.js:170
 msgid "Company"
-msgstr ""
+msgstr "Tvrtka"
 
 #: js/ContractEditDialog.js:176 js/ContractGridPanel.js:93 js/Models.js:147
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/ContractEditDialog.js:183 js/ContractGridPanel.js:100 js/Models.js:154
 msgid "Cleared"
-msgstr ""
+msgstr "Izvršeno"
 
 #: js/ContractEditDialog.js:187 js/ContractGridPanel.js:107 js/Models.js:160
 msgid "Cleared in"
-msgstr ""
+msgstr "Izvršeno u"
 
 #: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
 #: js/ProductGridPanel.js:123
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
 msgid "Enter description..."
-msgstr ""
+msgstr "Unesite opis.."
 
 #: js/ContractGridPanel.js:81
 msgid "Contract number"
-msgstr ""
+msgstr "Broj ugovora"
 
 #: js/Models.js:39
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Proizvod"
+msgstr[1] "Proizvoda"
+msgstr[2] "Proizvoda"
 
 #: js/Models.js:43 js/Models.js:217
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Lista zapisa"
+msgstr[1] "Liste zapisa"
+msgstr[2] "Listi zapisa"
 
 #: js/Models.js:77 js/Models.js:143
 msgid "Quick search"
-msgstr ""
+msgstr "Brzo pretraživanje"
 
 #: js/Models.js:78
 msgid "Product name"
-msgstr ""
+msgstr "Naziv proizvoda"
 
 #: js/Models.js:80 js/Models.js:145
 msgid "Creator"
-msgstr ""
+msgstr "Kreirao"
 
 #: js/Models.js:113
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ugovor"
+msgstr[1] "Ugovora"
+msgstr[2] "Ugovora"
 
 #: js/Models.js:117
 msgid "All Contracts"
 msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Lista ugovora"
+msgstr[1] "Liste ugovora"
+msgstr[2] "Listi ugovora"
 
 #: js/Models.js:144
 msgid "Contract name"
-msgstr ""
+msgstr "Naziv ugovora"
 
 #: js/Models.js:186
 msgid "CostCenter"
 msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Mjesto troška"
+msgstr[1] "Mjesta troška"
+msgstr[2] "Mjesta troška"
 
 #: js/Models.js:189
 msgid "All CostCenters"
 msgid_plural "All CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Sva mjesta troška"
+msgstr[1] "Sva mjesta troška"
+msgstr[2] "Sva mjesta troška"
 
 #: js/Models.js:214
 msgid "Division"
 msgid_plural "Divisions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Odjel"
+msgstr[1] "Odjela"
+msgstr[2] "Odjela"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:120
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #: js/ProductEditDialog.js:99 js/ProductGridPanel.js:124
 msgid "Price"
-msgstr ""
+msgstr "Cijena"
 
 #: js/ProductEditDialog.js:106 js/ProductGridPanel.js:121
 msgid "Manufacturer"
-msgstr ""
+msgstr "Proizvođač"
 
 #: js/ProductEditDialog.js:110 js/ProductGridPanel.js:122
 msgid "Category"
-msgstr ""
+msgstr "Kategorija"
 
 #: js/ProductGridPanel.js:119
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 #: Model/Contract.php:92
 msgid "Responsible"
-msgstr ""
+msgstr "Zadužen"
 
 #: Model/Contract.php:93
 msgid "Customer"
-msgstr ""
+msgstr "Klijent"
 
 #: Model/Contract.php:94
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:63
 msgid "My Products"
-msgstr ""
+msgstr "Moji proizvodi"
 
 #: Setup/Initialize.php:35 Setup/Update/Release5.php:64
 msgid "Products created by myself"
-msgstr ""
+msgstr "Proizvodi koje sam kreirao"
 
 #: Setup/Initialize.php:55 Setup/Update/Release5.php:84
 msgid "My Contracts"
-msgstr ""
+msgstr "Moji ugovori"
 
 #: Setup/Initialize.php:56 Setup/Update/Release5.php:85
 msgid "Contracts created by myself"
-msgstr ""
+msgstr "Ugovori koje sam kreirao"
