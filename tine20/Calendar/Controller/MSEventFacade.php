@@ -600,7 +600,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             
             try{
                 $currExdates = $this->_eventController->getRecurExceptions($_event, TRUE);
+                $this->getAlarms($currExdates);
                 $currClientExdates = $this->_eventController->getRecurExceptions($_event, TRUE, $this->getEventFilter());
+                $this->getAlarms($currClientExdates);
             } catch (Tinebase_Exception_NotFound $e) {
                 $currExdates = NULL;
                 $currClientExdates = NULL; 
@@ -640,6 +642,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // apply changes to original alarms
         $_currentEvent->alarms  = $_currentEvent->alarms instanceof Tinebase_Record_RecordSet ? $_currentEvent->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         $_event->alarms  = $_event->alarms instanceof Tinebase_Record_RecordSet ? $_event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        
         foreach($_currentEvent->alarms as $currentAlarm) {
             if (Calendar_Model_Attender::isAlarmForAttendee($this->_calendarUser, $currentAlarm)) {
                 $alarmUpdate = Calendar_Controller_Alarm::getMatchingAlarm($_event->alarms, $currentAlarm);

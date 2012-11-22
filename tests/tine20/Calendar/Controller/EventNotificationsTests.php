@@ -528,16 +528,18 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         // check adjusted alarm time
         $loadedEvent = $this->_eventController->get($persistentEvent->getId());
-        
         $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
         $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
         
         $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now()->addDay(1), 'alarmtime is not adjusted');
-        //$orgiginalAlarm = $persistentEvent->alarms->getFirstRecord()->alarm_time;
-        //$adjustedAlarm = $loadedEvent->alarms->getFirstRecord()->alarm_time;
-        //$this->assertTrue($adjustedAlarm->isLater($orgiginalAlarm), 'alarmtime is not adjusted');
-
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
+        
+        // update series @see #7430: Calendar sends too much alarms for recurring events
+        $this->_eventController->update($loadedEvent);
+        $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now()->addDay(1), 'alarmtime is wrong');
     }
     
     /**
@@ -550,7 +552,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->attendee = $this->_getPersonaAttendee('pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         
-        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(15);
         $event->dtend = clone $event->dtstart;
         $event->dtend->addMinute(30);
         $event->rrule = 'FREQ=DAILY;INTERVAL=1';
@@ -562,9 +564,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persistentEvent = $this->_eventController->create($event);
         
-        $exceptionEvent = $this->_eventController->get($persistentEvent->getId());
-        $exceptionEvent->summary = 'first occurance exception';
-        $exceptionEvent = $this->_eventController->createRecurException($exceptionEvent);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $persistentEvent->dtstart, Tinebase_DateTime::now()->addDay(1));
+        $exceptionEvent = $this->_eventController->createRecurException($recurSet->getFirstRecord());
         
         // assert one alarm only
         self::flushMailer();
@@ -572,11 +574,25 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
+        // check series
         $loadedEvent = $this->_eventController->get($persistentEvent->getId());
-        
         $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
         $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
-        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime is not adjusted');
+        
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime of series is not adjusted');
+        
+        // check exception
+        $recurid = $exceptionEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        
+        $this->assertTrue($nextAlarmEventStart < Tinebase_DateTime::now()->addHour(1), 'alarmtime of exception is not adjusted');
+        
+        // update exception @see #7430: Calendar sends too much alarms for recurring events
+        $exceptionEvent = $this->_eventController->update($exceptionEvent);
+        $recurid = $exceptionEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        
+        $this->assertTrue($nextAlarmEventStart < Tinebase_DateTime::now()->addHour(1), 'alarmtime of exception is wrong');
     }
     
     /**
