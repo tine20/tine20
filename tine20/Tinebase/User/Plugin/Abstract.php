@@ -100,7 +100,6 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
             
             $this->_db = Tinebase_Core::getDb();
         } else {
-            Zend_Session::start();
             $dbConfig = array_intersect_key($_config, array_flip(array('host', 'dbname', 'username', 'password', 'prefix', 'port')));
             $this->_db = Zend_Db::factory('Pdo_Mysql', $dbConfig);
         }
