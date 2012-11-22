@@ -19,10 +19,12 @@ error_reporting( E_ALL | E_STRICT );
 /*
  * Set include path
  */
- 
-define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
-define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
-define('PATH_TO_TEST_DIR', dirname(__FILE__));
+
+if (!defined('PATH_TO_REAL_DIR')) {
+    define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
+    define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
+    define('PATH_TO_TEST_DIR', dirname(__FILE__));
+}
 
 /*
  * Set white / black lists
