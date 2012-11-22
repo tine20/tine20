@@ -129,11 +129,60 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 6.6
+     * 
+     * - add index to contracts table
+     *   @see 0007474: add primary key to humanresources_contract
+     * - remove sales constrains
+     * 
+     */
+    public function update_5()
+    {
+        $field = '<index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>';
+
+        $declaration = new Setup_Backend_Schema_Index_Xml($field);
+        try {
+            $this->_backend->addIndex('humanresources_contract', $declaration);
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        try {
+            $this->_backend->dropForeignKey('humanresources_contract', 'contract::cost_center_id--sales_cost_centers::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        try {
+            $this->_backend->dropIndex('humanresources_contract', 'contract::cost_center_id--sales_cost_centers::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        try {
+            $this->_backend->dropForeignKey('humanresources_employee', 'hr_employee::division_id--divisions::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        try {
+            $this->_backend->dropIndex('humanresources_employee', 'hr_employee::division_id--divisions::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        $this->setTableVersion('humanresources_employee', '6');
+        $this->setTableVersion('humanresources_contract', '3');
+        $this->setApplicationVersion('HumanResources', '6.6');
+    }
+    
+    /**
      * update to 7.0
      * 
      * @return void
      */
-    public function update_5()
+    public function update_6()
     {
         $this->setApplicationVersion('HumanResources', '7.0');
     }

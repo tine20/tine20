@@ -174,8 +174,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     public function getContractsByEmployeeId($employeeId)
     {
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+        $pagination = new Tinebase_Model_Pagination(array('sort' => 'start_date'));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
-        $recs = $this->search($filter, null);
+        $recs = $this->search($filter, $pagination);
         
         return $recs;
     }

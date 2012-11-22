@@ -179,7 +179,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     fieldLabel: this.app.i18n._('Number'),
                                     name: 'number',
                                     allowBlank: false,
-                                    columnWidth: .125
+                                    columnWidth: .125,
+                                    xtype: 'numberfield'
                                 }, 
                                     Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                         userOnly: true,

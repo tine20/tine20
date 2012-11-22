@@ -101,6 +101,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     /**
+     * validates day length
+     * 
+     * @param {Float/Integer} value
+     * @return {Boolean}
+     */
+    isDayLengthValid: function(value) {
+        return (value <= 1 && value >=0.25);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -196,14 +206,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     store: this.dayLengths,
                                     value: 1,
                                     columnWidth: .5,
-                                    ref: '../../../../../../../firstDayLengthPicker'
+                                    ref: '../../../../../../../firstDayLengthPicker',
+                                    validator: this.isDayLengthValid
                                 },{
                                     fieldLabel: this.app.i18n._('Last Day Length'),
                                     xtype: 'combo',
                                     store: this.dayLengths,
                                     value: 1,
                                     columnWidth: .5,
-                                    ref: '../../../../../../../lastDayLengthPicker'
+                                    ref: '../../../../../../../lastDayLengthPicker',
+                                    validator: this.isDayLengthValid
                                 }],[{
                                     fieldLabel: this.app.i18n._('Remark'),
                                     name: 'remark'

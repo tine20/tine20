@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>7.1</version>
+    <version>7.2</version>
     <order>51</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -216,17 +216,6 @@
                     <field>
                         <name>id</name>
                     </field>
-                </index>
-                <index>
-                    <name>hr_employee::division_id--divisions::id</name>
-                    <field>
-                        <name>division_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>sales_divisions</table>
-                        <field>id</field>
-                    </reference>
                 </index>
                 <index>
                     <name>hr_employee::account_id--accounts::id</name>
@@ -474,7 +463,7 @@
         </table>
         <table>
             <name>humanresources_contract</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -564,6 +553,13 @@
                     <default>0</default>
                 </field>
                 <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
                     <name>contract::employee_id--employee::id</name>
                     <field>
                         <name>employee_id</name>
@@ -593,17 +589,6 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>container</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
-                    <name>contract::cost_center_id--sales_cost_centers::id</name>
-                    <field>
-                        <name>cost_center_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>sales_cost_centers</table>
                         <field>id</field>
                     </reference>
                 </index>
