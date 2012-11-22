@@ -32,7 +32,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
     autoScroll: true,
     layout: 'fit',
     defaultSortInfo: {field: 'start_date', direction: 'DESC'},
-    autoExpandColumn: 'cost_center_id',
+    autoExpandColumn: null,
     quickaddMandatory: 'workingtime_id',
     clicksToEdit: 1,
     enableColumnHide:false,
@@ -55,6 +55,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      * initializes the component
      */
     initComponent: function() {
+        this.autoExpandColumn = Tine.Tinebase.appMgr.get('Sales') ? 'cost_center_id' : 'workingtime_id';
         this.title = this.app.i18n.ngettext('Contract', 'Contracts', 2),
         Tine.HumanResources.ContractGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
@@ -67,7 +68,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      */
     onRecordLoad: function() {
         var c = this.editDialog.record.get('contracts');
-        if(Ext.isArray(c)) {
+        if (Ext.isArray(c)) {
             Ext.each(c, function(ar) {
                 this.store.addSorted(new this.recordClass(ar));
             }, this);
@@ -85,7 +86,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
      */
     onNewentry: function(recordData) {
         
-        if(this.store.getCount() == 0) {
+        if (this.store.getCount() == 0) {
             recordData.start_date = recordData.start_date ? recordData.start_date : this.editDialog.record.get('employment_begin') ? this.editDialog.record.get('employment_begin') : this.editDialog.form.findField('employment_begin').getValue();
             recordData.end_date = recordData.end_date ? recordData.end_date : this.editDialog.record.get('employment_end') ? this.editDialog.record.get('employment_end') : this.editDialog.form.findField('employment_end').getValue();
         }
@@ -119,7 +120,36 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
 
         this.calendarQuickAdd = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
         this.calendarEditor = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
-        this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter');
+        if (Tine.Tinebase.appMgr.get('Sales')) {
+            this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter');
+        }
+        
+        var columns = [
+            {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
+                 quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
+                 renderer: this.renderWorkingTime, scope: this
+            }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer', header: this.app.i18n._('Vacation Days'),
+                 quickaddField: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/ }), width: 90, editor: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/})
+            }];
+            
+        if (Tine.Tinebase.appMgr.get('Sales')) {
+            columns.push({ dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Centre'),
+                 quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), renderer: this.renderCostCenter,
+                 editor: this.costCenterEditor
+            });
+        }
+        
+        columns = columns.concat([{ dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
+                 quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
+                 editor: new Ext.ux.form.ClearableDateField()
+            }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
+                 quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
+                 editor: new Ext.ux.form.ClearableDateField()
+            }, { dataIndex: 'feast_calendar_id', width: 280, id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
+                 renderer: Tine.Tinebase.common.containerRenderer, scope: this,
+                 quickaddField: this.calendarQuickAdd, editor: this.calendarEditor
+            }
+        ]);
         
         return new Ext.grid.ColumnModel({
             defaults: {
@@ -127,26 +157,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                 width: 160,
                 editable: true
             }, 
-            columns: [
-                {    dataIndex: 'workingtime_id',  id: 'workingtime_id',  type: Tine.HumanResources.Model.WorkingTime,  header: this.app.i18n._('Working Time Model'),
-                     quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
-                     renderer: this.renderWorkingTime, scope: this
-                }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer', header: this.app.i18n._('Vacation Days'),
-                     quickaddField: new Ext.form.NumberField({allowBlank: false, maxValue: 255, minValue: 0}), width: 90, editor: new Ext.form.NumberField({allowBlank: false, maxValue: 255, minValue: 0})
-                }, { dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Centre'),
-                     quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {allowBlank: true}), renderer: this.renderCostCenter,
-                     editor: this.costCenterEditor
-                }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
-                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
-                     editor: new Ext.ux.form.ClearableDateField()
-                }, { dataIndex: 'end_date',      id: 'end_date',      type: 'date',   header: this.app.i18n._('End Date'),
-                     quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
-                     editor: new Ext.ux.form.ClearableDateField()
-                }, { dataIndex: 'feast_calendar_id', width: 280, id: 'feast_calendar_id',  header: this.app.i18n._('Feast Calendar'),
-                     renderer: Tine.Tinebase.common.containerRenderer, scope: this,
-                     quickaddField: this.calendarQuickAdd, editor: this.calendarEditor
-                }
-           ]
+            columns: columns
        });
     },
     

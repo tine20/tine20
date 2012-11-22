@@ -19,6 +19,13 @@
 class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * true if sales is installed
+     * 
+     * @var boolean
+     */
+    protected $_useSales = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -28,6 +35,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $this->_backend = new HumanResources_Backend_Contract();
         $this->_modelName = 'HumanResources_Model_Contract';
         $this->_purgeRecords = FALSE;
+        $this->_useSales = Tinebase_Application::getInstance()->isInstalled('Sales', TRUE);
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
     }
@@ -86,13 +94,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * @param Tinebase_Record_Interface $_record
      */
     protected function _containerToId(Tinebase_Record_Interface $_record) {
-        if(is_array($_record->feast_calendar_id)) {
+        if (is_array($_record->feast_calendar_id)) {
             $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
         }
-        if(is_array($_record->workingtime_id)) {
+        if (is_array($_record->workingtime_id)) {
             $_record->workingtime_id = $_record->workingtime_id['id'];
         }
-        if(is_array($_record->cost_center_id)) {
+        if ($this->_useSales === true && is_array($_record->cost_center_id)) {
             $_record->cost_center_id = $_record->cost_center_id['id'];
         }
     }
@@ -108,8 +116,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $this->_checkDates($_record);
         $this->_containerToId($_record);
 
-        if(empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null;
-        if(empty($_record->cost_center_id)) $_record->cost_center_id = null;
+        if (empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null;
+        if (empty($_record->cost_center_id)) $_record->cost_center_id = null;
 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
@@ -131,7 +139,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     public function getValidContract($_employeeId, $_firstDayDate = NULL)
     {
-        if(!$_employeeId) {
+        if (!$_employeeId) {
             throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
         }
         $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();
@@ -141,23 +149,22 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         $endDate = new Tinebase_Model_Filter_FilterGroup(array(), 'OR');
         $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $_firstDayDate)));
-        #$endDate->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'equals', 'value' =>  '')));
         $filter->addFilterGroup($endDate);
         
         $contracts = $this->search($filter);
         
-        if($contracts->count() < 1) {
+        if ($contracts->count() < 1) {
             $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
             $contracts = $this->search($filter);
-            if($contracts->count() > 0) {
+            if ($contracts->count() > 0) {
                 $e = new HumanResources_Exception_NoCurrentContract();
                 $e->addRecord($contracts->getFirstRecord());
                 throw $e;
             } else {
                 throw new HumanResources_Exception_NoContract();
             }
-        } else if($contracts->count() > 1) {
+        } else if ($contracts->count() > 1) {
             throw new Tinebase_Exception_Duplicate('There are more than one valid contracts for this employee!');
         }
 

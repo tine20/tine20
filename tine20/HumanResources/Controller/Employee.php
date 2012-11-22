@@ -20,13 +20,14 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
 {
 
     protected $_duplicateCheckFields = array(array('account_id'), array('number'));
-
+    
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Employee();
         $this->_modelName = 'HumanResources_Model_Employee';
@@ -91,7 +92,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             }
         }
         $contracts->sort('start_date', 'ASC');
-        foreach($contracts->getIterator() as $contract) {
+        foreach ($contracts as $contract) {
             $createdContracts->addRecord(HumanResources_Controller_Contract::getInstance()->create($contract));
         }
         $_createdRecord->contracts = $createdContracts;
@@ -128,10 +129,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 if (is_array($contractArray['workingtime_id'])) {
                     $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
                 }
-                if (is_array($contractArray['cost_center_id'])) {
+                if (isset($contractArray['cost_center_id']) && is_array($contractArray['cost_center_id'])) {
                     $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
                 }
-                if (is_array($contractArray['feast_calendar_id'])) {
+                if (isset($contractArray['feast_calendar_id']) && is_array($contractArray['feast_calendar_id'])) {
                     $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
                 }
                 $contractArray['employee_id'] = $_oldRecord->getId();
