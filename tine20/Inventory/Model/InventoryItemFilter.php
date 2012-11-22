@@ -44,24 +44,19 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Inventory')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+        'tags'           => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'inventory_item.id',
             'applicationName' => 'Inventory',
         )),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'inventory_id'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'add_time'       => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'total_number'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'active_number'  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'invoice_date'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'costcentre'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'warranty'       => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'item_added'     => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'item_removed'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'depreciation'   => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'amortiziation'  => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'invoice'        => array('filter' => 'Tinebase_Model_Filter_Text')
+        'warranty'       => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'added_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'removed_date'   => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'invoice'        => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'status'         => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

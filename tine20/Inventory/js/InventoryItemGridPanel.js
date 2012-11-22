@@ -29,5 +29,62 @@ Ext.ns('Tine.Inventory');
  * Create a new Tine.Inventory.InventoryItemGridPanel
  */
 Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    multipleEdit: true
+    multipleEdit: true,
+    
+    initActions: function() {
+        this.actions_exportInventoryItem = new Ext.Action({
+            text: this.app.i18n._('Export Inventory'),
+            iconCls: 'action_export',
+            scope: this,
+            requiredGrant: 'exportGrant',
+            disabled: true,
+            allowMultiple: true,
+            menu: {
+                items: [
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        format: 'ods',
+                        iconCls: 'tinebase-action-export-ods',
+                        exportFunction: 'Inventory.exportInventoryItems',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as CSV'),
+                        format: 'csv',
+                        iconCls: 'tinebase-action-export-csv',
+                        exportFunction: 'Inventory.exportInventoryItems',
+                        gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ...'),
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: 'Inventory.exportInventoryItems',
+                        showExportDialog: true,
+                        gridPanel: this
+                    })
+                ]
+            }
+        });
+        
+        // register actions in updater
+        this.actionUpdater.addActions([
+            this.actions_exportInventoryItem
+        ]);
+        
+        Tine.Inventory.InventoryItemGridPanel.superclass.initActions.call(this);
+    },
+        /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     */
+    getActionToolbarItems: function() {
+        return [
+            Ext.apply(new Ext.Button(this.actions_exportInventoryItem), {
+                scale: 'medium',
+                rowspan: 2,
+                iconAlign: 'top'
+            })
+        ];
+    }
 });

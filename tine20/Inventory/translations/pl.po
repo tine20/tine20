@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012.
 msgid ""
@@ -8,104 +8,14 @@ msgstr ""
 "PO-Revision-Date: 2012-10-13 11:31+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Status ewidencji Dostępne"
-
-#: Config.php:33
-msgid "Possible status."
-msgstr "Możliwy status."
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal inventory items"
-msgstr "%s's osobistych wpisów z ewidencji"
-
-#: js/InventoryItemEditDialog.js:51
-msgid "The active number must be less than or equal total number."
-msgstr "Aktywna ilość musi być mniejsza albo równa całkowitej ilości."
-
-#: js/InventoryItemEditDialog.js:75
-msgid "General"
-msgstr "Ogólnie"
-
-#: js/InventoryItemEditDialog.js:97
-msgid "ID"
-msgstr "ID"
-
-#: js/InventoryItemEditDialog.js:106 Model/InventoryItem.php:71
-msgid "Name"
-msgstr "Nazwa"
-
-#: js/InventoryItemEditDialog.js:116
-msgid "Description"
-msgstr "Opis"
-
-#: js/InventoryItemEditDialog.js:121
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/InventoryItemEditDialog.js:129 Model/InventoryItem.php:93
-msgid "Location"
-msgstr "Miejsce"
-
-#: js/InventoryItemEditDialog.js:136 js/InventoryItemEditDialog.js:238
-#: Model/InventoryItem.php:97
-msgid "Added"
-msgstr "Dodano"
-
-#: js/InventoryItemEditDialog.js:144
-msgid "Total number"
-msgstr "Całkowita ilość"
-
-#: js/InventoryItemEditDialog.js:152
-msgid "Active number"
-msgstr "Aktywna ilość"
-
-#: js/InventoryItemEditDialog.js:160 Model/InventoryItem.php:75
-msgid "Status"
-msgstr "Status"
-
-#: js/InventoryItemEditDialog.js:196
-msgid "Accounting"
-msgstr "Księgowość"
-
-#: js/InventoryItemEditDialog.js:218 Model/InventoryItem.php:111
-msgid "Price"
-msgstr "Cena"
-
-#: js/InventoryItemEditDialog.js:224
-msgid "Costcentre"
-msgstr "Centrum kosztów"
-
-#: js/InventoryItemEditDialog.js:230 Model/InventoryItem.php:106
-msgid "Invoice"
-msgstr "Faktura"
-
-#: js/InventoryItemEditDialog.js:244 Model/InventoryItem.php:121
-msgid "Warranty"
-msgstr "Gwarancja"
-
-#: js/InventoryItemEditDialog.js:250
-msgid "Removed"
-msgstr "Usunięto"
-
-#: js/InventoryItemEditDialog.js:258 Model/InventoryItem.php:136
-msgid "Depreciation"
-msgstr "Deprecjacja"
-
-#: js/InventoryItemEditDialog.js:264 Model/InventoryItem.php:141
-msgid "Amortization"
-msgstr "Amortyzacja"
 
 #: Model/InventoryItem.php:48
 msgid "Inventory item"
@@ -126,13 +36,41 @@ msgstr "Lista wpisów ewidencyjnych"
 msgid "Inventory items lists"
 msgstr "Listy wpisów ewidencyjnych"
 
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:109
+msgid "Name"
+msgstr "Nazwa"
+
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:205
+msgid "Status"
+msgstr "Status"
+
 #: Model/InventoryItem.php:85
 msgid "Inventory ID"
 msgstr "ID ewidencji"
 
-#: Model/InventoryItem.php:116
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:163
+msgid "Location"
+msgstr "Miejsce"
+
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:283
+msgid "Invoice date"
+msgstr ""
+
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:277
+msgid "Invoice"
+msgstr "Faktura"
+
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:265
+msgid "Price"
+msgstr "Cena"
+
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:271
 msgid "Cost centre"
 msgstr "Centrum kosztów"
+
+#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:176
+msgid "Warranty"
+msgstr "Gwarancja"
 
 #: Model/InventoryItem.php:126
 msgid "Item added"
@@ -141,6 +79,74 @@ msgstr "Pozycja dodana"
 #: Model/InventoryItem.php:131
 msgid "Item removed"
 msgstr "Pozycja usunięta"
+
+#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
+msgid "Depreciate"
+msgstr ""
+
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Status ewidencji Dostępne"
+
+#: Config.php:33
+msgid "Possible status."
+msgstr "Możliwy status."
+
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:52
+msgid "The active number must be less than or equal total number."
+msgstr "Aktywna ilość musi być mniejsza albo równa całkowitej ilości."
+
+#: js/InventoryItemEditDialog.js:76
+msgid "General"
+msgstr "Ogólnie"
+
+#: js/InventoryItemEditDialog.js:100
+msgid "ID"
+msgstr "ID"
+
+#: js/InventoryItemEditDialog.js:129
+msgid "Description"
+msgstr "Opis"
+
+#: js/InventoryItemEditDialog.js:133
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/InventoryItemEditDialog.js:170
+msgid "Added"
+msgstr "Dodano"
+
+#: js/InventoryItemEditDialog.js:182
+msgid "Removed"
+msgstr "Usunięto"
+
+#: js/InventoryItemEditDialog.js:189
+msgid "Total number"
+msgstr "Całkowita ilość"
+
+#: js/InventoryItemEditDialog.js:197
+msgid "Available number"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:244
+msgid "Accounting"
+msgstr "Księgowość"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
@@ -171,9 +177,29 @@ msgid "removed"
 msgstr "usunięte"
 
 #: Setup/Initialize.php:38
-msgid "unkown"
-msgstr "nieznany"
+msgid "unknown"
+msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "Ewidencja"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal inventory items"
+msgstr "%s's osobistych wpisów z ewidencji"
+
+#~ msgid "Active number"
+#~ msgstr "Aktywna ilość"
+
+#~ msgid "Costcentre"
+#~ msgstr "Centrum kosztów"
+
+#~ msgid "Depreciation"
+#~ msgstr "Deprecjacja"
+
+#~ msgid "Amortization"
+#~ msgstr "Amortyzacja"
+
+#~ msgid "unkown"
+#~ msgstr "nieznany"
