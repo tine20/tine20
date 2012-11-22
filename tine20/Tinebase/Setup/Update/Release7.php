@@ -182,8 +182,15 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
             $updateData = array(
                 'seq' => $maxSeq
             );
-            $where = $db->quoteInto('id = ?', $recordId);
-            $db->update(SQL_TABLE_PREFIX . $recordTable, $updateData, $where);
+            $where = $db->quoteInto($db->quoteIdentifier('id') . ' = ?', (string) $recordId);
+            try {
+                $db->update(SQL_TABLE_PREFIX . $recordTable, $updateData, $where);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+                    ' Could not update record seq: ' . $zdse->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                    ' Data: ' . print_r($updateData, TRUE) . ' Where: ' . $where);
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
