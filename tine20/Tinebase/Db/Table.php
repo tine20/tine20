@@ -70,4 +70,27 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         return $result['count'];
     }
     
+    /**
+     * get describe table from metadata cache
+     * 
+     * @param string $tableName
+     * @param Zend_Db_Adapter_Abstract $db
+     * @return array
+     */
+    public static function getTableDescriptionFromCache($tableName, $db = NULL)
+    {
+        try {
+            $tableDescription = new Tinebase_Db_Table(array('name' => $tableName));
+            $tableInfo = $tableDescription->info();
+            $result = $tableInfo['metadata'];
+        } catch (Zend_Db_Table_Exception $zdte) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not fetch schema from cache: ' . $zdte->getMessage());
+            if ($db === NULL) {
+                $db = Tinebase_Core::getDb();
+            }
+            $result = $db->describeTable($tableName);
+        }
+        return $result;
+    }
 }

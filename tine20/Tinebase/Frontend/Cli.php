@@ -296,7 +296,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
         foreach ($args['tables'] as $table) {
             try {
-                $schema = $db->describeTable(SQL_TABLE_PREFIX . $table);
+                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
             } catch (Zend_Db_Statement_Exception $zdse) {
                 echo "\nCould not get schema (" . $zdse->getMessage() ."). Skipping table $table";
                 continue;
