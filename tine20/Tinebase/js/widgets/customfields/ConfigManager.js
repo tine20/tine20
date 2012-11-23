@@ -65,7 +65,7 @@ Tine.widgets.customfields.ConfigManager = function() {
             
             cfStore.clearFilter(true);
             cfStore.filter('model', model);
-            cfConfig = cfStore.find('name', name);
+            cfConfig = cfStore.findExact('name', name);
             cfConfig = cfConfig > -1 ? cfStore.getAt(cfConfig): null;
             cfStore.clearFilter(true);
             

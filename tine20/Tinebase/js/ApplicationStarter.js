@@ -359,7 +359,7 @@ Tine.Tinebase.ApplicationStarter = {
                         }
                         // add customfields if needed
                         if(config.meta.hasCustomFields) {
-                            defaultData['customfields'] = [];
+                            defaultData['customfields'] = {};
                         }
                         // overwrite function
                         Tine[appName].Model[model].getDefaultData = function() {

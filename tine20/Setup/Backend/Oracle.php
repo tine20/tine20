@@ -208,7 +208,8 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     protected function _getTableInfo($_tableName)
     {
         $tableName = SQL_TABLE_PREFIX . $_tableName;
-        $tableInfo = $this->_db->describeTable($tableName);
+        $tableInfo = Tinebase_Db_Table::getTableDescriptionFromCache($tableName, $this->_db);
+
         $trigger = $this->_db->fetchRow("SELECT * FROM USER_TRIGGERS WHERE TRIGGER_NAME=?", array($this->_getIncrementTriggerName($_tableName)));
         $fieldComments = $this->_getFieldComments($_tableName);
         
@@ -233,7 +234,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
                {
                 $field['EXTRA'] = 'auto_increment';
             }
-            //@todo aggregate more information liek auto_increment, indices, constraints etc. that have not been returned by describeTable
+            //@todo aggregate more information like auto_increment, indices, constraints etc. that have not been returned by describeTable
             
             $tableInfo[$index] = $field;
         }

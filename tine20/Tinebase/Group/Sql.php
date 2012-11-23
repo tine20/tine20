@@ -63,8 +63,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             // MySQL throws an exception         if the table does not exist
             // PostgreSQL returns an empty array if the table does not exist
-            $tableDescription = $this->_db->describeTable(SQL_TABLE_PREFIX . 'addressbook');
-            if (!empty($tableDescription)) {
+            $addressBookInstalled = $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . 'addressbook');
+            if (! empty($addressBookInstalled)) {
                 $this->_addressBookInstalled = true;
             }
         } catch (Zend_Db_Statement_Exception $zdse) {

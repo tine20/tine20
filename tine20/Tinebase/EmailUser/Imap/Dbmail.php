@@ -113,8 +113,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         // connect to DB
         $this->_getDb($this->_config);
         
-        $columns = $this->_db->describeTable('dbmail_users');
-
+        $columns = Tinebase_Db_Table::getTableDescriptionFromCache('dbmail_users', $this->_db);
         if(array_key_exists('tine20_userid', $columns) && array_key_exists('tine20_clientid', $columns)) {
             $this->_hasTine20Userid = true;
             $this->_propertyMapping['emailUserId'] = 'tine20_userid';

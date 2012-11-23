@@ -162,7 +162,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         try {
-            $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
+            $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
         } catch (Zend_Db_Adapter_Exception $zdae) {
             throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
         }
@@ -1329,8 +1329,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             // resolve * to single columns
             if ($column[1] == '*') {
-                $tableFields = $select->getAdapter()->describeTable(SQL_TABLE_PREFIX . $column[0]);
-                
+
+                $tableFields = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $column[0], $this->_db);
                 foreach($tableFields as $columnName => $schema) {
                     
                     // adds columns into group by clause (table.field)
