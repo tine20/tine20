@@ -44,6 +44,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'id'                => 'id',
         'name'              => 'name',
         /*'type'              => 'type',*/
+        'titleProperty'     => 'name',
         'container_id'      => 'container_id',
         'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
         'recordsName'       => 'Inventory items', // _('Inventory items')
