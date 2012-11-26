@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>6.8</version>
+    <version>6.9</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2297,7 +2297,7 @@
         </table>
         <table>
             <name>filter</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2320,7 +2320,7 @@
                 <field>
                     <name>model</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -2394,7 +2394,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2411,7 +2411,7 @@
                 <field>
                     <name>model</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -2434,7 +2434,7 @@
                 <field>
                     <name>plugin</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>64</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

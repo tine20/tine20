@@ -71,7 +71,7 @@ Tine.widgets.grid.RendererManager = function() {
          * @param {String} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
-         * @return Function
+         * @return {Function}
          */
         getByDataType: function(appName, modelName, fieldName) {
             var renderer = null,
@@ -101,16 +101,17 @@ Tine.widgets.grid.RendererManager = function() {
         /**
          * returns renderer for given field
          * 
-         * @param {String/Application} appName
+         * @param {String/Tine.Tinebase.Application} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {String} category {gridPanel|displayPanel} optional.
+         * @return {Function}
          */
         get: function(appName, modelName, fieldName, category) {
-            var appName = Ext.isString(appName) ? appName : appName.appName,
-                modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
-                categoryKey = [appName, modelName, fieldName, category].join('_'),
-                genericKey = [appName, modelName, fieldName].join('_');
+            var appName = this.getAppName(appName),
+                modelName = this.getModelName(modelName),
+                categoryKey = this.getKey([appName, modelName, fieldName, category]),
+                genericKey = this.getKey([appName, modelName, fieldName]);
                 
             // check for registered renderer
             var renderer = renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey];
@@ -131,19 +132,68 @@ Tine.widgets.grid.RendererManager = function() {
         /**
          * register renderer for given field
          * 
-         * @param {String/Application} appName
+         * @param {String/Tine.Tinebase.Application} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
          * @param {Function} renderer
          * @param {String} category {gridPanel|displayPanel} optional.
          */
         register: function(appName, modelName, fieldName, renderer, category) {
-            var appName = Ext.isString(appName) ? appName : appName.appName,
-                modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
-                categoryKey = [appName, modelName, fieldName, category].join('_'),
-                genericKey = [appName, modelName, fieldName].join('_');
+            var appName = this.getAppName(appName),
+                modelName = this.getModelName(modelName),
+                categoryKey = this.getKey([appName, modelName, fieldName, category]),
+                genericKey = this.getKey([appName, modelName, fieldName]);
                 
             renderers[category ? categoryKey : genericKey] = renderer;
+        },
+        
+        /**
+         * check if a renderer is explicitly registered
+         * 
+         * @param {String/Tine.Tinebase.Application} appName
+         * @param {Record/String} modelName
+         * @param {String} fieldName
+         * @param {String} category {gridPanel|displayPanel} optional.
+         * @return {Boolean}
+         */
+        has: function(appName, modelName, fieldName, category) {
+            var appName = this.getAppName(appName),
+                modelName = this.getModelName(modelName),
+                categoryKey = this.getKey([appName, modelName, fieldName, category]),
+                genericKey = this.getKey([appName, modelName, fieldName]);
+                
+            // check for registered renderer
+            return (renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey]) ? true : false;
+        },
+        
+        /**
+         * returns the modelName by modelName or record
+         * 
+         * @param {Record/String} modelName
+         * @return {String}
+         */
+        getModelName: function(modelName) {
+            return Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName;
+        },
+        
+        /**
+         * returns the modelName by appName or application instance
+         * 
+         * @param {String/Tine.Tinebase.Application} appName
+         * @return {String}
+         */
+        getAppName: function(appName) {
+            return Ext.isString(appName) ? appName : appName.appName;
+        },
+        
+        /**
+         * returns a key by joining the array values
+         * 
+         * @param {Array} params
+         * @return {String}
+         */
+        getKey: function(params) {
+             return params.join('_');
         }
     };
 }();

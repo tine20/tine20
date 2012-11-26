@@ -207,4 +207,46 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('customfield', 3);
         $this->setApplicationVersion('Tinebase', '6.8');
     }
+    
+    /**
+     * update to 6.9
+     * 
+     *  - set length for field (persistent)filter-model from 40 to 64
+     * 
+     */
+    public function update_8()
+    {
+        $dec = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>');
+        
+        $this->_backend->alterCol('filter', $dec);
+        
+        $this->setTableVersion('filter', 4);
+        
+        $dec = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>');
+        
+        $this->_backend->alterCol('importexport_definition', $dec);
+        
+        $dec = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>plugin</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>');
+        
+        $this->_backend->alterCol('importexport_definition', $dec);
+        
+        $this->setTableVersion('importexport_definition', 6);
+        
+        $this->setApplicationVersion('Tinebase', '6.9');
+    }
 }
