@@ -205,19 +205,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test create trash on the fly
-     */
-    public function testCreateTrashOnTheFly()
-    {
-        // set another trash folder
-        $this->_account->trash_folder = 'newtrash';
-        $this->_foldersToDelete[] = 'newtrash';
-        $accountBackend = new Felamimail_Backend_Account();
-        $account = $accountBackend->update($this->_account);
-        $newtrash = $this->_controller->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_TRASH);
-    }
-    
-    /**
      * testEmptySignature
      * 
      * @see 0006666: Signature delimeter not removed if no Signature is used
