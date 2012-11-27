@@ -95,7 +95,7 @@ Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCo
     
     getFormValue: function() {
         var ids = [];
-        var keyfieldStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName);
+        var keyfieldStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName);
         
         var formValues = this.getInnerForm().getForm().getValues();
         for (var id in formValues) {
@@ -109,7 +109,7 @@ Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCo
     
     getItems: function() {
         var items = [];
-        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName).each(function(keyfieldRecord) {
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).each(function(keyfieldRecord) {
             var checkbox = {
                 xtype: 'checkbox',
                 boxLabel: keyfieldRecord.get('i18nValue'),
@@ -137,7 +137,7 @@ Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCo
         var keyfieldRecordText = [];
         this.currentValue = [];
         
-        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName).each(function(keyfieldRecord) {
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).each(function(keyfieldRecord) {
             var id = keyfieldRecord.get('id');
             var name = keyfieldRecord.get('i18nValue');
             if (value.indexOf(id) >= 0) {

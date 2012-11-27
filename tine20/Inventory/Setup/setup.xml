@@ -2,7 +2,7 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>7.1</version>
+    <version>7.2</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
@@ -51,11 +51,6 @@
                     <length>255</length>
                 </field>
                 <field>
-                    <name>add_time</name>
-                    <type>datetime</type>
-                    <notnull>false</notnull>
-                </field>
-                <field>
                     <name>total_number</name>
                     <type>integer</type>
                     <notnull>false</notnull>
@@ -71,6 +66,11 @@
                     <length>255</length>
                 </field>
                 <field>
+                    <name>invoice_date</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>price</name>
                     <type>float</type>
                 </field>
@@ -84,20 +84,17 @@
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>item_added</name>
+                    <name>added_date</name>
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>item_removed</name>
+                    <name>removed_date</name>
                     <type>datetime</type>
                 </field>
                 <field>
-                    <name>depreciation</name>
-                    <type>float</type>
-                </field>
-                <field>
-                    <name>amortization</name>
-                    <type>float</type>
+                    <name>depreciate_status</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <!-- defaults for tine system -->
                 <field>
@@ -151,7 +148,6 @@
                         <name>container_id</name>
                     </field>
                 </index>
- 
             </declaration>
         </table>
     </tables>

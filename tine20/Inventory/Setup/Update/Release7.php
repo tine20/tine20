@@ -30,4 +30,22 @@ class Inventory_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Inventory', '7.1');
     }
+    
+    /**
+     * update to 7.2
+     * 
+     * - Delete depreciation and amortization column
+     * - Add depreciate_status
+     * - Rename add_time to invoice_date
+     * - Rename item_added to added_date and item_removed to removed_date
+     * - Update ExportDefinitions
+     */
+    public function update_1()
+    {
+        if ($this->getTableVersion('inventory_item') != 3) {
+            $release6 = new Inventory_Setup_Update_Release6($this->_backend);
+            $release6->update_1();
+        }
+        $this->setApplicationVersion('Inventory', '6.2');
+    }
 }

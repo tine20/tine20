@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Inventory_Model_InventoryItem</model>
+    <name>i_default_xls</name>
+    <type>export</type>
+    <plugin>Inventory_Export_Xls</plugin>
+    <description>default xls InventoryItem export definition</description>
+    <header>1</header>
+    <columns>
+        <!--column>
+            <identifier>account_id</identifier>
+        </column-->
+        <column>
+            <identifier>name</identifier>
+        </column>
+        <column>
+            <identifier>inventory_id</identifier>
+        </column>
+            <column>
+            <identifier>status</identifier>
+        </column>
+        <column>
+            <identifier>location</identifier>
+        </column>
+        <column>
+            <identifier>added_date</identifier>
+        </column>
+        <column>
+            <identifier>removed_date</identifier>
+        </column>
+        <column>
+            <identifier>warranty</identifier>
+        </column>
+        <column>
+            <identifier>price</identifier>
+        </column>
+        <column>
+            <identifier>costcentre</identifier>
+        </column>
+        <column>
+            <identifier>invoice</identifier>
+        </column>
+        <column>
+            <identifier>invoice_date</identifier>
+        </column>
+        <column>
+            <identifier>depreciate_status</identifier>
+        </column>
+        <column>
+            <identifier>total_number</identifier>
+        </column>
+        <column>
+            <identifier>active_number</identifier>
+        </column>
+    </columns>
+</config>

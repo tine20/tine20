@@ -40,6 +40,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
     showContainerSelector: true,
+    multipleEdit: true,
     
     /**
      * check validity of activ number field
@@ -55,6 +56,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         return isValid && Tine.Inventory.InventoryItemEditDialog.superclass.isValid.apply(this, arguments);
     },
     
+    
     /**
      * returns dialog
      * 
@@ -63,109 +65,154 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @return {Object}
      * @private
      */
-    getFormItems: function() {
-        
+        getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
-            plain:true,
+            plain: true,
             activeTab: 0,
-            border: false,
-            items:[{
+            items: [{
+                //Start first tab
                 title: this.app.i18n._('General'),
-                autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
-                items: [
-                    {
+                items: [{
                     region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333,
-                        disabled: (this.useMultiple) ? true : false
+                    layout: 'hfit',
+                    border: false,
+                    items: [{
+                        region: 'center',
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: .333,
+                            disabled: (this.useMultiple) ? true : false
+                        },
+                        //Start first line
+                        items: [
+                            [{
+                                columnWidth: 1,
+                                xtype: 'tw-uidtriggerfield',
+                                fieldLabel: this.app.i18n._('ID'),
+                                name: 'inventory_id',
+                                maxLength: 100,
+                                allowBlank: false
+                            }],
+                            [{
+                                columnWidth: 1,
+                                xtype: 'tine.widget.field.AutoCompleteField',
+                                recordClass: this.recordClass,
+                                fieldLabel: this.app.i18n._('Name'),
+                                name: 'name',
+                                maxLength: 100,
+                                allowBlank: false
+                            }]
+                        ]
                     },
-                    items: [
-                        //Start ID
-                        [{
-                            columnWidth: 1,
-                            xtype: 'tw-uidtriggerfield',
-                            fieldLabel: this.app.i18n._('ID'),
-                            name: 'inventory_id',
-                            maxLength: 100,
-                            allowBlank: false
-                        }],
-                        //End ID
-                        //Start name
-                        [{
-                            columnWidth: 1,
-                            fieldLabel: this.app.i18n._('Name'),
-                            name: 'name',
-                            maxLength: 100,
-                            allowBlank: false
-                        }],
-                        //End name
-                        //Start description
-                        [{
-                            xtype: 'textarea',
-                            name: 'description',
-                            fieldLabel: this.app.i18n._('Description'),
-                            grow: false,
-                            preventScrollbars: false,
-                            columnWidth: 1,
-                            height: 150,
-                            emptyText: this.app.i18n._('Enter description')
-                        }],
-                        //End description
-                        //Start Place and time
-                        [{
-                            columnWidth: 0.5,
-                            xtype: 'tine.widget.field.AutoCompleteField',
-                            recordClass: this.recordClass,
-                            fieldLabel: this.app.i18n._('Location'),
-                            name: 'location',
-                            maxLength: 255
+                    {
+                        //Start second line
+                        layout: 'hbox',
+                        items: [{
+                            flex: 1,
+                            xtype: 'columnform',
+                            autoHeight: true,
+                            style:'padding-right: 5px;',
+                            items: [
+                                [{
+                                    xtype: 'textarea',
+                                    columnWidth: 1,
+                                    name: 'description',
+                                    fieldLabel: this.app.i18n._('Description'),
+                                    grow: false,
+                                    preventScrollbars: false,
+                                    height: 150,
+                                    emptyText: this.app.i18n._('Enter description')
+                                }]
+                            ]
+                        }/*,
+                            new Ext.ux.form.ImageField({
+                                name: 'jpegphoto',
+                                width: 160,
+                                height: 150,
+                                style: {
+                                    'margin-top': '17px'
+                                }
+                            })*/
+                        ]
+                    },
+                    {
+                        //Start third line
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: .333,
+                            disabled: (this.useMultiple) ? true : false
                         },
-                        {
-                            xtype: 'extuxclearabledatefield',
-                            columnWidth: 0.5,
-                            fieldLabel: this.app.i18n._('Added'),
-                            name: 'add_time'
-                        }],
-                        //end Place and time
-                        //Start number
-                        [{
-                            xtype:'numberfield',
-                            columnWidth: 0.5,
-                            fieldLabel: this.app.i18n._('Total number'),
-                            name: 'total_number',
-                            value: 1,
-                            minValue: 1
-                        },
-                        {
-                            xtype:'numberfield',
-                            columnWidth: 0.5,
-                            fieldLabel: this.app.i18n._('Active number'),
-                            name: 'active_number',
-                            value: 1,
-                            minValue: 0
-                        }],
-                        [new Tine.Tinebase.widgets.keyfield.ComboBox({
-                            app: 'Inventory',
-                            keyFieldName: 'inventoryStatus',
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'status',
-                            columnWidth: 0.5
-                        })]
-                        //End number
-                    ]
+                        items: [
+                            [{
+                                columnWidth: 1,
+                                xtype: 'tine.widget.field.AutoCompleteField',
+                                recordClass: this.recordClass,
+                                fieldLabel: this.app.i18n._('Location'),
+                                name: 'location',
+                                maxLength: 255
+                            }],
+                            [{
+                                xtype: 'extuxclearabledatefield',
+                                columnWidth: 0.333,
+                                fieldLabel: this.app.i18n._('Added'),
+                                name: 'added_date'
+                            },
+                            {
+                                xtype: 'datefield',
+                                name: 'warranty',
+                                fieldLabel: this.app.i18n._('Warranty'),
+                                columnWidth: 0.333
+                            },
+                            {
+                                xtype: 'extuxclearabledatefield',
+                                columnWidth: 0.333,
+                                fieldLabel: this.app.i18n._('Removed'),
+                                name: 'removed_date'
+                            }
+                            ],
+                            [{
+                                xtype:'numberfield',
+                                columnWidth: 0.333,
+                                fieldLabel: this.app.i18n._('Total number'),
+                                name: 'total_number',
+                                value: 1,
+                                minValue: 1
+                            },
+                            {
+                                xtype:'numberfield',
+                                columnWidth: 0.333,
+                                fieldLabel: this.app.i18n._('Available number'),
+                                name: 'active_number',
+                                value: 1,
+                                minValue: 0
+                            },
+                            new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                app: 'Inventory',
+                                keyFieldName: 'inventoryStatus',
+                                fieldLabel: this.app.i18n._('Status'),
+                                name: 'status',
+                                columnWidth: 0.333
+                            })
+                            ]
+                        ]
+                    }]
+                    
                 },
                 {
-                    // activities and tags
+                    //Start side
                     layout: 'accordion',
                     animate: true,
                     region: 'east',
@@ -178,21 +225,22 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     border: true,
                     
                     items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Inventory',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
-                    
-                    new Tine.widgets.tags.TagPanel({
-                        app: 'Inventory',
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    })]
+                        new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Inventory',
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Inventory',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
                 }]
             },
             {
+                //Start second tab
                 title: this.app.i18n._('Accounting'),
                 autoScroll: true,
                 border: false,
@@ -207,72 +255,51 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333,
+                        columnWidth: 1,
                         disabled: (this.useMultiple) ? true : false
                     },
                     items: [
-                        // Start price, costcentre and invoice
                         [{
                             xtype: 'textfield',
                             name: 'price',
                             fieldLabel: this.app.i18n._('Price'),
-                            columnWidth: 0.333
+                            columnWidth: 0.5
                         },
                         {
                             xtype: 'textfield',
                             name: 'costcentre',
-                            fieldLabel: this.app.i18n._('Costcentre'),
-                            columnWidth: 0.333
-                        },
-                        {
+                            fieldLabel: this.app.i18n._('Cost centre'),
+                            columnWidth: 0.5
+                        }],
+                        [{
                             xtype: 'textfield',
                             name: 'invoice',
                             fieldLabel: this.app.i18n._('Invoice'),
-                            columnWidth: 0.333
-                        }],
-                        // End price, costcentre and invoice
-                        // Start item_added, warranty and item_removed
-                        [{
-                            xtype: 'datefield',
-                            name: 'item_added',
-                            fieldLabel: this.app.i18n._('Added'),
-                            columnWidth: 0.333
-                        },
-                        {
-                            xtype: 'datefield',
-                            name: 'warranty',
-                            fieldLabel: this.app.i18n._('Warranty'),
-                            columnWidth: 0.333
-                        },
-                        {
-                            xtype: 'datefield',
-                            name: 'item_removed',
-                            fieldLabel: this.app.i18n._('Removed'),
-                            columnWidth: 0.333
-                        }],
-                        // End item_added, warranty and item_removed
-                        // Start depreciation and amortization
-                        [{
-                            xtype: 'numberfield',
-                            name: 'depreciation',
-                            fieldLabel: this.app.i18n._('Depreciation'),
                             columnWidth: 0.5
                         },
                         {
-                            xtype: 'numberfield',
-                            name: 'amortization',
-                            fieldLabel: this.app.i18n._('Amortization'),
+                            xtype: 'datefield',
+                            name: 'invoice_date',
+                            fieldLabel: this.app.i18n._('Invoice date'),
                             columnWidth: 0.5
+                        }],
+                        [{
+                                xtype: 'checkbox',
+                                hideLabel: true,
+                                boxLabel: this.app.i18n._('Depreciate'),
+                                name: 'depreciate_status'
                         }]
-                        // End depreciation and amortization
                     ]
-                    
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
-        };
+            })
+            ]
+        }
+    },
+    isMultipleValid: function() {
+        return true;
     }
 });

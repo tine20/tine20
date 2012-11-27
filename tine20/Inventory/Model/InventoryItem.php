@@ -44,6 +44,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'id'                => 'id',
         'name'              => 'name',
         /*'type'              => 'type',*/
+        'titleProperty'     => 'name',
         'container_id'      => 'container_id',
         'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
         'recordsName'       => 'Inventory items', // _('Inventory items')
@@ -92,9 +93,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
                 'label'      => 'Location' // _('Location')
             ),
-            'add_time' => array(
+            'invoice_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Added', // _('Added')
+                'label'      => 'Invoice date', // _('Invoice date')
                 'hidden'     => true
             ),
             'total_number' => array(
@@ -121,29 +122,28 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'      => 'Warranty', // _('Warranty')
                 'hidden'     => TRUE
             ),
-            'item_added' => array(
+            'added_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item added', // _('Item added')
                 'hidden'     => TRUE
             ),
-            'item_removed' => array(
+            'removed_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item removed', // _('Item removed')
                 'hidden'     => TRUE
             ),
-            'depreciation' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Depreciation', // _('Depreciation')
-                'hidden'     => TRUE
-            ),
-            'amortization' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Amortization', // _('Amortization')
-                'hidden'     => TRUE
-            ),
             'active_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Available' // _(Available)
+                'label'      => 'Available number' // _(Available number)
+            ),
+            'total_number' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'label'      => 'Quantity' // _(Quantity)
+            ),
+            'depreciate_status' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                //'label' => 'Depreciate', // _('Depreciate')
+                'label'      => NULL,
             ),
             'created_by' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -200,9 +200,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        foreach (array("total_number", "active_number", "add_time",
-                    "price", "item_added", "warranty",
-                    "item_removed", "depreciation", "amortization")
+        foreach (array("total_number", "active_number", "invoice_date",
+                    "price", "added_date", "warranty",
+                    "removed_date")
                 as $val)
         {
             $this->_filters[$val] = new Zend_Filter_Empty(NULL);

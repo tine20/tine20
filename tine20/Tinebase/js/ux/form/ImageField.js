@@ -37,7 +37,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     defaultImage: 'images/empty_photo_blank.png',
     
-    defaultAutoCreate: {tag: 'input', type: 'hidden'},
+    
+    defaultAutoCreate: {tag: 'div', cls: 'ux-imagefield-ct', cn: [
+        {tag: 'img', cls: 'ux-imagefield-img'},
+        {tag: 'div', cls: 'ux-imagefield-button'},
+        {tag: 'div', cls: 'ux-imagefield-text'}
+    ]},
     
     handleMouseEvents: true,
     
@@ -46,75 +51,113 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.scope = this;
         this.handler = this.onFileSelect;
         
-        this.browsePlugin = new Ext.ux.file.BrowsePlugin({
-            dropElSelector: 'div[class^=x-panel-body]'
-        });
+        this.browsePlugin = new Ext.ux.file.BrowsePlugin({});
         this.plugins.push(this.browsePlugin);
-
+        
         Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
+        
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
-        this.imageSrc = this.defaultImage;
-        if (this.border === true) {
-            this.width = this.width;
-            this.height = this.height;
-        }
+        this.value = this.defaultImage;
+        
     },
     
-    onRender: function (ct, position) {
-        Ext.ux.form.ImageField.superclass.onRender.call(this, ct, position);
+    afterRender: function() {
         
-        // the container for the browe button
-        this.buttonCt = Ext.DomHelper.insertFirst(ct, '<div>&#160;</div>', true);
-        this.buttonCt.applyStyles({
-            border: this.border === true ? '1px solid #B5B8C8' : '0'
-        });
-        this.buttonCt.setSize(this.width, this.height);
+        this.imageCt = this.el.child('img');
+        this.buttonCt = this.el.child('div[class=ux-imagefield-button]');
+        this.textCt = this.el.child('div[class=ux-imagefield-text]');
+        
+        if (this.border === false) {
+            this.el.applyStyles({
+                border: '0'
+            });
+        }
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: _('Loading'), msgCls: 'x-mask-loading'});
-        
-        // the click to edit text container
-        var clickToEditText = _('Click to edit');
-        this.textCt = Ext.DomHelper.insertFirst(this.buttonCt, '<div class="x-ux-from-imagefield-text">' + clickToEditText + '</div>', true);
         this.textCt.setSize(this.width, this.height);
+        var clickToEditText = _('Click to edit');
         var tm = Ext.util.TextMetrics.createInstance(this.textCt);
         tm.setFixedWidth(this.width);
-        this.textCt.setStyle({top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'});
-        
-        // the image container
-        // NOTE: this will atm. always be the default image for the first few miliseconds
-        this.imageCt = Ext.DomHelper.insertFirst(this.buttonCt, '<img src="' + this.imageSrc + '"/>' , true);
-        this.imageCt.setOpacity(0.2);
-        this.imageCt.setStyle({
-            position: 'absolute',
-            top: '18px'
+        this.textCt.applyStyles({
+            top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'
         });
+        this.textCt.insertHtml('afterBegin', clickToEditText);
         
         Ext.apply(this.browsePlugin, {
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt
         });
+        
+        Ext.ux.form.ImageField.superclass.afterRender.apply(this, arguments);
     },
     
+    /**
+    * returns value or empty string
+    */
     getValue: function () {
-        return Ext.ux.form.ImageField.superclass.getValue.call(this);
+        if (! this.value || this.value === this.defaultImage) {
+            return '';
+        } else {
+            return String(this.value);
+        }
     },
     
+    /**
+    * set value (image)
+    */
     setValue: function (value) {
         Ext.ux.form.ImageField.superclass.setValue.call(this, value);
         if (! value || value === this.defaultImage) {
-            this.setDefaultImage(this.defaultImage);
+            this.value = this.defaultImage;
         } else {
             if (value instanceof Ext.ux.util.ImageURL || (Ext.isString(value) && value.match(/&/))) {
-                this.imageSrc = Ext.ux.util.ImageURL.prototype.parseURL(value);
-                this.imageSrc.width = this.width;
-                this.imageSrc.height = this.height;
-                this.imageSrc.ratiomode = 0;
-            }
-            else {
-                this.setDefaultImage(! Ext.isEmpty(value) ? value : this.defaultImage);
+                this.value = Ext.ux.util.ImageURL.prototype.parseURL(value);
+                this.value.width = (this.border === false ? this.width : this.width-2);
+                this.value.height = (this.border === false ? this.height : this.height-2);
+                this.value.ratiomode = 0;
+            } else {
+                this.setDefaultImage(value);
             }
         }
         this.updateImage();
+    },
+    
+    /**
+    * show image
+    */
+    updateImage: function () {
+        var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.value + '"/>' , true);
+        this.imageCt.remove();
+        this.imageCt = img;
+        this.textCt.setVisible(this.value === this.defaultImage);
+        this.imageCt.setOpacity(this.value === this.defaultImage ? 0.2 : 1);
+        
+        img.on('load', function () {
+            if (this.value === this.defaultImage) {
+                this.imageCt.setStyle({
+                    position: 'absolute',
+                    top: ((this.height - this.imageCt.getHeight()) /2)+ 'px',
+                    left: ((this.width - this.imageCt.getWidth()) /2) + 'px'
+                });
+            }
+            this.loadMask.hide();
+        }, this);
+        img.on('error', function () {
+            Ext.MessageBox.alert(_('Image Failed'), _('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+            this.loadMask.hide();
+        }, this);
+    },
+    
+    /**
+    * set new default image
+    */
+    setDefaultImage: function (image) {
+        if (this.value === this.defaultImage) {
+            this.defaultImage = image;
+            this.setValue(this.defaultImage);
+        } else {
+            this.defaultImage = image;
+        }
     },
     
     /**
@@ -127,39 +170,44 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }
         
         var files = fileSelector.getFileList();
-        var uploader = new Ext.ux.file.Upload({
+        this.uploader = new Ext.ux.file.Upload({
             file: files[0],
             fileSelector: fileSelector
         });
         
-        uploader.on('uploadcomplete', function (uploader, record) {
-            console.log(arguments);
-            this.imageSrc = new Ext.ux.util.ImageURL({
-                id: record.get('tempFile').id,
-                width: this.width,
-                height: this.height,
-                ratiomode: 0
-            });
-            this.setValue(this.imageSrc);
-            
-            this.updateImage();
-        }, this);
-        
-        uploader.on('uploadfailure', this.onUploadFail, this);
+        this.uploader.on('uploadcomplete', this.onUploadComplete, this);
+        this.uploader.on('uploadfailure', this.onUploadFail, this);
         
         this.loadMask.show();
         
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(uploader);
+        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(this.uploader);
         var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();
         }
     },
+    
+    onUploadComplete: function(upload, record) {
+        this.uploader.un('uploadcomplete', this.onUploadComplete, this);
+        this.uploader.un('uploadfailure', this.onUploadFail, this);
+        
+        var value = new Ext.ux.util.ImageURL({
+            id: record.get('tempFile').id,
+            width: this.width,
+            height: this.height,
+            ratiomode: 0
+        });
+        this.setValue(value);
+    },
+    
     /**
      * @private
      */
     onUploadFail: function () {
+        this.uploader.un('uploadcomplete', this.onUploadComplete, this);
+        this.uploader.un('uploadfailure', this.onUploadFail, this);
+        
         Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
     },
     /**
@@ -168,9 +216,10 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onContextMenu: function (e, input) {
         e.preventDefault();
-        
-        var ct = Ext.DomHelper.append(this.buttonCt, '<div>&#160;</div>', true);
-        
+        if (this.ctxMenu) {
+            this.ctxMenu.destroy();
+        }
+        this.browsePlugin.hideLayer();
         var upload = new Ext.menu.Item({
             text: _('Change Image'),
             iconCls: 'action_uploadImage',
@@ -178,16 +227,15 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             scope: this,
             plugins: [new Ext.ux.file.BrowsePlugin({})]
         });
-        
         this.ctxMenu = new Ext.menu.Menu({
             items: [upload, {
                 text: _('Crop Image'),
                 iconCls: 'action_cropImage',
                 scope: this,
-                disabled: true, //this.imageSrc == this.defaultImage,
+                disabled: true, 
                 handler: function () {
                     var cropper = new Ext.ux.form.ImageCropper({
-                        imageURL: this.imageSrc
+                        imageURL: this.value
                     });
                     
                     var dlg = new Tine.widgets.dialog.EditRecord({
@@ -207,7 +255,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             }, {
                 text: _('Delete Image'),
                 iconCls: 'action_delete',
-                disabled: this.imageSrc === this.defaultImage,
+                disabled: this.value === this.defaultImage,
                 scope: this,
                 handler: function () {
                     this.setValue('');
@@ -216,17 +264,18 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             }, {
                 text: _('Show Original Image'),
                 iconCls: 'action_originalImage',
-                disabled: this.imageSrc === this.defaultImage,
+                disabled: this.value === this.defaultImage,
                 scope: this,
                 handler: this.downloadImage
                 
             }]
         });
         this.ctxMenu.showAt(e.getXY());
+        
     },
     
     downloadImage: function () {
-        var url = Ext.apply(this.imageSrc, {
+        var url = Ext.apply(this.value, {
             height: -1,
             width: -1
         }).toString();
@@ -240,46 +289,20 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     },
     
     /**
-     * Set (new) default (empty) image
-     * @param {String} image
-     */
-    setDefaultImage: function (image) {
-        this.defaultImage = image;
-        this.imageSrc = this.defaultImage;
-        
-        var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.defaultImage + '"/>' , true);
-        
+    * clean up
+    */
+    onDestroy: function() {
         this.imageCt.remove();
-        this.imageCt = img;
-        this.imageCt.setOpacity(0.2);
-        this.imageCt.setStyle({
-            position: 'absolute',
-            top: '18px'
-        });
-        this.textCt.setVisible(true);
+        this.buttonCt.remove();
+        this.textCt.remove();
+        this.imageCt = null;
+        this.buttonCt = null;
+        this.textCt = null;
+        this.loadMask.destroy();
+        this.ctxMenu.destroy();
+        this.uploader = null;
         
-        // after setting new empty photo set field value to empty string
-        Ext.ux.form.ImageField.superclass.setValue.call(this, '');
-    },
-    
-    updateImage: function () {
-        // only update when new image differs from current
-        if (this.imageCt.dom.src.substr(-1 * this.imageSrc.length) !== this.imageSrc) {
-            var ct = this.imageCt.up('div');
-            var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.imageSrc + '"/>' , true);
-            // replace image after load
-            img.on('load', function () {
-                this.imageCt.remove();
-                this.imageCt = img;
-                this.textCt.setVisible(this.imageSrc === this.defaultImage);
-                this.imageCt.setOpacity(this.imageSrc === this.defaultImage ? 0.2 : 1);
-                this.loadMask.hide();
-            }, this);
-            img.on('error', function () {
-                Ext.MessageBox.alert(_('Image Failed'), _('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
-                this.loadMask.hide();
-            }, this);
-        }
+        Ext.ux.form.ImageField.superclass.destroy.call(this);
     }
 });
 

@@ -35,7 +35,7 @@ class Inventory_Setup_Initialize extends Setup_Initialize
                 array('id' => 'DEFECT',     'value' => 'defect'                        ), //_('defect')
                 array('id' => 'MISSING',    'value' => 'missing'                       ), //_('missing')
                 array('id' => 'REMOVED',    'value' => 'removed', 'system' => true     ), //_('removed')
-                array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unkown')
+                array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unknown')
             ),
         );
         
@@ -44,5 +44,6 @@ class Inventory_Setup_Initialize extends Setup_Initialize
             'name'              => Inventory_Config::INVENTORY_STATUS,
             'value'             => json_encode($typeConfig),
         )));
+        
     }
 }
