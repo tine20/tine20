@@ -337,7 +337,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
                 plugins.push(this.quickSearchFilterToolbarPlugin);
             }
-            var modelName = this.recordClass.getMeta('modelName');
+            
             this.filterToolbar = new Tine.widgets.grid.FilterPanel({
                 app: this.app,
                 recordClass: this.recordClass,
@@ -366,7 +366,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         dataIndex: key,
                         header: this.app.i18n._(this.modelConfig.fields[key].label),
                         hidden: this.modelConfig.fields[key].hidden 
-                    }
+                    };
                     var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
                     if(renderer) {
                         config.renderer = renderer;
@@ -1479,8 +1479,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
         
-        var config = null,
-            popupWindow = editDialogClass.openWindow(Ext.copyTo(
+        var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 plugins: plugins ? Ext.encode(plugins) : null,
                 fixedFields: fixedFields,

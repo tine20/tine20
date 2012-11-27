@@ -196,4 +196,18 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Finished modlog sequence update for ' . $model);
     }
+
+    /**
+     * update to 7.2
+     * 
+     * - set length for field (persistent)filter-model from 40 to 64
+     */
+    public function update_1()
+    {
+        $update6 = new Tinebase_Setup_Update_Release6($this->_backend);
+        $update6->update_8();
+        $this->setTableVersion('importexport_definition', 7);
+        $this->setTableVersion('filter', 5);
+        $this->setApplicationVersion('Tinebase', '7.2');
+    }
 }
