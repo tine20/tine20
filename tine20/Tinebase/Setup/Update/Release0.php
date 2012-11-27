@@ -2050,12 +2050,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         // delete old user config settings
         $oldSettings = array('Locale', 'Timezone');
         foreach ($oldSettings as $oldSetting) {
-            try {
-                $oldConfig = Tinebase_Config::getInstance()->getConfig($oldSetting);
-                Tinebase_Config::getInstance()->deleteConfig($oldConfig);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
+            Tinebase_Config::getInstance()->delete($oldSetting);
         }
         
         $this->setApplicationVersion('Tinebase', '0.25');
@@ -2160,7 +2155,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
      */
     public function update_27()
     {
-        $config = Setup_Core::getConfig();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
         $tableprefix = $config->database->tableprefix;
         
         // have a second db connection with default charset

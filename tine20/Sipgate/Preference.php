@@ -146,7 +146,6 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
          * @param string $_accountType
          * @return Tinebase_Model_Preference
          */
-
         public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
         {
             if ($_preferenceName == self::MOBILENUMBER) {
@@ -177,6 +176,4 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
             }
             return $pref;
         }
-
 }
-

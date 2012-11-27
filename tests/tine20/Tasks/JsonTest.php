@@ -66,7 +66,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_backend = new Tasks_Frontend_Json();
-        $this->_smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
+        $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         $this->_smtpTransport = Tinebase_Smtp::getDefaultTransport();
     }
 
@@ -81,7 +81,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
         
         if ($this->_smtpConfigChanged) {
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, $this->_smtpConfig);
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
             Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
         }
     }
@@ -171,13 +171,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         // set wrong smtp user/password
         $wrongCredentialsConfig = $this->_smtpConfig;
         $wrongCredentialsConfig['password'] = 'wrongpw';
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, $wrongCredentialsConfig);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $wrongCredentialsConfig);
         $this->_smtpConfigChanged = TRUE;
         Tinebase_Smtp::setDefaultTransport(NULL);
-        
         $this->_sendAlarm();
-
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status']);
         $this->assertContains('535 5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'], 
             'got: ' . $loadedTaskData['alarms'][0]['sent_message']);
@@ -242,13 +241,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task = $this->_getTask();
         
         // set config for automatic alarms
-        Tinebase_Config::getInstance()->setConfigForApplication(
+        Tasks_Config::getInstance()->set(
             Tinebase_Config::AUTOMATICALARM,
-            Zend_Json::encode(array(
+            array(
                 2*24*60,    // 2 days before
                 //0           // 0 minutes before
-            )),
-            'Tasks'
+            )
         );
         
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
@@ -261,13 +259,11 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
         $this->assertEquals(2*24*60, $loadedTaskData['alarms'][0]['minutes_before']);
 
-        // reset automatic alarms config
-        Tinebase_Config::getInstance()->setConfigForApplication(
+       // reset automatic alarms config
+        Tasks_Config::getInstance()->set(
             Tinebase_Config::AUTOMATICALARM,
-            Zend_Json::encode(array()),
-            'Tasks'
+            array()
         );
-        
         $this->_backend->deleteTasks($persistentTaskData['id']);
     }
     

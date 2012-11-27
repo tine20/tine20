@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -47,7 +47,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
     public function __construct(array $_options = array())
     {
         // get cyrus imap config options (host, username, password, port)
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         
         // merge _config and dovecot imap
         $this->_config = array_merge($this->_config, $imapConfig['cyrus']);
@@ -58,7 +58,8 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $this->_config['port']   = !empty($imapConfig['port']) ? $imapConfig['port'] : 143;
         $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? $imapConfig['ssl'] : false;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' cyrus imap config: ' . print_r($this->_config, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' cyrus imap config: ' . print_r($this->_config, true));
     }
     
     /**

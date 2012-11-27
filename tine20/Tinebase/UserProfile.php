@@ -286,7 +286,7 @@ class Tinebase_UserProfile
             'updateableFields' => $this->_updateableFields
         );
         
-        Tinebase_Config::getInstance()->setConfigForApplication(self::USERPROFILEFIELDS, Zend_Json::encode($config));
+        Tinebase_Config::getInstance()->set(self::USERPROFILEFIELDS, $config);
     }
     
     /**
@@ -295,10 +295,10 @@ class Tinebase_UserProfile
      */
     protected function _initConfig()
     {
-        $config = Tinebase_Config::getInstance()->getConfigAsArray(self::USERPROFILEFIELDS, 'Tinebase', array(
+        $config = Tinebase_Config::getInstance()->get(self::USERPROFILEFIELDS, new Tinebase_Config_Struct(array(
             'readableFields'   => $this->_defaultReadableFields,
             'updateableFields' => $this->_defaultUpdateableFields
-        ));
+        )))->toArray();
         
         // ensure generic fields are in readable fields
         $this->_readableFields = array_merge(

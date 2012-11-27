@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Backend_LdapTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
@@ -73,10 +69,4 @@ class Addressbook_Backend_LdapTest extends PHPUnit_Framework_TestCase
     {
         $this->_backend->getAll();
     }
-    
-}       
-    
-
-if (PHPUnit_MAIN_METHOD == 'Addressbook_Backend_LdapTest::main') {
-    Addressbook_Backend_LdapTest::main();
 }

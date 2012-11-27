@@ -1,6 +1,7 @@
 <?php
 /**
  * @package     ActiveSync
+ * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,6 +11,7 @@
  * ActiveSync config class
  * 
  * @package     ActiveSync
+ * @subpackage  Config
  */
 class ActiveSync_Config extends Tinebase_Config_Abstract
 {

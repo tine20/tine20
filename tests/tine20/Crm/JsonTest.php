@@ -127,15 +127,15 @@ class Crm_JsonTest extends Crm_AbstractTest
             'leadsource' => 'Another Leadsource'
         );
         $anotherResult = $this->_instance->saveSettings($newSettings);
-        $this->assertEquals($anotherResult, $newSettings);
+        $this->assertEquals($newSettings, $anotherResult, 'new settings have not been saved');
         
         // reset original settings
         $result = $this->_instance->saveSettings($oldSettings);
-        $this->assertEquals($oldSettings, $result);
+        $this->assertEquals($result, $oldSettings, 'old settings have not been reset');
         
         // test Crm_Model_Config::getOptionById
         $settings = Crm_Controller::getInstance()->getConfigSettings();
-        $this->assertEquals(array(), $settings->getOptionById(5, 'leadsources'));
+        $this->assertEquals(array(), $settings->getOptionById(5, 'leadsources'), 'Crm_Model_Config::getOptionById failed');
     }
     
     /**

@@ -45,7 +45,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
         
-        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value;
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::MAPPANEL, TRUE);
         if (! $this->_setGeoDataForContacts) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
         }

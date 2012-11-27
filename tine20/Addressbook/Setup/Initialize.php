@@ -243,12 +243,11 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         }
         
-        Tinebase_Config::getInstance()->setConfigForApplication(
+        Admin_Config::getInstance()->set(
             Tinebase_Config::APPDEFAULTS,
-            Zend_Json::encode(array(
+            array(
                 Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK => $internalAddressbook->getId()
-            )),
-            'Admin'
+            )
         );
         
         return $internalAddressbook;

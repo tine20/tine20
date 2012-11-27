@@ -63,7 +63,7 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('Cyrus IMAP plugin not enabled');
         }
         
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
+        $this->_config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         
         $this->objects['users'] = array();
     }

@@ -216,13 +216,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     protected function _initUserSession(Tinebase_Model_FullUser $_user)
     {
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, TRUE)) {
             Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
@@ -237,11 +237,11 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
              * -> search all Set-Cookie: headers and replace them with the last one!
              **/
             $cookieHeaders = array();
-            foreach(headers_list() as $headerString) {
+            foreach (headers_list() as $headerString) {
                 if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
                     array_push($cookieHeaders, $headerString);
-                }   
-            }   
+                }
+            }
             header(array_pop($cookieHeaders), true);
             /** end of fix **/
             

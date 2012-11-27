@@ -107,6 +107,7 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
         
         // check for cache files
         $config = Tinebase_Core::getConfig();
+        
         if ($config->caching && $config->caching->backend == 'File' && $config->caching->path) {
             $cacheFile = $this->_lookForCacheFile($config->caching->path);
             $this->assertEquals(NULL, $cacheFile, 'found cache file: ' . $cacheFile);

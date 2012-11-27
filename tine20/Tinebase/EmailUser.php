@@ -291,7 +291,7 @@ class Tinebase_EmailUser
     public static function getConfig($_configType)
     {
         if (!isset(self::$_configs[$_configType])) {
-            self::$_configs[$_configType] = Tinebase_Config::getInstance()->getConfigAsArray($_configType);
+            self::$_configs[$_configType] = Tinebase_Config::getInstance()->get($_configType, new Tinebase_Config_Struct())->toArray();
         }
         
         return self::$_configs[$_configType];

@@ -596,6 +596,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             }
         }
         
+        
 //        // get all configs at once
 //        $clientRecords = $this->_getBackend()->search(new Tinebase_Model_ConfigFilter(array(array('condition' => 'OR', 'filters' => $filters))));
 //        $clientRecords->addIndices(array('application_id', 'name'));
@@ -623,159 +624,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     }
     
     /**
-     * returns one config value identified by config name and application id
-     * -> value in config.inc.php overwrites value in db if $_fromFile is TRUE
-     * 
-     * @deprecated
-     * @param   string      $_name config name/key
-     * @param   string      $_applicationId application id [optional]
-     * @param   mixed       $_default the default value [optional]
-     * @param   boolean     $_fromFile get from config.inc.php [optional]
-     * @return  Tinebase_Model_Config  the config record
-     * @throws  Tinebase_Exception_NotFound
-     */
-    public function getConfig($_name, $_applicationId = NULL, $_default = NULL, $_fromFile = TRUE)
-    {
-        $applicationId = ($_applicationId !== NULL ) 
-            ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
-            : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-            
-        
-        $result = $this->_loadConfigOld($_name, $applicationId);
-        if (! $result) {
-            $result = new Tinebase_Model_Config(array(
-                'application_id'    => $applicationId,
-                'name'              => $_name,
-                'value'             => $_default,
-            ), TRUE);
-        }
-            
-        // check config.inc.php and get value from there
-        $configFileData = $this->_getConfigFileData();
-        if ($_fromFile && array_key_exists($_name, $configFileData)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Overwriting config setting "' . $_name . '" with value from config.inc.php.');
-            $result->value = $configFileData[$_name];
-        } 
-        
-        return $result;
-    }
-    
-    /**
-    * load a config record from database
-    *
-    * @param  string                   $_name
-    * @param  mixed                    $_application
-    * @return Tinebase_Model_Config
-    * @deprecated
-    */
-    protected function _loadConfigOld($_name, $_application = null)
-    {
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application ? $_application : $this->_appName);
-    
-        $filter = new Tinebase_Model_ConfigFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            array('field' => 'name',           'operator' => 'equals', 'value' => $_name        ),
-        ));
-    
-        $result = $this->_getBackend()->search($filter)->getFirstRecord();
-    
-        return $result;
-    }    
-
-    /**
-     * returns one config value identified by config name and application name as array (it was json encoded in db)
-     * 
-     * @deprecated 
-     * @param   string      $_name config name/key
-     * @param   string      $_applicationName
-     * @param   array       $_default the default value
-     * @return  array       the config array
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function getConfigAsArray($_name, $_applicationName = 'Tinebase', $_default = array())
-    {
-        $config = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(), $_default);
-        
-        if (! is_object($config)) {
-            throw new Tinebase_Exception_NotFound('Config object ' . $_name . ' not found or is not an object!');
-        }
-        
-        $result = (is_array($config->value)) ? $config->value : Zend_Json::decode($config->value);
-        
-        return $result;
-    }
-    
-    /**
-     * set config for application
+     * get application config
      *
-     * @deprecated use set / __set (if $_applicationName !== 'Tinebase' this needs a $_applicationName_Config class)
-     * @param string $_name
-     * @param string $_value
-     * @param string $_applicationName [optional]
-     * @return Tinebase_Model_Config
+     * @param  string  $applicationName Application name
+     * @return string  $configClassName
+     * 
+     * @todo shouldn't this return a config object??
      */
-    public function setConfigForApplication($_name, $_value, $_applicationName = 'Tinebase')
+    public static function getAppConfig($applicationName)
     {
-        $value = (is_array($_value)) ? Zend_Json::encode($_value) : $_value;
-        
-        $configRecord = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(),
-            "name"              => $_name,
-            "value"             => $value,
-        ));
-        
-        return $this->_saveConfigOld($configRecord);
-    }
-    
-    /**
-    * store a config record in database
-    *
-    * @param   Tinebase_Model_Config $_config record to save
-    * @return  Tinebase_Model_Config
-    * @deprecated
-    */
-    protected function _saveConfigOld(Tinebase_Model_Config $_config)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
-    
-        $config = $this->_loadConfigOld($_config->name, $_config->application_id);
-        if ($config) {
-            $config->value = $_config->value;
-            $result = $this->_getBackend()->update($config);
+        $configClassName = $applicationName . '_Config';
+        if (@class_exists($configClassName)) {
+            return $configClassName;
         } else {
-            $result = $this->_getBackend()->create($_config);
-        }
-    
-        return $result;
-    }
-
-    /**
-     * deletes one config setting
-     * 
-     * @deprecated
-     * @param   Tinebase_Model_Config $_config record to delete
-     * @return void
-     */
-    public function deleteConfig(Tinebase_Model_Config $_config)
-    {
-        $this->_getBackend()->delete($_config->getId());
-    }
-    
-    /**
-     * Delete config for application (simplified deleteConfig())
-     *
-     * @deprecated
-     * @param string $_name
-     * @param string $_applicationName [optional]
-     * @return void
-     */
-    public function deleteConfigForApplication($_name, $_applicationName = 'Tinebase')
-    {
-        try {
-            $configRecord = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId());
-            $this->deleteConfig($configRecord);
-        } catch (Tinebase_Exception_NotFound $e) {
-            //no config found => nothing to delete
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Application ' . $applicationName . ' has no config.');
+            return NULL;
         }
     }
     

@@ -690,7 +690,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $user = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $newUser->contact_id);
-        $this->assertEquals(1, count($user), 'added user is not attender of event, but should be');
+        $this->assertEquals(1, count($user), 'added user is not attender of event, but should be. user: ' . print_r($newUser->toArray(), TRUE));
         
         // cleanup user
         Admin_Controller_User::getInstance()->delete($newUser->getId());
@@ -703,7 +703,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $user = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $newUser->contact_id);
-        $this->assertEquals(0, count($user), 'added user is attender of event, but should be');
+        $this->assertEquals(0, count($user), 'added user is attender of event, but should be (after deleting user)');
     }
     
     /**

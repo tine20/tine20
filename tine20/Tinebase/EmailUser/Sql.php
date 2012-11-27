@@ -71,7 +71,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         }
         
         // get email user backend config options (host, dbname, username, password, port)
-        $emailConfig = Tinebase_Config::getInstance()->getConfigAsArray($this->_configKey);
+        $emailConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
         
         // merge _config and email backend config
         $this->_config = array_merge($emailConfig[$this->_subconfigKey], $this->_config);

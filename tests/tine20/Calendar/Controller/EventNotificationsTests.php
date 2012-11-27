@@ -55,7 +55,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         parent::setUp();
         
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
         }

@@ -189,7 +189,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _addAutomaticAlarms(Tinebase_Record_Abstract $_record)
     {
-        $automaticAlarms = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::AUTOMATICALARM, 'Tasks');
+        $automaticAlarms = Tasks_Config::getInstance()->get(Tinebase_Config::AUTOMATICALARM, new Tinebase_Config_Struct())->toArray();
         if (count($automaticAlarms) == 0) {
             return;
         }

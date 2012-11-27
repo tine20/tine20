@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Crm
+ * @package     SimpleFAQ
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
@@ -8,14 +8,14 @@
  */
 
 /**
- * Crm config class
+ * SimpleFAQ config class
  * 
- * @package     Crm
+ * @package     SimpleFAQ
  * @subpackage  Config
  * 
- * @todo add config settings/properties here
+ * @todo add config settings here
  */
-class Crm_Config extends Tinebase_Config_Abstract
+class SimpleFAQ_Config extends Tinebase_Config_Abstract
 {
     /**
      * (non-PHPdoc)
@@ -28,7 +28,7 @@ class Crm_Config extends Tinebase_Config_Abstract
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
-    protected $_appName = 'Crm';
+    protected $_appName = 'SimpleFAQ';
     
     /**
      * holds the instance of the singleton
@@ -41,14 +41,14 @@ class Crm_Config extends Tinebase_Config_Abstract
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */
+     */    
     private function __construct() {}
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */
+     */    
     private function __clone() {}
     
     /**
@@ -56,7 +56,7 @@ class Crm_Config extends Tinebase_Config_Abstract
      *
      * @return Tinebase_Config
      */
-    public static function getInstance()
+    public static function getInstance() 
     {
         if (self::$_instance === NULL) {
             self::$_instance = new self();

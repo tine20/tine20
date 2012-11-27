@@ -110,7 +110,7 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', 14);
         
         // delete config we don't need anymore
-        Tinebase_Config::getInstance()->deleteConfigForApplication(Tinebase_Config::APPDEFAULTS, 'Addressbook');
+        Addressbook_Config::getInstance()->delete(Tinebase_Config::APPDEFAULTS);
         
         $this->setApplicationVersion('Addressbook', '5.3');
     }

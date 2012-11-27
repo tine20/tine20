@@ -51,8 +51,8 @@ class Setup_Auth implements Zend_Auth_Adapter_Interface
      */
     public function authenticate()
     {
-        if (isset(Setup_Core::getConfig()->setupuser)) {
-            $setupConfig = Setup_Core::getConfig()->setupuser;
+        if (isset(Setup_Core::get(Setup_Core::CONFIG)->setupuser)) {
+            $setupConfig = Setup_Core::get(Setup_Core::CONFIG)->setupuser;
             
             $givenPassword = self::isMd5($setupConfig->password) ? md5($this->_password) : $this->_password;
             

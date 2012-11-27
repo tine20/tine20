@@ -189,9 +189,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function login()
     {
         // redirect to REDIRECTURL if set
-        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value;
+        $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL);
 
-        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTALWAYS, NULL, FALSE)->value) {
+        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
             header('Location: ' . $redirectUrl);
             return;
         }
@@ -340,7 +340,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             // redirect back to loginurl if needed
             $defaultUrl = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $_SERVER['HTTP_REFERER'] : '';
-            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, $defaultUrl)->value;
+            $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, $defaultUrl);
             if (! empty($redirectUrl)) {
                 header('Location: ' . $redirectUrl);
             }

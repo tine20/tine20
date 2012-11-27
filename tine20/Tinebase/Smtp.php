@@ -49,10 +49,10 @@ class Tinebase_Smtp
      */
     public static function createDefaultTransport()
     {
-        $config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP, 'Tinebase', array(
+        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array(
             'hostname' => 'localhost', 
             'port' => 25
-        ));
+        )))->toArray();
         
         // set default transport none is set yet
         if (! self::getDefaultTransport() && array_key_exists('hostname', $config)) {

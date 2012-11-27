@@ -209,7 +209,7 @@ class Setup_Controller
      */
     public function checkConfigLogger()
     {
-        $config = Setup_Core::getConfig();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
         if (!isset($config->logger) || !$config->logger->active) {
             return true;
         } else {
@@ -230,7 +230,7 @@ class Setup_Controller
      */
     public function checkConfigCaching()
     {
-        $config = Setup_Core::getConfig();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
         if (!isset($config->caching) || !$config->caching->active) {
             return true;
         } else {
@@ -696,7 +696,7 @@ class Setup_Controller
      */
     public function getConfigData()
     {
-        $configArray = Setup_Core::getConfig()->toArray();
+        $configArray = Setup_Core::get(Setup_Core::CONFIG)->toArray();
         
         #####################################
         # LEGACY/COMPATIBILITY:
@@ -768,7 +768,7 @@ class Setup_Controller
     {
         // merge config data and active config
         if ($_merge) {
-            $activeConfig = Setup_Core::getConfig();
+            $activeConfig = Setup_Core::get(Setup_Core::CONFIG);
             $config = new Zend_Config($activeConfig->toArray(), true);
             $config->merge(new Zend_Config($_data));
         } else {
@@ -976,9 +976,9 @@ class Setup_Controller
         foreach ($keys as $key) {
             if (array_key_exists($key, $_data)) {
                 if (strlen($_data[$key]) === 0) {
-                    Tinebase_Config::getInstance()->deleteConfigForApplication($key);
+                    Tinebase_Config::getInstance()->delete($key);
                 } else {
-                    Tinebase_Config::getInstance()->setConfigForApplication($key, $_data[$key]);
+                    Tinebase_Config::getInstance()->set($key, $_data[$key]);
                 }
             }
         }
@@ -1038,8 +1038,8 @@ class Setup_Controller
               Tinebase_Config::REDIRECTTOREFERRER => '0'
         );
         if (Setup_Core::get(Setup_Core::CHECKDB) && $this->isInstalled('Tinebase')) {
-            $return[Tinebase_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value;
-            $return[Tinebase_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value;
+            $return[Tinebase_Config::REDIRECTURL] = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
+            $return[Tinebase_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTTOREFERRER, '');
         }
         return $return;
     }
@@ -1083,7 +1083,7 @@ class Setup_Controller
         $result = array();
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
-            $config = Tinebase_Config::getInstance()->getConfigAsArray($configKey, 'Tinebase', array());
+            $config = Tinebase_Config::getInstance()->get($configKey, new Tinebase_Config_Struct(array()))->toArray();
             if (! empty($config) && ! isset($config['active'])) {
                 $config['active'] = TRUE;
             }
@@ -1107,7 +1107,7 @@ class Setup_Controller
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
             if (array_key_exists($configName, $_data)) {
-                Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
+                Tinebase_Config::getInstance()->set($configKey, $_data[$configName]);
             }
         }
     }
@@ -1129,7 +1129,7 @@ class Setup_Controller
      */
     public function getAcceptedTerms()
     {
-        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
+        return Tinebase_Config::getInstance()->get(Tinebase_Config::ACCEPTEDTERMSVERSION, new Tinebase_Config_Struct())->toArray();
     }
     
     /**
@@ -1140,7 +1140,7 @@ class Setup_Controller
      */
     public function saveAcceptedTerms($_data)
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCEPTEDTERMSVERSION, $_data);
     }
     
     /**

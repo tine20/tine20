@@ -28,9 +28,10 @@ class Admin_Controller extends Tinebase_Controller_Abstract
     private static $_instance = NULL;
 
     /**
-     * constructor (get current user)
+     * constructor
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Admin';
         $this->_defaultsSettings = array(
             Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK  => NULL,

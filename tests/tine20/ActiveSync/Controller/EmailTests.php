@@ -74,7 +74,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (empty($imapConfig) || !array_key_exists('useSystemAccount', $imapConfig) || $imapConfig['useSystemAccount'] != true) {
             $this->markTestSkipped('IMAP backend not configured');
         }

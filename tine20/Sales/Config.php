@@ -12,6 +12,7 @@
  * 
  * @package     Sales
  * @subpackage  Config
+ * 
  */
 class Sales_Config extends Tinebase_Config_Abstract
 {
@@ -40,6 +41,7 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CONTRACT_CLEARED = 'contractCleared';
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties

@@ -565,12 +565,12 @@ class Tinebase_Setup_Update_Release1 extends Setup_Update_Abstract
     public function update_8()
     {
         $configSettings = array(
-            'groupUUIDAttribute' => 'gidnumber',              
+            'groupUUIDAttribute' => 'gidnumber',
             'userUUIDAttribute'  => 'uidnumber'
         );
         
         foreach ($configSettings as $name => $value) {
-            Tinebase_Config::getInstance()->setConfigForApplication($name, $value);
+            Tinebase_Config::getInstance()->set($name, $value);
         }
         $this->setApplicationVersion('Tinebase', '1.9');
     }

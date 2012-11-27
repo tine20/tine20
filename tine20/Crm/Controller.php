@@ -147,7 +147,10 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
         $result = $cache->load($cacheId);
         
         if (! $result) {
-        
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Fetching Crm Settings ...');
+            
             $translate = Tinebase_Translation::getTranslation('Crm');
             
             $result = new Crm_Model_Config(array(
@@ -176,7 +179,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
                 )
             );
             foreach ($others as $setting => $defaults) {
-                $result->$setting = Tinebase_Config::getInstance()->getConfigAsArray($setting, $this->_applicationName, $defaults);
+                $result->$setting = Crm_Config::getInstance()->get($setting, new Tinebase_Config_Struct($defaults))->toArray();
             }
             
             // save result and tag it with 'settings'
@@ -196,7 +199,8 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      */
     public function saveConfigSettings($_settings)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
         
         foreach ($_settings->toArray() as $field => $value) {
             if ($field == 'id') {
@@ -204,12 +208,13 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
             } else if ($field == 'defaults') {
                 parent::saveConfigSettings($value);
             } else {
-                Tinebase_Config::getInstance()->setConfigForApplication($field, Zend_Json::encode($value), $this->_applicationName);
+                Crm_Config::getInstance()->set($field, $value);
             }
         }
         
         // invalidate cache
-        Tinebase_Core::get('cache')->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('settings'));
+        Tinebase_Core::getCache()->remove('getCrmSettings');
+        Crm_Config::getInstance()->clearCache();
         
         return $this->getConfigSettings();
     }

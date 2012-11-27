@@ -134,7 +134,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
 
         parent::__construct($_options);
         
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray($this->_configKey);
+        $smtpConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
         
         // set domain from smtp config
         $this->_config['domain'] = !empty($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : null;

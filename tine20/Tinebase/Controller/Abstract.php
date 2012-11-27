@@ -119,12 +119,15 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public function getConfigSettings($_resolve = FALSE)
     {
-        $settings = Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Config::APPDEFAULTS, 
-            $this->_applicationName, 
-            $this->_defaultsSettings
-        );
-        
+        $appConfig = Tinebase_Config::getAppConfig($this->_applicationName);
+        if ($appConfig != NULL) {
+            $settings = $appConfig::getInstance()->get(
+                Tinebase_Config::APPDEFAULTS, 
+                new Tinebase_Config_Struct($this->_defaultsSettings)
+            )->toArray();
+        } else { 
+            $settings = $this->_defaultsSettings;
+        }
         return ($_resolve) ? $this->_resolveConfigSettings($settings) : $settings;
     }
     
@@ -149,11 +152,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         // only admins are allowed to do this
         $this->checkRight(Tinebase_Acl_Rights::ADMIN);
         
-        Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Config::APPDEFAULTS, 
-            Zend_Json::encode($_settings), 
-            $this->_applicationName
-        );
+        $appConfig = Tinebase_Config::getAppConfig($this->_applicationName);
+        
+        if ($appConfig !== NULL) {
+            $appConfig::getInstance()->set(Tinebase_Config::APPDEFAULTS, $_settings);
+        }
     }
     
     /**

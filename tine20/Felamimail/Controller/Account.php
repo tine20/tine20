@@ -71,7 +71,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_backend = new Felamimail_Backend_Account();
         
-        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
+        $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         $this->_useSystemAccount = (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount']);
     }
     
@@ -952,9 +952,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
     {
-        $config = ($_configKey == Tinebase_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
+        $config = ($_configKey == Tinebase_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->get($_configKey, new Tinebase_Config_Struct($_defaults))->toArray();
         $prefix = ($_configKey == Tinebase_Config::IMAP) ? '' : strtolower($_configKey) . '_';
-        
         if (! is_array($config)) {
             throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
         }

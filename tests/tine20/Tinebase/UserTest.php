@@ -77,12 +77,12 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User::setBackendType(Tinebase_User::LDAP);
      
-        $rawConfigBefore = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, 'null');
+        $rawConfigBefore = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND);
         $key = 'host';
         $testValue = 'phpunit-test-host2';
         Tinebase_User::setBackendConfiguration($testValue, $key);
         Tinebase_User::saveBackendConfiguration();
-        $rawConfigAfter = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND);
+        $rawConfigAfter = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND);
         $this->assertNotEquals($rawConfigBefore, $rawConfigAfter);
     }
     

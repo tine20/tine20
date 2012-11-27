@@ -247,7 +247,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         $this->_quotasTable = $this->_config['prefix'] . $this->_config['quotaTable'];
         
         // set domain from imap config
-        $emailConfig = Tinebase_Config::getInstance()->getConfigAsArray($this->_configKey);
+        $emailConfig =Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
         $this->_config['domain'] = !empty($emailConfig['domain']) ? $emailConfig['domain'] : null;
         
         // copy over default scheme, home, UID, GID from preconfigured defaults

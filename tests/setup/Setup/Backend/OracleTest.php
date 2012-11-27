@@ -322,11 +322,5 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         $dbProxy->setNamedParamPrefix($_prefix);
         
         return $dbProxy;
-    }    
-}        
-
-
-                
-if (PHPUnit_MAIN_METHOD == 'Setup_Backend_MysqlTest::main') {
-    Setup_Backend_OracleTest::main();
+    }
 }

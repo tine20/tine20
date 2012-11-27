@@ -295,8 +295,8 @@ class Tinebase_User
      */
     public static function saveBackendConfiguration()
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKENDTYPE, self::getConfiguredBackend());
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, self::getBackendConfiguration());
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKENDTYPE, self::getConfiguredBackend());
     }
     
     /**
@@ -310,7 +310,7 @@ class Tinebase_User
         //lazy loading for $_backendConfiguration
         if (!isset(self::$_backendConfiguration)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, array())->value;
+                $rawBackendConfiguration = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND, new Tinebase_Config_Struct())->toArray();
             } else {
                 $rawBackendConfiguration = array();
             }

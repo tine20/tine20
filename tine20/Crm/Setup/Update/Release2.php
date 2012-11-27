@@ -26,7 +26,7 @@ class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
             'leadsource_id' => $config->get(defaultsource, 1),
         );
         
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::APPDEFAULTS, Zend_Json::encode($defaults), 'Crm');
+        Crm_Config::getInstance()->set(Tinebase_Config::APPDEFAULTS, $defaults);
         
         $this->setApplicationVersion('Crm', '2.1');
     }
@@ -65,7 +65,7 @@ class Crm_Setup_Update_Release2 extends Setup_Update_Abstract
             $queryResult = $stmt->fetchAll();
 
             // save to config
-            Tinebase_Config::getInstance()->setConfigForApplication($config['cfgId'], Zend_Json::encode($queryResult), 'Crm');
+            Crm_Config::getInstance()->set($config['cfgId'], Zend_Json::encode($queryResult));
             
             // remove tables and constraints
             try {

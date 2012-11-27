@@ -72,7 +72,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,

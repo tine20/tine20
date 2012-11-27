@@ -311,8 +311,9 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['account1']->contact_id, $list->members[0]);
         
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        $this->assertTrue(! empty($appConfigDefaults), 'app config defaults empty');
         $internal = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
-        $this->assertEquals($internal, $list->container_id);
+        $this->assertEquals($internal, $list->container_id, 'did not get correct internal container');
         
         // sync again -> should not change anything
         Tinebase_Group::syncListsOfUserContact(array($group->getId()), $this->objects['account1']->contact_id);

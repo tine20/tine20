@@ -141,7 +141,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
         
         // add fixed calendar on demand
-        $fixedCalendars = Tinebase_Config::getInstance()->getConfigAsArray('fixedCalendars', 'Calendar');
+        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS, new Tinebase_Config_Struct(array()))->toArray();
         if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
             $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));

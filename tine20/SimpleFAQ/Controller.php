@@ -171,7 +171,7 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
                 )
             );
             foreach ($others as $setting => $defaults) {
-                $result->$setting = Tinebase_Config::getInstance()->getConfigAsArray($setting, $this->_applicationName, $defaults);
+                $result->$setting = SimpleFAQ_Config::getInstance()->get($setting, new Tinebase_Config_Struct($defaults))->toArray();
             }
 
             // save result and tag it with 'settings'
@@ -199,7 +199,7 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
             } else if ($field == 'defaults') {
                 parent::saveConfigSettings($value);
             } else {
-                Tinebase_Config::getInstance()->setConfigForApplication($field, Zend_Json::encode($value), $this->_applicationName);
+                SimpleFAQ_Config::getInstance()->set($field, $value);
             }
         }
 

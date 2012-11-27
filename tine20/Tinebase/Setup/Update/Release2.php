@@ -127,16 +127,16 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
             unset($config['accounts']);
         }
         
-        $defaultUserGroupName = Tinebase_Config::getInstance()->getConfig('Default User Group', null, 'Users');
-        $defaultAdminGroupName = Tinebase_Config::getInstance()->getConfig('Default Admin Group', null, 'Administrators');
+        $defaultUserGroupName = Tinebase_Config::getInstance()->get('Default User Group', 'Users');
+        $defaultAdminGroupName = Tinebase_Config::getInstance()->get('Default Admin Group', 'Administrators');
         Tinebase_User::setBackendConfiguration($defaultUserGroupName->value, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
         Tinebase_User::setBackendConfiguration($defaultAdminGroupName->value, Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY);
         
         //write changes to config table
         Tinebase_User::saveBackendConfiguration();
         
-        Tinebase_Config::getInstance()->deleteConfig($defaultUserGroupName);
-        Tinebase_Config::getInstance()->deleteConfig($defaultAdminGroupName);
+        Tinebase_Config::getInstance()->delete('Default User Group');
+        Tinebase_Config::getInstance()->delete('Default Admin Group');
         
         $this->setApplicationVersion('Tinebase', '2.3');
     }
@@ -144,7 +144,7 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
     /**
      * update to 2.4
      * - move email configuration from config.inc.php to config db table
-     */    
+     */
     public function update_3()
     {
         $config = Setup_Controller::getInstance()->getConfigData();
@@ -156,14 +156,14 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
                 $config['imap']['ssl'] = $config['imap']['secure_connection'];
                 unset($config['imap']['secure_connection']);
             }
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::IMAP, Zend_Json::encode($config['imap']));
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $config['imap']);
             unset($config['imap']);
         }
         
         // get smtp settings -> tinebase config
         if (isset($config['smtp'])) {
             $config['smtp']['active'] = 1;
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::SMTP, Zend_Json::encode($config['smtp']));
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $config['smtp']);
             unset($config['smtp']);
         }
         
@@ -177,13 +177,13 @@ class Tinebase_Setup_Update_Release2 extends Setup_Update_Abstract
     /**
      * update to 2.5
      * - replace serialized data in config with json encoded data
-     */    
+     */
     public function update_4()
     {
-        $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, array())->value;
+        $rawBackendConfiguration = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND);
         if (substr($rawBackendConfiguration,0, 1) != '{') {
             $decodedConfig = unserialize($rawBackendConfiguration);
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKEND, Zend_Json::encode($decodedConfig));
+            Tinebase_Config::getInstance()->set(Tinebase_Config::USERBACKEND, Zend_Json::encode($decodedConfig));
         }
         
         $this->setApplicationVersion('Tinebase', '2.5');
