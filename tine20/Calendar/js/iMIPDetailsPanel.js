@@ -47,18 +47,18 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-
+        
         this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
-        if (! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
+        if (! this.iMIPrecord.get('event') || ! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
             this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
                 responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
             }));
         }
-
+        
         this.initIMIPToolbar();
-
+        
         this.on('afterrender', this.showIMIP, this);
-
+        
         Tine.Calendar.iMIPDetailsPanel.superclass.initComponent.call(this);
     },
     
