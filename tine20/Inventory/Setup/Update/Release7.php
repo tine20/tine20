@@ -46,6 +46,6 @@ class Inventory_Setup_Update_Release7 extends Setup_Update_Abstract
             $release6 = new Inventory_Setup_Update_Release6($this->_backend);
             $release6->update_1();
         }
-        $this->setApplicationVersion('Inventory', '6.2');
+        $this->setApplicationVersion('Inventory', '7.2');
     }
 }
