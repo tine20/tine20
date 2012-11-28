@@ -436,7 +436,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         
         
         #$syncrotonEmail->categories = array('Test');
-        $syncrotonEmail->conversationId    = Tinebase_Record_Abstract::generateUID();
+        $syncrotonEmail->conversationId    = $entry->getId();
         $syncrotonEmail->conversationIndex = "\x00\x01\x02\x03\x04";
         
         return $syncrotonEmail;

@@ -118,6 +118,24 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * validate getEntry
+     */
+    public function testGetEntry()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $message = $this->_createTestMessage();
+        
+        $syncrotonModelEmail = $controller->getEntry(
+            new Syncroton_Model_SyncCollection(array('collectionId' => 'foobar', 'options' => array('bodyPreferences' => array('2' => array('type' => '2'))))), 
+            $message->getId()
+        );
+        
+        $this->assertEquals('9631', $syncrotonModelEmail->body->estimatedDataSize);
+        #$this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->data)));
+    }
+    
+    /**
      * validate fetching email by filereference(hashid-partid)
      */
     public function testGetFileReference()
@@ -132,18 +150,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('text/plain', $syncrotonFileReference->contentType);
         $this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->data)));
-        
-        $imp = new DOMImplementation();
-        
-        // Creates a DOMDocumentType instance
-        $dtd = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        
-        // Creates a DOMDocument instance
-        $syncDoc = $imp->createDocument('uri:ItemOperations', 'ItemOperations', $dtd);
-        $syncDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
-        $syncDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase', 'uri:AirSyncBase');
-        $syncDoc->formatOutput = false;
-        $syncDoc->encoding     = 'utf-8';
     }
     
     /**
