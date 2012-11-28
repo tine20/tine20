@@ -428,8 +428,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 // take a break to save battery lifetime
                 sleep(Syncroton_Registry::getPingTimeout());
                 
-                $now = new DateTime('now', new DateTimeZone('utc'));
-                
+                $now = new DateTime(null, new DateTimeZone('utc'));
+
                 foreach($this->_collections as $collectionData) {
                     // countinue immediately if folder does not exist 
                     if (! ($collectionData->folder instanceof Syncroton_Model_IFolder)) {
@@ -500,6 +500,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         }
                     }
                 }
+                
+                $this->_syncTimeStamp = clone $now;
                 
             } while (time() - $intervalStart < $this->_heartbeatInterval);
         }
@@ -590,7 +592,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
 
                             // entries to be deleted
                             $serverModifications['deleted'] = array_diff($allClientEntries, $allServerEntries);
-
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " last sync timestamp: " . $collectionData->syncState->format('Y-m-d H:i:s'));
+                            if ($this->_logger instanceof Zend_Log) 
+                                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->format('Y-m-d H:i:s'));
                             // fetch entries changed since last sync
                             $serverModifications['changed'] = $dataController->getChangedEntries($collectionData->collectionId, $collectionData->syncState->lastsync, $this->_syncTimeStamp);
                             $serverModifications['changed'] = array_merge($serverModifications['changed'], $clientModifications['forceChange']);
