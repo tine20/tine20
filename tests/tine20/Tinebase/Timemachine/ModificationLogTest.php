@@ -74,7 +74,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now)->addDay(-2),
+            'modification_time'    => $this->_cloner($now)->addDay(-2),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Hamburg',
@@ -85,7 +85,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now)->addDay(-1),
+            'modification_time'    => $this->_cloner($now)->addDay(-1),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Bremen',
@@ -96,7 +96,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now),
+            'modification_time'    => $this->_cloner($now),
             'modification_account' => 7,
             'modified_attribute'   => 'FirstTestAttribute',
             'old_value'            => 'Frankfurt',
@@ -107,7 +107,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now)->addDay(-2),
+            'modification_time'    => $this->_cloner($now)->addDay(-2),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Deutschland',
@@ -118,7 +118,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now)->addDay(-1)->addSecond(1),
+            'modification_time'    => $this->_cloner($now)->addDay(-1)->addSecond(1),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Östereich',
@@ -129,7 +129,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             'record_id'            => $this->_recordIds[0],
             'record_type'          => 'TestType',
             'record_backend'       => 'TestBackend',
-            'modification_time'    => $this->Cloner($now),
+            'modification_time'    => $this->_cloner($now),
             'modification_account' => 7,
             'modified_attribute'   => 'SecondTestAttribute',
             'old_value'            => 'Schweitz',
@@ -161,11 +161,11 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     public function testGetModification()
     {
         foreach ($this->_logEntries as $num => $logEntry) {
-            $RawLogEntry = $logEntry->toArray();
-            $RawPersistantLogEntry = $this->_persistantLogEntries[$num]->toArray();
+            $rawLogEntry = $logEntry->toArray();
+            $rawPersistantLogEntry = $this->_persistantLogEntries[$num]->toArray();
             
-            foreach ($RawLogEntry as $field => $value) {
-                $persistantValue = $RawPersistantLogEntry[$field];
+            foreach ($rawLogEntry as $field => $value) {
+                $persistantValue = $rawPersistantLogEntry[$field];
                 if ($value != $persistantValue) {
                     $this->fail("Failed asserting that contents of saved LogEntry #$num in field $field equals initial datas. \n" . 
                                 "Expected '$value', got '$persistantValue'");
@@ -174,9 +174,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         }
         $this->assertTrue(true);
     }
+    
     /**
      * tests computation of a records differences described by a set of modification logs
-     *
      */
     public function testComputeDiff()
     {
@@ -307,8 +307,29 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      * @param object $_object
      * @return object
      */
-    protected function Cloner($_object)
+    protected function _cloner($_object)
     {
         return clone $_object;
+    }
+    
+    /**
+     * testDateTimeModlog
+     * 
+     * @see 0000996: add changes in relations/linked objects to modlog/history
+     */
+    public function testDateTimeModlog()
+    {
+        $task = Tasks_Controller_Task::getInstance()->create(new Tasks_Model_Task(array(
+            'summary' => 'test task',
+        )));
+        
+        $task->due = Tinebase_DateTime::now();
+        $updatedTask = Tasks_Controller_Task::getInstance()->update($task);
+        
+        $task->seq = 0;
+        $modlog = $this->_modLogClass->getModificationsBySeq($task, 1);
+        
+        $this->assertEquals(1, count($modlog));
+        $this->assertEquals((string) $task->due, (string) $modlog->getFirstRecord()->new_value, 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));
     }
 }

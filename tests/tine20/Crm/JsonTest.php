@@ -48,6 +48,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = new Crm_Frontend_Json();
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
     }
 
     /**
@@ -58,6 +59,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected function tearDown()
     {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -145,7 +147,69 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testAddGetSearchDeleteLead()
     {
-        // create lead with task and contact
+        $savedLead = $this->_saveLead();
+        $getLead = $this->_instance->getLead($savedLead['id']);
+        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
+        
+        // assertions
+        $this->assertEquals($getLead, $savedLead);
+        $this->assertEquals($getLead['notes'][0]['note'], 'phpunit test note');
+        $this->assertTrue($searchLeads['totalcount'] > 0);
+        $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
+        $this->assertEquals($getLead['description'], $searchLeads['results'][0]['description']);
+        $this->assertEquals(200, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
+        $this->assertEquals($searchLeads['results'][0]['turnover']*$getLead['probability']/100, $searchLeads['results'][0]['probableTurnover']);
+        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');
+
+        // get related records and check relations
+        foreach ($searchLeads['results'][0]['relations'] as $relation) {
+            switch ($relation['type']) {
+                case 'PRODUCT':
+                    //print_r($relation);
+                    $this->assertEquals(200, $relation['remark']['price'], 'product price (remark) does not match');
+                    $relatedProduct = $relation['related_record'];
+                    break;
+                case 'TASK':
+                    $relatedTask = $relation['related_record'];
+                    break;
+                case 'PARTNER':
+                    $relatedContact = $relation['related_record'];
+                    break;
+            }
+        }
+        $this->assertTrue(isset($relatedContact), 'contact not found');
+        $this->assertEquals($this->_getContact()->n_fn, $relatedContact['n_fn'], 'contact name does not match');
+        
+        $this->assertTrue(isset($relatedTask), 'task not found');
+        $this->assertEquals($this->_getTask()->summary, $relatedTask['summary'], 'task summary does not match');
+        $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
+        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
+        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
+        
+        $this->assertTrue(isset($relatedProduct), 'product not found');
+        $this->assertEquals($this->_getProduct()->name, $relatedProduct['name'], 'product name does not match');
+        
+        // delete all
+        $this->_instance->deleteLeads($savedLead['id']);
+        Addressbook_Controller_Contact::getInstance()->delete($relatedContact['id']);
+        Sales_Controller_Product::getInstance()->delete($relatedProduct['id']);
+        
+        // check if delete worked
+        $result = $this->_instance->searchLeads($this->_getLeadFilter(), '');
+        $this->assertEquals(0, $result['totalcount']);
+        
+        // check if linked task got removed as well
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Tasks_Controller_Task::getInstance()->get($relatedTask['id']);
+    }
+    
+    /**
+     * save lead with relations
+     * 
+     * @return array
+     */
+    protected function _saveLead()
+    {
         $contact    = $this->_getContact();
         $task       = $this->_getTask();
         $lead       = $this->_getLead();
@@ -166,59 +230,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadData['notes'] = array($note);
         
         $savedLead = $this->_instance->saveLead($leadData);
-        $getLead = $this->_instance->getLead($savedLead['id']);
-        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
-        
-        // assertions
-        $this->assertEquals($getLead, $savedLead);
-        $this->assertEquals($getLead['notes'][0]['note'], $note['note']);
-        $this->assertTrue($searchLeads['totalcount'] > 0);
-        $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
-        $this->assertEquals($lead->description, $searchLeads['results'][0]['description']);
-        $this->assertEquals($price, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
-        $this->assertEquals($searchLeads['results'][0]['turnover']*$lead->probability/100, $searchLeads['results'][0]['probableTurnover']);
-        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');
-
-        // get related records and check relations
-        foreach ($searchLeads['results'][0]['relations'] as $relation) {
-            switch ($relation['type']) {
-                case 'PRODUCT':
-                    //print_r($relation);
-                    $this->assertEquals(200, $relation['remark']['price'], 'product price (remark) does not match');
-                    $relatedProduct = $relation['related_record'];
-                    break;
-                case 'TASK':
-                    $relatedTask = $relation['related_record'];
-                    break;
-                case 'PARTNER':
-                    $relatedContact = $relation['related_record'];
-                    break;
-            }
-        }
-        $this->assertTrue(isset($relatedContact), 'contact not found');
-        $this->assertEquals($contact->n_fn, $relatedContact['n_fn'], 'contact name does not match');
-        
-        $this->assertTrue(isset($relatedTask), 'task not found');
-        $this->assertEquals($task->summary, $relatedTask['summary'], 'task summary does not match');
-        $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
-        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
-        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
-        
-        $this->assertTrue(isset($relatedProduct), 'product not found');
-        $this->assertEquals($product->name, $relatedProduct['name'], 'product name does not match');
-        
-        // delete all
-        $this->_instance->deleteLeads($savedLead['id']);
-        Addressbook_Controller_Contact::getInstance()->delete($relatedContact['id']);
-        Sales_Controller_Product::getInstance()->delete($relatedProduct['id']);
-        
-        // check if delete worked
-        $result = $this->_instance->searchLeads($this->_getLeadFilter(), '');
-        $this->assertEquals(0, $result['totalcount']);
-        
-        // check if linked task got removed as well
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $task = Tasks_Controller_Task::getInstance()->get($relatedTask['id']);
+        return $savedLead;
     }
     
     /**
@@ -434,6 +446,13 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected function _getLead()
     {
+        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+            'model'          => 'Crm_Model_Lead',
+            'name'           => 'crmcf',
+        ));
+        Tinebase_CustomField::getInstance()->addCustomField($cfc);
+        
         return new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
@@ -446,6 +465,12 @@ class Crm_JsonTest extends Crm_AbstractTest
             'turnover'      => 0,
             'probability'   => 70,
             'end_scheduled' => NULL,
+            'tags'          => array(
+                array('name' => 'lead tag', 'type' => Tinebase_Model_Tag::TYPE_SHARED)
+            ),
+            'customfields'  => array(
+                'crmcf' => '1234'
+            ),
         ));
     }
     
@@ -458,7 +483,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         return new Sales_Model_Product(array(
             'name'  => 'PHPUnit test product',
-            'price' => 10000,        
+            'price' => 10000,
         ));
     }
     
@@ -473,4 +498,50 @@ class Crm_JsonTest extends Crm_AbstractTest
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
     }
-}        
+
+    /**
+     * testRelatedModlog
+     * 
+     * @see 0000996: add changes in relations/linked objects to modlog/history
+     */
+    public function testRelatedModlog()
+    {
+        // create lead with tag, customfield and related contacts
+        $savedLead = $this->_saveLead();
+        // change relations, customfields + tags
+        $savedLead['tags'][] = array('name' => 'another tag', 'type' => Tinebase_Model_Tag::TYPE_PERSONAL);
+        $savedLead['relations'][0]['type'] = 'CUSTOMER';
+        unset($savedLead['relations'][1]);
+        $savedLead['customfields']['crmcf'] = '5678';
+        $updatedLead = $this->_instance->saveLead($savedLead);
+        
+        // check modlog + history
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Crm', $updatedLead['id']);
+        
+        //print_r($updatedLead);
+        $this->assertEquals(3, count($modifications), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
+        foreach ($modifications as $modification) {
+            switch ($modification->modified_attribute) {
+                case 'customfields':
+                    $this->assertEquals('{"crmcf":"5678"}', $modification->new_value);
+                    break;
+                case 'relations':
+                    $diff = new Tinebase_Record_RecordSetDiff(Zend_Json::decode($modification->new_value));
+                    $this->assertEquals(0, count($diff->added));
+                    $this->assertEquals(1, count($diff->removed));
+                    $this->assertEquals(1, count($diff->modified), 'relations modified mismatch: ' . print_r($diff->toArray(), TRUE));
+                    $this->assertTrue(isset($diff->modified[0]['diff']['type']));
+                    $this->assertEquals('CUSTOMER', $diff->modified[0]['diff']['type'], 'type diff is not correct: ' . print_r($diff->toArray(), TRUE));
+                    break;
+                case 'tags':
+                    $diff = new Tinebase_Record_RecordSetDiff(Zend_Json::decode($modification->new_value));
+                    $this->assertEquals(1, count($diff->added));
+                    $this->assertEquals(0, count($diff->removed));
+                    $this->assertEquals(0, count($diff->modified), 'tags modified mismatch: ' . print_r($diff->toArray(), TRUE));
+                    break;
+                default:
+                    $this->fail('Invalid modification: ' . print_r($modification->toArray(), TRUE));
+            }
+        }
+    }
+}

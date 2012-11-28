@@ -118,19 +118,22 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $record2 = clone $record1;
         $record2->string = 'anders';
         $record2->test_1 = 26;
-        $diff = $record1->diff($record2);
-        $this->assertEquals(2, count($diff));
+        $diff = $record1->diff($record2)->diff;
+        $this->assertEquals(2, count($diff), 'expected difference in string & test_1: ' . print_r($diff, TRUE));
         $this->assertEquals('anders', $diff['string']);
         $this->assertEquals(26, $diff['test_1']);
 
         $record2 = clone $record1;
         $record2->date_single = clone $record1->date_single;
         $record2->date_single = $record2->date_single->addDay(1);
-        $diff = $record1->diff($record2);
+        $diff = $record1->diff($record2)->diff;
         $this->assertEquals(1, count($diff));
         $this->assertTrue(array_key_exists('date_single', $diff));
     }
 
+    /**
+     * test clone
+     */
     public function testClone()
     {
         $record = new Tinebase_Record_DummyRecord(array(
@@ -146,7 +149,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * test if equal
-     *
      */
     public function testIsEqual()
     {
@@ -168,7 +170,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * test record translation
-     *
      */
     public function testTranslate()
     {
@@ -188,7 +189,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test standard record
-     *
      */
     public function testRecord()
     {
@@ -198,7 +198,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test invalid record bypassing filters
-     *
      */
     public function testInvalidRecord()
     {
@@ -208,7 +207,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test invalid record provoking exception
-     *
      */
     public function testRecordException()
     {
@@ -218,7 +216,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test date conversion
-     *
      */
     public function testDateConversion()
     {
@@ -228,7 +225,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test date to string conversion
-     *
      */
     public function testDateStringConversion()
     {
@@ -238,7 +234,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test string trim
-     *
      */
     public function testStringTrim()
     {
@@ -260,7 +255,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test set ID
-     *
      */
     public function testSetId()
     {
@@ -272,7 +266,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test get ID
-     *
      */
     public function testGetId()
     {
@@ -283,7 +276,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test getApplication
-     *
      */
     public function testGetApplication()
     {
@@ -293,7 +285,6 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     
     /**
      * Test has
-     *
      */
     public function testHas()
     {

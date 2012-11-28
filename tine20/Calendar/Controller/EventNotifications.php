@@ -67,7 +67,7 @@
     protected function _getUpdates($_event, $_oldEvent)
     {
         // check event details
-        $diff = $_event->diff($_oldEvent);
+        $diff = $_event->diff($_oldEvent)->diff;
         
         $orderedUpdateFieldOfInterest = array(
             'dtstart', 'dtend', 'summary', 'location', 'description',

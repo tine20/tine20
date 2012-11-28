@@ -315,7 +315,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             'last_modified_time',
             'last_modified_by',
         );
-        $diff = $_record->diff($_oldRecord);
+        $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
             if (! in_array($key, $allowedFields)) {
                 // setting old value
@@ -335,7 +335,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
         
-        $diff = $_record->diff($_oldRecord);
+        $diff = $_record->diff($_oldRecord)->diff;
         
         // delete message body cache because display format has changed
         if (array_key_exists('display_format', $diff)) {

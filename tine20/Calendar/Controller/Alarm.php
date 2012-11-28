@@ -18,7 +18,7 @@
 class Calendar_Controller_Alarm
 {
     /**
-     * enforce acl restrictions to alram options
+     * enforce acl restrictions to alarm options
      * 
      * @param Calendar_Model_Event $_event
      * @param Calendar_Model_Event $_currentEvent
@@ -49,17 +49,8 @@ class Calendar_Controller_Alarm
         $alarms        = $_event->alarms instanceof Tinebase_Record_RecordSet ? $_event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         $currentAlarms = $_currentEvent->alarms instanceof Tinebase_Record_RecordSet ? $_currentEvent->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
-        $migration = $currentAlarms->getMigration($alarms->getArrayOfIds());
-        $migration['toCreateIds'] = $alarms->getIdLessIndexes();
-        
-        array_filter($migration['toUpdateIds'], function($alarmId) use($alarms, $currentAlarms) {
-            return (bool) $currentAlarms->getById($alarmId)->diff($alarms->getById($alarmId));
-        });
-        array_filter($migration, function($toX) {
-            return ! empty($toX);
-        });
-        
-        return ! empty($migration);
+        $diff = $currentAlarms->diff($alarms);
+        return ! $diff->isEmpty();
     }
     
     /**

@@ -450,7 +450,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
         
-        $someRecurInstance['last_modified_time'] = $recurResult['creation_time'];
+        $someRecurInstance['seq'] = 2;
         $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
         $from = $recurSet[0]['dtstart'];
@@ -477,7 +477,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $fishings = array_keys($summaryMap, 'go fishing');
         $this->assertEquals(5, count($fishings));
-        foreach($fishings as $dtstart) {
+        foreach ($fishings as $dtstart) {
             $this->assertEquals('10:00:00', substr($dtstart, -8));
         }
     }

@@ -72,7 +72,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testAddSelfCustomField()
     {
-        $cf = $this->_getCustomField(array(
+        $cf = self::getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
             'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
@@ -100,7 +100,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = NULL;
         
-        $cf = $this->_getCustomField(array(
+        $cf = self::getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
             'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
@@ -139,7 +139,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     public function testCustomFields()
     {
         // create
-        $customField = $this->_getCustomField();
+        $customField = self::getCustomField();
         $createdCustomField = $this->_instance->addCustomField($customField);
         $this->assertEquals($customField->name, $createdCustomField->name);
         $this->assertNotNull($createdCustomField->getId());
@@ -181,7 +181,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testCustomFieldAcl()
     {
-        $createdCustomField = $this->_instance->addCustomField($this->_getCustomField());
+        $createdCustomField = $this->_instance->addCustomField(self::getCustomField());
         $this->_instance->setGrants($createdCustomField);
         
         $application = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
@@ -198,7 +198,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      * @param array $config 
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _getCustomField($config = array())
+    public static function getCustomField($config = array())
     {
         return new Tinebase_Model_CustomField_Config(array_replace_recursive(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
@@ -224,7 +224,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     public function testSearchByDate()
     {
         $date = new Tinebase_DateTime();
-        $cf = $this->_getCustomField(array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(), 'model' => 'Addressbook_Model_Contact', 'definition' => array('type' => 'date')));
+        $cf = self::getCustomField(array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(), 'model' => 'Addressbook_Model_Contact', 'definition' => array('type' => 'date')));
         $this->_instance->addCustomField($cf);
         
         $contact = new Addressbook_Model_Contact(array('n_given' => 'Rita', 'n_family' => 'Blütenrein'));
@@ -256,7 +256,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchByBool()
     {
-        $cf = $this->_getCustomField(array(
+        $cf = self::getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
             'definition' => array('type' => 'bool')
@@ -310,7 +310,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchByRecord()
     {
-        $cf = $this->_getCustomField(array(
+        $cf = self::getCustomField(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model' => 'Addressbook_Model_Contact',
             'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Sales.Model.Contract")))
