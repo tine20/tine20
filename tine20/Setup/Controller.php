@@ -1125,11 +1125,11 @@ class Setup_Controller
     /**
      * get accepted terms config
      *
-     * @return array
+     * @return integer
      */
     public function getAcceptedTerms()
     {
-        return Tinebase_Config::getInstance()->get(Tinebase_Config::ACCEPTEDTERMSVERSION, new Tinebase_Config_Struct())->toArray();
+        return Tinebase_Config::getInstance()->get(Tinebase_Config::ACCEPTEDTERMSVERSION, 0);
     }
     
     /**
