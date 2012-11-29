@@ -277,6 +277,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $this->_updateFolderQuota($folder, $imap);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Folder status of ' . $folder->globalname . ' after updateCache(): ' . $folder->cache_status);
+        
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
@@ -435,7 +438,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
     }
     
     /**
