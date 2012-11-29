@@ -33,16 +33,22 @@ Tine.widgets.ContentTypeTreePanel = function(config) {
 Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     rootVisible : false,
     border : false,
-    collapsible : true,
 
     root: null,
     
-    titleCollapse: true,
-    title: '',
-    baseCls: 'ux-arrowcollapse',
+    title: 'Modules',
 
-    recordClass: null,
+    collapsible: true,
+    baseCls: 'ux-arrowcollapse',
+    animCollapse: true,
+    titleCollapse:true,
+    draggable : true,
+    autoScroll: false,
     
+    collapsed: false,
+    renderHidden: true,
+    
+    recordClass: null,
     /**
      * @cfg {Tine.Tinebase.Application} app
      */
@@ -71,7 +77,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             allowDrop : false,
             icon : false
         });
-    
+        var groupNodes = {};
         this.setRootNode(treeRoot);
         var treeRoot = this.getRootNode();
         
@@ -80,21 +86,37 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         Ext.each(this.contentTypes, function(ct) {
             var modelName = ct.meta ? ct.meta.modelName : ct.model; 
             var recordClass = Tine[this.app.appName].Model[modelName];
+            var group = recordClass.getMeta('group');
+            
+            if(group) {
+                if(! groupNodes[group]) {
+                    groupNodes[group] = new Ext.tree.TreeNode({
+                        id : 'modulenode-' + recordClass.getMeta('modelName'),
+                        iconCls: this.app.appName + modelName,
+                        text: this.app.i18n._hidden(group),
+                        leaf : false,
+                        expanded: false
+                    });
+                    treeRoot.appendChild(groupNodes[group]);
+                }
+                var parentNode = groupNodes[group];
+            } else {
+                var parentNode = treeRoot;
+            }
+            
             // check requiredRight if any
             if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + modelName,
                 text: recordClass.getRecordsName(),
-                leaf : true,
-                containerType: Tine.Tinebase.container.TYPE_SHARED,
-                container: Ext.apply(Tine[this.app.name].registry.get('defaultContainer'), {name: this.app.i18n._hidden(recordClass.getMeta('containerName'))})                 
+                leaf : true
             });
             
             child.on('click', function() {
-                        this.app.getMainScreen().activeContentType = modelName;
-                        this.app.getMainScreen().show();
-                    }, this);
+                this.app.getMainScreen().activeContentType = modelName;
+                this.app.getMainScreen().show();
+            }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
                     
@@ -115,7 +137,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }, this);
              }       
                     
-            treeRoot.appendChild(child);
+            parentNode.appendChild(child);
         }, this);
     },
     
@@ -124,18 +146,10 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
      */
     afterRender: function() {
         Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
-        
-        var activeNode = this.root.findChildBy(function(node) {
-            if(node.id == 'treenode-' + this.contentType) return true;
-            return false;
-        }, this);
-        
-        if(activeNode) activeNode.select();
-        
-        this.on('click', function(event) {
-            if(activeNode) activeNode.select();
-        }, this);
-        
+        (function() {
+            this.getEl().setStyle('height', null);
+            this.getEl().select('div.ux-arrowcollapse-body').setStyle('height', null);
+        }).defer(100, this);
     }
  
 });

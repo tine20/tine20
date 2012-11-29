@@ -30,13 +30,6 @@ Tine.widgets.mainscreen.WestPanel = function(config) {
 Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     
     /**
-     * @cfg {String} moduleTreeClass
-     * name of module tree class in namespace of this app (defaults to ContentTypeTreePanel)
-     * the class name will be expanded to Tine[this.appName][this.ContentTypeTreePanelClassName]
-     */
-    moduleTreePanelClassName: 'ContentTypeTreePanel',
-    
-    /**
      * @cfg {Array} contentTypes
      * Array of Objects
      * Object Properties: "model", "requiredRight"
@@ -90,7 +83,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     cls : 'x-portal',
     defaultType : 'portalcolumn',
     border: false,
-
     stateful: true,
     stateEvents: ['collapse', 'expand', 'drop'],
 
@@ -138,7 +130,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         }, this);
         
         // enable vertical scrolling
-        this.body.applyStyles('overflow-y: auto');
+//        this.body.applyStyles('overflow-y: auto');
     },
     
     /**
@@ -201,30 +193,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     },
     
     /**
-     * returns module panel
-     * 
-     * @return {Tine.Tinebase.widgets.ContentTypeTreePanel}
-     */
-    getContentTypeTreePanel: function() {
-        if (this.hasContentTypeTreePanel && !this.contentTypeTreePanel) {
-            this.contentTypeTreePanel = new Tine.widgets.ContentTypeTreePanel({
-                app: this.app, 
-                contentTypes: this.contentTypes,
-                contentType: this.contentType
-                });
-
-            this.contentTypeTreePanel.on('click', function (node, event) {
-                if(node != this.lastClickedNode) {
-                    this.lastClickedNode = node;
-                    this.fireEvent('selectionchange');
-                }
-            });
-            
-        }
-        return this.contentTypeTreePanel;
-    },    
-    
-    /**
      * returns containerTree panel
      * 
      * @return {Tine.Tinebase.widgets.ContainerTreePanel}
@@ -271,8 +239,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     
                     app: this.app,
                     contentType: ct,
-
-                    treePanel: (this.hasContainerTreePanel) ? this.getContainerTreePanel() : this.getContentTypeTreePanel(),
+                    autoScroll: false,
+                    style: {
+                        width: '100%',
+                        overflow: 'hidden'
+                    },
+                    
+                    treePanel: (this.hasContainerTreePanel) ? this.getContainerTreePanel() : null,
                     listeners: {
                         scope: this,
                         click: function (node, event) {
@@ -354,45 +327,17 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 items.unshift(Ext.apply(this.getFavoritesPanel(), {
                     title: _('Favorites')
                 }, this.defaults));
-                
-            if (this.hasContentTypeTreePanel) {
-                
-                this.defaults = {
-                    collapsible: true,
-                    baseCls: 'ux-arrowcollapse',
-                    animCollapse: true,
-                    titleCollapse:true,
-                    draggable : true,
-                    autoScroll: false
-                };
-                
-                items.unshift(Ext.apply(this.getContentTypeTreePanel(), {
-                    title: _('Modules'),
-                    collapsed: false
-                }));
-                
-            }    
-                
-            // save as favorite btn
-            items.unshift(new Ext.Toolbar({
-                buttonAlign : 'center',
-                items: [{
-                    xtype: 'button',
-                    text: _('Save current view as favorite'),
-                    iconCls: 'action_saveFilter',
-                    handler: this.getFavoritesPanel().saveFilter.createDelegate(this.getFavoritesPanel())
-                }]
-            }));
             }
             
             items = items.concat(this.getAdditionalItems());
 
-            // save origianl/programatical position
+            // save original/programatical position
             // NOTE: this has to be done before applyState!
-            Ext.each(items, function(item, idx) {
-                item.startPosition = idx;
-            }, this);
-        
+            if (items.length) {
+                Ext.each(items, function(item, idx) {
+                    item.startPosition = idx;
+                }, this);
+            }
             this.portalColumn = new Ext.ux.PortalColumn({
                 columnWidth: 1,
                 items: items

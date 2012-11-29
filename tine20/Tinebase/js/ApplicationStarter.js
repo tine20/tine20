@@ -400,7 +400,7 @@ Tine.Tinebase.ApplicationStarter = {
                     }
                     
                     var editDialogName = model + 'EditDialog';
-                    // create editDialog openWindow function only when edit dialog exists
+                    // create editDialog openWindow function only if edit dialog exists
                     if(Tine[appName].hasOwnProperty(editDialogName)) {
                         if(config.meta.containerProperty) {
                             Tine[appName][editDialogName].prototype.showContainerSelector = true;
