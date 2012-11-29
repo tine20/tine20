@@ -24,18 +24,40 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
      */
     protected $_request = NULL;
     
+    /**
+     * request body
+     * 
+     * @var resource
+     */
     protected $_body;
     
     /**
      * handler for ActiveSync requests
      * 
+     * @param Zend_Controller_Request_Http $request
+     * @param resource $body used mostly for unittesting
      * @return boolean
+     * 
+     * @todo 0007504: research input stream problems / remove the hotfix afterwards
      */
     public function handle(Zend_Controller_Request_Http $request = null, $body = null)
     {
         $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
-        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
-
+        
+        if ($body === null) {
+            // FIXME: this is a hotfix for 0007454: no email reply or forward (iOS/android 4.1.1)
+            // the wbxml decoder seems to run into problems when we just pass the input stream
+            // when the stream is copied first, the problems disappear
+            //$this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+            $tempStream = fopen("php://temp", 'r+');
+            stream_copy_to_stream(fopen('php://input', 'r'), $tempStream);
+            rewind($tempStream);
+            // file_put_contents(tempnam('/var/tmp', 'wbxml'), $tempStream); // for debugging
+            $this->_body = $tempStream;
+        } else {
+            $this->_body = $body;
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
         

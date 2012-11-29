@@ -1309,8 +1309,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $updatedColumns = array();
         
         //$column is an array where 0 is table, 1 is field and 2 is alias
-        foreach($columns as $key => $column) {
-            
+        foreach ($columns as $key => $column) {
             if ($column[1] instanceof Zend_Db_Expr) {
                 if (preg_match('/^\(.*\)/', $column[1])) {
                     $updatedColumns[] = array($column[0], new Zend_Db_Expr("MIN(" . $column[1] . ")"), $column[2]);
@@ -1330,15 +1329,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             // resolve * to single columns
             if ($column[1] == '*') {
 
-                $tableFields = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $column[0], $this->_db);
-                foreach($tableFields as $columnName => $schema) {
+                $tableFields = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $column[0], $select->getAdapter());
+                foreach ($tableFields as $columnName => $schema) {
                     
                     // adds columns into group by clause (table.field)
                     // checks if field has a function (that must be an aggregation)
                     $fieldName = "{$column[0]}.$columnName";
                     
                     if (in_array($fieldName, $group)) {
-                        #$updatedColumns[] = array($column[0], $columnName, null);
                         $updatedColumns[] = array($column[0], $fieldName, $columnName);
                     } else {
                         // any selected field which is not in the group by clause must have an aggregate function
