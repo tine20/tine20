@@ -292,11 +292,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.editBuffer = [];
         this.deleteQueue = [];
         
-        // init generic filter toolbar
-        this.initGenericFilterToolbar();
-        
-        // init generic columnModel
-        this.initGenericColumnModel();
+        // init generic stuff
+        this.initGeneric();
         
         // init store
         this.initStore();
@@ -327,61 +324,82 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
+     * initializes generic stuff
+     */
+    initGeneric: function() {
+        
+        if (this.modelConfig) {
+            
+            Tine.log.debug('init generic gridpanel with config:');
+            Tine.log.debug(this.modelConfig);
+            
+            var meta = this.modelConfig.meta;
+            
+            if (meta.hasOwnProperty('multiEdit') && (meta.multiEdit === true)) {
+                this.multipleEdit = true;
+                this.multipleEditRequiredRight = (meta.hasOwnProperty('multiEditRight')) ? meta.multiEditRight : null;
+            }
+            
+            // init generic filter toolbar
+            this.initGenericFilterToolbar();
+        
+            // init generic columnModel
+            this.initGenericColumnModel();
+        }
+    },
+    
+    /**
      * initialises generic filter toolbar
      * @private
      */
     initGenericFilterToolbar: function() {
-        if(this.modelConfig) {
-            var plugins = [];
-            if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
-                this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-                plugins.push(this.quickSearchFilterToolbarPlugin);
-            }
-            
-            this.filterToolbar = new Tine.widgets.grid.FilterPanel({
-                app: this.app,
-                recordClass: this.recordClass,
-                allowSaving: true,
-                filterModels: this.recordClass.getFilterModel(),
-                defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
-                plugins: plugins,
-                filters: []
-            });
-            this.plugins = this.plugins || [];
-            this.plugins.push(this.filterToolbar);
+        var plugins = [];
+        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
+            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+            plugins.push(this.quickSearchFilterToolbarPlugin);
         }
+        
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+            app: this.app,
+            recordClass: this.recordClass,
+            allowSaving: true,
+            filterModels: this.recordClass.getFilterModel(),
+            defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
+            plugins: plugins,
+            filters: []
+        });
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
     },
 
     /**
      * initializes the generic column model on auto bootstrap
      */
     initGenericColumnModel: function() {
-        if(this.modelConfig) {
-            var columns = [];
-            Ext.each(this.modelConfig.keys, function(key) {
-                // When no label exists, don't use in grid
-                if(this.modelConfig.fields[key].label) {
-                    var config = {
-                        id: key,
-                        dataIndex: key,
-                        header: this.app.i18n._(this.modelConfig.fields[key].label),
-                        hidden: this.modelConfig.fields[key].hidden 
-                    };
-                    var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
-                    if(renderer) {
-                        config.renderer = renderer;
-                    }
-                    columns.push(config);
+        var columns = [];
+        Ext.each(this.modelConfig.keys, function(key) {
+            // When no label exists, don't use in grid
+            if (this.modelConfig.fields[key].label) {
+                var config = {
+                    id: key,
+                    dataIndex: key,
+                    header: this.app.i18n._(this.modelConfig.fields[key].label),
+                    hidden: this.modelConfig.fields[key].hidden 
+                };
+                var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
+                if (renderer) {
+                    config.renderer = renderer;
                 }
-            }, this);
-            this.gridConfig.cm = new Ext.grid.ColumnModel({ 
-                defaults: {
-                    sortable: true,
-                    resizable: true
-                },
-                columns: columns
-            });
-        }
+                columns.push(config);
+            }
+        }, this);
+        this.gridConfig.cm = new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: columns
+        });
     },
     
     /**
@@ -447,6 +465,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initActions: function() {
 
+        var services = Tine.Tinebase.registry.get('serviceMap').services;
+        
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
             requiredMultipleGrant: 'editGrant',
@@ -495,7 +515,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             allowMultiple: true
         });
 
-        this.initDeleteAction();
+        this.initDeleteAction(services);
 
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
             hidden:         ! this.recordClass.getField('tags'),
@@ -521,7 +541,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 handler: this.onResolveDuplicates,
                 disabled: false,
                 actionUpdater: function(action, grants, records) {
-                    if(records && (records.length != 2)) action.setDisabled(true);
+                    if (records && (records.length != 2)) action.setDisabled(true);
                     else action.setDisabled(false);
                 }
         });
@@ -540,8 +560,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init actionToolbar (needed for correct fitertoolbar init atm -> fixme)
         this.getActionToolbar();
     },
-
-    initDeleteAction: function() {
+    
+    /**
+     * initializes the delete action
+     * @param {Object} services the rpc service map from the registry
+     */
+    initDeleteAction: function(services) {
         // note: unprecise plural form here, but this is hard to change
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
@@ -555,6 +579,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             iconCls: 'action_delete',
             scope: this
         });
+        
+        if (services) {
+            // disable delete action if no delete method was found in serviceMap
+            var serviceKey = this.app.name + '.delete' + this.recordClass.getMeta('modelName') + 's';
+            if (! services.hasOwnProperty(serviceKey)) {
+                this.action_deleteRecord.setDisabled(1);
+                this.action_deleteRecord.initialConfig.actionUpdater = function(action) {
+                    action.setDisabled(1);
+                }
+            }
+        }
     },
 
     /**
@@ -1130,7 +1165,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.action_editInNewWindow) items.push(this.action_editInNewWindow);
             if (this.action_deleteRecord) items.push(this.action_deleteRecord);
 
-            if(this.duplicateResolvable) {
+            if (this.duplicateResolvable) {
                 items.push(this.action_resolveDuplicates);
             }
             
@@ -1376,7 +1411,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         */
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
-        if(e.button === 0 && !e.shiftKey && !e.ctrlKey) {
+        if (e.button === 0 && !e.shiftKey && !e.ctrlKey) {
             var sm = grid.getSelectionModel();
 
             if (sm.getCount() == 1 && sm.isSelected(row)) {
@@ -1392,7 +1427,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
         var selModel = grid.getSelectionModel();
-        if(!selModel.isSelected(row)) {
+        if (!selModel.isSelected(row)) {
             // disable preview update if config option is set to false
             this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
             selModel.selectRow(row);
@@ -1424,7 +1459,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
         var selModel = grid.getSelectionModel();
-        if(!selModel.isSelected(row)) {
+        if (!selModel.isSelected(row)) {
             // disable preview update if config option is set to false
             this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
             selModel.selectRow(row);
@@ -1443,7 +1478,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Boolean}
      */
     onEditInNewWindow: function(button, record, plugins) {
-        if(!record) {
+        if (!record) {
             if (button.actionType == 'edit' || button.actionType == 'copy') {
                 if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
                     // if edit action is disabled or not available, we also don't open a new window
@@ -1465,7 +1500,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
         
         // add "multiple_edit_dialog" plugin to dialog, if required
-        if(((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
+        if (((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
             Ext.each(this.selectionModel.getSelections(), function(record) {
                 selectedRecords.push(record.data);
             }, this );
@@ -1547,7 +1582,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onResolveDuplicates: function() {
         // TODO: allow more than 2 records      
-        if(this.grid.getSelectionModel().getSelections().length != 2) return;
+        if (this.grid.getSelectionModel().getSelections().length != 2) return;
         
         var selections = [];
         Ext.each(this.grid.getSelectionModel().getSelections(), function(sel) {
@@ -1613,7 +1648,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 String.format(Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record ({0})?',
                     'Do you really want to delete the selected records ({0})?', records.length), recordNames);
             Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
-                if(btn == 'yes') {
+                if (btn == 'yes') {
                     this.deleteRecords(sm, records);
                 }
             }, this);
