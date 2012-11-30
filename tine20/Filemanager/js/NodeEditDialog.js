@@ -31,7 +31,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Filemanager',
     recordClass: Tine.Filemanager.Model.Node,
     recordProxy: Tine.Filemanager.fileRecordBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    tbarItems: null,
     evalGrants: true,
     showContainerSelector: false,
     
@@ -48,7 +48,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this
         });
         
-        this.tbarItems.push(this.downloadAction);
+        this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}, this.downloadAction];
+        
         Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -220,5 +221,6 @@ Tine.Filemanager.NodeEditDialog.openWindow = function (config) {
         contentPanelConstructor: 'Tine.Filemanager.NodeEditDialog',
         contentPanelConstructorConfig: config
     });
+    
     return window;
 };
