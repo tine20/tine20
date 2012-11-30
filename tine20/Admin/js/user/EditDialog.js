@@ -601,7 +601,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
-                    var domain = value.email.split('@')[1];
+                    var split = value.email.split('@');
+                    if (split.length != 2 || split[1].split('.').length < 2) {
+                        return false;
+                    }
+                    var domain = split[1];
                     if (domains.indexOf(domain) > -1) {
                         Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
                     } else {
