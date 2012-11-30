@@ -54,43 +54,45 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         // we need that because the voip db tables can have a different prefix
         Tinebase_Core::set('voipdbTablePrefix', SQL_TABLE_PREFIX);
         
         $this->_backend = new Voipmanager_Backend_Snom_Phone();
         
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
-            'id' => 20001,
-            'name' => 'phpunit test location',
-            'registrar' => 'registrar'        
+            'id'        => Tinebase_Record_Abstract::generateUID(),
+            'name'      => 'phpunit test location',
+            'registrar' => 'registrar'
         ));
 
         $this->_objects['software'] = new Voipmanager_Model_Snom_Software(array(
-            'id' => 20003
+            'id' => Tinebase_Record_Abstract::generateUID()
         ));
         
         $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
-            'id' => 20004
+            'id' => Tinebase_Record_Abstract::generateUID()
         ));
         
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
-            'id' => 20002,
-            'name' => 'phpunit test location',
+            'id'          => Tinebase_Record_Abstract::generateUID(),
+            'name'        => 'phpunit test location',
             'software_id' => $this->_objects['software']->getId(),
-            'setting_id' => $this->_objects['setting']->getId()
+            'setting_id'  => $this->_objects['setting']->getId()
         ));
         
         $this->_objects['phone'] = new Voipmanager_Model_Snom_Phone(array(
-            'id' => 1001,
-            'macaddress' => "1234567890cd",
-            'location_id' => $this->_objects['location']->getId(),
-            'template_id' => $this->_objects['template']->getId(),
-            'current_model' => 'snom320',
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'macaddress'     => "1234567890cd",
+            'location_id'    => $this->_objects['location']->getId(),
+            'template_id'    => $this->_objects['template']->getId(),
+            'current_model'  => 'snom320',
             'redirect_event' => 'none'
         ));
         
         $this->_objects['phoneOwner'] = array(
-            'account_id' => Zend_Registry::get('currentAccount')->getId(),
+            'account_id'   => Zend_Registry::get('currentAccount')->getId(),
             'account_type' => 'user'
         );
         
@@ -108,6 +110,7 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -143,11 +146,5 @@ class Voipmanager_Backend_Snom_PhoneTest extends PHPUnit_Framework_TestCase
         $rights = $this->_backend->getPhoneRights($this->_objects['phone']->getId());
         
         $this->assertEquals(0, count($rights));
-        
-        // remove phone, location, template
-        $this->_backend->delete($this->_objects['phone']->getId());
-        $snomLocationBackend->delete($this->_objects['location']->getId());
-        $snomTemplateBackend->delete($this->_objects['template']->getId());
-        $snomSoftwareBackend->delete($this->_objects['software']->getId());
     }
 }
