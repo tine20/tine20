@@ -369,7 +369,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         // remove alarm part from vcalendar
-        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM\n/s', null, $vcalendar);
+        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
         
         $event = $converter->toTine20Model($vcalendar, $event);
         

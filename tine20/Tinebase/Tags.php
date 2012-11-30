@@ -620,7 +620,7 @@ class Tinebase_Tags
                 'application_id' => $appId,
                 'record_id'      => $recordId,
             // backend property not supported by record yet
-                'record_backend_id' => ''
+                'record_backend_id' => ' '
                 )
             );
         }

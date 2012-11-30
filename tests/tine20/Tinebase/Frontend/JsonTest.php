@@ -91,7 +91,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     {
         if ($this->_clearPrefs) {
             $query = Tinebase_Core::getDb()->quoteInto(
-                'DELETE FROM ' . SQL_TABLE_PREFIX . 'preferences WHERE application_id = ?', 
+                'DELETE FROM ' . Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX . 'preferences') .' WHERE ' .Tinebase_Core::getDb()->quoteIdentifier('application_id') .' = ?', 
                 Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
             );
             Tinebase_Core::getDb()->query($query);

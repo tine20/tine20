@@ -89,6 +89,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     public function importFile($_filename, $_clientRecordData = array())
     {
+        if (preg_match('/^win/i', PHP_OS)) {
+           $_filename = utf8_decode($_filename);
+        }
         if (! file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
         }

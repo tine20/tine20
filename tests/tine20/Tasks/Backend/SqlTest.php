@@ -87,7 +87,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
     {
         // NOTE: cascading delete of dependend stuff due to sql schema
         $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
-        $db->delete($db->getAdapter()->quoteInto('id = ?', $this->_persistantTestTask1->getId() ));
+        $db->delete($db->getAdapter()->quoteInto($db->getAdapter()->quoteIdentifier('id') .' = ?', $this->_persistantTestTask1->getId() ));
         Tinebase_Timemachine_ModificationLogTest::purgeLogs($this->_persistantTestTask1->getId());
     }
     

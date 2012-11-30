@@ -1001,7 +1001,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testPhpinfo()
     {
         $info = $this->_json->getServerInfo();
-        $this->assertContains("phpinfo()
-PHP Version =>", $info['html']);
+        $this->assertContains("phpinfo()", $info['html']);
+        $this->assertContains("PHP Version =>", $info['html']);
     }
 }

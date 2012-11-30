@@ -265,15 +265,15 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         $dateString = ($_date instanceof Tinebase_DateTime) ? $_date->format(Tinebase_Record_Abstract::ISO8601LONG) : $_date;
         $dateWhere = ($dateString === NULL) 
-            ? $this->_db->quoteInto('valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)) 
-            : $this->_db->quoteInto('creation_time < ?', $dateString);
+            ? $this->_db->quoteInto($this->_db->quoteIdentifier('valid_until') . ' < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)) 
+            : $this->_db->quoteInto($this->_db->quoteIdentifier('creation_time') . ' < ?', $dateString);
         $where = array($dateWhere);
-            
+             
         if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
             // delete only records that are not related to email accounts
             $fmailIds = $this->_getFelamimailCredentialIds();
             if (! empty($fmailIds)) {
-                $where[] = $this->_db->quoteInto('id NOT IN (?)', $fmailIds);
+                $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('id') .' NOT IN (?)', $fmailIds);
             }
         }
         

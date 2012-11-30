@@ -62,9 +62,10 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
          
         if ($_db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $createQuery .= " ENGINE=InnoDB DEFAULT CHARSET=utf8";
+            $_db->query("DROP TABLE IF EXISTS $tableName;");
+        } else {
+            $_db->query("DROP TABLE $tableName;");
         }
-        
-        $_db->query("DROP TABLE IF EXISTS $tableName;");
         $_db->query($createQuery);
     }
     

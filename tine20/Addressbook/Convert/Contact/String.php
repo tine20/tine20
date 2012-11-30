@@ -73,7 +73,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
             }
             $matches = array();
             if (preg_match($rule->regex, $contactString, $matches)) {
-                $contactData[$rule->field] = $matches[1];
+                $contactData[$rule->field] = trim($matches[1]);
             }
         }
         
