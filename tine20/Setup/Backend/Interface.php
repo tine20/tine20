@@ -151,8 +151,16 @@ interface Setup_Backend_Interface
      */
     public function applicationVersionQuery($_application);
 
-    public function getExistingSchema($_tableName);
+    /**
+     * return list of all foreign key names for given table
+     * 
+     * @param string $tableName
+     * @return array list of foreignkey names
+     */
+    public function getExistingForeignKeys($tableName);
 
+    public function getExistingSchema($_tableName);
+    
     /**
      * Compare Setup_Backend_Schema_Table_Abstract table schema with the corresponding schema 
      * read from db using {@see getExistingSchema()}

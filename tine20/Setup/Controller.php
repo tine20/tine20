@@ -1411,14 +1411,27 @@ class Setup_Controller
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Remove table: $table");
                 
                 try {
+                    // drop foreign keys which point to current table first
+                    $foreignKeys = $this->_backend->getExistingForeignKeys($table);
+                    foreach ($foreignKeys as $foreignKey) {
+                        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                            " Drop index: " . $foreignKey['table_name'] . ' => ' . $foreignKey['constraint_name']);
+                        $this->_backend->dropForeignKey($foreignKey['table_name'], $foreignKey['constraint_name']);
+                    }
+                    
+                    // drop table
                     $this->_backend->dropTable($table);
+                    
                     if ($_application->name != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
                     }
+                    
                     unset($applicationTables[$key]);
+                    
                 } catch(Zend_Db_Statement_Exception $e) {
                     // we need to catch exceptions here, as we don't want to break here, as a table
                     // might still have some foreign keys
+                    // this works with mysql only
                     $message = $e->getMessage();
                     Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Could not drop table $table - " . $message);
                     

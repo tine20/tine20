@@ -76,7 +76,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract $_table) 
     {
         $enums = array();
-        $statement = "CREATE TABLE " . SQL_TABLE_PREFIX . $_table->name . " (\n";
+        $statement = "CREATE TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_table->name) . " (\n";
         $statementSnippets = array();
 
         // get primary key now because it is necessary in two places
@@ -115,7 +115,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         }
 
         $statement .= implode(",\n", $statementSnippets) . "\n)";
-
+        
         return array('table' => $statement, 'index' => $createIndexStatement, 'primary' => $primaryKey);
     }
 
@@ -141,7 +141,54 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
 
         return null;
     }
+    
+    /**
+     * check if given constraint exists 
+     *
+     * @param string $_tableName
+     * @return boolean|string "version" if the table exists, otherwise false
+     */
+    protected function _constraintExists($_name)
+    {
+        $select = $this->_db->select()
+            ->from('pg_constraint')
+            ->where($this->_db->quoteIdentifier('conname') . ' = ?', $_name);
+        
+        $stmt = $select->query();
+        $constraint = $stmt->fetch();
+        
+        return ($constraint === false) ? false : true;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Setup_Backend_Interface::getExistingForeignKeys()
+     */
+    public function getExistingForeignKeys($tableName)
+    {
+        $select = $this->_db->select()
+            ->from(array('table_constraints' => 'information_schema.table_constraints'), array('table_name', 'constraint_name'))
+            ->join(
+                array('constraint_column_usage' => 'information_schema.constraint_column_usage'), 
+                $this->_db->quoteIdentifier('table_constraints.constraint_name') . '=' . $this->_db->quoteIdentifier('constraint_column_usage.constraint_name'),
+                array()
+            )
+            ->where($this->_db->quoteIdentifier('table_constraints.constraint_catalog') . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('table_constraints.constraint_type')    . ' = ?', 'FOREIGN KEY')
+            ->where($this->_db->quoteIdentifier('constraint_column_usage.table_name')   . ' = ?', SQL_TABLE_PREFIX . $tableName);
 
+        $foreignKeyNames = array();
+        
+        $stmt = $select->query();
+        while ($row = $stmt->fetch()) {
+            $foreignKeyNames[] = array(
+                'table_name'      => str_replace(SQL_TABLE_PREFIX, '', $row['table_name']), 
+                'constraint_name' => str_replace(SQL_TABLE_PREFIX, '', $row['constraint_name']));
+        }
+        
+        return $foreignKeyNames;
+    }
+    
     /**
      * Get schema of existing table
      *
@@ -153,9 +200,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     {
         // Get common table information
         $select = $this->_db->select()
-                ->from('information_schema.tables')
-                ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
-                ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
+            ->from('information_schema.tables')
+            ->where($this->_db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
 
         $stmt = $select->query();
@@ -165,8 +212,8 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         $existingTable = Setup_Backend_Schema_Table_Factory::factory('Pgsql', $tableInfo);
         // get field informations
         $select = $this->_db->select()
-                ->from('information_schema.COLUMNS')
-                ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
+            ->from('information_schema.COLUMNS')
+            ->where($this->_db->quoteIdentifier('TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
         $stmt = $select->query();
         $tableColumns = $stmt->fetchAll();
@@ -209,7 +256,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL) 
     {
-        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ADD COLUMN ';
+        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ADD COLUMN ';
 
         $statement .= $this->getFieldDeclarations($_declaration);
 
@@ -234,7 +281,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
-        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ALTER COLUMN ';
+        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ALTER COLUMN ';
 
         if ($_oldName === NULL) {
             $oldName = $_declaration->name;
@@ -257,8 +304,13 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function addIndex($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration) 
     {
-        $statement = 'ALTER TABLE "' . SQL_TABLE_PREFIX . $_tableName . '" ADD '
-                . $this->getIndexDeclarations($_declaration);
+        $indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName);
+        
+        if (strpos($indexSnippet, 'CREATE INDEX') !== false) {
+            $statement = $indexSnippet;
+        } else {
+            $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ADD ' . $indexSnippet;
+        }
 
         $this->execQueryVoid($statement);
     }
@@ -274,38 +326,28 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
     {
-        $isNotIndex = false;
-
-        $keys = array();
-
-        $indexes = str_replace('-', ',', $_key->name);
-        $snippet = 'CREATE INDEX  ' . $_tableName . '_' . $_key->name . ' ON ' . SQL_TABLE_PREFIX . $_tableName . "($indexes);";
-        $snippet = str_replace('-', '_', $snippet);
-
         if (!empty($_key->primary)) {
-            $pkey = $_tableName . '_pkey';
-            $pkey = str_replace('-', '_', $pkey);
-            $snippet = " CONSTRAINT $pkey PRIMARY KEY ";
-            $isNotIndex = true;
+            $identifier = $this->_db->quoteIdentifier($_tableName . '_pkey');
+            $snippet = " CONSTRAINT $identifier PRIMARY KEY";
         } elseif (!empty($_key->unique)) {
-            $unique = $_tableName . '_' . $_key->name . '_' . 'key';
-            $unique = str_replace('-', '_', $unique);
-            $snippet = "CONSTRAINT $unique UNIQUE ";
-            $isNotIndex = true;
+            $identifier  = $this->_db->quoteIdentifier($_tableName . '_' . $_key->name . '_key');
+            $snippet = "CONSTRAINT $identifier UNIQUE";
+        } else {
+            $identifier = $this->_db->quoteIdentifier($_key->name);
+            $snippet = "CREATE INDEX  $identifier ON " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         }
-
+        
+        $keys = array();
+        
         foreach ($_key->field as $keyfield) {
-            $key = (string) $keyfield;
-            $keys[] = $key;
+            $keys[] = $this->_db->quoteIdentifier((string) $keyfield);
         }
 
         if (empty($keys)) {
             throw new Setup_Exception_NotFound('no keys for index found');
         }
 
-        if ($isNotIndex) {
-            $snippet .= ' (' . implode(",", $keys) . ')';
-        }
+        $snippet .= ' (' . implode(',', $keys) . ')';
 
         return $snippet;
     }
@@ -318,16 +360,16 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function getForeignKeyDeclarations(Setup_Backend_Schema_Index_Abstract $_key)
     {
-        $snippet = '  CONSTRAINT ' . SQL_TABLE_PREFIX . $_key->referenceTable . '_' . $_key->field . ' FOREIGN KEY ';
-        $snippet .= '(' . $_key->field . ") REFERENCES " . SQL_TABLE_PREFIX
-                . $_key->referenceTable .
-                " (" . $_key->referenceField . ")";
+        $snippet = ' CONSTRAINT ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_key->name) . 
+            ' FOREIGN KEY (' . $this->_db->quoteIdentifier($_key->field) . ')' . 
+            ' REFERENCES ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_key->referenceTable) . 
+                ' (' . $this->_db->quoteIdentifier($_key->referenceField) . ')';
 
         if (!empty($_key->referenceOnDelete)) {
-            $snippet .= " ON DELETE " . strtoupper($_key->referenceOnDelete);
+            $snippet .= ' ON DELETE ' . strtoupper($_key->referenceOnDelete);
         }
         if (!empty($_key->referenceOnUpdate)) {
-            $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
+            $snippet .= ' ON UPDATE ' . strtoupper($_key->referenceOnUpdate);
         }
 
         return $snippet;
@@ -340,9 +382,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function setForeignKeyChecks($_value)
     {
-        if ($_value == 0 || $_value == 1) {
-            $this->_db->query("SET FOREIGN_KEY_CHECKS=" . $_value);
-        }
+        // does nothing
     }
 
     /**
@@ -358,7 +398,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         try {
             // creates sequence
             if (!empty($statements['primary'])) {
-                $sequence = SQL_TABLE_PREFIX . $_table->name . '_' . $statements['primary'] . '_seq';
+                $sequence = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_table->name . '_' . $statements['primary'] . '_seq');
 
                 $createSequence = 'CREATE SEQUENCE ' . $sequence;
 
@@ -382,8 +422,44 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
         }
     }
+    
+    /**
+     * removes a foreign key from database table
+     * 
+     * @param string tableName
+     * @param string foreign key name
+     */     
+    public function dropForeignKey($_tableName, $_name)
+    {
+        if (! $this->_constraintExists(SQL_TABLE_PREFIX . $_name)) {
+            throw new Zend_Db_Statement_Exception('foreign key does not exist');
+        }
+        
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
+            . " DROP CONSTRAINT " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_name);
+        
+        $this->execQueryVoid($statement);
+    }
+    
+    /**
+     * removes a key from database table
+     * 
+     * @param string tableName 
+     * @param string key name
+     */    
+    public function dropIndex($_tableName, $_indexName)
+    {
+        if (! $this->_constraintExists(SQL_TABLE_PREFIX . $_name)) {
+            throw new Zend_Db_Statement_Exception('index does not exist');
+        }
+        
+        $statement = "DROP INDEX " . $this->_db->quote($_indexName);
 
-     /**
+        $this->execQueryVoid($statement);
+    }
+
+    
+    /**
      * create the right postgreSql-statement-snippet for columns/fields
      * PostgreSQL has not unsigned modifier
      *
