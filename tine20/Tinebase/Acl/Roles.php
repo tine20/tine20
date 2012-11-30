@@ -395,17 +395,15 @@ class Tinebase_Acl_Roles
      */
     public function deleteRoles($_ids)
     {
-        $ids = ( is_array($_ids) ) ? implode(",", $_ids) : $_ids;
-
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             // delete role acls/members first
-            $this->_roleMembersTable->delete( "role_id in ( $ids )");
-            $this->_roleRightsTable->delete( "role_id in ( $ids )");
+            $this->_roleMembersTable->delete( $this->_db->quoteInto("role_id in (?)", $_ids) );
+            $this->_roleRightsTable->delete( $this->_db->quoteInto("role_id in (?)", $_ids) );
             
             // delete role
-            $this->_rolesTable->delete( "id in ( $ids )");
+            $this->_rolesTable->delete( $this->_db->quoteInto("id in (?)", $_ids) );
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
