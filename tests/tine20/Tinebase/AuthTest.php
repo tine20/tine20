@@ -68,6 +68,9 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        // as we change the config, we also have to clear the config cache
+        Tinebase_Config::getInstance()->clearCache();
     }
 
     /**
