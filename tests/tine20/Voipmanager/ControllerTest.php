@@ -56,16 +56,18 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backends['Asterisk_Context'] = Voipmanager_Controller_Asterisk_Context::getInstance();
-        $this->_backends['Asterisk_Meetme'] = Voipmanager_Controller_Asterisk_Meetme::getInstance();
-        $this->_backends['Asterisk_SipPeer'] = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        $this->_backends['Asterisk_Context']   = Voipmanager_Controller_Asterisk_Context::getInstance();
+        $this->_backends['Asterisk_Meetme']    = Voipmanager_Controller_Asterisk_Meetme::getInstance();
+        $this->_backends['Asterisk_SipPeer']   = Voipmanager_Controller_Asterisk_SipPeer::getInstance();
         $this->_backends['Asterisk_Voicemail'] = Voipmanager_Controller_Asterisk_Voicemail::getInstance();
-        $this->_backends['Snom_Line'] = Voipmanager_Controller_Snom_Line::getInstance();
-        $this->_backends['Snom_Location'] = Voipmanager_Controller_Snom_Location::getInstance();
-        $this->_backends['Snom_Phone'] = Voipmanager_Controller_Snom_Phone::getInstance();
-        $this->_backends['Snom_Setting'] = Voipmanager_Controller_Snom_Setting::getInstance();
-        $this->_backends['Snom_Software'] = Voipmanager_Controller_Snom_Software::getInstance();
-        $this->_backends['Snom_Template'] = Voipmanager_Controller_Snom_Template::getInstance();
+        $this->_backends['Snom_Line']          = Voipmanager_Controller_Snom_Line::getInstance();
+        $this->_backends['Snom_Location']      = Voipmanager_Controller_Snom_Location::getInstance();
+        $this->_backends['Snom_Phone']         = Voipmanager_Controller_Snom_Phone::getInstance();
+        $this->_backends['Snom_Setting']       = Voipmanager_Controller_Snom_Setting::getInstance();
+        $this->_backends['Snom_Software']      = Voipmanager_Controller_Snom_Software::getInstance();
+        $this->_backends['Snom_Template']      = Voipmanager_Controller_Snom_Template::getInstance();
     }
 
     /**
@@ -76,13 +78,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach (array('Asterisk_SipPeer', 'Asterisk_Context', 'Snom_Location') as $backend) {
-            $filterName = 'Voipmanager_Model_' . $backend . 'Filter';
-            $search = $this->_backends[$backend]->search(new $filterName());
-            foreach ($search as $result) {
-                $this->_backends[$backend]->delete($result->getId());
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -97,8 +93,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Context']->delete($returned->getId());
     }
     
     /**
@@ -116,8 +110,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Context']->delete($returned->getId());
     }
     
     /**
@@ -139,8 +131,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Asterisk_Context']->search($filter);
         $this->assertEquals(1, count($returned));
-        
-        $this->_backends['Asterisk_Context']->delete($returned->getId());
     }
     
     protected function _getAsteriskContext()
@@ -165,8 +155,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->confno, $returned->confno);
         $this->assertEquals($test->adminpin, $returned->adminpin);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Meetme']->delete($returned->getId());
     }
     
     /**
@@ -184,8 +172,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->confno, $returned->confno);
         $this->assertEquals($test->adminpin, $returned->adminpin);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Meetme']->delete($returned->getId());
     }
     
     /**
@@ -206,8 +192,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Asterisk_Meetme']->search($filter);
         $this->assertEquals(1, count($returned));
-        
-        $this->_backends['Asterisk_Meetme']->delete($returned->getId());
     }
     
     protected function _getAsteriskMeetme()
@@ -233,8 +217,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->qualify, $returned->qualify);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_SipPeer']->delete($returned->getId());
     }
     
     /**
@@ -253,8 +235,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->callerid, $returned->callerid);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_SipPeer']->delete($returned->getId());
     }
     
     /**
@@ -272,8 +252,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->qualify, $returned->qualify, 'qualify does not match');
         $this->assertEquals($test->name, $returned->name, 'name does not match');
         $this->assertNotNull($returned->id);
-        
-       $this->_backends['Asterisk_SipPeer']->delete($returned->getId());
     }
     
     /**
@@ -305,8 +283,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Asterisk_SipPeer']->search($filter);
         $this->assertEquals(1, count($returned));
-        
-        $this->_backends['Asterisk_SipPeer']->delete($returned->getId());
     }
     
     protected function _getAsteriskSipPeer()
@@ -316,10 +292,11 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $context = $this->_backends['Asterisk_Context']->create($context);
         
         return new Voipmanager_Model_Asterisk_SipPeer(array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
-            'callerid' => Tinebase_Record_Abstract::generateUID(),
-            'qualify' => 'yes',
-            'context_id' => $context->getId()
+            'name'       => Tinebase_Record_Abstract::generateUID(),
+            'callerid'   => Tinebase_Record_Abstract::generateUID(),
+            'qualify'    => 'yes',
+            'context_id' => $context->getId(),
+            'regseconds' => '111111111'
         ));
     }    
     
@@ -337,8 +314,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mailbox, $returned->mailbox);
         $this->assertEquals($test->fullname, $returned->fullname);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Voicemail']->delete($returned->getId());
     }
     
     /**
@@ -356,8 +331,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mailbox, $returned->mailbox);
         $this->assertEquals($test->fullname, $returned->fullname);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Asterisk_Voicemail']->delete($returned->getId());
     }
     
     /**
@@ -379,8 +352,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Asterisk_Voicemail']->search($filter);
         $this->assertEquals(1, count($returned));
-                
-        $this->_backends['Asterisk_Voicemail']->delete($returned->getId());
     }
     
     /**
@@ -416,8 +387,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Software']->delete($returned->getId());
     }
     
     /**
@@ -436,8 +405,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Software']->delete($returned->getId());
     }
     
     /**
@@ -454,8 +421,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->softwareimage_snom320, $returned->softwareimage_snom320);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Software']->delete($returned->getId());
     }
     
     /**
@@ -477,8 +442,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Snom_Software']->search($filter);
         $this->assertEquals(1, count($returned));
-                
-        $this->_backends['Snom_Software']->delete($returned->getId());
     }
     
     /**
@@ -513,8 +476,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
         $this->assertEquals($test->mwi_notification_w, $returned->mwi_notification_w);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Setting']->delete($returned->getId());
     }
     
     /**
@@ -536,8 +497,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
         $this->assertEquals($test->mwi_notification_w, $returned->mwi_notification_w);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Setting']->delete($returned->getId());
     }
     
     /**
@@ -559,8 +518,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Snom_Setting']->search($filter);
         $this->assertEquals(1, count($returned));
-                
-        $this->_backends['Snom_Setting']->delete($returned->getId());
     }
     
     /**
@@ -594,8 +551,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -614,8 +569,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -633,8 +586,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -657,8 +608,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_backends['Snom_Location']->search($filter);
         $this->assertEquals(1, count($returned));
-                
-        $this->_backends['Snom_Location']->delete($returned->getId());
     }
     
     /**
@@ -691,10 +640,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Template']->delete($returned->getId());
-        $this->_backends['Snom_Setting']->delete($settings->getId());
-        $this->_backends['Snom_Software']->delete($software->getId());
     }
     
     /**
@@ -715,10 +660,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Template']->delete($returned->getId());
-        $this->_backends['Snom_Setting']->delete($settings->getId());
-        $this->_backends['Snom_Software']->delete($software->getId());
     }
     
     /**
@@ -738,10 +679,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertNotNull($returned->id);
-        
-        $this->_backends['Snom_Template']->delete($returned->getId());
-        $this->_backends['Snom_Setting']->delete($settings->getId());
-        $this->_backends['Snom_Software']->delete($software->getId());
     }
     
     /**
@@ -765,10 +702,6 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $returned = $this->_backends['Snom_Template']->search($filter);
         $this->assertEquals(1, count($returned));
-                
-        $this->_backends['Snom_Template']->delete($returned->getId());
-        $this->_backends['Snom_Setting']->delete($settings->getId());
-        $this->_backends['Snom_Software']->delete($software->getId());
     }
     
     /**

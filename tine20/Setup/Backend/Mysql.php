@@ -104,6 +104,35 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Setup_Backend_Interface::getExistingForeignKeys()
+     */
+    public function getExistingForeignKeys($tableName)
+    {
+        $select = $this->_db->select()
+            ->from(array('table_constraints' => 'INFORMATION_SCHEMA.TABLE_CONSTRAINTS'), array('TABLE_NAME', 'CONSTRAINT_NAME'))
+            ->join(
+                array('key_column_usage' => 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE'), 
+                $this->_db->quoteIdentifier('table_constraints.CONSTRAINT_NAME') . '=' . $this->_db->quoteIdentifier('key_column_usage.CONSTRAINT_NAME'),
+                array()
+            )
+            ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_SCHEMA')    . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_TYPE')      . ' = ?', 'FOREIGN KEY')
+            ->where($this->_db->quoteIdentifier('key_column_usage.REFERENCED_TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $tableName);
+        
+        $foreignKeyNames = array();
+        
+        $stmt = $select->query();
+        while ($row = $stmt->fetch()) {
+            $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
+                'table_name'      => str_replace(SQL_TABLE_PREFIX, '', $row['TABLE_NAME']), 
+                'constraint_name' => str_replace(SQL_TABLE_PREFIX, '', $row['CONSTRAINT_NAME']));
+        }
+        
+        return $foreignKeyNames;
+    }
+    
+    /**
      * Get schema of existing table
      * 
      * @param String $_tableName

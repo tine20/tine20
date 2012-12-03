@@ -395,8 +395,6 @@ class Tinebase_Acl_Roles
      */
     public function deleteRoles($_ids)
     {
-        $ids = ( is_array($_ids) ) ? implode(",", $_ids) : $_ids;
-
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             

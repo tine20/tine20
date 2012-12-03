@@ -182,6 +182,31 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         return $statement;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Setup_Backend_Interface::getExistingForeignKeys()
+     * @todo implement Oracle specific logic
+     */
+    public function getExistingForeignKeys($tableName)
+    {
+        return array();
+        
+        $select = $this->_db->select()
+            ->from('information_schema.table_constraints', array('constraint_name'))
+            ->where($this->_db->quoteIdentifier('constraint_catalog') . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('constraint_type') . ' = ?', 'FOREIGN KEY')
+            ->where($this->_db->quoteIdentifier('table_name') . ' = ?', $tableName);
+        
+        $stmt = $select->query();
+        $foreignKeyNames = $stmt->fetchColumn();
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' existing foreign keys: ' . print_r($foreignKeyNames, true));
+        
+        return $foreignKeyNames;
+    }
+    
+    
     public function getExistingSchema($_tableName)
     {
         $tableInfo = $this->_getTableInfo($_tableName);

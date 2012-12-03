@@ -33,16 +33,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     protected $_json = array();
     
     /**
-     * objects to delete
-     * 
-     * @var array
-     */
-    protected $_toDelete = array(
-        'phone'     => array(),
-        'sippeer'   => array(),
-    );
-    
-    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -60,6 +50,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_json = new Voipmanager_Frontend_Json();
     }
 
@@ -71,28 +63,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_toDelete['phone'] as $phone) {
-            $phoneTemplate = $this->_json->getSnomTemplate($phone['template_id']['value']);
-            $this->_json->deleteSnomPhones(array($phone['id']));
-            $this->_json->deleteSnomLocations(array($phone['location_id']['value']));
-            $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
-            $this->_json->deleteSnomTemplates(array($phone['template_id']['value']));
-            $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
-        }
-        
-        foreach ($this->_toDelete['sippeer'] as $sippeer) {
-            $this->_json->deleteAsteriskSipPeers(array($sippeer['id']));
-        }
-
-        // delete all contexts
-        $search = $this->_json->searchAsteriskContexts('', '');
-        foreach ($search['results'] as $result) {
-            try {
-                $this->_json->deleteAsteriskContexts($result['id']);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                // integrity constraint
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /** Asterisk Context tests **/
@@ -114,7 +85,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returnedGet = $this->_json->getAsteriskContext($returned['id']);
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
-        $this->_json->deleteAsteriskContexts(array($returned['id']));
     }
     
     /**
@@ -132,8 +102,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['name'], $updated['name']);
         $this->assertEquals($returned['description'], $updated['description']);
         $this->assertNotNull($updated['id']);
-        
-        $this->_json->deleteAsteriskContexts(array($returned['id']));
     }
     
     /**
@@ -150,10 +118,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchAsteriskContexts($this->_getAsteriskContextFilter($asteriskContext->name), $this->_getPaging());
         $this->assertEquals($asteriskContext->description, $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteAsteriskContexts($asteriskContextData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -165,7 +129,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Voipmanager_Model_Asterisk_Context(array(
             'name'         => Tinebase_Record_Abstract::generateUID(),
-            'description'   => 'blabla',
+            'description'  => 'blabla'
         ), TRUE);
     }
     
@@ -178,10 +142,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'description', 
+                'field'    => 'description', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),   
+                'value'    => $_name
+            )
         );
     }
     
@@ -207,7 +171,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returnedGet = $this->_json->getAsteriskSipPeer($returned['id']);
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['context'], $returnedGet['context']);
-        $this->_json->deleteAsteriskSipPeers(array($returned['id']));
     }
     
     /**
@@ -231,8 +194,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($regseconds, $updated['regseconds'], 'regseconds should not be updated');
         $this->assertEquals($returned['context_id'], $updated['context_id']['value']);
         $this->assertNotNull($updated['id']);
-        
-        $this->_json->deleteAsteriskSipPeers(array($returned['id']));
     }
 
     /**
@@ -256,8 +217,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $nowConverted = $now->get(Tinebase_Record_Abstract::ISO8601LONG);
         date_default_timezone_set('UTC');
         $this->assertEquals($nowConverted, $updated['regseconds']);
-        
-        $this->_json->deleteAsteriskSipPeers(array($returned['id']));
     }
     
     /**
@@ -274,10 +233,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchAsteriskSipPeers($this->_getAsteriskSipPeerFilter($asteriskSipPeer->name), $this->_getPaging());
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals($asteriskSipPeer->name, $search['results'][0]['name']);
-        
-        // cleanup
-        $this->_json->deleteAsteriskSipPeers($asteriskSipPeerData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -292,9 +247,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $context = $this->_json->saveAsteriskContext($context->toArray());
         
         return new Voipmanager_Model_Asterisk_SipPeer(array(
-            'name'          => Tinebase_Record_Abstract::generateUID(),
-            'context'       => $context['name'],
-            'context_id'    => $context['id']
+            'name'       => Tinebase_Record_Abstract::generateUID(),
+            'context'    => $context['name'],
+            'context_id' => $context['id']
         ), TRUE);
     }
     
@@ -308,10 +263,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'query', 
+                'field'    => 'query', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),  
+                'value'    => $_name
+            )
         );
     }
     
@@ -338,8 +293,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($test['confno'], $returnedGet['confno']);
         $this->assertEquals($test['adminpin'], $returnedGet['adminpin']);
-        
-        $this->_json->deleteAsteriskMeetmes(array($returned['id']));
     }
     
     /**
@@ -357,8 +310,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['confno'], $updated['confno']);
         $this->assertEquals($returned['adminpin'], $updated['adminpin']);
         $this->assertNotNull($updated['id']);
-                
-        $this->_json->deleteAsteriskMeetmes(array($returned['id']));
     }
     
     /**
@@ -375,10 +326,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchAsteriskMeetmes($this->_getAsteriskMeetmeFilter($asteriskMeetme->confno), $this->_getPaging());
         $this->assertEquals($asteriskMeetme->confno, $search['results'][0]['confno']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteAsteriskMeetmes($asteriskMeetmeData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -389,10 +336,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getAsteriskMeetme()
     {
         return new Voipmanager_Model_Asterisk_Meetme(array(
-            'confno'  => Tinebase_Record_Abstract::generateUID(),
+            'confno'   => Tinebase_Record_Abstract::generateUID(),
             'adminpin' => Tinebase_Record_Abstract::generateUID(),
-            'pin' => Tinebase_Record_Abstract::generateUID(),
-            'members' => 1,
+            'pin'      => Tinebase_Record_Abstract::generateUID(),
+            'members'  => 1
         ), TRUE);
     }
     
@@ -405,10 +352,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'confno', 
+                'field'    => 'confno', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),     
+                'value'    => $_name
+            )
         );
     }
     
@@ -435,8 +382,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($test['context'], $returnedGet['context']);
         $this->assertEquals($test['fullname'], $returnedGet['fullname']);
-        
-        $this->_json->deleteAsteriskVoicemails(array($returned['id']));
     }
     
     /**
@@ -455,8 +400,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['context'], $updated['context']);
         $this->assertEquals($returned['fullname'], $updated['fullname']);
         $this->assertNotNull($updated['id']);
-                
-        $this->_json->deleteAsteriskVoicemails(array($returned['id']));
     }
     
     /**
@@ -473,10 +416,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchAsteriskVoicemails($this->_getAsteriskVoicemailFilter($asteriskVoicemail->context), $this->_getPaging());
         $this->assertEquals($asteriskVoicemail->context, $search['results'][0]['context']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteAsteriskVoicemails($asteriskVoicemailData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -491,9 +430,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $context = $this->_json->saveAsteriskContext($context->toArray());
         
         return new Voipmanager_Model_Asterisk_Voicemail(array(
-            'context'       => $context['name'],
-            'context_id'    => $context['id'],
-            'fullname' => Tinebase_Record_Abstract::generateUID()
+            'context'    => $context['name'],
+            'context_id' => $context['id'],
+            'fullname'   => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
     
@@ -506,10 +445,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'context', 
+                'field'    => 'context', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),     
+                'value'    => $_name
+            )
         );
     }
     
@@ -538,8 +477,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
         $this->assertEquals($test['registrar'], $returnedGet['registrar']);
-        
-        $this->_json->deleteSnomLocations(array($returned['id']));
     }
     
     /**
@@ -558,8 +495,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['description'], $updated['description']);
         $this->assertEquals($returned['registrar'], $updated['registrar']);
         $this->assertNotNull($updated['id']);
-                
-        $this->_json->deleteSnomLocations(array($returned['id']));
     }
     
     /**
@@ -576,10 +511,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchSnomLocations($this->_getSnomLocationFilter($snomLocation->name), $this->_getPaging());
         $this->assertEquals($snomLocation->name, $search['results'][0]['name']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteSnomLocations($snomLocationData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -590,9 +521,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getSnomLocation()
     {
         return new Voipmanager_Model_Snom_Location(array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'name'        => Tinebase_Record_Abstract::generateUID(),
             'description' => Tinebase_Record_Abstract::generateUID(),
-            'registrar' => Tinebase_Record_Abstract::generateUID()
+            'registrar'   => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
     
@@ -605,10 +536,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'name', 
+                'field'    => 'name', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),
+                'value'    => $_name
+            )
         );
     }
     
@@ -624,7 +555,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         $testPhone = $this->getSnomPhone();
         
-        $lineData = array();
+        $lineData   = array();
         $rightsData = array();
         
         $returned = $this->_json->saveSnomPhone($testPhone, $lineData, $rightsData);
@@ -644,12 +575,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(strtoupper($testPhone['macaddress']), $returnedGet['macaddress']);
         $this->assertEquals($testPhone['location_id'], $returnedGet['location_id']['value']);
         $this->assertEquals($testPhone['template_id'], $returnedGet['template_id']['value']);
-        
-        $this->_json->deleteSnomPhones(array($returned['id']));
-        $this->_json->deleteSnomLocations(array($returned['location_id']['value']));
-        $this->_json->deleteSnomTemplates(array($returned['template_id']['value']));
-        $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
-        $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
     }
     
     /**
@@ -660,7 +585,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         $testPhone = $this->getSnomPhone();
         
-        $lineData = array();
+        $lineData   = array();
         $rightsData = array();
         
         $returned = $this->_json->saveSnomPhone($testPhone, $lineData, $rightsData);
@@ -677,12 +602,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['location_id'], $updated['location_id']['value']);
         $this->assertEquals($returned['template_id'], $updated['template_id']['value']);
         $this->assertNotNull($updated['id']);
-        
-        $this->_json->deleteSnomPhones(array($returned['id']));
-        $this->_json->deleteSnomLocations(array($returned['location_id']));
-        $this->_json->deleteSnomTemplates(array($returned['template_id']));
-        $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
-        $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
     }
     
 /**
@@ -697,16 +616,15 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $sipPeer['context_id'] = $sipPeer['context_id']['value'];
         $sipPeer['cfi_mode'] = 'number';
         $snomLine = new Voipmanager_Model_Snom_Line(array(
-            'asteriskline_id'   => $sipPeer,
-            'linenumber'        => 1,
-            'lineactive'        => 1,
-            'idletext'          => 'idle'
+            'asteriskline_id' => $sipPeer,
+            'linenumber'      => 1,
+            'lineactive'      => 1,
+            'idletext'        => 'idle'
         ));
         $testPhone['lines'] = array($snomLine->toArray());
         
         // save
         $returned = $this->_json->saveSnomPhone($testPhone);
-        $this->_toDelete['phone'][] = $returned;
         
         // check result
         $this->assertGreaterThan(0, count($returned['lines']));
@@ -734,12 +652,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $searchResult['totalcount']);
         $this->assertEquals($phoneTemplate['name'], $searchResult['results'][0]['template']);
         $this->assertEquals($phoneLocation['name'], $searchResult['results'][0]['location']);
-        
-        $this->_json->deleteSnomPhones(array($returned['id']));
-        $this->_json->deleteSnomLocations(array($returned['location_id']['value']));
-        $this->_json->deleteSnomTemplates(array($returned['template_id']['value']));
-        $this->_json->deleteSnomSoftwares(array($phoneTemplate['software_id']['value']));
-        $this->_json->deleteSnomSettings(array($phoneTemplate['setting_id']['value']));
     }
     
     /**
@@ -751,10 +663,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'description', 
+                'field'    => 'description', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),
+                'value'    => $_name
+            )
         );
     }
     
@@ -810,15 +722,15 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returnedTemplate = $this->_json->saveSnomTemplate($testTemplate->toArray());
         
         return array(
-            'description'  => Tinebase_Record_Abstract::generateUID(),
-            'macaddress' => substr(Tinebase_Record_Abstract::generateUID(), 0, 12),
-            'location_id' => $returnedLocation['id'],
-            'template_id' => $returnedTemplate['id'],
-            'current_model' => 'snom300',
-            'redirect_event' => 'none',
+            'description'       => Tinebase_Record_Abstract::generateUID(),
+            'macaddress'        => substr(Tinebase_Record_Abstract::generateUID(), 0, 12),
+            'location_id'       => $returnedLocation['id'],
+            'template_id'       => $returnedTemplate['id'],
+            'current_model'     => 'snom300',
+            'redirect_event'    => 'none',
             'http_client_info_sent' => '1',
-            'http_client_user' => Tinebase_Record_Abstract::generateUID(),
-            'http_client_pass' => Tinebase_Record_Abstract::generateUID()
+            'http_client_user'  => Tinebase_Record_Abstract::generateUID(),
+            'http_client_pass'  => Tinebase_Record_Abstract::generateUID()
         );
     }
     
@@ -850,13 +762,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $settings_id = $phoneTemplate['setting_id']['value'];
         $software_id = $phoneTemplate['software_id']['value'];
-        
-        $this->_json->deleteSnomPhoneSettings(array($returned['phone_id']));
-        $this->_json->deleteSnomPhones(array($settingsPhone['id']));
-        $this->_json->deleteSnomTemplates(array($template_id));
-        $this->_json->deleteSnomLocations(array($location_id));
-        $this->_json->deleteSnomSettings(array($settings_id));
-        $this->_json->deleteSnomSoftwares(array($software_id));
     }
     
     /**
@@ -868,13 +773,13 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         $testPhone = $this->getSnomPhone();
         
-        $lineData = array();
+        $lineData   = array();
         $rightsData = array();
         
         $returnedPhone = $this->_json->saveSnomPhone($testPhone, $lineData, $rightsData);
         
         return array(
-            'phone_id'  => $returnedPhone['id'],
+            'phone_id'     => $returnedPhone['id'],
             'web_language' => 'English'
         );
     }
@@ -897,8 +802,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
-        
-        $this->_json->deleteSnomSettings(array($returned['id']));
     }
     
     /**
@@ -916,8 +819,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['name'], $updated['name']);
         $this->assertEquals($returned['description'], $updated['description']);
         $this->assertNotNull($updated['id']);
-        
-        $this->_json->deleteSnomSettings(array($returned['id']));
     }
     
     /**
@@ -934,10 +835,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchSnomSettings($this->_getSnomSettingFilter($snomSetting->name), $this->_getPaging());
         $this->assertEquals($snomSetting->name, $search['results'][0]['name']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteSnomSettings($snomSettingData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -948,7 +845,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getSnomSetting()
     {
         return new Voipmanager_Model_Snom_Setting(array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'name'        => Tinebase_Record_Abstract::generateUID(),
             'description' => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
@@ -962,10 +859,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'name', 
+                'field'    => 'name', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),
+                'value'    => $_name
+            )
         );
     }
     
@@ -991,8 +888,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['description'], $returnedGet['description']);
-        
-        $this->_json->deleteSnomSoftwares(array($returned['id']));
     }
     
     /**
@@ -1010,8 +905,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['name'], $updated['name']);
         $this->assertEquals($returned['description'], $updated['description']);
         $this->assertNotNull($updated['id']);
-                
-        $this->_json->deleteSnomSoftwares(array($returned['id']));
     }
     
     /**
@@ -1028,10 +921,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchSnomSoftwares($this->_getSnomSoftwareFilter($snomSoftware->name), $this->_getPaging());
         $this->assertEquals($snomSoftware->name, $search['results'][0]['name']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteSnomSoftwares($snomSoftwareData['id']);
-        /***********************************************************************************/
     }
     
     /**
@@ -1043,10 +932,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'name', 
+                'field'    => 'name', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),
+                'value'    => $_name
+            )
         );
     }
     
@@ -1058,7 +947,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getSnomSoftware()
     {
         return new Voipmanager_Model_Snom_Software(array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'name'        => Tinebase_Record_Abstract::generateUID(),
             'description' => Tinebase_Record_Abstract::generateUID()
         ), TRUE);
     }
@@ -1087,10 +976,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test['name'], $returnedGet['name']);
         $this->assertEquals($test['setting_id'], $returnedGet['setting_id']['value']);
         $this->assertEquals($test['software_id'], $returnedGet['software_id']['value']);
-        
-        $this->_json->deleteSnomTemplates(array($returned['id']));
-        $this->_json->deleteSnomSoftwares(array($returned['software_id']['value']));
-        $this->_json->deleteSnomSettings(array($returned['setting_id']['value']));
     }
     
     /**
@@ -1111,10 +996,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returned['setting_id'], $updated['setting_id']['value']);
         $this->assertEquals($returned['software_id'], $updated['software_id']['value']);
         $this->assertNotNull($updated['id']);
-        
-        $this->_json->deleteSnomTemplates(array($returned['id']));
-        $this->_json->deleteSnomSoftwares(array($updated['software_id']['value']));
-        $this->_json->deleteSnomSettings(array($updated['setting_id']['value']));
     }
     
     /**
@@ -1131,12 +1012,6 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $search = $this->_json->searchSnomTemplates($this->_getSnomTemplateFilter($snomTemplate->name), $this->_getPaging());
         $this->assertEquals($snomTemplate->name, $search['results'][0]['name']);
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteSnomTemplates($snomTemplateData['id']);
-        $this->_json->deleteSnomSoftwares($snomTemplateData['software_id']['value']);
-        $this->_json->deleteSnomSettings($snomTemplateData['setting_id']['value']);
-        /***********************************************************************************/
     }
     
     /**
@@ -1153,8 +1028,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returnedSetting = $this->_json->saveSnomSetting($testSetting->toArray());
         
         return new Voipmanager_Model_Snom_Template(array(
-            'name'  => Tinebase_Record_Abstract::generateUID(),
-            'setting_id' => $returnedSetting['id'],
+            'name'        => Tinebase_Record_Abstract::generateUID(),
+            'setting_id'  => $returnedSetting['id'],
             'software_id' => $returnedSoftware['id']
         ), TRUE);
     }
@@ -1168,10 +1043,10 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'field' => 'name', 
+                'field'    => 'name', 
                 'operator' => 'contains', 
-                'value' => $_name
-            ),
+                'value'    => $_name
+            )
         );
     }
     
@@ -1185,9 +1060,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'start' => 0,
             'limit' => 50,
-            'sort' => 'id',
-            'dir' => 'ASC'
+            'sort'  => 'id',
+            'dir'   => 'ASC'
         );
     }
-
 }

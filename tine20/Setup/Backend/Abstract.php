@@ -268,7 +268,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function dropTable($_tableName, $_applicationId = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
-        $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        $statement = "DROP TABLE IF EXISTS " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
         
         if ($_applicationId !== NULL) {
@@ -378,12 +378,12 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */    
     public function dropIndex($_tableName, $_indexName)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `"  . $_indexName. "`" ;
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quote($_indexName);
         try {
             $this->execQueryVoid($statement);
         } catch (Zend_Db_Statement_Exception $zdse) {
             // try it again with table prefix
-            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX `" . SQL_TABLE_PREFIX . $_indexName. "`" ;
+            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quote(SQL_TABLE_PREFIX . $_indexName);
             $this->execQueryVoid($statement);
         }
     }
