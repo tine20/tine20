@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -341,7 +341,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string tableName
      * @param Setup_Backend_Schema_Index_Abstract declaration
-     */       
+     */
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
@@ -354,7 +354,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string tableName
      * @param string foreign key name
-     */     
+     */
     public function dropForeignKey($_tableName, $_name)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
@@ -375,15 +375,15 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string tableName 
      * @param string key name
-     */    
+     */
     public function dropIndex($_tableName, $_indexName)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quote($_indexName);
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quoteIdentifier($_indexName);
         try {
             $this->execQueryVoid($statement);
         } catch (Zend_Db_Statement_Exception $zdse) {
             // try it again with table prefix
-            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quote(SQL_TABLE_PREFIX . $_indexName);
+            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_indexName);
             $this->execQueryVoid($statement);
         }
     }
