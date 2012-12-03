@@ -91,7 +91,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                     $sequence = SQL_TABLE_PREFIX . $_table->name . "_{$primaryKey}_seq";
                     // don't create sequence if is field is not auto_increment
                     $primaryKey = (strpos($fieldDeclarations, 'auto_increment') !== false) ? $primaryKey : null;
-                    $fieldDeclarations = str_replace('integer NOT NULL auto_increment', "integer NOT NULL DEFAULT nextval('" . $sequence . "')", $fieldDeclarations);
+                    $fieldDeclarations = str_replace('integer NOT NULL auto_increment', 'integer NOT NULL DEFAULT nextval(' . $this->_db->quote($sequence) . ')', $fieldDeclarations);
                 }
 
                 $statementSnippets[] = $fieldDeclarations;
@@ -260,15 +260,6 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
 
         $statement .= $this->getFieldDeclarations($_declaration);
 
-        if ($_position !== NULL) {
-            if ($_position == 0) {
-                $statement .= ' FIRST ';
-            } else {
-                $before = $this->execQuery('DESCRIBE "' . SQL_TABLE_PREFIX . $_tableName . '" ');
-                $statement .= ' AFTER "' . $before[$_position]['Field'] . '"';
-            }
-        }
-
         $this->execQueryVoid($statement);
     }
 
@@ -281,19 +272,35 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
-        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ALTER COLUMN ';
+        $baseStatement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
 
-        if ($_oldName === NULL) {
-            $oldName = $_declaration->name;
-        } else {
-            $oldName = $_oldName;
+        // rename the column if needed
+        if ($_oldName !== NULL) {
+            $statement = $baseStatement . ' RENAME COLUMN ' . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $this->_db->quoteIdentifier($_declaration->name);
+            $this->execQueryVoid($statement);
         }
+        
+        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
 
         $fieldDeclaration = $this->getFieldDeclarations($_declaration);
-        $fieldDeclaration = trim(str_replace('"' . $oldName . '"', '', $fieldDeclaration));
-
-        $statement .= ' "' . $oldName . '" TYPE ' . $fieldDeclaration;
+        
+        // strip of column name from the beginning
+        $type      = trim(str_replace($quotedName, null, $fieldDeclaration));
+        // cut of NOT NULL and DEFAULT from the end
+        $type      = preg_replace(array('/ (NOT NULL|DEFAULT .*)/'), null, $type);
+        
+        $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' TYPE ' . $type;
         $this->execQueryVoid($statement);
+        
+        if (preg_match('/NOT NULL/', $fieldDeclaration)) {
+            $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' SET NOT NULL ';
+            $this->execQueryVoid($statement);
+        }
+        
+        if (preg_match('/(?P<DEFAULT>DEFAULT .*)/', $fieldDeclaration, $matches)) {
+            $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' SET ' . $matches['DEFAULT'];
+            $this->execQueryVoid($statement);
+        }
     }
 
     /**
@@ -304,6 +311,18 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function addIndex($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration) 
     {
+        if (!empty($_declaration->primary)) {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_pkey';
+        } elseif (!empty($_declaration->unique)) {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name . '_key';
+        } else {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name;
+        }
+        
+        if ($this->_constraintExists($identifier)) {
+            throw new Zend_Db_Statement_Exception('index does exist already');
+        }
+        
         $indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName);
         
         if (strpos($indexSnippet, 'CREATE INDEX') !== false) {
@@ -327,14 +346,14 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_key, $_tableName = '')
     {
         if (!empty($_key->primary)) {
-            $identifier = $this->_db->quoteIdentifier($_tableName . '_pkey');
+            $identifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . '_pkey');
             $snippet = " CONSTRAINT $identifier PRIMARY KEY";
         } elseif (!empty($_key->unique)) {
-            $identifier  = $this->_db->quoteIdentifier($_tableName . '_' . $_key->name . '_key');
+            $identifier  = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name . '_key');
             $snippet = "CONSTRAINT $identifier UNIQUE";
         } else {
-            $identifier = $this->_db->quoteIdentifier($_key->name);
-            $snippet = "CREATE INDEX  $identifier ON " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+            $identifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name);
+            $snippet = "CREATE INDEX $identifier ON " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         }
         
         $keys = array();
@@ -449,15 +468,43 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */    
     public function dropIndex($_tableName, $_indexName)
     {
-        if (! $this->_constraintExists(SQL_TABLE_PREFIX . $_name)) {
-            throw new Zend_Db_Statement_Exception('index does not exist');
+        $indexName = SQL_TABLE_PREFIX . $_tableName . '_' . $_indexName;
+        if ($this->_constraintExists($indexName)) {
+            $statement = "DROP INDEX " . $this->_db->quoteIdentifier($indexName);
+    
+            $this->execQueryVoid($statement);
+            
+            return;
         }
         
-        $statement = "DROP INDEX " . $this->_db->quote($_indexName);
-
+        $indexName = SQL_TABLE_PREFIX . $_tableName . '_' . $_indexName . '_key';
+        if ($this->_constraintExists($indexName)) {
+            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP CONSTRAINT " . $this->_db->quoteIdentifier($indexName);
+    
+            $this->execQueryVoid($statement);
+            
+            return;
+        }
+        
+        throw new Zend_Db_Statement_Exception("index $_indexName does not exist");
+    }
+    
+    /**
+     * removes a primary key from database table
+     * 
+     * @param string tableName (there is just one primary key...)
+     */         
+    public function dropPrimaryKey($_tableName)
+    {
+        $indexName = SQL_TABLE_PREFIX . $_tableName . '_pkey';
+        
+        if (! $this->_constraintExists($indexName)) {
+            throw new Zend_Db_Statement_Exception("primary key for table $_tableName does not exist");
+        }
+        
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP CONSTRAINT " . $this->_db->quoteIdentifier($indexName);
         $this->execQueryVoid($statement);
     }
-
     
     /**
      * create the right postgreSql-statement-snippet for columns/fields
@@ -475,10 +522,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         
         $fieldTypes = array ('tinyint', 'mediumint', 'bigint', 'int', 'integer');
         foreach ($fieldTypes as $fieldType) {
-            $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', 'integer', $fieldDeclarations);
+            $fieldDeclarations = preg_replace('/' . $fieldType . '\(\d*\)/', 'integer', $fieldDeclarations);
         }
         
-        $fieldDeclarations = preg_replace('/ smallint\(\d*\)/', 'smallint', $fieldDeclarations);
+        $fieldDeclarations = preg_replace('/smallint\(\d*\)/', 'smallint', $fieldDeclarations);
         
         return $fieldDeclarations;
     }
