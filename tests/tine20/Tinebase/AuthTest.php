@@ -57,6 +57,8 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->_originalBackendConfiguration = Tinebase_Auth::getBackendConfiguration();
+        $this->_originalBackendType = Tinebase_Auth::getConfiguredBackend();
     }
 
     /**
@@ -67,10 +69,14 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        // this needs to be done because Tinebase_Auth & Tinebase_Config use caching mechanisms
+        Tinebase_Auth::setBackendType($this->_originalBackendType);
+        Tinebase_Auth::deleteBackendConfiguration();
+        Tinebase_Auth::setBackendConfiguration($this->_originalBackendConfiguration);
+        Tinebase_Auth::saveBackendConfiguration();
+        Tinebase_Auth::getInstance()->setBackend();
         
-        // as we change the config, we also have to clear the config cache
-        Tinebase_Config::getInstance()->clearCache();
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
