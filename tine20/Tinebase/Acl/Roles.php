@@ -389,20 +389,20 @@ class Tinebase_Acl_Roles
     /**
      * Deletes roles identified by their identifiers
      * 
-     * @param   string|array id(s) to delete
+     * @param   string|array $ids to delete
      * @return  void
      * @throws  Tinebase_Exception_Backend
      */
-    public function deleteRoles($_ids)
+    public function deleteRoles($ids)
     {
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             // delete role acls/members first
-            $this->_roleMembersTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)', $ids ));
-            $this->_roleRightsTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)',  $ids ));
+            $this->_roleMembersTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)', (array) $ids));
+            $this->_roleRightsTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' in (?)',  (array) $ids));
             // delete role
-            $this->_rolesTable->delete(  $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', $ids));
+            $this->_rolesTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' in (?)', (array) $ids));
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
