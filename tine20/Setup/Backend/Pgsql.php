@@ -181,7 +181,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         
         $stmt = $select->query();
         while ($row = $stmt->fetch()) {
-            $foreignKeyNames[] = array(
+            $foreignKeyNames[$row['constraint_name']] = array(
                 'table_name'      => str_replace(SQL_TABLE_PREFIX, '', $row['table_name']), 
                 'constraint_name' => str_replace(SQL_TABLE_PREFIX, '', $row['constraint_name']));
         }

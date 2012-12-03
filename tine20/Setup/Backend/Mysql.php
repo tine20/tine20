@@ -124,7 +124,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         $stmt = $select->query();
         while ($row = $stmt->fetch()) {
-            $foreignKeyNames[] = array(
+            $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
                 'table_name'      => str_replace(SQL_TABLE_PREFIX, '', $row['TABLE_NAME']), 
                 'constraint_name' => str_replace(SQL_TABLE_PREFIX, '', $row['CONSTRAINT_NAME']));
         }

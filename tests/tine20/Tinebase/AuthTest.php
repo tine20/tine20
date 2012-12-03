@@ -56,8 +56,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_originalBackendConfiguration = Tinebase_Auth::getBackendConfiguration();
-        $this->_originalBackendType = Tinebase_Auth::getConfiguredBackend();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
@@ -68,11 +67,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_Auth::setBackendType($this->_originalBackendType);
-        Tinebase_Auth::deleteBackendConfiguration();
-        Tinebase_Auth::setBackendConfiguration($this->_originalBackendConfiguration);
-        Tinebase_Auth::saveBackendConfiguration();
-        Tinebase_Auth::getInstance()->setBackend();
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -212,7 +207,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         
         Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable();
         
-        $result = Tinebase_Core::getDb()->fetchAll('SELECT * FROM ' . $table . ' WHERE valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertTrue(count($result) == 0);
+        $result = Tinebase_Core::getDb()->fetchCol('SELECT id FROM ' . $table . ' WHERE valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertNotContains($id, $result);
     }
 }
