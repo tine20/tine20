@@ -347,7 +347,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($grants));
         
         // check num of db rows
-        $stmt = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $stmt = Tinebase_Core::getDb()->query('select * from '.Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX .'container_acl') . ' where ' . Tinebase_Core::getDb()->quoteInto(Tinebase_Core::getDb()->quoteIdentifier('container_id') . ' = ?', $this->objects['initialContainer']->getId()));
         $rows = $stmt->fetchAll();
         
         $this->assertEquals(1, count($rows));
@@ -364,7 +364,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result);
         
         // check num of db rows
-        $stmt = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $stmt = Tinebase_Core::getDb()->query('select * from '.Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX .'container_acl') . ' where ' . Tinebase_Core::getDb()->quoteInto(Tinebase_Core::getDb()->quoteIdentifier('container_id') . ' = ?', $this->objects['initialContainer']->getId()));
         $rows = $stmt->fetchAll();
         
         $this->assertEquals(7, count($rows));

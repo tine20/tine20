@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-	<enviroment name="PHP" version="5.3.0"/>
-	<enviroment name="Zend" version="1.9.0" operator="biggerThan" />
-	<enviroment name="Zend" version="1.9.2" operator="lessThan" />
-	<extensions>	
-		<extension name="json" />
-		<extension name="gd" />
-		<extension name="date" />
+    <enviroment name="PHP" version="5.3.0"/>
+    <enviroment name="Zend" version="1.9.0" operator="biggerThan" />
+    <enviroment name="Zend" version="1.9.2" operator="lessThan" />
+    <extensions>
+        <extension name="json" />
+        <extension name="gd" />
+        <extension name="date" />
         <extension name="SPL" />
         <extension name="SimpleXML" />
         <extension name="ctype" />
@@ -15,5 +15,6 @@
         <extension name="iconv" />
         <extension name="zip" />
         <extension name="xml" />
-    </extensions>	
-</essential>	
+        <extension name="fileinfo" />
+    </extensions>
+</essential>

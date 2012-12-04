@@ -425,7 +425,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $configfile = Setup_Core::getConfigFilePath();
         if ($configfile) {
             $configfile = escapeshellcmd($configfile);
-            exec("php -l $configfile 2> /dev/null", $error, $code);
+            if (preg_match('/^win/i', PHP_OS)) {
+                exec("php -l $configfile 2> NUL", $error, $code);
+            } else {
+                exec("php -l $configfile 2> /dev/null", $error, $code);
+            }
             if ($code == 0) {
                 $configcheck = TRUE;
             } else {

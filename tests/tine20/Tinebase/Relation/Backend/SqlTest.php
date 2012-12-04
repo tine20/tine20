@@ -112,7 +112,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
 
         foreach ($this->relations as $relation) {
              $db->delete(array(
-                 $db->getAdapter()->quoteInto('rel_id = ?',$relation->getId())
+                 $db->getAdapter()->quoteInto($db->getAdapter()->quoteIdentifier('rel_id') .' = ?',$relation->getId())
             ));
         }
     }

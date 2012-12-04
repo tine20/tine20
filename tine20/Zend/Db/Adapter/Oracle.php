@@ -128,6 +128,15 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             throw new Zend_Db_Adapter_Oracle_Exception('The OCI8 extension is required for this adapter but the extension is not loaded');
         }
 
+        // if set host, port and dbname create string connection or use tnsnames.ora name or string connection
+        if (! empty($this->_config['host']) && ! empty($this->_config['port']) && ! empty($this->_config['dbname'])) {
+            if ($this->_config['isSID']) {
+                $this->_config['dbname']="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SID=\"".$this->_config['dbname']."\")))";
+            } else {
+                $this->_config['dbname']="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SERVICE_NAME=\"".$this->_config['dbname']."\")))";
+            }
+        }
+
         $connectionFuncName = ($this->_config['persistent'] == true) ? 'oci_pconnect' : 'oci_connect';
         $connectionDatabase = (($this->_config['host'] == 'localhost' || $this->_config['host'] == '127.0.0.1') ? $this->_config['dbname'] : $this->_config['host'].'/'.$this->_config['dbname']);
         
@@ -136,7 +145,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $this->_config['password'],
                 $connectionDatabase,
                 $this->_config['charset']);
-
+                
         // check the connection
         if (!$this->_connection) {
             /**
@@ -783,7 +792,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      * @param  mixed  $bind An array of data to bind to the placeholders.
      * @return array
      */
-    protected function _positionalToNamedParameters($sql, array $bind)
+    protected function _positionalToNamedParameters($sql, $bind)
     {
         if ($sql instanceof Zend_Db_Select) {
             if (empty($bind)) {
@@ -795,23 +804,25 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         
         $keyCounter = 0;
         $quotedQuestionMarksCounter = 0;
-        foreach ($bind as $key => $value)
-        {
-            if (is_int($key)) {
-                unset($bind[$key]);
-                $bind[$this->_namedParamPrefix . $keyCounter] = $value;
-                
-                $position = 0;
-                while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
-                    if ($this->_isQuoted($sql, $position)) {
-                        $quotedQuestionMarksCounter++;
-                    } else {
-                        break;
+        if (is_array($bind)) {
+            foreach ($bind as $key => $value)
+            {
+                if (is_int($key)) {
+                    unset($bind[$key]);
+                    $bind[$this->_namedParamPrefix . $keyCounter] = $value;
+
+                    $position = 0;
+                    while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
+                        if ($this->_isQuoted($sql, $position)) {
+                            $quotedQuestionMarksCounter++;
+                        } else {
+                            break;
+                        }
                     }
+                    $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
+
+                    $keyCounter++;
                 }
-                $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
-                
-                $keyCounter++;
             }
         }
 

@@ -39,9 +39,10 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
             return;
         }
         $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
-        
-        Tinebase_Core::getDb()->query("RESET QUERY CACHE;");
-        
+        $_db = Tinebase_Core::getDb();
+        if ($_db instanceof Zend_Db_Adapter_Mysql) {
+            $_db->query("RESET QUERY CACHE;");
+        }
         $this->_json = new Calendar_Frontend_Json();
     }
     

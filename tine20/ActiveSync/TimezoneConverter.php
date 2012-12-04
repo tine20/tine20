@@ -518,7 +518,7 @@ class ActiveSync_TimezoneConverter
               throw new ActiveSync_Exception('It is not possible not set standard offsets without setting daylight offsets and vice versa');
         }
     }
-    
+
     /**
      * Parse and set object property {@see $_startDate}
      * 
@@ -538,7 +538,7 @@ class ActiveSync_TimezoneConverter
             $startDateParsed['ts']     = strtotime($_startDate);
         } elseif (is_int($_startDate)) {
             $startDateParsed['ts']     = $_startDate;
-            $startDateParsed['string'] = strftime('%F', $_startDate);
+            $startDateParsed['string'] = strftime("%Y-%m-%d", $_startDate);
         }
         else {
             throw new Tinebase_Exception_InvalidArgument('$startDate Parameter should be either a Timestamp or a Datestring parseable by strtotime.');

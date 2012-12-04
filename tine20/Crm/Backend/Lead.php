@@ -66,7 +66,7 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
         
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array(
             $_field             => $_field,
-            'count'             => 'COUNT(' . $_field . ')',
+            'count'             => 'COUNT(' . $this->_db->quoteIdentifier($_field) . ')',
         ));
         $select->group($_field);
         $this->_addFilter($select, $_filter);

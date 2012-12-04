@@ -93,7 +93,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $queryResult = $stmt->fetchAll();
         
         // increase revision
-        $where = $this->_db->quoteInto('id = ?', $objectId);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
         $data  = array('revision' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision') . ' + 1'));
         $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
 

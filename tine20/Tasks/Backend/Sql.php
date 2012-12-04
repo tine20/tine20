@@ -145,7 +145,7 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         foreach (array('contact') as $table) {
             $TableObject = $this->_getTableInstance($table);
             $deletedRows += $TableObject->delete(
-                $this->_db->quoteInto('task_id = ?', $_parentTaskId)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('task_id') .' = ?', $_parentTaskId)
             );
         }
         return $deletedRows;

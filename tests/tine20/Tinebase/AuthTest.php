@@ -204,6 +204,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     {
         // add dummy record to credential cache
         $id = Tinebase_Record_Abstract::generateUID();
+        $db = Tinebase_Core::getDb();
         $oneMinuteAgo = Tinebase_DateTime::now()->subMinute(1)->format(Tinebase_Record_Abstract::ISO8601LONG);
         $data = array(
             'id'            => $id,
@@ -216,7 +217,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         
         Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable();
         
-        $result = Tinebase_Core::getDb()->fetchCol('SELECT id FROM ' . $table . ' WHERE valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $result = $db->fetchCol('SELECT id FROM ' . $db->quoteIdentifier($table) . ' WHERE ' . $db->quoteInto($db->quoteIdentifier('valid_until') .' < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)));
         $this->assertNotContains($id, $result);
     }
 }

@@ -37,10 +37,12 @@ class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstrac
     {
         $db = $_backend->getAdapter();
         $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value . 'owner';
+        // use only last 30 chars (oracle column name limit)
+        $correlationName = substr($correlationName, -30);
         
         $_select->joinLeft(
             /* table  */ array($correlationName => SQL_TABLE_PREFIX . 'container_acl'), 
-            /* on     */ $db->quoteIdentifier("{$correlationName}.container_id") . " = container.id",
+            /* on     */ $db->quoteIdentifier("{$correlationName}.container_id") . " = " . $db->quoteIdentifier("container.id"),
             /* select */ array()
         );
         

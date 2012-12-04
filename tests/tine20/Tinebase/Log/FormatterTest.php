@@ -66,6 +66,7 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
         $config = Tinebase_Core::getConfig();
         $this->_logger->notice($config->database->password);
         $loggerFile = file_get_contents($logfile);
+        $writer->shutdown();
         unlink($logfile);
         
         $this->assertFalse(strpos($loggerFile, $config->database->password), 'pw found!');

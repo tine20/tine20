@@ -96,6 +96,8 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
         }
         //Writes msgids and msgstr into _data
         while ($line = fgets($this->_file)) {
+            // fix for wrong calculate lenght only for windows format (CRLF)
+            $line = str_replace("\r\n", "\n", $line);
             if (strpos($line, 'msgid ')!== FALSE) {
                 $id = substr($line, 7, -2);
                 $line = fgets($this->_file);
@@ -106,6 +108,7 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
                 $this->_data[$locale][$id] = "";
             }
             if(strpos($line, 'msgstr "')!== FALSE){
+                $line = str_replace("\r\n", "\n", $line);
                 $str = substr($line, 8, -2);
                 $line = fgets($this->_file);
                 while (strpos($line, '"')=== 0){
@@ -115,6 +118,7 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
                 $this->_data[$locale][$id] = $str;
             }
             if(strpos($line, 'msgstr[')!== FALSE){
+                $line = str_replace("\r\n", "\n", $line);    
                 $str = substr($line, 11, -2);
                 $line = fgets($this->_file);
                 while (strpos($line, '"')=== 0){
