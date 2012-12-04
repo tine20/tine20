@@ -699,6 +699,9 @@ class Tinebase_Timemachine_ModificationLog
             case 'create':
                 $_newRecord->created_by    = $currentAccountId;
                 $_newRecord->creation_time = $currentTime;
+                if ($_newRecord->has('seq')) {
+                    $_newRecord->seq       = 0;
+                }
                 break;
             case 'update':
                 $_newRecord->last_modified_by   = $currentAccountId;
@@ -725,7 +728,7 @@ class Tinebase_Timemachine_ModificationLog
      * @param Tinebase_Record_Abstract $newRecord
      * @param Tinebase_Record_Abstract $curRecord
      */
-    public static function increaseRecordSequence($newRecord, $curRecord)
+    public static function increaseRecordSequence($newRecord, $curRecord = NULL)
     {
         if (is_object($curRecord) && $curRecord->has('seq')) {
             $newRecord->seq = (int) $curRecord->seq +1;
