@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -117,7 +117,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     onOk: function() {
-        
         var tag = this.tagSelect.getValue();
         
         if(! tag) {
@@ -126,20 +125,34 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
         
         this.okButton.enable();
         
-        
         this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Attaching Tag')});
         this.loadMask.show();
         
         var filter = this.selectionModel.getSelectionFilter();
         var filterModel = this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter';
         
-        Tine.Tinebase.attachTagToMultipleRecords(filter, filterModel, tag, this.onSuccess.createDelegate(this));
+        // can't use Ext direct because the timeout is not configurable
+        //Tine.Tinebase.attachTagToMultipleRecords(filter, filterModel, tag, this.onSuccess.createDelegate(this));
+        Ext.Ajax.request({
+            scope: this,
+            timeout: 1800000, // 30 minutes
+            success: this.onSuccess.createDelegate(this),
+            params: {
+                method: 'Tinebase.attachTagToMultipleRecords',
+                filterData: filter,
+                filterName: filterModel,
+                tag: tag
+            },
+            failure: function(response, options) {
+                this.loadMask.hide();
+                Tine.Tinebase.ExceptionHandler.handleRequestException(response, options);
+            }
+        });
     },
     
     onSuccess: function() {
         this.updateHandler.call(this.updateHandlerScope || this);
         this.loadMask.hide();
-
         this.win.close();
     }
 });

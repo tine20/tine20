@@ -372,8 +372,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                     .' mods to log: ' . print_r($_mods->toArray(), TRUE));
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    .' Adding "' . $_type . '" system note note to record.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
                 
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
