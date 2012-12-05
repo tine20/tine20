@@ -39,7 +39,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     protected $_backendACL;
     
     /**
-     * custom field values bakcend
+     * custom field values backend
      * 
      * @var Tinebase_Backend_Sql
      */
@@ -162,7 +162,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cacheId = convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
         
-        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Before - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
         
         if (!$result) {
             $filterValues = array(array(
@@ -193,7 +194,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
         
-        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' After - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
         
         return $result;
     }
@@ -432,29 +434,61 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         };
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Adding ' . count($customFields) . ' custom fields to record  ' . $_record->getId());
+            . ' Adding ' . count($customFields) . ' customfields to record  ' . $_record->getId());
         
         $result = array();
         foreach ($customFields as $customField) {
-            $idx = $_configs->getIndexById($customField->customfield_id);
-            if ($idx !== FALSE) {
-                $config = $_configs[$idx];
-                if (strtolower($config->definition['type']) == 'record') {
-                    try {
-                        $modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
-                        $controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];
-                        $controller = call_user_func(array($controllerName, 'getInstance'));
-                        $result[$config->name] = $controller->get($customField->value)->toArray();
-                    } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
-                        $result[$config->name] = $customField->value;
-                    }
-                } else {
-                    $result[$config->name] = $customField->value;
-                }
-            }
+            $this->_setCfValueInRecord($_record, $customField, $_configs);
         }
-        $_record->customfields = $result;
+    }
+    
+    /**
+     * set customfield value in record
+     * 
+     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Model_CustomField_Value $customField
+     * @param Tinebase_Record_RecordSet $configs
+     */
+    protected function _setCfValueInRecord(Tinebase_Record_Abstract $record, Tinebase_Model_CustomField_Value $customField, Tinebase_Record_RecordSet $configs)
+    {
+        $recordCfs = $record->customfields;
+        $idx = $configs->getIndexById($customField->customfield_id);
+        if ($idx !== FALSE) {
+            $config = $configs[$idx];
+            if (strtolower($config->definition['type']) == 'record') {
+                $value = $this->_getRecordTypeCfValue($config, $customField->value);
+            } else {
+                $value = $customField->value;
+            }
+            $recordCfs[$config->name] = $value;
+        }
+        
+        $record->customfields = $recordCfs;
+    }
+    
+    /**
+     * get record cf value
+     * 
+     * @param Tinebase_Model_CustomField_Config $config
+     * @param string $value
+     * @return string
+     */
+    protected function _getRecordTypeCfValue($config, $value)
+    {
+        try {
+            $model = $config->definition['recordConfig']['value']['records'];
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Fetching record customfield of type ' . $model);
+            
+            $controller = Tinebase_Core::getApplicationInstance($model);
+            $result = $controller->get($value)->toArray();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Error resolving custom field record: ' . $e->getMessage());
+            $result = $value;
+        }
+        
+        return $result;
     }
     
     /**
@@ -468,19 +502,29 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             return;
         }
         
-        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Before resolving - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
         $configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_records->getFirstRecord()->getApplication()));
-        $customFields = $this->_getCustomFields($_records->getArrayOfIdsAsString(), $configs->getArrayOfIds());
-        $customFields->addIndices(array('record_id'));
         
-        foreach ($_records as $record) {
-            $this->resolveRecordCustomFields($record, $customFields->filter('record_id', $record->getId()), $configs);
+        $customFields = $this->_getCustomFields($_records->getArrayOfIdsAsString(), $configs->getArrayOfIds());
+        $customFields->sort('record_id');
+        
+        // NOTE: as filtering is currently very slow, we have to loop the customfields and add the value to the record.
+        // @see 0007496: timeout when opening multiedit dlg and assigning records to events/projects/email
+        // @see 0007558: reactivate indices in Tinebase_Record_RecordSet
+        $record = NULL;
+        foreach ($customFields as $customField) {
+            if (! $record || $record->getId() !== $customField->record_id) {
+                $record = $_records->getById($customField->record_id);
+            }
+            $this->_setCfValueInRecord($record, $customField, $configs);
         }
         
-        //Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' seconds  MEMORY: ' . memory_get_usage(true)/1024/1024 . ' MBytes');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' After resolving - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
     }
     
     /**
@@ -508,7 +552,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
-        return $this->_backendValue->search($filter);
+        $result = $this->_backendValue->search($filter);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Fetched ' . count($result) . ' customfield values.');
+        
+        return $result;
     }
     
     /**

@@ -388,6 +388,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return new Tinebase_Record_RecordSet($this->_modelName);
         }
 
+        // replace objects with their id's
+        foreach ($ids as &$id) {
+            if ($id instanceof Tinebase_Record_Interface) {
+                $id = $id->getId();
+            }
+        }
+        
         $select = $this->_getSelect();
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', $ids);
         

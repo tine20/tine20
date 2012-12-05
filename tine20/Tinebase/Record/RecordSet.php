@@ -325,6 +325,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * 
      * @param  string $_name property
      * @return array index => property
+     * 
+     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     public function __get($_name)
     {
@@ -522,7 +524,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
-        
         $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
         $result->addIndices(array_keys($this->_indices));
         
@@ -548,6 +549,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_field
      * @param string $_value
      * @return array
+     * 
+     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
     {

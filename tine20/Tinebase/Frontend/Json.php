@@ -329,6 +329,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function attachTagToMultipleRecords($filterData, $filterName, $tag)
     {
+        $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
 
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
@@ -345,6 +346,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function detachTagsFromMultipleRecords($filterData, $filterName, $tag)
     {
+        $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
 
         Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tag);
