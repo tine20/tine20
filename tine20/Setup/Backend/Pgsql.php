@@ -522,10 +522,10 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         
         $fieldTypes = array ('tinyint', 'mediumint', 'bigint', 'int', 'integer');
         foreach ($fieldTypes as $fieldType) {
-            $fieldDeclarations = preg_replace('/' . $fieldType . '\(\d*\)/', 'integer', $fieldDeclarations);
+            $fieldDeclarations = preg_replace('/ ' . $fieldType . '\(\d*\)/', ' integer', $fieldDeclarations);
         }
         
-        $fieldDeclarations = preg_replace('/smallint\(\d*\)/', 'smallint', $fieldDeclarations);
+        $fieldDeclarations = preg_replace('/ smallint\(\d*\)/', ' smallint', $fieldDeclarations);
         
         return $fieldDeclarations;
     }
