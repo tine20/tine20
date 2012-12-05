@@ -57,42 +57,42 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json = new Phone_Frontend_Json();
         
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
-            'id' => 20001,
-            'name' => 'phpunit test location',
+            'id'        => Tinebase_Record_Abstract::generateUID(),
+            'name'      => 'phpunit test location',
             'registrar' => 'registrar'
         ));
 
         $this->_objects['software'] = new Voipmanager_Model_Snom_Software(array(
-            'id' => 20003
+            'id' => Tinebase_Record_Abstract::generateUID()
         ));
         
         $this->_objects['setting'] = new Voipmanager_Model_Snom_Setting(array(
-            'id' => 20004,
-            'name' => 'test setting',
+            'id'          => Tinebase_Record_Abstract::generateUID(),
+            'name'        => 'test setting',
             'description' => 'test setting',
         ));
 
-        $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
-            'phone_id'  => 1001,
-            'web_language' => 'English'
-        ));
-        
         $this->_objects['template'] = new Voipmanager_Model_Snom_Template(array(
-            'id' => 20002,
-            'name' => 'phpunit test location',
-            'model' => 'snom320',
+            'id'          => Tinebase_Record_Abstract::generateUID(),
+            'name'        => 'phpunit test location',
+            'model'       => 'snom320',
             'software_id' => $this->_objects['software']->getId(),
-            'setting_id' => $this->_objects['setting']->getId()
+            'setting_id'  => $this->_objects['setting']->getId()
         ));
         
         $this->_objects['phone'] = new Voipmanager_Model_Snom_Phone(array(
-            'id' => 1001,
-            'macaddress' => "1234567890cd",
-            'description' => 'user phone',
-            'location_id' => $this->_objects['location']->getId(),
-            'template_id' => $this->_objects['template']->getId(),
-            'current_model' => 'snom320',
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'macaddress'     => "1234567890cd",
+            'description'    => 'user phone',
+            'location_id'    => $this->_objects['location']->getId(),
+            'template_id'    => $this->_objects['template']->getId(),
+            'current_model'  => 'snom320',
             'redirect_event' => 'none'
+        ));
+        
+        $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
+            'phone_id'     => $this->_objects['phone']->getId(),
+            'web_language' => 'English'
         ));
         
         $this->_objects['phoneOwner'] = array(
@@ -106,23 +106,23 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_objects['phone']->rights = $rights;
         
-        $this->_objects['line'] = new Voipmanager_Model_Snom_Line(array(
-            'id'                => 1001,
-            'snomphone_id'      => $this->_objects['phone']->getId(),
-            'asteriskline_id'   => 1001,
-            'linenumber'        => 1,
-            'lineactive'        => 1
-        ));
-
         $this->_objects['context'] = new Voipmanager_Model_Asterisk_Context(array(
-            'id'                => 1001,
+            'id'                => Tinebase_Record_Abstract::generateUID(),
             'name'              => 'test context',
             'description'       => 'test context',
         ));
         
         $this->_objects['sippeer'] = new Voipmanager_Model_Asterisk_SipPeer(array(
-            'id'                => 1001,
-            'context_id'        => 1001
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'context_id'        => $this->_objects['context']->getId()
+        ));
+        
+        $this->_objects['line'] = new Voipmanager_Model_Snom_Line(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'snomphone_id'      => $this->_objects['phone']->getId(),
+            'asteriskline_id'   => $this->_objects['sippeer']->getId(),
+            'linenumber'        => 1,
+            'lineactive'        => 1
         ));
         
         // create phone, location, template, rights
@@ -159,7 +159,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'phone_id'              => $this->_objects['phone']->getId(),
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
-            'destination'           => '0406437435',    
+            'destination'           => '0406437435',
         ));
 
         $this->_objects['call2'] = new Phone_Model_Call(array(
@@ -168,7 +168,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'phone_id'              => $this->_objects['phone']->getId(),
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
-            'destination'           => '050364354',    
+            'destination'           => '050364354',
         ));
         
         $this->_objects['paging'] = array(
