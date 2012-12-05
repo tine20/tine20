@@ -222,12 +222,12 @@ Tine.Tinebase.ApplicationStarter = {
                     filter = Ext.apply(filter, {label: _('Quick search'), operators: ['contains']});
                     break;
                 default:
-                    if (fieldconfig.type == 'keyfield') {
+                    if (this.filters[filterconfig.filter]) {  // use pre-defined default filter (this.filters)
+                        filter.valueType = this.filters[filterconfig.filter];
+                    } else if (fieldconfig && fieldconfig.hasOwnProperty('type') && fieldconfig.type == 'keyfield') {
                         filter.filtertype = 'tine.widget.keyfield.filter';
                         filter.app = {name: appName};
                         filter.keyfieldName = fieldconfig.name;
-                    } else if (this.filters[filterconfig.filter]) {  // use pre-defined default filter (this.filters)
-                        filter.valueType = this.filters[filterconfig.filter];
                     } else {    // try to find registered filter
                         var keys = filterconfig.filter.split('_'),
                             filterkey = keys[0].toLowerCase() + '.' + keys[2].toLowerCase();
