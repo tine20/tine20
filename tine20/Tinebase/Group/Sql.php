@@ -290,21 +290,22 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $groupId   = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
-        $data = array(
-            'group_id'      => $groupId,
-            'account_id'    => $accountId
-        );
+        $memberShips = $this->getGroupMemberships($accountId);
         
-        try {
+        if (!in_array($groupId, $memberShips)) {
+            $data = array(
+                'group_id'      => $groupId,
+                'account_id'    => $accountId
+            );
+        
             $this->groupMembersTable->insert($data);
             
             $this->_clearCache(array(
                 'groupMembers'     => $groupId,
                 'groupMemberships' => $accountId,
             ));
-        } catch (Zend_Db_Statement_Exception $e) {
-            // account is already member of this group
         }
+        
     }
     
     /**
