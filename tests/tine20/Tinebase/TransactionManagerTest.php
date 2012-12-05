@@ -16,19 +16,33 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var bool allow the use of GLOBALS to excange data between tests
-     */
-    protected $backupGlobals = false;
-    
-    /**
      * @var string
      */
-    protected $_testTableName = '';
+    protected $_testTableName = null;
     
     /**
      * @var Tinebase_TransactionManager
      */
     protected $_instance = NULL;
+    
+    protected $_tableXML = '
+        <table>
+            <name>transactiontest</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>Column1</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+            </declaration>
+        </table>
+    ';
     
     /**
      * Runs the test methods of this class.
@@ -41,11 +55,14 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tinebase_TransactionManagerTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-    
-    public function setup()
+
+    /**
+     * setup test
+     */
+    protected function setup()
     {
         $this->_testTableName = SQL_TABLE_PREFIX . 'transactiontest';
-        $this->_instance = Tinebase_TransactionManager::getInstance();
+        $this->_instance      = Tinebase_TransactionManager::getInstance();
     }
     
     /**
@@ -55,28 +72,15 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
      */
     protected function _createDbTestTable($_db)
     {
-        $tableName = $_db->quoteIdentifier($this->_testTableName);
-        $createQuery = "CREATE TABLE $tableName (" .
-            $_db->quoteIdentifier('Column1') . " varchar(64)," .
-            $_db->quoteIdentifier('Column2') . " varchar(64))";
-         
-        if ($_db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $createQuery .= " ENGINE=InnoDB DEFAULT CHARSET=utf8";
-            $_db->query("DROP TABLE IF EXISTS $tableName;");
-        } else {
-            $_db->query("DROP TABLE $tableName;");
-        }
-        $_db->query($createQuery);
-    }
-    
-    protected function _cleanDbTestTable($db)
-    {
+        $setupBackend = Setup_Backend_Factory::factory();
         
+        $setupBackend->dropTable('transactiontest');
+        
+        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($this->_tableXML));
     }
     
     /**
      * test getInstance()
-     *
      */
     public function testGetInstance()
     {
@@ -86,7 +90,6 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     
     /**
      * tests transaction ids
-     *
      */
     public function testUniqueTransactionIds()
     {
@@ -112,6 +115,9 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         $this->_instance->startTransaction($date);
     }
     
+    /**
+     * test one single transaction
+     */
     public function testOneDbSingleTransaction()
     {
         $db = Zend_Registry::get('dbAdapter');
@@ -128,6 +134,9 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($transactionId, $columns[0]['Column1'], 'Transaction was not executed properly');
     }
 
+    /**
+     * 
+     */
     public function testOneDbRollback()
     {
         $db = Zend_Registry::get('dbAdapter');
