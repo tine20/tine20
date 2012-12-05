@@ -100,10 +100,51 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         this.startValue = this.getValue();
     },
     
+    /**
+     * @see Ext.form.ComboBox
+     */
     setValue: function (value) {
         Ext.ux.form.ClearableComboBox.superclass.setValue.call(this, value);
         if (value && (this.triggers && this.disableClearer !== true)) {
             this.triggers[0].show();
+        }
+    },
+    
+    /**
+     * @see Ext.form.ComboBox
+     */
+    assertValue : function(){
+        
+        var val = this.getRawValue(),
+            rec;
+
+        if (this.valueField && Ext.isDefined(this.value)){
+            rec = this.findRecord(this.valueField, this.value);
+        }
+        if (!rec || rec.get(this.displayField) != val){
+            rec = this.findRecord(this.displayField, val);
+        }
+        
+        if (!rec && this.forceSelection){
+            if (val.length > 0 && val != this.emptyText){
+                this.el.dom.value = Ext.value(this.lastSelectionText, '');
+                this.applyEmptyText();
+            } else {
+                this.clearValue();
+            }
+        } else {
+            if (rec && this.valueField){
+                // onSelect may have already set the value and by doing so
+                // set the display field properly.  Let's not wipe out the
+                // valueField here by just sending the displayField.
+                if (this.value == val){
+                    return;
+                }
+                val = rec.get(this.valueField || this.displayField);
+            }
+            
+            this.selectedRecord = rec;
+            this.setRawValue(rec.get(this.displayField));
         }
     }
 });

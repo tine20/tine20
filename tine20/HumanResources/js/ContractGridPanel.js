@@ -115,13 +115,14 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
             requiredGrant: 'readGrant',
             hideTrigger2: true,
             allowBlank: true,
-            blurOnSelect: true
+            blurOnSelect: true,
+            value: Tine.HumanResources.registry.get('defaultFeastCalendar')
         };
 
         this.calendarQuickAdd = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
         this.calendarEditor = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', calConfig);
         if (Tine.Tinebase.appMgr.get('Sales')) {
-            this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter');
+            this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', { allowBlank: true});
         }
         
         var columns = [
@@ -134,7 +135,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
             
         if (Tine.Tinebase.appMgr.get('Sales')) {
             columns.push({ dataIndex: 'cost_center_id', width:50,  id: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Centre'),
-                 quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter'), renderer: this.renderCostCenter,
+                 quickaddField: Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {allowBlank: true}), renderer: this.renderCostCenter,
                  editor: this.costCenterEditor
             });
         }

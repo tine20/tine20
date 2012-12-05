@@ -272,4 +272,23 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function setConfig($config) {
         return HumanResources_Controller::getInstance()->setConfig($config);
     }
+    
+    /**
+     * Returns registry data of the application.
+     *
+     * Each application has its own registry to supply static data to the client.
+     * Registry data is queried only once per session from the client.
+     *
+     * This registry must not be used for rights or ACL purposes. Use the generic
+     * rights and ACL mechanisms instead!
+     *
+     * @return mixed array 'variable name' => 'data'
+     */
+    public function getRegistryData()
+    {
+        $data = parent::getRegistryData();
+        $calid = HumanResources_Config::getInstance()->get(HumanResources_Config::DEFAULT_FEAST_CALENDAR, NULL);
+        $data['defaultFeastCalendar'] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : NULL;
+        return $data;
+    }
 }

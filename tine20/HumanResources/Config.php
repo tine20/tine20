@@ -59,7 +59,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'default'               => 'REQUESTED'
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
+            // _('Default Feast Calendar')
             'label'                 => 'Default Feast Calendar',
+            // _('Here you can define the default feast calendar used to set feast days and other free days in datepicker')
             'description'           => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
             'type'                  => 'container',
             'clientRegistryInclude' => TRUE,

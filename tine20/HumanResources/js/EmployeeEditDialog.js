@@ -194,7 +194,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         listeners: {
                                             scope: this,
                                             blur: function() { 
-                                                if(this.contactPicker.selectedRecord) {
+                                                if (this.contactPicker.selectedRecord) {
                                                     this.contactButton.enable();
                                                 } else {
                                                     this.contactButton.disable();
@@ -213,7 +213,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         scope: this,
                                         click: function() {
                                             var sr = this.contactPicker.selectedRecord;
-                                            if(sr) {
+                                            if (sr) {
                                                 Ext.each(['n_fn', 'title', 'salutation', 'n_given', 'n_family'], function(f) {
                                                     this.form.findField(f).setValue(sr.get(f));
                                                 }, this);
@@ -253,6 +253,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     fieldLabel: this.app.i18n._('First Name'),
                                     name: 'n_given',
+                                    allowBlank: false,
                                     listeners: {
                                         scope: this,
                                         blur: this.updateDisplayName
@@ -261,6 +262,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     fieldLabel: this.app.i18n._('Last Name'),
                                     name: 'n_family',
+                                    allowBlank: false,
                                     listeners: {
                                         scope: this,
                                         blur: this.updateDisplayName
