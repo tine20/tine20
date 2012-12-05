@@ -20,7 +20,7 @@ class Setup_Backend_Factory
      * factory function to return a selected setup backend class
      *
      * @param string | optional $_type
-     * @return object
+     * @return Setup_Backend_Interface
      */
     static public function factory($_type = null)
     {
