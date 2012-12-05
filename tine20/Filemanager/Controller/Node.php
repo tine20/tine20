@@ -773,7 +773,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $aclContainer = NULL;
             if (! $_path->container) {
                 // resolve container
-                if (is_string($record->name)) {
+                if (! $record->name instanceof Tinebase_Model_Container) {
                     $idx = $containers->getIndexById($record->name);
                     if ($idx !== FALSE) {
                         $aclContainer = $containers[$idx];
