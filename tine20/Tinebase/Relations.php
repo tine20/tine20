@@ -256,7 +256,7 @@ class Tinebase_Relations
         
         switch ($_relation->related_model) {
             case 'Addressbook_Model_Contact':
-                $_relation->related_backend = Addressbook_Backend_Factory::SQL;
+                $_relation->related_backend = ucfirst(Addressbook_Backend_Factory::SQL);
                 break;
             case 'Tasks_Model_Task':
                 $_relation->related_backend = Tasks_Backend_Factory::SQL;
@@ -358,7 +358,7 @@ class Tinebase_Relations
      * @return  Tinebase_Model_Relation|NULL the new relation
      * @throws  Tinebase_Exception_Record_Validation
      */
-    protected function _addRelation($_relation)
+    protected function _addRelation(Tinebase_Model_Relation $_relation)
     {
         $_relation->created_by = Tinebase_Core::getUser()->getId();
         $_relation->creation_time = Tinebase_DateTime::now();
