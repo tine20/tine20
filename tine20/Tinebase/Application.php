@@ -511,16 +511,18 @@ class Tinebase_Application
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
-            'customfield'    => array('tablename' => ''),
+            'customfield'   => array('tablename' => ''),
             'rights'        => array('tablename' => 'role_rights'),
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
+            'modlog'        => array('tablename' => 'timemachine_modlog')
         );
         $countMessage = ' Deleted';
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $_application->getId())
         );
+        
         foreach ($dataToDelete as $dataType => $info) {
             switch ($dataType) {
                 case 'container':

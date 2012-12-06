@@ -1033,6 +1033,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         $adbJson = new Addressbook_Frontend_Json();
         $contact = $adbJson->getContact($node['relations'][0]['related_id']);
+        $this->assertEquals(1, count($contact['relations']), 'relations are missing');
         $this->assertEquals($node['name'], $contact['relations'][0]['related_record']['name']);
     }
     
