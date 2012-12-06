@@ -595,6 +595,40 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($nextAlarmEventStart < Tinebase_DateTime::now()->addHour(1), 'alarmtime of exception is wrong');
     }
     
+    public function testRecuringAlarmCustomDate()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->addWeek(1)->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->rrule = 'FREQ=YEARLY;INTERVAL=1;BYDAY=2TH;BYMONTH=12';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => Tinebase_Model_Alarm::OPTION_CUSTOM,
+                // NOTE: user means one week and 30 mins before
+                'alarm_time'     => Tinebase_DateTime::now()->subMinute(15)
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // assert one alarm only
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $assertString = ' at ' . Tinebase_DateTime::now()->addWeek(1)->format('M j');
+        $this->_assertMail('pwulf', $assertString);
+        
+        // check adjusted alarm time
+        $loadedEvent = $this->_eventController->get($persistentEvent->getId());
+        $recurid = $loadedEvent->alarms->getFirstRecord()->getOption('recurid');
+        $nextAlarmEventStart = new Tinebase_DateTime(substr($recurid, -19));
+        
+        $this->assertTrue($nextAlarmEventStart > Tinebase_DateTime::now(), 'alarmtime of series is not adjusted');
+    }
+    
     /**
      * test alarm inspection from 24.03.2012 -> 25.03.2012
      */
