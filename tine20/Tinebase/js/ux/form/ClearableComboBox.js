@@ -144,7 +144,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             }
             
             this.selectedRecord = rec;
-            this.setRawValue(rec.get(this.displayField));
+            this.setRawValue(rec ? rec.get(this.displayField) : '');
         }
     }
 });
