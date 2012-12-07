@@ -65,9 +65,29 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     contentType: null,
     
     /**
+     * Enable state
+     * 
+     * @type {Boolean}
+     */
+    stateful: true,
+    
+    /**
+     * define state events
+     * 
+     * @type {Array}
+     */
+    stateEvents: ['collapse', 'expand', 'collapsenode', 'expandnode'],
+    
+    /**
+     * @private {Ext.tree.treeNode} the latest clicked node
+     */
+    lastClickedNode: null,
+    
+    /**
      * init
      */  
     initComponent: function() {
+        this.stateId = this.app.name + (this.contentType ? this.contentType : '') + '-moduletree';
         Tine.widgets.ContentTypeTreePanel.superclass.initComponent.call(this);
         
         var treeRoot = new Ext.tree.TreeNode({
@@ -83,12 +103,14 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         
         this.recordClass = Tine[this.app.appName].Model[this.contentType];
         
+        this.on('click', this.saveClickedNodeState, this);
+        
         Ext.each(this.contentTypes, function(ct) {
             var modelName = ct.meta ? ct.meta.modelName : ct.model; 
             var recordClass = Tine[this.app.appName].Model[modelName];
             var group = recordClass.getMeta('group');
             
-            if(group) {
+            if (group) {
                 if(! groupNodes[group]) {
                     groupNodes[group] = new Ext.tree.TreeNode({
                         id : 'modulenode-' + recordClass.getMeta('modelName'),
@@ -120,7 +142,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
                     
-            if(ct.genericCtxActions) {
+            if (ct.genericCtxActions) {
                 this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
                     nodeName: this.app.i18n._hidden(recordClass.getMeta('recordsName')),
                     actions: ct.genericCtxActions,
@@ -142,6 +164,54 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     },
     
     /**
+     * saves the last clicked node as state
+     * 
+     * @param {Ext.tree.treeNode} node
+     * @param {Ext.EventObjectImpl} event
+     */
+    saveClickedNodeState: function(node, event) {
+        this.lastClickedNode = node;
+        this.saveState();
+    },
+    
+    /**
+     * @see Ext.Component
+     */
+    getState: function() {
+        var root = this.getRootNode();
+        
+        var state = {
+            expanded: [],
+            selected: this.lastClickedNode ? this.lastClickedNode.id : null
+        };
+        Ext.each(root.childNodes, function(node) {
+            state.expanded.push(!! node.expanded);
+        }, this);
+        
+        return state;
+    },
+    
+    /**
+     * applies state to cmp
+     * 
+     * @param {Object} state
+     */
+    applyState: function(state) {
+        var root = this.getRootNode();
+        Ext.each(state.expanded, function(isExpanded, index) {
+            root.childNodes[index].expanded = isExpanded;
+        }, this);
+
+        (function() {
+            var node = this.getNodeById(state.selected);
+            if (node) {
+                node.select();
+                node.fireEvent('click');
+            }
+        }).defer(100, this);
+    },
+    
+    /**
      * is called after render this panel, selects active node by contentType
      */
     afterRender: function() {
@@ -151,5 +221,4 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             this.getEl().select('div.ux-arrowcollapse-body').setStyle('height', null);
         }).defer(100, this);
     }
- 
 });

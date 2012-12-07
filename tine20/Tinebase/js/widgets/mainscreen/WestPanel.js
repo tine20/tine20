@@ -128,9 +128,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             //bubble state events
             item.enableBubble(['collapse', 'expand', 'selectionchange']);
         }, this);
-        
-        // enable vertical scrolling
-//        this.body.applyStyles('overflow-y: auto');
     },
     
     /**
