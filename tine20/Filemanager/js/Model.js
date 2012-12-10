@@ -15,7 +15,7 @@ Ext.ns('Tine.Filemanager.Model');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'name' },
     { name: 'path' },
@@ -40,7 +40,6 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     // ngettext('File', 'Files', n); gettext('File');
     recordName: 'File',
     recordsName: 'Files',
-    containerProperty: null,
     // ngettext('Folder', 'Folders', n); gettext('Folder');
     containerName: 'Folder',
     containersName: 'Folders',

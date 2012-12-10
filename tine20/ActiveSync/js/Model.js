@@ -16,7 +16,7 @@ Ext.ns('Tine.ActiveSync.Model');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * Device record definition
  */
-Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'deviceid'},
     { name: 'devicetype' },

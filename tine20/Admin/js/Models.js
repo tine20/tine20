@@ -86,8 +86,7 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create([
     titleProperty: 'name',
     // ngettext('Group', 'Groups', n); gettext('Groups');
     recordName: 'Group',
-    recordsName: 'Groups',
-    containerProperty: null
+    recordsName: 'Groups'
 });
 
 /**
@@ -127,6 +126,5 @@ Tine.Admin.Model.Application = Tine.Tinebase.data.Record.create([
     titleProperty: 'name',
     // ngettext('Application', 'Applications', n); gettext('Applications');
     recordName: 'Application',
-    recordsName: 'Applications',
-    containerProperty: null
+    recordsName: 'Applications'
 });

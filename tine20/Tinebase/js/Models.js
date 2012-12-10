@@ -62,8 +62,7 @@ Tine.Tinebase.Model.Role = Tine.Tinebase.data.Record.create([
     idProperty: 'id',
     titleProperty: 'name',
     recordName: 'Role',
-    recordsName: 'Roles',
-    containerProperty: null
+    recordsName: 'Roles'
 });
 
 /**
@@ -79,7 +78,7 @@ Tine.Tinebase.Model.Account = Ext.data.Record.create([
 /**
  * Model of a container
  */
-Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'type'},
@@ -122,7 +121,7 @@ Tine.Tinebase.Model.Grant = Ext.data.Record.create([
  * 
  * @constructor {Tine.Tinebase.data.Record}
  */
-Tine.Tinebase.Model.Tag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Tinebase.Model.Tag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'         },
     {name: 'app'        },
     {name: 'owner'      },
@@ -273,7 +272,6 @@ Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
     // ngettext('Alarm', 'Alarms', n); gettext('Alarm');
     recordName: 'Alarm',
     recordsName: 'Alarms',
-    containerProperty: null,
     getOption: function(name) {
         var encodedOptions = this.get('options'),
             options = encodedOptions ? Ext.decode(encodedOptions) : {}
@@ -311,8 +309,7 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
     titleProperty: 'model',
     // ngettext('Import', 'Imports', n); gettext('Import');
     recordName: 'Import',
-    recordsName: 'Imports',
-    containerProperty: null
+    recordsName: 'Imports'
 });
 
 /**
@@ -338,8 +335,7 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
     titleProperty: 'model',
     // ngettext('Export', 'Export', n); gettext('Export');
     recordName: 'Export',
-    recordsName: 'Exports',
-    containerProperty: null
+    recordsName: 'Exports'
 });
 
 /**
@@ -376,8 +372,7 @@ Tine.Tinebase.Model.Credentials = Tine.Tinebase.data.Record.create([
     titleProperty: 'username',
     // ngettext('Credentials', 'Credentials', n); gettext('Credentials');
     recordName: 'Credentials',
-    recordsName: 'Credentials',
-    containerProperty: null
+    recordsName: 'Credentials'
 });
 
 /**
@@ -404,8 +399,7 @@ Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
     titleProperty: 'related_model',
     // ngettext('Relation', 'Relations', n); gettext('Relation');
     recordName: 'Relation',
-    recordsName: 'Relations',
-    containerProperty: null
+    recordsName: 'Relations'
 });
 
 /**
@@ -426,8 +420,7 @@ Tine.Tinebase.Model.Department = Tine.Tinebase.data.Record.create([
     titleProperty: 'name',
     // ngettext('Department', 'Departments', n); gettext('Department');
     recordName: 'Department',
-    recordsName: 'Departments',
-    containerProperty: null
+    recordsName: 'Departments'
 });
 
 Tine.Tinebase.Model.Department.getFilterModel = function() {
@@ -453,6 +446,5 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     titleProperty: 'id',
     // ngettext('Config', 'Configs', n); gettext('Configs');
     recordName: 'Config',
-    recordsName: 'Configs',
-    containerProperty: null
+    recordsName: 'Configs'
 });

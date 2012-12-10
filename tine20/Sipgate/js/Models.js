@@ -25,7 +25,7 @@ Tine.Sipgate.Model.AccountArray = [
     { name: 'mobile_number' }
 ];
 
-Tine.Sipgate.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat(Tine.Sipgate.Model.AccountArray), {
+Tine.Sipgate.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat(Tine.Sipgate.Model.AccountArray), {
     appName: 'Sipgate',
     modelName: 'Account',
     idProperty: 'id',
@@ -35,9 +35,7 @@ Tine.Sipgate.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
     recordsName: 'Accounts',
     
     containerName: 'Account',
-    containersName: 'Accounts',
-    containerProperty: null
-
+    containersName: 'Accounts'
 });
 
 Tine.Sipgate.accountBackend = new Tine.Tinebase.data.RecordProxy({
@@ -136,10 +134,7 @@ Tine.Sipgate.Model.Line = Tine.Tinebase.data.Record.create(Tine.Sipgate.Model.Li
     titleProperty: 'uri_alias',
 
     recordName: 'Line',
-    recordsName: 'Lines',
-    
-    containerProperty: null
-
+    recordsName: 'Lines'
 });
 
 Tine.Sipgate.Model.Line.getFilterModel = function() {
@@ -305,16 +300,12 @@ Tine.Sipgate.Model.Connection = Tine.Tinebase.data.Record.create(Tine.Sipgate.Mo
     idProperty: 'id',
     titleProperty: 'source_uri',
     
-//    containerProperty: null,
     // ngettext('record list', 'record lists', n);
     containerName: 'Connection',
     containersName: 'Connections',
     
     recordName: 'Connection',
     recordsName: 'Connections'
-    
-//    containerProperty: 'line_id'
-
 });
 
 Tine.Sipgate.connectionBackend = new Tine.Tinebase.data.RecordProxy({

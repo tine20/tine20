@@ -67,7 +67,6 @@ Tine.HumanResources.Model.Employee = Tine.Tinebase.data.Record.create(Tine.Human
     // ngettext('Employee', 'Employees', n);
     recordName: 'Employee',
     recordsName: 'Employees',
-    containerProperty: null,
     // ngettext('Employees', 'Employees', n);
     containerName: 'Employees',
     containersName: 'Employees',
@@ -157,7 +156,6 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     // ngettext('Working Time', 'Working Times', n);
     recordName: 'Working Time',
     recordsName: 'Working Times',
-    containerProperty: null,
     // ngettext('Working Times', 'Working Times', n);
     containerName: 'Working Times',
     containersName: 'Working Times',
@@ -230,7 +228,6 @@ Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Human
     // ngettext('Contract', 'Contracts', n);
     recordName: 'Contract',
     recordsName: 'Contracts',
-    containerProperty: null,
     // ngettext('Contracts', 'Contracts', n);
     containerName: 'Contracts',
     containersName: 'Contracts',
@@ -302,7 +299,6 @@ Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.Human
     modelName: 'FreeTime',
     idProperty: 'id',
     titleProperty: 'remark',
-    containerProperty: null,
     // ngettext('Free Time', 'Free Times', n);
     recordName: 'Free Time',
     recordsName: 'Free Times',
@@ -387,7 +383,6 @@ Tine.HumanResources.Model.FreeDay = Tine.Tinebase.data.Record.create(Tine.HumanR
     modelName: 'FreeDay',
     idProperty: 'id',
     titleProperty: 'name',
-    containerProperty: null,
     // ngettext('Free Day', 'Free Days', n);
     recordName: 'Free Day',
     recordsName: 'Free Days',

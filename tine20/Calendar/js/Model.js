@@ -555,8 +555,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     titleProperty: 'name',
     // ngettext('Resource', 'Resources', n); gettext('Resources');
     recordName: 'Resource',
-    recordsName: 'Resources',
-    containerProperty: null
+    recordsName: 'Resources'
 });
 
 /**

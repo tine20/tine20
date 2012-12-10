@@ -63,7 +63,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @cfg {String} containerProperty
      * name of the container property
      */
-    containerProperty: 'container_id',
+    containerProperty: null,
     /**
      * @cfg {String} containerName
      * untranslated container name

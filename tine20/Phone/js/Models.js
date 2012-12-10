@@ -32,7 +32,7 @@ Tine.Phone.Model.Call = Ext.data.Record.create([
  * @type {Tine.Tinebase.data.Record}
  * Voipmanager record definition
  */
-Tine.Phone.Model.MyPhone = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([ 
+Tine.Phone.Model.MyPhone = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([ 
     {name: 'id'},
     {name: 'description'},
     {name: 'template_id'},

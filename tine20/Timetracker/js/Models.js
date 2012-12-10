@@ -14,7 +14,7 @@ Ext.ns('Tine.Timetracker', 'Tine.Timetracker.Model');
  * @type {Array}
  * Timesheet model fields
  */
-Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'account_id' },
     { name: 'timeaccount_id' },

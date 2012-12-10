@@ -10,7 +10,7 @@
  
 Ext.namespace('Tine.Sales', 'Tine.Sales.Model');
 
-Tine.Sales.Model.ProductArray = Tine.Tinebase.Model.genericFields.concat([
+Tine.Sales.Model.ProductArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id',            type: 'string'},
     {name: 'name',          type: 'string'},
     {name: 'description',   type: 'string'},
@@ -39,7 +39,6 @@ Tine.Sales.Model.Product = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Pro
     // ngettext('Product', 'Products', n);
     recordName: 'Product',
     recordsName: 'Products',
-    containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'All Products',
     containersName: 'Products',

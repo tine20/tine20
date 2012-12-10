@@ -152,7 +152,6 @@ Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
     // ngettext('Settings', 'Settings', n);
     recordName: 'Settings',
     recordsName: 'Settingss',
-    containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Settings',
     containersName: 'Settings',

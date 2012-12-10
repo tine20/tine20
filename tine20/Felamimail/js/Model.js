@@ -314,7 +314,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Account Record Definition
  */ 
-Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'original_id' }, // client only, used in message compose dialog for accounts combo
     { name: 'user_id' },
@@ -360,7 +360,6 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     // ngettext('Account', 'Accounts', n);
     recordName: 'Account',
     recordsName: 'Accounts',
-    containerProperty: 'container_id',
     // ngettext('Email Accounts', 'Email Accounts', n);
     containerName: 'Email Accounts',
     containersName: 'Email Accounts',
@@ -607,7 +606,7 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Vacation Record Definition
  */ 
-Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'reason' },
     { name: 'enabled', type: 'boolean'},
@@ -626,7 +625,6 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
     // ngettext('Vacation', 'Vacations', n);
     recordName: 'Vacation',
     recordsName: 'Vacations',
-    //containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Vacation list',
     containersName: 'Vacation lists'    
@@ -673,7 +671,7 @@ Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Rule Record Definition
  */ 
-Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id', sortType: function(value) {
         // should be sorted as int
         return parseInt(value, 10);
@@ -807,7 +805,7 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
  * 
  * Flag Record Definition
  */ 
-Tine.Felamimail.Model.Flag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Felamimail.Model.Flag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
     { name: 'id' },
     { name: 'name' }
 ]), {
