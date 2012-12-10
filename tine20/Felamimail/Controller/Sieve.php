@@ -241,21 +241,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _addVacationUserData(Felamimail_Model_Sieve_Vacation $_vacation, Felamimail_Model_Account $_account)
     {
-        $addresses = array();
         if ($_account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-            $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
-            
-            $addresses[] = (! empty(Tinebase_Core::getUser()->accountEmailAddress)) ? Tinebase_Core::getUser()->accountEmailAddress : $_account->email;
-            if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
-                $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
-            }
-            if ($this->_isDbmailSieve() && $fullUser->imapUser && ! empty($fullUser->imapUser->emailUID)) {
-                // dbmail sieve needs dbmail uid (envelope recipient) in addresses
-                // see https://bugs.launchpad.net/ubuntu/+source/libsieve/+bug/883627
-                $addresses[] = $fullUser->imapUser->emailUID;
-            }
+            $addresses = $this->_getSystemAccountVacationAddresses($_account);
         } else {
-            $addresses[] = $_account->email;
+            $addresses = array($_account->email);
         }
         $_vacation->addresses = $addresses;
         
@@ -267,6 +256,46 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
             $_vacation->from = $from;
         }
+    }
+    
+    /**
+     * get vacation addresses from system account
+     * 
+     * @param Felamimail_Model_Account $account
+     * @return array
+     */
+    protected function _getSystemAccountVacationAddresses(Felamimail_Model_Account $account)
+    {
+        $addresses = array();
+        $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        
+        $addresses[] = (! empty(Tinebase_Core::getUser()->accountEmailAddress)) ? Tinebase_Core::getUser()->accountEmailAddress : $account->email;
+        if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
+            $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
+        }
+        
+        // append all valid domains if nessesary
+        $systemAccountConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
+        foreach ($addresses as $idx => $address) {
+            if (! strpos($address, '@')) {
+                $addresses[$idx] = $address . '@' . $systemAccountConfig['primarydomain'];
+                if ($systemAccountConfig['secondarydomains']) {
+                    foreach (explode(',', $systemAccountConfig['secondarydomains']) as $secondarydomain) {
+                        if ($secondarydomain) {
+                            $addresses[] = $address . '@' . trim($secondarydomain);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ($this->_isDbmailSieve() && $fullUser->imapUser && ! empty($fullUser->imapUser->emailUID)) {
+            // dbmail sieve needs dbmail uid (envelope recipient) in addresses
+            // see https://bugs.launchpad.net/ubuntu/+source/libsieve/+bug/883627
+            $addresses[] = $fullUser->imapUser->emailUID;
+        }
+        
+        return $addresses;
     }
     
     /**
