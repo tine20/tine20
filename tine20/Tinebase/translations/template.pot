@@ -569,8 +569,8 @@ msgstr ""
 
 #: js/LoginPanel.js:152
 msgid ""
-"If you miss a language, or your language is not supported completely, feel "
-"free to add you own translations!"
+"If you miss a language, or your language is not supported completely, you "
+"can help our translation teams at transifex."
 msgstr ""
 
 #: js/LoginPanel.js:155
@@ -1098,7 +1098,7 @@ msgstr ""
 msgid "Select Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:130
+#: js/widgets/tags/TagsMassAttachAction.js:128
 msgid "Attaching Tag"
 msgstr ""
 
