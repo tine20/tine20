@@ -146,7 +146,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }], [{
                             columnWidth: .5,
                             xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Contact Customer'),
+                            fieldLabel: this.app.i18n._('Contract Contact'),
                             editDialog: this,
                             allowBlank: true,
                             app: 'Addressbook',
@@ -158,7 +158,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             columnWidth: .5,
                             editDialog: this,
                             xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Contact Responsible'),
+                            fieldLabel: this.app.i18n._('Account Manager'),
                             allowBlank: true,
                             app: 'Addressbook',
                             recordClass: Tine.Addressbook.Model.Contact,

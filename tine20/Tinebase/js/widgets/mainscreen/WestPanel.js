@@ -397,6 +397,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 columnWidth: 1,
                 items: items
             });
+            
+            this.portalColumn.on('resize', function(cmp, width) {
+                this.portalColumn.items.each(function(item) {
+                    item.setWidth(width);
+                }, this);
+            }, this)
         }
         
         return this.portalColumn;

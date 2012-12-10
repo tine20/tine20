@@ -83,7 +83,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _checkDates(Tinebase_Record_Interface $_record)
     {
-        if ($_record->start_date instanceof Tinebase_DateTime && $_record->end_date instanceof Tinebase_DateTime) {
+        if ($_record->start_date instanceof Tinebase_DateTime && $_record->end_date instanceof Tinebase_DateTime && (int) $_record->end_date->getTimestamp() != 0) {
             if ($_record->end_date->isEarlier($_record->start_date)) {
                 throw new Tinebase_Exception_Record_Validation('The start date of the contract must be before the end date');
             }
