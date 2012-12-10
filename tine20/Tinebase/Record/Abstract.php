@@ -223,11 +223,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $this->dateConversionFormat = $_convertDates;
         }
 
-        if($this->has('description')) {
+        if ($this->has('description')) {
             $this->_filters['description'] = new Tinebase_Model_InputFilter_CrlfConvert();
         }
 
-        if(is_array($_data)) {
+        if (is_array($_data)) {
             $this->setFromArray($_data);
         }
     }
@@ -316,7 +316,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function setFromArray(array $_data)
     {
-        if($this->convertDates === true) {
+        if ($this->convertDates === true) {
             if (! is_string($this->dateConversionFormat)) {
                 $this->_convertISO8601ToDateTime($_data);
             } else {
@@ -399,7 +399,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         foreach ($this->_datetimeFields as $field) {
             if (!isset($this->_properties[$field])) continue;
             
-            if(!is_array($this->_properties[$field])) {
+            if (!is_array($this->_properties[$field])) {
                 $toConvert = array($this->_properties[$field]);
             } else {
                 $toConvert = $this->_properties[$field];
@@ -487,7 +487,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function isValid($_throwExceptionOnInvalidData = false)
     {
-        if($this->_isValidated === false) {
+        if ($this->_isValidated === false) {
             
             $inputFilter = $this->_getFilter();
             $inputFilter->setData($this->_properties);
@@ -615,16 +615,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _autoModeling()
     {
-        if(static::$_meta) {
-            if(! $this->_identifier) {
+        if (static::$_meta) {
+            if (! $this->_identifier) {
                 $this->_identifier = (array_key_exists('idProperty', static::$_meta))  ? static::$_meta['idProperty'] : 'id';
             }
-            if(static::$_fields) {
+            if (static::$_fields) {
                 foreach(static::$_fields as $k => $f) {
-                    if(array_key_exists('filters', $f)) $this->_filters[$k] = $f['filters'];
-                    if(array_key_exists('validators', $f)) $this->_validators[$k] = $f['validators'];
-                    if(array_key_exists('modlogOmit', $f)) $this->_modlogOmitFields[] = $k;
-                    if(! array_key_exists('type', $f)) $f['type'] = 'string';
+                    if (array_key_exists('filters', $f)) $this->_filters[$k] = $f['filters'];
+                    if (array_key_exists('validators', $f)) $this->_validators[$k] = $f['validators'];
+                    if (array_key_exists('modlogOmit', $f)) $this->_modlogOmitFields[] = $k;
+                    if (! array_key_exists('type', $f)) $f['type'] = 'string';
                     switch ($f['type']) {
                         case 'string':
                         case 'integer':
@@ -633,7 +633,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                             break;
                         case 'date':
                         case 'datetime':
-                            if(array_key_exists('alarm', $f)) $this->_alarmDateTimeField = $k;
+                            if (array_key_exists('alarm', $f)) $this->_alarmDateTimeField = $k;
                             $this->_datetimeFields[] = $k;
                             break;
                         case 'time':
@@ -661,25 +661,24 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static function _autoModelingStatic()
     {
-        if(static::$_meta) {
-            if(static::_checkMetaProperty('hasCustomFields')) {
+        if (static::$_meta) {
+            if (static::_checkMetaProperty('hasCustomFields')) {
                 static::$_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            if(static::_checkMetaProperty('hasRelations')) {
+            if (static::_checkMetaProperty('hasRelations')) {
                 static::$_fields['relations'] = array('label' => NULL, 'type' => 'relation', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            if(static::_checkMetaProperty('hasNotes')) {
-                static::$_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
-            }
-            if(static::_checkMetaProperty('hasTags')) {
+            if (static::_checkMetaProperty('hasTags')) {
                 static::$_fields['tags'] = array('label' => 'Tags', 'type' => 'tag', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
-            
-            if(static::_checkMetaProperty('containerProperty')) {
+            if (static::_checkMetaProperty('containerProperty')) {
                 static::$_fields[static::$_meta['containerProperty']] = array('label' => 'Container', 'hidden' => true, 'type' => 'container', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
             }
             
-            if(static::_checkMetaProperty('useModlog')) {
+            if (static::_checkMetaProperty('useModlog')) {
+                // notes are needed if modlog is active
+                static::$_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+                
                 static::$_fields['created_by']         = array('label' => 'Created By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['creation_time']      = array('label' => 'Creation Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['last_modified_by']   = array('label' => 'Last Modified By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
@@ -688,6 +687,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 static::$_fields['deleted_by']         = array('label' => NULL, 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['is_deleted']         = array('label' => NULL, 'type' => 'bool', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+
+            } else if (static::_checkMetaProperty('hasNotes')) {
+                static::$_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
             }
         }
 
@@ -700,7 +702,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected static function _checkMetaProperty($property)
     {
-        if(static::$_meta) {
+        if (static::$_meta) {
             return array_key_exists($property, static::$_meta) && static::$_meta[$property];
         }
         return false;
@@ -762,7 +764,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
             
             try {
-                if(is_array($_data[$field])) {
+                if (is_array($_data[$field])) {
                     foreach($_data[$field] as $dataKey => $dataValue) {
                         if ($dataValue instanceof DateTime) continue;
                         $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
@@ -796,7 +798,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $_data[$field] = explode(',', $_data[$field]);
             }
             
-            if(is_array($_data[$field])) {
+            if (is_array($_data[$field])) {
                 foreach($_data[$field] as $dataKey => $dataValue) {
                     if ($dataValue instanceof DateTime) continue;
                     $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
@@ -921,7 +923,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $uid = sha1(mt_rand(). microtime());
         
-        if($_length !== false) {
+        if ($_length !== false) {
             $uid = substr($uid, 0, $_length);
         }
         
@@ -963,7 +965,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function diff($_record)
     {
-        if(! $_record instanceof Tinebase_Record_Abstract) {
+        if (! $_record instanceof Tinebase_Record_Abstract) {
             return $_record;
         }
         
@@ -1156,7 +1158,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if (!$key) {
             return static::$_meta;
         } else {
-            if(array_key_exists($key, static::$_meta)) {
+            if (array_key_exists($key, static::$_meta)) {
                 return static::$_meta[$key];
             }
             return null;
@@ -1178,9 +1180,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public static function getResolveForeignIdFields()
     {
-        if(static::_checkMetaProperty('useModlog')) {
+        if (static::_checkMetaProperty('useModlog')) {
             $res = array('Tinebase_Model_User' => array('created_by', 'last_modified_by'));
-            if(is_array(static::$_resolveForeignIdFields)) {
+            if (is_array(static::$_resolveForeignIdFields)) {
                 return array_merge_recursive(static::$_resolveForeignIdFields, $res);
             } else {
                 return $res;
