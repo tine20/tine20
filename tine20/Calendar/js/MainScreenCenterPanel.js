@@ -110,7 +110,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             refresh: true,
             autoRefresh: true
         }]);
-    
+        
         Tine.Calendar.MainScreenCenterPanel.superclass.initComponent.call(this);
     },
     
@@ -1072,12 +1072,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (this.rendered) {
-        // update filtertoolbar
+            // update filtertoolbar
             if(this.filterToolbar) {
                 this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
             }
-            // update tree
+            // update container tree
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
+            
+            // update attendee filter grid
+            Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getAttendeeFilter().setFilterValue(store.proxy.jsonReader.jsonData.filter);
         }
     },
     

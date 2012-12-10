@@ -82,39 +82,38 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
         labelWidth: 30
     },
     
+    attendeeData: null,
+    
     initComponent: function() {
-        this.fakeRecord = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData());
-        
         this.on('beforecollapse', this.onBeforeCollapse, this);
         
         this.supr().initComponent.call(this);
     },
     
     getFormValue: function() {
-        this.attendeeGridPanel.onRecordUpdate(this.fakeRecord);
-        return this.fakeRecord.get('attendee');
+        return this.attendeeFilterGrid.getValue();
     },
     
     getItems: function() {
         
-        this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
+        this.attendeeFilterGrid = new Tine.Calendar.AttendeeFilterGrid({
             title: this.app.i18n._('Select Attendee'),
             height: this.layerHeight || 'auto',
             showNamesOnly: true,
             showMemberOfType: true,
-            stateful: false
+            onStoreChange: Ext.emptyFn
         });
-        this.attendeeGridPanel.store.on({
+        this.attendeeFilterGrid.store.on({
             'add': function (store) {
-                this.action_ok.setDisabled(this.attendeeGridPanel.store.getCount() === 1);
+                this.action_ok.setDisabled(this.attendeeFilterGrid.store.getCount() === 1);
             },
             'remove': function (store) {
-                this.action_ok.setDisabled(this.attendeeGridPanel.store.getCount() === 1);
+                this.action_ok.setDisabled(this.attendeeFilterGrid.store.getCount() === 1);
             },
             scope: this
         });
         
-        var items = [this.attendeeGridPanel];
+        var items = [this.attendeeFilterGrid];
         
         return items;
     },
@@ -124,8 +123,8 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
      */
     onBeforeCollapse: function() {
         
-        return (!this.attendeeGridPanel.ctxMenu || this.attendeeGridPanel.ctxMenu.hidden) &&
-                !this.attendeeGridPanel.editing;
+        return (!this.attendeeFilterGrid.ctxMenu || this.attendeeFilterGrid.ctxMenu.hidden) &&
+                !this.attendeeFilterGrid.editing;
     },
     
     /**
@@ -134,8 +133,7 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
      */
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
-        this.fakeRecord.set('attendee', '');
-        this.fakeRecord.set('attendee', value);
+        this.attendeeData = value;
         this.currentValue = [];
         
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value);
@@ -157,6 +155,6 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
      * sets values to innerForm
      */
     setFormValue: function(value) {
-        this.attendeeGridPanel.onRecordLoad(this.fakeRecord);
+        this.attendeeFilterGrid.setValue(this.attendeeData);
     }
 });

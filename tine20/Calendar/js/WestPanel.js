@@ -23,23 +23,27 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     
     cls: 'cal-tree',
-
+    
     getAdditionalItems: function() {
-        return [Ext.apply({
-            title: this.app.i18n._('Mini Calendar'),
-            forceLayout: true,
-            border: false,
-            layout: 'hbox',
-            layoutConfig: {
-                align:'middle'
-            },
-            defaults: {border: false},
-            items: [{
-                flex: 1
-            }, this.getDatePicker(), {
-                flex: 1
-            }]
-        }, this.defaults)];
+        return [
+            Ext.apply(this.getAttendeeFilter(), this.defaults),
+            
+            Ext.apply({
+                title: this.app.i18n._('Mini Calendar'),
+                forceLayout: true,
+                border: false,
+                layout: 'hbox',
+                layoutConfig: {
+                    align:'middle'
+                },
+                defaults: {border: false},
+                items: [{
+                    flex: 1
+                }, this.getDatePicker(), {
+                    flex: 1
+                }]
+            }, this.defaults)
+        ];
     },
     
     getDatePicker: function() {
@@ -69,5 +73,16 @@ Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
         }
         
         return this.datePicker;
+    },
+    
+    getAttendeeFilter: function() {
+        if (! this.attendeeFilter) {
+            this.attendeeFilter = new Tine.Calendar.AttendeeFilterGrid({
+                autoHeight: true,
+                title: this.app.i18n._('Attendee')
+            });
+        }
+        
+        return this.attendeeFilter;
     }
 });

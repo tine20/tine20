@@ -22,6 +22,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     enableHdMenu: false,
     
     /**
+     * @cfg defaut text for new attendee combo
+     * _('Click here to invite another attender...')
+     */
+    addNewAttendeeText: 'Click here to invite another attender...',
+    
+    /**
      * @cfg {Boolean} showGroupMemberType
      * show user_type groupmember in type selection
      */
@@ -88,6 +94,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('afteredit', this.onAfterAttenderEdit, this);
         
         this.initColumns();
+        
+        this.mon(Ext.getBody(), 'click', this.stopEditingIf, this);
+        
+        this.viewConfig = {
+            getRowClass: this.getRowClass
+        };
         
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
     },
@@ -223,6 +235,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         o.record.set('status_authkey', 1);
                     }
                     
+                    o.record.explicitlyAdded = true;
+                    o.record.set('checked', true);
+                    
                     var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
                     this.store.add([newAttender]);
                     this.startEditing(o.row +1, o.column);
@@ -282,6 +297,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             switch(o.record.get('user_type')) {
                 case 'user' :
                 colModel.config[o.column].setEditor(new Tine.Addressbook.SearchCombo({
+                    allowBlank: true,
                     blurOnSelect: true,
                     selectOnFocus: true,
                     forceSelection: false,
@@ -296,6 +312,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 case 'group':
                 case 'memberOf':
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    minListWidth: 350,
                     blurOnSelect: true,
                     recordClass: Tine.Addressbook.Model.List,
                     getValue: function() {
@@ -306,6 +323,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 
                 case 'resource':
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                    minListWidth: 350,
                     blurOnSelect: true,
                     recordClass: Tine.Calendar.Model.Resource,
                     getValue: function() {
@@ -449,7 +467,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // add new user:
         if (arguments[1]) {
             arguments[1].css = 'x-form-empty-field';
-            return this.app.i18n._('Click here to invite another attender...');
+            return this.app.i18n._(this.addNewAttendeeText);
         }
     },
     

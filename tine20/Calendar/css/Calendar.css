@@ -105,6 +105,13 @@
     background-position: 2px 2px;
 }
 
+.x-cal-add-attendee-row .x-grid3-col-checked {
+    display: none;
+}
+.x-cal-attendee-filter-grid .x-grid3-dirty-cell {
+    background-image:none;
+}
+
 /**** calendar select widget ****/
 .cal-calselectwidget-faketriggerwrap {
     position: absolute;
