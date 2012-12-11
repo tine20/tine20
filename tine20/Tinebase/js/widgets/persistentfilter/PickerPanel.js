@@ -489,7 +489,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     
     getNewEmptyRecord: function() {
-        var model = this.filterModel;
+        var model = this.filterModel,
+            ftb = this.getFilterToolbar();
+            
         if (!model) {
             var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
             model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';

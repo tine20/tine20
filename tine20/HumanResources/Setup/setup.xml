@@ -3,6 +3,9 @@
     <name>HumanResources</name>
     <version>7.2</version>
     <order>51</order>
+    <depends>
+        <application>Calendar</application>
+    </depends>
     <status>enabled</status>
     <tables>
         <table>
