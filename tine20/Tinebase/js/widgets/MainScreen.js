@@ -34,6 +34,8 @@ Tine.widgets.MainScreen = function(config) {
         'show'
     );
     
+    this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
+    
     Tine.widgets.MainScreen.superclass.constructor.call(this);
 };
 
@@ -60,6 +62,16 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      */
     centerPanelClassNameSuffix: 'GridPanel',
 
+    /**
+     * private 
+     */
+    
+    /**
+     * @type {Bool} useModuleTreePanel
+     * use modulePanel (defaults to null -> autodetection)
+     */
+    useModuleTreePanel: null,
+    
     /**
      * returns active content type
      * 
@@ -130,6 +142,27 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         return this[contentType + 'ActionToolbar'];
     },
     
+    getModuleTreePanel: function() {
+        if(! this.moduleTreePanel) {
+            if(this.useModuleTreePanel) {
+                this.moduleTreePanel = new Tine.widgets.ContentTypeTreePanel({
+                    app: this.app, 
+                    contentTypes: this.contentTypes,
+                    contentType: this.getActiveContentType()
+                });
+                this.moduleTreePanel.on('click', function (node, event) {
+                    if(node != this.lastClickedNode) {
+                        this.lastClickedNode = node;
+                        this.fireEvent('selectionchange');
+                    }
+                });
+            } else {
+                this.moduleTreePanel = new Ext.Panel({html:'', border: false, frame: false});
+            } 
+        }
+        return this.moduleTreePanel;
+    },
+    
     /**
      * get west panel for given contentType
      * 
@@ -138,7 +171,6 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * @return {Ext.Panel}
      */
     getWestPanel: function() {
-
         var contentType = this.getActiveContentType(),
             wpName = contentType + 'WestPanel';
             
@@ -190,7 +222,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
             this.showWestPanel();
             this.showCenterPanel();
             this.showNorthPanel();
-            
+            this.showModuleTreePanel()
             this.fireEvent('show', this);
         }
         return this;
@@ -201,6 +233,13 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      */
     showCenterPanel: function() {
         Tine.Tinebase.MainScreen.setActiveContentPanel(this.getCenterPanel(this.getActiveContentType()), true);
+    },
+    
+    /**
+     * shows module tree panel in mainscreen
+     */
+    showModuleTreePanel: function() {
+        Tine.Tinebase.MainScreen.setActiveModulePanel(this.getModuleTreePanel(), true);
     },
     
     /**

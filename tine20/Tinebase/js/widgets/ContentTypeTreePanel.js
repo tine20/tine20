@@ -33,16 +33,22 @@ Tine.widgets.ContentTypeTreePanel = function(config) {
 Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     rootVisible : false,
     border : false,
-    collapsible : true,
 
     root: null,
     
-    titleCollapse: true,
-    title: '',
-    baseCls: 'ux-arrowcollapse',
+    title: 'Modules',
 
-    recordClass: null,
+    collapsible: true,
+    baseCls: 'ux-arrowcollapse',
+    animCollapse: true,
+    titleCollapse:true,
+    draggable : true,
+    autoScroll: false,
     
+    collapsed: false,
+    renderHidden: true,
+    
+    recordClass: null,
     /**
      * @cfg {Tine.Tinebase.Application} app
      */
@@ -59,9 +65,29 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     contentType: null,
     
     /**
+     * Enable state
+     * 
+     * @type {Boolean}
+     */
+    stateful: true,
+    
+    /**
+     * define state events
+     * 
+     * @type {Array}
+     */
+    stateEvents: ['collapse', 'expand', 'collapsenode', 'expandnode'],
+    
+    /**
+     * @private {Ext.tree.treeNode} the latest clicked node
+     */
+    lastClickedNode: null,
+    
+    /**
      * init
      */  
     initComponent: function() {
+        this.stateId = this.app.name + (this.contentType ? this.contentType : '') + '-moduletree';
         Tine.widgets.ContentTypeTreePanel.superclass.initComponent.call(this);
         
         var treeRoot = new Ext.tree.TreeNode({
@@ -71,34 +97,52 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             allowDrop : false,
             icon : false
         });
-    
+        var groupNodes = {};
         this.setRootNode(treeRoot);
         var treeRoot = this.getRootNode();
         
         this.recordClass = Tine[this.app.appName].Model[this.contentType];
         
+        this.on('click', this.saveClickedNodeState, this);
+        
         Ext.each(this.contentTypes, function(ct) {
             var modelName = ct.meta ? ct.meta.modelName : ct.model; 
             var recordClass = Tine[this.app.appName].Model[modelName];
+            var group = recordClass.getMeta('group');
+            
+            if (group) {
+                if(! groupNodes[group]) {
+                    groupNodes[group] = new Ext.tree.TreeNode({
+                        id : 'modulenode-' + recordClass.getMeta('modelName'),
+                        iconCls: this.app.appName + modelName,
+                        text: this.app.i18n._hidden(group),
+                        leaf : false,
+                        expanded: false
+                    });
+                    treeRoot.appendChild(groupNodes[group]);
+                }
+                var parentNode = groupNodes[group];
+            } else {
+                var parentNode = treeRoot;
+            }
+            
             // check requiredRight if any
             if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + modelName,
                 text: recordClass.getRecordsName(),
-                leaf : true,
-                containerType: Tine.Tinebase.container.TYPE_SHARED,
-                container: Ext.apply(Tine[this.app.name].registry.get('defaultContainer'), {name: this.app.i18n._hidden(recordClass.getMeta('containerName'))})                 
+                leaf : true
             });
             
             child.on('click', function() {
-                        this.app.getMainScreen().activeContentType = modelName;
-                        this.app.getMainScreen().show();
-                    }, this);
+                this.app.getMainScreen().activeContentType = modelName;
+                this.app.getMainScreen().show();
+            }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
                     
-            if(ct.genericCtxActions) {
+            if (ct.genericCtxActions) {
                 this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
                     nodeName: this.app.i18n._hidden(recordClass.getMeta('recordsName')),
                     actions: ct.genericCtxActions,
@@ -115,8 +159,56 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }, this);
              }       
                     
-            treeRoot.appendChild(child);
+            parentNode.appendChild(child);
         }, this);
+    },
+    
+    /**
+     * saves the last clicked node as state
+     * 
+     * @param {Ext.tree.treeNode} node
+     * @param {Ext.EventObjectImpl} event
+     */
+    saveClickedNodeState: function(node, event) {
+        this.lastClickedNode = node;
+        this.saveState();
+    },
+    
+    /**
+     * @see Ext.Component
+     */
+    getState: function() {
+        var root = this.getRootNode();
+        
+        var state = {
+            expanded: [],
+            selected: this.lastClickedNode ? this.lastClickedNode.id : null
+        };
+        Ext.each(root.childNodes, function(node) {
+            state.expanded.push(!! node.expanded);
+        }, this);
+        
+        return state;
+    },
+    
+    /**
+     * applies state to cmp
+     * 
+     * @param {Object} state
+     */
+    applyState: function(state) {
+        var root = this.getRootNode();
+        Ext.each(state.expanded, function(isExpanded, index) {
+            root.childNodes[index].expanded = isExpanded;
+        }, this);
+
+        (function() {
+            var node = this.getNodeById(state.selected);
+            if (node) {
+                node.select();
+                node.fireEvent('click');
+            }
+        }).defer(100, this);
     },
     
     /**
@@ -124,18 +216,9 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
      */
     afterRender: function() {
         Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
-        
-        var activeNode = this.root.findChildBy(function(node) {
-            if(node.id == 'treenode-' + this.contentType) return true;
-            return false;
-        }, this);
-        
-        if(activeNode) activeNode.select();
-        
-        this.on('click', function(event) {
-            if(activeNode) activeNode.select();
-        }, this);
-        
+        (function() {
+            this.getEl().setStyle('height', null);
+            this.getEl().select('div.ux-arrowcollapse-body').setStyle('height', null);
+        }).defer(100, this);
     }
- 
 });

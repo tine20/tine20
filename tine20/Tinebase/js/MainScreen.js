@@ -25,6 +25,11 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         align:'stretch',
         padding:'0'
     },
+    /**
+     * the active app
+     * @type {Tine.Tinebase.Application}
+     */
+    app: null,
     
     /**
      * @cfg {String} appPickerStyle "tabs" or "pile" defaults to "tabs"
@@ -77,7 +82,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 region: 'north',
                 layout: 'card',
                 activeItem: 0,
-                //height: 26,
                 height: 59,
                 border: false,
                 id:     'north-panel-2',
@@ -109,19 +113,84 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                     cls: 'tine-mainscreen-centerpanel-west-apptitle',
                     hidden: this.appPickerStyle != 'pile',
                     region: 'north',
-                    layout: 'fit',
                     border: false,
                     height: 40,
                     baseCls: 'x-panel-header',
                     html: '<div class ="app-panel-title"></div>'
                 }, {
-                    cls: 'tine-mainscreen-centerpanel-west-treecards',
+                    cls: 'tine-mainscreen-centerpanel-west-center',
                     border: false,
-                    id: 'treecards',
                     region: 'center',
-                    layout: 'card',
-                    activeItem: 0,
-                    items: []
+                    layout: {
+                        type: 'column',
+                        align: 'stretch'
+                    },
+                    items:[{
+                        xtype: 'toolbar',
+                        height: 27,
+                        flex: 0,
+                        buttonAlign : 'center',
+                        style: {
+                            padding: '2px'
+                        },
+                        items: [{
+                            xtype: 'button',
+                            text: _('Save current view as favorite'),
+                            iconCls: 'action_saveFilter',
+                            scope: this,
+                            handler: function() {
+                                var fp = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+                                fp.saveFilter.call(fp);
+                            }
+                        }]
+                    }, {
+                        border: false,
+                        frame: false,
+                        id: 'westpanel-scroll-wrapper',
+                        autoScroll:true,
+                        style: {
+                                width: '100%',
+                                'overflow-y': 'auto',
+                                'overflow-x': 'hidden'
+                            },
+                        layout: {
+                            type: 'column',
+                            align: 'stretch'
+                        },
+                        doLayout: function(shallow, force) {
+                            var el = this.getEl();
+                            this.supr().doLayout.call(this, shallow, force);
+                            var wrap = Ext.get('west').select('div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct').getStyle('height'),
+                                height = wrap.first().getHeight() - 27;
+                            el.setStyle('height', height + 'px');
+                            el.dom.firstChild.firstChild.style.overflow = 'hidden';
+                            },
+                        items: [{
+                            cls: 'tine-mainscreen-centerpanel-west-modules',
+                            border: false,
+                            autoScroll: false,
+                            style: {
+                                width: '100%'
+                            },
+                            id: 'moduletree',
+                            flex: 1,
+                            layout: 'card',
+                            activeItem: 0,
+                            items: []
+                        }, {
+                            cls: 'tine-mainscreen-centerpanel-west-treecards',
+                            border: false,
+                            style: {
+                                width: '100%'
+                            },
+                            autoScroll: false,
+                            flex:1,
+                            id: 'treecards',
+                            layout: 'card',
+                            activeItem: 0,
+                            items: []
+                        }]
+                    }]
                 }, new Tine.Tinebase.AppPile({
                     cls: 'tine-mainscreen-centerpanel-west-apppile',
                     hidden: this.appPickerStyle != 'pile',
@@ -160,6 +229,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     onAppActivate: function(app) {
         Tine.log.info('Activating app ' + app.appName);
         
+        this.app = app;
+        
         // set document / browser title
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '',
             // some apps (Felamimail atm) can add application specific title postfixes
@@ -170,6 +241,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         // set left top title
         Ext.DomQuery.selectNode('div[class=app-panel-title]').innerHTML = app.getTitle();
         
+        this.getEl().select('div#treecards div.x-column-layout-ct').setStyle('height', null);
+        this.getEl().select('div#moduletree div.ux-arrowcollapse-body.ux-arrowcollapse-body-noborder').setStyle('height', null);
     },
     
     /**
@@ -233,9 +306,21 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     setActiveTreePanel: function(panel, keep) {
         var cardPanel = Ext.getCmp('treecards');
         panel.keep = keep;
-        
         this.cleanupCardPanelItems(cardPanel);
         this.setActiveCardPanelItem(cardPanel, panel);
+    },
+    
+    /**
+     * sets the active module tree panel
+     * 
+     * @param {Ext.Panel} panel Panel to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveModulePanel: function(panel, keep) {
+        var modulePanel = Ext.getCmp('moduletree');
+        panel.keep = keep;
+        this.cleanupCardPanelItems(modulePanel);
+        this.setActiveCardPanelItem(modulePanel, panel);
     },
     
     /**
@@ -260,7 +345,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
     getActiveToolbar: function() {
         var northPanel = Ext.getCmp('north-panel-2');
 
-        if(northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
+        if (northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
             return northPanel.layout.activeItem.el;
         } else {
             return false;
@@ -273,7 +358,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @param {Ext.Panel} cardPanel
      */
     cleanupCardPanelItems: function(cardPanel) {
-        if(cardPanel.items) {
+        if (cardPanel.items) {
             for (var i=0,p; i<cardPanel.items.length; i++){
                 p =  cardPanel.items.get(i);
                 if (! p.keep) {
