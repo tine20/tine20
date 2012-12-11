@@ -44,6 +44,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     titleCollapse:true,
     draggable : true,
     autoScroll: false,
+    autoHeight: true,
     
     collapsed: false,
     renderHidden: true,
@@ -208,17 +209,6 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 node.select();
                 node.fireEvent('click');
             }
-        }).defer(100, this);
-    },
-    
-    /**
-     * is called after render this panel, selects active node by contentType
-     */
-    afterRender: function() {
-        Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
-        (function() {
-            this.getEl().setStyle('height', null);
-            this.getEl().select('div.ux-arrowcollapse-body').setStyle('height', null);
         }).defer(100, this);
     }
 });

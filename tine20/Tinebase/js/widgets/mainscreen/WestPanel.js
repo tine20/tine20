@@ -82,6 +82,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
     layout: 'column',
     cls : 'x-portal',
     defaultType : 'portalcolumn',
+    autoHeight: true,
     border: false,
     stateful: true,
     stateEvents: ['collapse', 'expand', 'drop'],
@@ -236,7 +237,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     
                     app: this.app,
                     contentType: ct,
-                    autoScroll: false,
+
                     style: {
                         width: '100%',
                         overflow: 'hidden'

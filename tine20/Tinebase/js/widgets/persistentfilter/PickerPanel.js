@@ -42,7 +42,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     /**
      * @private
      */
-    autoScroll : true,
+    autoScroll : false,
+    autoHeight: true,
     border : false,
     rootVisible : false,
 
