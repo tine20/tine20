@@ -344,6 +344,11 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         return this.portalColumn;
     },
     
+    doLayout: function(shallow, force) {
+        var els = this.getEl().select('div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct').setStyle({overflow: 'none', height: null});
+        Tine.widgets.mainscreen.WestPanel.superclass.doLayout.call(this, shallow, force);
+    },
+    
     /**
      * gets state of this cmp
      */
