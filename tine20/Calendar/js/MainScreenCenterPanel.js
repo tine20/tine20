@@ -453,6 +453,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         var ctxMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Calendar-MainScreenPanel-ContextMenu',
+                config: {
+                    event: event,
+                    datetime: datetime
+                }
+            }],
             items: this.recordActions.concat(addAction, responseAction || [], copyAction || [])
         });
         ctxMenu.showAt(e.getXY());
@@ -479,6 +487,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             };
             
             statusStore.each(function(status) {
+                var isCurrent = myAttenderRecord.get('status') === status.id;
+                
+                // NOTE: we can't use checked items here as we use icons already
                 responseAction.menu.push({
                     text: status.get('i18nValue'),
                     handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
