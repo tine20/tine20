@@ -19,6 +19,8 @@ Tine.Calendar.MonthView = function(config){
     Ext.apply(this, config);
     Tine.Calendar.MonthView.superclass.constructor.call(this);
     
+    this.printRenderer = Tine.Calendar.Printer.MonthViewRenderer;
+    
     this.addEvents(
         /**
          * @event click
@@ -70,7 +72,7 @@ Tine.Calendar.MonthView = function(config){
     );
 };
 
-Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
+Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
     /**
      * @cfg {Date} startDate
      * start date
@@ -129,25 +131,32 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      */
     parallelEventsRegistry: null,
     
+    cls: "cal-monthview",
+    
+    boxMinWidth: 550,
+    
     /**
      * @private
      */
     afterRender: function() {
+        Tine.Calendar.MonthView.superclass.afterRender.apply(this, arguments);
+        
         this.initElements();
         
         this.getSelectionModel().init(this);
         
-        this.el.on('mousedown', this.onMouseDown, this);
-        this.el.on('dblclick', this.onDblClick, this);
-        this.el.on('click', this.onClick, this);
-        this.el.on('contextmenu', this.onContextMenu, this);
+        this.mon(this.el, 'mousedown', this.onMouseDown, this);
+        this.mon(this.el, 'dblclick', this.onDblClick, this);
+        this.mon(this.el, 'click', this.onClick, this);
+        this.mon(this.el, 'contextmenu', this.onContextMenu, this);
+        this.mon(this.el, 'keydown', this.onKeyDown, this);
         
         this.initDragZone();
         this.initDropZone();
         
         this.updatePeriod({from: this.period.from});
         
-        if (this.dsLoaded) {
+        if (this.store.getCount()) {
             this.onLoad.apply(this);
         }
         
@@ -235,7 +244,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     },
     
     getSelectionModel: function() {
-        return this.calPanel.selModel;
+        return this.selModel;
     },
     
     getTargetDateTime: function(e) {
@@ -256,19 +265,16 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         if (target) {
             var parts = target.id.split(':');
-            var event = this.ds.getById(parts[1]);
+            var event = this.store.getById(parts[1]);
         }
         
         return event;
     },
     
     /**
-     * @private
-     * @param {Tine.Calendar.CalendarPanel} calPanel
+     * init month view
      */
-    init: function(calPanel) {
-        this.calPanel = calPanel;
-        
+    initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.newEventSummary =  this.app.i18n._hidden(this.newEventSummary);
         this.calWeekString   =  this.app.i18n._hidden(this.calWeekString);
@@ -279,8 +285,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.dayNames   = Date.dayNames;
         this.startDay   = Ext.DatePicker.prototype.startDay;
         
-        this.initData(calPanel.store);
+        this.initData(this.store);
         this.initTemplates();
+        
+        if (! this.selModel) {
+            this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
+        }
+        Tine.Calendar.MonthView.superclass.initComponent.apply(this, arguments);
     },
     
     /**
@@ -288,23 +299,21 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * @param {Ext.data.Store} ds
      */
     initData : function(ds){
-        if(this.ds){
-            this.ds.un("load", this.onLoad, this);
-            //this.ds.un("datachanged", this.onDataChange, this);
-            this.ds.un("add", this.onAdd, this);
-            this.ds.un("remove", this.onRemove, this);
-            this.ds.un("update", this.onUpdate, this);
-            //this.ds.un("clear", this.onClear, this);
+        if(this.store){
+            this.store.un("load", this.onLoad, this);
+            this.store.un("beforeload", this.onBeforeLoad, this);
+            this.store.un("add", this.onAdd, this);
+            this.store.un("remove", this.onRemove, this);
+            this.store.un("update", this.onUpdate, this);
         }
         if(ds){
             ds.on("load", this.onLoad, this);
-           // ds.on("datachanged", this.onDataChange, this);
+            ds.on("beforeload", this.onBeforeLoad, this);
             ds.on("add", this.onAdd, this);
             ds.on("remove", this.onRemove, this);
             ds.on("update", this.onUpdate, this);
-            //ds.on("clear", this.onClear, this);
         }
-        this.ds = ds;
+        this.store = ds;
     },
     
     /**
@@ -320,7 +329,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
                 var eventEl = e.getTarget('div.cal-monthview-alldayevent', 10) || e.getTarget('div.cal-monthview-event', 10);
                 if (eventEl) {
                     var parts = eventEl.id.split(':');
-                    var event = this.view.ds.getById(parts[1]);
+                    var event = this.view.store.getById(parts[1]);
                     
                     // don't allow dragging with missing edit grant
                     if (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant')) {
@@ -402,11 +411,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
     initElements: function() {
         var E = Ext.Element;
 
-        this.focusEl = new E(this.calPanel.body.dom.firstChild);
-        this.el = new E(this.calPanel.body.dom.lastChild);
+        this.focusEl = new E(this.el.dom.firstChild);
         
-        this.mainHd = new E(this.el.dom.firstChild);
-        this.mainBody = new E(this.el.dom.lastChild);
+        this.mainHd = new E(this.el.dom.lastChild.firstChild);
+        this.mainBody = new E(this.el.dom.lastChild.lastChild);
         
         this.dayCells = Ext.DomQuery.select('td[class=cal-monthview-daycell]', this.mainBody.dom);
     },
@@ -527,14 +535,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
     },
     
-    layout: function() {
+    onLayout: function() {
+        Tine.Calendar.MonthView.superclass.onLayout.apply(this, arguments);
+        
         if(!this.mainBody){
             return; // not rendered
         }
         
-        var g = this.calPanel;
-        var c = g.body;
-        var csize = c.getSize(true);
+        var csize = this.container.getSize(true);
         var vw = csize.width;
         
         //this.el.setSize(csize.width, csize.height);
@@ -561,6 +569,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
         
         this.layoutDayCells();
+    },
+    
+    onDestroy: function() {
+        this.removeAllEvents();
+        this.initData(false);
+        this.purgeListeners();
+        
+        Tine.Calendar.MonthView.superclass.onDestroy.apply(this, arguments);
     },
     
     /**
@@ -670,6 +686,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.fireEvent('contextmenu', e);
     },
     
+    onKeyDown : function(e){
+        this.fireEvent("keydown", e);
+    },
+    
     onDblClick: function(e, target) {
         this.lastClickTime = new Date().getTime();
         
@@ -705,12 +725,17 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         //console.log(Ext.get(target));
     },
     
+    onBeforeLoad: function(store, options) {
+        if (! options.refresh) {
+            this.store.each(this.removeEvent, this);
+        }
+    },
+    
     /**
      * @private
      */
     onLoad : function(){
         if(! this.rendered){
-            this.dsLoaded = true;
             return;
         }
         
@@ -724,16 +749,16 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         });
         
         // todo: sort generic?
-        this.ds.fields = Tine.Calendar.Model.Event.prototype.fields;
-        this.ds.sortInfo = {field: 'dtstart', direction: 'ASC'};
-        this.ds.applySort();
+        this.store.fields = Tine.Calendar.Model.Event.prototype.fields;
+        this.store.sortInfo = {field: 'dtstart', direction: 'ASC'};
+        this.store.applySort();
         
         // calculate duration and parallels
-        this.ds.each(function(event) {
+        this.store.each(function(event) {
             this.parallelEventsRegistry.register(event);
         }, this);
         
-        this.ds.each(this.insertEvent, this);
+        this.store.each(this.insertEvent, this);
         this.layoutDayCells();
     },
     
@@ -800,7 +825,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
      * print wrapper
      */
     print: function() {
-        var renderer = new Tine.Calendar.Printer.MonthViewRenderer();
+        var renderer = new this.printRenderer();
         renderer.print(this);
     },
     
@@ -813,7 +838,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             Ext.fly(els[i]).remove();
         }
         
-        this.ds.each(function(event) {
+        this.store.each(function(event) {
             if (event.ui) {
                 event.ui.domIds = [];
             }
@@ -839,7 +864,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         }
     },
     
-    render: function() {
+    /**
+     * renders the view
+     */
+    onRender: function(container, position) {
+        Tine.Calendar.MonthView.superclass.onRender.apply(this, arguments);
+        
         var m = [
              '<a href="#" class="cal-monthviewpanel-focus" tabIndex="-1"></a>',
              '<table class="cal-monthview-inner" cellspacing="0"><thead><tr class="cal-monthview-inner-header" height="23px">',
@@ -869,12 +899,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         m.push('</tr></tbody></table>');
         
                 
-        var el = this.calPanel.body.dom;
-        el.className = "cal-monthview";
-        el.innerHTML = m.join("");
-
-        //container.dom.insertBefore(el, position);
-        //this.calPanel.body
+        this.el.update(m.join(""));
     },
     
     /**
@@ -932,11 +957,13 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         this.startDate = period.from;
         this.calcDateMesh();
         
-        var tbar = this.calPanel.getTopToolbar();
+        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
         if (tbar) {
             tbar.periodPicker.update(this.startDate);
             this.startDate = tbar.periodPicker.getPeriod().from;
         }
+        
+        if (! this.rendered) return;
         
         // update dates and bg colors
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-date]', this.mainBody.dom);
@@ -959,7 +986,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
             }
         }
         
-        this.layout();
+        this.onLayout();
         this.fireEvent('changePeriod', period);
     },
     
@@ -1005,7 +1032,8 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         dayBodyEl.setStyle('border-top', '1px solid ' + bgColor);
         
         var requiredHeight = this.layoutDayCell(cell, false, true) + 10;
-        var availHeight = this.calPanel.el.getBottom() - box.y;
+        var availHeight = this.el.getBottom() - box.y;
         dayBodyEl.setHeight(Math.min(requiredHeight, availHeight));
     }
 });
+Ext.reg('Tine.Calendar.MonthView', Tine.Calendar.MonthView);

@@ -18,7 +18,6 @@ Ext.ns('Tine.Calendar');
  * @class Tine.Calendar.CalendarPanel
  * @namespace Tine.Calendar
  * @extends Ext.Panel
- * Calendar Panel, pooling together store, and view <br/>
  * @author Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
@@ -26,50 +25,44 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * @cfg {Tine.Calendar.someView} view
      */
     view: null,
-    /**
-     * @cfg {Ext.data.Store} store
-     */
-    store: null,
     
-    /**
-     * @cfg {Bool} border
-     */
     border: false,
+    layout: 'fit',
+    autoScroll: false,
+    autoWidth: false,
     
     /**
      * @private
      */
     initComponent: function() {
+        this.items = this.view;
+        
+        // init plugins
+        this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? this.plugins.concat(Ext.decode(this.initialConfig.plugins)) : [];
+        
         Tine.Calendar.CalendarPanel.superclass.initComponent.call(this);
         
-        this.app = Tine.Tinebase.appMgr.get('Calendar');
-        
-        this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
-        
-        this.autoScroll = false;
-        this.autoWidth = false;
-        
-        this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu']);
-        
-        this.store.on('beforeload', this.onBeforeLoad, this);
+        this.relayEvents(this.view, ['changeView', 'changePeriod', 'click', 'dblclick', 'contextmenu', 'keydown']);
     },
     
     /**
      * Returns selection model
      * 
+     * @deprecated
      * @return {Tine.Calendar.EventSelectionModel}
      */
     getSelectionModel: function() {
-        return this.selModel;
+        return this.getView().getSelectionModel();
     },
     
     /**
      * Returns data store
      * 
+     * @deprecated
      * @return {Ext.data.Store}
      */
     getStore: function() {
-        return this.store;
+        return this.getView().store;
     },
     
     /**
@@ -79,57 +72,5 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      */
     getView: function() {
         return this.view;
-    },
-    
-    onBeforeLoad: function(store, options) {
-        if (! options.refresh) {
-            this.store.each(this.view.removeEvent, this.view);
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onRender: function(ct, position) {
-        Tine.Calendar.CalendarPanel.superclass.onRender.apply(this, arguments);
-        
-        var c = this.body;
-        this.el.addClass('cal-panel');
-        this.view.init(this);
-        
-        c.on("keydown", this.onKeyDown, this);
-        //this.relayEvents(c, ["keypress"]);
-        
-        this.view.render();
-    },
-    
-    /**
-     * @private
-     */
-    afterRender : function(){
-        Tine.Calendar.CalendarPanel.superclass.afterRender.call(this);
-        
-        this.view.layout();
-        this.view.afterRender();
-        
-        this.viewReady = true;
-    },
-    
-    /**
-     * @private
-     */
-    onResize: function(ct, position) {
-        Tine.Calendar.CalendarPanel.superclass.onResize.apply(this, arguments);
-        if(this.viewReady){
-            this.view.layout();
-        }
-    },
-    
-    /**
-     * @private
-     */
-    onKeyDown : function(e){
-        this.fireEvent("keydown", e);
     }
-    
 });

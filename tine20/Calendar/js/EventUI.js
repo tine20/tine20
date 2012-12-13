@@ -100,6 +100,10 @@ Tine.Calendar.EventUI.prototype = {
                 eventEls[i].remove();
             }
         }
+        if (this.resizeable) {
+            this.resizeable.destroy();
+            this.resizeable = null;
+        }
         this.domIds = [];
     },
     
@@ -278,6 +282,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             // the event was selected before
             this.onSelectedChange(true);
         }
+        
+        if (this.event.outOfFilter) {
+            this.markOutOfFilter();
+        }
+        
+        this.rendered = true;
     },
     
     renderAllDayEvent: function(view, parallels, pos) {

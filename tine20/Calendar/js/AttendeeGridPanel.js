@@ -316,6 +316,26 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
+    /**
+     * give new attendee an extra cls
+     */
+    getRowClass: function(record, index) {
+        if (! record.get('user_id')) {
+            return 'x-cal-add-attendee-row';
+        }
+    },
+    
+    /**
+     * stop editing if user clicks else where
+     * 
+     * FIXME this breaks the paging in search combos, maybe we should check if search combo paging buttons are clicked, too
+     */
+    stopEditingIf: function(e) {
+        if (! e.within(this.getGridEl())) {
+            //this.stopEditing();
+        }
+    },
+    
     // NOTE: Ext docu seems to be wrong on arguments here
     onContextMenu: function(e, target) {
         e.preventDefault();

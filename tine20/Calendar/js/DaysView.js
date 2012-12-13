@@ -21,6 +21,8 @@ Tine.Calendar.DaysView = function(config){
     Ext.apply(this, config);
     Tine.Calendar.DaysView.superclass.constructor.call(this);
     
+    this.printRenderer = Tine.Calendar.Printer.DaysViewRenderer;
+    
     this.addEvents(
         /**
          * @event click
@@ -72,7 +74,7 @@ Tine.Calendar.DaysView = function(config){
     );
 };
 
-Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
+Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     /**
      * @cfg {Date} startDate
      * start date
@@ -139,11 +141,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @param {Array} period
      */
     updatePeriod: function(period) {
-        this.toDay = new Date().clearTime();
-        
         this.startDate = period.from;
         
-        var tbar = this.calPanel.getTopToolbar();
+        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
         if (tbar) {
             tbar.periodPicker.update(this.startDate);
             this.startDate = tbar.periodPicker.getPeriod().from;
@@ -153,7 +153,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         //this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         //this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
-        //this.ds.each(this.removeEvent, this);
+        //this.store.each(this.removeEvent, this);
         
         this.updateDayHeaders();
         this.onBeforeScroll();
@@ -163,12 +163,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     
     /**
      * init this view
-     * 
-     * @param {Tine.Calendar.CalendarPanel} calPanel
      */
-    init: function(calPanel) {
-        this.calPanel = calPanel;
-        
+    initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
         this.newEventSummary      =  this.app.i18n._hidden(this.newEventSummary);
@@ -180,18 +176,25 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
         
+        this.boxMinWidth = 60*this.numOfDays;
+        
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         
-        this.initData(calPanel.store);
+        this.initData(this.store);
         
         this.initTimeScale();
         this.initTemplates();
         
-        this.calPanel.on('beforehide', this.onBeforeHide, this);
-        this.calPanel.on('show', this.onShow, this);
+        this.on('beforehide', this.onBeforeHide, this);
+        this.on('show', this.onShow, this);
         
-        Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
+        this.mon(Tine.Tinebase.appMgr, 'activate', this.onAppActivate, this);
+        
+        if (! this.selModel) {
+            this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
+        }
+        Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
     
     /**
@@ -199,25 +202,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @param {Ext.data.Store} ds
      */
     initData : function(ds){
-        if(this.ds){
-            this.ds.un("load", this.onLoad, this);
-            this.ds.un("datachanged", this.onDataChange, this);
-            this.ds.un("add", this.onAdd, this);
-            this.ds.un("remove", this.onRemove, this);
-            this.ds.un("update", this.onUpdate, this);
-            this.ds.un("clear", this.onClear, this);
+        if(this.store){
+            this.store.un("load", this.onLoad, this);
+            this.store.un("beforeload", this.onBeforeLoad, this);
+            this.store.un("add", this.onAdd, this);
+            this.store.un("remove", this.onRemove, this);
+            this.store.un("update", this.onUpdate, this);
         }
         if(ds){
             ds.on("load", this.onLoad, this);
-            ds.on("datachanged", this.onDataChange, this);
+            ds.on("beforeload", this.onBeforeLoad, this);
             ds.on("add", this.onAdd, this);
             ds.on("remove", this.onRemove, this);
             ds.on("update", this.onUpdate, this);
-            ds.on("clear", this.onClear, this);
         }
-        this.ds = ds;
+        this.store = ds;
     },
-    
     /**
      * inits time scale
      * @private
@@ -340,7 +340,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
                 if (eventEl) {
                     var parts = eventEl.id.split(':');
-                    var event = this.view.ds.getById(parts[1]);
+                    var event = this.view.store.getById(parts[1]);
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
@@ -383,8 +383,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * renders the view
      */
-    render: function() {
-        this.templates.master.append(this.calPanel.body, {
+    onRender: function(container, position) {
+        Tine.Calendar.DaysView.superclass.onRender.apply(this, arguments);
+        
+        this.templates.master.append(this.el.dom, {
             header: this.templates.header.applyTemplate({
                 daysHeader: this.getDayHeaders(),
                 wholeDayCols: this.getWholeDayCols()
@@ -403,20 +405,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * fill the events into the view
      */
     afterRender: function() {
+        Tine.Calendar.DaysView.superclass.afterRender.apply(this, arguments);
         
-        this.mainWrap.on('click', this.onClick, this);
-        this.mainWrap.on('dblclick', this.onDblClick, this);
-        this.mainWrap.on('contextmenu', this.onContextMenu, this);
-        this.mainWrap.on('mousedown', this.onMouseDown, this);
-        this.mainWrap.on('mouseup', this.onMouseUp, this);
-        this.calPanel.on('resize', this.onResize, this);
+        this.mon(this.el, 'click', this.onClick, this);
+        this.mon(this.el, 'dblclick', this.onDblClick, this);
+        this.mon(this.el, 'contextmenu', this.onContextMenu, this);
+        this.mon(this.el, 'mousedown', this.onMouseDown, this);
+        this.mon(this.el, 'mouseup', this.onMouseUp, this);
+        this.mon(this.el, 'keydown', this.onKeyDown, this);
         
         this.initDropZone();
         this.initDragZone();
         
         this.updatePeriod({from: this.startDate});
         
-        if (this.dsLoaded) {
+        if (this.store.getCount()) {
             this.onLoad.apply(this);
         }
         
@@ -434,7 +437,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.scrollTo();
         }
         
-        this.layout();
+        this.onLayout();
         this.rendered = true;
     },
     
@@ -473,7 +476,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             aboveCols     = [],
             belowCols     = [];
             
-        this.ds.each(function(event) {
+        this.store.each(function(event) {
             if (event.ui) {
                 Ext.each(event.ui.domIds, function(domId) {
                     var el = Ext.get(domId),
@@ -515,7 +518,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     onShow: function() {
-        this.layout();
+        this.onLayout();
         this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date());
     },
     
@@ -535,17 +538,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     /**
-     * removes all events from dom
+     * removes all events
      */
     removeAllEvents: function() {
-        var els = Ext.DomQuery.select('div[class^=cal-daysviewpanel-event]', this.mainWrap.dom);
-        for (var i=0; i<els.length; i++) {
-            Ext.fly(els[i]).remove();
-        }
-        
-        this.ds.each(function(event) {
+        this.store.each(function(event) {
             if (event.ui) {
-                event.ui.domIds = [];
+                event.ui.remove();
             }
         });
     },
@@ -592,7 +590,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * @return {}
      */
     getSelectionModel: function() {
-        return this.calPanel.getSelectionModel();
+        return this.selModel;
     },
     
     /**
@@ -608,9 +606,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         // insert event silently into store
         this.editing = event;
-        this.ds.suspendEvents();
-        this.ds.add(event);
-        this.ds.resumeEvents();
+        this.store.suspendEvents();
+        this.store.add(event);
+        this.store.resumeEvents();
         
         
         // draw event
@@ -618,7 +616,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.register(event);
         this.insertEvent(event);
         //this.setActiveEvent(event);
-        this.layout();
+        this.onLayout();
         
         //var eventEls = event.ui.getEls();
         //eventEls[0].setStyle({'border-style': 'dashed'});
@@ -655,7 +653,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     abortCreateEvent: function(event) {
-        this.ds.remove(event);
+        this.store.remove(event);
         this.editing = false;
     },
     
@@ -736,20 +734,20 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         event.set('summary', summary);
         
-        this.ds.suspendEvents();
-        this.ds.remove(event);
-        this.ds.resumeEvents();
+        this.store.suspendEvents();
+        this.store.remove(event);
+        this.store.resumeEvents();
         
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.unregister(event);
         this.removeEvent(event);
         
         event.dirty = true;
-        this.ds.add(event);
+        this.store.add(event);
         this.fireEvent('addEvent', event);
 
-        //this.ds.resumeEvents();
-        //this.ds.fireEvent.call(this.ds, 'add', this.ds, [event], this.ds.indexOf(event));
+        //this.store.resumeEvents();
+        //this.store.fireEvent.call(this.store, 'add', this.store, [event], this.store.indexOf(event));
     },
     
     onAppActivate: function(app) {
@@ -769,10 +767,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
     },
     
-    onResize: function(e) {
+    onResize: function() {
+        Tine.Calendar.DaysView.superclass.onResize.apply(this, arguments);
+        
+        this.updateDayHeaders();
+        
         // redraw whole day events
-        (function(){this.ds.each(function(event) {
-            if (event.get('is_all_day_event')) {
+        (function(){this.store.each(function(event) {
+            if (event.ui && event.get('is_all_day_event')) {
                 this.removeEvent(event);
                 this.insertEvent(event);
             }
@@ -796,6 +798,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     
     onContextMenu: function(e) {
         this.fireEvent('contextmenu', e);
+    },
+    
+    onKeyDown : function(e){
+        this.fireEvent("keydown", e);
     },
     
     /**
@@ -848,6 +854,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var targetEvent = this.getTargetEvent(e);
         if (this.editing && this.editing.summaryEditor && (targetEvent != this.editing)) {
             this.editing.summaryEditor.fireEvent('blur', this.editing.summaryEditor, null);
+            return;
         }
 
         var sm = this.getSelectionModel();
@@ -882,7 +889,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onBeforeEventResize: function(rz, e) {
         var parts = rz.el.id.split(':');
-        var event = this.ds.getById(parts[1]);
+        var event = this.store.getById(parts[1]);
         
         rz.event = event;
         rz.originalHeight = rz.el.getHeight();
@@ -958,22 +965,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * @private
      */
-    onDataChange : function(){
-        //console.log('onDataChange');
-        //this.refresh();
-    },
-
-    /**
-     * @private
-     */
-    onClear : function(){
-        //console.log('onClear')
-        //this.refresh();
-    },
-
-    /**
-     * @private
-     */
     onUpdate : function(ds, event){
         // don't update events while being created
         if (event.get('id').match(/new/)) {
@@ -1013,7 +1004,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         this.setActiveEvent(this.getActiveEvent());
-        this.layout();
+        this.onLayout();
     },
 
     /**
@@ -1037,7 +1028,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             //this.setActiveEvent(event);
         }
         
-        this.layout();
+        this.onLayout();
     },
 
     /**
@@ -1055,7 +1046,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         registry.unregister(event);
         this.removeEvent(event);
         this.getSelectionModel().unselect(event);
-        this.layout();
+        this.onLayout();
+    },
+    
+    onBeforeLoad: function(store, options) {
+        if (! options.refresh) {
+            this.store.each(this.removeEvent, this);
+            this.transitionEvents = [];
+        } else {
+            this.transitionEvents = this.store.data.items;
+        }
     },
     
     /**
@@ -1063,38 +1063,37 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      */
     onLoad : function() {
         if(! this.rendered){
-            this.dsLoaded = true;
             return;
         }
         
-        // remove all old events from dom
-        this.removeAllEvents();
+        // remove old events
+        Ext.each(this.transitionEvents, this.removeEvent, this);
         
         // setup registry
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         
         // todo: sort generic?
-        this.ds.fields = Tine.Calendar.Model.Event.prototype.fields;
-        this.ds.sortInfo = {field: 'dtstart', direction: 'ASC'};
-        this.ds.applySort();
+        this.store.fields = Tine.Calendar.Model.Event.prototype.fields;
+        this.store.sortInfo = {field: 'dtstart', direction: 'ASC'};
+        this.store.applySort();
         
-        this.ds.each(function(event) {
+        this.store.each(function(event) {
             var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
             registry.register(event);
         }, this);
         
         // put the events in
-        this.ds.each(this.insertEvent, this);
+        this.store.each(this.insertEvent, this);
         
-        this.layout();
+        this.onLayout();
     },
     
     /**
      * print wrapper
      */
     print: function() {
-        var renderer = new Tine.Calendar.Printer.DaysViewRenderer();
+        var renderer = new this.printRenderer();
         renderer.print(this);
     },
     
@@ -1167,7 +1166,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         if (el.hasClass('cal-daysviewpanel-event') || (el = el.up('[id*=event:]', 10))) {
             var parts = el.dom.id.split(':');
             
-            return this.ds.getById(parts[1]);
+            return this.store.getById(parts[1]);
         }
     },
     
@@ -1188,10 +1187,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     initElements : function(){
         var E = Ext.Element;
 
-        var el = this.calPanel.body.dom.firstChild;
-        var cs = el.childNodes;
+//        var el = this.el.dom.firstChild;
+        var cs = this.el.dom.firstChild.childNodes;
 
-        this.el = new E(el);
+//        this.el = new E(el);
 
         this.mainWrap = new E(cs[0]);
         this.mainHd = new E(this.mainWrap.dom.firstChild);
@@ -1203,14 +1202,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
-        this.scroller.on('scroll', this.onBeforeScroll, this);
-        this.scroller.on('scroll', this.onScroll, this, {buffer: 200});
+        this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
+        this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
         
         this.mainBody = new E(this.scroller.dom.firstChild);
         
         this.dayCols = this.mainBody.dom.firstChild.lastChild.childNodes;
 
-        this.focusEl = new E(this.el.dom.lastChild);
+        this.focusEl = new E(this.el.dom.lastChild.lastChild);
         this.focusEl.swallowEvent("click", true);
         this.focusEl.swallowEvent("dblclick", true);
         this.focusEl.swallowEvent("contextmenu", true);
@@ -1247,14 +1246,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     /**
      * layouts the view
      */
-    layout: function() {
+    onLayout: function() {
+        Tine.Calendar.DaysView.superclass.onLayout.apply(this, arguments);
         if(!this.mainBody){
             return; // not rendered
         }
         
-        var g = this.calPanel;
-        var c = g.body;
-        var csize = c.getSize(true);
+        var csize = this.container.getSize(true);
         var vw = csize.width;
         
         this.el.setSize(csize.width, csize.height);
@@ -1276,6 +1274,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         // force positioning on scroll hints
         this.onScroll.defer(100, this);
+    },
+    
+    onDestroy: function() {
+        this.removeAllEvents();
+        this.initData(false);
+        this.purgeListeners();
+        
+        Tine.Calendar.DaysView.superclass.onDestroy.apply(this, arguments);
     },
     
     /**
@@ -1301,18 +1307,31 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * updates HTML of day headers
      */
     updateDayHeaders: function() {
-        var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd);
-        
+        if (! this.rendered) {
+            return;
+        }
+        var dayHeaders = Ext.DomQuery.select('div[class=cal-daysviewpanel-dayheader-day]', this.innerHd),
+            dayWidth = Ext.get(dayHeaders[0]).getWidth(),
+            headerString;
+            
         for (var i=0, date, isToDay, headerEl, dayColEl; i<dayHeaders.length; i++) {
             
             date = this.startDate.add(Date.DAY, i);
-            isToDay = date.getTime() == this.toDay.getTime();
+            isToDay = date.getTime() == new Date().clearTime().getTime();
             
-            headerEl = Ext.fly(dayHeaders[i]);
+            headerEl = Ext.get(dayHeaders[i]);
             
-            headerEl.update(String.format(this.dayFormatString, date.format('l'), date.format('j'), date.format('F')));
+            if (dayWidth > 150) {
+                headerString = String.format(this.dayFormatString, date.format('l'), date.format('j'), date.format('F'));
+            } else if (dayWidth > 60){
+                headerString = date.format('D') + ', ' + date.format('j') + '.' + date.format('n');
+            } else {
+                headerString = date.format('j') + '.' + date.format('n');
+            }
+            
+            headerEl.update(headerString);
             headerEl.parent()[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-dayheader-today');
-            Ext.fly(this.dayCols[i])[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-body-daycolumn-today');
+            Ext.get(this.dayCols[i])[(isToDay ? 'add' : 'remove') + 'Class']('cal-daysviewpanel-body-daycolumn-today');
         }
     },
     
@@ -1504,3 +1523,5 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.templates = ts;
     }
 });
+
+Ext.reg('Tine.Calendar.DaysView', Tine.Calendar.DaysView);

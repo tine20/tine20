@@ -9,6 +9,9 @@ Ext.ns('Tine.Calendar.Printer');
  */
 Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
     stylesheetPath: 'Calendar/css/print.css',
+    
+    extraTitle: '',
+    titleStyle: '',
 //    generateBody: function(view) {
 //        var days = [];
 //        
@@ -18,7 +21,7 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 //            dayEnd   = dayStart.add(Date.DAY, 1).add(Date.SECOND, -1);
 //            
 //            // get events in this day
-//            dayEvents = view.ds.queryBy(function(event){
+//            dayEvents = view.store.queryBy(function(event){
 //                return event.data.dtstart.getTime() < dayEnd.getTime() && event.data.dtend.getTime() > dayStart.getTime();
 //            });
 //            
@@ -29,6 +32,10 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 //        var body  = 
 //        return view.numOfDays === 1 ? days[0] : String.format('<table>{0}</table>', this.generateCalRows(days, view.numOfDays < 9 ? 2 : 7));
 //    },
+    
+    generateTitle: function(view) {
+        return ['<table style="', this.titleStyle, '"><tr><th class="cal-print-title">', this.extraTitle,  this.getTitle(view), '</th></tr></table>'].join('');
+    },
     
     generateCalRows: function(days, numCols, alignHorizontal) {
         var row, col, cellsHtml, idx,

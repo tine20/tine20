@@ -70,6 +70,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     copyOmitFields: ['uid', 'recurid'],
     
     /**
+     * mark record out of current filter
+     * 
+     * @type Boolean
+     */
+    outOfFilter: false,
+    
+    /**
      * returns displaycontainer with orignialcontainer as fallback
      * 
      * @return {Array}

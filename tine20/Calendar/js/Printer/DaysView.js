@@ -1,10 +1,10 @@
 Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
     paperHeight: 200, 
     generateBody: function(view) {
-        var daysHtml = this.splitDays(view.ds, view.startDate, view.numOfDays),
+        var daysHtml = this.splitDays(view.store, view.startDate, view.numOfDays),
             body = [];
         
-        body.push('<table><tr><th class="cal-print-title">', this.getTitle(view), '</th></tr></table>');
+        body.push(this.generateTitle(view));
         
         if (view.numOfDays === 1) {
             body.push(String.format('<div class="cal-print-day-singleday">{0}</div>', daysHtml[0]));

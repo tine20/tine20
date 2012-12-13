@@ -2,7 +2,7 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
     paperHeight: 155,
     
     generateBody: function(view) {
-        var daysHtml = this.splitDays(view.ds, view.dateMesh[0], view.dateMesh.length),
+        var daysHtml = this.splitDays(view.store, view.dateMesh[0], view.dateMesh.length),
             body = [];
         
         // try to force landscape -> opera only atm...
@@ -13,7 +13,7 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         '</style>');
         
         // title
-        body.push('<table><tr><th class="cal-print-title">', this.getTitle(view), '</th></tr></table>');
+        body.push(this.generateTitle(view));
         
         // day headers
         var dayNames = [];
