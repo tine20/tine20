@@ -99,7 +99,7 @@ Ext.ux.ItemRegistry.prototype = {
             item;
             
         if (typeof def === 'function') {
-            item = new def;
+            item = new def(this.config);
         } else {
             if (Ext.isString(def)) {
                 def = {xtype: def};
