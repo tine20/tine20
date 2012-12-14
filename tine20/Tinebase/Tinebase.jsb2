@@ -242,6 +242,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "ComboBoxRecentsPlugin.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "HorizontalFitLayout.js",
           "path": "js/ux/layout/"
         },
@@ -324,6 +328,10 @@
         {
           "text": "AbstractBackend.js",
           "path": "js/data/"
+        },
+        {
+          "text": "RecentsManager.js",
+          "path": "js/"
         },
         {
           "text": "StateProvider.js",
