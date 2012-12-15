@@ -81,7 +81,18 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             }
         });
         
-        this.initSearchField();
+        this.searchField = new Tine.widgets.tags.TagCombo({
+            app: this.app,
+            onlyUsableTags: true,
+            disableClearer: true
+        });
+        this.searchField.on('select', function(searchField, selectedTag){
+            if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
+                this.recordTagsStore.add(selectedTag);
+            }
+            searchField.blur();
+            searchField.reset();
+        },this);
         
         this.bottomBar = new Ext.Container({
             layout: 'column',
@@ -396,98 +407,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 scope: this 
             });
         }
-    },
-    
-    /**
-     * @private
-     */
-    initSearchField: function() {
-        var tpl = new Ext.XTemplate(
-            '<tpl for="."><div class="x-combo-list-item" ext:qtip="', 
-                '{[this.encode(values.name)]}', 
-                '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
-                '</i>&nbsp;[{occurrence}]',
-                '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>">',
-                
-                '{[this.encode(values.name)]} <tpl if="type == \'personal\' "><i>(' + _('personal') + ')</i></tpl>',
-            '</div></tpl>',{
-                encode: function(value) {
-                    return Tine.Tinebase.common.doubleEncode(value);
-                }
-            }
-        );
-        
-        this.searchField = new Ext.form.ComboBox({
-            store: this.availableTagsStore,
-            mode: 'local',
-            //width: 170,
-            enableKeyEvents: true,
-            displayField:'name',
-            typeAhead: true,
-            emptyText: _('Enter tag name'),
-            loadingText: _('Searching...'),
-            typeAheadDelay: 10,
-            minChars: 1,
-            hideTrigger:false,
-            triggerAction: 'all',
-            forceSelection: true,
-            tpl: tpl
-            //expand: function(){}
-        });
-        
-        // load data once
-        this.searchField.on('focus', function(searchField){
-            if (! searchField.store.lastOptions) {
-                // hack to supress selecting the first item from the freshly
-                // retrieved store
-                searchField.hasFocus = false;
-                this.availableTagsStore.load({
-                    scope: this,
-                    callback: function() {
-                        searchField.hasFocus = true;
-                    }
-                });
-            }
-        }, this);
-        
-        this.searchField.on('select', function(searchField, selectedTag){
-            if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
-                this.recordTagsStore.add(selectedTag);
-            }
-            searchField.emptyText = '';
-            searchField.clearValue();
-        },this);
-        
-        /*
-        // filter invalid
-        this.searchField.on('beforequery', function(qe) {
-            var query = qe.query;
-            if (this.searchField.store.find('name', query) < 0) {
-                console.log(query);
-            }
-            //var val = searchField.el.dom.value;
-        }, this);
-        */
-        /*
-        this.searchField.on('specialkey', function(searchField, e){
-             if(e.getKey() == e.ENTER){
-                var value = searchField.getValue();
-                
-                }
-                searchField.emptyText = '';
-                searchField.clearValue();
-             }
-        }, this);
-        */
-        
-        // workaround extjs bug:
-        this.searchField.on('blur', function(searchField){
-            searchField.emptyText = _('Enter tag name');
-            searchField.clearValue();
-        },this);
     }
-    
-
 });
 
 /**
