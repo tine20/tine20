@@ -43,8 +43,9 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.modlogFields.conca
     {name: 'tags', label: 'Tags'},
     {name: 'notes', omitDuplicateResolving: true},
     // relations with other objects
-    { name: 'relations', omitDuplicateResolving: true},
-    { name: 'contracts', omitDuplicateResolving: true},
+    { name: 'relations',   omitDuplicateResolving: true},
+    { name: 'contracts',   omitDuplicateResolving: true},
+    { name: 'costcenters', omitDuplicateResolving: true},
     { name: 'customfields', isMetaField: true}
 ]);
 
@@ -102,22 +103,25 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
 
     var filters = [
-        { label: _('Quick search'),           field: 'query', operators: ['contains']},
-        { label: app.i18n._('Employee name'), field: 'n_fn' },
-        { filtertype: 'tinebase.tag', app: app},
-        { label: _('Last Modified Time'),     field: 'last_modified_time', valueType: 'date'},
-        { label: _('Last Modified By'),       field: 'last_modified_by',   valueType: 'user'},
-        { label: _('Creation Time'),          field: 'creation_time',      valueType: 'date'},
-        { label: _('Employment begin'),       field: 'employment_begin',   valueType: 'date'},
-        { label: _('Employment end'),         field: 'employment_end',     valueType: 'date'},
-        { label: _('Created By'),             field: 'created_by',         valueType: 'user'},
-        { label: _('Account'),                field: 'account_id',         valueType: 'user'},
-        { label: _('First Name'),             field: 'n_given'},
-        { label: _('Title'),                  field: 'title'},
-        { label: _('Profession'),             field: 'profession'},
-        { label: _('Last Name'),              field: 'n_family'},
-        { label: _('Salutation'),             field: 'salutation'},
-        { label: app.i18n._('Health Insurance'),  field: 'health_insurance'}
+        { label:          _('Quick search'),        field: 'query', operators: ['contains']},
+        { label: app.i18n._('Employee name'),       field: 'n_fn' },
+        { label: app.i18n._('Employment begin'),    field: 'employment_begin',   valueType: 'date'},
+        { label: app.i18n._('Employment end'),      field: 'employment_end',     valueType: 'date'},
+        { label: app.i18n._('Account'),             field: 'account_id',         valueType: 'user'},
+        { label: app.i18n._('Currently employed'),  field: 'is_employed',        valueType: 'bool'},
+        { label: app.i18n._('First Name'),          field: 'n_given'},
+        { label: app.i18n._('Title'),               field: 'title'},
+        { label: app.i18n._('Profession'),          field: 'profession'},
+        { label: app.i18n._('Last Name'),           field: 'n_family'},
+        { label: app.i18n._('Salutation'),          field: 'salutation'},
+        { label: app.i18n._('Health Insurance'),    field: 'health_insurance'},
+        
+        { label: _('Last Modified Time'),           field: 'last_modified_time', valueType: 'date'},
+        { label: _('Last Modified By'),             field: 'last_modified_by',   valueType: 'user'},
+        { label: _('Creation Time'),                field: 'creation_time',      valueType: 'date'},
+        { label: _('Created By'),                   field: 'created_by',         valueType: 'user'},
+        
+        { filtertype: 'tinebase.tag', app: app}
     ];
     
     if (Tine.Tinebase.appMgr.get('Sales')) {
@@ -209,17 +213,44 @@ Tine.HumanResources.workingtimeBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.HumanResources.Model.WorkingTime
 });
 
-// ELayer
+// CostCenter
 
-Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.modlogFields.concat([
+Tine.HumanResources.Model.CostCenterArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id',        type: 'string'},
     {name: 'start_date', type: 'date'},
-    {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
-    {name: 'end_date', type: 'date'},
-    {name: 'vacation_days', type: 'int'},
     {name: 'cost_center_id', type: 'Sales.CostCenter' },
-    {name: 'employee_id', type: Tine.HumanResources.Model.Employee },
-    {name: 'workingtime_id', type: Tine.HumanResources.Model.WorkingTime }
+    {name: 'employee_id', type: Tine.HumanResources.Model.Employee }
+]);
+
+Tine.HumanResources.Model.CostCenter = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.CostCenterArray, {
+    appName: 'HumanResources',
+    modelName: 'CostCenter',
+    idProperty: 'id',
+    titleProperty: 'workingtime_id.title',
+    // ngettext('CostCenter', 'CostCenters', n);
+    recordName: 'CostCenter',
+    recordsName: 'CostCenters',
+    containerProperty: null,
+    // ngettext('CostCenters', 'CostCenters', n);
+    containerName: 'CostCenters',
+    containersName: 'CostCenters',
+    getTitle: function() {
+        var cc = this.get('cost_center_id');
+        return  cc ? Ext.util.Format.htmlEncode(cc.number + ' - ' + cc.remark) : '';
+    }
+});
+
+// Contract
+
+Tine.HumanResources.Model.ContractArray = Tine.Tinebase.Model.modlogFields.concat([
+    {name: 'id',                type: 'string'},
+    {name: 'start_date',        type: 'date'},
+    {name: 'feast_calendar_id', type: Tine.Tinebase.Model.Container },
+    {name: 'end_date',          type: 'date'},
+    {name: 'vacation_days',     type: 'float'},
+    {name: 'workingtime_json',  type: 'string' },
+    {name: 'employee_id',       type: Tine.HumanResources.Model.Employee },
+    {name: 'workingtime_id',    type: Tine.HumanResources.Model.WorkingTime }
 ]);
 
 Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.ContractArray, {
@@ -248,7 +279,6 @@ Tine.HumanResources.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Human
  * @static
  */ 
 Tine.HumanResources.Model.Contract.getDefaultData = function() {
-    
     var data = {};
     return data;
 };

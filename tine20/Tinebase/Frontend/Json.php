@@ -554,7 +554,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultUsername = '';
             $defaultPassword = '';
         }
-
+        
+        $numberString = Zend_Locale_Format::toFloat(1234.56);
+        
         $registryData =  array(
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
@@ -576,7 +578,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
             'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
             'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
-            'maxPostSize'       => convertToBytes(ini_get('post_max_size'))
+            'maxPostSize'       => convertToBytes(ini_get('post_max_size')),
+            'thousandSeparator' => $numberString[1],
+            'decimalSeparator'  => $numberString[5]
         );
 
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {

@@ -152,6 +152,10 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.updateOnSelectionChange = true;
     },
     
+    /**
+     * creates and returns the context  menu
+     * @return {Ext.menu.Menu}
+     */
     getContextMenu: function() {
         if (! this.contextMenu) {
             var items = [this.deleteAction];

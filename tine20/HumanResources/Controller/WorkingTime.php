@@ -19,6 +19,13 @@
 class HumanResources_Controller_WorkingTime extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * duplicate check fields / if this is NULL -> no duplicate check
+     *
+     * @var array
+     */
+    protected $_duplicateCheckFields = array(array('title'));
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton

@@ -98,7 +98,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         );
         $this->assertEquals($r['results'][0]['employee_id']['id'], $savedEmployee['id']);
 
-        $this->assertTrue(is_array($r['results'][0]['cost_center_id']));
         $this->assertTrue(is_array($r['results'][0]['workingtime_id']));
         $this->assertTrue(is_array($r['results'][0]['feast_calendar_id']));
 

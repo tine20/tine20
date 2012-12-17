@@ -146,6 +146,23 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns localised number string with two digits if no format is given
+     * 
+     * @param {Number} v The number to format.
+     * @param {String} format The way you would like to format this text.
+     * @see Ext.util.Format.number
+     * 
+     * @return {String} The formatted number.
+     */
+    floatRenderer: function(v, format) {
+        if (! format) {
+            // default format by locale and with two decimals
+            format = '0' + Tine.Tinebase.registry.get('thousandSeparator') + '000' + Tine.Tinebase.registry.get('decimalSeparator') + '00'
+        }
+        return Ext.util.Format.number(v, format)
+    },
+    
+    /**
      * Returns localised time string
      * 
      * @param {mixed} date

@@ -34,7 +34,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * initializes the component
      */
     initComponent: function() {
-        this.disabledDays = [0,6];
+//        this.disabledDays = [0,6];
         
         if(this.useWeekPickerPlugin) {
             this.plugins = this.plugins ? this.plugins : [];
@@ -90,6 +90,22 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
             this.setDisabledDates(this.disabledDates);
         }
+        console.warn(result);
+        // weekdays are saved from mon. to sun., the calendar needs sun. to sat.
+        var weekdays = Ext.decode(result.contract.workingtime_json).days;
+        var sunday = weekdays.pop();
+        weekdays.unshift(sunday);
+        
+        disabledDays = [];
+        
+        for (var index = 0; index < 7; index++) {
+            if (weekdays[index] == 0) {
+                disabledDays.push(index);
+            }
+        }
+        
+        this.setDisabledDays(disabledDays);
+        
         this.editDialog.contractPicker.setValue(result.contract);
         this.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(result.contract);
         this.editDialog.contractPicker.enable();

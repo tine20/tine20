@@ -150,6 +150,11 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
         $this->_doPrivateCleanup();
         $this->_filters['division_id'] = new Zend_Filter_Empty(NULL);
+        
+        if (Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
+            $this->_validators['costcenters'] = array(Zend_Filter_Input::ALLOW_EMPTY => true);
+        }
+        
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 
