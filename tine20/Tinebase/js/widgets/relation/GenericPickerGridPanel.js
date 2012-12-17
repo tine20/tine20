@@ -47,6 +47,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @type Tine.widgets.dialog.EditDialog
      */
     editDialog: null,
+    /**
+     * reference to relationPanelRegistry from the editdialog
+     * 
+     * @type {Array}
+     */
+    relationPanelRegistry: null,
     /* private */
     /**
      * configuration fetched from registry
@@ -94,12 +100,22 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * initializes the component
      */
     initComponent: function() {
-        
-        this.record = this.editDialog.record,
+        this.record = this.editDialog.record;
         this.app = this.editDialog.app;
-        this.ownRecordClass = this.editDialog.recordClass,
+        this.ownRecordClass = this.editDialog.recordClass;
         
-        this.possibleRelations = Tine.widgets.relation.Manager.get(this.app, this.ownRecordClass, this.editDialog.ignoreRelatedModels);
+        this.ignoreRelatedModels = this.editDialog.ignoreRelatedModels ? [].concat(this.editDialog.ignoreRelatedModels) : [];
+        this.relationPanelRegistry = this.editDialog.relationPanelRegistry;
+        
+        if (this.relationPanelRegistry && this.relationPanelRegistry.length) {
+            Ext.each(this.relationPanelRegistry, function(panel) {
+                if (panel.relatedPhpModel) {
+                    this.ignoreRelatedModels.push(panel.relatedPhpModel);
+                }
+            }, this);
+        }
+        
+        this.possibleRelations = Tine.widgets.relation.Manager.get(this.app, this.ownRecordClass, this.ignoreRelatedModels);
         
         this.initTbar();
         this.viewConfig = {
@@ -164,15 +180,31 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.store.on('add', this.onAdd, this);
     },
     
+    /**
+     * is called from onApplyChanges of the edit dialog per save event
+     * 
+     * @param {Tine.widgets.dialog.EditDialog} dialog
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Function} ticket
+     * @return {Boolean}
+     */
     onSaveRecord: function(dialog, record, ticket) {
         var interceptor = ticket();
 
         // update from relationsPanel if any
-        if(this.isValid()) {
-            if(record.data.hasOwnProperty('relations')) {
+        if (this.isValid()) {
+            if (record.data.hasOwnProperty('relations')) {
                 delete record.data.relations;
             }
-            record.set('relations', this.getData());
+            var relations = [];
+            
+            Ext.each(this.relationPanelRegistry, function(panel) {
+                relations = relations.concat(this.getData(panel.store));
+            }, this);
+            
+            relations = relations.concat(this.getData());
+            
+            record.set('relations', relations);
         } else {
             Ext.Msg.alert(_('Relations failure'), _('There are invalid relations. Please check before saving.'));
             return false;
@@ -530,7 +562,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         var split = value.split('_');
         var model = Tine[split[0]][split[1]][split[2]];
-        return '<span class="tine-recordclass-gridicon ' + _(model.getMeta('appName')) + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+        return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
     },
 
     /**
@@ -750,13 +782,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     loadRecord: function(dialog, record, ticketFn) {
         this.store.removeAll();
         var interceptor = ticketFn();
-        if (record.get('relations') && record.get('relations').length > 0) {
-            this.updateTitle(record.get('relations').length);
+        var relations = record.get('relations');
+        if (relations && relations.length > 0) {
+            this.updateTitle(relations.length);
             var relationRecords = [];
             
-            Ext.each(record.get('relations'), function(relation) {
-                if(this.editDialog.ignoreRelatedModels) {
-                    if(relation.hasOwnProperty('related_model') && this.editDialog.ignoreRelatedModels.indexOf(relation.related_model) == -1) {
+            Ext.each(relations, function(relation) {
+                if(this.ignoreRelatedModels) {
+                    if(relation.hasOwnProperty('related_model') && this.ignoreRelatedModels.indexOf(relation.related_model) == -1) {
                         relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
                     }
                 } else {
@@ -799,12 +832,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
     /**
      * get relations data as array
-     *
+     * 
+     * @param store if no store is given, this.store will be iterated
      * @return {Array}
      */
-    getData: function() {
+    getData: function(store) {
+        store = store ? store : this.store;
         var relations = [];
-        this.store.each(function(record) {
+        store.each(function(record) {
             delete record.data.related_record.relations;
             delete record.data.related_record.relation;
             relations.push(record.data);

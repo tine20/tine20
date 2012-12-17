@@ -106,6 +106,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     hideRelationsPanel: false,
     
     /**
+     * Registry for other relationgridpanels than the generic one,
+     * handling special types of relations the generic one will not.
+     * Panels registered here must have a store with the relation records.
+     * 
+     * @type {Array}
+     */
+    relationPanelRegistry: null,
+    
+    /**
      * ignore relations to given php-class names in the relation grid
      * @type {Array}
      */
@@ -155,6 +164,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     relationPickers: null,
     //private
     initComponent: function() {
+        this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
         this.addEvents(
             /**
              * @event cancel
