@@ -81,6 +81,7 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         }
         this.multiselectFieldConfig = this.multiselectFieldConfig || {
             selectionWidget: new this.picker ({
+                app: this.app,
                 recordClass: this.recordClass,
                 blurOnSelect: true
             }),
@@ -180,6 +181,7 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         Tine.log.debug('Tine.widgets.grid.PickerFilter::getPicker()');
         
         var result = new this.picker ({
+            app: this.app,
             recordClass: this.recordClass,
             filter: filter,
             blurOnSelect: true,
@@ -269,12 +271,10 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return {Array}
      */
     getItems: function() {
-        var items = [];
+        var me = this,
+            items = [];
 
         this.initSelectionWidget();
-        
-        // defeat scoping :)
-        selectionWidget = this.selectionWidget;
         
         this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel({
             height: this.layerHeight || 'auto',
@@ -286,7 +286,7 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
                 Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
                 this.tbar = new Ext.Toolbar({
                     layout: 'fit',
-                    items: [ selectionWidget ]
+                    items: [ me.selectionWidget ]
                 });
             }
         });
@@ -406,7 +406,8 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         // always copy/clone record because it can't exist in 2 different stores
         this.store.add(record.copy());
         this.currentValue.push(record.id);
-        text = record.get(this.labelField);
+        
+        var text = record.get(this.labelField);
         text = (this.labelRenderer != Ext.emptyFn) ? this.labelRenderer(text) : text;
         
         return text;
@@ -418,12 +419,12 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return Boolean
      */
     onBeforeCollapse: function() {
+        var result = true;
+        
         if (this.pickerGridPanel) {
             var contextMenuVisible = this.pickerGridPanel.contextMenu && ! this.pickerGridPanel.contextMenu.hidden,
                 selectionVisible = this.isSelectionVisible();
             result = ! (contextMenuVisible || selectionVisible);
-        } else {
-            result = true;
         }
         
         Tine.log.debug('Tine.widgets.grid.PickerFilterValueField::onBeforeCollapse() - collapse: ' + result);
