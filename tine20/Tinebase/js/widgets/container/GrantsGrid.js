@@ -21,7 +21,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
 Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPanel, {
 
     /**
-     * @cfg {Tine.Tinebase.container.models.container}
+     * @cfg {Array} data of Tine.Tinebase.Model.Container
      * Container to manage grants for
      */
     grantContainer: null,
