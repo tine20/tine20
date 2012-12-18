@@ -218,6 +218,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveResource($recordData)
     {
+        $recordData['grants'] = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $recordData['grants']);
+        
         return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }
     

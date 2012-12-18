@@ -1578,8 +1578,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $userAccountId = $_attender->getUserAccountId();
         
-        // reset status if not a contact or my account
-        if ($_attender->user_type != Calendar_Model_Attender::USERTYPE_USER || ($userAccountId && $userAccountId != Tinebase_Core::getUser()->getId())) {
+        if (    $_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
+             || ( $userAccountId && $userAccountId != Tinebase_Core::getUser()->getId()) ) {
+            
             $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
@@ -1606,6 +1607,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
             $resource = Calendar_Controller_Resource::getInstance()->get($_attender->user_id);
             $_attender->displaycontainer_id = $resource->container_id;
+            
+            // check if user is allowed to set status
+            if (! Tinebase_Core::getUser()->hasGrant($_attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
+                $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
         }
         $this->_backend->createAttendee($_attender);
     }
@@ -1642,15 +1648,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $userAccountId = $_currentAttender->getUserAccountId();
         
         // reset status if attender != currentuser and wrong authkey
-        if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP
-                || $userAccountId != Tinebase_Core::getUser()->getId()) {
+        if ($userAccountId != Tinebase_Core::getUser()->getId()) {
             
             if ($_isRescheduled) {
                 $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
                 $_attender->transp = null;
             }
             
-            else  if ($_attender->status_authkey != $_currentAttender->status_authkey) {
+            else if ($_attender->status_authkey != $_currentAttender->status_authkey) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " wrong authkey -> resetting status ");
                 $_attender->status = $_currentAttender->status;
             }

@@ -556,7 +556,8 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'email'},
     {name: 'is_location', type: 'bool'},
     {name: 'tags'},
-    {name: 'notes'}
+    {name: 'notes'},
+    {name: 'grants'}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

@@ -215,9 +215,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     o.record.reject();
                     this.startEditing(o.row, o.column);
                 } else if (o.value) {
-                    // set a status authkey for contacts and recources so user can edit status directly
+                    // set status authkey for contacts and recources so user can edit status directly
                     // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
-                    if (! o.value.account_id ) {
+                    //       WELL we could add the info to search attendee somehow
+                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id )
+                        || (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').container_id && o.record.get('user_id').container_id.account_grants && o.record.get('user_id').container_id.account_grants.editGrant)) {
                         o.record.set('status_authkey', 1);
                     }
                     

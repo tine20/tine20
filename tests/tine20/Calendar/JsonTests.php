@@ -800,4 +800,89 @@ class Calendar_JsonTests extends Calendar_TestCase
         $search = $this->_uit->searchEvents($events['filter'], NULL);
         $this->assertEquals(1, $search['totalcount'], '1 event should remain: ' . print_r($search,TRUE));
     }
+    
+    /**
+     * assert grant handling
+     */
+    public function testSaveResource($grants = array('readGrant' => true,'editGrant' => true))
+    {
+        $resoureData = array(
+            'name'  => Tinebase_Record_Abstract::generateUID(),
+            'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.com',
+            'grants' => array(array_merge($grants, array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => 'user'
+            )))
+        );
+        
+        $resoureData = $this->_uit->saveResource($resoureData);
+        $this->assertTrue(is_array($resoureData['grants']), 'grants are not resolved');
+        
+        return $resoureData;
+    }
+    
+    /**
+     * assert only resources with read grant are returned if the user has no manage right
+     */
+    public function testSearchResources()
+    {
+        $readableResoureData = $this->testSaveResource();
+        $nonReadableResoureData = $this->testSaveResource(array());
+        
+        $filer = array(
+            array('field' => 'name', 'operator' => 'in', 'value' => array(
+                $readableResoureData['name'],
+                $nonReadableResoureData['name'],
+            ))
+        );
+        
+        $searchResultManager = $this->_uit->searchResources($filer, array());
+        $this->assertEquals(2, count($searchResultManager['results']), 'with manage grants all records should be found');
+        
+        // steal manage right
+        Tinebase_Acl_Roles::getInstance()->deleteAllRoles();
+        
+        $searchResult = $this->_uit->searchResources($filer, array());
+        $this->assertEquals(1, count($searchResult['results']), 'without manage grants only one record should be found');
+    }
+    
+    /**
+     * assert status authkey with editGrant
+     * assert stauts can be set with editGrant
+     * assert stauts can't be set without editGrant
+     */
+    public function testResourceAttendeeGrants()
+    {
+        $editableResoureData = $this->testSaveResource();
+        $nonEditableResoureData = $this->testSaveResource(array('readGrant'));
+        
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $editableResoureData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            ),
+            array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'    => $nonEditableResoureData['id'],
+                'status'     => Calendar_Model_Attender::STATUS_ACCEPTED
+            )
+        ));
+        
+        $persistentEventData = $this->_uit->saveEvent($event->toArray());
+        
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $persistentEventData['attendee']);
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)), 'one accepted');
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_NEEDSACTION)), 'one needs action');
+        
+        $this->assertEquals(1, count($attendee->filter('status_authkey', '/[a-z0-9]+/', TRUE)), 'one has authkey');
+        
+        $attendee->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $persistentEventData['attendee'] = $attendee->toArray();
+        
+        $updatedEventData = $this->_uit->saveEvent($persistentEventData);
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $updatedEventData['attendee']);
+        $this->assertEquals(1, count($attendee->filter('status', Calendar_Model_Attender::STATUS_TENTATIVE)), 'one tentative');
+    }
 }

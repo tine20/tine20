@@ -738,8 +738,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 }
                 
-                // keep authkey if attender resource OR contact (no account) and user has editGrant for event
-                if (in_array($attender->user_type, array(self::USERTYPE_USER, self::USERTYPE_RESOURCE))
+                // keep authkey if attender is a contact (no account) and user has editGrant for event
+                if ($attender->user_type == self::USERTYPE_USER
                     && $attender->user_id instanceof Tinebase_Record_Abstract
                     && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)
                     && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})

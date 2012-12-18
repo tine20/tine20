@@ -29,7 +29,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_doContainerACLChecks = FALSE;
+    protected $_doContainerACLChecks = TRUE;
     
     /**
      * @var Calendar_Controller_Resource
@@ -85,20 +85,16 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         // create a calendar for this resource
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => $_record->name,
+            'color'             => '#333399',
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
             'model'             => 'Calendar_Model_Event'
         )), NULL, TRUE);
         
-        // remove default admin
-        $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-            array(
-                'account_id'      => '0',
-                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                Tinebase_Model_Grants::GRANT_FREEBUSY  => true
-            )
-        )), TRUE, FALSE);
+        if ($_record->grants instanceof Tinebase_Record_RecordSet) {
+            $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
+        }
         
         $_record->container_id = $container->getId();
         return parent::create($_record);
@@ -117,7 +113,18 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         $container->name = $_record->name;
         Tinebase_Container::getInstance()->update($container);
         
+        if ($_record->grants instanceof Tinebase_Record_RecordSet) {
+            Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
+        }
+        
         return parent::update($_record);
+    }
+    
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        $this->doContainerACLChecks(! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
+        
+        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
     
     /**
@@ -129,6 +136,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkRight($_action)
     {
+        $this->doContainerACLChecks(! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
+        
         switch ($_action) {
             case 'create':
             case 'update':

@@ -28,6 +28,18 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     //mode: 'local',
     
     getFormItems: function() {
+        this.grantsGridPanel = new Tine.widgets.container.GrantsGrid({
+            grantContainer: {
+                application_id: this.app.id,
+                type: Tine.Tinebase.container.TYPE_SHARED
+            },
+        
+            store: new Ext.data.JsonStore({
+                fields: Tine.Tinebase.Model.Grant,
+                root: 'grants'
+            })
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -101,15 +113,37 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
+            }, {
+                title: this.app.i18n._('Grants'),
+                layout: 'fit',
+                items: this.grantsGridPanel
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+    
+    onAfterRecordLoad: function() {
+        Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
+        
+        this.grantsGridPanel.getStore().loadData(this.record.data);
+    },
+    
+    onRecordUpdate: function() {
+        var grantsData = [];
+        
+        this.grantsGridPanel.getStore().each(function(r){
+            grantsData.push(r.data);
+        }, this);
+        
+        this.record.set('grants', '');
+        this.record.set('grants', grantsData);
+        
+        Tine.Calendar.ResourceEditDialog.superclass.onRecordUpdate.apply(this, arguments);
     }
     
-                
 });
 
 /**
