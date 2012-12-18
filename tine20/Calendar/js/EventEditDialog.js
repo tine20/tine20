@@ -310,6 +310,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.attendeeGridPanel.on('afteredit', function(o) {
             if (o.field == 'user_id'
                 && o.record.get('user_type') == 'resource'
+                && o.record.get('user_id')
                 && o.record.get('user_id').is_location
             ) {
                 this.getForm().findField('location').setValue(
