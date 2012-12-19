@@ -186,7 +186,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );
             
-            if ($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
+            if (    $_container->type === Tinebase_Model_Container::TYPE_SHARED 
+                 && ! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
     
                 // add all grants to creator and
                 // add read grants to any other user
@@ -622,8 +623,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
             ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
-            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships)
-            ->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships);
+        
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+            $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        }
         
         $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         foreach ($grants as $grant) {

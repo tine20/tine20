@@ -243,6 +243,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAX_LOGIN_FAILURES = 'maxLoginFailures';
+     
+    /*
+     * ANYONE_ACCOUNT_DISABLED
+     *
+     * @var string
+     */
+    const ANYONE_ACCOUNT_DISABLED = 'anyoneAccountDisabled';
     
     /**
      * (non-PHPdoc)
@@ -544,7 +551,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
-        );
+        self::ANYONE_ACCOUNT_DISABLED => array(
+                                   //_('Disable Anyone Account')
+            'label'                 => 'Disable Anyone Account',
+                                   //_('Disallow anyone account in grant configurations')
+            'description'           => 'Disallow anyone account in grant configurations',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+    );
     
     /**
      * (non-PHPdoc)

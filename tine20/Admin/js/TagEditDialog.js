@@ -100,7 +100,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.tag = new Tine.Tinebase.Model.Tag(tagData, tagData.id ? tagData.id : 0);
         
         if (! tagData.rights) {
-            tagData.rights = [{
+            tagData.rights = Tine.Tinebase.configManager.get('anyoneAccountDisabled') ? [] : [{
                 tag_id: '', //todo!
                 account_name: 'Anyone',
                 account_id: 0,

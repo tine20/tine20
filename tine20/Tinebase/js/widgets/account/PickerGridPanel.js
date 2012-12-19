@@ -96,6 +96,10 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         this.recordClass = this.recordClass || Tine.Tinebase.Model.Account;
         this.groupRecordClass = this.groupRecordClass || Tine.Addressbook.Model.List;
         
+        if (Tine.Tinebase.configManager.get('anyoneAccountDisabled')) {
+            Tine.log.info('Tine.widgets.account.PickerGridPanel::initComponent() -> select anyone disabled in config');
+            this.selectAnyone = false;
+        }
         Tine.widgets.account.PickerGridPanel.superclass.initComponent.call(this);
 
         this.store.sort(this.recordPrefix + 'name');

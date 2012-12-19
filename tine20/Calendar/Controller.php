@@ -166,11 +166,13 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 Tinebase_Model_Grants::GRANT_PRIVATE   => true,
             ), TRUE));
             
-            $grants->addRecord(new Tinebase_Model_Grants(array(
-                'account_id'      => '0',
-                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                Tinebase_Model_Grants::GRANT_FREEBUSY  => true
-            ), TRUE));
+            if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+                $grants->addRecord(new Tinebase_Model_Grants(array(
+                    'account_id'      => '0',
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+                ), TRUE));
+            }
         }
     }
     

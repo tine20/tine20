@@ -634,4 +634,34 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($container->name, 'tine20phpunit');
         $this->assertEquals($container->model, 'Addressbook_Model_Contact');
     }
+    
+    public function testAccountAnyoneDisabled()
+    {
+        $container = new Tinebase_Model_Container(array(
+            'name'              => 'tine20shared',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'owner_id'          => Tinebase_Core::getUser(),
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+        ));
+        
+        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_EXPORT  => true,
+                Tinebase_Model_Grants::GRANT_SYNC    => true,
+            )
+        ), TRUE);
+        
+        $sharedContainer = $this->_instance->addContainer($container, $grants);
+        $readGrant = $this->_instance->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
+        $this->assertTrue($readGrant);
+        
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, TRUE);
+        Tinebase_Core::getCache()->clean();
+        $readGrant = $this->_instance->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
+        $this->assertFalse($readGrant);
+    }
 }
