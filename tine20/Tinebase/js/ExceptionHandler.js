@@ -278,10 +278,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 break;
         }
         
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('config') && 
-            Tine.Tinebase.registry.get('config').automaticBugreports && 
-            Tine.Tinebase.registry.get('config').automaticBugreports.value && ! Tine.Tinebase.exceptionDlg
-        ) {
+        if (Tine.Tinebase.configManager.get('automaticBugreports') && ! Tine.Tinebase.exceptionDlg) {
             Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Activate non-interacive exception dialog.');
             Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                 exception: exception,

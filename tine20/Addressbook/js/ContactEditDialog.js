@@ -35,7 +35,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     multipleEdit: true,
     
     getFormItems: function () {
-        if (Tine.Tinebase.registry.get('mapPanel') && Tine.widgets.MapPanel) {
+        if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
                 layout: 'fit',
                 title: this.app.i18n._('Map'),

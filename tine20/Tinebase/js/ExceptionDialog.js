@@ -75,10 +75,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         }, this);
         
         this.on('close', function() {
-            if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('config') && 
-                Tine.Tinebase.registry.get('config').automaticBugreports && 
-                Tine.Tinebase.registry.get('config').automaticBugreports.value && ! this.nonInteractive
-            ) {
+            if (Tine.Tinebase.configManager.get('automaticBugreports') && ! this.nonInteractive) {
                 Tine.log.debug('Tine.Tinebase.ExceptionDialog::onCancel -> Activate non-interacive exception dialog.');
                 Tine.Tinebase.exceptionDlg = new Tine.Tinebase.ExceptionDialog({
                     exception: this.exception,

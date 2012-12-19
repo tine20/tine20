@@ -137,7 +137,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.action_changePassword = new Ext.Action({
             text: _('Change password'),
             handler: this.onChangePassword,
-            disabled: (Tine.Tinebase.registry.get('changepw') == '0'),
+            disabled: (! Tine.Tinebase.configManager.get('changepw')),
             iconCls: 'action_password'
         });
         

@@ -354,6 +354,10 @@
           "path": "js/"
         },
         {
+          "text": "configManager.js",
+          "path": "js/"
+        },
+        {
           "text": "Models.js",
           "path": "js/"
         },

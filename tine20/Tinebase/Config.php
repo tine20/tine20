@@ -390,7 +390,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Use of external Geolocation services is allowed.')
             'description'           => 'Use of external Geolocation services is allowed.',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
