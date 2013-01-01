@@ -1,0 +1,10 @@
+--- Setup/essentials.xml	2012-06-27 11:00:42.000000000 +0200
++++ Setup/essentials.xml.fedora	2012-08-02 08:40:56.605780474 +0200
+@@ -13,7 +13,6 @@
+         <extension name="dom" />
+         <extension name="mcrypt" />
+         <extension name="iconv" />
+-        <extension name="zip" />
+         <extension name="xml" />
+     </extensions>
+ </essential>

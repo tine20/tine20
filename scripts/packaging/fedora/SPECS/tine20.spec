@@ -27,7 +27,7 @@
 
 %global vyear 2012
 %global vmonth 10
-%global vmin 1
+%global vmin 2
 
 Name:           tine20
 Version:        %{vyear}.%{vmonth}.%{vmin}
@@ -36,16 +36,20 @@ Summary:        Open Source Groupware and CRM
 
 License:        AGPLv3, GPLv3, BSD, LGPLv2.1+, LGPLv2.1
 URL:            http://www.tine20.org/
-Source0:        http://www.tine20.org/downloads/%{version}/tine20-allinone_%{version}.tar.bz2
-Source1:        tine20-httpd.conf
-Source2:        tine20-php.ini
-Source3:        tine20-config.inc.php
-Source4:        tine20-logrotate.conf
-Source5:        tine20-README.fedora
+Source0:        http://www.tine20.org/downloads/%{version}/%{name}-allinone_%{version}.tar.bz2
+Source1:        %{name}-httpd.conf
+Source2:        %{name}-php.ini
+Source3:        %{name}-config.inc.php
+Source4:        %{name}-logrotate.conf
+Source5:        %{name}-README.fedora
+Source6:        %{name}-cron
+
+Requires:       %{name}-webstack = %{version}
+Requires:       mysql-server
 
 # The patch is to make some requirements compatible with packages (not) provided
 # in Fedora and thus, not implemented upstream
-Patch0:         0001-tine20-fix-requirements.patch
+Patch0:         0001-%{name}-fix-requirements.patch
 
 BuildArch:      noarch
 
@@ -70,21 +74,41 @@ pleasure and include:
  * History
  * PDF export
 
-
-%package base
-Summary:        Tine 2.0 base package
+%package webstack
+Summary:        Webserver dependencies
 Requires:       httpd
-Requires:       php >= 5.2.3
-Requires:       php-gd, php-mysqli, php-mcrypt
+Requires:       php >= 5.3.0
+Requires:       php-gd php-mysqli php-mcrypt php-pecl-apc
 Requires:       php-ZendFramework php-ZendFramework-Ldap
+Requires:       %{name}-tinebase %{name}-activesync %{name}-calendar %{name}-crm %{name}-felamimail %{name}-filemanager %{name}-projects %{name}-sales %{name}-tasks %{name}-timetracker
 
-%description base
+%description webstack
+This package depends on all other Tine 2.0 packages and the webserver.
+Install this package to setup the whole Tine 2.0 stack.
+
+%package tinebase
+Summary:        Tine 2.0 base package
+Requires:       %{name}-libraries = %{version}
+
+%description tinebase
 This package contains the base which at least is necessary to run Tine 2.0.
 
+%package libraries
+Summary:        External libraries required by Tine 2.0
+
+%description libraries
+External libraries required by Tine 2.0
+
+%package activesync
+Summary:        Tine 2.0 activesync module
+Requires:       %{name}-tinebase = %{version}
+
+%description activesync
+This package contains the activesync module for Tine 2.0.
 
 %package calendar
 Summary:        Tine 2.0 calendar module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description calendar
 This package contains the calendar module for Tine 2.0.
@@ -92,9 +116,9 @@ This package contains the calendar module for Tine 2.0.
 
 %package crm
 Summary:        Tine 2.0 CRM module
-Requires:       tine20-base = %{version}
-Requires:       tine20-sales = %{version}
-Requires:       tine20-tasks = %{version}
+Requires:       %{name}-tinebase = %{version}
+Requires:       %{name}-sales = %{version}
+Requires:       %{name}-tasks = %{version}
 
 %description crm
 This package contains the CRM module for Tine 2.0.
@@ -102,7 +126,7 @@ This package contains the CRM module for Tine 2.0.
 
 %package felamimail
 Summary:        Tine 2.0 mail client module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description felamimail
 This package contains the mail client module for Tine 2.0 called "Felamimail".
@@ -110,15 +134,22 @@ This package contains the mail client module for Tine 2.0 called "Felamimail".
 
 %package filemanager
 Summary:        Tine 2.0 file manager module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description filemanager
 This package contains the file manager module for Tine 2.0.
 
 
+%package projects
+Summary:        Tine 2.0 project module
+Requires:       %{name}-tinebase = %{version}
+
+%description projects
+This package contains the projects module for Tine 2.0.
+
 %package sales
 Summary:        Tine 2.0 sales module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description sales
 This package contains the sales module for Tine 2.0.
@@ -126,7 +157,7 @@ This package contains the sales module for Tine 2.0.
 
 %package tasks
 Summary:        Tine 2.0 tasks module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description tasks
 This package contains the tasks module for Tine 2.0.
@@ -134,7 +165,7 @@ This package contains the tasks module for Tine 2.0.
 
 %package timetracker
 Summary:        Tine 2.0 time tracker module
-Requires:       tine20-base = %{version}
+Requires:       %{name}-tinebase = %{version}
 
 %description timetracker
 This package contains the time tracker module for Tine 2.0.
@@ -142,7 +173,7 @@ This package contains the time tracker module for Tine 2.0.
 
 %prep
 %setup -q -c -n %{name}-%{version}
-cp -a %{SOURCE5} README.fedora
+%{__cp} -a %{SOURCE5} README.fedora
 
 %patch0
 
@@ -151,59 +182,61 @@ cp -a %{SOURCE5} README.fedora
 # nothing to do here so far..
 
 %install
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 
 
 ## remove the bundled ZendFramework, the Fedora-shipped one is referenced from
 ## tine20-httpd.conf which will be installed as /etc/httpd/conf.d/tine20.conf
-#rm -rf library/Zend/
+#%{__rm} -rf library/Zend/
 
 
 # installation of code to /usr/share/tine20
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/
-cp -ad * $RPM_BUILD_ROOT%{_datadir}/%{name}/
-rm -f $RPM_BUILD_ROOT%{_datadir}/%{name}/{[R]*,config.inc.php.dist}
+%{__install} -d $RPM_BUILD_ROOT%{_datadir}/%{name}/
+%{__cp} -ad * $RPM_BUILD_ROOT%{_datadir}/%{name}/
+%{__rm} -f $RPM_BUILD_ROOT%{_datadir}/%{name}/{[R]*,config.inc.php.dist}
 
 # session and other stuff
-install -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{tmp,sessions,files,cache}
+%{__install} -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{tmp,sessions,files,cache}
 
 # httpd configuration
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
-install -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/%{name}.conf
+%{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
+%{__install} -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/%{name}.conf
 
 # php.ini needed if FastCGI is used
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/php.d/
-install -pm 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/php.d/%{name}.ini
+%{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/php.d/
+%{__install} -pm 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/php.d/%{name}.ini
 
 # Tine 2.0 configuration
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
-install -pm 640 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config.inc.php
+%{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
+%{__install} -pm 640 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config.inc.php
 
 # logging
-install -d $RPM_BUILD_ROOT%{_localstatedir}/log/%{name}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/
-install -pm 644 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
+%{__install} -d $RPM_BUILD_ROOT%{_localstatedir}/log/%{name}
+%{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/
+%{__install} -pm 644 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
 
+# cron
+%{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/cron.d/
+%{__install} -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 
 %post
 if [ "$1" -eq "1" ]; then
-        export NEWPASS=$( dd if=/dev/urandom bs=20 count=1 2>/dev/null \
-                                | sha1sum | awk '{print $1}' )
+    export NEWPASS=$( dd if=/dev/urandom bs=20 count=1 2>/dev/null \
+        | sha1sum | awk '{print $1}' )
     sed -i "s/SETUP PASSWORD/$NEWPASS/" %{_sysconfdir}/%{name}/config.inc.php
 fi
 
+%files
 
-%files base
-%doc LICENSE PRIVACY README RELEASENOTES config.inc.php.dist README.fedora
+
+%files tinebase
+%doc LICENSE PRIVACY README RELEASENOTES config.inc.php.dist README.fedora docs/htaccess
 %dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/ActiveSync/
 %{_datadir}/%{name}/Addressbook/
 %{_datadir}/%{name}/Admin/
 %{_datadir}/%{name}/images/
 %{_datadir}/%{name}/index.php
 %{_datadir}/%{name}/langHelper.php
-%{_datadir}/%{name}/library/
-%{_datadir}/%{name}/Projects/
 %{_datadir}/%{name}/Setup/
 %{_datadir}/%{name}/setup.php
 %{_datadir}/%{name}/styles/
@@ -214,11 +247,13 @@ fi
 %{_datadir}/%{name}/PRIVACY
 %{_datadir}/%{name}/bootstrap.php
 %{_datadir}/%{name}/CREDITS
+%{_datadir}/%{name}/docs/htaccess
 
 %dir %{_sysconfdir}/%{name}/
 %config(noreplace) %attr(0640,root,apache) %{_sysconfdir}/%{name}/config.inc.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %config(noreplace) %{_sysconfdir}/php.d/tine20.ini
+%config            %{_sysconfdir}/cron.d/tine20
 
 %dir %{_sharedstatedir}/%{name}/
 %dir %attr(0750,apache,apache) %{_sharedstatedir}/%{name}/tmp
@@ -228,6 +263,12 @@ fi
 
 %dir %attr(0750,apache,apache) %{_localstatedir}/log/%{name}/
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+
+%files libraries
+%{_datadir}/%{name}/library/
+
+%files activesync
+%{_datadir}/%{name}/ActiveSync/
 
 
 %files calendar
@@ -246,6 +287,10 @@ fi
 %{_datadir}/%{name}/Filemanager/
 
 
+%files projects
+%{_datadir}/%{name}/Projects/
+
+
 %files sales
 %{_datadir}/%{name}/Sales/
 
@@ -257,6 +302,8 @@ fi
 %files timetracker
 %{_datadir}/%{name}/Timetracker/
 
+
+%files webstack
 
 %changelog
 * Mon Nov 05 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.10.1-1
