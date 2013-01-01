@@ -42,6 +42,7 @@ Depends: ${misc:Depends},
  php5-mysql | php5-mysqli, 
  php5-mcrypt, 
  php5-gd,
+ php-apc,
  makepasswd
 Recommends: mysql-client
 Description: Tine 2.0 integration package for Univention Corporate Server
