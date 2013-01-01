@@ -39,25 +39,6 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     }
     
     /**
-     * init tine framework
-     */
-    protected function _initFramework()
-    {
-        $this->_setupCliConfig();
-        Tinebase_Core::setupTempDir();
-        Tinebase_Core::setupLogger();
-        Tinebase_Core::setupStreamWrapper();
-        Tinebase_Core::setupBuildConstants();
-        Tinebase_Core::setupSession();
-        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
-        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
-        Tinebase_Core::setupDatabaseConnection();
-        Tinebase_Core::setupCache();
-        Tinebase_Core::setupUserTimezone();
-        Tinebase_Core::setupUserLocale();
-    }
-    
-    /**
      * initializes the config
      * - overwrite session_save_path
      */
@@ -84,7 +65,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         $method = $this->getRequestMethod();
         
         if (! in_array($method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
-            $this->_initFramework();
+            Tinebase_Core::initFramework();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 .' Is cli request. method: ' . $method);
         }

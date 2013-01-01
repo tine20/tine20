@@ -68,7 +68,7 @@ class Tinebase_Redis_Queue_Zend_Redis extends Zend_Queue_Adapter_AdapterAbstract
         }
 
         $this->_queueStructName = $options['queueName'] . $options['redisQueueSuffix'];
-        $this->_dataStructName = $options['queueName'] . $options['redisDataSuffix'];
+        $this->_dataStructName  = $options['queueName'] . $options['redisDataSuffix'];
 
         $this->_redis = new Redis;
         $this->_redis->connect($options['host'], $options['port'], $options['timeout']);
