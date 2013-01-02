@@ -306,6 +306,9 @@ fi
 %files webstack
 
 %changelog
+* Wed Jan 02 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.2-1
+- new upstream release 2012.10.2
+
 * Mon Nov 05 2012 Dominic Hopf <dmaphy@fedoraproject.org> - 2012.10.1-1
 - new upstream release 2012.10.1
 
