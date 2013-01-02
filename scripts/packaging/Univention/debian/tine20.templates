@@ -1,0 +1,10 @@
+Template: tine20/setupuser
+Type: string
+Default: tine20setup
+_Description: Tine 2.0 setup username
+ Username used to login into Tine 2.0 setup (setup.php)
+
+Template: tine20/setuppasswd
+Type: password
+_Description: Tine 2.0 setup password
+ Password used to login into Tine 2.0 setup (setup.php)

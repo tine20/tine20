@@ -45,13 +45,20 @@ Depends: ${misc:Depends},
  php-apc,
  makepasswd
 Recommends: mysql-client
-Description: Tine 2.0 integration package for Univention Corporate Server
- Integration package for installation and configuration of the Tine 2.0
- groupware solution on Univention Corporate Server.
+Description: Tine 2.0 webserver integration package
+ This package integrates Tine 2.0 with the webserver, by installing all needed
+ dependencies to make Tine 2.0 available via HTTP(S).
+
+Package: tine20-libraries
+Architecture: all
+Depends: ${misc:Depends}
+Descrption: Additional libraries needed by Tine 2.0
+ Libraries bundled with upstream Tine 2.0 source package, but developed by other developers.
 
 Package: tine20-tinebase
 Architecture: all
-Depends: ${misc:Depends}, 
+Depends: ${misc:Depends},
+ tine20-libraries (= ${binary:Version}),
  makepasswd,
  php5-cli
 Recommends: php5-ldap

@@ -1,0 +1,25 @@
+After installation you will need to do some adjustments to the configuration
+file at /etc/tine20/config.inc.php. At least the database connection has to
+be configured there after you manually configured a database access in your
+MySQL-Server. You are also recommended to adjust the setupuser
+credentials to your needs.
+
+
+You are able to decided whether you use Tine 2.0 via mod_php or FastCGI,
+just disable and enable the corresponding lines in
+/etc/httpd/conf.d/tine20.conf accordingly.
+
+
+Please note that, even if the installation process places the corresponding
+Apache configuration to your /etc/httpd/conf.d/, Apache is not automatically
+triggered to re-read the configuration, this has to be done manually by
+yourself via
+
+	systemctl reload httpd.service
+
+
+Note that this package does not contain the optional VoIP integration,
+if you want to use this feature, you can download and install the according
+tarball at
+
+    http://www.tine20.org/download.html
