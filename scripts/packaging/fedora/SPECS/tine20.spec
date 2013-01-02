@@ -43,13 +43,10 @@ Source3:        %{name}-config.inc.php
 Source4:        %{name}-logrotate.conf
 Source5:        %{name}-README.fedora
 Source6:        %{name}-cron
+Source7:        http://www.tine20.org/downloads/%{version}/%{name}-humanresources_%{version}.tar.bz2
 
 Requires:       %{name}-webstack = %{version}
 Requires:       mysql-server
-
-# The patch is to make some requirements compatible with packages (not) provided
-# in Fedora and thus, not implemented upstream
-Patch0:         0001-%{name}-fix-requirements.patch
 
 BuildArch:      noarch
 
@@ -75,7 +72,7 @@ pleasure and include:
  * PDF export
 
 %package webstack
-Summary:        Webserver dependencies
+Summary:        Tine 2.0 webserver integration package
 Requires:       httpd
 Requires:       php >= 5.3.0
 Requires:       php-gd php-mysqli php-mcrypt php-pecl-apc
@@ -83,8 +80,8 @@ Requires:       php-ZendFramework php-ZendFramework-Ldap
 Requires:       %{name}-tinebase %{name}-activesync %{name}-calendar %{name}-crm %{name}-felamimail %{name}-filemanager %{name}-projects %{name}-sales %{name}-tasks %{name}-timetracker
 
 %description webstack
-This package depends on all other Tine 2.0 packages and the webserver.
-Install this package to setup the whole Tine 2.0 stack.
+This package integrates Tine 2.0 with the webserver, by installing all needed
+dependencies to make Tine 2.0 available via HTTP(S).
 
 %package tinebase
 Summary:        Tine 2.0 base package
@@ -94,10 +91,10 @@ Requires:       %{name}-libraries = %{version}
 This package contains the base which at least is necessary to run Tine 2.0.
 
 %package libraries
-Summary:        External libraries required by Tine 2.0
+Summary:        Additional libraries required by Tine 2.0
 
 %description libraries
-External libraries required by Tine 2.0
+Libraries bundled with upstream Tine 2.0 source package, but developed by other developers.
 
 %package activesync
 Summary:        Tine 2.0 activesync module
@@ -174,8 +171,6 @@ This package contains the time tracker module for Tine 2.0.
 %prep
 %setup -q -c -n %{name}-%{version}
 %{__cp} -a %{SOURCE5} README.fedora
-
-%patch0
 
 
 %build
