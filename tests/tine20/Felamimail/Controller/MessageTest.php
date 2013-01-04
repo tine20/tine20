@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -1261,6 +1261,20 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertContains('unwahrscheinlichen Fall, dass Probleme auftreten sollten,', $message->body, print_r($message->toArray(), TRUE));
+    }
+    
+    /**
+     * testUmlautAttachment
+     * 
+     * @see 0007624: losing umlauts in attached filenames
+     */
+    public function testUmlautAttachment()
+    {
+        $cachedMessage = $this->messageTestHelper('attachmentUmlaut.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertEquals(1, count($message->attachments));
+        $this->assertEquals('äöppopä.txt', $message->attachments[0]['filename']);
     }
     
     /********************************* protected helper funcs *************************************/

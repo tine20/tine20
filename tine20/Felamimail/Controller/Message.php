@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
  */
@@ -891,6 +891,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         foreach ($structure['parts'] as $part) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($part, TRUE));
+            
             if ($part['type'] == 'multipart') {
                 $attachments = $attachments + $this->getAttachments($message, $part['partId']);
             } else {
@@ -900,24 +903,44 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     continue;
                 }
                 
-                if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) && array_key_exists('filename', $part['disposition']['parameters'])) {
-                    $filename = $part['disposition']['parameters']['filename'];
-                } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
-                    $filename = $part['parameters']['name'];
-                } else {
-                    $filename = 'Part ' . $part['partId'];
-                }
-                $attachments[] = array( 
+                $filename = $this->_getAttachmentFilename($part);
+                $attachmentData = array(
                     'content-type' => $part['contentType'], 
                     'filename'     => $filename,
                     'partId'       => $part['partId'],
                     'size'         => $part['size'],
                     'description'  => $part['description']
                 );
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Got attachment with name ' . $filename);
+                
+                $attachments[] = $attachmentData;
             }
         }
         
         return $attachments;
+    }
+    
+    /**
+     * fetch attachment filename from part
+     * 
+     * @param array $part
+     * @return string
+     */
+    protected function _getAttachmentFilename($part)
+    {
+        if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) 
+            && array_key_exists('filename', $part['disposition']['parameters'])) 
+        {
+            $filename = $part['disposition']['parameters']['filename'];
+        } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
+            $filename = $part['parameters']['name'];
+        } else {
+            $filename = 'Part ' . $part['partId'];
+        }
+        
+        return $filename;
     }
     
     /**
