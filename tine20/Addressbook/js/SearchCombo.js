@@ -76,7 +76,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      */
     processValue: function(value) {
         if (this.useAccountRecord) {
-            if(value == '') {
+            if (value == '') {
                 this.accountId = null;
                 this.selectedRecord = null;
             }
@@ -153,7 +153,6 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     },
 
     setValue: function (value) {
-
         if (this.useAccountRecord) {
             if (value) {
                 if(value.accountId) {
@@ -168,7 +167,6 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
             } else {
                 this.accountId = null;
                 this.selectedRecord = null;
-                
             }
         }
         return Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);

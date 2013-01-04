@@ -258,11 +258,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         var r = this.findRecord(this.valueField, value),
             text = value;
         
-        if(r){
+        if (r){
             text = r.getTitle();
             
             if (this.allowLinkingItself === false) {
-                if(r.getId() == this.editDialog.record.getId()) {
+                if (r.getId() == this.editDialog.record.getId()) {
                     Ext.MessageBox.show({
                         title: _('Failure'),
                         msg: _('You tried to link a record with itself. This is not allowed!'),
@@ -273,11 +273,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 }
             }
             
-        } else if(Ext.isDefined(this.valueNotFoundText)){
+        } else if (Ext.isDefined(this.valueNotFoundText)){
             text = this.valueNotFoundText;
         }
         this.lastSelectionText = text;
-        if(this.hiddenField){
+        if (this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);

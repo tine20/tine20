@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -188,7 +188,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     
                     // need to update record because we relay blur event and it might not be updated otherwise
                     if (this.activeEditor) {
-                        var value = combo.getValue();
+                        var value = combo.getRawValue();
+                        Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboBlur() -> current value: ' + value);
                         if (value !== null && this.activeEditor.record.get('address') != value) {
                             this.activeEditor.record.set('address', value);
                         }
@@ -323,7 +324,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.commitChanges();
         this.setFixedHeight(false);
         this.ownerCt.doLayout();
-    },        
+    },
     
     /**
      * start editing (check if message compose dlg is saving/sending first)
@@ -402,10 +403,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             var emptyRecord = this.store.getAt(this.store.findExact('address', '')),
                 type = (emptyRecord) ? emptyRecord.get('type') : 'to';
         }
-                        
+        
         var hasEmail = false,
             added = false;
-
+        
         Ext.each(records, function(record) {
             if (record.hasEmail()) {
                 this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -144,7 +144,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             }
             
             this.selectedRecord = rec;
-            this.setRawValue(rec ? rec.get(this.displayField) : '');
+            this.setRawValue(rec ? rec.get(this.displayField) : val);
         }
     }
 });
