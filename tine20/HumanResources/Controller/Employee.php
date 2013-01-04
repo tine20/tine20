@@ -18,7 +18,11 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
-
+    /**
+     * duplicate check fields / if this is NULL -> no duplicate check
+     *
+     * @var array
+     */
     protected $_duplicateCheckFields = array(array('account_id'), array('number'));
     
     /**
@@ -68,34 +72,54 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        if(! $_record->has('contracts')) {
-            return;
-        }
-
-        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
-        $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
-        
-        if (! empty($_record->contracts) && is_array($_record->contracts)) {
-            foreach ($_record->contracts as $contractArray) {
-                if (is_array($contractArray['workingtime_id'])) {
-                    $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+        if ($_record->has('contracts')) {
+            $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+            $createdContracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+            
+            if (! empty($_record->contracts) && is_array($_record->contracts)) {
+                foreach ($_record->contracts as $contractArray) {
+                    if (is_array($contractArray['workingtime_id'])) {
+                        if (! array_key_exists('workingtime_json', $contractArray) || empty($contractArray['workingtime_json'])) {
+                            $contractArray['workingtime_json'] = $contractArray['workingtime_id']['json'];
+                        }
+                    
+                        $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                    }
+                    if (is_array($contractArray['feast_calendar_id'])) {
+                        $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                    }
+                    $contractArray['employee_id'] = $_createdRecord->getId();
+                    $contract = new HumanResources_Model_Contract($contractArray);
+                    $contracts->addRecord($contract);
                 }
-                if (is_array($contractArray['cost_center_id'])) {
-                    $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-                }
-                if (is_array($contractArray['feast_calendar_id'])) {
-                    $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
-                }
-                $contractArray['employee_id'] = $_createdRecord->getId();
-                $contract = new HumanResources_Model_Contract($contractArray);
-                $contracts->addRecord($contract);
             }
+            $contracts->sort('start_date', 'ASC');
+            foreach ($contracts as $contract) {
+                $createdContracts->addRecord(HumanResources_Controller_Contract::getInstance()->create($contract));
+            }
+            $_createdRecord->contracts = $createdContracts;
         }
-        $contracts->sort('start_date', 'ASC');
-        foreach ($contracts as $contract) {
-            $createdContracts->addRecord(HumanResources_Controller_Contract::getInstance()->create($contract));
+        
+        if ($_record->has('costcenters')) {
+            $costcenters = new Tinebase_Record_RecordSet('HumanResources_Model_CostCenter');
+            $createdCostCenters = new Tinebase_Record_RecordSet('HumanResources_Model_CostCenter');
+            
+            if (! empty($_record->costcenters) && is_array($_record->costcenters)) {
+                foreach ($_record->costcenters as $costcenterArray) {
+                    if (is_array($costcenterArray['cost_center_id'])) {
+                        $costcenterArray['cost_center_id'] = $costcenterArray['cost_center_id']['id'];
+                    }
+                    $costcenterArray['employee_id'] = $_createdRecord->getId();
+                    $costcenter = new HumanResources_Model_CostCenter($costcenterArray);
+                    $costcenters->addRecord($costcenter);
+                }
+            }
+            $costcenters->sort('start_date', 'ASC');
+            foreach ($costcenters as $costcenter) {
+                $createdCostCenters->addRecord(HumanResources_Controller_CostCenter::getInstance()->create($costcenter));
+            }
+            $_createdRecord->costcenters = $createdCostCenters;
         }
-        $_createdRecord->contracts = $createdContracts;
     }
 
     /**
@@ -114,47 +138,79 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $_record->account_id = $_record->account_id['accountId'];
         }
 
-        if(! $_record->has('contracts')) {
-            return;
-        }
-
-        $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
-        $ec = HumanResources_Controller_Contract::getInstance();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-            . print_r($_record->contracts, TRUE));
-
-        if (! empty($_record->contracts) && is_array($_record->contracts)) {
-            foreach ($_record->contracts as $contractArray) {
-                if (is_array($contractArray['workingtime_id'])) {
-                    $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
-                }
-                if (isset($contractArray['cost_center_id']) && is_array($contractArray['cost_center_id'])) {
-                    $contractArray['cost_center_id'] = $contractArray['cost_center_id']['id'];
-                }
-                if (isset($contractArray['feast_calendar_id']) && is_array($contractArray['feast_calendar_id'])) {
-                    $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
-                }
-                $contractArray['employee_id'] = $_oldRecord->getId();
-                $contract = new HumanResources_Model_Contract($contractArray);
-                if ($contract->id) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                        . 'Updating contract ' . $contract->id);
-                    $contracts->addRecord($ec->update($contract));
-                } else {
-                    $contracts->addRecord($ec->create($contract));
+        if($_record->has('contracts')) {
+            $contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+            $ec = HumanResources_Controller_Contract::getInstance();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . print_r($_record->contracts, TRUE));
+    
+            if (! empty($_record->contracts) && is_array($_record->contracts)) {
+                foreach ($_record->contracts as $contractArray) {
+                    if (is_array($contractArray['workingtime_id'])) {
+                        if (! array_key_exists('workingtime_json', $contractArray) || empty($contractArray['workingtime_json'])) {
+                            $contractArray['workingtime_json'] = $contractArray['workingtime_id']['json'];
+                        }
+                    
+                        $contractArray['workingtime_id'] = $contractArray['workingtime_id']['id'];
+                    }
+                    if (isset($contractArray['feast_calendar_id']) && is_array($contractArray['feast_calendar_id'])) {
+                        $contractArray['feast_calendar_id'] = $contractArray['feast_calendar_id']['id'];
+                    }
+                    $contractArray['employee_id'] = $_oldRecord->getId();
+                    $contract = new HumanResources_Model_Contract($contractArray);
+                    if ($contract->id) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                            . 'Updating contract ' . $contract->id);
+                        $contracts->addRecord($ec->update($contract));
+                    } else {
+                        $contracts->addRecord($ec->create($contract));
+                    }
                 }
             }
+                
+            $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
+            $deleteContracts = HumanResources_Controller_Contract::getInstance()->search($filter);
+            // update first date
+            $contracts->sort('start_date', 'DESC');
+            $ec->delete($deleteContracts->id);
+            $_record->contracts = $contracts->toArray();
         }
+        
+        if ($_record->has('costcenters')) {
+            $costcenters = new Tinebase_Record_RecordSet('HumanResources_Model_CostCenter');
+            $be = HumanResources_Controller_CostCenter::getInstance();
             
-        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
-        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $contracts->id));
-        $deleteContracts = HumanResources_Controller_Contract::getInstance()->search($filter);
-        // update first date
-        $contracts->sort('start_date', 'DESC');
-        $ec->delete($deleteContracts->id);
-        $_record->contracts = $contracts->toArray();
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . print_r($_record->costcenters, TRUE));
+    
+            if (! empty($_record->costcenters) && is_array($_record->costcenters)) {
+                foreach ($_record->costcenters as $costcenterArray) {
+                    
+                    if (isset($costcenterArray['cost_center_id']) && is_array($costcenterArray['cost_center_id'])) {
+                        $costcenterArray['cost_center_id'] = $costcenterArray['cost_center_id']['id'];
+                    }
+                    
+                    $costcenterArray['employee_id'] = $_oldRecord->getId();
+                    $costcenter = new HumanResources_Model_CostCenter($costcenterArray);
+                    
+                    if ($costcenter->id) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                            . 'Updating costcenter ' . $costcenter->id);
+                        $costcenters->addRecord($be->update($costcenter));
+                    } else {
+                        $costcenters->addRecord($be->create($costcenter));
+                    }
+                }
+            }
+                
+            $filter = new HumanResources_Model_CostCenterFilter(array(), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text('employee_id', 'equals', $_record['id']));
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $costcenters->id));
+            $be->deleteByFilter($filter);
+        }
     }
     
     /**
@@ -179,7 +235,15 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             ), 'AND');
         $filter->addFilter($eFilter);
         
-        HumanResources_Controller_FreeTime::getInstance()->deleteByFilter($filter);
+        HumanResources_Controller_Contract::getInstance()->deleteByFilter($filter);
+        
+        // delete costcenters
+        if($_record->has('costcenters')) {
+            $filter = new HumanResources_Model_CostCenterFilter(array(
+                ), 'AND');
+            $filter->addFilter($eFilter);
+            HumanResources_Controller_CostCenter::getInstance()->deleteByFilter($filter);
+        }
         
         parent::_deleteLinkedObjects($_record);
     }
@@ -229,20 +293,24 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             if(($lastNumber == 0) || ($this->search($filter)->count() === 0)) {
                 
                 $employee = new HumanResources_Model_Employee(array(
-                    'number'      => $nextNumber,
-                    'account_id'  => $account->account_id,
-                    'countryname' => $account->adr_two_countryname,
-                    'locality'    => $account->adr_two_locality,
-                    'postalcode'  => $account->adr_two_postalcode,
-                    'region'      => $account->adr_two_region,
-                    'street'      => $account->adr_two_street,
-                    'street2'     => $account->adr_two_street2,
-                    'email'       => $account->email_home,
-                    'tel_home'    => $account->tel_home,
-                    'tel_cell'    => $account->tel_cell_private,
-                    'n_fn'        => $account->n_fn,
+                    'number'              => $nextNumber,
+                    'account_id'          => $account->account_id,
+                    'countryname'         => $account->adr_two_countryname,
+                    'locality'            => $account->adr_two_locality,
+                    'postalcode'          => $account->adr_two_postalcode,
+                    'region'              => $account->adr_two_region,
+                    'street'              => $account->adr_two_street,
+                    'street2'             => $account->adr_two_street2,
+                    'email'               => $account->email_home,
+                    'tel_home'            => $account->tel_home,
+                    'tel_cell'            => $account->tel_cell_private,
+                    'n_given'             => $account->n_given,
+                    'n_family'            => $account->n_family,
+                    'n_fn'                => $account->n_fn,
+                    'bday'                => $account->bday,
+                    'bank_account_holder' => $account->n_fn,
                 ));
-                if($createContract) {
+                if ($createContract) {
                     $contract = $this->createContractDataForEmployee(array(
                         'feastCalendarId' => $_feastCalendarId,
                         'workingTimeModelId' => $_workingTimeModelId,
@@ -332,17 +400,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $workingTimeModel = NULL;
         }
         
-        if (isset($contractData['costCenterId'])) {
-            $costCenter = Sales_Controller_CostCenter::getInstance()->get($contractData['costCenterId']);
-        } else {
-            $costCenter = NULL;
-        }
-        
         return array(
             'feast_calendar_id'  => $feastCalendar ? $feastCalendar->toArray() : NULL,
             'workingtime_id'     => $workingTimeModel ? $workingTimeModel->toArray() : NULL,
             'vacation_days'      => isset($contractData['vacationDays']) ? $contractData['vacationDays'] : NULL,
-            'cost_center_id'     => $costCenter ? $costCenter->toArray() : NULL,
         );
     }
 }

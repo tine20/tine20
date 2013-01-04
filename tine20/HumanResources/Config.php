@@ -22,11 +22,17 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FREETIME_TYPE = 'freetimeType';
 
     /**
-     * FreeTime Status
+     * Vacation Status
      * @var string
      */
-    const FREETIME_STATUS = 'freetimeStatus';
+    const VACATION_STATUS = 'vacationStatus';
 
+    /**
+     * Sickness Status
+     * @var string
+     */
+    const SICKNESS_STATUS = 'sicknessStatus';
+    
     /**
      * Default Feast Calendar (used for tailoring datepicker)
      * @var string
@@ -41,22 +47,32 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         self::FREETIME_TYPE => array(
             //_('Freetime Type')
             'label'                 => 'Freetime Type',
-            //_('Possible free time definitions.')
+            //_('Possible free time definitions')
             'description'           => 'Possible free time definitions',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeType'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'VACATION'
         ),
-        self::FREETIME_STATUS => array(
-            //_('Freetime Status')
-            'label'                 => 'Freetime Status',
-            //_('Possible free time status definitions.')
-            'description'           => 'Possible free time status definitions',
+        self::VACATION_STATUS => array(
+            //_('Vacation Status')
+            'label'                 => 'Vacation Status',
+            //_('Possible vacation status definitions')
+            'description'           => 'Possible vacation status definitions',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'REQUESTED'
+        ),
+        self::SICKNESS_STATUS => array(
+            //_('Sickness Status')
+            'label'                 => 'Sickness Status',
+            //_('Possible sickness status definitions')
+            'description'           => 'Possible sickness status definitions',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'EXCUSED'
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')

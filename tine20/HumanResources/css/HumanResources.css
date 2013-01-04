@@ -25,6 +25,23 @@
         background-image:url(../../images/oxygen/16x16/actions/tools-wizard.png) !important;
 }
 
+.HumanResourcesWorkingTime {
+    background-image:url(../../images/oxygen/16x16/actions/media-playlist-refresh.png) !important;
+}
+
+.HumanResourcesWorkingTimeFormButton {
+    background-image:url(../../images/oxygen/16x16/actions/media-playlist-refresh.png) !important;
+    height:13px!important;
+    width: 16px!important;
+}
+.x-btn-medium .HumanResourcesWorkingTime {
+    background-image:url(../../images/oxygen/22x22/actions/media-playlist-refresh.png) !important;
+}
+
+.x-btn-large .HumanResourcesWorkingTime {
+    background-image:url(../../images/oxygen/32x32/actions/media-playlist-refresh.png) !important;
+}
+
 .HumanResourcesFreeTime {
     background-image:url(../../images/oxygen/16x16/actions/book2.png) !important;
 }

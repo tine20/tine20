@@ -69,7 +69,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
         
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, count($susan->contracts), 'no contracts found');
-        $this->assertEquals($cc->getId(), $susan->contracts->getFirstRecord()->cost_center_id);
         
         return $susan;
     }
@@ -146,7 +145,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $susan = $this->_getSusan();
         $susan->bank_name = 'xyz';
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
-        $susan->contracts->getFirstRecord()->cost_center_id = NULL;
         $susan->contracts = $susan->contracts->toArray();
         HumanResources_Controller_Employee::getInstance()->update($susan);
         
@@ -159,6 +157,5 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $cc = $this->_getCostCenter(7);
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, count($susan->contracts), 'no contracts found');
-        $this->assertEquals($cc->getId(), $susan->contracts->getFirstRecord()->cost_center_id);
     }
 }

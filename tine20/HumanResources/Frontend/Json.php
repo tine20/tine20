@@ -54,7 +54,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getEmployee($id)
     {
-        return $this->_get($id, HumanResources_Controller_Employee::getInstance());
+        $employee = $this->_get($id, HumanResources_Controller_Employee::getInstance());
+        $contactId = @$employee['account_id']['contact_id'];
+        $contact = $contactId ? Addressbook_Controller_Contact::getInstance()->get($contactId)->toArray() : null;
+        $employee['account_id']['contact_id'] = $contact;
+        
+        return $employee;
     }
 
     /**
@@ -195,6 +200,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $recs = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($_record['id']);
                     $_record['contracts'] = $this->_multipleRecordsToJson($recs);
                 }
+                if($_record->has('costcenters')) {
+                    $be = new HumanResources_Backend_CostCenter();
+                    $filter = new HumanResources_Model_CostCenterFilter(array(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record['id'])));
+                    $recs = $be->search($filter);
+                    $_record['costcenters'] = $this->_multipleRecordsToJson($recs);
+                }
                 break;
             case 'HumanResources_Model_FreeTime':
                 $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
@@ -238,7 +249,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $maxDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $minDate)));
-        $dates = Calendar_Controller_Event::getInstance()->search($filter)->dtstart;
+        $dates = Calendar_Controller_Event::getInstance()->search($filter);
+
+        $dates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $dates = $dates->dtstart;
 
         $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));

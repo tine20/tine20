@@ -57,5 +57,7 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
                 'controller'        => 'Sales_Controller_Division'
             )
         ),
+        
+        'is_employed' => array('filter' => 'HumanResources_Model_EmployeeEmployedFilter')
     );
 }

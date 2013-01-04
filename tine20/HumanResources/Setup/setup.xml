@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>7.2</version>
+    <version>7.3</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -345,7 +345,7 @@
                 <field>
                     <name>type</name>
                     <type>text</type>
-                    <length>10</length>
+                    <length>64</length>
                     <default>vacation</default>
                 </field>
                 <field>
@@ -466,7 +466,7 @@
         </table>
         <table>
             <name>humanresources_contract</name>
-            <version>4</version>
+            <version></version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -505,10 +505,9 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>cost_center_id</name>
+                    <name>workingtime_json</name>
                     <type>text</type>
-                    <length>40</length>
-                    <default>null</default>
+                    <length>1024</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -594,6 +593,74 @@
                         <table>container</table>
                         <field>id</field>
                     </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>humanresources_costcenter</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>employee_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cost_center_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
                 </index>
             </declaration>
         </table>

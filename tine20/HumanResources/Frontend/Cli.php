@@ -254,17 +254,6 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 if ($field === 'contracts' && ! empty($currentEmployee->{$field})) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                         . print_r($currentEmployee->toArray(), TRUE));
-                    if ($currentEmployee->contracts[0]['cost_center_id'] !== $employee->contracts[0]['cost_center_id']['id']) {
-                        $contracts = $currentEmployee->contracts;
-                        $contracts[0]['cost_center_id'] = $employee->contracts[0]['cost_center_id']['id'];
-                        $currentEmployee->contracts = $contracts;
-                        
-                        if ($opts->v) {
-                            echo "Updating cost center for " . $employee->n_fn . " to " . $currentEmployee->contracts[0]['cost_center_id'] . "\n";
-                        }
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-                            . print_r($currentEmployee->toArray(), TRUE));
-                    }
                 } else {
                     $currentEmployee->{$field} = $employee->{$field};
                 }

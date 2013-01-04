@@ -10,12 +10,12 @@
  */
 
 /**
- * class to hold Contract data
+ * class to hold CostCenter data
  *
  * @package     HumanResources
  * @subpackage  Model
  */
-class HumanResources_Model_Contract extends Tinebase_Record_Abstract
+class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which
@@ -32,8 +32,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
 
     protected static $_resolveForeignIdFields = array(
         'HumanResources_Model_Employee' => 'employee_id',
-        'HumanResources_Model_WorkingTime' => 'workingtime_id',
-        'Tinebase_Model_Container' => 'feast_calendar_id',
+        'Sales_Model_CostCenter'        => 'cost_center_id',
     );
 
     /**
@@ -44,12 +43,8 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'employee_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'workingtime_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'vacation_days'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'feast_calendar_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'workingtime_json'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'cost_center_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -58,11 +53,6 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // relations (linked HumanResources_Model_Contract records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -74,20 +64,5 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time',
         'start_date',
-        'end_date'
     );
-    
-    /**
-     * returns the foreignId fields (used in Tinebase_Convert_Json)
-     * @return array
-     */
-    public static function getResolveForeignIdFields()
-    {
-        $rf = static::$_resolveForeignIdFields;
-        if (! Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
-            unset($rf['Sales_Model_CostCenter']);
-        }
-        
-        return $rf;
-    }
 }

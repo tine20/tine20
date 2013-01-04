@@ -161,7 +161,6 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             'start_date' => $sdate,
             'end_date'   => null,
             'employee_id' => null,
-            'cost_center_id' => $this->_getCostCenter(),
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_getFeastCalendar(),
             'workingtime_id' => $this->_getWorkingTime()

@@ -100,9 +100,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         if (is_array($_record->workingtime_id)) {
             $_record->workingtime_id = $_record->workingtime_id['id'];
         }
-        if ($this->_useSales === true && is_array($_record->cost_center_id)) {
-            $_record->cost_center_id = $_record->cost_center_id['id'];
-        }
     }
 
     /**
@@ -117,7 +114,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $this->_containerToId($_record);
 
         if (empty($_record->feast_calendar_id)) $_record->feast_calendar_id = null;
-        if (empty($_record->cost_center_id)) $_record->cost_center_id = null;
 
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');

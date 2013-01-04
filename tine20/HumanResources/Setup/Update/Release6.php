@@ -178,11 +178,243 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 7.0
+     * update to 6.7
      * 
-     * @return void
+     * - remove costcenter from contract, create costcenter-employee-mm table
      */
     public function update_6()
+    {
+        $table = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>humanresources_costcenter</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>employee_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cost_center_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+        
+        $this->_backend->createTable($table);
+        
+        // find all contracts
+        $select = $this->_db->select()->from( SQL_TABLE_PREFIX . 'humanresources_contract')->where('is_deleted=0');
+        $stmt = $select->query();
+        $contracts = $stmt->fetchAll();
+        
+        $now = new Tinebase_DateTime();
+        $be = HumanResources_Controller_CostCenter::getInstance();
+        
+        foreach($contracts as $contract) {
+            if($contract['cost_center_id']) {
+                $costcenter = new HumanResources_Model_CostCenter(array(
+                    'employee_id'    => $contract['employee_id'],
+                    'cost_center_id' => $contract['cost_center_id'],
+                    'start_date'     => $contract['start_date'] ? $contract['start_date'] : (string) $now
+                ));
+                $be->create($costcenter);
+            }
+        }
+        // remove costcenter property from contract
+        try {
+            $this->_backend->dropCol('humanresources_contract', 'cost_center_id');
+        } catch (Exception $e) {
+            
+        }
+        
+        // create type config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId();
+        
+        // update vacation status config
+        $kfc = $cb->getByProperty('freetimeStatus');
+        $kfc->name = HumanResources_Config::VACATION_STATUS;
+        $cb->update($kfc);
+        
+        // create sickness status config
+        $sicknessStatusConfig = array(
+            'name'    => HumanResources_Config::SICKNESS_STATUS,
+            'records' => array(
+                array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => true),  //_('Excused')
+                array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => true),  //_('Unexcused')
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => HumanResources_Config::SICKNESS_STATUS,
+            'value'             => json_encode($sicknessStatusConfig),
+        )));
+        
+        // update sickness records, set status = excused
+        $filter = new HumanResources_Model_FreeTimeFilter(array(
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'SICKNESS')
+            ));
+        
+        $ftb = new HumanResources_Backend_FreeTime();
+        $records = $ftb->search($filter);
+        $ftb->updateMultiple($records->id, array('status' => 'EXCUSED'));
+        
+        // create persistenfilters
+        
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
+            'model'             => 'HumanResources_Model_EmployeeFilter',
+        );
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Currently employed", // _("Currently employed")
+            'description'       => "Employees which are currently employed", // _("Employees which are currently employed")
+            'filters'           => array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => 1)),
+        ))));
+        
+        // add workingtime json
+        $field = '<field>
+            <name>workingtime_json</name>
+            <type>text</type>
+            <length>1024</length>
+            <notnull>true</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_contract', $declaration);
+        $this->setTableVersion('humanresources_contract', '4');
+        
+        // change freetime type field length
+        $field = '<field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>vacation</default>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_freetime', $declaration);
+        $this->setTableVersion('humanresources_freetime', '3');
+        
+        // add vacation types
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+            'modlogActive' => false
+        ));
+    
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId();
+        $filter = new Tinebase_Model_ConfigFilter(array(array('field' => 'name', 'operator' => 'equals', 'value' => HumanResources_Config::FREETIME_TYPE)));
+        $ftt = $cb->search($filter)->getFirstRecord();
+        
+        $val = json_decode($ftt->value);
+        
+        $existing = $val->records;
+        
+        $existing[] = array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true);
+        $existing[] = array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true);
+        
+        $freeTimeTypeConfig = array(
+            'name'    => HumanResources_Config::FREETIME_TYPE,
+            'records' => $existing,
+        );
+
+        $ftt->value = json_encode($freeTimeTypeConfig);
+        $cb->update($ftt);
+        
+        // update json of workingtime models if they still exist
+        
+        $controller = HumanResources_Controller_WorkingTime::getInstance();
+        $controller->modlogActive(false);
+        
+        $filter = new HumanResources_Model_WorkingTimeFilter(array());//array('field' => 'working_hours', 'operator' => 'equals', 'value' => '40')));
+        $allWT = $controller->search($filter);
+        
+        $wt40 = $allWT->filter('working_hours', "40");
+        foreach($wt40 as $wt) {
+            $wt->json = '{"days":[8,8,8,8,8,0,0]}';
+            $controller->update($wt);
+        }
+        
+        $wt37 = $allWT->filter('working_hours', "37.5");
+        foreach($wt37 as $wt) {
+            $wt->json = '{"days":[8,8,8,8,5.5,0,0]}';
+            $controller->update($wt);
+        }
+        
+        $wt20 = $allWT->filter('working_hours', "20");
+        foreach($wt20 as $wt) {
+            $wt->json = '{"days":[4,4,4,4,4,0,0]}';
+            $controller->update($wt);
+        }
+        
+        $this->setApplicationVersion('HumanResources', '6.7');
+    }
+    
+    /**
+     * update to 7.0
+     */
+    public function update_7()
     {
         $this->setApplicationVersion('HumanResources', '7.0');
     }

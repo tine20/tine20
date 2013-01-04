@@ -128,7 +128,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }
             
             // check requiredRight if any
-            if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
+            if (ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + modelName,
@@ -142,7 +142,6 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
-                    
             if (ct.genericCtxActions) {
                 this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
                     nodeName: this.app.i18n._hidden(recordClass.getMeta('recordsName')),
@@ -152,14 +151,14 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                     backendModel: 'Container'
                 });
           
-            child.on('contextmenu', function(node, event) {
-                if(node.leaf) {
-                    this.ctxNode = node;
-                    this['contextMenu' + modelName].showAt(event.getXY());
-                }
-            }, this);
-             }       
-                    
+                child.on('contextmenu', function(node, event) {
+                    if(node.leaf) {
+                        this.ctxNode = node;
+                        this['contextMenu' + modelName].showAt(event.getXY());
+                    }
+                }, this);
+            }
+            
             parentNode.appendChild(child);
         }, this);
     },
@@ -207,7 +206,9 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var node = this.getNodeById(state.selected);
             if (node) {
                 node.select();
-                node.fireEvent('click');
+                var contentType = node.id.split('-')[1];
+                this.app.getMainScreen().activeContentType = contentType ? contentType : '';
+                this.app.getMainScreen().show();
             }
         }).defer(100, this);
     }

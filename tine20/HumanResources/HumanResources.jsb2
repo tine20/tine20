@@ -36,6 +36,10 @@
           "path": "js/"
         },
         {
+          "text": "WorkingTimeEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "DatePicker.js",
           "path": "js/"
         },
@@ -49,6 +53,10 @@
         },
         {
           "text": "ContractGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CostCenterGridPanel.js",
           "path": "js/"
         },
         {
