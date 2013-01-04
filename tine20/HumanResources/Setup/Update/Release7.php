@@ -64,10 +64,11 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
     public function update_2()
     {
         $update6 = new HumanResources_Setup_Update_Release6($this->_backend);
-        $update6->update_6();
-        
-        $this->setTableVersion('humanresources_contract', '5');
-        $this->setTableVersion('humanresources_freetime', '4');
+        if ($this->getTableVersion('humanresources_costcenter') === 0) {
+            $update6->update_6();
+            $this->setTableVersion('humanresources_contract', '5');
+            $this->setTableVersion('humanresources_freetime', '4');
+        }
         $this->setApplicationVersion('HumanResources', '7.3');
     }
 }
