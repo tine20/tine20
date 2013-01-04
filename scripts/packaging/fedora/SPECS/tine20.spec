@@ -301,6 +301,9 @@ fi
 %files webstack
 
 %changelog
+* Wed Jan 04 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.3-1
+- New upstream release Joey SR 3 (2012.10.3)
+
 * Wed Jan 02 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.2-1
 - new upstream release 2012.10.2
 
