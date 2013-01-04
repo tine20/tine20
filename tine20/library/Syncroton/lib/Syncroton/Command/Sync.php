@@ -503,7 +503,12 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 
                 $this->_syncTimeStamp = clone $now;
                 
-            } while (time() - $intervalStart < $this->_heartbeatInterval);
+            // See: http://www.tine20.org/forum/viewtopic.php?f=12&t=12146
+            //
+            // break if there are less than PingTimeout + 10 seconds left for the next loop
+            // otherwise the response will be returned after the client has finished his Ping
+            // request already maybe
+            } while (time() - $intervalStart < $this->_heartbeatInterval - (Syncroton_Registry::getPingTimeout() + 10));
         }
         
         foreach($this->_collections as $collectionData) {

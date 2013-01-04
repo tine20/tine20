@@ -832,8 +832,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
-        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
-        $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename']);
+        $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name'],
+            'filename mismatch in structure' . print_r($forwardedMessage['structure']['parts'][2], TRUE));
+        $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename'],
+            'filename mismatch of attachment' . print_r($completeForwardedMessage->attachments[0], TRUE));
         
         return $forwardedMessage;
     }

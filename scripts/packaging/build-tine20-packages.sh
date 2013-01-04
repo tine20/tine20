@@ -26,6 +26,7 @@ function checkout()
     echo "checkout files from git url $1 to $TEMPDIR/tine20 ... "
     rm -rf $TEMPDIR/tine20
     rm -rf $TEMPDIR/debian
+    rm -rf $TEMPDIR/fedora
     rm -rf $TEMPDIR/Univention
     
     rm -rf $TEMPDIR/tine20.git
@@ -66,6 +67,7 @@ function checkout()
 
     mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
     mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
+    mv $TEMPDIR/tine20.git/scripts/packaging/fedora $TEMPDIR/fedora
     mv $TEMPDIR/tine20.git/scripts/packaging/Univention $TEMPDIR/Univention
     rm -Rf $TEMPDIR/tine20.git
     
@@ -344,8 +346,29 @@ function prepareUniventionPackaging()
     echo "done"
 }
 
+function prepareFedoraPackaging()
+{
+    PACKAGEDIR="$BASEDIR/packages/fedora/$RELEASE"
+    rm -rf $PACKAGEDIR
+    
+    # Replace all matches of - with .
+    RPMVERSION=${RELEASE//-/.}
+
+    mkdir -p "$PACKAGEDIR/tine20-$RPMVERSION"
+    
+    echo -n "preparing fedora packaging directory in $PACKAGEDIR/tine20-$RPMVERSION ... "
+    
+    cp -r $BASEDIR/temp/fedora/* $PACKAGEDIR/tine20-$RPMVERSION/
+    
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
+    cp $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
+
+    echo "done"
+}
+
 getOptions $*
-                 
+
 createDirectories
 checkout "$GITURL" $GITBRANCH
 setupPackageDir
@@ -356,4 +379,5 @@ createSpecialArchives
 packageTranslations
 buildChecksum
 prepareDebianPackaging
+prepareFedoraPackaging
 prepareUniventionPackaging

@@ -102,10 +102,21 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
                 foreach ((array) $folders as $folderId) {
-                    $folder = $this->_folderBackend->get($folderId);
-                    
-                    $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
-                    
+                    try {
+                        $folder         = $this->_folderBackend->get($folderId);
+                        $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                    } catch (Syncroton_Exception_NotFound $e) {
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        $status = self::STATUS_FOLDER_NOT_FOUND;
+                        break;
+                    } catch (Exception $e) {
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->err(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        // do nothing, maybe temporal issue, should we stop?
+                        continue;
+                    }
+
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
                         
@@ -137,7 +148,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                     }
                 }
                 
-                if ($status === self::STATUS_CHANGES_FOUND) {
+                if ($status != self::STATUS_NO_CHANGES_FOUND) {
                     break;
                 }
                 
@@ -145,8 +156,13 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
-                
-            } while ($secondsLeft > 0);
+            
+            // See: http://www.tine20.org/forum/viewtopic.php?f=12&t=12146
+            //
+            // break if there are less than PingTimeout + 10 seconds left for the next loop
+            // otherwise the response will be returned after the client has finished his Ping
+            // request already maybe
+            } while ($secondsLeft > (Syncroton_Registry::getPingTimeout() + 10));
         }
         
         if ($this->_logger instanceof Zend_Log) 
@@ -162,7 +178,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder->serverId);
             }
-        }                
+        }
     }
         
     /**

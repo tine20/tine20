@@ -27,7 +27,7 @@
 
 %global vyear 2012
 %global vmonth 10
-%global vmin 2
+%global vmin 3
 
 Name:           tine20
 Version:        %{vyear}.%{vmonth}.%{vmin}

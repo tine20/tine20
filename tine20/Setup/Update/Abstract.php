@@ -92,7 +92,7 @@ class Setup_Update_Abstract
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
-        $result = ( isset($rows[0]['version']) ) ? $rows[0]['version'] : 0;
+        $result = (count($rows) > 0 && isset($rows[0]['version'])) ? $rows[0]['version'] : 0;
         
         return $result;
     }
