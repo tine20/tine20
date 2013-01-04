@@ -49,6 +49,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(2, count($savedEmployee['contracts']));
 
         $this->assertEquals(null, $savedEmployee['contracts'][1]['end_date'], 'The end_date should have a null value.');
+        $this->assertEquals('2012-12-12', substr($savedEmployee['costcenters'][0]['start_date'], 0, 10));
+        
+        $this->assertEquals($savedEmployee['contracts'][0]['workingtime_json'], $savedEmployee['contracts'][0]['workingtime_id']['json'], 'The json definition of the contract should be the same as the corresponding wt json');
+        
         $date1 = new Tinebase_DateTime($savedEmployee['contracts'][0]['end_date']);
         $date2 = new Tinebase_DateTime($savedEmployee['contracts'][1]['start_date']);
 
@@ -57,6 +61,21 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id']);
 
         $this->assertEquals($savedEmployee['contracts'][0]['id'], $freeTimes['contract']['id']);
+    }
+    
+    /**
+     * test working time
+     */
+    public function testWorkingTimeTemplate()
+    {
+        $recordData = array('title' => 'lazy worker', 'type' => 'static', 'json' => '{"days":[1,1,1,1,1,0,0]}', 'working_hours' => 5);
+        $savedWT = $this->_json->saveWorkingTime($recordData);
+        
+        $this->assertEquals($savedWT['title'], 'lazy worker');
+        
+        // test duplicate exception
+        $this->setExpectedException('Tinebase_Exception_Duplicate');
+        $this->_json->saveWorkingTime($recordData);
     }
 
     /**

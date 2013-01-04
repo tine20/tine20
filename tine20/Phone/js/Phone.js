@@ -778,7 +778,9 @@ Tine.Phone.Main = {
     show: function(_node) 
     {
         var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-
+        
+        Tine.Tinebase.MainScreen.setActiveModulePanel(new Ext.Panel({html:'', border: false, frame: false}), true);
+        
         if(currentToolbar === false || currentToolbar.id != 'Phone_Toolbar') {
             this.initComponent();
             this.displayToolbar();

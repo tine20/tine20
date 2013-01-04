@@ -207,7 +207,9 @@ Tine.Admin = function () {
             }
             
             var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-
+            
+            Tine.Tinebase.MainScreen.setActiveModulePanel(new Ext.Panel({html:'', border: false, frame: false}), true);
+            
             switch (node.attributes.dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();

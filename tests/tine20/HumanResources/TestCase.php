@@ -144,8 +144,12 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             'number' => ($number) ? $number : Tinebase_Record_Abstract::generateUID(),
             'remark' => Tinebase_Record_Abstract::generateUID(),
         ));
+        
         $c = Sales_Controller_CostCenter::getInstance()->create($c);
-        return $c;
+        $startDate = new Tinebase_DateTime('2012-12-12');
+        $hrc = array('cost_center_id' => $c->getId(), 'start_date' => $startDate);
+        
+        return $hrc;
     }
 
     /**
@@ -182,7 +186,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             array(
                 'number' => 1,
                 'n_fn' => $c->n_fn,
-                'account_id' => $a->getId()
+                'account_id' => $a->getId(),
+                'costcenters' => array($this->_getCostCenter())
             )
         );
 

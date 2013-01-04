@@ -142,9 +142,14 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         return this[contentType + 'ActionToolbar'];
     },
     
+    /**
+     * get module tree panel
+     * 
+     * @return {Ext.Panel}
+     */
     getModuleTreePanel: function() {
-        if(! this.moduleTreePanel) {
-            if(this.useModuleTreePanel) {
+        if (! this.moduleTreePanel) {
+            if (this.useModuleTreePanel) {
                 this.moduleTreePanel = new Tine.widgets.ContentTypeTreePanel({
                     app: this.app, 
                     contentTypes: this.contentTypes,
