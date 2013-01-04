@@ -156,8 +156,13 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
-                
-            } while ($secondsLeft > 0);
+            
+            // See: http://www.tine20.org/forum/viewtopic.php?f=12&t=12146
+            //
+            // break if there are less than PingTimeout + 10 seconds left for the next loop
+            // otherwise the response will be returned after the client has finished his Ping
+            // request already maybe
+            } while ($secondsLeft > (Syncroton_Registry::getPingTimeout() + 10));
         }
         
         if ($this->_logger instanceof Zend_Log) 
