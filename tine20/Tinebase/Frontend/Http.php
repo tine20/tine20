@@ -189,7 +189,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function login()
     {
         // redirect to REDIRECTURL if set
-        $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL);
+        $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
 
         if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
             header('Location: ' . $redirectUrl);
