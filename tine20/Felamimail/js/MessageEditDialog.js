@@ -28,7 +28,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new MessageEditDialog
  */
- Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {Array/String} bcc
      * initial config for bcc
@@ -414,6 +414,7 @@ Ext.namespace('Tine.Felamimail');
         this.recipientGrid.on('blur', function(editor) {
             // do not let the blur event reach the editor grid if we want the subjectField to have focus
             if (this.subjectField.hasFocus) {
+                Tine.log.debug('Tine.Felamimail.MessageEditDialog::onBlur() -> stopping blur event because subjectField.hasFocus')
                 return false;
             }
         }, this);
@@ -609,7 +610,6 @@ Ext.namespace('Tine.Felamimail');
      * fix input fields layout
      */
     fixLayout: function() {
-        
         if (! this.subjectField.rendered || ! this.accountCombo.rendered || ! this.recipientGrid.rendered) {
             return;
         }
@@ -629,7 +629,7 @@ Ext.namespace('Tine.Felamimail');
         
         var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
             folderName = account.get(folderField);
-                    
+        
         if (! folderName || folderName == '') {
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed'), 
@@ -713,11 +713,11 @@ Ext.namespace('Tine.Felamimail');
      * overwrite, just hide the loadMask
      */
     onAfterRecordLoad: function() {
-        if(this.loadMask) {
+        if (this.loadMask) {
             this.loadMask.hide();
         }
     },
-        
+    
     /**
      * executed when record gets updated from form
      * - add attachments to record here
@@ -990,7 +990,7 @@ Ext.namespace('Tine.Felamimail');
      * TODO add note editing textfield here
      */
     onApplyChanges: function(closeWindow) {
-        Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges');
+        Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
         
         this.loadMask.show();
         

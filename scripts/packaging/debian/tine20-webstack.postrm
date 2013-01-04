@@ -35,32 +35,38 @@ db_version 2.0
 
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
     db_get tine20/webserver_type
-    webservers="$RET"
+    webserver="$RET"
 
-    if [ "$webservers" != "" ]; then
+    # check if webserver is installed
+    test -x /usr/sbin/$webserver || continue
 
-        for webserver in $webservers; do
-            webserver=${webserver%,}
+    case "$webserver" in
+        apache2)
+            rm -f /etc/$webserver/conf.d/tine20
+            
+            # mark webserver for restart (used by restart.sh)
+            restart="$restart $webserver"
+            
+            ;;
+            
+        lighttpd)
+            if [ -f /etc/$webserver/conf-enabled/15-tine20.conf ]; then
+                /usr/sbin/lighttpd-disable-mod tine20
+                
+                # mark webserver for restart (used by restart.sh)
+                restart="$restart $webserver"
+            fi
+            
+            rm -f /etc/$webserver/conf-available/15-tine20.conf
+            
+            ;;
+    esac
 
-            # check if webserver is installed
-            test -x /usr/sbin/$webserver || continue
-    
-            case "$webserver" in
-                apache2)
-                    rm -f /etc/$webserver/conf.d/tine20
-                    
-                    # mark webserver for restart (used by restart.sh)
-                    restart="$restart $webserver"
-                    ;;
-            esac
-        done
-    
-        # restart webserver
-        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
-            . /usr/share/wwwconfig-common/restart.sh
-        fi
-        
+    # restart webserver
+    if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
+        . /usr/share/wwwconfig-common/restart.sh
     fi
+    
 fi
 
 #DEBHELPER#

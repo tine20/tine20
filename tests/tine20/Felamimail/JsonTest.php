@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -855,6 +855,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * forward message test
+     * 
+     * @see 0007624: losing umlauts in attached filenames
      */
     public function testForwardMessageWithAttachment()
     {
@@ -875,7 +877,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'original_id'   => $message['id'],
             'attachments'   => array(new Tinebase_Model_TempFile(array(
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
-                'name'  => $subject,
+                'name'  => 'Verbessurüngsvorschlag',
             ), TRUE)),
             'flags'         => Zend_Mail_Storage::FLAG_PASSED,
         );
@@ -883,6 +885,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($forwardMessageData);
         $forwardMessage = $this->_searchForMessageBySubject($fwdSubject);
+        
+        // check attachment name
+        $forwardMessageComplete = $this->_json->getMessage($forwardMessage['id']);
+        $this->assertEquals(1, count($forwardMessageComplete['attachments']));
+        $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'], 'umlaut missing from attachment filename');
         
         $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
         $this->assertTrue(array_key_exists('structure', $forwardMessage), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));

@@ -59,14 +59,16 @@ if [ "$1" = "configure" ]; then
         chmod 0640       "$tine20ConfigFile"
         chown 0:www-data "$tine20ConfigFile"
 
+        setupuser="tine20setup"
+        setuppassword=$(makepasswd --minchars=10 --maxchars=15)
+
         mysqlpassword=$(cat "$mysqlPasswordFile")
+        
         sed -i -e "s/_DBC_DBSERVER_/localhost/g"    "$tine20ConfigFile"
         sed -i -e "s/_DBC_DBNAME_/tine20/g"         "$tine20ConfigFile"
         sed -i -e "s/_DBC_DBUSER_/tine20/g"         "$tine20ConfigFile"
         sed -i -e "s/_DBC_DBPASS_/$mysqlpassword/g" "$tine20ConfigFile"
-
-        setuppassword=$(makepasswd --minchars=10 --maxchars=15)
-        sed -i -e 's/_SETUPUSERNAME_/tine20setup/g'    "$tine20ConfigFile"
+        sed -i -e "s/_SETUPUSERNAME_/$setupuser/g"     "$tine20ConfigFile"
         sed -i -e "s/_SETUPPASSWORD_/$setuppassword/g" "$tine20ConfigFile"
     fi
     
