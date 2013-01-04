@@ -102,10 +102,21 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
                 foreach ((array) $folders as $folderId) {
-                    $folder = $this->_folderBackend->get($folderId);
-                    
-                    $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
-                    
+                    try {
+                        $folder         = $this->_folderBackend->get($folderId);
+                        $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                    } catch (Syncroton_Exception_NotFound $e) {
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        $status = self::STATUS_FOLDER_NOT_FOUND;
+                        break;
+                    } catch (Exception $e) {
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->err(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        // do nothing, maybe temporal issue, should we stop?
+                        continue;
+                    }
+
                     try {
                         $syncState = $this->_syncStateBackend->getSyncState($this->_device, $folder);
                         
@@ -137,7 +148,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                     }
                 }
                 
-                if ($status === self::STATUS_CHANGES_FOUND) {
+                if ($status != self::STATUS_NO_CHANGES_FOUND) {
                     break;
                 }
                 
@@ -162,7 +173,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 if ($this->_logger instanceof Zend_Log) 
                     $this->_logger->info(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " changes in folder: " . $changedFolder->serverId);
             }
-        }                
+        }
     }
         
     /**
