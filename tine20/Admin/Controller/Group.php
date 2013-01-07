@@ -362,7 +362,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                 if (!empty($group->list_id)) {
                     $listIds[] = $group->list_id;
                 }
-                
             }
             
             if (!empty($listIds)) {

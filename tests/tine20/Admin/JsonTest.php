@@ -155,12 +155,16 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to save group data
+     * 
+     * @return array
      */
     public function testAddGroup()
     {
         $result = $this->_json->saveGroup($this->objects['initialGroup']->toArray(), array());
         
         $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
+        
+        return $result;
     }
     
     /**
@@ -570,7 +574,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         // account to add as role member
         $account = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId);
         
-        $roledData = $this->objects['role']->toArray();
+        $roleData = $this->objects['role']->toArray();
         $roleMembers = array(
             array(
                 "id"    => $account->getId(),
@@ -585,7 +589,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $result = $this->_json->saveRole($roledData, $roleMembers, $roleRights);
+        $result = $this->_json->saveRole($roleData, $roleMembers, $roleRights);
         
         // get role id from result
         $roleId = $result['id'];
@@ -703,6 +707,30 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($tinebaseRightsFound), 'found Tinebase_Rights: ' . print_r($tinebaseRightsFound, TRUE));
         $tinebaseRightsFound = array_intersect($appRightsFound['Tinebase'], $expectedTinebaseRights);
         $this->assertEquals(4, count($tinebaseRightsFound), 'did not find Tinebase_Rights: ' . print_r($appRightsFound['Tinebase'], TRUE));
+    }
+    
+    /**
+     * testDeleteGroupBelongingToRole
+     * 
+     * @see 0007578: Deleting a group belonging to a role => can not use the role anymore !
+     */
+    public function testDeleteGroupBelongingToRole()
+    {
+        $group = $this->testAddGroup();
+        $roleData = $this->objects['role']->toArray();
+        $roleMembers = array(
+            array(
+                "id"    => $group['id'],
+                "type"  => "group",
+            )
+        );
+        
+        $result = $this->_json->saveRole($roleData, $roleMembers, array());
+        $this->_json->deleteGroups(array($group['id']));
+        
+        $role = $this->_json->getRole($result['id']);
+        
+        $this->assertEquals(0, $role['roleMembers']['totalcount'], 'role members should be empty: ' . print_r($role['roleMembers'], TRUE));
     }
     
     /**
