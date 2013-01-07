@@ -306,8 +306,14 @@ class Tinebase_Application
         
         $affectedRows = $this->_applicationTable->update($data, $where);
         
+        if ($affectedRows === count($_applicationIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Disabled ' . $affectedRows . ' applications.');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not disable all requested applications: ' . print_r($_applicationIds, TRUE));
+        }
+        
         $this->_cleanCache();
-        //error_log("AFFECTED:: $affectedRows");
     }
     
     /**
