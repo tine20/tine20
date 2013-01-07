@@ -67,4 +67,10 @@ interface Tinebase_Backend_Sql_Command_Interface
      */
     public function setDatabaseJokerCharacters();
 
+    /**
+     * get like keyword
+     * 
+     * @return string
+     */
+    public function getLike();
 }

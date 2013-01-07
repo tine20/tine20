@@ -107,4 +107,14 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     {
         return array('%', '\_');
     }
+
+    /**
+     * get like keyword
+     * 
+     * @return string
+     */
+    public function getLike()
+    {
+        return 'LIKE';
+    }
 }

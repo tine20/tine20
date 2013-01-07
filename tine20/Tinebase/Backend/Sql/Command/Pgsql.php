@@ -58,6 +58,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
         
         return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN $returnIfTrue ELSE $returnIfFalse END)");
     }
+
     /**
      *
      * @param Zend_Db_Adapter_Abstract $adapter
@@ -111,5 +112,15 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     public function setDatabaseJokerCharacters()
     {
         return array('%', '\_');
+    }
+    
+    /**
+     * get like keyword
+     * 
+     * @return string
+     */
+    public function getLike()
+    {
+        return 'iLIKE';
     }
 }

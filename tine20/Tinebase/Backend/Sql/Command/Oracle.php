@@ -107,4 +107,14 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return array('%', '_');
     }
+    
+    /**
+     * get like keyword
+     * 
+     * @return string
+     */
+    public function getLike()
+    {
+        return 'LIKE';
+    }
 }
