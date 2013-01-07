@@ -200,6 +200,15 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         
         return unserialize($entry);
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::hasChanges()
+     */
+    public function hasChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
+    {
+        return !!$this->getCountOfChanges($contentBackend, $folder, $syncState);
+    }
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)
     {

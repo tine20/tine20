@@ -78,6 +78,16 @@ interface Syncroton_Data_IData
      * @return array
      */
     public function getServerEntries($folderId, $filter);
+
+    /**
+     * return true if any data got modified in the backend
+     * 
+     * @param  Syncroton_Backend_IContent  $contentBackend
+     * @param  Syncroton_Model_IFolder     $folder
+     * @param  Syncroton_Model_ISyncState  $syncState
+     * @return bool
+     */
+    public function hasChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState);
     
     public function moveItem($srcFolderId, $serverId, $dstFolderId);
     

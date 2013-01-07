@@ -130,7 +130,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                             continue;
                         }
                         
-                        $foundChanges = !!$dataController->getCountOfChanges($this->_contentStateBackend, $folder, $syncState);
+                        $foundChanges = $dataController->hasChanges($this->_contentStateBackend, $folder, $syncState);
                         
                     } catch (Syncroton_Exception_NotFound $e) {
                         // folder got never synchronized to client
