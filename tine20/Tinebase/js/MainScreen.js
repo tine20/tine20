@@ -53,7 +53,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @private
      */
     initLayout: function() {
-        
         this.items = [{
             cls: 'tine-mainscreen-topbox',
             border: false,
@@ -133,16 +132,8 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                         style: {
                             padding: '2px'
                         },
-                        items: [{
-                            xtype: 'button',
-                            text: _('Save current view as favorite'),
-                            iconCls: 'action_saveFilter',
-                            scope: this,
-                            handler: function() {
-                                var fp = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
-                                fp.saveFilter.call(fp);
-                            }
-                        }]
+                        items: [],
+                        ref: '../../../westPanelToolbar'
                     }, {
                         border: false,
                         frame: false,
@@ -240,6 +231,29 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
         
         // set left top title
         Ext.DomQuery.selectNode('div[class=app-panel-title]').innerHTML = app.getTitle();
+        
+        // add save favorites button to toolbar if favoritesPanel exists
+        var westPanel = app.getMainScreen().getWestPanel();
+        var favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : null;
+        
+        this.westPanelToolbar.removeAll();
+        if (favoritesPanel) {
+            this.westPanelToolbar.addButton({
+                xtype: 'button',
+                text: _('Save current view as favorite'),
+                iconCls: 'action_saveFilter',
+                scope: this,
+                handler: function() {
+                    favoritesPanel.saveFilter.call(favoritesPanel);
+                }
+            });
+            
+            this.westPanelToolbar.show();
+        } else {
+            this.westPanelToolbar.hide();
+        }
+        
+        this.westPanelToolbar.doLayout();
         
         this.getEl().select('div#treecards div.x-column-layout-ct').setStyle('height', null);
         this.getEl().select('div#moduletree div.ux-arrowcollapse-body.ux-arrowcollapse-body-noborder').setStyle('height', null);
