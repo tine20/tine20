@@ -415,6 +415,10 @@ class Tinebase_Core
             return;
         }
 
+        $logLine = " $errstr in {$errfile}::{$errline} ($severity)";
+        $e = new Exception('just to get trace');
+        $trace = $e->getTraceAsString();
+        
         switch ($severity) {
             case E_COMPILE_ERROR:
             case E_CORE_ERROR:
@@ -430,9 +434,11 @@ class Tinebase_Core
             case E_USER_WARNING:
             case E_WARNING:
                 if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . $logLine);
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $trace);
                 } else {
-                    error_log(" $errstr in {$errfile}::{$errline} ($severity)");
+                    error_log(__METHOD__ . '::' . __LINE__ . $logLine);
+                    error_log(__METHOD__ . '::' . __LINE__ . ' ' . $trace);
                 }
                 break;
 
@@ -441,9 +447,11 @@ class Tinebase_Core
             case E_USER_NOTICE:
             default:
                 if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . $logLine);
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $trace);
                 } else {
-                    error_log(" $errstr in {$errfile}::{$errline} ($severity)");
+                    error_log(__METHOD__ . '::' . __LINE__ . $logLine);
+                    error_log(__METHOD__ . '::' . __LINE__ . ' ' . $trace);
                 }
                 break;
         }
