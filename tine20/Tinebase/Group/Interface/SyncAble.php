@@ -115,4 +115,12 @@ interface Tinebase_Group_Interface_SyncAble
      * @return array
      */
     public function setGroupMembershipsInSyncBackend($_userId, $_groupIds);
+    
+    /**
+     * merges missing properties from existing sql group into group fetchted from sync backend
+     * 
+     * @param Tinebase_Model_Group $syncGroup
+     * @param Tinebase_Model_Group $sqlGroup
+     */
+    public static function mergeMissingProperties($syncGroup, $sqlGroup);
 }

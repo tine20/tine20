@@ -236,12 +236,13 @@ class Tinebase_Group
         $groupBackend = Tinebase_Group::getInstance();
         
         $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
-
+        
         foreach($groups as $group) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' sync group: ' . $group->name);
             // update or create user in local sql backend
             try {
-                $groupBackend->getGroupById($group);
+                $sqlGroup = $groupBackend->getGroupById($group);
+                $groupBackend->mergeMissingProperties($group, $sqlGroup);
                 $groupBackend->updateGroupInSqlBackend($group);
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
                 $groupBackend->addGroupInSqlBackend($group);
