@@ -645,9 +645,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
                     
-                    $applicationJson = new $jsonAppName;
-
-                    $registryData[$application->name] = (array_key_exists($application->name, $registryData)) ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) : $applicationJson->getRegistryData();
+                    try {
+                        $applicationJson = new $jsonAppName;
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e->getMessage());
+                        Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
+                        unset($registryData[$application->name]);
+                        continue;
+                    }
+                    
+                    $registryData[$application->name] = (array_key_exists($application->name, $registryData))
+                        ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
+                        : $applicationJson->getRegistryData();
+                    
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
                     $registryData[$application->name]['models'] = $applicationJson->getModelsConfiguration();

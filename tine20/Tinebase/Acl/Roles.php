@@ -457,25 +457,36 @@ class Tinebase_Acl_Roles
     }
 
     /**
-     * get list of role members 
+     * get list of role memberships
      *
-     * @param   int $_accountId
-     * @return  array of array with account ids & types
+     * @param   int $accountId
+     * @param   string $type
+     * @return  array of array with role ids
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getRoleMemberships($_accountId)
+    public function getRoleMemberships($accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
-        if (empty($groupMemberships)) {
-            throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
+            $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+            if (empty($groupMemberships)) {
+                throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
+            }
+        } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+            $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
         }
         
         $memberships = array();
         
         $select = $this->_roleMembersTable->select();
-        $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', (string) $_accountId) . ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER))
-                ->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
+        $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND '
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', $type));
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $select->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' 
+                .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
+        }
         
         $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
         
@@ -575,7 +586,7 @@ class Tinebase_Acl_Roles
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
-        $validTypes = array( Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+        $validTypes = array(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
 
         if (! in_array($_account['type'], $validTypes)) {
             throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 
@@ -604,7 +615,7 @@ class Tinebase_Acl_Roles
      * remove one member from the role
      *
      * @param  mixed  $_groupId
-     * @param  array   $_account as role member ("account_type" => account type, "account_id" => account id)
+     * @param  array   $_account as role member ("type" => account type, "id" => account id)
      */
     public function removeRoleMember($_roleId, $_account)
     {

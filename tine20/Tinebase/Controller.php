@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Controller extends Tinebase_Controller_Abstract
+class Tinebase_Controller extends Tinebase_Controller_Event
 {
     /**
      * holds the instance of the singleton
@@ -428,5 +428,30 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         }
         
         return;
+    }
+
+    /**
+     * handle events for Tinebase
+     * 
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case 'Admin_Event_DeleteGroup':
+                foreach ($_eventObject->groupIds as $groupId) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Removing role memberships of group ' .$groupId );
+                    
+                    $roleIds = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($groupId, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP);
+                    foreach ($roleIds as $roleId) {
+                        Tinebase_Acl_Roles::getInstance()->removeRoleMember($roleId, array(
+                            'id'   => $groupId,
+                            'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                        ));
+                    }
+                }
+                break;
+        }
     }
 }

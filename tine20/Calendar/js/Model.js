@@ -441,6 +441,8 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
         
         switch (this.get('user_type')) {
             case 'user':
+            case 'groupmember':
+            case 'memberOf':
                 if (userData.hasOwnProperty('contact_id')) {
                     // userData contains account
                     return userData.contact_id;

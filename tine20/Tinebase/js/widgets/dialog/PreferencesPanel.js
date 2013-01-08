@@ -123,7 +123,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 } else {
                     Ext.apply(fieldDef, {
                         xtype: (this.adminMode ? 'lockTextfield' : 'textfield'),
-                        defaultValue: options[0][1],
+                        defaultValue: (options[0] && options[0][1]) ? options[0][1] : '',
                         isValid: function() {
                             // crude hack to guess type (prefs need DTD)
                             var type = this.defaultValue.match(/\(([0-9]*)\)$/) ? 'int' : 'string',

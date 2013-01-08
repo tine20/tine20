@@ -234,6 +234,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     getActionToolbarItems: function() {
         return {
             xtype: 'buttongroup',
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Calendar-MainScreenPanel-ViewBtnGrp'
+            }],
             items: [
                 this.showSheetView,
                 this.showGridView
