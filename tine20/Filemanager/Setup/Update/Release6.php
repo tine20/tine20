@@ -5,7 +5,7 @@
  * @package     Filemanager
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -24,12 +24,25 @@ class Filemanager_Setup_Update_Release6 extends Setup_Update_Abstract
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $app->getId())
         ), 'AND');
         $results = Tinebase_Container::getInstance()->search($filter);
-
-        foreach($results as $container) {
+        foreach ($results as $container) {
             $container->model = 'Filemanager_Model_Node';
             Tinebase_Container::getInstance()->update($container);
         }
         $this->setApplicationVersion('Filemanager', '6.1');
     }
 
+    /**
+     * update from 6.1 to 6.2
+     * 
+     * - set container model once again to $this->setApplicationVersion('Filemanager', '6.1');
+     * @see 0007400: Newly created directories disappear
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->update_0();
+        
+        $this->setApplicationVersion('Filemanager', '6.2');
+    }
 }

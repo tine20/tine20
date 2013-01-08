@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -239,12 +239,18 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'expected at least one entry');
         if ($_toplevel) {
-            // toplevel containers are resolved
-            $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
-            if ($_checkAccountGrants) {
-                $this->assertTrue(isset($result['results'][0]['name']['account_grants']));
-                $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['name']['account_grants']['account_id']);
+            $found = FALSE;
+            foreach ($result['results'] as $container) {
+                // toplevel containers are resolved (array structure below [name])
+                if ($_expectedName == $container['name']['name']) {
+                    $found = TRUE;
+                    if ($_checkAccountGrants) {
+                        $this->assertTrue(isset($container['name']['account_grants']));
+                        $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['name']['account_grants']['account_id']);
+                    }
+                }
             }
+            $this->assertTrue($found, 'container not found: ' . print_r($result['results'], TRUE));
         } else {
             $this->assertEquals($_expectedName, $result['results'][0]['name']);
         }
@@ -289,6 +295,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     
     /**
      * search top level containers of user
+     * 
+     * @see 0007400: Newly created directories disappear
      */
     public function testSearchTopLevelContainersOfUser()
     {
@@ -298,6 +306,9 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
         ));
         $this->_searchHelper($filter, $this->_personalContainer->name, TRUE);
+        
+        $another = $this->testCreateContainerNodeInPersonalFolder();
+        $this->_searchHelper($filter, $another['name']['name'], TRUE);
     }
 
     /**
