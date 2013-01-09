@@ -150,7 +150,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             timeout: 1800000, // 30 minutes
             callback: this.onImportResponse.createDelegate(this, [callback], true),
             params: {
-                method: this.appName + '.import' + this.recordClass.getMeta('recordsName'),
+                method: this.appName + '.import' + this.recordClass.getMeta('modelName')  + 's',
                 tempFileId: this.uploadButton.getTempFileId(),
                 definitionId: this.definitionCombo.getValue(),
                 importOptions: Ext.apply({
