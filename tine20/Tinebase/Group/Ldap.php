@@ -895,4 +895,15 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         return $memberships;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Group/Interface/Syncable::mergeMissingProperties
+     */
+    public static function mergeMissingProperties($syncGroup, $sqlGroup)
+    {
+        // @TODO see ldap schema, email might be an attribute
+        foreach (array('list_id', 'email', 'visibility') as $property) {
+            $syncGroup->{$property} = $sqlGroup->{$property};
+        }
+    }
 }
