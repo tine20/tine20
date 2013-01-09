@@ -123,7 +123,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if($this->_models) {
             foreach($this->_models as $model) {
                 $mn = $this->_applicationName . '_Model_' . $model;
-                $ret[$model] = $mn::getConfiguration(); 
+                $ret[$model] = $mn::getConfiguration();
             }
             return $ret;
         }

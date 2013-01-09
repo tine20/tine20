@@ -2,13 +2,13 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>6.2</version>
+    <version>6.4</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>inventory_item</name>
-            <version>2</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -24,7 +24,7 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>100</length>
+                    <length>250</length>
                     <notnull>true</notnull>
                 </field>
                 <!-- keyfield 'status' -->
@@ -43,7 +43,7 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>location</name>

@@ -66,25 +66,76 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
         });
         
+        this.actions_importInventoryItem = new Ext.Action({
+            requiredGrant: 'addGrant',
+            text: this.app.i18n._('Import items'),
+            disabled: false,
+            handler: this.onImport,
+            iconCls: 'action_import',
+            scope: this,
+            allowMultiple: true
+        });
+        
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportInventoryItem
+            this.actions_exportInventoryItem,
+            this.actions_importInventoryItem
         ]);
+        
         
         Tine.Inventory.InventoryItemGridPanel.superclass.initActions.call(this);
     },
-        /**
+    
+    /**
+     * import inventory items
+     * 
+     * @param {Button} btn 
+     * 
+     * TODO generalize this & the import button
+     */
+    onImport: function(btn) {
+        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
+            appName: 'Inventory',
+            modelName: 'InventoryItem',
+            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultInventoryItemContainer'),
+            listeners: {
+                scope: this,
+                'finish': function() {
+                    this.loadGridData({
+                        preserveCursor:     false, 
+                        preserveSelection:  false, 
+                        preserveScroller:   false,
+                        removeStrategy:     'default'
+                    });
+                }
+            }
+        });
+    },
+       
+    /**
      * add custom items to action toolbar
      * 
      * @return {Object}
      */
     getActionToolbarItems: function() {
         return [
-            Ext.apply(new Ext.Button(this.actions_exportInventoryItem), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top'
-            })
+            {
+                xtype: 'buttongroup',
+                columns: 1,
+                frame: false,
+                items: [
+                    Ext.apply(new Ext.Button(this.actions_exportInventoryItem), {
+                        scale: 'small',
+                        rowspan: 1,
+                        iconAlign: 'left'
+                    }),
+                    Ext.apply(new Ext.Button(this.actions_importInventoryItem), {
+                        scale: 'small',
+                        rowspan: 1,
+                        iconAlign: 'left'
+                    })
+                ]
+            }
         ];
     }
 });

@@ -17,13 +17,13 @@
  * @subpackage  Model
  */
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
-{  
+{
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the filed which
      * represents the identifier
-     * 
+     *
      * @var string
-     */    
+     */
     protected $_identifier = 'id';
     
     /**
@@ -35,7 +35,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 
     /**
      * list of zend validator
-     * 
+     *
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
@@ -43,7 +43,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     protected static $_meta = array(
         'id'                => 'id',
         'name'              => 'name',
-        /*'type'              => 'type',*/
         'titleProperty'     => 'name',
         'container_id'      => 'container_id',
         'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
@@ -57,7 +56,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasTags'           => true,
         'useModlog'         => true
     );
-
+    
     /**
      * fields for auto start
      * @var array
@@ -87,10 +86,10 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'description' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
+                'label'      => 'Description' // _('Description')
             ),
             'location' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'presence' => 'required'),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Location' // _('Location')
             ),
             'invoice_date' => array(
@@ -162,7 +161,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'last_modified_time'=> array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => NULL
-            ),    
+            ),
             'is_deleted'        => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => NULL,
@@ -202,12 +201,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     {
         foreach (array("total_number", "active_number", "invoice_date",
                     "price", "added_date", "warranty",
-                    "removed_date")
+                    "removed_date", "description", "location")
                 as $val)
         {
             $this->_filters[$val] = new Zend_Filter_Empty(NULL);
         }
-        
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }

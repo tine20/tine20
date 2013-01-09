@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>inv_tine_import_csv</name>
+    <model>Inventory_Model_InventoryItem</model>
+    <plugin>Inventory_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <mapUndefinedFields>1</mapUndefinedFields>
+    <mapToField>description</mapToField>
+    <label>Inventory CSV import</label>
+    <!-- _("Inventory CSV import") -->
+    <description>tine inv import</description>
+    <example>Inventory/Import/examples/inv_tine_import.csv</example>
+    <extension>csv</extension>
+    <autotags>
+        <tag>
+            <name>Import list (###CURRENTDATE###)</name>
+            <!-- _("Import list (###CURRENTDATE###)") -->
+            <description>Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###</description>
+            <!-- _("Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###") -->
+            <contexts>
+                <Inventory />
+            </contexts>
+            <type>shared</type>
+        </tag>
+    </autotags>
+    <mapping>
+        <field>
+            <source>Titel</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>Anschaffung</source>
+            <destination>added_date</destination>
+        </field>
+        <field>
+            <source>Inventarnummer</source>
+            <destination>inventory_id</destination>
+        </field>
+    </mapping>
+</config>

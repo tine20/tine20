@@ -89,4 +89,45 @@ class Inventory_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setApplicationVersion('Inventory', '6.2');
         $this->setTableVersion('inventory_item', '3');
     }
+    
+    /**
+     * Add CSV import feature and ensure that imports does not cause errors
+     */
+    public function update_2()
+    {
+        $field = '
+             <field>
+                <name>description</name>
+                <type>text</type>
+                <notnull>false</notnull>
+             </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('inventory_item', $declaration, 'description');
+
+        $field = '
+            <field>
+                <name>name</name>
+                <type>text</type>
+                <length>250</length>
+                <notnull>true</notnull>
+            </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('inventory_item', $declaration, 'name');
+        
+        $this->setApplicationVersion('Inventory', '6.3');
+        $this->setTableVersion('inventory_item', '4');
+        
+    }
+    /**
+     * Update import / export definitions
+     */
+    public function update_3()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Inventory'));
+    
+        $this->setApplicationVersion('Inventory', '6.4');
+    
+    }
 }
