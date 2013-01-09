@@ -414,7 +414,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.recipientGrid.on('blur', function(editor) {
             // do not let the blur event reach the editor grid if we want the subjectField to have focus
             if (this.subjectField.hasFocus) {
-                Tine.log.debug('Tine.Felamimail.MessageEditDialog::onBlur() -> stopping blur event because subjectField.hasFocus')
+                Tine.log.debug('Tine.Felamimail.MessageEditDialog::onBlur() -> stopping blur event because subjectField.hasFocus');
+                // clear recipient grid selection and focus subjectField once again because we might lose it during blur
+                this.recipientGrid.getSelectionModel().clearSelections();
+                this.subjectField.focus.defer(50, this.subjectField);
                 return false;
             }
         }, this);
