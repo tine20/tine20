@@ -290,6 +290,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
     
+    /**
+     * send email
+     * 
+     * @param resource $inputStream
+     * @param boolean $saveInSent
+     * @throws Syncroton_Exception
+     */
     public function sendEmail($inputStream, $saveInSent)
     {
         $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
@@ -303,7 +310,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             throw new Syncroton_Exception('no email account configured');
         }
         
-        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
             throw new Syncroton_Exception('no email address set for current user');
         }
         
@@ -332,12 +339,17 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             )
         );
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . " saveInSent: " . $saveInSent);
+        if (Tinebase_Mail::isiMIPMail($incomingMessage)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Do not send iMIP message with subject "' . $incomingMessage->getHeader('subject') . '". The server should handle those.');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $incomingMessage->getHeader('subject') . " (saveInSent: " . $saveInSent . ")");
+            
+            $mail = Tinebase_Mail::createFromZMM($incomingMessage);
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage);
-        
-        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+            Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+        }
     }
     
     /**
