@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
@@ -192,6 +192,33 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue($found);
+    }
+    
+    /**
+     * testSearchContactsByListValueNull
+     */
+    public function testSearchContactsByListValueNull()
+    {
+        $filter = '[
+            {
+                "condition": "OR",
+                "filters": [
+                    {
+                        "condition": "AND",
+                        "filters": [
+                            {
+                                "field": "list",
+                                "operator": "equals",
+                                "value": null,
+                                "id": "ext-record-102"
+                            }
+                        ],
+                        "id": "ext-comp-1211",
+                        "label": "Kontakte"
+                    }
+                ]';
+        $contacts = $this->_instance->searchContacts(Zend_Json::decode($filter), NULL);
+        $this->assertGreaterThan(0, $contacts['totalcount']);
     }
 
     /**
