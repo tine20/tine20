@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.6</version>
+    <version>6.7</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -213,28 +213,6 @@
                     <field>
                         <name>id</name>
                     </field>
-                </index>
-                <index>
-                    <name>hr_employee::account_id--accounts::id</name>
-                    <field>
-                        <name>account_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
-                    <name>hr_employee::supervisor_id--accounts::id</name>
-                    <field>
-                        <name>supervisor_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-                    </reference>
                 </index>
             </declaration>
         </table>

@@ -110,11 +110,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         };
         
         var firstRow = [
-            Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+            Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
+                    allowLinkingItself: false,
                     name: 'supervisor_id',
                     fieldLabel: this.app.i18n._('Supervisor'),
-                    useAccountRecord: true,
-                    userOnly: true,
+                    editDialog: this,
                     allowBlank: true
             })];
         if (Tine.Tinebase.appMgr.get('Sales')) {

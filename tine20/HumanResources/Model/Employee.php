@@ -41,8 +41,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User'  => array('created_by', 'last_modified_by', 'account_id', 'supervisor_id'),
-        'Sales_Model_Division' => array('division_id')
+        'Tinebase_Model_User'           => array('created_by', 'last_modified_by', 'account_id'),
+        'Sales_Model_Division'          => array('division_id'),
+        'HumanResources_Model_Employee' => array('supervisor_id')
     );
 
     /**
@@ -158,13 +159,16 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      */
     protected function _doPrivateCleanup()
     {
-        // no private cleanup with admin rights
-        if (Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
-            Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
-            Tinebase_Core::getUser()->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
-            return;
-        } else {
-            $this->_validators = array_diff_key($this->_validators, array_flip($this->_privateFields));
+        $user = Tinebase_Core::getUser();
+        if ($user instanceof Tinebase_Model_FullUser) {
+            // no private cleanup with admin rights
+            if ($user->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
+                $user->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
+                $user->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+                return;
+            } else {
+                $this->_validators = array_diff_key($this->_validators, array_flip($this->_privateFields));
+            }
         }
     }
 }

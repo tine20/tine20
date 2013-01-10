@@ -176,4 +176,47 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_contract', '3');
         $this->setApplicationVersion('HumanResources', '6.6');
     }
+    
+    /**
+     * - remove foreign keys for employee-account_id, -supervisor_id
+     * - make supervisor_id hold an employee, not an account
+     * 
+     * 0007666: can't delete user that is linked to an employee
+     * https://forge.tine20.org/mantisbt/view.php?id=7666
+     */
+    public function update_6()
+    {
+        try {
+            $this->_backend->dropForeignKey('humanresources_employee', 'hr_employee::account_id--accounts::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        
+        try {
+            $this->_backend->dropForeignKey('humanresources_employee', 'hr_employee::supervisor_id--accounts::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+            
+        }
+        
+        $c = new HumanResources_Backend_Employee();
+        $f = new HumanResources_Model_EmployeeFilter();
+        
+        $allEmployees = $c->search($f);
+        $employees = clone $allEmployees;
+        
+        foreach($employees as $employee) {
+            
+            $linkEmployee = $allEmployees->filter('account_id', $employee->supervisor_id)->getFirstRecord();
+            
+            if ($linkEmployee) {
+                $employee->supervisor_id = $linkEmployee->getId();
+            } else {
+                $employee->supervisor_id = NULL;
+            }
+            $c->update($employee);
+        }
+        
+        $this->setTableVersion('humanresources_employee', '7');
+        $this->setApplicationVersion('HumanResources', '6.7');
+    }
 }

@@ -154,7 +154,9 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 width: 150,
                 sortable: true,
                 dataIndex: 'supervisor_id',
-                renderer: Tine.Tinebase.common.accountRenderer 
+                renderer: function(value) {
+                    return Ext.util.Format.htmlEncode(value ? value.n_fn : '');
+                }
             }, {
                 id: 'health_insurance',
                 header: this.app.i18n._("Health Insurance"),
