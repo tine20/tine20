@@ -265,4 +265,21 @@ class Tinebase_Mail extends Zend_Mail
             return sprintf($format, $encodedName, $email);
         }
     }
+
+    /**
+     * check if Zend_Mail_Message is/contains calendar iMIP message
+     * 
+     * @param Zend_Mail_Message $zmm
+     * @return boolean
+     */
+    public static function isiMIPMail(Zend_Mail_Message $zmm)
+    {
+        foreach ($zmm as $part) {
+            if (preg_match('/text\/calendar/', $part->contentType)) {
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
 }

@@ -264,6 +264,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(2000, strlen($syncrotonEmail->body->data));
     }
     
+    /**
+     * testSendEmail
+     */
     public function testSendEmail()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
@@ -285,6 +288,28 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         $this->assertEquals(1, count($completeMessage->headers['mime-version']));
         $this->assertEquals(1, count($completeMessage->headers['content-type']));
+    }
+    
+/**
+     * testCalendarInvitation (should not be sent)
+     * 
+     * @see 0007568: do not send iMIP-messages via ActiveSync
+     */
+    public function testCalendarInvitation()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/iOSInvitation.eml');
+        $email = str_replace('unittest@tine20.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $stream = fopen('data://text/plain;base64,' . base64_encode($email), 'r');
+        
+        $controller->sendEmail($email, true);
+        
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'iOSInvitation.eml';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox, FALSE);
+        
+        $this->assertTrue(empty($message), 'message found: ' . var_export($message, TRUE));
     }
     
     /**

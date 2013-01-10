@@ -70,12 +70,22 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} record
      * @private
      */
-    onSelect: function(record) {
+    onSelect: function(record, index) {
         var value = Tine.Felamimail.getEmailStringFromContact(record);
         this.setValue(value);
         
         this.collapse();
         this.fireEvent('blur', this);
+        this.fireEvent('select', this, record, index);
+    },
+    
+    /**
+     * always return raw value
+     * 
+     * @return String
+     */
+    getValue: function() {
+        return this.getRawValue();
     },
     
     /**

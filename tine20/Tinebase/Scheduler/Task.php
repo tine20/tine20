@@ -220,17 +220,25 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()
      * 
      * @todo remove the loop? can there be multiple requests?)
+     * 
+     * @return mixed (FALSE on error)
      */
     public function run()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Fetching requests .... ');
+            . ' Fetching requests .... ');
         
         foreach ($this->getRequests() as $request) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Running request: ' . $request->getControllerName() . '::' . $request->getActionName());
             
-            $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
+            try {
+                $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Could not get controller for scheduler job: ' . $e->getMessage());
+                return false;
+            }
             
             // only the first request is processed because of this return 
             return call_user_func_array(array($controller, $request->getActionName()), $request->getUserParams());

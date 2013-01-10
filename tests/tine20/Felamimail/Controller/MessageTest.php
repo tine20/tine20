@@ -1320,12 +1320,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
-     * @return Felamimail_Model_Message
+     * @param boolean $assert
+     * @return Felamimail_Model_Message|NULL
      */
-    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL)
+    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL, $assert = TRUE)
     {
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
-        $message = $this->_searchMessage($_testHeaderValue, $folder);
+        $message = $this->_searchMessage($_testHeaderValue, $folder, $assert);
+        
+        if ($message === NULL && ! $assert) {
+            return NULL;
+        }
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
         if ($cachedMessage === FALSE) {
@@ -1334,7 +1339,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             $cachedMessage = $this->_cache->addMessage($message, $folder);
         }
         
-        $this->assertTrue($cachedMessage instanceof Felamimail_Model_Message, 'could not add message to cache');
+        if ($assert) {
+            $this->assertTrue($cachedMessage instanceof Felamimail_Model_Message, 'could not add message to cache');
+        }
         
         $this->_createdMessages->addRecord($cachedMessage);
         
@@ -1346,7 +1353,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
-     * @return array
+     * @param boolean $_assert
+     * @return array|NULL
      */
     protected function _searchMessage($_testHeaderValue, $_folder, $_assert = TRUE)
     {
@@ -1361,7 +1369,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         if ($_assert) {
             $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
         }
-        $message = $imap->getSummary($result[0]);
+        $message = (! empty($result)) ? $imap->getSummary($result[0]) : NULL;
         
         return $message;
     }
