@@ -61,7 +61,12 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
                 </field>
             </index>
         ');
-        $this->_backend->dropIndex('timemachine_modlog', 'unique-fields');
+        try {
+            $this->_backend->dropIndex('timemachine_modlog', 'unique-fields');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $zdse->getMessage());
+        }
         $this->_backend->addIndex('timemachine_modlog', $declaration);
         
         // add index to seq column
