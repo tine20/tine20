@@ -778,7 +778,7 @@ class Tinebase_Core
             ));
         }
         
-        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
+        if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             Zend_Session::setOptions(array(
                 'cookie_secure'     => true
             ));
