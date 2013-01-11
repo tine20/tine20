@@ -71,4 +71,20 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('HumanResources', '7.3');
     }
+
+    /**
+     * update 7.3 -> 7.4
+     * 
+     * - remove foreign keys for employee-account_id, -supervisor_id
+     * - make supervisor_id hold an employee, not an account
+     * 
+     * @see 0007666: can't delete user that is linked to an employee
+     */
+    public function update_3()
+    {
+        $update6 = new HumanResources_Setup_Update_Release6($this->_backend);
+        $update6->update_7(7);
+        $this->setTableVersion('humanresources_employee', '8');
+        $this->setApplicationVersion('HumanResources', '7.4');
+    }
 }

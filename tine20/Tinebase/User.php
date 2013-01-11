@@ -372,8 +372,10 @@ class Tinebase_User
      * @param  mixed  $username  the login id of the user to synchronize
      * @param  array $options
      * @return Tinebase_Model_FullUser
+     * @throws Tinebase_Exception
      * 
      * @todo make use of dbmail plugin configurable (should be false by default)
+     * @todo switch to new primary group if it could not be found
      */
     public static function syncUser($username, $options = array())
     {
@@ -403,7 +405,11 @@ class Tinebase_User
         try {
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
+            try {
+                $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
+            }
             try {
                 $sqlGgroup = $groupBackend->getGroupByName($group->name);
                 throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);

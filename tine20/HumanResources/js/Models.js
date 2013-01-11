@@ -32,7 +32,7 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.modlogFields.conca
     {name: 'bank_account_number', type: 'string', group: 'Banking Information', label: 'Account Number'},
     {name: 'bank_name',           type: 'string', group: 'Banking Information', label: 'Bank Name'},
     {name: 'bank_code_number',    type: 'string', group: 'Banking Information', label: 'Code Number'},
-    {name: 'supervisor_id',       type: Tine.Tinebase.Model.Account, group: 'Internal Information', label: 'Supervisor' },
+    {name: 'supervisor_id',       type: Tine.HumanResources.Model.Employee, group: 'Internal Information', label: 'Supervisor' },
     {name: 'division_id',         type: 'Sales.Division', group: 'Internal Information', label: 'Division' },
     {name: 'health_insurance',    type: 'string', group: 'Internal Information', label: 'Health Insurance' },
     {name: 'profession',          type: 'string', group: 'Internal Information', label: 'Profession' },

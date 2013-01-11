@@ -326,7 +326,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         
         $list = $this->_backend->create($list);
         
-        return $this->get($list->getId());
+        return $list;
     }
     
     /**

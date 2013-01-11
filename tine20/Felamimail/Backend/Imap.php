@@ -74,7 +74,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * 
      * @param object $_params
      * @return void
-     * @throws Felamimail_Exception_IMAPInvalidCredentials, Felamimail_Exception_IMAPServiceUnavailable
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @throws Felamimail_Exception_IMAPServiceUnavailable
      */
     public function connectAndLogin($_params)
     {
@@ -87,9 +88,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $timeEndConnect = microtime(true);
         $connectTime = $timeEndConnect - $timeStartConnect;
         
-        if (! $this->_protocol->login($_params->user, $_params->password)) {
+        try {
+            $loginResult = $this->_protocol->login($_params->user, $_params->password);
+        } catch (Exception $e) {
+            throw new Felamimail_Exception_IMAPServiceUnavailable($e->getMessage());
+        }
+        if (! $loginResult) {
             throw new Felamimail_Exception_IMAPInvalidCredentials('Cannot login, user or password wrong.');
         }
+        
         $timeEndLogin = microtime(true);
         $loginTime = $timeEndLogin - $timeEndConnect;
         

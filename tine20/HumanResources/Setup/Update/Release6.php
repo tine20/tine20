@@ -412,9 +412,51 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
     }
     
     /**
+     * update 7
+     * 
+     * - remove foreign keys for employee-account_id, -supervisor_id
+     * - make supervisor_id hold an employee, not an account
+     * 
+     * @see 0007666: can't delete user that is linked to an employee
+     */
+    public function update_7($requiredTableVersion = 6)
+    {
+        if ($this->getTableVersion('humanresources_employee') == $requiredTableVersion) {
+            try {
+                $this->_backend->dropForeignKey('humanresources_employee', 'hr_employee::account_id--accounts::id');
+            } catch (Zend_Db_Statement_Exception $e) {
+                
+            }
+            
+            try {
+                $this->_backend->dropForeignKey('humanresources_employee', 'hr_employee::supervisor_id--accounts::id');
+            } catch (Zend_Db_Statement_Exception $e) {
+                
+            }
+            
+            $c = new HumanResources_Backend_Employee();
+            $f = new HumanResources_Model_EmployeeFilter();
+            
+            $allEmployees = $c->search($f);
+            $employees = clone $allEmployees;
+            
+            foreach ($employees as $employee) {
+                $linkEmployee = $allEmployees->filter('account_id', $employee->supervisor_id)->getFirstRecord();
+                if ($linkEmployee) {
+                    $employee->supervisor_id = $linkEmployee->getId();
+                    $c->update($employee);
+                }
+            }
+            
+            $this->setTableVersion('humanresources_employee', '7');
+        }
+        $this->setApplicationVersion('HumanResources', '6.8');
+    }
+    
+    /**
      * update to 7.0
      */
-    public function update_7()
+    public function update_8()
     {
         $this->setApplicationVersion('HumanResources', '7.0');
     }
