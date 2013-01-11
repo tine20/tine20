@@ -4,7 +4,7 @@
  * 
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add relations tests
@@ -24,13 +24,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
      * @var Projects_Frontend_Json
      */
     protected $_json = array();
-    
-    /**
-     * projects to delete in tearDown
-     * 
-     * @var array
-     */
-    protected $_projectsToDelete = array();
     
     /**
      * test department
@@ -105,7 +98,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $project = $this->_getProjectData();
         $projectData = $this->_json->saveProject($project);
         $projectData = $this->_json->getProject($projectData['id']);
-        $this->_projectsToDelete[] = $projectData['id'];
         
         // checks
         $this->assertEquals($project['description'], $projectData['description']);
@@ -122,7 +114,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     {
         $project = $this->_getProjectData();
         $projectData = $this->_json->saveProject($project);
-        $this->_projectsToDelete[] = $projectData['id'];
         
         // update Project
         $projectData['description'] = "blubbblubb";
@@ -145,12 +136,67 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $project = $this->_getProjectData();
         $projectData = $this->_json->saveProject($project);
-        $this->_projectsToDelete[] = $projectData['id'];
         
         // search & check
         $search = $this->_json->searchProjects($this->_getProjectFilter($projectData['title']), $this->_getPaging());
         $this->assertEquals($project['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
+    }
+    
+    /**
+     * testSearchProjectsWithMultipleFilters / taken from a bugreport
+     */
+    public function testSearchProjectsWithMultipleFilters()
+    {
+        $filter = '[
+            {
+                "condition": "OR",
+                "filters": [
+                    {
+                        "condition": "AND",
+                        "filters": [
+                            {
+                                "field": "status",
+                                "operator": "notin",
+                                "value": [
+                                    "COMPLETED",
+                                    "CANCELLED"
+                                ],
+                                "id": "ext-record-347"
+                            },
+                            {
+                                "field": "contact",
+                                "operator": "AND",
+                                "value": [
+                                    {
+                                        "field": "list",
+                                        "operator": "equals",
+                                        "value": null,
+                                        "id": "ext-record-1073"
+                                    },
+                                    {
+                                        "field": ":id",
+                                        "operator": "AND"
+                                    },
+                                    {
+                                        "field": ":relation_type",
+                                        "operator": "in",
+                                        "value": [
+                                            "COWORKER",
+                                            "RESPONSIBLE"
+                                        ],
+                                        "id": "ext-record-395"
+                                    }
+                                ],
+                                "id": "ext-record-379"
+                            }
+                        ],
+                        "id": "ext-comp-1330",
+                        "label": "Projekte"
+                    }
+                ]';
+        $search = $this->_json->searchProjects(Zend_Json::decode($filter), $this->_getPaging());
+        $this->assertGreaterThanOrEqual(0, $search['totalcount']);
     }
 
     /**
@@ -332,7 +378,6 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
             )
         );
         $projectData = $this->_json->saveProject($project);
-        $this->_projectsToDelete[] = $projectData['id'];
         
         return $projectData;
     }
