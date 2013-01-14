@@ -76,6 +76,8 @@ Description: Tine 2.0 webserver integration package
 Package: tine20-libraries
 Architecture: all
 Depends: ${misc:Depends}
+Replaces: tine20-tinebase (<< 2012.10.3-0)
+Breaks: tine20-tinebase (<< 2012.10.3-0)
 Description: Additional libraries needed by Tine 2.0
  Libraries bundled with upstream Tine 2.0 source package, but developed by other developers.
 
