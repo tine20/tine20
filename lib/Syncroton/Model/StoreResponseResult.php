@@ -24,8 +24,8 @@ class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AEntry
             'collectionId' => array('type' => 'string'),
         ),
         'Search' => array(
-            'longId'     => array('type' => 'string'),
-            'properties' => array('type' => 'container'),
+            'longId'     => array('type' => 'string', 'supportedSince' => '2.5'),
+            'properties' => array('type' => 'container', 'supportedSince' => '2.5'),
         )
     );
 }
