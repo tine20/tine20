@@ -141,25 +141,12 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         if (! empty($this->_headline) && sizeof($this->_headline) == sizeof($_data)) {
             $_data_indexed = array_combine($this->_headline, $_data);
         }
+        
         if ($this->_options['mapUndefinedFields'] == 1) {
-            $validKeys = array();
-            foreach ($this->_options['mapping']['field'] as $keys) {
-                $validKeys[$keys['source']] = null;
+            $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
+            if (! $undefinedFieldsText === false) {
+                $data[$this->_options['mapToField']] = $this->_createInfoTextForUnmappedFields($_data_indexed);
             }
-            // This is an array containing every not mapped field as key with his value.
-            $notImportedFields = array_diff_key($_data_indexed, $validKeys);
-            
-            $description = "The following fields weren't imported: \n"; // _('The following fields weren't imported: \n')
-            $valueIfEmpty = "N/A"; // _('N/A')
-            
-            foreach ($notImportedFields as $nKey => $nVal) {
-                if (trim($nKey) == "")
-                    $nKey = $valueIfEmpty;
-                if (trim($nVal) == "")
-                    $nVal = $valueIfEmpty;
-                $description .= $nKey . " : " . $nVal . " \n";
-            }
-            $data[$this->_options['mapToField']] = $description;
         }
         
         foreach ($this->_options['mapping']['field'] as $index => $field) {
@@ -182,5 +169,41 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             . ' Mapped data: ' . print_r($data, true));
         
         return $data;
+    }
+    
+    /**
+     * Generates a text with every undefined data from import 
+     * 
+     * @param array $_data_indexed
+     * @return string
+     */
+    protected function _createInfoTextForUnmappedFields ($_data_indexed)
+    {
+        $return = null;
+        
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        
+        $validKeys = array();
+        foreach ($this->_options['mapping']['field'] as $keys) {
+            $validKeys[$keys['source']] = null;
+        }
+        // This is an array containing every not mapped field as key with his value.
+        $notImportedFields = array_diff_key($_data_indexed, $validKeys);
+        
+        if (count($notImportedFields) >= 1) {
+            $description = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
+            $valueIfEmpty = $translation->_("N/A");
+            
+            foreach ($notImportedFields as $nKey => $nVal) {
+                if (trim($nKey) == "") $nKey = $valueIfEmpty;
+                if (trim($nVal) == "") $nVal = $valueIfEmpty;
+                
+                $description .= $nKey . " : " . $nVal . " \n";
+            }
+            $return = $description;
+        } else {
+            $return = false;
+        }
+        return $return;
     }
 }
