@@ -38,18 +38,18 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
 
         // set backend with activated modlog
         $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName'     => $this->_modelName, 
+            'modelName'     => $this->_modelName,
             'tableName'     => 'importexport_definition',
             'modlogActive'  => TRUE,
         ));
-    }    
+    }
     
     /**
      * the singleton pattern
      *
      * @return Tinebase_ImportExportDefinition
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Tinebase_ImportExportDefinition();
@@ -71,8 +71,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     }
     
     /**
-     * get application export definitions 
-     * 
+     * get application export definitions
+     *
      * @param Tinebase_Model_Application $_application
      * @return Tinebase_Record_RecordSet of Tinebase_Model_ImportExportDefinition
      */
@@ -85,7 +85,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $result = $this->search($filter);
         
         return $result;
-    }    
+    }
     
     /**
      * get definition from file
@@ -102,21 +102,24 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $basename = basename($_filename);
             $content = file_get_contents($_filename);
             $config = new Zend_Config_Xml($_filename);
+            
             if ($_name === NULL) {
                 $name = ($config->name) ? $config->name : preg_replace("/\.xml/", '', $basename);
             } else {
                 $name = $_name;
             }
-                    
+            
             $definition = new Tinebase_Model_ImportExportDefinition(array(
-                'application_id'    => $_applicationId,
-                'name'              => $name,
-                'description'       => $config->description,
-                'type'              => $config->type,
-                'model'             => $config->model,
-                'plugin'            => $config->plugin,
-                'plugin_options'    => $content,
-                'filename'          => $basename,
+                'application_id'              => $_applicationId,
+                'name'                        => $name,
+                'description'                 => $config->description,
+                'type'                        => $config->type,
+                'model'                       => $config->model,
+                'plugin'                      => $config->plugin,
+                'plugin_options'              => $content,
+                'filename'                    => $basename,
+                'mapUndefinedFields'          => $config->mapUndefinedFields,
+                'mapToField'                  => $config->mapToField
             ));
             
             return $definition;
@@ -166,8 +169,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     public function updateOrCreateFromFilename($_filename, $_application, $_name = NULL)
     {
         $definition = $this->getFromFile(
-            $_filename, 
-            $_application->getId(), 
+            $_filename,
+            $_application->getId(),
             $_name
         );
         

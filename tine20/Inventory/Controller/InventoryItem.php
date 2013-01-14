@@ -21,7 +21,7 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
     private function __construct() {
         $this->_applicationName = 'Inventory';
@@ -31,7 +31,7 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
         // activate this if you want to use containers
         $this->_doContainerACLChecks = FALSE;
         $this->_resolveCustomFields = TRUE;
-    }    
+    }
     
     /**
      * holds the instance of the singleton
@@ -45,15 +45,24 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
      *
      * @return Inventory_Controller_InventoryItem
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Inventory_Controller_InventoryItem();
         }
         
         return self::$_instance;
-    }        
+    }
 
-    /****************************** overwritten functions ************************/    
+    /**
+     * returns the default inventory
+     *
+     * @return Tinebase_Model_Container
+     */
+    public function getDefaultInventory()
+    {
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Inventory_Preference::DEFAULT_INVENTORYITEM_CONTAINER);
+    }
     
+    /****************************** overwritten functions ************************/
 }

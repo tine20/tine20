@@ -48,4 +48,22 @@ class Inventory_Setup_Update_Release7 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Inventory', '7.2');
     }
+
+    /**
+     * update to 7.3
+     * 
+     * - Add CSV import feature and ensure that imports does not cause errors
+     * - Update import / export definitions
+     */
+    public function update_2()
+    {
+        if ($this->getTableVersion('inventory_item') != 4) {
+            $release6 = new Inventory_Setup_Update_Release6($this->_backend);
+            $release6->update_2();
+        }
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Inventory'));
+        
+        $this->setApplicationVersion('Inventory', '7.3');
+    }
 }

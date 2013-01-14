@@ -29,9 +29,9 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
     protected static $_defaultModel = 'Inventory_Model_InventoryItem';
     
     /**
-     * the constructor 
+     * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
     private function __construct() {
         $this->_applicationName = 'Inventory';
@@ -41,7 +41,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() 
+    private function __clone()
     {
     }
     
@@ -56,7 +56,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
      *
      * @return Inventory_Controller
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Inventory_Controller();
@@ -89,7 +89,7 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
         
         return $container;
     }
-
+    
     /**
      * event handler function
      * 
