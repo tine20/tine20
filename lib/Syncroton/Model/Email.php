@@ -22,7 +22,7 @@
  * @property    DateTime  lastVerbExecutionTime
  * @property    int       read
  */
-class Syncroton_Model_Email extends Syncroton_Model_AEntry
+class Syncroton_Model_Email extends Syncroton_Model_AXMLEntry
 {
     const LASTVERB_UNKNOWN       = 0;
     const LASTVERB_REPLYTOSENDER = 1;

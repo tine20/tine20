@@ -16,7 +16,7 @@
  * @property    string  Data
  */
 
-class Syncroton_Model_FileReference extends Syncroton_Model_AEntry
+class Syncroton_Model_FileReference extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
     

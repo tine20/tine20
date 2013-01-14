@@ -15,7 +15,7 @@
  * @package     Model
  */
 
-class Syncroton_Model_Folder extends Syncroton_Model_AEntry implements Syncroton_Model_IFolder
+class Syncroton_Model_Folder extends Syncroton_Model_AXMLEntry implements Syncroton_Model_IFolder
 {
     protected $_xmlBaseElement = array('FolderUpdate', 'FolderCreate');
     

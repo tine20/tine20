@@ -29,7 +29,7 @@
  * @property    string    Picture
  * @property    string    Title
  */
-class Syncroton_Model_GAL extends Syncroton_Model_AEntry
+class Syncroton_Model_GAL extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
 

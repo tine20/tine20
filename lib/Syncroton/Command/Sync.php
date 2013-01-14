@@ -164,7 +164,9 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         
             $this->_device->lastsynccollection = Zend_Json::encode($collectionsToSave);
         
-            Syncroton_Registry::getDeviceBackend()->update($this->_device);
+            if ($this->_device->isDirty()) {
+                Syncroton_Registry::getDeviceBackend()->update($this->_device);
+            }
         }
         
         foreach ($collections as $collectionData) {

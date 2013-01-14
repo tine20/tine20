@@ -53,15 +53,15 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
         $status = self::STATUS_NO_CHANGES_FOUND;
         
         // the client does not send a wbxml document, if the Ping parameters did not change compared with the last request
-        if($this->_requestBody instanceof DOMDocument) {
+        if ($this->_requestBody instanceof DOMDocument) {
             $xml = simplexml_import_dom($this->_requestBody);
-            $xml->registerXPathNamespace('Ping', 'Ping');    
+            $xml->registerXPathNamespace('Ping', 'Ping');
 
             if(isset($xml->HeartBeatInterval)) {
                 $this->_device->pinglifetime = (int)$xml->HeartBeatInterval;
             }
             
-            if(isset($xml->Folders->Folder)) {
+            if (isset($xml->Folders->Folder)) {
                 $folders = array();
                 foreach ($xml->Folders->Folder as $folderXml) {
                     try {
@@ -78,7 +78,10 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 }
                 $this->_device->pingfolder = serialize(array_keys($folders));
             }
-            $this->_device = $this->_deviceBackend->update($this->_device);
+
+            if ($this->_device->isDirty() && $status == self::STATUS_NO_CHANGES_FOUND) {
+                $this->_device = $this->_deviceBackend->update($this->_device);
+            }
         }
         
         $lifeTime = $this->_device->pinglifetime;

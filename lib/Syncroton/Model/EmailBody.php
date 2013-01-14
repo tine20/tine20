@@ -20,7 +20,7 @@
  * @property   string  Type
  */
 
-class Syncroton_Model_EmailBody extends Syncroton_Model_AEntry
+class Syncroton_Model_EmailBody extends Syncroton_Model_AXMLEntry
 {
     const TYPE_PLAINTEXT = 1;
     const TYPE_HTML      = 2;

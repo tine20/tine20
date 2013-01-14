@@ -38,7 +38,7 @@
  * @property    string   emailfilter_id
  * @property    string   lastsynccollection
  */
-interface Syncroton_Model_IDevice
+interface Syncroton_Model_IDevice extends Syncroton_Model_IEntry
 {
     /**
      * Returns major firmware version of this device

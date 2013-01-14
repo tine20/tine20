@@ -14,7 +14,7 @@
  * @package     Syncroton
  * @subpackage  Model
  */
-class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AEntry
+class Syncroton_Model_StoreResponseResult extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'Result';
 
