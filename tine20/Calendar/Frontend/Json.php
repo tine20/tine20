@@ -145,10 +145,18 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
             $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
+            
             $periodFilter = $filter->getFilter('period');
-            if ($periodFilter) {
-                $fixed->addFilter($periodFilter);
+            
+            // add period filter per default to prevent endless search
+            if (!$periodFilter) {
+                $now = new Tinebase_DateTime();
+                $inAmonth = clone $now;
+                $inAmonth->addMonth(1);
+                $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array("from" => $now, "until" => $inAmonth)));
             }
+            
+            $fixed->addFilter($periodFilter);
             
             $og = new Calendar_Model_EventFilter(array(), 'OR');
             $og->addFilterGroup($fixed);
