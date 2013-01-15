@@ -7,8 +7,8 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <mapUndefinedFields>1</mapUndefinedFields>
-    <mapToField>adt_info</mapToField>
+    <mapUndefinedFieldsEnable>1</mapUndefinedFieldsEnable>
+    <mapUndefinedFieldsTo>adt_info</mapUndefinedFieldsTo>
     <label>Inventory CSV import</label>
     <!-- _("Inventory CSV import") -->
     <description>tine inv import</description>

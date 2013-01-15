@@ -118,8 +118,9 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'plugin'                      => $config->plugin,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
-                'mapUndefinedFields'          => $config->mapUndefinedFields,
-                'mapToField'                  => $config->mapToField
+                'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
+                'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
+                'postMappingHook'             => $config->postMappingHook
             ));
             
             return $definition;

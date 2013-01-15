@@ -66,8 +66,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'mapping'                     => '',
             'headline'                    => 0,
             'use_headline'                => 1,
-            'mapUndefinedFields'          => 0,
-            'mapToField'                  => 'description'
+            'mapUndefinedFieldsEnable'    => 0,
+            'mapUndefinedFieldsTo'        => 'description'
         ));
         
         parent::__construct($_options);
@@ -142,10 +142,10 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             $_data_indexed = array_combine($this->_headline, $_data);
         }
         
-        if ($this->_options['mapUndefinedFields'] == 1) {
+        if ($this->_options['mapUndefinedFieldsEnable'] == 1) {
             $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
             if (! $undefinedFieldsText === false) {
-                $data[$this->_options['mapToField']] = $this->_createInfoTextForUnmappedFields($_data_indexed);
+                $data[$this->_options['mapUndefinedFieldsTo']] = $this->_createInfoTextForUnmappedFields($_data_indexed);
             }
         }
         
@@ -167,6 +167,10 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Mapped data: ' . print_r($data, true));
+        
+        if (is_array($this->_options['postMappingHook']) && isset($this->_options['postMappingHook']['path'])) {
+            $data = $this->_postMappingHook($data);
+        }
         
         return $data;
     }

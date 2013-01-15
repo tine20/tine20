@@ -101,7 +101,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
-        $this->assertEquals($result['results'][0]['inventory_id'], '133331666');
+        $this->assertEquals($result['results'][0]['inventory_id'], '12345');
         $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');

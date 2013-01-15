@@ -7,13 +7,16 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <mapUndefinedFields>1</mapUndefinedFields>
-    <mapToField>description</mapToField>
+    <mapUndefinedFieldsEnable>1</mapUndefinedFieldsEnable>
+    <mapUndefinedFieldsTo>description</mapUndefinedFieldsTo>
     <label>Inventory CSV import</label>
     <!-- _("Inventory CSV import") -->
     <description>tine inv import</description>
     <example>Inventory/Import/examples/inv_tine_import.csv</example>
     <extension>csv</extension>
+    <postMappingHook>
+        <path>Inventory/Import/files/testScript.php</path>
+    </postMappingHook>
     <autotags>
         <tag>
             <name>Import list (###CURRENTDATE###)</name>
