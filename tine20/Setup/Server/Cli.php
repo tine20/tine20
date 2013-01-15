@@ -49,8 +49,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
-                          setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname latin1
-                          setup.php --egw14import egwdbhost egwdbuser egwdbpass egwdbname utf8'
+                          setup.php --egw14import /path/to/config.ini'
                 #'username'             => 'Username [required]',
                 #'password'             => 'Password [required]',
             ));
