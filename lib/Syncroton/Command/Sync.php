@@ -491,13 +491,13 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
                             continue;
                         }
-                                                
+                        
                         $dataController = Syncroton_Data_Factory::factory($collectionData->folder->class , $this->_device, $this->_syncTimeStamp);
                         
-                        $estimate = $dataController->getCountOfChanges($this->_contentStateBackend, $collectionData->folder, $collectionData->syncState);
+                        $hasChanges = $dataController->hasChanges($this->_contentStateBackend, $collectionData->folder, $collectionData->syncState);
                         
-                        // countinue immediately if there are changes available
-                        if ($estimate > 0) {
+                        // countinue immediately if there are any changes available
+                        if ($hasChanges) {
                             break 2;
                         }
                     }
