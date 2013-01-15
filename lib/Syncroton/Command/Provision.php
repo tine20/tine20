@@ -60,7 +60,6 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
         
         if ($this->_device->remotewipe == self::REMOTEWIPE_REQUESTED && isset($xml->RemoteWipe->Status) && (int)$xml->RemoteWipe->Status == self::STATUS_SUCCESS) {
             $this->_device->remotewipe = self::REMOTEWIPE_CONFIRMED;
-            $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
         // try to fetch element from Settings namespace
@@ -74,9 +73,10 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
             $this->_device->os              = $this->_deviceInformation->oS;
             $this->_device->oslanguage      = $this->_deviceInformation->oSLanguage;
             $this->_device->phonenumber     = $this->_deviceInformation->phoneNumber;
-            
+        }
+
+        if ($this->_device->isDirty()) {
             $this->_device = $this->_deviceBackend->update($this->_device);
-            
         }
     }
     

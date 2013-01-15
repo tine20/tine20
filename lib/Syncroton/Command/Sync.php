@@ -924,7 +924,9 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 try {
                     $folderState = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
                     $folderState->lastfiltertype = $collectionData->options['filterType'];
-                    $this->_folderBackend->update($folderState);
+                    if ($folderState->isDirty()) {
+                        $this->_folderBackend->update($folderState);
+                    }
                 } catch (Syncroton_Exception_NotFound $senf) {
                     // failed to get folderstate => should not happen but is also no problem in this state
                     if ($this->_logger instanceof Zend_Log) 

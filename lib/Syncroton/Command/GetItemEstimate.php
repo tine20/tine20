@@ -137,7 +137,7 @@ class Syncroton_Command_GetItemEstimate extends Syncroton_Command_Wbxml
             }
             
             // folderState can be NULL in case of not existing folder
-            if (isset($collectionData['folder'])) {
+            if (isset($collectionData['folder']) && $collectionData['folder']->isDirty()) {
                 $this->_folderBackend->update($collectionData['folder']);
             }
         }
