@@ -17,43 +17,16 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Pozovi kontakt"
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
+msgid "Edit phone settings"
+msgstr "Uredi postavke telefona"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "radni"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "kućni"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Mobitel"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Privatni mobitel"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefoni"
 msgstr[2] "Telefoni"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Lista telefona"
-msgstr[1] "Liste telefona"
-msgstr[2] "Liste telefona"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Uredi postavke telefona"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -158,3 +131,30 @@ msgstr "Zvonjenje"
 #: js/Phone.js:712
 msgid "Call ID"
 msgstr "ID poziva"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Lista telefona"
+msgstr[1] "Liste telefona"
+msgstr[2] "Liste telefona"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Pozovi kontakt"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "radni"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "kućni"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Mobitel"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Privatni mobitel"

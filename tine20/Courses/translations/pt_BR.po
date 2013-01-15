@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-29 19:04+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,183 +18,183 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr ""
+msgstr "Adicionar novo usuário"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr ""
+msgstr "Adicionar novo usuário como membro para o curso"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr ""
+msgstr "Adicionar usuário existente"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr ""
+msgstr "Adicionar usuário existente como membro para o curso"
 
 #: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
-msgstr ""
+msgstr "Acesso à Internet"
 
 #: Config.php:77
 msgid "Internet access options."
-msgstr ""
+msgstr "Opções de acesso à internet"
 
 #: Config.php:84 Config.php:86
 msgid "Internet Access Group (ON)"
-msgstr ""
+msgstr "Grupo de Acesso à Internet (ON)"
 
 #: Config.php:92 Config.php:94
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Grupo de Acesso à Internet (FILTRADO)"
 
 #: Config.php:100 Config.php:102
 msgid "Students Group"
-msgstr ""
+msgstr "Grupo de Estudantes"
 
 #: Config.php:108 Config.php:110
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Definição de Importação de Estudantes"
 
 #: Config.php:116
 msgid "Students login name prefix"
-msgstr ""
+msgstr "Prefixo do nome de entrada de estudantes"
 
 #: Config.php:123 Config.php:125
 msgid "Samba user settings"
-msgstr ""
+msgstr "Configuração de usuário para o Samba"
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Cursos"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr ""
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Todos os cursos"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr ""
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Em"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr ""
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Fora"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr ""
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtrado"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr ""
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr ""
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr ""
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr ""
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "O favorito padrão que foi carregado na inicialização das Classes"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
-msgstr ""
+msgstr "Importação de membros do curso"
 
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
-msgstr ""
+msgstr "Adicionar novo membro"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Curso"
+msgstr[1] "Cursos"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
-msgstr ""
+msgstr "Nome do Curso"
 
 #: js/CourseEditDialog.js:210
 msgid "Course / School Type"
-msgstr ""
+msgstr "Curso / Tipo de Escola"
 
 #: js/CourseEditDialog.js:221
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: js/CourseEditDialog.js:237
 msgid "Fileserver Access"
-msgstr ""
+msgstr "Acesso ao arquivo do servidor"
 
 #: js/CourseEditDialog.js:269
 msgid "Members"
-msgstr ""
+msgstr "Membros"
 
 #: js/CourseEditDialog.js:296
 msgid "Login"
-msgstr ""
+msgstr "Entrada"
 
 #: js/CourseEditDialog.js:300
 msgid "unknown"
-msgstr ""
+msgstr "desconhecido"
 
 #: js/CourseEditDialog.js:305
 msgid "Reset Password"
-msgstr ""
+msgstr "Restabelecer a senha"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Prenome"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Sobrenome"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Adicionar novo membro ao curso"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Erros"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Favor fixar os erros anotados."
 
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: js/CourseGridPanel.js:54
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: js/CourseGridPanel.js:99
 msgid "Failed"
-msgstr ""
+msgstr "Falhou"
 
 #: js/CourseGridPanel.js:100
 msgid "Some error occured while trying to update the courses."
-msgstr ""
+msgstr "Ocorreu algum erro enquanto tentava atualizar os cursos."
 
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "lista de registro"
+msgstr[1] "listas de registro"
 
 #: js/Models.js:69
 msgid "Quick search"
-msgstr ""
+msgstr "Pesquisa rápida"
 
 #: js/Models.js:107
 msgid "Course Type"
 msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tipo de Curso"
+msgstr[1] "Tipos de Curso"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr ""
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Professor"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Conta de Professor"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr ""
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr ""
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr ""
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Meu curso"

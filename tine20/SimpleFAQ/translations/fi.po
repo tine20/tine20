@@ -1,0 +1,171 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 06:08+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:114
+#, python-format
+msgid "%s's personal FAQs"
+msgstr "%s's henkilökohtainen UKK"
+
+#: Controller.php:164
+msgid "Draft"
+msgstr "Luonnos"
+
+#: Controller.php:165
+msgid "released"
+msgstr "julkaistu"
+
+#: Controller.php:166
+msgid "obsolete"
+msgstr "vanhentunut"
+
+#: Controller.php:169
+msgid "Internal"
+msgstr "sisäinen"
+
+#: Controller.php:170
+msgid "Public"
+msgstr "Julkinen"
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Kaikki UKK:t omassa UKK listassa"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Omat muokkaukset"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Kaikki UKK:t joita olen muokannut"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Kaikki omat UKK:t"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Oletus suosikki ladataan UKK käynnistyessä"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Oletus UKK lista"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Oletus UKK  lista luodaan uudelle UKK:lle"
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "UKK Tila"
+msgstr[1] "UKK Tilat"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Apua Tyyppi"
+msgstr[1] "UKK Tyypit"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Oletukset"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Lisää uusi UKK tyyppi.."
+
+#: js/SimpleFAQ.js:19 js/Model.js:33
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "UKK"
+msgstr[1] "UKK:t"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "UKK tunnus"
+
+#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/FaqGridPanel.js:108 js/FaqEditDialog.js:136
+msgid "Status"
+msgstr "Tila"
+
+#: js/FaqGridPanel.js:114 js/FaqEditDialog.js:124
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/FaqGridPanel.js:120 js/FaqEditDialog.js:108
+#: js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Kysymys"
+
+#: js/FaqGridPanel.js:127 js/FaqEditDialog.js:115
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Vastaus"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Lisää uusi UKK tila..."
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "UKK Lista"
+msgstr[1] "UKK Listat"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "UKK LIstat"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Lisää kysymys..."
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Lisää vastaus..."
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "UKK Info"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Ei vastauksia vielä"

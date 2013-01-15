@@ -1,0 +1,693 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-17 16:00+0000\n"
+"Last-Translator: samituoh <sami@www-data.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:98
+msgid "manage shared addressbooks"
+msgstr "hallitse jaettuja osoitekirjoja"
+
+#: Acl/Rights.php:99
+msgid "Create new shared addressbook folders"
+msgstr "Luo uusi jaettu osoitekirja kansio"
+
+#: Acl/Rights.php:102
+msgid "manage shared addressbook favorites"
+msgstr ""
+
+#: Acl/Rights.php:103
+msgid "Create or update shared addressbook favorites"
+msgstr ""
+
+#: Controller.php:103
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr "CSV Outlook osoitekirjan tuonti"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Tuo yhteystiedot gmail osoitekirjasta"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "CSV Yhteystietojen tuonti"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "CSV Yhteystietojen tuonti macista"
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr "VCARD Yhteystietojen tuonti"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 tuonti"
+
+#: Config.php:45
+msgid "Contact duplicate check fields"
+msgstr ""
+
+#: Config.php:47
+msgid ""
+"These fields are checked when a new contact is created. If a record with the"
+" same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
+#: Config.php:59
+msgid "Contact salutations available"
+msgstr ""
+
+#: Config.php:61
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:69
+msgid "Parsing rules for addresses"
+msgstr ""
+
+#: Config.php:71
+msgid "Path to a XML file with address parsing rules."
+msgstr ""
+
+#: Setup/setup.xml:648
+msgid "Internal Contacts"
+msgstr "Sisäiset kontaktit"
+
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+msgid "Mr"
+msgstr "Herra"
+
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+msgid "Ms"
+msgstr "Neiti"
+
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:142
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:27
+#: js/Model.js:141
+msgid "Company"
+msgstr "Yritys"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+msgid "All contacts I have read grants for"
+msgstr ""
+
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr "Yritykseni"
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr "Työkaverini"
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr "Kontaktini"
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr "Kaikki kontaktit osoitekirjassani"
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr "Viimeksi muokattu itseni toimesta"
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr "Kaikki kontaktit joita olen viimeksi muokannut"
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Kaikki yhteystiedot"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Oletus osoitekirja"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr ""
+
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Yhteystiedot työ"
+
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Organisaatio / Osasto"
+
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Työ osoite"
+
+#: Export/Pdf.php:52 js/ContactGrid.js:127
+msgid "Email"
+msgstr "Sähköposti"
+
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Työpuhelin"
+
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Matkapuhelin"
+
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Autopuhelin"
+
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Fax"
+
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Hakulaite"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "Internetsivu"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Asema"
+
+#: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:179
+#: js/Model.js:33
+msgid "Room"
+msgstr "Huone"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Avustaja"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Avustajan puhelin"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Yhteystiedot koti"
+
+#: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
+#: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
+#: js/Model.js:159
+msgid "Private Address"
+msgstr "Kotiosoite"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "Sähköposti koti"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Puhelin koti"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Matkapuhelin koti"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Fax koti"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "Internetsivu koti"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Lisätiedot"
+
+#: Export/Pdf.php:114 js/ContactGrid.js:142 js/ContactEditDialog.js:167
+#: js/Model.js:26 js/Model.js:149
+msgid "Birthday"
+msgstr "Syntymäpäivä"
+
+#: Export/Pdf.php:117 js/ContactGrid.js:114 js/ContactEditDialog.js:161
+#: js/Model.js:30 js/Model.js:144
+msgid "Job Title"
+msgstr "Työnimike"
+
+#: js/ContactGrid.js:105 js/Model.js:160
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/ContactGrid.js:106
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/ContactGrid.js:107 js/ContactEditDialog.js:97 js/Model.js:29
+msgid "Salutation"
+msgstr "Tervehdys"
+
+#: js/ContactGrid.js:108 js/ContactEditDialog.js:133
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:19
+#: js/Model.js:140
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: js/ContactGrid.js:109 js/ContactEditDialog.js:123 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "Etunimi"
+
+#: js/ContactGrid.js:110
+msgid "Full Name"
+msgstr "Koko nimi"
+
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:156 js/Model.js:24
+msgid "Display Name"
+msgstr "Näyttönimi"
+
+#: js/ContactGrid.js:113 js/ContactEditDialog.js:147 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr "Yksikkö"
+
+#: js/ContactGrid.js:115 js/ContactEditDialog.js:175 js/Model.js:31
+#: js/Model.js:145
+msgid "Job Role"
+msgstr "Työn kuvaus"
+
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "Osoite"
+
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:286
+#: js/ContactEditDialog.js:315 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "Toimipaikka"
+
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr ""
+
+#: js/ContactGrid.js:120
+msgid "Postalcode"
+msgstr "Postinumero"
+
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:291
+#: js/ContactEditDialog.js:320 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "Maa"
+
+#: js/ContactGrid.js:122
+msgid "Street (private)"
+msgstr "Osoite (yksityinen)"
+
+#: js/ContactGrid.js:123
+msgid "City (private)"
+msgstr "Kaupunki (yksityinen)"
+
+#: js/ContactGrid.js:124
+msgid "Region (private)"
+msgstr ""
+
+#: js/ContactGrid.js:125
+msgid "Postalcode (private)"
+msgstr "Postinumero ( Koti)"
+
+#: js/ContactGrid.js:126
+msgid "Country (private)"
+msgstr "Maa (Koti)"
+
+#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:191
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "Puhelin"
+
+#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:196
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "Matkapuhelin"
+
+#: js/ContactGrid.js:130 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:201
+#: js/Model.js:53
+msgid "Fax"
+msgstr "Faksi"
+
+#: js/ContactGrid.js:131
+msgid "Car phone"
+msgstr "Autopuhelin"
+
+#: js/ContactGrid.js:132
+msgid "Pager"
+msgstr "Hakulaite"
+
+#: js/ContactGrid.js:133 js/ContactEditDialog.js:206 js/Model.js:57
+msgid "Phone (private)"
+msgstr "Puhelin (yksityinen)"
+
+#: js/ContactGrid.js:134 js/ContactEditDialog.js:216 js/Model.js:58
+msgid "Fax (private)"
+msgstr "Faksi (Yksityinen)"
+
+#: js/ContactGrid.js:135 js/ContactEditDialog.js:211 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "Matkapuhelin (yksityinen)"
+
+#: js/ContactGrid.js:136
+msgid "Email (private)"
+msgstr "Sähköpostiosoite (Koti)"
+
+#: js/ContactGrid.js:137 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:234
+#: js/Model.js:64
+msgid "Web"
+msgstr "WWW"
+
+#: js/ContactGrid.js:138
+msgid "URL (private)"
+msgstr "Internetsivu (Koti)"
+
+#: js/ContactGrid.js:139
+msgid "Note"
+msgstr "Huomautukset"
+
+#: js/ContactGrid.js:140
+msgid "Timezone"
+msgstr "Aikavyöhyke"
+
+#: js/ContactGrid.js:141
+msgid "Geo"
+msgstr ""
+
+#: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] "Vie"
+msgstr[1] "Vie"
+
+#: js/ContactGrid.js:163
+msgid "Export as PDF"
+msgstr "Vie pdf"
+
+#: js/ContactGrid.js:170
+msgid "Export as CSV"
+msgstr "Vie CSV"
+
+#: js/ContactGrid.js:177
+msgid "Export as ODS"
+msgstr "Vie ODS"
+
+#: js/ContactGrid.js:184
+msgid "Export as XLS"
+msgstr "Vie XLS"
+
+#: js/ContactGrid.js:191
+msgid "Export as ..."
+msgstr "Vie..."
+
+#: js/ContactGrid.js:203
+msgid "Import contacts"
+msgstr "Tuo yhteystiedot"
+
+#: js/ContactGrid.js:292
+msgid "Internal Contact"
+msgstr "Sisäinen kontakti"
+
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
+msgid "Contacts"
+msgstr "Yhteystiedot"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Valitse yhteystieto"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:221 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Yksityinen"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Info"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr ""
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr ""
+
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Kartta"
+
+#: js/ContactEditDialog.js:76
+msgid "Personal Information"
+msgstr "Henkilökohtaiset tiedot"
+
+#: js/ContactEditDialog.js:115 js/Model.js:22
+msgid "Title"
+msgstr "Titteli"
+
+#: js/ContactEditDialog.js:128 js/Model.js:21
+msgid "Middle Name"
+msgstr "Keski nimi"
+
+#: js/ContactEditDialog.js:171 js/Model.js:23
+msgid "Suffix"
+msgstr ""
+
+#: js/ContactEditDialog.js:186
+msgid "Contact Information"
+msgstr ""
+
+#: js/ContactEditDialog.js:227 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "E-Mail (yksityinen)"
+
+#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "Yrityksen osoite"
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
+msgid "Street 2"
+msgstr "Osoite 2"
+
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "Postinumero"
+
+#: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/ContactEditDialog.js:355
+msgid "Enter description"
+msgstr "Syötä kuvaus"
+
+#: js/ContactEditDialog.js:399
+msgid "Export as pdf"
+msgstr "Vie PDF:nä"
+
+#: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
+msgid "Parse address"
+msgstr "Parsi osoite"
+
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactEditDialog.js:484
+msgid "Paste address"
+msgstr "Liitä osoite"
+
+#: js/ContactEditDialog.js:484
+msgid "Please paste an address that should be parsed:"
+msgstr ""
+
+#: js/ContactEditDialog.js:518
+msgid "End token mode"
+msgstr ""
+
+#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/MapPanel.js:58
+msgid "Company address"
+msgstr "Yrityksen osoite"
+
+#: js/MapPanel.js:65
+msgid "Private address"
+msgstr "Kotiosoite"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CardDAV Osoite"
+
+#: js/Model.js:19
+msgid "Name"
+msgstr "Nimi"
+
+#: js/Model.js:34
+msgid "Street (Company Address)"
+msgstr "Katuosoite ( Yrityksen)"
+
+#: js/Model.js:35
+msgid "Street 2 (Company Address)"
+msgstr "Katuosoite 2 ( Yrityksen)"
+
+#: js/Model.js:36
+msgid "City (Company Address)"
+msgstr "Kaupunki ( Yrityksen)"
+
+#: js/Model.js:37
+msgid "Region (Company Address)"
+msgstr "Alue ( Yrityksen)"
+
+#: js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr "Postinumero ( Yrityksen)"
+
+#: js/Model.js:39
+msgid "Country (Company Address)"
+msgstr "Maa ( Yrityksen)"
+
+#: js/Model.js:43
+msgid "Street (Private Address)"
+msgstr "Katuosoite ( Yrityksen)"
+
+#: js/Model.js:44
+msgid "Street 2 (Private Address)"
+msgstr "Katuosoite 2 ( Yrityksen)"
+
+#: js/Model.js:45
+msgid "City (Private Address)"
+msgstr "Kaupunki ( Yrityksen)"
+
+#: js/Model.js:46
+msgid "Region (Private Address)"
+msgstr "Alue ( Yrityksen)"
+
+#: js/Model.js:47
+msgid "Postal Code (Private Address)"
+msgstr "Postinumero ( Koti)"
+
+#: js/Model.js:48
+msgid "Country (Private Address)"
+msgstr "Maa ( Koti)"
+
+#: js/Model.js:51
+msgid "Company Communication"
+msgstr ""
+
+#: js/Model.js:57
+msgid "Private Communication"
+msgstr ""
+
+#: js/Model.js:65
+msgid "Web (private)"
+msgstr "WWW (yksityinen)"
+
+#: js/Model.js:98 js/Model.js:205 js/Addressbook.js:32
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Osoitekirja"
+msgstr[1] "Osoitekirjat"
+
+#: js/Model.js:98 js/Model.js:205
+msgid "Addressbooks"
+msgstr "Osoitekirja"
+
+#: js/Model.js:133
+msgid "User Account"
+msgstr "Käyttäjätili"
+
+#: js/Model.js:136
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Model.js:161
+msgid "Last Modified Time"
+msgstr "Viimeksi muokattu"
+
+#: js/Model.js:162
+msgid "Last Modified By"
+msgstr "Viimeisin muokkaaja"
+
+#: js/Model.js:163
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Model.js:164
+msgid "Created By"
+msgstr "Luoja"
+
+#: js/Model.js:201
+msgid "List"
+msgid_plural "Lists"
+msgstr[0] "Lista"
+msgstr[1] "Listat"
+
+#: js/Model.js:201
+msgid "Lists"
+msgstr "Listat"
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Uusi yhteystieto"
+
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr ""

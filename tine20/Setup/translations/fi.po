@@ -1,0 +1,667 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-28 18:34+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: js/AuthenticationPanel.js:127
+msgid "Delete all existing users and groups"
+msgstr "Poista kaikki käyttäjät ja ryhmät"
+
+#: js/AuthenticationPanel.js:127
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
+msgstr ""
+
+#: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
+#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:132
+msgid "Backend"
+msgstr ""
+
+#: js/AuthenticationPanel.js:233
+msgid "Initial Admin User"
+msgstr "Alustava ylläpitäjä"
+
+#: js/AuthenticationPanel.js:246
+msgid "Initial admin login name"
+msgstr "Alustava ylläpitäjän kirjautumisnimi"
+
+#: js/AuthenticationPanel.js:251
+msgid "Initial admin Password"
+msgstr "Alustava ylläpitäjän salasana"
+
+#: js/AuthenticationPanel.js:255
+msgid "Password confirmation"
+msgstr "Salasanan vahvistus"
+
+#: js/AuthenticationPanel.js:263
+msgid "Authentication provider"
+msgstr ""
+
+#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
+msgid "Try to split username"
+msgstr ""
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
+#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:584
+#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
+#: js/EmailPanel.js:207
+msgid "Yes"
+msgstr "Kyllä"
+
+#: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
+#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
+#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:584
+#: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
+#: js/EmailPanel.js:207
+msgid "No"
+msgstr "Ei"
+
+#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
+#: js/AuthenticationPanel.js:405
+msgid "Account canonical form"
+msgstr ""
+
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
+#: js/AuthenticationPanel.js:409
+msgid "Account domain name "
+msgstr ""
+
+#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
+#: js/AuthenticationPanel.js:414
+msgid "Account domain short name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
+msgid "Host"
+msgstr "Host"
+
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
+#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
+msgid "Port"
+msgstr "Portti"
+
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
+msgid "Login name"
+msgstr "Kirjautumisnimi"
+
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
+#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:207
+msgid "Password"
+msgstr "Salasana"
+
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
+msgid "Bind requires DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:334
+msgid "Base DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:337
+msgid "Search filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310
+msgid "Hostname"
+msgstr ""
+
+#: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
+#: js/EmailPanel.js:398
+msgid "Secure Connection"
+msgstr ""
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:303 js/EmailPanel.js:401
+msgid "None"
+msgstr "Ei mitään"
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:401
+msgid "TLS"
+msgstr ""
+
+#: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
+#: js/EmailPanel.js:401
+msgid "SSL"
+msgstr ""
+
+#: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
+msgid "Append domain to login name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:426
+msgid "Accounts storage"
+msgstr ""
+
+#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
+msgid "Default user group name"
+msgstr "Oletus käyttäjän ryhmän nimi"
+
+#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:542
+msgid "Default admin group name"
+msgstr "Oletus ylläpitäjän ryhmän nimi"
+
+#: js/AuthenticationPanel.js:483
+msgid "User DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:486
+msgid "User Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:490
+msgid "User Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:496
+msgid "Groups DN"
+msgstr ""
+
+#: js/AuthenticationPanel.js:499
+msgid "Group Filter"
+msgstr ""
+
+#: js/AuthenticationPanel.js:503
+msgid "Group Search Scope"
+msgstr ""
+
+#: js/AuthenticationPanel.js:509
+msgid "Password encoding"
+msgstr ""
+
+#: js/AuthenticationPanel.js:515
+msgid "Use Rfc 2307 bis"
+msgstr ""
+
+#: js/AuthenticationPanel.js:521
+msgid "Min User Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:524
+msgid "Max User Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:527
+msgid "Min Group Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:530
+msgid "Max Group Id"
+msgstr ""
+
+#: js/AuthenticationPanel.js:533
+msgid "Group UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:536
+msgid "User UUID Attribute name"
+msgstr ""
+
+#: js/AuthenticationPanel.js:546
+msgid "Readonly access"
+msgstr ""
+
+#: js/AuthenticationPanel.js:556
+msgid "Password Settings"
+msgstr "Salasana asetukset"
+
+#: js/AuthenticationPanel.js:571
+msgid "User can change password"
+msgstr "Käyttäjä voi vaihtaa salasanan"
+
+#: js/AuthenticationPanel.js:577
+msgid "Enable password policy"
+msgstr "Aktivoi salasana määritykset"
+
+#: js/AuthenticationPanel.js:583
+msgid "Only ASCII"
+msgstr "Vain ASCII"
+
+#: js/AuthenticationPanel.js:588
+msgid "Minimum length"
+msgstr "Minimi pituus"
+
+#: js/AuthenticationPanel.js:591
+msgid "Minimum word chars"
+msgstr "Minimimäärä pieniä kirjaimia"
+
+#: js/AuthenticationPanel.js:594
+msgid "Minimum uppercase chars"
+msgstr "Minimimäärä isoja kirjaimia"
+
+#: js/AuthenticationPanel.js:597
+msgid "Minimum special chars"
+msgstr "Minimimäärä erikoismerkkejä"
+
+#: js/AuthenticationPanel.js:600
+msgid "Minimum numbers"
+msgstr "Minimimäärä numeroita"
+
+#: js/AuthenticationPanel.js:607
+msgid "Redirect Settings"
+msgstr ""
+
+#: js/AuthenticationPanel.js:615
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:619
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr ""
+
+#: js/AuthenticationPanel.js:625
+msgid "Redirect to referring site, if exists"
+msgstr ""
+
+#: js/AuthenticationPanel.js:639
+msgid "Save config and install"
+msgstr ""
+
+#: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:360
+msgid "Save config"
+msgstr ""
+
+#: js/AuthenticationPanel.js:666
+msgid "Passwords don't match"
+msgstr ""
+
+#: js/AuthenticationPanel.js:676 js/AuthenticationPanel.js:683
+#: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:699
+#: js/AuthenticationPanel.js:710
+msgid "Should not be empty"
+msgstr ""
+
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr ""
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Hyväksy käyttöehdot ja säännöt"
+
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr ""
+
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr ""
+
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr ""
+
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr ""
+
+#: js/Setup.js:76
+msgid "Email"
+msgstr ""
+
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr ""
+
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Nimi"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Käytössä"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Järjestys"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Asennettu versio"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Saatavilla oleva versio"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Tila"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Riippuu"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Asenna ohjelma"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Poista ohjelma"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Päivitä ohjelma"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Siirry {0} kirjautumissivulle"
+
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "poista asennus"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Haluatko poistaa ohjelmat?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Tämä voi kestää hetken"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr ""
+
+#: js/EmailPanel.js:150
+msgid "Standard IMAP"
+msgstr "Standardi IMAP"
+
+#: js/EmailPanel.js:160
+msgid "Standard SMTP"
+msgstr "Standardi SMTP"
+
+#: js/EmailPanel.js:174
+msgid "Imap"
+msgstr "Imap"
+
+#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:167
+msgid "Username"
+msgstr ""
+
+#: js/EmailPanel.js:206
+msgid "Use system account"
+msgstr ""
+
+#: js/EmailPanel.js:258
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:261
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:278
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:300
+msgid "Authentication"
+msgstr ""
+
+#: js/EmailPanel.js:303
+msgid "Login"
+msgstr ""
+
+#: js/EmailPanel.js:303
+msgid "Plain"
+msgstr ""
+
+#: js/EmailPanel.js:307
+msgid "Primary Domain"
+msgstr ""
+
+#: js/EmailPanel.js:311
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:315
+msgid "Notifications service address"
+msgstr ""
+
+#: js/EmailPanel.js:319
+msgid "Notification Username"
+msgstr ""
+
+#: js/EmailPanel.js:323
+msgid "Notification Password"
+msgstr ""
+
+#: js/EmailPanel.js:328
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+#: js/EmailPanel.js:384
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:425
+msgid "MySql Hostname"
+msgstr ""
+
+#: js/EmailPanel.js:428
+msgid "MySql Database"
+msgstr "MySql Tietokanta"
+
+#: js/EmailPanel.js:431
+msgid "MySql User"
+msgstr "MySql Käyttäjätunnus"
+
+#: js/EmailPanel.js:434
+msgid "MySql Password"
+msgstr "MySql Salasana"
+
+#: js/EmailPanel.js:438
+msgid "MySql Port"
+msgstr "MySql Portti"
+
+#: js/EmailPanel.js:454
+msgid "User or UID"
+msgstr ""
+
+#: js/EmailPanel.js:457
+msgid "Group or GID"
+msgstr ""
+
+#: js/EmailPanel.js:460
+msgid "Home Template"
+msgstr ""
+
+#: js/EmailPanel.js:462
+msgid "Password Scheme"
+msgstr ""
+
+#: js/EmailPanel.js:473
+msgid "PLAIN-MD5"
+msgstr ""
+
+#: js/EmailPanel.js:474
+msgid "MD5-CRYPT"
+msgstr ""
+
+#: js/EmailPanel.js:475
+msgid "SHA1"
+msgstr ""
+
+#: js/EmailPanel.js:476
+msgid "SHA256"
+msgstr ""
+
+#: js/EmailPanel.js:477
+msgid "SSHA256"
+msgstr ""
+
+#: js/EmailPanel.js:478
+msgid "SHA512"
+msgstr ""
+
+#: js/EmailPanel.js:479
+msgid "SSHA512"
+msgstr ""
+
+#: js/EmailPanel.js:480
+msgid "PLAIN"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:130
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Tarkista"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Error"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:160
+msgid "Setup Authentication"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
+msgid "Database"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:203
+msgid "User"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:211
+msgid "Prefix"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:215
+msgid "Logging"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:225
+msgid "Filename"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:228
+msgid "Priority"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:232
+msgid "Caching"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
+msgid "Path"
+msgstr "Polku"
+
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
+msgid "Lifetime (seconds)"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:251
+msgid "Temporary files"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:259
+msgid "Temporary Files Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:263
+msgid "Session"
+msgstr "Sessio"
+
+#: js/ConfigManagerPanel.js:323
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:331
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:336
+msgid "Addressbook Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:344
+msgid "Map panel"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:346
+msgid "disabled"
+msgstr "pois käytöstä"
+
+#: js/ConfigManagerPanel.js:346
+msgid "enabled"
+msgstr "ei käytössä"
+
+#: js/ConfigManagerPanel.js:358
+msgid "Config file is not writable"
+msgstr "Config tiedostoon ei voida kirjoittaa"
+
+#: js/ConfigManagerPanel.js:376
+msgid "Download config file"
+msgstr "Lataa config tiedosto"

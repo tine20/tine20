@@ -1,0 +1,201 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 07:29+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:99
+msgid "Add new user"
+msgstr "Lisää uusi osallistuja"
+
+#: Acl/Rights.php:100
+msgid "Add new user as member to a course"
+msgstr "Lisää uusi osallistuja kurssille"
+
+#: Acl/Rights.php:103
+msgid "Add existing user"
+msgstr "Lisää olemassa oleva osallistuja"
+
+#: Acl/Rights.php:104
+msgid "Add existing user as member to a course"
+msgstr "Lisää olemassa oleva osallistuja kurssille"
+
+#: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
+msgid "Internet Access"
+msgstr "Internet oikeudet"
+
+#: Config.php:77
+msgid "Internet access options."
+msgstr "Internet oikeuksien asetukset."
+
+#: Config.php:84 Config.php:86
+msgid "Internet Access Group (ON)"
+msgstr "Internet oikeuksien ryhmä (KÄYTÖSSÄ)"
+
+#: Config.php:92 Config.php:94
+msgid "Internet Access Group (FILTERED)"
+msgstr "Internet oikeuksien ryhmä (SUODATETTU)"
+
+#: Config.php:100 Config.php:102
+msgid "Students Group"
+msgstr "Opiskelija ryhmä"
+
+#: Config.php:108 Config.php:110
+msgid "Students Import Definition"
+msgstr ""
+
+#: Config.php:116
+msgid "Students login name prefix"
+msgstr ""
+
+#: Config.php:123 Config.php:125
+msgid "Samba user settings"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurssit"
+
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Kaikki kurssit"
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Päällä"
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Pois päältä"
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Suodatettu"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
+msgstr "Lisää kurssin osallistujat"
+
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
+msgstr "Lisää uusi jäsen"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurssi"
+msgstr[1] "Kurssit"
+
+#: js/CourseEditDialog.js:203
+msgid "Course Name"
+msgstr "Kurssin nimi"
+
+#: js/CourseEditDialog.js:210
+msgid "Course / School Type"
+msgstr "Kurssi / Koulutuksen tyyppi"
+
+#: js/CourseEditDialog.js:221
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/CourseEditDialog.js:237
+msgid "Fileserver Access"
+msgstr "Tiedostopalvelimen oikeudet"
+
+#: js/CourseEditDialog.js:269
+msgid "Members"
+msgstr "Käyttäjät"
+
+#: js/CourseEditDialog.js:296
+msgid "Login"
+msgstr "Kirjaudu"
+
+#: js/CourseEditDialog.js:300
+msgid "unknown"
+msgstr "tuntematon"
+
+#: js/CourseEditDialog.js:305
+msgid "Reset Password"
+msgstr "Nollaa salasana"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Etunimi"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Lisää uusi osallistuja kurssille"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Virheet"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Korjaa havaitut virheet"
+
+#: js/CourseGridPanel.js:48 js/Models.js:70
+msgid "Name"
+msgstr "Nimi"
+
+#: js/CourseGridPanel.js:54
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/CourseGridPanel.js:99
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: js/CourseGridPanel.js:100
+msgid "Some error occured while trying to update the courses."
+msgstr "Virhe kurssia päivitettäessä"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:69
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Models.js:107
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurssin tyyppi"
+msgstr[1] "Kurssin tyypit"
+
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Opettaja"
+
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Opettajan käyttäjätili"
+
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Kurssini"

@@ -42,105 +42,17 @@ msgstr "Wewnętrzny"
 msgid "Public"
 msgstr "Publiczny"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "Status pytań"
-msgstr[1] "Statusy pytań"
-msgstr[2] "Statusów pytań"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Wszystkie pytania z mojej listy pytań"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Typ FAQ"
-msgstr[1] "Typy FAQ"
-msgstr[2] "Typy FAQ"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Ostatnio zmodyfikowane przeze mnie"
 
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Domyślne"
-
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
-#: js/FaqGridPanel.js:120
-msgid "Question"
-msgstr "Pytanie"
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Wpisz pytanie..."
-
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
-#: js/FaqGridPanel.js:127
-msgid "Answer"
-msgstr "Odpowiedź"
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Wpisz odpowiedź..."
-
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
-msgid "Type"
-msgstr "Typ"
-
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "Informacje o FAQ"
-
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Czas użytkownika"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Utworzone przez"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Na razie brak odpowiedzi"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "Id FAQ"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Nowy status pytania..."
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Dodaj nowy typ FAQ"
-
-#: js/Model.js:33 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "Pytanie"
-msgstr[1] "Pytania"
-msgstr[2] "Pytania"
-
-#: js/Model.js:37
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "Lista pytań"
-msgstr[1] "listy pytań"
-msgstr[2] "listy pytań"
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr "listy pytań"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Wszystkie pytania, które ostatnio zmieniłam/em"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -162,14 +74,102 @@ msgstr "Domyślna lista pytań"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Domyślna lista pytań, do której można dodawać pytania"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Wszystkie pytania z mojej listy pytań"
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Status pytań"
+msgstr[1] "Statusy pytań"
+msgstr[2] "Statusów pytań"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Ostatnio zmodyfikowane przeze mnie"
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Typ FAQ"
+msgstr[1] "Typy FAQ"
+msgstr[2] "Typy FAQ"
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Wszystkie pytania, które ostatnio zmieniłam/em"
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Domyślne"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Dodaj nowy typ FAQ"
+
+#: js/SimpleFAQ.js:19 js/Model.js:33
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "Pytanie"
+msgstr[1] "Pytania"
+msgstr[2] "Pytania"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "Id FAQ"
+
+#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/FaqGridPanel.js:108 js/FaqEditDialog.js:136
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:114 js/FaqEditDialog.js:124
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqGridPanel.js:120 js/FaqEditDialog.js:108
+#: js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Pytanie"
+
+#: js/FaqGridPanel.js:127 js/FaqEditDialog.js:115
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Odpowiedź"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Nowy status pytania..."
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "Lista pytań"
+msgstr[1] "listy pytań"
+msgstr[2] "listy pytań"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "listy pytań"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Wpisz pytanie..."
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Wpisz odpowiedź..."
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Informacje o FAQ"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Czas użytkownika"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Na razie brak odpowiedzi"

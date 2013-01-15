@@ -25,6 +25,48 @@ msgstr "Standaard gedragslijn voor nieuwe apparaten"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Voer het ID van de op nieuwe apparaten van toepassing gedagslijn in"
 
+#: Setup/setup.xml:706 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Standaard gedragslijn"
+
+#: Setup/setup.xml:711 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Standaard gedragslijn ingesteld tijdens de installatie"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standaard adresboek"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Het standaard adresboek waar nieuwe contacten in komen."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standaard agenda"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "De standaard agenda waar nieuwe gebeurtenissen in komen"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standaard taaklijst"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "De standaard taaklijst waar nieuwe taken in komen"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Apparaat"
+msgstr[1] "Apparaten"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Apparaten"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "ActiveSync"
@@ -56,45 +98,3 @@ msgstr "Hersteld"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Zet Sync filter"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Apparaat"
-msgstr[1] "Apparaten"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Apparaten"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standaard adresboek"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Het standaard adresboek waar nieuwe contacten in komen."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standaard agenda"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "De standaard agenda waar nieuwe gebeurtenissen in komen"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standaard taaklijst"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "De standaard taaklijst waar nieuwe taken in komen"
-
-#: Setup/setup.xml:689 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Standaard gedragslijn"
-
-#: Setup/setup.xml:694 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Standaard gedragslijn ingesteld tijdens de installatie"

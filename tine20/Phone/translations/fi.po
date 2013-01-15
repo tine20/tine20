@@ -1,0 +1,158 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 06:13+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
+msgid "Edit phone settings"
+msgstr "Muokkaa puhelin asetuksia"
+
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] "Puhelin"
+msgstr[1] "Puhelimet"
+
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Puhelimet"
+
+#: js/Phone.js:288
+msgid "Line"
+msgstr "Linja"
+
+#: js/Phone.js:297
+msgid "Number"
+msgstr "Numero"
+
+#: js/Phone.js:306
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: js/Phone.js:316
+msgid "Dial"
+msgstr "Soita"
+
+#: js/Phone.js:336
+msgid "Error"
+msgstr "Virhe"
+
+#: js/Phone.js:337
+msgid "Not possible to dial."
+msgstr "Valinta ei onnistu."
+
+#: js/Phone.js:480
+msgid "Dial number"
+msgstr "Valitse numero"
+
+#: js/Phone.js:481
+msgid "Initiate a new outgoing call"
+msgstr "Aloita uusi puhelu"
+
+#: js/Phone.js:542
+msgid "Incoming call"
+msgstr "Tuleva puhelu"
+
+#: js/Phone.js:546
+msgid "Outgoing call"
+msgstr "Lähtevä puhelu"
+
+#: js/Phone.js:554
+msgid "unknown number"
+msgstr "Tuntematon numero"
+
+#: js/Phone.js:591
+msgid "Search:"
+msgstr "Hae:"
+
+#: js/Phone.js:676
+msgid "Source or Destination"
+msgstr "Lähde tai kohde:"
+
+#: js/Phone.js:692
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Näytetään puhelut {0} - {1} - {2}"
+
+#: js/Phone.js:693 js/Phone.js:736
+msgid "No calls to display"
+msgstr "Ei näytettäviä puheluita"
+
+#: js/Phone.js:703
+msgid "Direction"
+msgstr "Suunta"
+
+#: js/Phone.js:704
+msgid "Source"
+msgstr "Lähde"
+
+#: js/Phone.js:705
+msgid "Caller Id"
+msgstr "Soittajan numero"
+
+#: js/Phone.js:706
+msgid "Destination"
+msgstr "Kohde"
+
+#: js/Phone.js:707
+msgid "Start"
+msgstr "Aloita"
+
+#: js/Phone.js:708
+msgid "Connected"
+msgstr "Yhdistetty"
+
+#: js/Phone.js:709
+msgid "Disconnected"
+msgstr "Katkaistu"
+
+#: js/Phone.js:710
+msgid "Duration"
+msgstr "Kesto"
+
+#: js/Phone.js:711
+msgid "Ringing"
+msgstr "Soi"
+
+#: js/Phone.js:712
+msgid "Call ID"
+msgstr "Soittajan tunnus"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "puhelin lista"
+msgstr[1] "puhelin listat"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Yhteyshenkilö"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Työ"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Koti"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Matkapuhelin"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Matkapuhelin koti"

@@ -18,66 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Ime"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Omogućeno"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Poredak"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Instalirana verzija"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Dostupna verzija"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Status"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Ovisi o"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instaliraj aplikaciju"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Ukloni aplikaciju"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Ažuriraj aplikaciju"
-
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "Idi na {0} prijavu"
-
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "ukloni"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Želite li stvarno ukloniti aplikaciju(e)?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Ovo bi moglo potrajati"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "Kršenje ovisnosti"
-
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "Izbriši sve postojeće korisnike i grupe"
@@ -90,7 +30,7 @@ msgid ""
 msgstr "Prijelaz sa SQL na  LDAP će izbrisati sve postojeće korisničke račune, grupe i uloge. Želite li stvarno zamjeniti pozadinu pohrane računa na LDAP? "
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
+#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:132
 msgid "Backend"
 msgstr "Pozadina"
 
@@ -156,8 +96,8 @@ msgid "Host"
 msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 msgid "Port"
 msgstr "Port"
 
@@ -166,8 +106,8 @@ msgid "Login name"
 msgstr "Ime za prijavu"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
-#: js/EmailPanel.js:190
+#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:207
 msgid "Password"
 msgstr "Zaporka"
 
@@ -183,9 +123,9 @@ msgstr "Baza DN"
 msgid "Search filter"
 msgstr "Filter pretraživanja"
 
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
-#: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390
+#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310
 msgid "Hostname"
 msgstr "Poslužitelj"
 
@@ -355,101 +295,116 @@ msgstr "Zaporke nisu jednake"
 msgid "Should not be empty"
 msgstr "Ne bi trebalo biti prazno"
 
-#: js/ConfigManagerPanel.js:135
-msgid "File"
-msgstr "Datoteka"
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Pročitao sam ugovor o korištenju i prihvaćam ga"
 
-#: js/ConfigManagerPanel.js:145
-msgid "Adapter"
-msgstr "Adapter"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Ugovor o korištenju"
 
-#: js/ConfigManagerPanel.js:160
-msgid "Setup Authentication"
-msgstr "Podešavanje autentikacije"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Pročitao sam ugovor o privatnosti i prihvaćam ga"
 
-#: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
-msgid "Username"
-msgstr "Korisničko ime"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Ugovor o privatnosti"
 
-#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
-msgid "Database"
-msgstr "Baza podataka"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Prihvaćam uvjete korištenja"
 
-#: js/ConfigManagerPanel.js:203
-msgid "User"
-msgstr "Korisnik"
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Uvjeti i odredbe"
 
-#: js/ConfigManagerPanel.js:211
-msgid "Prefix"
-msgstr "Prefiks"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Provjere postavki"
 
-#: js/ConfigManagerPanel.js:215
-msgid "Logging"
-msgstr "Logiranje"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Uređivač konfiguracije"
 
-#: js/ConfigManagerPanel.js:225
-msgid "Filename"
-msgstr "Ime datoteke"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Autentikacija/Računi"
 
-#: js/ConfigManagerPanel.js:228
-msgid "Priority"
-msgstr "Prioritet"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "E-mail"
 
-#: js/ConfigManagerPanel.js:232
-msgid "Caching"
-msgstr "Keširanje"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Uređivač aplikacija"
 
-#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
-msgid "Path"
-msgstr "Putanja"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikacija"
+msgstr[1] "Aplikacije"
+msgstr[2] "Aplikacija"
 
-#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
-msgid "Lifetime (seconds)"
-msgstr "Životni vijek (sekunde)"
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Ime"
 
-#: js/ConfigManagerPanel.js:251
-msgid "Temporary files"
-msgstr "Privremene datoteke"
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Omogućeno"
 
-#: js/ConfigManagerPanel.js:259
-msgid "Temporary Files Path"
-msgstr "Putanja privremenih datoteka"
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Poredak"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Session"
-msgstr "Sesija"
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Instalirana verzija"
 
-#: js/ConfigManagerPanel.js:323
-msgid "Filestore directory"
-msgstr "Direktorij za spremanje datoteka"
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Dostupna verzija"
 
-#: js/ConfigManagerPanel.js:331
-msgid "Filestore Path"
-msgstr "Putanja do direktorija za spremanje datoteka"
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Status"
 
-#: js/ConfigManagerPanel.js:336
-msgid "Addressbook Map panel"
-msgstr "Mapa imenika"
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Ovisi o"
 
-#: js/ConfigManagerPanel.js:344
-msgid "Map panel"
-msgstr "Mapa"
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instaliraj aplikaciju"
 
-#: js/ConfigManagerPanel.js:346
-msgid "disabled"
-msgstr "isključeno"
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Ukloni aplikaciju"
 
-#: js/ConfigManagerPanel.js:346
-msgid "enabled"
-msgstr "uključeno"
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Ažuriraj aplikaciju"
 
-#: js/ConfigManagerPanel.js:358
-msgid "Config file is not writable"
-msgstr "Upis u konfiguracijsku datoteku nije moguć"
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Idi na {0} prijavu"
 
-#: js/ConfigManagerPanel.js:376
-msgid "Download config file"
-msgstr "Preuzmi konfiguracijsku datoteku"
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "ukloni"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Želite li stvarno ukloniti aplikaciju(e)?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Ovo bi moglo potrajati"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Kršenje ovisnosti"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -462,6 +417,10 @@ msgstr "Standardni SMTP"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "Imap"
+
+#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:167
+msgid "Username"
+msgstr "Korisničko ime"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -617,53 +576,94 @@ msgstr "Pokreni testove podešavanja"
 msgid "Ignore setup tests"
 msgstr "Ignoriraj testove podešavanja"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Uvjeti i odredbe"
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr "Datoteka"
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Provjere postavki"
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr "Adapter"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Uređivač konfiguracije"
+#: js/ConfigManagerPanel.js:160
+msgid "Setup Authentication"
+msgstr "Podešavanje autentikacije"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Autentikacija/Računi"
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
+msgid "Database"
+msgstr "Baza podataka"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "E-mail"
+#: js/ConfigManagerPanel.js:203
+msgid "User"
+msgstr "Korisnik"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Uređivač aplikacija"
+#: js/ConfigManagerPanel.js:211
+msgid "Prefix"
+msgstr "Prefiks"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikacija"
-msgstr[1] "Aplikacije"
-msgstr[2] "Aplikacija"
+#: js/ConfigManagerPanel.js:215
+msgid "Logging"
+msgstr "Logiranje"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Pročitao sam ugovor o korištenju i prihvaćam ga"
+#: js/ConfigManagerPanel.js:225
+msgid "Filename"
+msgstr "Ime datoteke"
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Ugovor o korištenju"
+#: js/ConfigManagerPanel.js:228
+msgid "Priority"
+msgstr "Prioritet"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Pročitao sam ugovor o privatnosti i prihvaćam ga"
+#: js/ConfigManagerPanel.js:232
+msgid "Caching"
+msgstr "Keširanje"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Ugovor o privatnosti"
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
+msgid "Path"
+msgstr "Putanja"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Prihvaćam uvjete korištenja"
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
+msgid "Lifetime (seconds)"
+msgstr "Životni vijek (sekunde)"
+
+#: js/ConfigManagerPanel.js:251
+msgid "Temporary files"
+msgstr "Privremene datoteke"
+
+#: js/ConfigManagerPanel.js:259
+msgid "Temporary Files Path"
+msgstr "Putanja privremenih datoteka"
+
+#: js/ConfigManagerPanel.js:263
+msgid "Session"
+msgstr "Sesija"
+
+#: js/ConfigManagerPanel.js:323
+msgid "Filestore directory"
+msgstr "Direktorij za spremanje datoteka"
+
+#: js/ConfigManagerPanel.js:331
+msgid "Filestore Path"
+msgstr "Putanja do direktorija za spremanje datoteka"
+
+#: js/ConfigManagerPanel.js:336
+msgid "Addressbook Map panel"
+msgstr "Mapa imenika"
+
+#: js/ConfigManagerPanel.js:344
+msgid "Map panel"
+msgstr "Mapa"
+
+#: js/ConfigManagerPanel.js:346
+msgid "disabled"
+msgstr "isključeno"
+
+#: js/ConfigManagerPanel.js:346
+msgid "enabled"
+msgstr "uključeno"
+
+#: js/ConfigManagerPanel.js:358
+msgid "Config file is not writable"
+msgstr "Upis u konfiguracijsku datoteku nije moguć"
+
+#: js/ConfigManagerPanel.js:376
+msgid "Download config file"
+msgstr "Preuzmi konfiguracijsku datoteku"

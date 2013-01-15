@@ -64,43 +64,29 @@ msgstr ""
 msgid "Samba user settings"
 msgstr ""
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurz"
-msgstr[1] "Kurzy"
-msgstr[2] "Kurzů"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurzy"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Lektor"
-
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Účet lektora"
-
-#: Controller/Course.php:308
-msgid "My course"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
 msgstr ""
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
+#: Setup/Initialize.php:66
+msgid "On"
 msgstr ""
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
+#: Setup/Initialize.php:67
+msgid "Off"
 msgstr ""
 
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
+#: Setup/Initialize.php:68
+msgid "Filtered"
 msgstr ""
 
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr ""
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
 msgstr ""
 
 #: js/CourseEditDialog.js:33
@@ -110,6 +96,13 @@ msgstr "Importovat členy kurzu"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr ""
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurz"
+msgstr[1] "Kurzy"
+msgstr[2] "Kurzů"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -142,6 +135,26 @@ msgstr ""
 #: js/CourseEditDialog.js:305
 msgid "Reset Password"
 msgstr "Resetovat heslo"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr ""
 
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
@@ -177,27 +190,14 @@ msgstr[0] "Typ kurzu"
 msgstr[1] "Typy kurzů"
 msgstr[2] "Typů kurzů"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr ""
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Lektor"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Účet lektora"
 
-#: Setup/Initialize.php:66
-msgid "On"
+#: Controller/Course.php:308
+msgid "My course"
 msgstr ""
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr ""
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurzy"

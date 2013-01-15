@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <mail@demiveo.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-09 12:58+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-12-26 19:42+0000\n"
+"Last-Translator: demiveo <mail@demiveo.de>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/tine20/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,6 +17,81 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal inventory items"
+msgstr ""
+
+#: Model/InventoryItem.php:48
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] "one: Envanter Öğe\n\nother: Envanter Öğeler"
+
+#: Model/InventoryItem.php:49
+msgid "Inventory items"
+msgstr "Envanter Öğeler"
+
+#: Model/InventoryItem.php:51
+msgid "Inventory item list"
+msgstr "Envanter Listesi"
+
+#: Model/InventoryItem.php:52
+msgid "Inventory items lists"
+msgstr "Envanter Listeleri"
+
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:106
+msgid "Name"
+msgstr "İsim"
+
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:160
+msgid "Status"
+msgstr ""
+
+#: Model/InventoryItem.php:85
+msgid "Inventory ID"
+msgstr "Envanter ID"
+
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:129
+msgid "Location"
+msgstr "Yer"
+
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:136
+#: js/InventoryItemEditDialog.js:238
+msgid "Added"
+msgstr "Eklendi"
+
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:230
+msgid "Invoice"
+msgstr "Fatura"
+
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:218
+msgid "Price"
+msgstr "Fiyat"
+
+#: Model/InventoryItem.php:116
+msgid "Cost centre"
+msgstr "Maliyet Merkezi"
+
+#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:244
+msgid "Warranty"
+msgstr "Garanti"
+
+#: Model/InventoryItem.php:126
+msgid "Item added"
+msgstr "Eklenmiştir"
+
+#: Model/InventoryItem.php:131
+msgid "Item removed"
+msgstr "Silinmiştir"
+
+#: Model/InventoryItem.php:136 js/InventoryItemEditDialog.js:258
+msgid "Depreciation"
+msgstr ""
+
+#: Model/InventoryItem.php:141 js/InventoryItemEditDialog.js:264
+msgid "Amortization"
+msgstr ""
+
 #: Config.php:31
 msgid "Inventory Status Available"
 msgstr ""
@@ -24,120 +100,33 @@ msgstr ""
 msgid "Possible status."
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal inventory items"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Envanter"
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr "Sipariş Verilmiştir"
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr "Bulunmaktadır"
+
+#: Setup/Initialize.php:35
+msgid "defect"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:51
-msgid "The active number must be less than or equal total number."
-msgstr ""
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr "Kayıp"
 
-#: js/InventoryItemEditDialog.js:75
-msgid "General"
-msgstr ""
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr "Silinmiştir"
 
-#: js/InventoryItemEditDialog.js:97
-msgid "ID"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:106 Model/InventoryItem.php:71
-msgid "Name"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:116
-msgid "Description"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:121
-msgid "Enter description"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:129 Model/InventoryItem.php:93
-msgid "Location"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:136 js/InventoryItemEditDialog.js:238
-#: Model/InventoryItem.php:97
-msgid "Added"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:144
-msgid "Total number"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:152
-msgid "Active number"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:160 Model/InventoryItem.php:75
-msgid "Status"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:196
-msgid "Accounting"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:218 Model/InventoryItem.php:111
-msgid "Price"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:224
-msgid "Costcentre"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:230 Model/InventoryItem.php:106
-msgid "Invoice"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:244 Model/InventoryItem.php:121
-msgid "Warranty"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:250
-msgid "Removed"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:258 Model/InventoryItem.php:136
-msgid "Depreciation"
-msgstr ""
-
-#: js/InventoryItemEditDialog.js:264 Model/InventoryItem.php:141
-msgid "Amortization"
-msgstr ""
-
-#: Model/InventoryItem.php:48
-msgid "Inventory item"
-msgid_plural "Inventory items"
-msgstr[0] ""
-
-#: Model/InventoryItem.php:49
-msgid "Inventory items"
-msgstr ""
-
-#: Model/InventoryItem.php:51
-msgid "Inventory item list"
-msgstr ""
-
-#: Model/InventoryItem.php:52
-msgid "Inventory items lists"
-msgstr ""
-
-#: Model/InventoryItem.php:85
-msgid "Inventory ID"
-msgstr ""
-
-#: Model/InventoryItem.php:116
-msgid "Cost centre"
-msgstr ""
-
-#: Model/InventoryItem.php:126
-msgid "Item added"
-msgstr ""
-
-#: Model/InventoryItem.php:131
-msgid "Item removed"
-msgstr ""
+#: Setup/Initialize.php:38
+msgid "unkown"
+msgstr "Bilinmiyor"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
@@ -147,30 +136,42 @@ msgstr ""
 msgid "The default container for new items"
 msgstr ""
 
-#: Setup/Initialize.php:33
-msgid "ordered"
+#: js/InventoryItemEditDialog.js:51
+msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr ""
+#: js/InventoryItemEditDialog.js:75
+msgid "General"
+msgstr "Genel"
 
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr ""
+#: js/InventoryItemEditDialog.js:97
+msgid "ID"
+msgstr "ID"
 
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr ""
+#: js/InventoryItemEditDialog.js:116
+msgid "Description"
+msgstr "Açıklama"
 
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr ""
+#: js/InventoryItemEditDialog.js:121
+msgid "Enter description"
+msgstr "Detaylı Bilgi Gir"
 
-#: Setup/Initialize.php:38
-msgid "unkown"
-msgstr ""
+#: js/InventoryItemEditDialog.js:144
+msgid "Total number"
+msgstr "Toplam Sazı"
 
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr ""
+#: js/InventoryItemEditDialog.js:152
+msgid "Active number"
+msgstr "Aktif Sayı"
+
+#: js/InventoryItemEditDialog.js:196
+msgid "Accounting"
+msgstr "Muhasebe"
+
+#: js/InventoryItemEditDialog.js:224
+msgid "Costcentre"
+msgstr "Maliyet Merkezi"
+
+#: js/InventoryItemEditDialog.js:250
+msgid "Removed"
+msgstr "Silinmiştir"

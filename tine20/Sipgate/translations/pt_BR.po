@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:32+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-11-30 14:44+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,244 +16,1598 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr ""
+#: Exception/NoConnection.php:29
+msgid "Could not connect to sipgate."
+msgstr "Não foi possível conectar ao código postal."
 
-#: js/AddressbookGridPanelHook.js:62
-msgid "Compose SMS"
-msgstr ""
+#: Exception/Authorization.php:29
+msgid "Could not authenticate to sipgate."
+msgstr "Não foi possível autenticar o código postal."
 
-#: js/AddressbookGridPanelHook.js:256
-msgid "Work"
-msgstr ""
+#: Exception/ResolveCredentials.php:29
+msgid "Could not resolve account settings."
+msgstr "Não foi possível resolver a configuração da conta."
 
-#: js/AddressbookGridPanelHook.js:266
-msgid "Home"
-msgstr ""
+#: Exception/Backend.php:29
+msgid "General Backend Exception."
+msgstr "Exceção Geral de Suporte."
 
-#: js/AddressbookGridPanelHook.js:276 js/AddressbookGridPanelHook.js:321
-msgid "Cell"
-msgstr ""
+#: Exception/MissingConfig.php:29
+msgid "The configuration is missing."
+msgstr "Não existe a configuração."
 
-#: js/AddressbookGridPanelHook.js:286 js/AddressbookGridPanelHook.js:331
-msgid "Cell private"
-msgstr ""
+#: Acl/Rights.php:94
+msgid "manage accounts"
+msgstr "gerenciar contas"
 
-#: js/CallStateWindow.js:50 js/DialNumberDialog.js:64
-#: js/SearchAddressDialog.js:64 js/SmsEditDialog.js:60
+#: Acl/Rights.php:95
+msgid "enables the account module in the application"
+msgstr "permite o módulo de conta na aplicação"
+
+#: Acl/Rights.php:98
+msgid "sync lines"
+msgstr "sincronizar linhas"
+
+#: Acl/Rights.php:99
+msgid "allows the user to sync the call history"
+msgstr "permite ao usuário sincronizar o histórico de chamadas"
+
+#: Acl/Rights.php:102
+msgid "manage shared accounts"
+msgstr "gerenciar contas compartilhadas"
+
+#: Acl/Rights.php:103
+msgid "add, edit and delete shared accounts"
+msgstr "adcionar, editar e apagar contas compartilhadas"
+
+#: Acl/Rights.php:106
+msgid "manage private accounts"
+msgstr "gerenciar contas privadas"
+
+#: Acl/Rights.php:107
+msgid "add, edit and delete private accounts"
+msgstr "adicionar, editar e apagar contas privadas"
+
+#: Controller.php:95
+msgid "You do not have admin rights on Sales"
+msgstr "Você não tem privilégios de administrador em Vendas"
+
+#: Controller.php:117
+msgid "You do not have admin rights on Sipgate"
+msgstr "Você não tem privilégios de administrador no Código Postal"
+
+#: Config.php:48
+msgid "Connection Status"
+msgstr "Situação da Conexão"
+
+#: Config.php:50
+msgid "Possible connection states"
+msgstr "Possíveis situações de conexão"
+
+#: Config.php:58
+msgid "Connection TOS"
+msgstr "Conexão TOS"
+
+#: Config.php:60
+msgid "Possible connection type of services"
+msgstr "Possível tipo de serviço de conexão"
+
+#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
+msgid "Account Type"
+msgstr "Tipo de Conta"
+
+#: Config.php:70
+msgid ""
+"Private Accounts are editable only for the creating user. Shared accounts "
+"are editable for users with \"edit shared\" rights"
+msgstr "Contas Privadas são editáveis somente para o usuário que as criou. Contas compartilhadas são editáveis para usuários com \"editar compartilhar\" privilégios"
+
+#: Config.php:78
+msgid "Sipgate Account Type"
+msgstr "Código Telefônico do Tipo da Conta"
+
+#: Config.php:80
+msgid "The type of your account as defined in the contract"
+msgstr "O tipo da sua conta está definida no contrato"
+
+#: Setup/Update/Release1.php:50 Setup/Initialize.php:34
+msgid "accepted"
+msgstr "aceito"
+
+#: Setup/Update/Release1.php:51 Setup/Initialize.php:35
+msgid "outgoing"
+msgstr "cessante"
+
+#: Setup/Update/Release1.php:52 Setup/Initialize.php:36
+msgid "missed"
+msgstr "faltou"
+
+#: Setup/Update/Release1.php:66 Setup/Initialize.php:50
+msgid "Telephone Call"
+msgstr "Chamada Telefônica"
+
+#: Setup/Update/Release1.php:67 Setup/Initialize.php:51
+msgid "Facsimile"
+msgstr "Fax"
+
+#: Setup/Update/Release1.php:91 Setup/Initialize.php:65
+msgid "basic/plus"
+msgstr "básico/mais"
+
+#: Setup/Update/Release1.php:92 Setup/Initialize.php:66
+msgid "team"
+msgstr "equipe"
+
+#: Setup/Update/Release1.php:106 Setup/Initialize.php:80
+msgid "private"
+msgstr "privado"
+
+#: Setup/Update/Release1.php:107 Setup/Initialize.php:81
+msgid "shared"
+msgstr "compartilhado"
+
+#: Setup/calling-codes.xml:6
+msgid "+93 (Afghanistan)"
+msgstr "+93 (Afeganistão)"
+
+#: Setup/calling-codes.xml:11
+msgid "+355 (Albania (Republic of))"
+msgstr "+355 (Albânia (República da))"
+
+#: Setup/calling-codes.xml:16
+msgid "+213 (Algeria (People's Democratic Republic of))"
+msgstr "+213 (Argélia (República Democrática Popular da))"
+
+#: Setup/calling-codes.xml:21
+msgid "+1 (American Samoa)"
+msgstr "+1 (Samoa Americana)"
+
+#: Setup/calling-codes.xml:26
+msgid "+376 (Andorra (Principality of))"
+msgstr "+376 (Andorra (Principado de))"
+
+#: Setup/calling-codes.xml:31
+msgid "+244 (Angola (Republic of))"
+msgstr "+244 (Angola (República de))"
+
+#: Setup/calling-codes.xml:36
+msgid "+1 (Anguilla)"
+msgstr "+1 (Antilhas)"
+
+#: Setup/calling-codes.xml:41
+msgid "+1 (Antigua and Barbuda)"
+msgstr "+1 (Antígua e Barbados)"
+
+#: Setup/calling-codes.xml:46
+msgid "+54 (Argentine Republic)"
+msgstr "+54 (República Argentina)"
+
+#: Setup/calling-codes.xml:51
+msgid "+374 (Armenia (Republic of))"
+msgstr "+374 (Armênia (República da))"
+
+#: Setup/calling-codes.xml:56
+msgid "+297 (Aruba)"
+msgstr "+297 (Aruba)"
+
+#: Setup/calling-codes.xml:61
+msgid "+247 (Ascension)"
+msgstr "+247 (Ascensão)"
+
+#: Setup/calling-codes.xml:66
+msgid "+61 (Australia)"
+msgstr "+61 (Austrália)"
+
+#: Setup/calling-codes.xml:71
+msgid "+672 (Australian External Territories)"
+msgstr "+672 (Territórios Externos Australianos)"
+
+#: Setup/calling-codes.xml:76
+msgid "+43 (Austria)"
+msgstr "+43 (Áustria)"
+
+#: Setup/calling-codes.xml:81
+msgid "+994 (Azerbaijani Republic)"
+msgstr "+994 (República do Azerbaijão)"
+
+#: Setup/calling-codes.xml:86
+msgid "+1 (Bahamas (Commonwealth of the))"
+msgstr "+1 (Bahamas (Comunidade das))"
+
+#: Setup/calling-codes.xml:91
+msgid "+973 (Bahrain (Kingdom of))"
+msgstr "+973 (Bahrain (Reino de))"
+
+#: Setup/calling-codes.xml:96
+msgid "+880 (Bangladesh (People's Republic of))"
+msgstr "+880 (Bangladesh (República Popular de))"
+
+#: Setup/calling-codes.xml:101
+msgid "+1 (Barbados)"
+msgstr "+1 (Barbados)"
+
+#: Setup/calling-codes.xml:106
+msgid "+375 (Belarus (Republic of))"
+msgstr "+375 (Belarus (República de))"
+
+#: Setup/calling-codes.xml:111
+msgid "+32 (Belgium)"
+msgstr "+32 (Bélgica)"
+
+#: Setup/calling-codes.xml:116
+msgid "+501 (Belize)"
+msgstr "+501 (Belize)"
+
+#: Setup/calling-codes.xml:121
+msgid "+229 (Benin (Republic of))"
+msgstr "+229 (Benin (República de))"
+
+#: Setup/calling-codes.xml:126
+msgid "+1 (Bermuda)"
+msgstr "+1 (Bermudas)"
+
+#: Setup/calling-codes.xml:131
+msgid "+975 (Bhutan (Kingdom of))"
+msgstr "+975 (Butão (Reino de))"
+
+#: Setup/calling-codes.xml:136
+msgid "+591 (Bolivia (Republic of))"
+msgstr "+591 (Bolívia (República da))"
+
+#: Setup/calling-codes.xml:141
+msgid "+387 (Bosnia and Herzegovina)"
+msgstr "+387 (Bósnia e Herzegovina)"
+
+#: Setup/calling-codes.xml:146
+msgid "+267 (Botswana (Republic of))"
+msgstr "+267 (Botswana (República de))"
+
+#: Setup/calling-codes.xml:151
+msgid "+55 (Brazil (Federative Republic of))"
+msgstr "+55 (Brasil (República Federativa do))"
+
+#: Setup/calling-codes.xml:156
+msgid "+1 (British Virgin Islands)"
+msgstr "+1 (Ilhas Virgens Britânicas)"
+
+#: Setup/calling-codes.xml:161
+msgid "+673 (Brunei Darussalam)"
+msgstr "+673 (Sultanato de Brunei)"
+
+#: Setup/calling-codes.xml:166
+msgid "+359 (Bulgaria (Republic of))"
+msgstr "+359 (Bulgária (República da))"
+
+#: Setup/calling-codes.xml:171
+msgid "+226 (Burkina Faso)"
+msgstr "+226 (Burkina Faso)"
+
+#: Setup/calling-codes.xml:176
+msgid "+257 (Burundi (Republic of))"
+msgstr "+257 (Burundi (República de))"
+
+#: Setup/calling-codes.xml:181
+msgid "+855 (Cambodia (Kingdom of))"
+msgstr "+855 (Camboja (Reino do))"
+
+#: Setup/calling-codes.xml:186
+msgid "+237 (Cameroon (Republic of))"
+msgstr "+237 (Camarões (República de))"
+
+#: Setup/calling-codes.xml:191
+msgid "+1 (Canada)"
+msgstr "+1 (Canadá)"
+
+#: Setup/calling-codes.xml:196
+msgid "+238 (Cape Verde (Republic of))"
+msgstr "+238 (Cabo Verde (República de))"
+
+#: Setup/calling-codes.xml:201
+msgid "+1 (Cayman Islands)"
+msgstr "+1 (Ilhas Cayman)"
+
+#: Setup/calling-codes.xml:206
+msgid "+236 (Central African Republic)"
+msgstr "+236 (República Central Africana)"
+
+#: Setup/calling-codes.xml:211
+msgid "+235 (Chad (Republic of))"
+msgstr "+235 (Chade (República do))"
+
+#: Setup/calling-codes.xml:216
+msgid "+56 (Chile)"
+msgstr "+56 (Chile)"
+
+#: Setup/calling-codes.xml:221
+msgid "+86 (China (People's Republic of))"
+msgstr "+86 (China (República Popular da))"
+
+#: Setup/calling-codes.xml:226
+msgid "+57 (Colombia (Republic of))"
+msgstr "+57 (Colômbia (República da))"
+
+#: Setup/calling-codes.xml:231
+msgid "+269 (Comoros (Union of the))"
+msgstr "+269 (Comoros (União de))"
+
+#: Setup/calling-codes.xml:236
+msgid "+242 (Congo (Republic of the))"
+msgstr "+242 (Congo (República do))"
+
+#: Setup/calling-codes.xml:241
+msgid "+682 (Cook Islands)"
+msgstr "+682 (Ilhas Cook)"
+
+#: Setup/calling-codes.xml:246
+msgid "+506 (Costa Rica)"
+msgstr "+506 (Costa Rica)"
+
+#: Setup/calling-codes.xml:251
+msgid "+225 (Côte d'Ivoire (Republic of))"
+msgstr "+225 (Costa do Marfim (República da))"
+
+#: Setup/calling-codes.xml:256
+msgid "+385 (Croatia (Republic of))"
+msgstr "+385 (Croácia (R0epública da))"
+
+#: Setup/calling-codes.xml:261
+msgid "+53 (Cuba)"
+msgstr "+53 (Cuba)"
+
+#: Setup/calling-codes.xml:266
+msgid "+357 (Cyprus (Republic of))"
+msgstr "+357 (Chipre (República de))"
+
+#: Setup/calling-codes.xml:271
+msgid "+420 (Czech Republic)"
+msgstr "+420 (República Checa)"
+
+#: Setup/calling-codes.xml:276
+msgid "+850 (Democratic People's Republic of Korea)"
+msgstr "+850 (República Popular Democrática da Coréia)"
+
+#: Setup/calling-codes.xml:281
+msgid "+243 (Democratic Republic of the Congo)"
+msgstr "+243 (República Democrática do Congo"
+
+#: Setup/calling-codes.xml:286
+msgid "+670 (Democratic Republic of Timor-Leste)"
+msgstr "+670 (República Democrática do Timor-Leste)"
+
+#: Setup/calling-codes.xml:291
+msgid "+45 (Denmark)"
+msgstr "+45 (Dinamarca)"
+
+#: Setup/calling-codes.xml:296
+msgid "+246 (Diego Garcia)"
+msgstr "+246 (diego Garcia)"
+
+#: Setup/calling-codes.xml:301
+msgid "+253 (Djibouti (Republic of))"
+msgstr "+253 (Dijibuti (República do))"
+
+#: Setup/calling-codes.xml:306
+msgid "+1 (Dominica (Commonwealth of))"
+msgstr "+1 (Dominica (Comunidade de))"
+
+#: Setup/calling-codes.xml:311
+msgid "+1 (Dominican Republic)"
+msgstr "+1 (República Dominicana)"
+
+#: Setup/calling-codes.xml:316
+msgid "+593 (Ecuador)"
+msgstr "+593 (Equador)"
+
+#: Setup/calling-codes.xml:321
+msgid "+20 (Egypt (Arab Republic of))"
+msgstr "+20 (Egito (República Árabe do))"
+
+#: Setup/calling-codes.xml:326
+msgid "+503 (El Salvador (Republic of))"
+msgstr "+503 (El Salvador (República de))"
+
+#: Setup/calling-codes.xml:331
+msgid "+240 (Equatorial Guinea (Republic of))"
+msgstr "+240 (Guiné Equatorial (República de))"
+
+#: Setup/calling-codes.xml:336
+msgid "+291 (Eritrea)"
+msgstr "+291 (Eritréia)"
+
+#: Setup/calling-codes.xml:341
+msgid "+372 (Estonia (Republic of))"
+msgstr "+382 (Estônia (República da))"
+
+#: Setup/calling-codes.xml:346
+msgid "+251 (Ethiopia (Federal Democratic Republic of))"
+msgstr "+251 (Etiópia (República Federal Democrática da))"
+
+#: Setup/calling-codes.xml:351
+msgid "+500 (Falkland Islands (Malvinas))"
+msgstr "+500 (Ilhas Falkland (Malvinas))"
+
+#: Setup/calling-codes.xml:356
+msgid "+298 (Faroe Islands)"
+msgstr "+298 (Ilhas Faro)"
+
+#: Setup/calling-codes.xml:361
+msgid "+679 (Fiji (Republic of))"
+msgstr "+679 (Fiji (República de))"
+
+#: Setup/calling-codes.xml:366
+msgid "+358 (Finland)"
+msgstr "+358 (Finlândia)"
+
+#: Setup/calling-codes.xml:371
+msgid "+33 (France)"
+msgstr "+33 (França)"
+
+#: Setup/calling-codes.xml:376
+msgid "+594 (French Guiana (French Department of))"
+msgstr "+594 (Guiana Francesa (Departamento Francês da))"
+
+#: Setup/calling-codes.xml:381
+msgid "+689 (French Polynesia (Territoire français d'outre-mer))"
+msgstr "+689 (Polinésia Francesa (Território francês d'além-mar))"
+
+#: Setup/calling-codes.xml:386
+msgid "+241 (Gabonese Republic)"
+msgstr "+241 (República do Gabão)"
+
+#: Setup/calling-codes.xml:391
+msgid "+220 (Gambia (Republic of the))"
+msgstr "+220 (Gâmbia (República de))"
+
+#: Setup/calling-codes.xml:396
+msgid "+995 (Georgia)"
+msgstr "+995 (Geórgia)"
+
+#: Setup/calling-codes.xml:401
+msgid "+49 (Germany (Federal Republic of))"
+msgstr "+49 (Alemanha (República Federal da))"
+
+#: Setup/calling-codes.xml:406
+msgid "+233 (Ghana)"
+msgstr "+233 (Gana)"
+
+#: Setup/calling-codes.xml:411
+msgid "+350 (Gibraltar)"
+msgstr "+350 (Gibraltar)"
+
+#: Setup/calling-codes.xml:416
+msgid "+30 (Greece)"
+msgstr "+30 (Grécia)"
+
+#: Setup/calling-codes.xml:421
+msgid "+299 (Greenland (Denmark))"
+msgstr "+299 (Greenland (Dinamarca))"
+
+#: Setup/calling-codes.xml:426
+msgid "+1 (Grenada)"
+msgstr "+1 (Granada)"
+
+#: Setup/calling-codes.xml:431
+msgid "+388 (Group of countries, shared code)"
+msgstr "+388 (Grupo de países, código compartilhado)"
+
+#: Setup/calling-codes.xml:436
+msgid "+590 (Guadeloupe (French Department of))"
+msgstr "+590 (Guadalupe (Departamento Francês de))"
+
+#: Setup/calling-codes.xml:441
+msgid "+1 (Guam)"
+msgstr "+1 (Guam)"
+
+#: Setup/calling-codes.xml:446
+msgid "+502 (Guatemala (Republic of))"
+msgstr "+502 (Guatemala (República da))"
+
+#: Setup/calling-codes.xml:451
+msgid "+224 (Guinea (Republic of))"
+msgstr "+224 (Guiné (República da))"
+
+#: Setup/calling-codes.xml:456
+msgid "+245 (Guinea-Bissau (Republic of))"
+msgstr "+245 (Guiné-Bissau (República de))"
+
+#: Setup/calling-codes.xml:461
+msgid "+592 (Guyana)"
+msgstr "+592 (Guiana)"
+
+#: Setup/calling-codes.xml:466
+msgid "+509 (Haiti (Republic of))"
+msgstr "+509 (Haiti (República do))"
+
+#: Setup/calling-codes.xml:471
+msgid "+504 (Honduras (Republic of))"
+msgstr "+504 (Honduras (República de))"
+
+#: Setup/calling-codes.xml:476
+msgid "+852 (Hong Kong, China)"
+msgstr "+852 (Hong Kong, China)"
+
+#: Setup/calling-codes.xml:481
+msgid "+36 (Hungary (Republic of))"
+msgstr "+36 (Humgria (República da))"
+
+#: Setup/calling-codes.xml:486
+msgid "+354 (Iceland)"
+msgstr "+354 (Islândia)"
+
+#: Setup/calling-codes.xml:491
+msgid "+91 (India (Republic of))"
+msgstr "+91 (Índia (República da))"
+
+#: Setup/calling-codes.xml:496
+msgid "+62 (Indonesia (Republic of))"
+msgstr "+62 (Indonésia (República da))"
+
+#: Setup/calling-codes.xml:501
+msgid "+871 (Inmarsat (Atlantic Ocean-East))"
+msgstr "+871 (Inmarsat (Oceano Atlântico-Este)"
+
+#: Setup/calling-codes.xml:506
+msgid "+874 (Inmarsat (Atlantic Ocean-West))"
+msgstr "+874 (Inmarsat (Oceano Atlântico-Oeste)"
+
+#: Setup/calling-codes.xml:511
+msgid "+873 (Inmarsat (Indian Ocean))"
+msgstr "+873 (Inmarsat (Oceano Índico))"
+
+#: Setup/calling-codes.xml:516
+msgid "+872 (Inmarsat (Pacific Ocean))"
+msgstr "+872 (Inmarsat (Oceano Pacífico))"
+
+#: Setup/calling-codes.xml:521
+msgid "+870 (Inmarsat SNAC)"
+msgstr "+870 (Inmarsat SNAC)"
+
+#: Setup/calling-codes.xml:526
+msgid "+800 (International Freephone Service)"
+msgstr "+800 (Serviço de Telefone Livre Internacional)"
+
+#: Setup/calling-codes.xml:531
+msgid "+881 (International Mobile, shared code)"
+msgstr "+881 (Móvel Internacional, código compartilhado)"
+
+#: Setup/calling-codes.xml:536
+msgid "+882 (International Networks, shared code)"
+msgstr "+882 (Rede Internacional, código compartilhado)"
+
+#: Setup/calling-codes.xml:541
+msgid "+979 (International Premium Rate Service (IPRS))"
+msgstr "+979 (Serviço de Tarifa Premium Internacional (IPRS))"
+
+#: Setup/calling-codes.xml:546
+msgid "+808 (International Shared Cost Service (ISCS))"
+msgstr "+808 (Serviço de Custo Compartilhado Internacional (ISCS))"
+
+#: Setup/calling-codes.xml:551
+msgid "+98 (Iran (Islamic Republic of))"
+msgstr "+98 (Iran (República Islâmica do))"
+
+#: Setup/calling-codes.xml:556
+msgid "+964 (Iraq (Republic of))"
+msgstr "+964 (Iraque (República do))"
+
+#: Setup/calling-codes.xml:561
+msgid "+353 (Ireland)"
+msgstr "+353 (Irlanda)"
+
+#: Setup/calling-codes.xml:566
+msgid "+972 (Israel (State of))"
+msgstr "+972 (Israel (Estado de))"
+
+#: Setup/calling-codes.xml:571
+msgid "+39 (Italy)"
+msgstr "+39 (Itália)"
+
+#: Setup/calling-codes.xml:576
+msgid "+1 (Jamaica)"
+msgstr "+1 (Jamaica)"
+
+#: Setup/calling-codes.xml:581
+msgid "+81 (Japan)"
+msgstr "+81 (Japão)"
+
+#: Setup/calling-codes.xml:586
+msgid "+962 (Jordan (Hashemite Kingdom of))"
+msgstr "+962 (Jordânia (Reino Hashemita do))"
+
+#: Setup/calling-codes.xml:591
+msgid "+7 (Kazakhstan (Republic of))"
+msgstr "+7 (Kazaquistão (República do))"
+
+#: Setup/calling-codes.xml:596
+msgid "+254 (Kenya (Republic of))"
+msgstr "+254 (Quênia (República do))"
+
+#: Setup/calling-codes.xml:601
+msgid "+686 (Kiribati (Republic of))"
+msgstr "+686 (Kiribati (República de))"
+
+#: Setup/calling-codes.xml:606
+msgid "+82 (Korea (Republic of))"
+msgstr "+82 (Coréia (República da))"
+
+#: Setup/calling-codes.xml:611
+msgid "+965 (Kuwait (State of))"
+msgstr "+965 (Kuwait (Estado do))"
+
+#: Setup/calling-codes.xml:616
+msgid "+996 (Kyrgyz Republic)"
+msgstr "+996 (República de Kyrgyz)"
+
+#: Setup/calling-codes.xml:621
+msgid "+856 (Lao People's Democratic Republic)"
+msgstr "+856 (República Democrática Popular do Laos)"
+
+#: Setup/calling-codes.xml:626
+msgid "+371 (Latvia (Republic of))"
+msgstr "+371 (Latvia (República de))"
+
+#: Setup/calling-codes.xml:631
+msgid "+961 (Lebanon)"
+msgstr "+961 (Líbano)"
+
+#: Setup/calling-codes.xml:636
+msgid "+266 (Lesotho (Kingdom of))"
+msgstr "+266 (Lesoto (Reino de))"
+
+#: Setup/calling-codes.xml:641
+msgid "+231 (Liberia (Republic of))"
+msgstr "+231 (Libéria (República da))"
+
+#: Setup/calling-codes.xml:646
+msgid "+218 (Libya (Socialist People's Libyan Arab Jamahiriya))"
+msgstr "+218 (Libia (Nação Árabe Popular Socialista da))"
+
+#: Setup/calling-codes.xml:651
+msgid "+423 (Liechtenstein (Principality of))"
+msgstr "+423 (Liechtenstein (Principado de))"
+
+#: Setup/calling-codes.xml:656
+msgid "+370 (Lithuania (Republic of))"
+msgstr "+370 (Lituania (República da))"
+
+#: Setup/calling-codes.xml:661
+msgid "+352 (Luxembourg)"
+msgstr "+352 (Luxemburgo)"
+
+#: Setup/calling-codes.xml:666
+msgid "+853 (Macao, China)"
+msgstr "+853 (Macau, China)"
+
+#: Setup/calling-codes.xml:671
+msgid "+261 (Madagascar (Republic of))"
+msgstr "+261 (Madagascar (República de))"
+
+#: Setup/calling-codes.xml:676
+msgid "+265 (Malawi)"
+msgstr "+265 (Malawi)"
+
+#: Setup/calling-codes.xml:681
+msgid "+60 (Malaysia)"
+msgstr "+60 (Malásia)"
+
+#: Setup/calling-codes.xml:686
+msgid "+960 (Maldives (Republic of))"
+msgstr "+960 (Maldivas (República das))"
+
+#: Setup/calling-codes.xml:691
+msgid "+223 (Mali (Republic of))"
+msgstr "+223 (Mali (República do))"
+
+#: Setup/calling-codes.xml:696
+msgid "+356 (Malta)"
+msgstr "+356 (Malta)"
+
+#: Setup/calling-codes.xml:701
+msgid "+692 (Marshall Islands (Republic of the))"
+msgstr "+692 (Ilhas Marshall (República das))"
+
+#: Setup/calling-codes.xml:706
+msgid "+596 (Martinique (French Department of))"
+msgstr "+596 (Martinica (Departamento Francês da))"
+
+#: Setup/calling-codes.xml:711
+msgid "+222 (Mauritania (Islamic Republic of))"
+msgstr "+222 (Mauritânia (República Islâmica da))"
+
+#: Setup/calling-codes.xml:716
+msgid "+230 (Mauritius (Republic of))"
+msgstr "+230 (Maurício (República de))"
+
+#: Setup/calling-codes.xml:721
+msgid "+269 (Mayotte)"
+msgstr "+269 (Mayotte)"
+
+#: Setup/calling-codes.xml:726
+msgid "+52 (Mexico)"
+msgstr "+52 (México)"
+
+#: Setup/calling-codes.xml:731
+msgid "+691 (Micronesia (Federated States of))"
+msgstr "+691 (Micronésia (Estados Federados da))"
+
+#: Setup/calling-codes.xml:736
+msgid "+373 (Moldova (Republic of))"
+msgstr "+373 (Moldávia (República da))"
+
+#: Setup/calling-codes.xml:741
+msgid "+377 (Monaco (Principality of))"
+msgstr "+377 (Mônaco (Principado de))"
+
+#: Setup/calling-codes.xml:746
+msgid "+976 (Mongolia)"
+msgstr "+976 (Mongólia)"
+
+#: Setup/calling-codes.xml:751
+msgid "+1 (Montserrat)"
+msgstr "+1 (Montserrat)"
+
+#: Setup/calling-codes.xml:756
+msgid "+212 (Morocco (Kingdom of))"
+msgstr "+212 (Marrocos (Reino do))"
+
+#: Setup/calling-codes.xml:761
+msgid "+258 (Mozambique (Republic of))"
+msgstr "+258 (Moçambique (República de))"
+
+#: Setup/calling-codes.xml:766
+msgid "+95 (Myanmar (Union of))"
+msgstr "+95 (Myanmar (União de))"
+
+#: Setup/calling-codes.xml:771
+msgid "+264 (Namibia (Republic of))"
+msgstr "+264 (Namíbia (República da))"
+
+#: Setup/calling-codes.xml:776
+msgid "+674 (Nauru (Republic of))"
+msgstr "+674 (Nauru (República de))"
+
+#: Setup/calling-codes.xml:781
+msgid "+977 (Nepal)"
+msgstr "+977 (Nepal)"
+
+#: Setup/calling-codes.xml:786
+msgid "+31 (Netherlands (Kingdom of the))"
+msgstr "+31 (Holanda (Reino da))"
+
+#: Setup/calling-codes.xml:791
+msgid "+599 (Netherlands Antilles)"
+msgstr "+599 (Antilhas Holandesas)"
+
+#: Setup/calling-codes.xml:796
+msgid "+687 (New Caledonia (Territoire français d'outre-mer))"
+msgstr "+687 (Nova Caledônia (Território francês d'além-mar))"
+
+#: Setup/calling-codes.xml:801
+msgid "+64 (New Zealand)"
+msgstr "+64 (Nova Zelândia)"
+
+#: Setup/calling-codes.xml:806
+msgid "+505 (Nicaragua)"
+msgstr "+505 (Nicarágua)"
+
+#: Setup/calling-codes.xml:811
+msgid "+227 (Niger (Republic of the))"
+msgstr "+227 (Niger (República do))"
+
+#: Setup/calling-codes.xml:816
+msgid "+234 (Nigeria (Federal Republic of))"
+msgstr "+234 (Nigéria (República Federal da))"
+
+#: Setup/calling-codes.xml:821
+msgid "+683 (Niue)"
+msgstr "+683 (Niue"
+
+#: Setup/calling-codes.xml:826
+msgid "+1 (Northern Mariana Islands (Commonwealth of the))"
+msgstr "+1 (Ilhas Mariana do Norte (Comunidade das))"
+
+#: Setup/calling-codes.xml:831
+msgid "+47 (Norway)"
+msgstr "+47 (Noruega)"
+
+#: Setup/calling-codes.xml:836
+msgid "+968 (Oman (Sultanate of))"
+msgstr "+968 (Oman (Sultanato de))"
+
+#: Setup/calling-codes.xml:841
+msgid "+92 (Pakistan (Islamic Republic of))"
+msgstr "+92 (Paquistão (República Islâmica do))"
+
+#: Setup/calling-codes.xml:846
+msgid "+680 (Palau (Republic of))"
+msgstr "+680 (Palau (Repúbblica de))"
+
+#: Setup/calling-codes.xml:851
+msgid "+507 (Panama (Republic of))"
+msgstr "+507 (República do))"
+
+#: Setup/calling-codes.xml:856
+msgid "+675 (Papua New Guinea)"
+msgstr "+675 (Papua Nova Guiné"
+
+#: Setup/calling-codes.xml:861
+msgid "+595 (Paraguay (Republic of))"
+msgstr "+595 (Paraguai (República do))"
+
+#: Setup/calling-codes.xml:866
+msgid "+51 (Peru)"
+msgstr "+51 (Peru)"
+
+#: Setup/calling-codes.xml:871
+msgid "+63 (Philippines (Republic of the))"
+msgstr "+63 (Filipinas (República das))"
+
+#: Setup/calling-codes.xml:876
+msgid "+48 (Poland (Republic of))"
+msgstr "+48 (Polônia (República da))"
+
+#: Setup/calling-codes.xml:881
+msgid "+351 (Portugal)"
+msgstr "+351 (Portugal)"
+
+#: Setup/calling-codes.xml:886
+msgid "+1 (Puerto Rico)"
+msgstr "+1 (Porto Rico)"
+
+#: Setup/calling-codes.xml:891
+msgid "+974 (Qatar (State of))"
+msgstr "+974 (Catar (Estado do))"
+
+#: Setup/calling-codes.xml:896
+msgid "+262 (Reunion (French Department of))"
+msgstr "+262 (Reunião (Departamento Francês de))"
+
+#: Setup/calling-codes.xml:901
+msgid "+40 (Romania)"
+msgstr "+40 (Rumânia)"
+
+#: Setup/calling-codes.xml:906
+msgid "+7 (Russian Federation)"
+msgstr "+7 (Federação Russa)"
+
+#: Setup/calling-codes.xml:911
+msgid "+250 (Rwanda (Republic of))"
+msgstr "+250 (Ruanda (República de))"
+
+#: Setup/calling-codes.xml:916
+msgid "+290 (Saint Helena)"
+msgstr "+290 (Santa Helena)"
+
+#: Setup/calling-codes.xml:921
+msgid "+1 (Saint Kitts and Nevis)"
+msgstr "+1 (Saint Kitts e Nevis"
+
+#: Setup/calling-codes.xml:926
+msgid "+1 (Saint Lucia)"
+msgstr "+1 (Santa Lucia)"
+
+#: Setup/calling-codes.xml:931
+msgid ""
+"+508 (Saint Pierre and Miquelon (Collectivité territoriale de la République "
+"française))"
+msgstr "+508 (Saint Pierre e Miquelon (Coletividade territorial da República francesa))"
+
+#: Setup/calling-codes.xml:936
+msgid "+1 (Saint Vincent and the Grenadines)"
+msgstr "+1 (Saint Vicent e Grenadines)"
+
+#: Setup/calling-codes.xml:941
+msgid "+685 (Samoa (Independent State of))"
+msgstr "+685 (Samoa (Estado Independente de))"
+
+#: Setup/calling-codes.xml:946
+msgid "+378 (San Marino (Republic of))"
+msgstr "+378 (San Marino (República de))"
+
+#: Setup/calling-codes.xml:951
+msgid "+239 (Sao Tome and Principe (Democratic Republic of))"
+msgstr "+239 (São Tomé e Príncipe (República Democrática de))"
+
+#: Setup/calling-codes.xml:956
+msgid "+966 (Saudi Arabia (Kingdom of))"
+msgstr "+966 (Arábia Saudita (Reino da))"
+
+#: Setup/calling-codes.xml:961
+msgid "+221 (Senegal (Republic of))"
+msgstr "+221 (Senegal (República do))"
+
+#: Setup/calling-codes.xml:966
+msgid "+381 (Serbia and Montenegro)"
+msgstr "+381 (Sérvia e Montenegro)"
+
+#: Setup/calling-codes.xml:971
+msgid "+248 (Seychelles (Republic of))"
+msgstr "+248 (Seychelles (República de))"
+
+#: Setup/calling-codes.xml:976
+msgid "+232 (Sierra Leone)"
+msgstr "+232 (Serra Leoa)"
+
+#: Setup/calling-codes.xml:981
+msgid "+65 (Singapore (Republic of))"
+msgstr "+65 (Singapura (República de))"
+
+#: Setup/calling-codes.xml:986
+msgid "+421 (Slovak Republic)"
+msgstr "+421 (República da Eslováquia)"
+
+#: Setup/calling-codes.xml:991
+msgid "+386 (Slovenia (Republic of))"
+msgstr "+386 (Eslovênia (República da))"
+
+#: Setup/calling-codes.xml:996
+msgid "+677 (Solomon Islands)"
+msgstr "+677 (Ilhas Salomão)"
+
+#: Setup/calling-codes.xml:1001
+msgid "+252 (Somali Democratic Republic)"
+msgstr "+252 (República Democrática da Somália)"
+
+#: Setup/calling-codes.xml:1006
+msgid "+27 (South Africa (Republic of))"
+msgstr "+27 (África do Sul (República da))"
+
+#: Setup/calling-codes.xml:1011
+msgid "+34 (Spain)"
+msgstr "+34 (Espanha)"
+
+#: Setup/calling-codes.xml:1016
+msgid "+94 (Sri Lanka (Democratic Socialist Republic of))"
+msgstr "+94 (Sri Lanka (República Democrática Socialista do))"
+
+#: Setup/calling-codes.xml:1021
+msgid "+249 (Sudan (Republic of the))"
+msgstr "+249 (Sudão (República do))"
+
+#: Setup/calling-codes.xml:1026
+msgid "+597 (Suriname (Republic of))"
+msgstr "+597 (Suriname (República do))"
+
+#: Setup/calling-codes.xml:1031
+msgid "+268 (Swaziland (Kingdom of))"
+msgstr "+268 (Suazilândia (Reino da))"
+
+#: Setup/calling-codes.xml:1036
+msgid "+46 (Sweden)"
+msgstr "+46 (Suécia)"
+
+#: Setup/calling-codes.xml:1041
+msgid "+41 (Switzerland (Confederation of))"
+msgstr "+41 (Suiça (Confederação da))"
+
+#: Setup/calling-codes.xml:1046
+msgid "+963 (Syrian Arab Republic)"
+msgstr "+963 (República Árabe da Síria)"
+
+#: Setup/calling-codes.xml:1051
+msgid "+992 (Tajikistan (Republic of))"
+msgstr "+992 (Tajiquistão (República do))"
+
+#: Setup/calling-codes.xml:1056
+msgid "+255 (Tanzania (United Republic of))"
+msgstr "+255 (Tanzânia (República Unida da))"
+
+#: Setup/calling-codes.xml:1061
+msgid "+66 (Thailand)"
+msgstr "+66 (Tailândia)"
+
+#: Setup/calling-codes.xml:1066
+msgid "+389 (The Former Yugoslav Republic of Macedonia)"
+msgstr "+389 (Antiga República Iugoslava da Macedônia)"
+
+#: Setup/calling-codes.xml:1071
+msgid "+228 (Togolese Republic)"
+msgstr "+228 (República de Togo)"
+
+#: Setup/calling-codes.xml:1076
+msgid "+690 (Tokelau)"
+msgstr "+690 (Tokelau)"
+
+#: Setup/calling-codes.xml:1081
+msgid "+676 (Tonga (Kingdom of))"
+msgstr "+676 (Tonga (Reino de))"
+
+#: Setup/calling-codes.xml:1086
+msgid ""
+"+991 (Trial of a proposed new international telecommunication public "
+"correspondence service, shared code)"
+msgstr "+991 (Julgamento de uma nova proposta de um serviço público de correspondência pública internacional, código compartilhado)"
+
+#: Setup/calling-codes.xml:1091
+msgid "+1 (Trinidad and Tobago)"
+msgstr "+1 (Trinidad e Tobago)"
+
+#: Setup/calling-codes.xml:1096
+msgid "+216 (Tunisia)"
+msgstr "+216 (Tunísia)"
+
+#: Setup/calling-codes.xml:1101
+msgid "+90 (Turkey)"
+msgstr "+90 (Turquia)"
+
+#: Setup/calling-codes.xml:1106
+msgid "+993 (Turkmenistan)"
+msgstr "+993 (Turmenistão)"
+
+#: Setup/calling-codes.xml:1111
+msgid "+1 (Turks and Caicos Islands)"
+msgstr "+1 (Turks e Ilhas Caicos)"
+
+#: Setup/calling-codes.xml:1116
+msgid "+688 (Tuvalu)"
+msgstr "+688 (Tuvalu"
+
+#: Setup/calling-codes.xml:1121
+msgid "+256 (Uganda (Republic of))"
+msgstr "+256 (Uganda (República de))"
+
+#: Setup/calling-codes.xml:1126
+msgid "+380 (Ukraine)"
+msgstr "+380 (Ucrânia)"
+
+#: Setup/calling-codes.xml:1131
+msgid "+971 (United Arab Emirates)"
+msgstr "+971 (Emirados Árabes Unidos)"
+
+#: Setup/calling-codes.xml:1136
+msgid "+44 (United Kingdom of Great Britain and Northern Ireland)"
+msgstr "+44 (Reino Unido da Gran Bretanha e Irlanda do Norte)"
+
+#: Setup/calling-codes.xml:1141
+msgid "+1 (United States of America)"
+msgstr "+1 (Estados Unidos da América)"
+
+#: Setup/calling-codes.xml:1146
+msgid "+1 (United States Virgin Islands)"
+msgstr "+1 (Estados Unidos das Ilhas Virgens)"
+
+#: Setup/calling-codes.xml:1151
+msgid "+878 (Universal Personal Telecommunication Service (UPT))"
+msgstr "+878 (Serviço Universal de Telecomunicação Pessoal (SUP))"
+
+#: Setup/calling-codes.xml:1156
+msgid "+598 (Uruguay (Eastern Republic of))"
+msgstr "+598 (Uruguai (República Oriental do))"
+
+#: Setup/calling-codes.xml:1161
+msgid "+998 (Uzbekistan (Republic of))"
+msgstr "+998 (Uzbequistão (República do))"
+
+#: Setup/calling-codes.xml:1166
+msgid "+678 (Vanuatu (Republic of))"
+msgstr "+678 (Vanuatu (República de))"
+
+#: Setup/calling-codes.xml:1171
+msgid "+39 (Vatican City State)"
+msgstr "+39 (Cidade Estado do Vaticano)"
+
+#: Setup/calling-codes.xml:1176
+msgid "+379 (Vatican City State)"
+msgstr "+379 (Cidade Estado do Vaticano)"
+
+#: Setup/calling-codes.xml:1181
+msgid "+58 (Venezuela (Bolivarian Republic of))"
+msgstr "+58 (Venezuela (República Bolivariana da))"
+
+#: Setup/calling-codes.xml:1186
+msgid "+84 (Viet Nam (Socialist Republic of))"
+msgstr "+84 (Vietnam (República Socialista do))"
+
+#: Setup/calling-codes.xml:1191
+msgid "+681 (Wallis and Futuna (Territoire français d'outre-mer))"
+msgstr "+681 (Wallis e Futuna (Território francês d'além-mar))"
+
+#: Setup/calling-codes.xml:1196
+msgid "+967 (Yemen (Republic of))"
+msgstr "+967 (Iemen (República do))"
+
+#: Setup/calling-codes.xml:1201
+msgid "+260 (Zambia (Republic of))"
+msgstr "+260 (Zâmbia (República de))"
+
+#: Setup/calling-codes.xml:1206
+msgid "+263 (Zimbabwe (Republic of))"
+msgstr "+263 (Zimbabue (República de))"
+
+#: Preference.php:78
+msgid "Your phone"
+msgstr "Seu telefone"
+
+#: Preference.php:79
+msgid "This is your phone"
+msgstr "Este é seu telefone"
+
+#: Preference.php:82
+msgid "Your fax"
+msgstr "Seu fax"
+
+#: Preference.php:83
+msgid "This is your fax"
+msgstr "Este é o seu fax"
+
+#: Preference.php:87
+msgid "Your mobile number"
+msgstr "Seu número de celular"
+
+#: Preference.php:88
+msgid "Used when sending SMS"
+msgstr "Utilizado no envio de SMS"
+
+#: Preference.php:92
+msgid "International calling code"
+msgstr "Código Internacional de chamada"
+
+#: Preference.php:93
+msgid ""
+"Your international calling code (e.g. +1 in the United States, +49 in "
+"Germany)"
+msgstr "Seu código internacional de chamada (p.e. +1 para Estados Unidos, +49 para Alemanha)"
+
+#: js/ConnectionGridPanel.js:81 js/Models.js:341
+msgid "TOS"
+msgstr "TOS"
+
+#: js/ConnectionGridPanel.js:89 js/Models.js:109 js/Models.js:334
+msgid "Status"
+msgstr "Situação"
+
+#: js/ConnectionGridPanel.js:97
+msgid "Remote Number"
+msgstr "Número Remoto"
+
+#: js/ConnectionGridPanel.js:103
+msgid "Local Number"
+msgstr "Número Local"
+
+#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
+msgid "Line"
+msgstr "Linha"
+
+#: js/ConnectionGridPanel.js:116
+msgid "Call started"
+msgstr "Chamada iniciou"
+
+#: js/ConnectionGridPanel.js:123
+msgid "Contact"
+msgstr "Contato"
+
+#: js/ConnectionGridPanel.js:195
+msgid "Save number"
+msgstr "Salvar número"
+
+#: js/ConnectionGridPanel.js:196
+msgid "Adds this number to the Addressbook"
+msgstr "Adicione este número ao Catálogo de Endereços"
+
+#: js/ConnectionGridPanel.js:203 js/LineGridPanel.js:180
+#: js/AccountGridPanel.js:124
+msgid "Dial number"
+msgstr "Chamar o número"
+
+#: js/ConnectionGridPanel.js:204 js/LineGridPanel.js:181
+#: js/AccountGridPanel.js:125
+msgid "Initiates a new outgoing call"
+msgstr "Iniciar uma nova chamada"
+
+#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
+msgid "Add Account"
+msgstr "Adicionar Conta"
+
+#: js/SmsEditDialog.js:67
+msgid "Send"
+msgstr "Enviar"
+
+#: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
+#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
-#: js/CallStateWindow.js:106
-msgid "connecting..."
-msgstr ""
-
-#: js/CallStateWindow.js:144
-msgid "Connecting to: "
-msgstr ""
-
-#: js/DialNumberDialog.js:56 js/DialNumberDialog.js:152
-msgid "Dial Number"
-msgstr ""
-
-#: js/DialNumberDialog.js:72 js/SearchAddressDialog.js:72
-#: js/SmsEditDialog.js:68
+#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
-#: js/DialNumberDialog.js:120
-msgid "Number to call"
-msgstr ""
+#: js/SmsEditDialog.js:112
+msgid "Loading contact..."
+msgstr "Carregando contato..."
 
-#: js/SearchAddressDialog.js:56
+#: js/SmsEditDialog.js:113
+msgid "Sending message..."
+msgstr "Enviando mensagem..."
+
+#: js/SmsEditDialog.js:250
+msgid "Recipient"
+msgstr "Receptor"
+
+#: js/SmsEditDialog.js:259
+msgid "Recipient's phone number"
+msgstr "Número do telefone receptor"
+
+#: js/SmsEditDialog.js:263
+msgid "please choose the recipient's phone number..."
+msgstr "favor escolher o número do telefone receptor..."
+
+#: js/SmsEditDialog.js:267
+msgid "Your phone number"
+msgstr "Seu número de telefone"
+
+#: js/SmsEditDialog.js:270
+msgid "please choose your phone number..."
+msgstr "favor escolher seu número de telefone..."
+
+#: js/SmsEditDialog.js:276
+msgid "The message"
+msgstr "A mensagem"
+
+#: js/SmsEditDialog.js:279
+msgid "enter the text..."
+msgstr "digite o texto..."
+
+#: js/SmsEditDialog.js:302
+msgid "Send message to \"{0}\""
+msgstr "Enviar mensagem para \"{0}\""
+
+#: js/SmsEditDialog.js:302
+msgid "Send message"
+msgstr "Enviar mensagem"
+
+#: js/SearchAddressDialog.js:55
 msgid "Add Number"
-msgstr ""
+msgstr "Adicionar Número"
+
+#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+msgid "Phone"
+msgstr "Telefone"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
-msgid "Phone"
-msgstr ""
+msgid "Mobile"
+msgstr "Móvel"
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
-msgid "Mobile"
-msgstr ""
+#: js/AccountGridPanel.js:55
+msgid "Fax"
+msgstr "Fax"
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
-msgid "Fax"
-msgstr ""
+msgid "Car phone"
+msgstr "Telefone carro"
 
 #: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
-msgid "Car phone"
-msgstr ""
+msgid "Pager"
+msgstr "Pager"
 
 #: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
-msgid "Pager"
-msgstr ""
+msgid "Phone (private)"
+msgstr "Telefone (particular)"
 
 #: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
-msgid "Phone (private)"
-msgstr ""
+msgid "Fax (private)"
+msgstr "Fax (particular)"
 
 #: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
-msgid "Fax (private)"
-msgstr ""
-
-#: js/SearchAddressDialog.js:140 js/SearchAddressDialog.js:162
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Celular (particular)"
+
+#: js/SearchAddressDialog.js:144
+msgid "-- create new --"
+msgstr "-- criar novo --"
 
 #: js/SearchAddressDialog.js:145
-msgid "-- create new --"
-msgstr ""
-
-#: js/SearchAddressDialog.js:146
 msgid "Select existing contact or create a new one"
-msgstr ""
+msgstr "Selecionar um contato existente ou criar um novo"
 
-#: js/SearchAddressDialog.js:181
+#: js/SearchAddressDialog.js:180
 msgid "Choose Device"
-msgstr ""
+msgstr "Escolher Dispositivo"
 
-#: js/SearchAddressDialog.js:214
-msgid "Choose Address"
-msgstr ""
+#: js/SearchAddressDialog.js:211
+msgid "Add number {0} to the addressbook"
+msgstr "Adicionar número {0} ao catálogo de telefone"
 
-#: js/Sipgate.js:30
-msgid "Edit phone settings"
-msgstr ""
+#: js/LineGridPanel.js:82 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
+#: js/AccountEditDialog.js:278
+msgid "Type"
+msgstr "Tipo"
 
-#: js/Sipgate.js:44
-msgid "Sipgate"
-msgstr ""
+#: js/LineGridPanel.js:90 js/AccountFilterModel.js:38
+msgid "Account"
+msgstr "Conta"
 
-#: js/Sipgate.js:55
-msgid "Devices"
-msgstr ""
+#: js/LineGridPanel.js:98
+msgid "User"
+msgstr "Usuário"
 
-#: js/Sipgate.js:154
-msgid "Dial number"
-msgstr ""
+#: js/LineGridPanel.js:105 js/AssignLinesGrid.js:101
+#: js/AccountGridPanel.js:115
+msgid "Uri Alias"
+msgstr "Pseudo Uri"
 
-#: js/Sipgate.js:155
-msgid "Initiates a new outgoing call"
-msgstr ""
+#: js/LineGridPanel.js:111
+msgid "SIP Uri"
+msgstr "Pseudo Uri"
 
-#: js/Sipgate.js:162
-msgid "Add Number to Addressbook"
-msgstr ""
+#: js/LineGridPanel.js:117 js/AssignLinesGrid.js:104
+msgid "Incoming"
+msgstr "Entrada"
 
-#: js/Sipgate.js:163
-msgid "Adds this number to the Addressbook"
-msgstr ""
+#: js/LineGridPanel.js:125 js/AssignLinesGrid.js:103
+msgid "Outgoing"
+msgstr "Saída"
 
-#: js/Sipgate.js:282
-msgid "Calls from"
-msgstr ""
+#: js/LineGridPanel.js:131
+msgid "Created"
+msgstr "Criado"
 
-#: js/Sipgate.js:293
-msgid "Calls to"
-msgstr ""
+#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
+msgid "Synchronize Line"
+msgstr "Sincronizar Linha"
 
-#: js/Sipgate.js:312
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+#: js/LineGridPanel.js:189 js/AccountEditDialog.js:68
+msgid "Synchronize Lines"
+msgstr "Sincronizar Linhas"
 
-#: js/Sipgate.js:313 js/Sipgate.js:398
-msgid "No calls to display"
-msgstr ""
+#: js/LineGridPanel.js:191
+msgid "Synchronizes the selected line(s)"
+msgstr "Sincronize as linha(s) selecionada(s)"
 
-#: js/Sipgate.js:325
-msgid "Status"
-msgstr ""
+#: js/LineGridPanel.js:246
+msgid "Synchronizing..."
+msgstr "Sincronizando..."
 
-#: js/Sipgate.js:335
-msgid "Remote Party"
-msgstr ""
+#: js/AssignLinesGrid.js:57
+msgid "Assign Lines"
+msgstr "Designar Linhas"
 
-#: js/Sipgate.js:340
-msgid "Remote Number"
-msgstr ""
+#: js/AssignLinesGrid.js:99
+msgid "Id"
+msgstr "Id"
 
-#: js/Sipgate.js:345
-msgid "Local Uri"
-msgstr ""
+#: js/AssignLinesGrid.js:102
+msgid "Sip Uri"
+msgstr "Uri do Sip"
 
-#: js/Sipgate.js:350
-msgid "Remote Uri"
-msgstr ""
+#: js/AssignLinesGrid.js:107
+msgid "Assigned User"
+msgstr "Usuário Designado"
 
-#: js/Sipgate.js:357
-msgid "Call started"
-msgstr ""
+#: js/AccountGridPanel.js:54
+msgid "Telephone"
+msgstr "Telefone"
 
-#: js/Sipgate.js:367
-msgid "Call ID"
-msgstr ""
+#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
+msgid "Mobile Number"
+msgstr "Número Móvel"
 
-#: js/Sipgate.js:534
-msgid "unknown Person"
-msgstr ""
+#: js/DialNumberDialog.js:97
+msgid "Ok"
+msgstr "OK"
 
-#: js/Sipgate.js:555
-msgid "Configuration not set"
-msgstr ""
+#: js/DialNumberDialog.js:161
+msgid "Select Line"
+msgstr "Selecionar Linha"
 
-#: js/Sipgate.js:555
-msgid "Please configure the Sipgate application"
-msgstr ""
+#: js/DialNumberDialog.js:166
+msgid "Number to call"
+msgstr "Número a chamar"
 
-#: js/Sipgate.js:620
-msgid "first dial"
-msgstr ""
+#: js/DialNumberDialog.js:171
+msgid "Please use a valid telephone number!"
+msgstr "Favor usar um número de telefone válido"
 
-#: js/Sipgate.js:625
-msgid "second dial"
-msgstr ""
+#: js/DialNumberDialog.js:211
+msgid "Dial Number {0}"
+msgstr "Disque o número {0}"
 
-#: js/Sipgate.js:632
-msgid "established"
-msgstr ""
+#: js/ExceptionHandler.js:18
+msgid ""
+"A general backend error occurred. If this is a permanent error, please "
+"contact your administrator."
+msgstr "Ocorreu um erro geral de suporte. Se esse erro permanecer, favor contactar o administrador"
 
-#: js/Sipgate.js:637
+#: js/ExceptionHandler.js:26
+msgid ""
+"The application could not connect to the sipgate server. If this is a "
+"permanent error, please contact your administrator."
+msgstr "A aplicação não pode se conectar ao servidor de código telefônico."
+
+#: js/ExceptionHandler.js:34
+msgid ""
+"The authentication data provided are not valid. Please configure or contact "
+"your administrator."
+msgstr "O dado fornecido para a autenticação não é válido. Favor configurar ou contactar o administrador"
+
+#: js/ExceptionHandler.js:42
+msgid ""
+"The saved credentials and config data could not be resolved properly. Please"
+" reconfigure or contact your administrator."
+msgstr "As credenciais salvas e os dados de configuração não foram resolvidos adequadamente. Favor reconfigurar ou contactar o administrador."
+
+#: js/ExceptionHandler.js:50
+msgid ""
+"There are missing parameters to connect to sipgate. Please reconfigure or "
+"contact your administrator."
+msgstr "Faltam parâmetros para se conectar ao código telefônico. Favor reconfigure ou contacte o administrador."
+
+#: js/ExceptionHandler.js:60
+msgid ""
+"The account you've configured is already in use. Please contact your "
+"administrator or activate the account again if it's yours."
+msgstr "A conta que você configurou já está em uso. Favor contactar seu administrador ou ative a conta de novo se ela for sua."
+
+#: js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr "A chamada não pode ser continuada. Ligação perdida."
+
+#: js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr "A chamada não pode continuar devido a um erro desconhecido."
+
+#: js/CallStateWindow.js:151
+msgid "Please pick up your phone to get connected to {0}."
+msgstr "Favor pegar seu telefone para se conectar a {0}."
+
+#: js/CallStateWindow.js:155
+msgid "Connecting to {0}."
+msgstr "Conectando a {0}."
+
+#: js/CallStateWindow.js:162
+msgid "Connected to {0}."
+msgstr "Conectado a {0}."
+
+#: js/CallStateWindow.js:167
 msgid "call 1 busy"
-msgstr ""
+msgstr "chamada 1 ocupada"
 
-#: js/Sipgate.js:644
-msgid "call 2 busy"
-msgstr ""
+#: js/CallStateWindow.js:174
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr "Ligação para {0} falhou. {0} está ocupado ou a chamada foi rejeitada."
 
-#: js/Sipgate.js:651
+#: js/CallStateWindow.js:180
 msgid "hungup before other called"
-msgstr ""
+msgstr "desligou antes da outra chamada"
 
-#: js/Sipgate.js:654
+#: js/CallStateWindow.js:183
 msgid "hungup"
+msgstr "desligou"
+
+#: js/CallStateWindow.js:221
+msgid "Initializing call to {0}"
+msgstr "Iniciando chamada para {0}"
+
+#: js/CallStateWindow.js:244
+msgid "Connecting to: "
+msgstr "Conectando a: "
+
+#: js/AccountEditDialog.js:43
+msgid "Validating account..."
+msgstr "Validando a conta..."
+
+#: js/AccountEditDialog.js:44
+msgid "Synchronizing lines..."
+msgstr "Sincronizando linhas..."
+
+#: js/AccountEditDialog.js:60
+msgid "Save Account"
+msgstr "Salvar Conta"
+
+#: js/AccountEditDialog.js:62
+msgid "Saves the account (without closing window)"
+msgstr "Salve a conta (sem fechar a janela)"
+
+#: js/AccountEditDialog.js:70
+msgid ""
+"Synchronizes the selected account (creates or updates the associated lines)"
+msgstr "Sincronize a conta selecionada (crie ou atualize as linhas associadas)"
+
+#: js/AccountEditDialog.js:76
+msgid "Validate Account"
+msgstr "Validar a Conta"
+
+#: js/AccountEditDialog.js:78
+msgid ""
+"Validates the selected account (creates or updates the associated lines)"
+msgstr "Valide a conta selecionada (crie ou atualize as linhas associadas)"
+
+#: js/AccountEditDialog.js:95
+msgid "The account is not saved already!"
+msgstr "A conta ainda não foi salva!"
+
+#: js/AccountEditDialog.js:96
+msgid "Please save yout account before syncing!"
 msgstr ""
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:181
-msgid "Send"
+#: js/AccountEditDialog.js:109
+msgid "The lines have been synced sucessfully!"
+msgstr "As linhas foram sincronizadas com sucesso!"
+
+#: js/AccountEditDialog.js:110
+msgid ""
+"The account has now {0} lines. Go on assigning user accounts to the new "
+"lines in the next tab."
+msgstr "A conta tem {0} linhas agora. Atribua as novas linhas aos usuários de contas na próxima guia."
+
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+msgid "Errors"
+msgstr "Erros"
+
+#: js/AccountEditDialog.js:257
+msgid "Description"
+msgstr "Descrição"
+
+#: js/AccountEditDialog.js:288
+msgid "Sipgate Username"
+msgstr "Nome do usuário do código telefônico"
+
+#: js/AccountEditDialog.js:290
+msgid "Hidden due to security reasons."
+msgstr "Escondido por razões de segurança."
+
+#: js/AccountEditDialog.js:292
+msgid "Password"
+msgstr "Senha"
+
+#: js/AccountEditDialog.js:296
+msgid "Passwort Repeat"
 msgstr ""
 
-#: Preference.php:72
-msgid "Your phone"
-msgstr ""
+#: js/AccountEditDialog.js:302
+msgid "Is Validated"
+msgstr "Validou"
 
-#: Preference.php:73
-msgid "This is your phone"
-msgstr ""
+#: js/AccountEditDialog.js:340
+msgid "Please validate the account settings before saving!"
+msgstr "Favor validar os parâmetros da conta antes de salvar!"
 
-#: Preference.php:76
-msgid "Your fax"
-msgstr ""
+#: js/Models.js:99 js/Models.js:149 js/Models.js:330
+msgid "Quick search"
+msgstr "Pesquisa rápida"
 
-#: Preference.php:77
-msgid "This is your fax"
-msgstr ""
+#: js/Models.js:100
+msgid "Created By"
+msgstr "Criado Por"
 
-#: Preference.php:80
-msgid "Your mobile number"
-msgstr ""
+#: js/Models.js:102
+msgid "Account-Type"
+msgstr "Conta-Tipo"
 
-#: Preference.php:81
-msgid "Used when sending SMS"
-msgstr ""
+#: js/Models.js:151
+msgid "Assigned to"
+msgstr "Atribuído a"
+
+#: js/Models.js:309
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista de registro"
+msgstr[1] "listas de registro"
+
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Chamar contato"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Escrever SMS"
+
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr "Trabalho"
+
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr "Início"
+
+#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr "Celular"
+
+#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr "Celular particular"
+
+#: Controller/Connection.php:242
+msgid "anonymous"
+msgstr "anônimo"

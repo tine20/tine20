@@ -1,0 +1,600 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-28 18:49+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "hallitse johtajia"
+
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "lisää, muokkaa ja poista johtajia"
+
+#: Acl/Rights.php:110
+msgid "manage shared lead folders"
+msgstr "hallitse jaettujen johtajien kansioita"
+
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr "Luo uusi jaettu johtajan kansio"
+
+#: Acl/Rights.php:114
+msgid "manage shared leads favorites"
+msgstr "hallitse jaettujen kansioiden suosikeita"
+
+#: Acl/Rights.php:115
+msgid "Create or update shared leads favorites"
+msgstr "Luo tai päivitä jaettujen johtajien suosikkeja"
+
+#: Controller.php:117
+#, python-format
+msgid "%s's personal leads"
+msgstr ""
+
+#: Controller.php:159 Model/Lead.php:117 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
+#: js/Contact.js:396 js/LeadGridPanel.js:126
+msgid "Customer"
+msgstr "Asiakas"
+
+#: Controller.php:160 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
+#: js/Contact.js:400 js/LeadGridPanel.js:125
+msgid "Partner"
+msgstr "Partneri"
+
+#: Controller.php:161
+msgid "Reseller"
+msgstr "Jälleenmyyjä"
+
+#: Controller.php:164
+msgid "open"
+msgstr ""
+
+#: Controller.php:165
+msgid "contacted"
+msgstr ""
+
+#: Controller.php:166
+msgid "waiting for feedback"
+msgstr "Odottaa yhteydenotto"
+
+#: Controller.php:167
+msgid "quote sent"
+msgstr ""
+
+#: Controller.php:168
+msgid "accepted"
+msgstr "Hyväksytty"
+
+#: Controller.php:169
+msgid "lost"
+msgstr "menetetty"
+
+#: Controller.php:172
+msgid "Market"
+msgstr ""
+
+#: Controller.php:173 Export/Pdf.php:219
+msgid "Email"
+msgstr "Sähköposti"
+
+#: Controller.php:174 Export/Pdf.php:218
+msgid "Telephone"
+msgstr "Puhelin"
+
+#: Controller.php:175
+msgid "Website"
+msgstr "Internetsivu"
+
+#: Model/Lead.php:116 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
+#: js/LeadGridPanel.js:124
+msgid "Responsible"
+msgstr ""
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
+msgid "All leads I have read grants for"
+msgstr ""
+
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "My leads"
+msgstr ""
+
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
+msgstr ""
+
+#: Preference.php:37
+msgid "All leads"
+msgstr ""
+
+#: Preference.php:81
+msgid "Default Lead List"
+msgstr ""
+
+#: Preference.php:82
+msgid "The default list for new leads"
+msgstr ""
+
+#: Preference.php:86
+msgid "Get Notification Emails"
+msgstr ""
+
+#: Preference.php:87
+msgid "The level of actions you want to be notified about."
+msgstr ""
+
+#: Preference.php:91
+msgid "Send Notifications Emails for own actions"
+msgstr ""
+
+#: Preference.php:92
+msgid "Get notifications emails for actions you did yourself"
+msgstr ""
+
+#: Preference.php:95
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:96
+msgid "The default favorite which is loaded on crm startup"
+msgstr ""
+
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr ""
+
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:338 js/LeadGridPanel.js:127
+msgid "Leadstate"
+msgstr ""
+
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
+#: js/LeadEditDialog.js:357
+msgid "Leadtype"
+msgstr ""
+
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:364
+msgid "Leadsource"
+msgstr ""
+
+#: Export/Pdf.php:87 js/Model.js:108 js/LeadGridPanel.js:129
+#: Controller/Lead.php:183
+msgid "Turnover"
+msgstr ""
+
+#: Export/Pdf.php:90 js/Model.js:107 js/LeadEditDialog.js:220
+#: js/LeadGridPanel.js:128 Controller/Lead.php:184
+msgid "Probability"
+msgstr ""
+
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:396
+#: Controller/Lead.php:180
+msgid "Start"
+msgstr "Alku"
+
+#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
+msgid "End"
+msgstr "Loppu"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr ""
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Yhteystiedot"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Osoite"
+
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:243
+msgid "Tasks"
+msgstr ""
+
+#: Export/Pdf.php:252 js/Task.js:176
+msgid "Due Date"
+msgstr ""
+
+#: Export/Pdf.php:259 js/Task.js:189
+msgid "Priority"
+msgstr ""
+
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:254
+msgid "Products"
+msgstr "Tuotteet"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "alhainen"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "normaali"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "korkea"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "tärkeä"
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
+msgstr ""
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
+msgstr ""
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
+msgstr ""
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr ""
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr ""
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr ""
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:73 js/Model.js:49 js/LeadEditDialog.js:269
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr ""
+
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
+msgid "Role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:93
+msgid "Adding {0} contacts to lead"
+msgstr ""
+
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr ""
+
+#: js/Task.js:168
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: js/Task.js:172
+msgid "Add a task..."
+msgstr ""
+
+#: js/Task.js:205
+msgid "Percent"
+msgstr "Prosenttia"
+
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
+msgid "Status"
+msgstr "Tila"
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr ""
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr ""
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr ""
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr ""
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Tuote"
+
+#: js/Product.js:139 js/LeadEditDialog.js:434
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Hinta"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr "Määrä"
+
+#: js/Product.js:185 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr ""
+
+#: js/Product.js:186 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr ""
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
+msgid "Phone"
+msgstr "Puhelin"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Matkapuhelin"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "Sähköposti"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:402
+msgid "Estimated end"
+msgstr ""
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr ""
+
+#: js/Model.js:53
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:53
+msgid "lead lists"
+msgstr ""
+
+#: js/Model.js:103
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Model.js:105 js/LeadGridPanel.js:123
+msgid "Lead name"
+msgstr ""
+
+#: js/Model.js:110
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Model.js:111
+msgid "Last Modified By"
+msgstr "Muokkasi viimeksi"
+
+#: js/Model.js:112
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Model.js:113
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/Model.js:152
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Asetus"
+msgstr[1] "Asetukset"
+
+#: js/Model.js:156
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadEditDialog.js:244
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:255
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:296
+msgid "Enter short name"
+msgstr ""
+
+#: js/LeadEditDialog.js:380
+msgid "Expected turnover"
+msgstr ""
+
+#: js/LeadEditDialog.js:448
+msgid "Enter description"
+msgstr ""
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr ""
+
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr ""
+
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr ""
+
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr ""
+
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr ""
+
+#: js/Contact.js:222
+msgid "Name"
+msgstr "Nimi"
+
+#: js/Contact.js:242
+msgid "Data"
+msgstr "Tiedot"
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Matkapuhelin"
+
+#: js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Muokkaa {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Muokkaa valittuja {0}"
+
+#: js/LeadGridPanel.js:121
+msgid "Lead id"
+msgstr ""
+
+#: js/LeadGridPanel.js:122
+msgid "Tags"
+msgstr ""
+
+#: js/LeadGridPanel.js:130
+msgid "Probable Turnover"
+msgstr ""
+
+#: js/LeadGridPanel.js:172
+msgid "Export Lead"
+msgstr ""
+
+#: js/LeadGridPanel.js:181
+msgid "Export as PDF"
+msgstr ""
+
+#: js/LeadGridPanel.js:188
+msgid "Export as CSV"
+msgstr ""
+
+#: js/LeadGridPanel.js:195
+msgid "Export as ODS"
+msgstr ""
+
+#: js/LeadGridPanel.js:202
+msgid "Export as XLS"
+msgstr ""
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr ""
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr ""
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "Lähde"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "Arvioitu päättyminen"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "Kansio"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "Päivitetty"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "Päivitetyt kentät:"
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr ""
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Johtaja %s on vaihdettu"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Johtaja %s on luotu"

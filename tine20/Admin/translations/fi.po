@@ -1,0 +1,1067 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-28 18:23+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:185
+msgid "manage access log"
+msgstr "hallitse kirjautumislokia"
+
+#: Acl/Rights.php:186
+msgid "delete access log entries"
+msgstr "poista kirjautumisloki tiedot"
+
+#: Acl/Rights.php:189
+msgid "manage accounts"
+msgstr "hallitse käyttäjätilejä"
+
+#: Acl/Rights.php:190
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "lisää ja muokkaa käyttäjiä, ryhmiä ja ryhmien jäseniä sekä muuta salasanoja"
+
+#: Acl/Rights.php:193
+msgid "manage applications"
+msgstr "hallitse sovelluksia"
+
+#: Acl/Rights.php:194
+msgid "enable and disable applications, edit application settings"
+msgstr "ota käyttöön ja poista käytöstä ohjelmia sekä muokkaa ohjelmien asetuksia"
+
+#: Acl/Rights.php:197
+msgid "manage roles"
+msgstr "hallitse rooleja"
+
+#: Acl/Rights.php:198
+msgid ""
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "lisää ja muokkaa rooleja ja uusia jäseniä rooleissa, ohjelmissa ja oikeuksia niissä"
+
+#: Acl/Rights.php:201
+msgid "manage shared tags"
+msgstr ""
+
+#: Acl/Rights.php:202
+msgid "add, delete and edit shared tags"
+msgstr ""
+
+#: Acl/Rights.php:205
+msgid "manage computers"
+msgstr "hallitse tietokoneita"
+
+#: Acl/Rights.php:206
+msgid "add, delete and edit (samba) computers"
+msgstr "lisää, poista ja muokkaa (samba) tietokoneita"
+
+#: Acl/Rights.php:209
+msgid "manage containers"
+msgstr "hallitse tallustiloja"
+
+#: Acl/Rights.php:210
+msgid "add, delete and edit containers and manage container grants"
+msgstr "lisää, poista ja muokkaa tallennustiloja sekä niiden oikeuksia"
+
+#: Acl/Rights.php:213
+msgid "view access log"
+msgstr "näytä kirjautumisloki"
+
+#: Acl/Rights.php:214
+msgid "view access log list"
+msgstr "näytä kirjautumisloki lista"
+
+#: Acl/Rights.php:217
+msgid "view accounts"
+msgstr "näytä käytäjätilit"
+
+#: Acl/Rights.php:218
+msgid "view accounts list and details"
+msgstr "näytä käyttäjätilit ja tiedot"
+
+#: Acl/Rights.php:221
+msgid "view applications"
+msgstr "näytä sovellukset"
+
+#: Acl/Rights.php:222
+msgid "view applications list and details"
+msgstr "näytä sovellukset lista ja tiedot"
+
+#: Acl/Rights.php:225
+msgid "view roles"
+msgstr "näytä roolit"
+
+#: Acl/Rights.php:226
+msgid "view roles list and details"
+msgstr "näytä roolit ja tiedot"
+
+#: Acl/Rights.php:229
+msgid "view computers"
+msgstr "näytä tietokoneet"
+
+#: Acl/Rights.php:230
+msgid "view computers list and details"
+msgstr "näytä tietokoneet lista ja tiedot"
+
+#: Acl/Rights.php:233
+msgid "view containers"
+msgstr "näytä tallennustilat"
+
+#: Acl/Rights.php:234
+msgid "view personal and shared containers"
+msgstr "näytä henkiläkohtaiset ja jaetut tallennustilat"
+
+#: Config.php:33 Config.php:35
+msgid "Default IMAP user settings"
+msgstr "Oletus IMAP käyttäjä asetukset"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Oletus osoitekirja uusille yhteystiedoille ja ryhmille"
+
+#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Käyttäjä"
+msgstr[1] "Käyttäjät"
+
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Ryhmät"
+
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Roolit"
+
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Tietokoneet"
+
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Ohjelmat"
+
+#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Kirjautumisloki"
+msgstr[1] "Kirjautumislokit"
+
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr ""
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr ""
+
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr ""
+
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr "Palvelimen tiedot"
+
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Ylläpitäjä"
+
+#: js/Admin.js:254
+msgid "Refresh"
+msgstr "Päivitä"
+
+#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr "Tietokoneen nimi"
+
+#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
+#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
+#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
+#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
+#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
+msgid "ID"
+msgstr "Tunnus"
+
+#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
+#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
+#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
+#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
+#: js/customfield/GridPanel.js:72
+msgid "Name"
+msgstr "Nimi"
+
+#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
+#: js/customfield/GridPanel.js:131
+msgid "Confirm"
+msgstr "Vahvista"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr ""
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr ""
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr ""
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr ""
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr ""
+
+#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
+msgid "Search:"
+msgstr "Hae:"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr ""
+
+#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
+msgid "Color"
+msgstr "Väri"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr ""
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr ""
+
+#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
+#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: js/Roles.js:69 js/RoleEditDialog.js:136
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr "Lisää rooli"
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr "Muokkaa roolia"
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr "Poista rooli"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr ""
+
+#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Please wait"
+msgstr "Odota hetki"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr ""
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr ""
+
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+msgid "Errors"
+msgstr "Virheet"
+
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
+msgid "Please fix the errors noted."
+msgstr "Korjaa löytyneet virheet."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Ryhmän nimi"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
+msgid "Visibility"
+msgstr "Näkyvyys"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
+msgid "Display in addressbook"
+msgstr "Näytä osoitekirjassa"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
+msgid "Hide from addressbook"
+msgstr "Älä näytä osoitekirjassa"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
+msgid "Saved in Addressbook"
+msgstr "Tallennettu osoitekirjaan"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Ryhmän jäsenet"
+
+#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
+msgid "Transferring {0}..."
+msgstr "Siirretään {0}..."
+
+#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Ryhmä"
+msgstr[1] "Ryhmät"
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Lisää uusi ryhmä"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Muokkaa ryhmää \"{0}\""
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Asetukset"
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr "Aktivoi ohjelma"
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr "Poista ohjelma käytöstä"
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr "Asetukset"
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "Ota ohjelma käyttöön"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "Poista ohjelma käytöstä"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "asetukset"
+
+#: js/Applications.js:228 js/user/EditDialog.js:873
+msgid "disabled"
+msgstr "pois käytöstä"
+
+#: js/Applications.js:231 js/user/EditDialog.js:872
+msgid "enabled"
+msgstr "käytössä"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "tuntematon tila ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Näytetään ohjelmat {0} - {1} - {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Ei ohjelmia näytettäväksi"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Järjestys"
+
+#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Tila"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Versio"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Haluatko poistaa valitut ryhmät?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Poistetaan ryhmiä..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Ryhmien poistossa havaittu virheitä."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr "Lisää ryhmä"
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr "Muokkaa ryhmää"
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr "Poista ryhmä"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Näytetään ryhmät {0} - {1} - {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Ei ryhmiä"
+
+#: js/AccessLog.js:106 js/AccessLog.js:132
+msgid "IP Address"
+msgstr "IP Osoite"
+
+#: js/AccessLog.js:108 js/AccessLog.js:133
+msgid "Login Time"
+msgstr "Kirjautumisaika"
+
+#: js/AccessLog.js:109 js/AccessLog.js:134
+msgid "Logout Time"
+msgstr "Ulos kirjautumisaika"
+
+#: js/AccessLog.js:110 js/AccessLog.js:136
+msgid "Client Type"
+msgstr "Asiakas tyyppi"
+
+#: js/AccessLog.js:129
+msgid "Session ID"
+msgstr "Yhteyden tunnus"
+
+#: js/AccessLog.js:130
+msgid "Login Name"
+msgstr "Kirjautumis nimi"
+
+#: js/AccessLog.js:135
+msgid "Result"
+msgstr "Tulokset"
+
+#: js/AccessLog.js:156
+msgid "user blocked"
+msgstr "käyttäjä estetty"
+
+#: js/AccessLog.js:160
+msgid "password expired"
+msgstr "salasana umpeutunut"
+
+#: js/AccessLog.js:164
+msgid "user disabled"
+msgstr "käyttäjä poistettu"
+
+#: js/AccessLog.js:168
+msgid "invalid password"
+msgstr "virheellinen salasana"
+
+#: js/AccessLog.js:172
+msgid "ambiguous username"
+msgstr ""
+
+#: js/AccessLog.js:176
+msgid "user not found"
+msgstr "käyttäjää ei löydy"
+
+#: js/AccessLog.js:180
+msgid "failure"
+msgstr "virhe"
+
+#: js/AccessLog.js:184
+msgid "success"
+msgstr "onnistui"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr ""
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr ""
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr ""
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr ""
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr ""
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr ""
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr ""
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Roolin tallennus ei onnistunut."
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Poistetaan rooli..."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Oikeudet"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Jäsenet"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Roolin nimi"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "Rooli"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Lisää uusi rooli"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr ""
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Tietokone"
+msgstr[1] "Tietokoneet"
+
+#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
+#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
+#: js/Models.js:128
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Ohjelma"
+msgstr[1] "Ohjelmat"
+
+#: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
+#: js/customfield/GridPanel.js:75
+msgid "Model"
+msgstr "Malli"
+
+#: js/container/EditDialog.js:156 js/container/GridPanel.js:73
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:73
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/container/EditDialog.js:157
+msgid "personal"
+msgstr "henkilökohtainen"
+
+#: js/container/EditDialog.js:157
+msgid "shared"
+msgstr "jaettu"
+
+#: js/container/EditDialog.js:176
+msgid "Note for Owner"
+msgstr "Huomautus käytäjälle"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr ""
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:726
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr ""
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:848
+msgid "Primary group"
+msgstr ""
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr ""
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr ""
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr ""
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr ""
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr ""
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Kirjautumisaika"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:959
+#: js/user/EditDialog.js:963
+msgid "never logged in"
+msgstr "ei koskaan kirjautunut sisään"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Kotipolku"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Uloskirjautumisaika"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "ei koskaan kirjautunut ulos"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Profiilin polku"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Salasana asetettu viimeksi"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:907
+#: js/user/EditDialog.js:967
+msgid "never"
+msgstr "ei koskaan"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr ""
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "Salasana voidaan vaihtaa"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "ei asetettu"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "Salasana on vaihdettava"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr "IMAP Tila (MB)"
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Tila"
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr "tilaa ei asetettu"
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "Nykyinen sähköpostilaatikon koko"
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:942
+msgid "Information"
+msgstr "Tiedot"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Edellinen kirjautuminen"
+
+#: js/user/EditDialog.js:611
+msgid "Domain not allowed"
+msgstr ""
+
+#: js/user/EditDialog.js:612
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr ""
+
+#: js/user/EditDialog.js:621
+msgid "Email Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:627
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/user/EditDialog.js:645
+msgid "Forwarding to self"
+msgstr ""
+
+#: js/user/EditDialog.js:646
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:655
+msgid "Email Forward"
+msgstr "Sähköpostin uudelleen ohjaus"
+
+#: js/user/EditDialog.js:661
+msgid "Add a forward address..."
+msgstr "Lisää osoite johon sähköpostit ohjataan..."
+
+#: js/user/EditDialog.js:674
+msgid "Forward Only"
+msgstr "Uudelleen ohjaus ainoastaan"
+
+#: js/user/EditDialog.js:693
+msgid "Password confirmation"
+msgstr "Salasanan vahvistaminen"
+
+#: js/user/EditDialog.js:710
+msgid "Repeat password"
+msgstr "Toista salasana"
+
+#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: js/user/EditDialog.js:736
+msgid "Ok"
+msgstr "Ok"
+
+#: js/user/EditDialog.js:771
+msgid "Account"
+msgstr "Käyttäjätili"
+
+#: js/user/EditDialog.js:786 js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Etunimi"
+
+#: js/user/EditDialog.js:796 js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Sukunimi"
+
+#: js/user/EditDialog.js:801 js/user/EditDialog.js:843
+#: js/user/GridPanel.js:178
+msgid "Login name"
+msgstr "Kirjautumisnimi"
+
+#: js/user/EditDialog.js:806
+msgid "Password"
+msgstr "Salasana"
+
+#: js/user/EditDialog.js:836 js/user/GridPanel.js:181
+msgid "Email"
+msgstr "Sähköpostiosoite"
+
+#: js/user/EditDialog.js:842 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr ""
+
+#: js/user/EditDialog.js:874
+msgid "expired"
+msgstr "päättynyt"
+
+#: js/user/EditDialog.js:875
+msgid "blocked"
+msgstr "estetty"
+
+#: js/user/EditDialog.js:882
+msgid "Invalid Status"
+msgstr "Virheellinen tila"
+
+#: js/user/EditDialog.js:883
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:905 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Päättynyt"
+
+#: js/user/EditDialog.js:957 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Viimeksi kirjautunut"
+
+#: js/user/EditDialog.js:959 js/user/EditDialog.js:963
+msgid "don't know"
+msgstr "ei tiedossa"
+
+#: js/user/EditDialog.js:961 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Viimeksi kirjautunut "
+
+#: js/user/EditDialog.js:965
+msgid "Password set"
+msgstr ""
+
+#: js/user/EditDialog.js:972
+msgid "User groups"
+msgstr "Käyttäjä ryhmät"
+
+#: js/user/EditDialog.js:978
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:984
+msgid "Fileserver"
+msgstr "Tiedostopalvelin"
+
+#: js/user/EditDialog.js:990
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:999
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "Enable Account"
+msgstr "Aktivoi käyttäjätili"
+
+#: js/user/GridPanel.js:66
+msgid "Disable Account"
+msgstr "Poista käyttäjätili käytöstä"
+
+#: js/user/GridPanel.js:76
+msgid "Reset Password"
+msgstr "Nollaa salasana"
+
+#: js/user/GridPanel.js:177
+msgid "Display name"
+msgstr "Näyttönimi"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Salasanan muuttaminen"
+
+#: js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Aseta uusi salasana"
+
+#: js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Kirjoita uusi salasana: "
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Käyttäjät"
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba käyttäjä"
+msgstr[1] "Samba käyttäjät"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Sähköposti käyttäjä"
+msgstr[1] "Sähköposti käyttäjät"
+
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Muokattava kenttä"
+msgstr[1] "Muokattavat kentät"
+
+#: js/customfield/EditDialog.js:137
+msgid "Please configure store for this field type"
+msgstr ""
+
+#: js/customfield/EditDialog.js:244
+msgid "Default"
+msgstr "Oletus"
+
+#: js/customfield/EditDialog.js:288
+msgid "Add a New ID..."
+msgstr "Lisää uusi tunnus..."
+
+#: js/customfield/EditDialog.js:292
+msgid "Value"
+msgstr "Arvo"
+
+#: js/customfield/EditDialog.js:297
+msgid "Add a New Value..."
+msgstr "Lisää uusi arvo..."
+
+#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+msgid "Error"
+msgstr "Virhe"
+
+#: js/customfield/EditDialog.js:307
+msgid "ID already exists"
+msgstr "Tunnus jo olemassa"
+
+#: js/customfield/EditDialog.js:313
+msgid "Value already exists"
+msgstr "Arvo jo olemassa"
+
+#: js/customfield/EditDialog.js:407
+msgid "Record Class"
+msgstr ""
+
+#: js/customfield/EditDialog.js:432
+msgid "Given record class not found"
+msgstr ""
+
+#: js/customfield/EditDialog.js:465
+msgid "OK"
+msgstr "Ok"
+
+#: js/customfield/EditDialog.js:504
+msgid "Configure store"
+msgstr ""
+
+#: js/customfield/EditDialog.js:561
+msgid "Custom field definition"
+msgstr "Muokattavan kentän kuvaus"
+
+#: js/customfield/EditDialog.js:572
+msgid "Text"
+msgstr "Teksti"
+
+#: js/customfield/EditDialog.js:573
+msgid "Number"
+msgstr "Numero"
+
+#: js/customfield/EditDialog.js:574
+msgid "Date"
+msgstr "Päivä"
+
+#: js/customfield/EditDialog.js:575
+msgid "DateTime"
+msgstr "PäiväAika"
+
+#: js/customfield/EditDialog.js:576
+msgid "Time"
+msgstr "Aika"
+
+#: js/customfield/EditDialog.js:577
+msgid "Boolean"
+msgstr "Boolean"
+
+#: js/customfield/EditDialog.js:578
+msgid "Search Combo"
+msgstr ""
+
+#: js/customfield/EditDialog.js:579
+msgid "Key Field"
+msgstr ""
+
+#: js/customfield/EditDialog.js:580
+msgid "Record"
+msgstr ""
+
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
+msgid "Label"
+msgstr ""
+
+#: js/customfield/EditDialog.js:608
+msgid "Length"
+msgstr "Pituus"
+
+#: js/customfield/EditDialog.js:613
+msgid "Required"
+msgstr "Vaaditaan"
+
+#: js/customfield/EditDialog.js:620
+msgid "Custom field additional properties"
+msgstr ""
+
+#: js/customfield/EditDialog.js:653
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+#: js/customfield/GridPanel.js:131
+msgid "Restart application to apply new customfields?"
+msgstr "Käynnistä sovellus uudestaan ottaaksesi käyttään uudet kentät?"
+
+#: Controller/Container.php:198
+msgid "Your container has been changed"
+msgstr "Tallennustilaasi on muokattu "
+
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Tallennustilaasi on muutettu %1$s %2$sHuom: %3$s"

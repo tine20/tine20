@@ -1,0 +1,968 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-28 17:10+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:96
+msgid "manage shared calendars"
+msgstr "hallitse jaettuja kalentereita"
+
+#: Acl/Rights.php:97
+msgid "Create new shared calendars"
+msgstr "Luo uusi jaettu kalenteri"
+
+#: Acl/Rights.php:100
+msgid "manage shared calendars favorites"
+msgstr "hallitse jaettujen kalenterien suosikkeja"
+
+#: Acl/Rights.php:101
+msgid "Create or update shared calendars favorites"
+msgstr "Luo tai päivitä jaettu kalenterin suosikki"
+
+#: Acl/Rights.php:104
+msgid "manage resources"
+msgstr "hallitse resursseja"
+
+#: Acl/Rights.php:105
+msgid "All Rights to administrate resources"
+msgstr ""
+
+#: Controller.php:109
+#, python-format
+msgid "%s's personal calendar"
+msgstr ""
+
+#: Model/Attender.php:170
+msgid "unknown"
+msgstr ""
+
+#: Model/Attender.php:446
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+#: Model/Event.php:285
+msgid "Start"
+msgstr ""
+
+#: Model/Event.php:286 js/RrulePanel.js:321
+msgid "End"
+msgstr ""
+
+#: Model/Event.php:287 js/GridView.js:127 js/EventDetailsPanel.js:262
+msgid "Blocking"
+msgstr ""
+
+#: Model/Event.php:288
+msgid "Classification"
+msgstr ""
+
+#: Model/Event.php:289 js/GridView.js:161 js/ResourceEditDialog.js:72
+#: js/Model.js:198 js/EventEditDialog.js:251
+msgid "Description"
+msgstr ""
+
+#: Model/Event.php:290 js/GridView.js:148 js/EventDetailsPanel.js:272
+#: js/Model.js:197 js/EventEditDialog.js:121 js/ResourcesGridPanel.js:52
+msgid "Location"
+msgstr ""
+
+#: Model/Event.php:291 js/GridView.js:154 js/PerspectiveCombo.js:112
+#: js/EventDetailsPanel.js:276 js/Model.js:217 js/EventEditDialog.js:295
+msgid "Organizer"
+msgstr ""
+
+#: Model/Event.php:292
+msgid "Priority"
+msgstr ""
+
+#: Model/Event.php:293 js/GridView.js:171 js/AddToEventPanel.js:88
+#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:173
+msgid "Status"
+msgstr "Tila"
+
+#: Model/Event.php:294 js/GridView.js:143 js/Model.js:196
+#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:76
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: Model/Event.php:295
+msgid "Url"
+msgstr ""
+
+#: Model/Event.php:296
+msgid "Recurrance rule"
+msgstr ""
+
+#: Model/Event.php:297
+msgid "Is all day event"
+msgstr "Koko päivän tapahtuma"
+
+#: Model/Event.php:298
+msgid "Organizer timezone"
+msgstr "Järjestäjän aikavyöhyke"
+
+#: Model/Event.php:323
+msgid "No"
+msgstr "Ei"
+
+#: Model/Event.php:323
+msgid "Yes"
+msgstr "Kyllä"
+
+#: Config.php:45
+msgid "Fixed Calendars"
+msgstr "Kiinteät kalenterit"
+
+#: Config.php:47
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
+msgstr ""
+
+#: Config.php:55
+msgid "Attendee Status Available"
+msgstr ""
+
+#: Config.php:57
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:65
+msgid "Attendee Roles Available"
+msgstr ""
+
+#: Config.php:67
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalenteri"
+msgstr[1] "Kalenterit"
+
+#: Setup/Update/Release5.php:77 Setup/Initialize.php:98
+msgid "Required"
+msgstr "Vaaditaan"
+
+#: Setup/Update/Release5.php:78 Setup/Initialize.php:99
+msgid "Optional"
+msgstr "Optio"
+
+#: Setup/Update/Release5.php:91 Setup/Initialize.php:112
+msgid "No response"
+msgstr "Ei vastausta"
+
+#: Setup/Update/Release5.php:92 Setup/Initialize.php:113
+msgid "Accepted"
+msgstr "Hyväksytty"
+
+#: Setup/Update/Release5.php:93 Setup/Initialize.php:114
+msgid "Declined"
+msgstr "Takaraja"
+
+#: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:193
+msgid "Tentative"
+msgstr "Alustava"
+
+#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
+msgid "All events I attend"
+msgstr ""
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr ""
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr ""
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr "Olen järjestäjä"
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr ""
+
+#: Preference.php:31
+msgid "All my events"
+msgstr "Kaikki tapahtumani"
+
+#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:252
+#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:127
+msgid "Start Time"
+msgstr "Aloitusaika"
+
+#: Preference.php:92
+msgid "Position on the left time axis, day and week view should start with"
+msgstr ""
+
+#: Preference.php:95
+msgid "Default Calendar"
+msgstr "Oletus kalenteri"
+
+#: Preference.php:96
+msgid "The default calendar for invitations and new events"
+msgstr ""
+
+#: Preference.php:99
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:100
+msgid "The default favorite which is loaded on calendar startup"
+msgstr ""
+
+#: Preference.php:103
+msgid "Get Notification Emails"
+msgstr "Vastaanota ilmoitukset sähköpostilla"
+
+#: Preference.php:104
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers"
+" unless this preference is set to \"Never\""
+msgstr ""
+
+#: Preference.php:107
+msgid "Send Notifications Emails of own Actions"
+msgstr ""
+
+#: Preference.php:108
+msgid "Get notifications emails for actions you did yourself"
+msgstr ""
+
+#: Preference.php:111
+msgid "Enable Standard Alarm"
+msgstr ""
+
+#: Preference.php:112
+msgid "New events get a standard alarm as defined below"
+msgstr ""
+
+#: Preference.php:115
+msgid "Standard Alarm Time"
+msgstr ""
+
+#: Preference.php:116
+msgid "Minutes before the event starts"
+msgstr ""
+
+#: Preference.php:169
+msgid "Never"
+msgstr "Ei koskaan"
+
+#: Preference.php:169
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:169
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:169
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:169
+msgid "On attendee responses too"
+msgstr ""
+
+#: js/Calendar.js:29 js/MonthView.js:81 js/DaysView.js:88
+msgid "New Event"
+msgstr "Uusi tapahtuma"
+
+#: js/AdminPanel.js:45
+msgid "Manage Resources"
+msgstr ""
+
+#: js/GridView.js:94 js/EventEditDialog.js:207
+msgid "Private"
+msgstr ""
+
+#: js/GridView.js:102
+msgid "Tags"
+msgstr ""
+
+#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:141
+msgid "End Time"
+msgstr ""
+
+#: js/GridView.js:121 js/Printer/Base.js:66 js/EventEditDialog.js:135
+#: js/SearchCombo.js:201
+msgid "whole day"
+msgstr ""
+
+#: js/ResourceEditDialog.js:56 js/AttendeeGridPanel.js:178
+#: js/ResourcesGridPanel.js:41
+msgid "Name"
+msgstr "Nimi"
+
+#: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
+msgid "Email"
+msgstr ""
+
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
+msgid "Is a location"
+msgstr ""
+
+#: js/ResourceEditDialog.js:73
+msgid "Enter description..."
+msgstr ""
+
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:177
+msgid "non-blocking"
+msgstr ""
+
+#: js/AddToEventPanel.js:35
+msgid "Please choose the Event to add the contacts to"
+msgstr ""
+
+#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:102
+msgid "Role"
+msgstr "Rooli"
+
+#: js/AddToEventPanel.js:79
+msgid "Select Role"
+msgstr "Valitse rooli"
+
+#: js/AddToEventPanel.js:89
+msgid "Select Status"
+msgstr "Valitse tila"
+
+#: js/AddToEventPanel.js:109
+msgid "Adding {0} Attendee to event"
+msgstr ""
+
+#: js/RrulePanel.js:28
+msgid "Recurrances"
+msgstr ""
+
+#: js/RrulePanel.js:36
+msgid "No recurring rule defined"
+msgstr ""
+
+#: js/RrulePanel.js:72
+msgid "None"
+msgstr ""
+
+#: js/RrulePanel.js:79
+msgid "Daily"
+msgstr ""
+
+#: js/RrulePanel.js:86
+msgid "Weekly"
+msgstr ""
+
+#: js/RrulePanel.js:93
+msgid "Monthly"
+msgstr ""
+
+#: js/RrulePanel.js:100
+msgid "Yearly"
+msgstr ""
+
+#: js/RrulePanel.js:178
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr ""
+
+#: js/RrulePanel.js:240
+msgid "at"
+msgstr ""
+
+#: js/RrulePanel.js:252
+msgid "never"
+msgstr ""
+
+#: js/RrulePanel.js:261
+msgid "after {0} occurrences"
+msgstr ""
+
+#: js/RrulePanel.js:380
+msgid "Until has to be after event start"
+msgstr ""
+
+#: js/RrulePanel.js:411
+msgid "Every {0}. Day"
+msgstr ""
+
+#: js/RrulePanel.js:444
+msgid "Every {0}. Week at"
+msgstr ""
+
+#: js/RrulePanel.js:514
+msgid "Every {0}. Month"
+msgstr ""
+
+#: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
+#: js/RrulePanel.js:751
+msgid "at the"
+msgstr ""
+
+#: js/RrulePanel.js:539 js/RrulePanel.js:720
+msgid "first"
+msgstr ""
+
+#: js/RrulePanel.js:540 js/RrulePanel.js:721
+msgid "second"
+msgstr ""
+
+#: js/RrulePanel.js:541 js/RrulePanel.js:722
+msgid "third"
+msgstr ""
+
+#: js/RrulePanel.js:542 js/RrulePanel.js:723
+msgid "fourth"
+msgstr ""
+
+#: js/RrulePanel.js:543 js/RrulePanel.js:724
+msgid "last"
+msgstr ""
+
+#: js/RrulePanel.js:694
+msgid "Every {0}. Year"
+msgstr ""
+
+#: js/RrulePanel.js:792 js/RrulePanel.js:800
+msgid "of"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:69
+msgid "Checking Calendar Data..."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:95
+msgid "Reply to Recurring Event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:96
+msgid "You are responding to an recurring event. What would you like to do?"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:100
+msgid "Respond to whole series"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:101
+msgid "Do not respond"
+msgstr "Älä vastaa"
+
+#: js/iMIPDetailsPanel.js:197
+msgid "The event of this message does not exist"
+msgstr "Tämän viestin tapahtuma ei ole saatavilla"
+
+#: js/iMIPDetailsPanel.js:202
+msgid "The sender is not authorised to update the event"
+msgstr "Lähettäjä ei ole antanut oikeutta päivittää tapahtumaa"
+
+#: js/iMIPDetailsPanel.js:207
+msgid "This message is already processed"
+msgstr "Tämä viesti on jo käsittelyssä"
+
+#: js/iMIPDetailsPanel.js:212
+msgid "You are not an attendee of this event"
+msgstr "Et ole tapahtuman osallistuja"
+
+#: js/iMIPDetailsPanel.js:216
+msgid "Unsupported message"
+msgstr "Ei tuettu viesti"
+
+#: js/iMIPDetailsPanel.js:226
+msgid "This is an event invitation for someone else."
+msgstr "Tämä tapahtuman kutsu kuuluu jollekin toiselle."
+
+#: js/iMIPDetailsPanel.js:228
+msgid "You have already replied to this event invitation."
+msgstr "Olet jo vastannut tämän tapahtuman kutsuun."
+
+#: js/iMIPDetailsPanel.js:230
+msgid "You received an event invitation. Set your response to:"
+msgstr "Olet vastaanottanut tapahtuma kutsun. Lähetä vastauksesi kutsuun:"
+
+#: js/iMIPDetailsPanel.js:238
+msgid "An invited attendee responded to the invitation."
+msgstr "Kutsun osallistuja on vastannut kutsuun."
+
+#: js/iMIPDetailsPanel.js:242
+msgid "Unsupported method"
+msgstr "Ei tuettu metodi"
+
+#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:196
+msgid "Week"
+msgstr "Viikko"
+
+#: js/MainScreenCenterPanel.js:28
+msgid "Loading events, please wait..."
+msgstr "Ladataan tapahtumia, odota hetki..."
+
+#: js/MainScreenCenterPanel.js:149
+msgid "Print Page"
+msgstr "Tulosta sivu"
+
+#: js/MainScreenCenterPanel.js:162
+msgid "Sheet"
+msgstr "Arkki"
+
+#: js/MainScreenCenterPanel.js:177
+msgid "Grid"
+msgstr "Ruudukko"
+
+#: js/MainScreenCenterPanel.js:187
+msgid "Day"
+msgstr "Päivä"
+
+#: js/MainScreenCenterPanel.js:205
+msgid "Month"
+msgstr "Kuukausi"
+
+#: js/MainScreenCenterPanel.js:467
+msgid "Set my response"
+msgstr "Aseta vastaukseni"
+
+#: js/MainScreenCenterPanel.js:493
+msgid "Copy {0}"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:507
+msgid "Updating event in the past"
+msgstr "Päivitetyt tapahtumat "
+
+#: js/MainScreenCenterPanel.js:508
+msgid "Update this event"
+msgstr "Päivitä tämä tapahtuma"
+
+#: js/MainScreenCenterPanel.js:509
+msgid "Do not update this event"
+msgstr "Älä päivitä tätä tapahtumaa"
+
+#: js/MainScreenCenterPanel.js:513
+msgid "Creating event in the past"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:514
+msgid "Create this event"
+msgstr "Luo tämä tapahtuma"
+
+#: js/MainScreenCenterPanel.js:515
+msgid "Do not create this event"
+msgstr "Älä luo tätä tapahtumaa"
+
+#: js/MainScreenCenterPanel.js:636
+msgid "Update Event"
+msgstr "Päivitä tapahtuma"
+
+#: js/MainScreenCenterPanel.js:640
+msgid "Update this event only"
+msgstr "Päivitä tämä tapahtuma ainoastaan"
+
+#: js/MainScreenCenterPanel.js:641
+msgid "Update this and all future events"
+msgstr "Päivitä tämä ja tulevat tapahtumat"
+
+#: js/MainScreenCenterPanel.js:642
+msgid "Update whole series"
+msgstr "Päivitä koko sarja"
+
+#: js/MainScreenCenterPanel.js:643
+msgid "Update nothing"
+msgstr "Älä päivitä mitään"
+
+#: js/MainScreenCenterPanel.js:776
+msgid "Please Change Selection"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:777
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:791
+msgid "Delete Event"
+msgstr "Poista tapahtuma"
+
+#: js/MainScreenCenterPanel.js:795
+msgid "Delete this event only"
+msgstr "Poista tämä tapahtuma ainoastaan"
+
+#: js/MainScreenCenterPanel.js:796
+msgid "Delete this and all future events"
+msgstr "Poista tämä ja tulevat tapahtumat"
+
+#: js/MainScreenCenterPanel.js:797
+msgid "Delete whole series"
+msgstr "Poista kaikki sarjat"
+
+#: js/MainScreenCenterPanel.js:798
+msgid "Delete nothing"
+msgstr "Älä poista mitään"
+
+#: js/MainScreenCenterPanel.js:844
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] "Haluatko poistaa tämän tapahtuman?"
+msgstr[1] "Haluatko poistaa {0} valittua tapahtumaa?"
+
+#: js/MainScreenCenterPanel.js:988
+msgid "Could not Print"
+msgstr "Tulostus epäonnistui"
+
+#: js/MainScreenCenterPanel.js:988
+msgid "Sorry, your current view does not support printing."
+msgstr "Valittu näkymä ei tue tulostamista."
+
+#: js/MainScreenCenterPanel.js:1138
+msgid "Scheduling Conflict"
+msgstr "Aikataulu konflikti"
+
+#: js/MainScreenCenterPanel.js:1140
+msgid "The following attendee are busy at the requested time:"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1144
+msgid "Ignore Conflict"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1145
+msgid "Edit Event"
+msgstr "Muokkaa tapahtumaa"
+
+#: js/MainScreenCenterPanel.js:1146
+msgid "Cancel this action"
+msgstr "Peruuta tämä toiminto"
+
+#: js/calendarRenderer.js:30
+msgid ""
+"This event is originally stored in a calendar you don't have access to."
+msgstr ""
+
+#: js/calendarRenderer.js:31
+msgid "This event is originally stored in {0}"
+msgstr ""
+
+#: js/calendarRenderer.js:33
+msgid "This event is additionally displayed in your personal calendar {0}"
+msgstr ""
+
+#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:450
+#: js/AttendeeGridPanel.js:468 js/AttendeeGridPanel.js:485
+#: js/AttendeeGridPanel.js:497 js/Model.js:379
+msgid "No Information"
+msgstr "Ei tietoa"
+
+#: js/EventDetailsPanel.js:65
+msgid "{0} {1} o'clock"
+msgstr ""
+
+#: js/EventDetailsPanel.js:89 js/EventUI.js:238
+msgid "recurring event"
+msgstr ""
+
+#: js/EventDetailsPanel.js:91 js/EventUI.js:243
+msgid "recurring event exception"
+msgstr ""
+
+#: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
+#: js/AttendeeGridPanel.js:76 js/Model.js:363
+msgid "Attendee"
+msgstr "Osallistuja"
+
+#: js/CalDAVContainerPropertiesHookField.js:35
+msgid "CalDAV URL"
+msgstr "CalDAV Osoite"
+
+#: js/MonthView.js:86 js/WestPanel.js:51
+msgid "WK"
+msgstr ""
+
+#: js/MonthView.js:91
+msgid "{0} more..."
+msgstr ""
+
+#: js/AttendeeFilterModel.js:101
+msgid "Select Attendee"
+msgstr "Valitse osallistujat"
+
+#: js/Printer/DaysView.js:36
+msgid "Week {0} :"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:116
+msgid "Quantity"
+msgstr "Määrä"
+
+#: js/AttendeeGridPanel.js:125
+msgid "This is the calendar where the attender has saved this event in"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:161
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/AttendeeGridPanel.js:168
+msgid "User"
+msgstr "Käyttäjä"
+
+#: js/AttendeeGridPanel.js:169
+msgid "Group"
+msgstr "Ryhmä"
+
+#: js/AttendeeGridPanel.js:170 js/Model.js:556
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AttendeeGridPanel.js:171
+msgid "Member of group"
+msgstr "Ryhmän jäsen"
+
+#: js/AttendeeGridPanel.js:333
+msgid "Remove Attender"
+msgstr "Poista osallistuja"
+
+#: js/AttendeeGridPanel.js:430
+msgid "Click here to invite another attender..."
+msgstr ""
+
+#: js/AttendeeGridPanel.js:455
+msgid "(as a group member)"
+msgstr ""
+
+#: js/WestPanel.js:29
+msgid "Mini Calendar"
+msgstr ""
+
+#: js/Model.js:63 js/Model.js:367 js/SearchCombo.js:79
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Tapahtuma"
+msgstr[1] "Tapahtumat"
+
+#: js/Model.js:63 js/Model.js:367 js/ContactEventsGridPanel.js:50
+msgid "Events"
+msgstr "Tapahtumat"
+
+#: js/Model.js:67
+msgid "Calendars"
+msgstr "Kalenterit"
+
+#: js/Model.js:195
+msgid "Quick search"
+msgstr "Pika haku"
+
+#: js/Model.js:202
+msgid "Attendee Status"
+msgstr "Osallistuja tilanne"
+
+#: js/Model.js:211
+msgid "Attendee Role"
+msgstr "Osallistujan rooli"
+
+#: js/Model.js:227
+msgid "Event (as attendee)"
+msgstr "Tapahtuma (kuin osallistuja)"
+
+#: js/Model.js:234
+msgid "Event (as organizer)"
+msgstr ""
+
+#: js/Model.js:244
+msgid "Event attendee"
+msgstr ""
+
+#: js/Model.js:363
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:556
+msgid "Resources"
+msgstr ""
+
+#: js/EventEditDialog.js:92
+msgid "View"
+msgstr "Näytä"
+
+#: js/EventEditDialog.js:108
+msgid "Details"
+msgstr "Tiedot"
+
+#: js/EventEditDialog.js:157
+msgid "Saved in"
+msgstr "Tallennettu "
+
+#: js/EventEditDialog.js:265
+msgid "Enter description"
+msgstr ""
+
+#: js/EventEditDialog.js:495
+msgid "End date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:498
+msgid "End date must be after start date"
+msgstr ""
+
+#: js/EventEditDialog.js:511
+msgid "Start date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:531
+msgid "Errors"
+msgstr ""
+
+#: js/DaysView.js:93
+msgid "{0}, the {1}. of {2}"
+msgstr ""
+
+#: js/DaysView.js:678
+msgid "The summary must not be longer than 255 characters."
+msgstr ""
+
+#: js/DaysView.js:680
+msgid "The summary must have at least 1 character."
+msgstr ""
+
+#: js/DaysView.js:717
+msgid "Summary too Long"
+msgstr ""
+
+#: js/DaysView.js:727
+msgid "Summary too Short"
+msgstr ""
+
+#: js/EventUI.js:231
+msgid "private classification"
+msgstr ""
+
+#: js/EventUI.js:252
+msgid "has alarm"
+msgstr ""
+
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr "Originaali"
+
+#: js/SearchCombo.js:70
+msgid "no events found"
+msgstr ""
+
+#: js/SearchCombo.js:71
+msgid "Searching..."
+msgstr ""
+
+#: js/SearchCombo.js:80
+msgid "Search Event"
+msgstr ""
+
+#: views/eventNotification.php:12
+msgid "Updates"
+msgstr "Päivitykset"
+
+#: views/eventNotification.php:20
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr ""
+
+#: views/eventNotification.php:27
+msgid "%1$s has been invited"
+msgstr "%1$s on kutsuttu"
+
+#: views/eventNotification.php:32
+msgid "%1$s has been removed"
+msgstr "%1$s on poistettu"
+
+#: views/eventNotification.php:39
+msgid "%1$s accepted invitation"
+msgstr "%1$s on hyväksynyt kutsun"
+
+#: views/eventNotification.php:43
+msgid "%1$s declined invitation"
+msgstr ""
+
+#: views/eventNotification.php:47
+msgid "Tentative response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:51
+msgid "No response from %1$s"
+msgstr "Ei vastausta määräaikaan mennessä  %1$s"
+
+#: views/eventNotification.php:54
+msgid "\"%2$s\" response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:63
+msgid "Event details"
+msgstr "Tapahtuman tiedot"
+
+#: Controller/EventNotifications.php:256
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:259
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:263
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr ""
+
+#: Controller/EventNotifications.php:271
+msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:278
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr ""
+
+#: Controller/EventNotifications.php:289
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:293
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:297
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:301
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr ""
+
+#: Controller/EventNotifications.php:305
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr ""

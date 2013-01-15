@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-29 18:48+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,82 +18,82 @@ msgstr ""
 
 #: Config.php:29
 msgid "Default policy for new devices"
-msgstr ""
+msgstr "Política padrão para novos dispositivos"
 
 #: Config.php:31
 msgid "Enter the id of the policy to apply to newly created devices."
-msgstr ""
+msgstr "Informe o id da política para aplicar aos mais recentes dispositivos criados"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr ""
+#: Setup/setup.xml:706 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Política Padrão"
 
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr ""
+#: Setup/setup.xml:711 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Política Padrão instalada durante a configuração"
 
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr ""
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Catálogo de Endereços Padrão"
 
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr ""
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "O Catálogo de endereços padrão para criar novos contatos em."
 
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr ""
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendário Padrão"
 
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "O calendário padrão para criaro novos eventos em."
 
-#: js/Application.js:94
-msgid "resetted"
-msgstr ""
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Lista de Tarefas Padrão"
 
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr ""
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "A lista de tarefa padrão para criar novas tarefas em."
 
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dispositivo"
+msgstr[1] "Dispositivos"
 
 #: js/Model.js:42
 msgid "Devices"
-msgstr ""
+msgstr "Dispositivos"
 
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr ""
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Syncronização Ativa"
 
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr ""
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Selecione o Dispositivo"
 
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr ""
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Nenhum dispositivos de sincronização ativo registrado"
 
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr ""
+#: js/Application.js:65
+msgid "Set as {0} Filter"
+msgstr "Atribuir como {0} Filtro"
 
-#: Preference.php:83
-msgid "Default Task List"
-msgstr ""
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Filtro de Sincronização Restabelecido"
 
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr ""
+#: js/Application.js:91 js/Application.js:103
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
 
-#: Setup/setup.xml:689 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr ""
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Restabelecido"
 
-#: Setup/setup.xml:694 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr ""
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Atribuir Filtro Sincronizado"

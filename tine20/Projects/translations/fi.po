@@ -1,0 +1,196 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-11-28 17:18+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's hemkilökohtaisesta projektista"
+
+#: Config.php:38
+msgid "Project Status Available"
+msgstr "Projektin tila saatavilla"
+
+#: Config.php:40
+msgid ""
+"Possible Project status. Please note that additional project status might "
+"impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:48
+msgid "Project Attendee Role Available"
+msgstr "Projektin osallistujan rooli saatavilla"
+
+#: Config.php:50
+msgid ""
+"Possible Project attendee roles. Please note that additional project "
+"attendee roles might impact other Projects systems on export or "
+"syncronisation."
+msgstr ""
+
+#: Setup/setup.xml:4 js/Projects.js:24
+msgid "Projects"
+msgstr "Projektit"
+
+#: Setup/Initialize.php:34
+msgid "On hold"
+msgstr "Odottamassa"
+
+#: Setup/Initialize.php:35
+msgid "Completed"
+msgstr "Valmis"
+
+#: Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr "Peruttu"
+
+#: Setup/Initialize.php:37
+msgid "In process"
+msgstr "Työn alla"
+
+#: Setup/Initialize.php:50
+msgid "Coworker"
+msgstr "Aliurakoitsija"
+
+#: Setup/Initialize.php:51
+msgid "Responsible"
+msgstr "Vastuuhenkilö"
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr "Kaikki avoimet projektini"
+
+#: Setup/Initialize.php:99
+msgid "My projects that I'm responsible for"
+msgstr "Omat projektit joista olen vastuussa"
+
+#: Setup/Initialize.php:100
+msgid "All my open projects that I am responsible for"
+msgstr "Kaikki avoimet projektit joista olen vastuussa"
+
+#: Setup/Initialize.php:120
+msgid "My waiting projects"
+msgstr "Odottavat projektit"
+
+#: Setup/Initialize.php:121
+msgid "My projects that are on hold"
+msgstr "Odottamassa olevat projektini"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Kaikki projektini"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Valitse osallistujan rooli"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Valitse projekti"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+msgid "Role"
+msgstr "Rooli"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Valitse rooli"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "Lisätty {0} osallistujaa projektiin"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+msgid "Number"
+msgstr "Numero"
+
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+msgid "Status"
+msgstr "Tila"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekti"
+msgstr[1] "Projektit"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projekti lista"
+msgstr[1] "Projektit lista"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projekti lista"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Pika haku"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:170
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Viimeksi muokannut"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+msgid "Attendee"
+msgstr "Osallistuja"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Osallistujan rooli"
+
+#: js/ProjectEditDialog.js:184
+msgid "Enter description"
+msgstr "Lisää kuvaus"

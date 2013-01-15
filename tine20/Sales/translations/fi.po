@@ -1,0 +1,251 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 06:45+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:103
+msgid "manage products"
+msgstr "hallitse tuotteita"
+
+#: Acl/Rights.php:104
+msgid "add, edit and delete products"
+msgstr "lisää, muokkaa ja poista tuotteita"
+
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Sinulla ei ole ylläpitäjän oikeuksia myyntiin"
+
+#: Model/Contract.php:92
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:93
+msgid "Customer"
+msgstr ""
+
+#: Model/Contract.php:94
+msgid "Partner"
+msgstr ""
+
+#: Config.php:49
+msgid "Contract Number Creation"
+msgstr "Sopimusnumero"
+
+#: Config.php:51
+msgid "Should the contract number be set manually or be auto-created?"
+msgstr "Luodaanko sopimusnumero automaattisesti?"
+
+#: Config.php:54
+msgid "automatically"
+msgstr "automaattisesti"
+
+#: Config.php:55
+msgid "manually"
+msgstr "käsin"
+
+#: Config.php:62
+msgid "Contract Number Validation"
+msgstr "Sopimusnumeron vahvistaminen"
+
+#: Config.php:64
+msgid "The Number can be validated as text or number."
+msgstr "Numero voi olla tekstiä tai numeroita"
+
+#: Config.php:67 js/Models.js:200 js/ContractEditDialog.js:136
+msgid "Number"
+msgstr "Numero"
+
+#: Config.php:68
+msgid "Text"
+msgstr "Teksti"
+
+#: Config.php:75
+msgid "Contract Status Available"
+msgstr "Sopimuksen tila"
+
+#: Config.php:77
+msgid ""
+"Possible Contract status. Please note that additional contract status might "
+"impact other Sales systems on export or syncronisation."
+msgstr "Mahdollinen sopimuksen tila. Huomaa että sopimuksen tila voi riippua muista myynneistä ja tai synkronoinneista."
+
+#: Config.php:85
+msgid "Contract Cleared State Available"
+msgstr ""
+
+#: Config.php:87
+msgid "Possible Contract cleared states."
+msgstr ""
+
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
+msgstr "Omat tuotteet"
+
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr "Omat tuotteet"
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr "Omat sopimukset"
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
+msgstr "Omat sopimukseni"
+
+#: js/AdminPanel.js:61
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: js/AdminPanel.js:69
+msgid "OK"
+msgstr "Ok"
+
+#: js/AdminPanel.js:90
+msgid "Loading..."
+msgstr "Ladataan..."
+
+#: js/ContractGridPanel.js:82
+msgid "Contract number"
+msgstr "Yhteysnumero"
+
+#: js/ContractGridPanel.js:88 js/Models.js:237 js/ContractEditDialog.js:143
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/ContractGridPanel.js:94 js/Models.js:147 js/ContractEditDialog.js:176
+msgid "Status"
+msgstr "Tila"
+
+#: js/ContractGridPanel.js:101 js/Models.js:154 js/ContractEditDialog.js:183
+msgid "Cleared"
+msgstr ""
+
+#: js/ContractGridPanel.js:108 js/Models.js:160 js/ContractEditDialog.js:187
+msgid "Cleared in"
+msgstr ""
+
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
+msgid "Name"
+msgstr "Nimi"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
+msgid "Price"
+msgstr "Hinta"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
+msgid "Category"
+msgstr "Kategoria"
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
+#: js/ContractEditDialog.js:193
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
+msgid "Enter description..."
+msgstr "Lisää kuvaus..."
+
+#: js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/Models.js:39
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Tuote"
+msgstr[1] "Tuotteet"
+
+#: js/Models.js:43 js/Models.js:226
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:77 js/Models.js:143 js/Models.js:199 js/Models.js:236
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Models.js:78
+msgid "Product name"
+msgstr "Tuotteen nimi"
+
+#: js/Models.js:80 js/Models.js:145
+msgid "Creator"
+msgstr "Luoja"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Sopimus"
+msgstr[1] "Sopimukset"
+
+#: js/Models.js:117
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] "Kaikki sopimukset"
+msgstr[1] "sopimus listat"
+
+#: js/Models.js:144
+msgid "Contract name"
+msgstr "Sopimuksen nimi"
+
+#: js/Models.js:186
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:189
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:201
+msgid "Remark"
+msgstr ""
+
+#: js/Models.js:223
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Osasto"
+msgstr[1] "Osastot"
+
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Käytä desimaalinumeroita tässä!."
+
+#: js/ContractEditDialog.js:149
+msgid "Contact Customer"
+msgstr "Yhteyshenkilö"
+
+#: js/ContractEditDialog.js:161
+msgid "Contact Responsible"
+msgstr ""
+
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Yritys"
+
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "Numero jota koitit lisätä on jo käytössä"

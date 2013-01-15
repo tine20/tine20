@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 17:36+0000\n"
-"Last-Translator: Tamás Faragó <>\n"
+"PO-Revision-Date: 2012-11-28 11:47+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,56 +25,69 @@ msgstr "megosztott könyvtárak kezelése"
 msgid "Create new shared folders"
 msgstr "Új megosztott könyvtár létrehozása"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Saját könyvtárak"
-
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Megosztott könyvtárak"
-
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Többi felhasználó megosztott könyvtárai"
-
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "%s személyes file-ai"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Filekezelő"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "elérési út"
 
-#: js/Filemanager.js:34 js/NodeGridPanel.js:363
+#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr "Mentés helyileg"
 
-#: js/Filemanager.js:80
-msgid "Service Unavailable"
-msgstr "Szolgáltatás elérhetetlen"
+#: js/NodeEditDialog.js:94 js/NodeEditDialog.js:107
+msgid "Node"
+msgstr "Csomópont"
 
-#: js/Filemanager.js:81
+#: js/NodeEditDialog.js:113 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Név"
+
+#: js/NodeEditDialog.js:120 js/Model.js:531
+msgid "Type"
+msgstr "Típus"
+
+#: js/NodeEditDialog.js:128 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Készítő"
+
+#: js/NodeEditDialog.js:131 js/Model.js:533 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/NodeEditDialog.js:140
+msgid "Modified By"
+msgstr "Készítette"
+
+#: js/NodeEditDialog.js:143
+msgid "Last Modified"
+msgstr "Utolsó módosítás"
+
+#: js/NodeEditDialog.js:166
+msgid "Description"
+msgstr "Leírás"
+
+#: js/NodeEditDialog.js:180
+msgid "Enter description"
+msgstr "Leírás bevitele"
+
+#: js/NodeTreePanel.js:662 js/NodeTreePanel.js:772 js/NodeGridPanel.js:651
+#: js/NodeGridPanel.js:803
+msgid "Upload Failed"
+msgstr "Feltöltés sikertelen"
+
+#: js/NodeTreePanel.js:663 js/NodeGridPanel.js:652
 msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "A Filekezelő nincs megfelelően beállítva. Kérlek keresd fel a {0}Tine 2.0 Admin FAQ{1} beállítási tanácsokért vagy keresd meg a rendszergazdádat."
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
 
-#: js/Filemanager.js:103
-msgid "Files already exists"
-msgstr "File már létezik"
-
-#: js/Filemanager.js:103
-msgid "Do you want to replace the following file(s)?"
-msgstr "Szeretnéd cserélni a következő file(oka)t?"
-
-#: js/Filemanager.js:136
-msgid "Failure on create folder"
-msgstr "Hiba a könyvtár létrehozásakor"
-
-#: js/Filemanager.js:137
-msgid "Item with this name already exists!"
-msgstr "Ezen a néven már létezik adat!"
+#: js/NodeTreePanel.js:773 js/NodeGridPanel.js:804
+msgid "Putting files in this folder is not allowed!"
+msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -84,11 +97,11 @@ msgstr "Kérlek írd be a {0} új nevét:"
 msgid "Not renamed {0}"
 msgstr "{0} átnevezése sikertelen"
 
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:522
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
 msgid "You have to supply a {0} name!"
 msgstr "Biztosítanos kell egy {0} nevet!"
 
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:563
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
 msgid "Do you really want to delete the following files?"
 msgstr "Biztosan szeretnéd törölni a következő filokat?"
 
@@ -120,45 +133,39 @@ msgstr "Kérlek várj"
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/Model.js:531 js/NodeEditDialog.js:89
-msgid "Type"
-msgstr "Típus"
-
 #: js/Model.js:532 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "Tartalomtípus"
 
-#: js/Model.js:533 js/NodeEditDialog.js:100 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Készítés ideje"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Filekezelő"
 
-#: js/NodeEditDialog.js:63 js/NodeEditDialog.js:76
-msgid "Node"
-msgstr "Csomópont"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
+msgstr "Szolgáltatás elérhetetlen"
 
-#: js/NodeEditDialog.js:82 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Név"
+#: js/Filemanager.js:82
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "A Filekezelő nincs megfelelően beállítva. Kérlek keresd fel a {0}Tine 2.0 Admin FAQ{1} beállítási tanácsokért vagy keresd meg a rendszergazdádat."
 
-#: js/NodeEditDialog.js:97 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Készítő"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "File már létezik"
 
-#: js/NodeEditDialog.js:109
-msgid "Modified By"
-msgstr "Készítette"
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
+msgstr "Szeretnéd cserélni a következő file(oka)t?"
 
-#: js/NodeEditDialog.js:112
-msgid "Last Modified"
-msgstr "Utolsó módosítás"
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
+msgstr "Hiba a könyvtár létrehozásakor"
 
-#: js/NodeEditDialog.js:135
-msgid "Description"
-msgstr "Leírás"
-
-#: js/NodeEditDialog.js:149
-msgid "Enter description"
-msgstr "Leírás bevitele"
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "Ezen a néven már létezik adat!"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -180,61 +187,50 @@ msgstr "Utolsó módosítás ideje"
 msgid "Last Modified By"
 msgstr "Utolsó módosító"
 
-#: js/NodeGridPanel.js:233
-msgid "Show closed"
-msgstr "Bezártak mutatása"
-
-#: js/NodeGridPanel.js:268
+#: js/NodeGridPanel.js:249
 msgid "The max. Upload Filesize is {0} MB"
 msgstr "A max. feltölthető file méret {0} MB"
 
-#: js/NodeGridPanel.js:306
+#: js/NodeGridPanel.js:287
 msgid "Upload"
 msgstr "Feltöltés"
 
-#: js/NodeGridPanel.js:330
+#: js/NodeGridPanel.js:311
 msgid "Edit Properties"
 msgstr "Tulajdonságok szerkesztése"
 
-#: js/NodeGridPanel.js:341
+#: js/NodeGridPanel.js:322
 msgid "Create Folder"
 msgstr "Könyvtár létrehozása"
 
-#: js/NodeGridPanel.js:352
+#: js/NodeGridPanel.js:333
 msgid "Folder Up"
 msgstr "Könyvtárat fel"
 
-#: js/NodeGridPanel.js:373 js/NodeGridPanel.js:374 js/NodeGridPanel.js:376
+#: js/NodeGridPanel.js:354 js/NodeGridPanel.js:355 js/NodeGridPanel.js:357
 msgid "Delete"
 msgstr "Törlés"
 
-#: js/NodeGridPanel.js:518
+#: js/NodeGridPanel.js:499
 msgid "New Folder"
 msgstr "Új könyvtár"
 
-#: js/NodeGridPanel.js:518
+#: js/NodeGridPanel.js:499
 msgid "Please enter the name of the new folder:"
 msgstr "Kérlek add meg az új könyvtár nevét:"
 
-#: js/NodeGridPanel.js:522
+#: js/NodeGridPanel.js:503
 msgid "No {0} added"
 msgstr "{0} hozzáadása sikertelen"
 
-#: js/NodeGridPanel.js:669 js/NodeGridPanel.js:821 js/NodeTreePanel.js:662
-#: js/NodeTreePanel.js:772
-msgid "Upload Failed"
-msgstr "Feltöltés sikertelen"
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Saját könyvtárak"
 
-#: js/NodeGridPanel.js:670 js/NodeTreePanel.js:663
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Megosztott könyvtárak"
 
-#: js/NodeGridPanel.js:822 js/NodeTreePanel.js:773
-msgid "Putting files in this folder is not allowed!"
-msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "elérési út"
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Többi felhasználó megosztott könyvtárai"

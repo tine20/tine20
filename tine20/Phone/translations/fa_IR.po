@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <mrp59@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:31+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2013-01-05 14:07+0000\n"
+"Last-Translator: mrp59 <mrp59@yahoo.com>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,140 +17,140 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr ""
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
+msgid "Edit phone settings"
+msgstr "ویرایش تنظیمات تلفن"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr ""
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] ""
+msgstr[0] "one: تلفن\nother: تلفن"
+
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "تلفن ها"
+
+#: js/Phone.js:288
+msgid "Line"
+msgstr "خط"
+
+#: js/Phone.js:297
+msgid "Number"
+msgstr "شماره"
+
+#: js/Phone.js:306
+msgid "Cancel"
+msgstr "لغو کردن"
+
+#: js/Phone.js:316
+msgid "Dial"
+msgstr "تماس"
+
+#: js/Phone.js:336
+msgid "Error"
+msgstr "خطا"
+
+#: js/Phone.js:337
+msgid "Not possible to dial."
+msgstr "تماس ممکن نیست"
+
+#: js/Phone.js:480
+msgid "Dial number"
+msgstr "شماره تماس"
+
+#: js/Phone.js:481
+msgid "Initiate a new outgoing call"
+msgstr "آغاز تماس خروحی جدید"
+
+#: js/Phone.js:542
+msgid "Incoming call"
+msgstr "تماس ورودی"
+
+#: js/Phone.js:546
+msgid "Outgoing call"
+msgstr "تماس خروجی"
+
+#: js/Phone.js:554
+msgid "unknown number"
+msgstr "شماره ناشناس"
+
+#: js/Phone.js:591
+msgid "Search:"
+msgstr "جستجو :"
+
+#: js/Phone.js:676
+msgid "Source or Destination"
+msgstr "منبع یا مقصد"
+
+#: js/Phone.js:692
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "نمایش تماس ها {0} - {1} از {2}"
+
+#: js/Phone.js:693 js/Phone.js:736
+msgid "No calls to display"
+msgstr "تماسی برای نمایش نیست"
+
+#: js/Phone.js:703
+msgid "Direction"
+msgstr "آدرس"
+
+#: js/Phone.js:704
+msgid "Source"
+msgstr "منبع"
+
+#: js/Phone.js:705
+msgid "Caller Id"
+msgstr "شماره تماس گیرنده"
+
+#: js/Phone.js:706
+msgid "Destination"
+msgstr "مقصد"
+
+#: js/Phone.js:707
+msgid "Start"
+msgstr "شروع"
+
+#: js/Phone.js:708
+msgid "Connected"
+msgstr "تماس برقرار شد"
+
+#: js/Phone.js:709
+msgid "Disconnected"
+msgstr "تماس قطع شد"
+
+#: js/Phone.js:710
+msgid "Duration"
+msgstr "مدت"
+
+#: js/Phone.js:711
+msgid "Ringing"
+msgstr "در حال زنگ خوردن"
+
+#: js/Phone.js:712
+msgid "Call ID"
+msgstr "شناسه تماس"
 
 #: js/Models.js:73
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
+msgstr[0] "one: لیست تلفن\nother: لیست تلفن"
 
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "تماس با مخاطب"
 
-#: js/Phone.js:70
-msgid "Phones"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "محل کار"
 
-#: js/Phone.js:288
-msgid "Line"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "منزل"
 
-#: js/Phone.js:297
-msgid "Number"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "موبایل"
 
-#: js/Phone.js:306
-msgid "Cancel"
-msgstr ""
-
-#: js/Phone.js:316
-msgid "Dial"
-msgstr ""
-
-#: js/Phone.js:336
-msgid "Error"
-msgstr ""
-
-#: js/Phone.js:337
-msgid "Not possible to dial."
-msgstr ""
-
-#: js/Phone.js:480
-msgid "Dial number"
-msgstr ""
-
-#: js/Phone.js:481
-msgid "Initiate a new outgoing call"
-msgstr ""
-
-#: js/Phone.js:542
-msgid "Incoming call"
-msgstr ""
-
-#: js/Phone.js:546
-msgid "Outgoing call"
-msgstr ""
-
-#: js/Phone.js:554
-msgid "unknown number"
-msgstr ""
-
-#: js/Phone.js:591
-msgid "Search:"
-msgstr ""
-
-#: js/Phone.js:676
-msgid "Source or Destination"
-msgstr ""
-
-#: js/Phone.js:692
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
-
-#: js/Phone.js:693 js/Phone.js:736
-msgid "No calls to display"
-msgstr ""
-
-#: js/Phone.js:703
-msgid "Direction"
-msgstr ""
-
-#: js/Phone.js:704
-msgid "Source"
-msgstr ""
-
-#: js/Phone.js:705
-msgid "Caller Id"
-msgstr ""
-
-#: js/Phone.js:706
-msgid "Destination"
-msgstr ""
-
-#: js/Phone.js:707
-msgid "Start"
-msgstr ""
-
-#: js/Phone.js:708
-msgid "Connected"
-msgstr ""
-
-#: js/Phone.js:709
-msgid "Disconnected"
-msgstr ""
-
-#: js/Phone.js:710
-msgid "Duration"
-msgstr ""
-
-#: js/Phone.js:711
-msgid "Ringing"
-msgstr ""
-
-#: js/Phone.js:712
-msgid "Call ID"
-msgstr ""
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "موبایل شخصی"

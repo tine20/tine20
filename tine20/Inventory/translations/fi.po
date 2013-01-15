@@ -1,0 +1,177 @@
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-10-04 15:23+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal inventory items"
+msgstr ""
+
+#: Model/InventoryItem.php:48
+msgid "Inventory item"
+msgid_plural "Inventory items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/InventoryItem.php:49
+msgid "Inventory items"
+msgstr ""
+
+#: Model/InventoryItem.php:51
+msgid "Inventory item list"
+msgstr ""
+
+#: Model/InventoryItem.php:52
+msgid "Inventory items lists"
+msgstr ""
+
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:106
+msgid "Name"
+msgstr ""
+
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:160
+msgid "Status"
+msgstr ""
+
+#: Model/InventoryItem.php:85
+msgid "Inventory ID"
+msgstr ""
+
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:129
+msgid "Location"
+msgstr ""
+
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:136
+#: js/InventoryItemEditDialog.js:238
+msgid "Added"
+msgstr ""
+
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:230
+msgid "Invoice"
+msgstr ""
+
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:218
+msgid "Price"
+msgstr ""
+
+#: Model/InventoryItem.php:116
+msgid "Cost centre"
+msgstr ""
+
+#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:244
+msgid "Warranty"
+msgstr ""
+
+#: Model/InventoryItem.php:126
+msgid "Item added"
+msgstr ""
+
+#: Model/InventoryItem.php:131
+msgid "Item removed"
+msgstr ""
+
+#: Model/InventoryItem.php:136 js/InventoryItemEditDialog.js:258
+msgid "Depreciation"
+msgstr ""
+
+#: Model/InventoryItem.php:141 js/InventoryItemEditDialog.js:264
+msgid "Amortization"
+msgstr ""
+
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid "Possible status."
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr ""
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr ""
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr ""
+
+#: Setup/Initialize.php:38
+msgid "unkown"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:51
+msgid "The active number must be less than or equal total number."
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:75
+msgid "General"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:97
+msgid "ID"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:116
+msgid "Description"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:121
+msgid "Enter description"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:144
+msgid "Total number"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:152
+msgid "Active number"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:196
+msgid "Accounting"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:224
+msgid "Costcentre"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:250
+msgid "Removed"
+msgstr ""
