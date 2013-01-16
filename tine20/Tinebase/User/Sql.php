@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        extend Tinebase_Application_Backend_Sql and replace some functions
@@ -40,11 +40,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountEmailAddress'       => 'email',
         'accountHomeDirectory'      => 'home_dir',
         'accountLoginShell'         => 'login_shell',
-        'lastLoginFailure'            => 'last_login_failure_at',
-        'loginFailures'                => 'login_failures',
+        'lastLoginFailure'          => 'last_login_failure_at',
+        'loginFailures'             => 'login_failures',
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
-        'contactId'                    => 'contact_id'
+        'contactId'                 => 'contact_id'
     );
     
     /**
@@ -264,12 +264,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
          * WHEN (`login_failures` > 5 AND `last_login_failure_at` + INTERVAL 15 MINUTE > NOW()) 
          * THEN 'blocked' ELSE 'enabled' END) ELSE 'disabled' END
          */
-
+        
+        $maxLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_LOGIN_FAILURES, 5);
+        if ($maxLoginFailures > 0) {
+            $loginFailuresCondition = 'WHEN ( ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$maxLoginFailures} AND "
+                . $this->_dbCommand->setDate($this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure'])) . " + INTERVAL '{$this->_blockTime}' MINUTE > "
+                . $this->_dbCommand->setDate('NOW()') .") THEN 'blocked'";
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' User blocking disabled.');
+            $loginFailuresCondition = '';
+        }
+        
         $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN (';
-        $statusSQL .= 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires']) . ' THEN ' . $this->_db->quote('expired') .
-            ' WHEN (' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$this->_maxLoginFailures} AND " . 
-        $this->_dbCommand->setDate($this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure'])) . " + INTERVAL '{$this->_blockTime}' MINUTE > ". $this->_dbCommand->setDate('NOW()') .") THEN 'blocked'" .
-            ' ELSE ' . $this->_db->quote('enabled') . ' END) ELSE ' . $this->_db->quote('disabled') . ' END';
+        $statusSQL .= 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires'])
+            . ' THEN ' . $this->_db->quote('expired')
+            . $loginFailuresCondition
+            . ' ELSE ' . $this->_db->quote('enabled') . ' END) ELSE ' . $this->_db->quote('disabled') . ' END';
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
@@ -304,7 +315,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'container_id'            => 'container_id'
                 )
             );
-                
+        
         return $select;
     }
     

@@ -84,10 +84,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     protected $_plugins = array();
     
-    protected $_maxLoginFailures = 5;
-    
     protected $_blockTime        = 15;
-        
     
     /**
      * the constructor
