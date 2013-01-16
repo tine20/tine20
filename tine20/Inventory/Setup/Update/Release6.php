@@ -128,6 +128,26 @@ class Inventory_Setup_Update_Release6 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Inventory'));
     
         $this->setApplicationVersion('Inventory', '6.4');
-    
     }
+    
+    /**
+     * Update import / export definitions
+     * Add note field
+     */
+    public function update_4()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Inventory'));
+        
+        $field = '<field>
+                    <name>adt_info</name>
+                    <type>text</type>
+                </field>';
+    
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('inventory_item', $declaration);
+    
+        $this->setApplicationVersion('Inventory', '6.5');
+        $this->setTableVersion('inventory_item', '5');
+    }
+    
 }

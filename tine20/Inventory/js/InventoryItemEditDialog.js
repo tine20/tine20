@@ -225,6 +225,25 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     border: true,
                     
                     items: [
+                         new Ext.Panel({
+                            title: this.app.i18n._('Additional Information'),
+                            iconCls: 'descriptionIcon',
+                            layout: 'form',
+                            labelAlign: 'top',
+                            border: false,
+                            items: [{
+                                style: 'margin-top: -4px; border 0px;',
+                                labelSeparator: '',
+                                xtype: 'textarea',
+                                name: 'adt_info',
+                                hideLabel: true,
+                                grow: false,
+                                preventScrollbars: false,
+                                anchor: '100% 100%',
+                                emptyText: this.app.i18n._('Enter Information'),
+                                requiredGrant: 'editGrant'
+                            }]
+                        }),
                         new Tine.widgets.activities.ActivitiesPanel({
                             app: 'Inventory',
                             showAddNoteForm: false,
