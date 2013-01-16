@@ -303,7 +303,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Calendar.MainScreenCenterPanel.superclass.onRender.apply(this, arguments);
         
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName),
+            favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+        
         this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
+        
+        favoritesPanel.selectFilter(defaultFavorite);
     },
     
     getViewParts: function (view) {
@@ -1355,13 +1360,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.calendarPanels[which].on('contextmenu', this.onContextMenu, this);
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
             this.calendarPanels[which].on('keydown', this.onKeyDown, this);
-            
-            this.calendarPanels[which].on('render', function () {
-                var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
-                var favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
-                // NOTE: this perfoms the initial load!
-                favoritesPanel.selectFilter(defaultFavorite);
-            }, this);
             
             this.calendarPanels[which].relayEvents(this, ['show', 'beforehide']);
         }
