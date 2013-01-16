@@ -16,41 +16,15 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr ""
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
+msgid "Edit phone settings"
+msgstr "Редактирай условията на телефонниране"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr ""
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] ""
 msgstr[1] ""
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Редактирай условията на телефонниране"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -155,3 +129,29 @@ msgstr "Позвъняване"
 #: js/Phone.js:712
 msgid "Call ID"
 msgstr "Идентификатор (ID) на обаждането"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr ""

@@ -1,0 +1,2721 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-10 11:07+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Exception/PasswordPolicyViolation.php:22
+msgid "Password Policy Violation"
+msgstr ""
+
+#: Exception/SystemGeneric.php:27
+msgid "Generic System Exception"
+msgstr ""
+
+#: Exception/Record/SystemContainer.php:22
+msgid "System Container"
+msgstr ""
+
+#: Exception/Record/SystemContainer.php:28
+msgid "This is a system container which could not be deleted!"
+msgstr ""
+
+#: Acl/Rights.php:147
+msgid "Report bugs"
+msgstr "Raportoi virheestä"
+
+#: Acl/Rights.php:148
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Raportoi virheestä suoraan ohjelman tekijälle kun virhe havaitaan."
+
+#: Acl/Rights.php:151
+msgid "Check version"
+msgstr "Tarkista versio"
+
+#: Acl/Rights.php:152
+msgid "Check for new versions of this software."
+msgstr "Tarkista ohjelman uusin versio"
+
+#: Acl/Rights.php:155
+msgid "Manage own profile"
+msgstr "Hallitse omaa profiilia"
+
+#: Acl/Rights.php:156
+msgid "The right to manage the own profile (selected contact data)."
+msgstr ""
+
+#: Acl/Rights.php:159
+msgid "Manage own client state"
+msgstr ""
+
+#: Acl/Rights.php:160
+msgid "The right to manage the own client state."
+msgstr ""
+
+#: Acl/Rights/Abstract.php:71
+msgid "admin"
+msgstr "ylläpitäjä"
+
+#: Acl/Rights/Abstract.php:72
+msgid "admin right description"
+msgstr "ylläpitäjän oikeuksien kuvaus"
+
+#: Acl/Rights/Abstract.php:75
+msgid "run"
+msgstr ""
+
+#: Acl/Rights/Abstract.php:76
+msgid "run right description"
+msgstr ""
+
+#: Preference/Abstract.php:495
+msgid "default"
+msgstr "oletus"
+
+#: Frontend/Http.php:387 js/ExceptionHandler.js:149
+msgid "Authorisation Required"
+msgstr ""
+
+#: Frontend/Http.php:388
+msgid "Your session is not valid. You need to login again."
+msgstr ""
+
+#: Frontend/Http.php:413 js/ExceptionDialog.js:62
+msgid "Abnormal End"
+msgstr ""
+
+#: Frontend/Http.php:414 js/ExceptionDialog.js:137
+msgid "An error occurred, the program ended abnormal."
+msgstr ""
+
+#: Notes.php:369
+msgid "by"
+msgstr ""
+
+#: Notes.php:378
+msgid "Changed fields:"
+msgstr ""
+
+#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:287 User/Abstract.php:288 js/ux/ConnectionStatus.js:58
+#: Group/Abstract.php:191
+msgid "unknown"
+msgstr ""
+
+#: Config.php:239
+msgid "System IMAP"
+msgstr "Järjestelmän IMAP"
+
+#: Config.php:241
+msgid "System IMAP server configuration."
+msgstr "Järjestelmän IMAP palvelimen asetukset."
+
+#: Config.php:250
+msgid "System SMTP"
+msgstr "Järjestelmän SMTP"
+
+#: Config.php:252
+msgid "System SMTP server configuration."
+msgstr "Järjestelmän SMTP palvelimen asetukset."
+
+#: Config.php:261
+msgid "System SIEVE"
+msgstr "Järjestelmän SIEVE"
+
+#: Config.php:263
+msgid "System SIEVE server configuration."
+msgstr "Järjestelmän SIEVE palvelimen asetukset."
+
+#: Config.php:272
+msgid "Authentication Backend"
+msgstr ""
+
+#: Config.php:274
+msgid "Backend adapter for user authentication."
+msgstr ""
+
+#: Config.php:282
+msgid "Authentication Configuration"
+msgstr ""
+
+#: Config.php:284
+msgid "Authentication backend configuration."
+msgstr ""
+
+#: Config.php:293
+msgid "User Backend"
+msgstr ""
+
+#: Config.php:295
+msgid "Backend adapter for user data."
+msgstr ""
+
+#: Config.php:303
+msgid "User Configuration"
+msgstr ""
+
+#: Config.php:305
+msgid "User backend configuration."
+msgstr ""
+
+#: Config.php:314
+msgid "Cronuser ID"
+msgstr ""
+
+#: Config.php:316
+msgid "User ID of the cron user."
+msgstr ""
+
+#: Config.php:324
+msgid "Title Postfix"
+msgstr ""
+
+#: Config.php:326
+msgid "Postfix string appended to the title of this installation."
+msgstr ""
+
+#: Config.php:334
+msgid "Redirect URL"
+msgstr ""
+
+#: Config.php:336
+msgid "Redirect to this URL after logout."
+msgstr ""
+
+#: Config.php:344
+msgid "Redirect to Referrer"
+msgstr ""
+
+#: Config.php:346
+msgid "Redirect to referrer after logout."
+msgstr ""
+
+#: Config.php:354
+msgid "Redirect Always"
+msgstr ""
+
+#: Config.php:356
+msgid "Redirect to configured redirect URL also for login."
+msgstr ""
+
+#: Config.php:364
+msgid "Accepted Terms Version"
+msgstr ""
+
+#: Config.php:366
+msgid "Accepted version number of the terms and conditions document."
+msgstr ""
+
+#: Config.php:374
+msgid "Use Geolocation Services"
+msgstr ""
+
+#: Config.php:376
+msgid "Use of external Geolocation services is allowed."
+msgstr ""
+
+#: Config.php:384
+msgid "IP Session Validator"
+msgstr ""
+
+#: Config.php:386
+msgid "Destroy session if the users IP changes."
+msgstr ""
+
+#: Config.php:394
+msgid "UA Session Validator"
+msgstr ""
+
+#: Config.php:396
+msgid "Destroy session if the users user agent string changes."
+msgstr ""
+
+#: Config.php:404
+msgid "Files Directory"
+msgstr "Tiedostojen hakemisto"
+
+#: Config.php:406
+msgid "Directory with web server write access for user files."
+msgstr ""
+
+#: Config.php:414 Config.php:416
+msgid "User may change password"
+msgstr ""
+
+#: Config.php:424 Config.php:426
+msgid "Enable password policy"
+msgstr "Ota salasana vaatimukset käyttöön"
+
+#: Config.php:434
+msgid "Only ASCII"
+msgstr "Ainoastaan ASCII"
+
+#: Config.php:436
+msgid "Only ASCII characters are allowed in passwords."
+msgstr "Ainoastaan ASCII merkit ovat sallittuja salasanassa."
+
+#: Config.php:444
+msgid "Minimum length"
+msgstr "Minimi pituus"
+
+#: Config.php:446
+msgid "Minimum password length"
+msgstr "Salsanan minimi pituus"
+
+#: Config.php:454
+msgid "Minimum word chars"
+msgstr ""
+
+#: Config.php:456
+msgid "Minimum word chars in password"
+msgstr ""
+
+#: Config.php:464
+msgid "Minimum uppercase chars"
+msgstr ""
+
+#: Config.php:466
+msgid "Minimum uppercase chars in password"
+msgstr ""
+
+#: Config.php:474
+msgid "Minimum special chars"
+msgstr ""
+
+#: Config.php:476
+msgid "Minimum special chars in password"
+msgstr ""
+
+#: Config.php:484
+msgid "Minimum numbers"
+msgstr ""
+
+#: Config.php:486
+msgid "Minimum numbers in password"
+msgstr ""
+
+#: Config.php:494
+msgid "Automatic bugreports"
+msgstr ""
+
+#: Config.php:496
+msgid ""
+"Always send bugreports, even on timeouts and other exceptions / failures."
+msgstr ""
+
+#: Config.php:504
+msgid "Last sessions cleanup run"
+msgstr ""
+
+#: Config.php:506
+msgid "Stores the timestamp of the last sessions cleanup task run."
+msgstr ""
+
+#: Setup/setup.xml:3130
+msgid "note"
+msgstr "muistio"
+
+#: Setup/setup.xml:3135
+msgid "default note type"
+msgstr "oletus muistio tyyppi"
+
+#: Setup/setup.xml:3161
+msgid "telephone"
+msgstr "puhelin"
+
+#: Setup/setup.xml:3166
+msgid "telephone call"
+msgstr "puhelin soitto"
+
+#: Setup/setup.xml:3192
+msgid "email"
+msgstr "sähköposti"
+
+#: Setup/setup.xml:3197
+msgid "email contact"
+msgstr "sähköposti yhteys"
+
+#: Setup/setup.xml:3223
+msgid "created"
+msgstr "luotu"
+
+#: Setup/setup.xml:3228
+msgid "record created"
+msgstr ""
+
+#: Setup/setup.xml:3254
+msgid "changed"
+msgstr "muutettu"
+
+#: Setup/setup.xml:3259
+msgid "record changed"
+msgstr ""
+
+#: Preference.php:87 js/widgets/TimezoneChooser.js:37
+msgid "Timezone"
+msgstr "Aikavyöhyke"
+
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr ""
+
+#: Preference.php:91 js/widgets/LangChooser.js:35
+msgid "Language"
+msgstr ""
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr ""
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Oletus sovellukset"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Näytettävät ohjelmat kirjautumisen jälkeen."
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Ikkuna tyyppi"
+
+#: Preference.php:100
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr ""
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr "Vahvista uloskirjaus"
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr "Näytä vahvistus ikkuna ulos kirjauduttaessa"
+
+#: Export/Spreadsheet/Ods.php:278
+msgid "Data"
+msgstr ""
+
+#: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
+msgid "Tags"
+msgstr ""
+
+#: Export/Pdf.php:437
+msgid "Created by"
+msgstr ""
+
+#: Export/Pdf.php:483
+msgid "Activities"
+msgstr ""
+
+#: js/AdminPanel.js:75
+msgid "Profile Information"
+msgstr "Profiilin tiedot"
+
+#: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
+#: js/widgets/dialog/EditDialog.js:299
+msgid "Apply"
+msgstr "Hyväksy"
+
+#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
+#: js/widgets/LangChooser.js:68
+msgid "Please Wait"
+msgstr "Odota hetki"
+
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+msgid "Read"
+msgstr "Lue"
+
+#: js/AdminPanel.js:157
+msgid "The field is readable part of the profile"
+msgstr "Kenttä on luettava osa profiilia"
+
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: js/AdminPanel.js:162
+msgid "The field is editable part of the profile"
+msgstr "Kenttä on muokattava osa profiilia"
+
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
+msgid "Field Name"
+msgstr "Kentän nimi"
+
+#: js/AboutDialog.js:41 js/MainMenu.js:112
+msgid "About {0}"
+msgstr "Tietoa"
+
+#: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
+#: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:84
+#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/widgets/dialog/AddToRecordPanel.js:111
+#: js/widgets/dialog/PreferencesDialog.js:109
+#: js/widgets/dialog/EditDialog.js:288 js/widgets/ActivitiesPanel.js:311
+#: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
+msgid "Ok"
+msgstr ""
+
+#: js/AboutDialog.js:70
+msgid "Released under different"
+msgstr ""
+
+#: js/AboutDialog.js:71
+msgid "Open Source Licenses"
+msgstr ""
+
+#: js/AboutDialog.js:78
+msgid "with the help of our"
+msgstr ""
+
+#: js/AboutDialog.js:79
+msgid "Contributors"
+msgstr ""
+
+#: js/tineInit.js:603
+msgid ""
+"Fatal Error: Client self-update failed, please contact your administrator "
+"and/or restart/reload your browser."
+msgstr ""
+
+#: js/AppManager.js:208
+msgid "Missing Applications"
+msgstr "Puuttuvat ohjelmat"
+
+#: js/AppManager.js:209
+msgid ""
+"There are no applications enabled for you. Please contact your "
+"administrator."
+msgstr "Ohjelmia ei ole aktivoitu sinulle. Ota yhteyttä ylläpitäjään."
+
+#: js/CreditsScreen.js:36
+msgid "Credits"
+msgstr ""
+
+#: js/common.js:218
+msgid "Usage:&#160;"
+msgstr "Käyttö"
+
+#: js/common.js:247
+msgid "No Information"
+msgstr "Ei tietoa"
+
+#: js/common.js:296
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "minuutti"
+msgstr[1] "minuutit"
+
+#: js/common.js:297
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "tunti"
+msgstr[1] "tunnit"
+
+#: js/common.js:298
+msgid "{0} workday"
+msgid_plural "{0} workdays"
+msgstr[0] "työpäivä"
+msgstr[1] "työpäivät"
+
+#: js/common.js:325
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] "sekuntti"
+msgstr[1] "sekunnit"
+
+#: js/LoginPanel.js:80 js/LoginPanel.js:118
+msgid "Login"
+msgstr "Kirjaudu"
+
+#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
+msgid "Password"
+msgstr "Salasana"
+
+#: js/LoginPanel.js:137
+msgid "Tine 2.0 is made for you"
+msgstr "Tine 2.0 on tehty juuri sinulle"
+
+#: js/LoginPanel.js:139
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
+" and get help."
+msgstr "Tine 2.0 haluaa yritysyhteistyön olevan helpompaa ja nautittavampaa! Joten olet lämpimästi tervetullut keskustelemaan kanssamme, tuo uusi ideoita ja voit saada apua."
+
+#: js/LoginPanel.js:145
+msgid "Tine 2.0 Homepage"
+msgstr "Tine 2.0 Kotisivu"
+
+#: js/LoginPanel.js:146
+msgid "Tine 2.0 Forum"
+msgstr "ine 2.0 Foruumi"
+
+#: js/LoginPanel.js:150
+msgid "Translations"
+msgstr ""
+
+#: js/LoginPanel.js:152
+msgid ""
+"If you miss a language, or your language is not supported completely, you "
+"can help our translation teams at transifex."
+msgstr ""
+
+#: js/LoginPanel.js:155
+msgid "Tine 2.0 Translation Portal"
+msgstr ""
+
+#: js/LoginPanel.js:200
+msgid "about {0} minutes"
+msgstr "noin {0} minuuttia"
+
+#: js/LoginPanel.js:205 js/LoginPanel.js:430
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 tarvitsee apuasi"
+
+#: js/LoginPanel.js:207 js/LoginPanel.js:432
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr "Mekin tarvitsemme säännöllisesti palautetta, jotta seuraava Tine 2.0 sopisi tarpeisiisi vieläkin paremmin. Auta meitä ja itseäsi osallistumalla:"
+
+#: js/LoginPanel.js:213
+msgid "participate!"
+msgstr "osallistu!"
+
+#: js/LoginPanel.js:235
+msgid "Languages"
+msgstr "Kielet"
+
+#: js/LoginPanel.js:236
+msgid "Duration"
+msgstr "Kesto"
+
+#: js/LoginPanel.js:277
+msgid "Browser incompatible"
+msgstr "Selaimen yhteensopimattomuus"
+
+#: js/LoginPanel.js:279
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Selaimesi ei tue Tine 2.0 ohjelmaa"
+
+#: js/LoginPanel.js:284
+msgid "Browser incompatible?"
+msgstr "Selaimen yhteensopimattomuus?"
+
+#: js/LoginPanel.js:286
+msgid ""
+"You are using an unrecognized browser. This could result in unexpected "
+"behaviour."
+msgstr ""
+
+#: js/LoginPanel.js:292
+msgid "You might try one of these browsers:"
+msgstr "Voit kokeilla seuraavia selaimia:"
+
+#: js/LoginPanel.js:350
+msgid "Logging you in..."
+msgstr "Kirjaudutaan sisään..."
+
+#: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:624
+#: js/widgets/persistentfilter/PickerPanel.js:314
+#: js/widgets/persistentfilter/PickerPanel.js:352
+#: js/widgets/persistentfilter/PickerPanel.js:402
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Please wait"
+msgstr "Odota hetki"
+
+#: js/LoginPanel.js:363
+msgid "Login successful. Loading {0}..."
+msgstr "Kirjautuminen onnistui. Ladataan {0}..."
+
+#: js/LoginPanel.js:363 js/MainMenu.js:227
+msgid "Please wait!"
+msgstr "Odota hetki!"
+
+#: js/LoginPanel.js:371 js/ExceptionHandler.js:214
+msgid "Connection lost, please check your network!"
+msgstr "Yhteys katkennut, tarkista verkkoyhteytesi!"
+
+#: js/LoginPanel.js:375
+msgid "Login failure"
+msgstr "Kirjautuminen epäonnistui"
+
+#: js/LoginPanel.js:376
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Käyttäjätunnuksesi/ tai salasanasi on virheellinen!!!"
+
+#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:274
+#: js/widgets/dialog/EditDialog.js:659 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:610
+msgid "Errors"
+msgstr "Virheet"
+
+#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:679 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:610
+msgid "Please fix the errors noted."
+msgstr "Korjaa seuraavat virheet."
+
+#: js/LoginPanel.js:403
+msgid "Please enter your login data"
+msgstr "Kirjoita kirjautumistietosi"
+
+#: js/LicenseScreen.js:35
+msgid "License"
+msgstr ""
+
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr "Vaihda salasana käyttäjälle"
+
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Vanha salasana"
+
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Uusi salasana"
+
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Toista uusi salasana"
+
+#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
+#: js/widgets/tags/TagToggleBox.js:59
+#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/AddToRecordPanel.js:103
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/dialog/EditDialog.js:308 js/widgets/dialog/WizardPanel.js:187
+#: js/widgets/ActivitiesPanel.js:303
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:63
+#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:103
+#: js/ux/form/LayerCombo.js:193
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "Odota hetki!"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "Vaihdetaan salasanaa..."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Onnistui"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Salasanasi on vaihdettu."
+
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/widgets/relation/GenericPickerGridPanel.js:633
+#: js/widgets/relation/GenericPickerGridPanel.js:646
+#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/MultipleEditResultSummary.js:196
+#: js/widgets/form/RecordPickerComboBox.js:267
+msgid "Failure"
+msgstr "Virhe"
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Uudet salasanat virheelliset, tarkista salasanat."
+
+#: js/MainMenu.js:62
+msgid "User: {0}"
+msgstr "Käyttäjä: {0}"
+
+#: js/MainMenu.js:118
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Vikatila Console (Ctrl + F11)"
+
+#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: js/MainMenu.js:131
+msgid "Edit Profile"
+msgstr "Muokkaa profiilia"
+
+#: js/MainMenu.js:138
+msgid "Change password"
+msgstr "Muuta salasana"
+
+#: js/MainMenu.js:145
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#: js/MainMenu.js:146
+msgid "Logout from {0}"
+msgstr "Kirjaudutaan ulos {0}"
+
+#: js/MainMenu.js:153
+msgid "Allow desktop notifications"
+msgstr "Salli työpöydän ilmoitukset"
+
+#: js/MainMenu.js:154
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Salli työpöydän ilmoitukset"
+
+#: js/MainMenu.js:164
+msgid "Install web app"
+msgstr "Asenna web sovellus"
+
+#: js/MainMenu.js:165
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr "Asenna Tine 2.0 lisäosa selaimeesi."
+
+#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1616
+#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:686
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/persistentfilter/PickerPanel.js:312
+msgid "Confirm"
+msgstr "Vahvista"
+
+#: js/MainMenu.js:213
+msgid "Are you sure you want to logout?"
+msgstr "Haluatko todella kirjautua ulos?"
+
+#: js/MainMenu.js:227
+msgid "Logging you out..."
+msgstr "Kirjaudutaan ulos..."
+
+#: js/data/Record.js:174
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tehtävä"
+msgstr[1] "Tehtävät"
+
+#: js/data/Record.js:178
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "tehtävälista"
+msgstr[1] "tehtävälistat"
+
+#: js/ExceptionHandler.js:150
+msgid "Your session timed out. You need to login again."
+msgstr "Yhteys sessio aikakatkaistu. Kirjaudu uudestaan sisään."
+
+#: js/ExceptionHandler.js:165
+msgid "Insufficient Rights"
+msgstr ""
+
+#: js/ExceptionHandler.js:166
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Olemme pahoillamme, sinulla ei ole oikeuksia tehdä tätä toimintoa."
+
+#: js/ExceptionHandler.js:174
+msgid "Not Found"
+msgstr "Ei löytynyt"
+
+#: js/ExceptionHandler.js:175
+msgid ""
+"Sorry, your request could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr ""
+
+#: js/ExceptionHandler.js:183
+msgid "Concurrent Updates"
+msgstr ""
+
+#: js/ExceptionHandler.js:184
+msgid ""
+"Someone else saved this record while you where editing the data. You need to"
+" reload and make your changes again."
+msgstr ""
+
+#: js/ExceptionHandler.js:192
+msgid "Service Unavailable"
+msgstr "Palvelu ei saatavilla"
+
+#: js/ExceptionHandler.js:193
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading, maintenance or misconfiguration of the server. Please try again"
+" or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:199
+msgid "Server Message:"
+msgstr "Palvelimen viesti:"
+
+#: js/ExceptionHandler.js:201
+msgid "Invalid Data"
+msgstr "Virheellinen tieto"
+
+#: js/ExceptionHandler.js:202
+msgid "Your input data is not valid. Please provide valid data."
+msgstr "Antamasi tietoa on virheellinen. Tarkista tietojen oikeellisuus."
+
+#: js/ExceptionHandler.js:220
+msgid "Timeout"
+msgstr "Aikakatkaisu"
+
+#: js/ExceptionHandler.js:221
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:229
+msgid "No Response"
+msgstr ""
+
+#: js/ExceptionHandler.js:230
+msgid ""
+"Sorry, the Server did not respond any data. Please reload your browser, try "
+"again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:237
+msgid "Out of Resources"
+msgstr ""
+
+#: js/ExceptionHandler.js:238
+msgid ""
+"Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
+"your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:254
+msgid "No Role Memberships"
+msgstr ""
+
+#: js/ExceptionHandler.js:255
+msgid ""
+"Your user account has no role memberships. Please contact your "
+"administrator."
+msgstr ""
+
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Kaikki"
+
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Jaettu"
+
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Muut käyttäjät"
+
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Minä"
+
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:354
+#: js/widgets/dialog/EditDialog.js:382
+msgid "Saved in"
+msgstr "tallennettu kohteeseen"
+
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:317
+msgid "delete"
+msgstr "poista"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Detach Tags"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Attach Tags"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:112 js/widgets/tags/TagToggleBox.js:117
+#: js/widgets/tags/TagsPanel.js:140 js/widgets/tags/TagsPanel.js:456
+#: js/widgets/tags/TagsPanel.js:460 js/widgets/tags/TagCombo.js:152
+#: js/widgets/tags/TagCombo.js:157
+msgid "personal"
+msgstr "henkilökohtainen"
+
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:141
+msgid "Please Wait..."
+msgstr "Odota hetki..."
+
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+msgid "Add a new personal tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:95 js/widgets/tags/TagsPanel.js:120
+msgid "Add New Personal Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+msgid "Enter tag name:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:162
+msgid "No Tags to display"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:185
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/tags/TagsPanel.js:195
+msgid "Edit tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:200 js/widgets/tags/TagsPanel.js:205
+msgid "Rename Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:205
+msgid "Please enter a new name:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:214
+msgid "Edit Description"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:219
+msgid "Description for tag"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:219
+msgid "Please enter new description:"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:228
+msgid "Change Color"
+msgstr "Vaihda väriä"
+
+#: js/widgets/tags/TagsPanel.js:257
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/tags/TagsPanel.js:270
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/tags/TagsPanel.js:271
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/tags/TagsPanel.js:275
+msgid "Please wait a moment..."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:275
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:408
+#: js/widgets/tags/TagsPanel.js:441 js/widgets/dialog/EditDialog.js:698
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: js/widgets/tags/TagsPanel.js:291
+msgid "Could not delete Tag(s)."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:360 js/widgets/tags/TagsPanel.js:422
+msgid "Notice"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:361 js/widgets/tags/TagsPanel.js:423
+msgid "The minimum tag length is three."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:408
+msgid "Could not create tag."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:441
+msgid "Could not update tag."
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:475 js/widgets/tags/TagsPanel.js:533
+msgid "Enter tag name"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:476 js/widgets/form/RecordPickerManager.js:48
+#: js/widgets/form/RecordPickerComboBox.js:99
+msgid "Searching..."
+msgstr "Etsitään..."
+
+#: js/widgets/tags/TagsPanel.js:611
+#: js/widgets/relation/GenericPickerGridPanel.js:393
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
+#: js/ExceptionDialog.js:145
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/widgets/tags/TagsPanel.js:615
+#: js/widgets/container/PropertiesDialog.js:113
+msgid "Color"
+msgstr "Väri"
+
+#: js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsMassAttachAction.js:76
+msgid "Attach the following tag to all selected items:"
+msgstr ""
+
+#: js/widgets/tags/TagsMassAttachAction.js:98
+msgid "Select Tag"
+msgstr ""
+
+#: js/widgets/tags/TagsMassAttachAction.js:128
+msgid "Attaching Tag"
+msgstr ""
+
+#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Merkki"
+msgstr[1] "Merkit"
+
+#: js/widgets/tags/TagsMassDetachAction.js:18
+msgid "Detach tag(s)"
+msgstr ""
+
+#: js/widgets/tags/TagsMassDetachAction.js:84
+msgid "Select Tag(s) to detach"
+msgstr ""
+
+#: js/widgets/tags/TagCombo.js:48
+msgid "tag name"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr ""
+
+#: js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+
+#: js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:159
+msgid "Remove record"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:281
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/PickerFilter.js:310
+#: js/widgets/grid/FilterModelMultiSelect.js:214
+#: js/widgets/container/FilterModel.js:249
+msgid "Selected  {0}"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:168
+msgid "contains"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:169
+msgid "reg. exp."
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:170 js/widgets/container/FilterModel.js:142
+#: js/widgets/container/FilterModel.js:146
+msgid "is equal to"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:171
+msgid "is greater than"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:172
+msgid "is less than"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:173
+msgid "is not"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:174
+msgid "one of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:175
+msgid "none of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:176
+msgid "is before"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:177
+msgid "is after"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:178
+msgid "is within"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:179
+msgid "is in week no."
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:180
+msgid "starts with"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:181
+msgid "ends with"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:182
+msgid "defined by"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:228
+#: js/widgets/grid/ForeignRecordFilter.js:395
+#: js/widgets/relation/FilterModel.js:87
+msgid "select a operator"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:352
+msgid "Search Account ..."
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:462
+msgid "today"
+msgstr "tänään"
+
+#: js/widgets/grid/FilterModel.js:463
+msgid "yesterday"
+msgstr "eilen"
+
+#: js/widgets/grid/FilterModel.js:464
+msgid "this week"
+msgstr "tämä viikko"
+
+#: js/widgets/grid/FilterModel.js:465
+msgid "last week"
+msgstr "edellinen viikko"
+
+#: js/widgets/grid/FilterModel.js:466
+msgid "the week before last"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:467
+msgid "this month"
+msgstr "tämä kuukausi"
+
+#: js/widgets/grid/FilterModel.js:468
+msgid "last month"
+msgstr "edellinen kuukausi"
+
+#: js/widgets/grid/FilterModel.js:469
+msgid "this quarter"
+msgstr "tämä neljännes"
+
+#: js/widgets/grid/FilterModel.js:470
+msgid "last quarter"
+msgstr "edellinen neljännes"
+
+#: js/widgets/grid/FilterModel.js:471
+msgid "this year"
+msgstr "tämä vuosi"
+
+#: js/widgets/grid/FilterModel.js:472
+msgid "last year"
+msgstr "edellinen vuosi"
+
+#: js/widgets/grid/FilterModel.js:476
+msgid "tomorrow"
+msgstr "huomenna"
+
+#: js/widgets/grid/FilterModel.js:477
+msgid "next week"
+msgstr "seuraava viikko"
+
+#: js/widgets/grid/FilterModel.js:478
+msgid "next month"
+msgstr "seuraava vuosi"
+
+#: js/widgets/grid/FilterModel.js:479
+msgid "next quarter"
+msgstr "seuraava neljännes"
+
+#: js/widgets/grid/FilterModel.js:480
+msgid "next year"
+msgstr "seuraava vuosi"
+
+#: js/widgets/grid/FilterPanel.js:79
+msgid "Attention: There are more filters active!"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:479
+msgid "Criteria {0}"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:260
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr "näytä tiedot"
+
+#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:163
+msgid "Upload Failed"
+msgstr "Päivitys eäonnistui"
+
+#: js/widgets/grid/FileUploadGrid.js:116
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:180
+msgid "Remove file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
+msgid "Pause upload"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
+msgid "Resume upload"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:244
+msgid "Add file"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:286
+msgid "name"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:293
+msgid "size"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:300
+msgid "type"
+msgstr "tyyppi"
+
+#: js/widgets/grid/QuickaddGridPanel.js:91
+msgid "Remove"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
+msgid "Show"
+msgstr "Näytä"
+
+#: js/widgets/grid/FilterToolbar.js:164
+msgid "add new filter"
+msgstr "Lisää uusi suodatin"
+
+#: js/widgets/grid/FilterToolbar.js:170
+msgid "reset all filters"
+msgstr "nollaa kaikki suodattimet"
+
+#: js/widgets/grid/FilterToolbar.js:176
+msgid "start search"
+msgstr "aloita haku"
+
+#: js/widgets/grid/FilterToolbar.js:184
+msgid "save as favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:191
+msgid "Load a favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:358
+msgid "select a field"
+msgstr "valitse kenttä"
+
+#: js/widgets/grid/FilterToolbar.js:396
+msgid "Delete this filter"
+msgstr "Poista tämä suodatin"
+
+#: js/widgets/grid/FilterToolbar.js:428
+msgid "and"
+msgstr ""
+
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr ""
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr ""
+
+#: js/widgets/grid/LinkGridPanel.js:103
+#: js/widgets/account/PickerGridPanel.js:263
+#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:434
+msgid "Name"
+msgstr "Nimi"
+
+#: js/widgets/grid/LinkGridPanel.js:105
+#: js/widgets/relation/GenericPickerGridPanel.js:396
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
+msgid "Type"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:35
+#: js/widgets/grid/FilterStructureTreePanel.js:52
+msgid "Show records that match to one of the following filters"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:37
+#: js/widgets/grid/FilterStructureTreePanel.js:51
+msgid "or alternatively"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:55
+msgid "Add alternative filter"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:61
+msgid "Remove Filter"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:286
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:454
+#: js/widgets/grid/GridPanel.js:455 js/widgets/grid/GridPanel.js:456
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Muokkaa"
+msgstr[1] "Muokkaa"
+
+#: js/widgets/grid/GridPanel.js:469 js/widgets/dialog/EditDialog.js:479
+msgid "Copy {0}"
+msgstr "Kopioi {0}"
+
+#: js/widgets/grid/GridPanel.js:480 js/widgets/tree/ContextMenu.js:35
+msgid "Add {0}"
+msgstr "Lisää"
+
+#: js/widgets/grid/GridPanel.js:488
+msgid "Print Page"
+msgstr "Tulosta sivu"
+
+#: js/widgets/grid/GridPanel.js:518
+#: js/widgets/dialog/DuplicateMergeDialog.js:220
+msgid "Merge {0}"
+msgstr "Yhdistä"
+
+#: js/widgets/grid/GridPanel.js:549 js/widgets/grid/GridPanel.js:550
+#: js/widgets/grid/GridPanel.js:552 js/widgets/tree/ContextMenu.js:52
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Poista"
+msgstr[1] "Poista"
+
+#: js/widgets/grid/GridPanel.js:915
+msgid "Displaying records {0} - {1} of {2}"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:916
+msgid "No {0} to display"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1154
+msgid "New..."
+msgstr "Uusi..."
+
+#: js/widgets/grid/GridPanel.js:1173
+msgid "Add to..."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1217
+#: js/widgets/relation/GenericPickerGridPanel.js:397
+msgid "Creation Time"
+msgstr "Luotu"
+
+#: js/widgets/grid/GridPanel.js:1218 js/widgets/ActivitiesPanel.js:464
+msgid "Created By"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1219
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1220
+msgid "Last Modified By"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1590
+msgid "Not Allowed"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1591
+msgid "You are not allowed to delete all pages at once"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1614
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/GridPanel.js:1649 js/widgets/dialog/EditDialog.js:688
+msgid "Deleting {0}"
+msgstr "Poista {0}"
+
+#: js/widgets/grid/GridPanel.js:1649
+msgid " ... This may take a long time!"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:61
+msgid "Edit definition"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:71
+msgid "Start definition"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:111
+msgid "Related to"
+msgstr ""
+
+#: js/widgets/relation/FilterModel.js:32
+#: js/widgets/relation/GenericPickerGridPanel.js:117 js/Models.js:404
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Suhde"
+msgstr[1] "Suhteet"
+
+#: js/widgets/relation/FilterModel.js:71
+msgid "Defined by ..."
+msgstr ""
+
+#: js/widgets/relation/FilterModel.js:114
+msgid "Define ..."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:110
+msgid "Edit record"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:146
+msgid "Sibling"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:147
+msgid "Parent"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:148
+msgid "Child"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:177
+msgid "Relations failure"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:177
+msgid "There are invalid relations. Please check before saving."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:218
+msgid ""
+"The maximum number of {0} with the type {1} is reached. Please change the "
+"type of this relation"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:392
+msgid "Record"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:394
+msgid "Remark"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:395
+msgid "Dependency"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:634
+msgid ""
+"The record you tried to link is already linked. Please edit the existing "
+"link."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:647
+#: js/widgets/form/RecordPickerComboBox.js:268
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr ""
+
+#: js/widgets/relation/PickerCombo.js:93
+msgid ""
+"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
+"once!"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+msgid "Rename {0}"
+msgstr "Uudelleen nimeä"
+
+#: js/widgets/tree/ContextMenu.js:61
+msgid "Manage {0} Permissions"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:69
+msgid "{0} Properties"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:78
+msgid "Set {0} color"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:92
+msgid "Reload {0}"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:109
+msgid "Edit Properties"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:124
+msgid "Download"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "New {0}"
+msgstr "Uusi"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "Please enter the name of the new {0}:"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:188
+msgid "No {0} added"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Creating {0}..."
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:266
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:272
+msgid "Not renamed {0}"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:457
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:481
+msgid "Properties for {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:223
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:232
+msgid "Choose Import File"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:236
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:240
+msgid "Select file containing your {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
+msgid "What should the file you upload look like?"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:256
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You"
+" will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:259
+msgid ""
+"Following you find a list of all supported import formats and a sample file,"
+" how Tine 2.0 expects your file to look like."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:262
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
+msgid "Download example file"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:286
+msgid "Import description"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:336
+msgid "Set Import Options"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:344
+msgid "Select {0} to add you {1} to:"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:396
+msgid "Checking Import"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:425
+msgid "Resolve Conflicts"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:434
+msgid "There are {0} {1} that might already exist."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:441
+msgid "Conflict"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:442
+msgid "First Conflict"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:443
+msgid "Previous Conflict"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:444
+msgid "Next Conflict"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:445
+msgid "Last Conflict"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:451
+msgid "Conflict is resolved"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:456
+msgid "Resolve all conflicts"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:550
+msgid "Processing Conflict Data"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:575 js/widgets/dialog/ImportDialog.js:595
+msgid "No conflict to resolve"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:594
+msgid "(This is record {0} in your import file)"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:619
+msgid "No Detail Informations"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:624
+#: js/widgets/dialog/MultipleEditResultSummary.js:213
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: js/widgets/dialog/ImportDialog.js:653
+#: js/widgets/dialog/MultipleEditResultSummary.js:192
+msgid "Index"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:669
+msgid "Importing {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:700
+msgid "{0} records had failures and where discarded."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:742
+msgid "In total we found {0} records in your import file."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:745
+msgid "{0} of them will be added as new records into: \"{1}\"."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:752
+msgid "{0} of them where identified as duplicates."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:755
+msgid ""
+"From the identified duplicates {0} will be merged into the existing records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:759
+msgid "From the identified duplicates {0} will be discarded."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:775
+msgid "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:786
+msgid "{0} records have failures and will be discarded."
+msgstr ""
+
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr "Muuta ohjelman asetuksia"
+
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr "Oletukset"
+
+#: js/widgets/dialog/LinkPanel.js:46
+msgid "Links"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:34
+msgid "Alarms"
+msgstr "Hälytykset"
+
+#: js/widgets/dialog/AlarmPanel.js:37
+msgid "0 minutes before"
+msgstr "0 minuuttia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "5 minutes before"
+msgstr "5 minuuttia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "15 minutes before"
+msgstr "15 minuuttia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:40
+msgid "30 minutes before"
+msgstr "30 minuuttia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:41
+msgid "1 hour before"
+msgstr "1 tuntia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "2 hours before"
+msgstr "2 tuntia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:43
+msgid "12 hours before"
+msgstr "12 tuntia ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:44
+msgid "1 day before"
+msgstr "1 päivää ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:45
+msgid "2 days before"
+msgstr "2 päivää ennen"
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Custom Datetime"
+msgstr "Muokattava päiväys"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "Alarm Time"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:170
+msgid "{0} minutes before"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:56
+msgid "OK"
+msgstr "Ok"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:134
+msgid "Merging Records..."
+msgstr "Yhdistä tiedot..."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "Merge Failed"
+msgstr "Yhdistäminen epäonnistui"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:212
+msgid "Merge {0}, prefer First"
+msgstr "Yhdistä, ensimmäiseksi"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:213
+msgid "Merge {0}, prefer Second"
+msgstr "Yhdistä, toiseksi"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:223
+msgid "First {0}"
+msgstr "Ensimmäinen"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:224
+msgid "Second {0}"
+msgstr "Toinen"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
+msgid "Final {0}"
+msgstr "Viimeinen"
+
+#: js/widgets/dialog/PreferencesPanel.js:185
+msgid "There are no preferences for this application."
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+#: js/widgets/dialog/FileListDialog.js:28
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+#: js/widgets/dialog/FileListDialog.js:32
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:91
+msgid "No"
+msgstr "Ei"
+
+#: js/widgets/dialog/FileListDialog.js:99
+msgid "Yes"
+msgstr "Kyllä"
+
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:125
+msgid "Admin Mode"
+msgstr "Ylläpitäjä tila"
+
+#: js/widgets/dialog/PreferencesDialog.js:160
+msgid "Applications"
+msgstr "Ohjelmat"
+
+#: js/widgets/dialog/PreferencesDialog.js:189
+msgid "Edit Preferences"
+msgstr "Muokkaa asetuksia"
+
+#: js/widgets/dialog/PreferencesDialog.js:190
+msgid "Loading ..."
+msgstr "Ladataan..."
+
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/form/ConfigPanel.js:134
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesDialog.js:274
+msgid "Saving of preferences failed."
+msgstr "Asetuksien tallennus epäonnistui."
+
+#: js/widgets/dialog/EditDialog.js:482
+msgid "Add New {0}"
+msgstr "Lisää uusi {0}"
+
+#: js/widgets/dialog/EditDialog.js:484
+msgid "Edit {0} \"{1}\""
+msgstr "Muokkaa {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:544
+msgid "Transferring {0}..."
+msgstr "Siirretään {0}..."
+
+#: js/widgets/dialog/EditDialog.js:686
+msgid "Do you really want to delete this {0}?"
+msgstr "Haluatko poistaa nämä {0}?"
+
+#: js/widgets/dialog/EditDialog.js:698
+msgid "Could not delete {0}."
+msgstr "Ei voida poistaa {0}."
+
+#: js/widgets/dialog/EditDialog.js:750
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:146
+msgid "You edited {0} {1}."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} have been updated properly."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} has been updated properly."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
+#: js/Models.js:338
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Vie"
+msgstr[1] "Vienti"
+
+#: js/widgets/dialog/ExportDialog.js:84
+msgid "Export {0} {1}"
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:111
+msgid "Export definition"
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:120
+msgid "Select Export Definition ..."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:300
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:415
+msgid "Delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:398
+msgid "Undo change for all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:471
+msgid "Edit {0} {1}"
+msgstr "Muokkaa"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:524
+msgid "Different Values"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:525
+msgid ""
+"This field has different values. Editing this field will overwrite the old "
+"values."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:624
+msgid "Applying changes"
+msgstr ""
+
+#: js/widgets/dialog/PreferencesTreePanel.js:67
+msgid "General Preferences"
+msgstr "Yleiset asetukset"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:87
+msgid "My Profile"
+msgstr "Oma profiili"
+
+#: js/widgets/dialog/WizardPanel.js:173
+msgid "Back"
+msgstr "Takaisin"
+
+#: js/widgets/dialog/WizardPanel.js:180
+msgid "Next"
+msgstr "Seuraava"
+
+#: js/widgets/dialog/WizardPanel.js:194
+msgid "Finish"
+msgstr "Valmis"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
+msgid "The record you try to add might already exist."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:132
+msgid "Field Group"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:146
+msgid "My Value"
+msgstr "Oma arvo"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:154
+msgid "Existing Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:162
+msgid "Final Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:179
+msgid "Action:"
+msgstr "Toiminto:"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:195
+msgid "Merge, keeping existing details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
+msgid "Merge, keeping my details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:197
+msgid "Keep existing record and discard mine"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:198
+msgid "Keep both records"
+msgstr ""
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr ""
+
+#: js/widgets/customfields/EditDialogPlugin.js:155
+msgid "General"
+msgstr "Yleiset"
+
+#: js/widgets/customfields/EditDialogPlugin.js:167
+msgid "Custom Fields"
+msgstr "Muokattavat kentät"
+
+#: js/widgets/ActivitiesPanel.js:147
+msgid "Add a Note..."
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
+#: js/widgets/container/GrantsGrid.js:45
+msgid "Add"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+msgid "Note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+msgid "Add new note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:206
+msgid "Notes"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:282
+msgid "Enter new note:"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+msgid "Add Note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:371
+msgid "Add a {0} Note"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:465
+msgid "Timestamp"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:479
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:480
+msgid "No history to display"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:580
+msgid "History"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
+msgid "Quick search"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
+msgid "Time"
+msgstr ""
+
+#: js/widgets/ActivitiesPanel.js:596
+msgid "User"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:113
+msgid "My favorites"
+msgstr "Omat suosikit"
+
+#: js/widgets/persistentfilter/PickerPanel.js:284
+msgid "Delete Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:289
+#: js/widgets/persistentfilter/PickerPanel.js:384
+msgid "Edit Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:294
+msgid "Overwrite Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:312
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:314
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:350
+msgid "Overwrite?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:350
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:352
+msgid "Overwriting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:373
+msgid "Could not save Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:373
+msgid "Your current view does not support favorites"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:382
+msgid "Create Favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:402
+msgid "Saving Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:563
+msgid "(shared)"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:98
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:102
+msgid "Favorite not Saved"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:98
+msgid ""
+"You have to supply a shorter name! Names of favorite can only be up to 40 "
+"characters long."
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:102
+msgid "You have to supply a name for the favorite!"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "Title"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:154
+msgid "Shared Favorite (visible by all users)"
+msgstr ""
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr "Valitse maa..."
+
+#: js/widgets/account/PickerGridPanel.js:154
+msgid "Search User"
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:160
+msgid "Search Group"
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:166
+msgid "Add Anyone"
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:209
+msgid "Anyone"
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:225
+msgid "Search for users ..."
+msgstr ""
+
+#: js/widgets/account/PickerGridPanel.js:247
+msgid "Search for groups ..."
+msgstr ""
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:328
+msgid "containers"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:355
+msgid "Favorites"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:370
+msgid "Modules"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:381
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "Error"
+msgstr ""
+
+#: js/widgets/container/GrantsDialog.js:126
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+#: js/widgets/container/FilterModel.js:142
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:129
+msgid "choose other {0}..."
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Select a {0}"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:152
+msgid "Recently used {0}:"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:478
+msgid "please select a {0}"
+msgstr ""
+
+#: js/widgets/container/PropertiesDialog.js:90
+msgid "Properties"
+msgstr "Asetukset"
+
+#: js/widgets/container/PropertiesDialog.js:119
+msgid "My Grants"
+msgstr ""
+
+#: js/widgets/container/TreePanel.js:142
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/container/TreePanel.js:546
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Sinulla ei ole oikeuksia valita"
+
+#: js/widgets/container/TreePanel.js:547
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/TreePanel.js:548
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Poista"
+
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr "Synkronoi"
+
+#: js/widgets/container/GrantsGrid.js:54
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Ylläpitäjä"
+
+#: js/widgets/container/GrantsGrid.js:56
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr "Yksityinen"
+
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
+msgstr "Asetus ongelma"
+
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Virheelliset asetukset"
+
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
+msgstr "Siirretään asetuksia..."
+
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Tallenna asetukset"
+
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
+msgstr "Lataa asetukset"
+
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
+msgstr "Väärä tiedosto tyyppi"
+
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
+msgstr ""
+
+#: js/ExceptionDialog.js:110
+msgid "Send Report"
+msgstr "Lähetä raportti"
+
+#: js/ExceptionDialog.js:138
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Viimeksi suorittamasi toiminto ei tehty kunnolla."
+
+#: js/ExceptionDialog.js:139
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr "Helpottaaksesi ohjelman kehitystä. Liitä pieni kuvaus mitä olit tekemässä kun virhe ilmeni."
+
+#: js/ExceptionDialog.js:153
+msgid "Send Contact Information"
+msgstr "Lähetä yhteystiedot"
+
+#: js/ExceptionDialog.js:170
+msgid "Details:"
+msgstr "Tiedot:"
+
+#: js/ExceptionDialog.js:194
+msgid "Sending report..."
+msgstr "Lähetetään raporttia..."
+
+#: js/ExceptionDialog.js:194
+msgid "Please wait a moment"
+msgstr "Ole hyvä ja odota hetki"
+
+#: js/ExceptionDialog.js:243
+msgid "Transmission Completed"
+msgstr "Lähetys valmis"
+
+#: js/ExceptionDialog.js:244
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Raporttisi on lähetetty. Kiitos avustasi"
+
+#: js/ExceptionDialog.js:244
+msgid "Please restart your browser now!"
+msgstr "Käynnistä selaimesi uudestaan nyt!"
+
+#: js/MainScreen.js:192
+msgid "Your password expired. Please enter a new user password:"
+msgstr "Salasanasi on vanhentunut. Anna uusi salasana:"
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
+msgstr "Ulonna teksti"
+
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
+msgstr "Sisennä teksti"
+
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
+msgstr "Poista muotoilu"
+
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Rekisteröitymis apuri"
+
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr ""
+
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr ""
+
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Kirjautusmis nimi"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "Sähköpostiosoite"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Onneksi olkoon!"
+
+#: js/UserRegistration.js:171
+msgid ""
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr "Olet antanut kaikki tarvittavat tiedot. Jos painat valmis painiketta, lähetämme sinulle rekisteröinti sähköpostin."
+
+#: js/ux/PopupWindowManager.js:164
+msgid ""
+"The window you want to work with is backgrounded. Your browser doesn't "
+"support to foreground the window for you, so you need to use your operating "
+"systems window switching features. Please send complaints to your browser "
+"vendor!"
+msgstr ""
+
+#: js/ux/Percentage.js:190
+msgid "(paused)"
+msgstr ""
+
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr ""
+
+#: js/ux/grid/PagingToolbar.js:50
+msgid "{0} selected"
+msgstr "valitut"
+
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Unselect all"
+msgstr ""
+
+#: js/ux/grid/PagingToolbar.js:52
+msgid "Select all pages ({0} records)"
+msgstr ""
+
+#: js/ux/grid/PagingToolbar.js:53
+msgid "Toggle selection"
+msgstr ""
+
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "paikalla"
+
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "poissa"
+
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Ohjelma versio"
+
+#: js/ux/form/ImageField.js:73
+msgid "Loading"
+msgstr "Ladataan"
+
+#: js/ux/form/ImageField.js:76
+msgid "Click to edit"
+msgstr "Muokkaa"
+
+#: js/ux/form/ImageField.js:125
+msgid "Not An Image"
+msgstr ""
+
+#: js/ux/form/ImageField.js:125
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Valitse kuvatiedosto  (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:163
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Kuvan lataus epäonnistui. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
+
+#: js/ux/form/ImageField.js:175
+msgid "Change Image"
+msgstr "Muuta kuva"
+
+#: js/ux/form/ImageField.js:184 js/ux/form/ImageField.js:202
+msgid "Crop Image"
+msgstr "Leikkaa kuva"
+
+#: js/ux/form/ImageField.js:208
+msgid "Delete Image"
+msgstr "Poista kuva"
+
+#: js/ux/form/ImageField.js:217
+msgid "Show Original Image"
+msgstr "Näytä alkuperäinen kuva"
+
+#: js/ux/form/ImageField.js:279
+msgid "Image Failed"
+msgstr "Kuva epäonnistui"
+
+#: js/ux/form/ImageField.js:279
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Kuvan lataus ei onnistunut. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
+
+#: js/Models.js:272
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:311
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Tuo"
+msgstr[1] "Tuonti"
+
+#: js/Models.js:376
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Valtakirja"
+msgstr[1] "Valtakirjat"
+
+#: js/Models.js:426
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Osasto"
+msgstr[1] "Osastot"
+
+#: js/Models.js:453
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Asetus"
+msgstr[1] "Asetukset"
+
+#: js/Models.js:453
+msgid "Configs"
+msgstr "Asetukset"
+
+#: views/update.php:24
+msgid "Tine 2.0 needs to be updated or is not installed yet."
+msgstr "Tine 2.0 tarvitsee päivittää tai sitä ei ole asennettu vielä."
+
+#: views/update.php:25
+msgid "Please wait or contact your administrator"
+msgstr ""
+
+#: Container.php:680
+#, python-format
+msgid "%s's personal container"
+msgstr ""
+
+#: Container.php:1521
+msgid ""
+"You are not allowed to delete this Container. Please define another "
+"container as the default addressbook for internal contacts!"
+msgstr ""

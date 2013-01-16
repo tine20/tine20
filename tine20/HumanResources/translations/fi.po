@@ -1,0 +1,382 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 07:20+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:93
+msgid "edit private employee data"
+msgstr "muokkaa työntekijän tietoja"
+
+#: Acl/Rights.php:94
+msgid ""
+"Edit birthday, account data and other private information of employee "
+"records"
+msgstr "Muokkaa syntymäpäivää, työntekijätietoja ja muita tietoja työntekijä rekisterissä"
+
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr ""
+
+#: Config.php:42
+msgid "Freetime Type"
+msgstr "Vapaaika tyyppi"
+
+#: Config.php:44
+msgid "Possible free time definitions."
+msgstr ""
+
+#: Config.php:52
+msgid "Freetime Status"
+msgstr ""
+
+#: Config.php:54
+msgid "Possible free time status definitions."
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Sickness"
+msgstr "Sairas"
+
+#: Setup/Initialize.php:35
+msgid "Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:49
+msgid "Requested"
+msgstr ""
+
+#: Setup/Initialize.php:50
+msgid "In process"
+msgstr ""
+
+#: Setup/Initialize.php:51
+msgid "Accepted"
+msgstr "Hyväksytty"
+
+#: Setup/Initialize.php:52
+msgid "Declined"
+msgstr ""
+
+#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
+msgid "Tags"
+msgstr "Tagi"
+
+#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:179
+msgid "Number"
+msgstr "Numero"
+
+#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:237
+msgid "Full Name"
+msgstr "Koko nimi"
+
+#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:242 js/Models.js:119
+msgid "Salutation"
+msgstr "Palkka"
+
+#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:250 js/Models.js:116
+msgid "Title"
+msgstr "Ammatti"
+
+#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:254 js/Models.js:115
+msgid "First Name"
+msgstr "Etunimi"
+
+#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:262 js/Models.js:118
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:330 js/Models.js:111
+msgid "Employment begin"
+msgstr "Työsuhteen aloitus"
+
+#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:335 js/Models.js:112
+msgid "Employment end"
+msgstr "Työsuhteen lopetus"
+
+#: js/EmployeeGridPanel.js:153 js/EmployeeEditDialog.js:115
+msgid "Supervisor"
+msgstr "Työnjohtaja"
+
+#: js/EmployeeGridPanel.js:160 js/EmployeeEditDialog.js:130 js/Models.js:120
+msgid "Health Insurance"
+msgstr "Sairasvakuutus"
+
+#: js/EmployeeGridPanel.js:166 js/EmployeeEditDialog.js:123
+msgid "Division"
+msgstr "Osasto"
+
+#: js/AdminPanel.js:68
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: js/AdminPanel.js:76
+msgid "OK"
+msgstr "Ok"
+
+#: js/AdminPanel.js:204 js/ContractGridPanel.js:112
+msgid "Calendar"
+msgstr "Kalenteri"
+
+#: js/AdminPanel.js:205 js/ContractGridPanel.js:113
+msgid "Calendars"
+msgstr "Kalenterit"
+
+#: js/EmployeeEditDialog.js:143 js/Models.js:306
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] "Vapaa-aika"
+msgstr[1] "Vapaa-ajat"
+
+#: js/EmployeeEditDialog.js:160 js/EmployeeEditDialog.js:173
+#: js/FreeTimeEditDialog.js:124 js/FreeDayGridPanel.js:114
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:144 js/Models.js:67
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] "Työntekijä"
+msgstr[1] "Työntekijät"
+
+#: js/EmployeeEditDialog.js:190 js/Models.js:114
+msgid "Account"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:209
+msgid "Apply contact data on form"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:275
+msgid "Personal Information"
+msgstr "Henkilökohtaiset tiedot"
+
+#: js/EmployeeEditDialog.js:285
+msgid "Country"
+msgstr "Maa"
+
+#: js/EmployeeEditDialog.js:288
+msgid "Locality"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:291
+msgid "Postalcode"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:294
+msgid "Region"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:297
+msgid "Street"
+msgstr "Katuosoite"
+
+#: js/EmployeeEditDialog.js:300
+msgid "Street2"
+msgstr "Katuosoite 2"
+
+#: js/EmployeeEditDialog.js:303
+msgid "E-Mail"
+msgstr "Sähköpostiosoite"
+
+#: js/EmployeeEditDialog.js:306
+msgid "Telephone Number"
+msgstr "Puhelinnumero"
+
+#: js/EmployeeEditDialog.js:309
+msgid "Cell Phone Number"
+msgstr "Matkapuhelin numero"
+
+#: js/EmployeeEditDialog.js:313
+msgid "Birthday"
+msgstr "Syntymäpäivä"
+
+#: js/EmployeeEditDialog.js:321
+msgid "Internal Information"
+msgstr "Lisätiedot"
+
+#: js/EmployeeEditDialog.js:338 js/Models.js:117
+msgid "Profession"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:346
+msgid "Banking Information"
+msgstr "Pankkiyhteys"
+
+#: js/EmployeeEditDialog.js:355
+msgid "Account Holder"
+msgstr "Tilin haltija"
+
+#: js/EmployeeEditDialog.js:358
+msgid "Account Number"
+msgstr "Tilinumero"
+
+#: js/EmployeeEditDialog.js:361
+msgid "Bank Name"
+msgstr "Pankin nimi"
+
+#: js/EmployeeEditDialog.js:364
+msgid "Code Number"
+msgstr "Pankin koodi"
+
+#: js/EmployeeEditDialog.js:385 js/FreeTimeEditDialog.js:249
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/EmployeeEditDialog.js:399 js/FreeTimeEditDialog.js:263
+msgid "Enter description"
+msgstr "Lisää kuvaus"
+
+#: js/HumanResources.js:25
+msgid "Human Resources"
+msgstr ""
+
+#: js/ContractGridPanel.js:59 js/FreeTimeEditDialog.js:134 js/Models.js:230
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Sopimus"
+msgstr[1] "Sopimukset"
+
+#: js/ContractGridPanel.js:128
+msgid "Working Time Model"
+msgstr "Työaika malli"
+
+#: js/ContractGridPanel.js:131
+msgid "Vacation Days"
+msgstr "Lomapäivät"
+
+#: js/ContractGridPanel.js:136
+msgid "Cost Centre"
+msgstr ""
+
+#: js/ContractGridPanel.js:142
+msgid "Start Date"
+msgstr "Aloituspäivä"
+
+#: js/ContractGridPanel.js:145
+msgid "End Date"
+msgstr "Lopetuspäivä"
+
+#: js/ContractGridPanel.js:148
+msgid "Feast Calendar"
+msgstr "Juhlakalenteri"
+
+#: js/FreeTimeEditDialog.js:160 js/FreeTimeEditDialog.js:172
+msgid "FreeTime"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:189 js/FreeDayGridPanel.js:115
+#: js/FreeTimeGridPanel.js:145 js/Models.js:340
+msgid "Type"
+msgstr "Tyyppi"
+
+#: js/FreeTimeEditDialog.js:197 js/FreeTimeGridPanel.js:146 js/Models.js:348
+msgid "Status"
+msgstr "Tilas"
+
+#: js/FreeTimeEditDialog.js:204
+msgid "First Day Length"
+msgstr "Ensimmäisen päivän pituus"
+
+#: js/FreeTimeEditDialog.js:212
+msgid "Last Day Length"
+msgstr "Viimeisin päivän pituus"
+
+#: js/FreeTimeEditDialog.js:220 js/FreeDayGridPanel.js:117
+#: js/FreeTimeGridPanel.js:148 js/Models.js:354
+msgid "Remark"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:232
+msgid "Select Days"
+msgstr "Valitse päivät"
+
+#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:147
+msgid "Date Start"
+msgstr "Aloituspäivä"
+
+#: js/ExceptionHandler.js:47
+msgid "No contract could be found."
+msgstr "Työsopimusta ei löydy."
+
+#: js/ExceptionHandler.js:48
+msgid "Please create a contract for this employee!"
+msgstr "Luo työsopimus työntekijälle!"
+
+#: js/DatePicker.js:42
+msgid "WK"
+msgstr ""
+
+#: js/DatePicker.js:63
+msgid "Loading calendar data..."
+msgstr "Ladataan kalenterin tietoja..."
+
+#: js/Models.js:71
+msgid "Employees"
+msgid_plural "Employees"
+msgstr[0] "Työntekijä"
+msgstr[1] "Työntekijät"
+
+#: js/Models.js:105 js/Models.js:195 js/Models.js:268 js/Models.js:338
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Models.js:106
+msgid "Employee name"
+msgstr "Työntekijän nimi"
+
+#: js/Models.js:108 js/Models.js:355
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Models.js:109 js/Models.js:356
+msgid "Last Modified By"
+msgstr "Muokannut vimeksi"
+
+#: js/Models.js:110 js/Models.js:357
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Models.js:113 js/Models.js:358
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/Models.js:157
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] "Työaika"
+msgstr[1] "Työajat"
+
+#: js/Models.js:161
+msgid "Working Times"
+msgid_plural "Working Times"
+msgstr[0] "Työajat"
+msgstr[1] "Työajat"
+
+#: js/Models.js:234
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] "Sopimus"
+msgstr[1] "Sopimukset"
+
+#: js/Models.js:391
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] "Vapaapäivä"
+msgstr[1] "Vapaapäivät"
+
+#: js/Models.js:394
+msgid "Free Days"
+msgid_plural "Free Days"
+msgstr[0] "Vapaapäivät"
+msgstr[1] "Vapaapäivät"

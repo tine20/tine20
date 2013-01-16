@@ -27,9 +27,9 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      * @param Zend_Config               $_config
      * @param Zend_Log                  $_log
      */
-    public function __construct($_egwDb, $_config, $_log)
+    public function __construct($_config, $_log)
     {
-        parent::__construct($_egwDb, $_config, $_log);
+        parent::__construct($_config, $_log);
     }
     
     /**
@@ -38,11 +38,43 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     public function import()
     {
-        $this->_log->INFO('starting egw import for Tinebase');
+        //@TODO move to admin module
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' starting egw import for Admin');
         
-        $this->importGroups();
-        $this->importAccounts();
-        $this->importGroupMembers();
+        if ($this->config->admin->import_groups) {
+            $this->importGroups();
+        }
+        if ($this->config->admin->import_users) {
+            $this->importAccounts();
+        }
+        if ($this->config->admin->import_groupmembers) {
+            $this->importGroupMembers();
+        }
+        
+        // walk apps
+        $apps = Setup_Controller::getInstance()->searchApplications();
+        foreach($apps['results'] as $app) {
+            if (   $app['install_status'] == 'uptodate'
+                && $app['name'] != 'Admin'
+                && $this->_config->{strtolower($app['name'])}
+                && $this->_config->{strtolower($app['name'])}->enabled) {
+                
+                $config = $this->_config->{strtolower($app['name'])}->toArray();
+                
+                $class_name = $app['name'] . '_Setup_Import_Egw14';
+                if (! class_exists($class_name)) {
+                    $this->_log->ERR(__METHOD__ . '::' . __LINE__ . " no import for {$app['name']} available");
+                    continue;
+                }
+                
+                try {
+                    $importer = new $class_name($this->_config->{strtolower($app['name'])}, $this->_log);
+                    $importer->import();
+                } catch (Exception $e) {
+                    $this->_log->ERR(__METHOD__ . '::' . __LINE__ . " import for {$app['name']} failed ". $e->getMessage());
+                }
+            }
+        }
     }
     
     /**
@@ -53,7 +85,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function importAccounts()
     {
-        $this->_log->INFO('start importing egw users');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' start importing egw users');
         
         $select = $this->_egwDb->select()
             ->from(array('accounts' => 'egw_accounts'))
@@ -100,7 +132,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
         }
         
-        $this->_log->NOTICE('imported ' . count($accounts) . ' users from egw');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' imported ' . count($accounts) . ' users from egw');
     }
 
     /**
@@ -109,7 +141,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function importGroups()
     {
-        $this->_log->INFO('start importing egw groups');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' start importing egw groups');
         
         $select = $this->_egwDb->select()
             ->from(array('accounts' => 'egw_accounts'))
@@ -132,7 +164,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             }
         }
         
-        $this->_log->NOTICE('imported ' . count($groups) . ' groups from egw');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' imported ' . count($groups) . ' groups from egw');
     }
 
     /**
@@ -141,7 +173,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function importGroupMembers()
     {
-        $this->_log->INFO('start importing egw group members');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' start importing egw group members');
         
         $select = $this->_egwDb->select()
             ->from(array('acl' => 'egw_acl'))
@@ -155,6 +187,6 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             Tinebase_Group::getInstance()->addGroupMember($groupId, $member->acl_account);
         }
         
-        $this->_log->NOTICE('imported all group memberships from egw');
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' imported all group memberships from egw');
     }
 }

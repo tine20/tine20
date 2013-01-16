@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-21 18:18+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2012-11-28 11:48+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,6 +25,22 @@ msgstr "управление продуктами"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "добавление, изменение и удаление продуктов"
+
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr ""
+
+#: Model/Contract.php:92
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:93
+msgid "Customer"
+msgstr "Клиент"
+
+#: Model/Contract.php:94
+msgid "Partner"
+msgstr "Партнёр"
 
 #: Config.php:49
 msgid "Contract Number Creation"
@@ -50,7 +66,7 @@ msgstr "Проверка номера контракта"
 msgid "The Number can be validated as text or number."
 msgstr "Номер должен быть проверен как текст или число"
 
-#: Config.php:67 js/ContractEditDialog.js:136
+#: Config.php:67 js/Models.js:200 js/ContractEditDialog.js:136
 msgid "Number"
 msgstr "Число"
 
@@ -76,13 +92,21 @@ msgstr ""
 msgid "Possible Contract cleared states."
 msgstr ""
 
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr ""
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
+msgstr "Мои продукты"
 
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr ""
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr "Созданные мной продукты"
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr "Мои контракты"
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
+msgstr "Созданные мной контракты"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -96,50 +120,54 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr ""
+#: js/ContractGridPanel.js:82
+msgid "Contract number"
+msgstr "Номер договора"
 
-#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:87
+#: js/ContractGridPanel.js:88 js/Models.js:237 js/ContractEditDialog.js:143
 msgid "Title"
 msgstr "Заголовок"
 
-#: js/ContractEditDialog.js:149
-msgid "Contact Customer"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "Contact Responsible"
-msgstr ""
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Компания"
-
-#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:93 js/Models.js:147
+#: js/ContractGridPanel.js:94 js/Models.js:147 js/ContractEditDialog.js:176
 msgid "Status"
 msgstr "Статус"
 
-#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:100 js/Models.js:154
+#: js/ContractGridPanel.js:101 js/Models.js:154 js/ContractEditDialog.js:183
 msgid "Cleared"
 msgstr ""
 
-#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:107 js/Models.js:160
+#: js/ContractGridPanel.js:108 js/Models.js:160 js/ContractEditDialog.js:187
 msgid "Cleared in"
 msgstr ""
 
-#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
-#: js/ProductGridPanel.js:123
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
+msgid "Name"
+msgstr "Название"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
+msgid "Price"
+msgstr "Цена"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
+msgid "Manufacturer"
+msgstr "Производитель"
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
+msgid "Category"
+msgstr "Категория"
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
+#: js/ContractEditDialog.js:193
 msgid "Description"
 msgstr "Описание"
 
-#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
 msgid "Enter description..."
 msgstr "Ввести описание..."
 
-#: js/ContractGridPanel.js:81
-msgid "Contract number"
-msgstr "Номер договора"
+#: js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Теги"
 
 #: js/Models.js:39
 msgid "Product"
@@ -148,14 +176,14 @@ msgstr[0] "Продукт"
 msgstr[1] "Продукты"
 msgstr[2] "Продукты"
 
-#: js/Models.js:43 js/Models.js:217
+#: js/Models.js:43 js/Models.js:226
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
 
-#: js/Models.js:77 js/Models.js:143
+#: js/Models.js:77 js/Models.js:143 js/Models.js:199 js/Models.js:236
 msgid "Quick search"
 msgstr "Быстрый поиск"
 
@@ -199,57 +227,33 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:214
+#: js/Models.js:201
+msgid "Remark"
+msgstr ""
+
+#: js/Models.js:223
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Название"
-
-#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Цена"
-
-#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Производитель"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Категория"
-
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Теги"
-
-#: Model/Contract.php:92
-msgid "Responsible"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
 msgstr ""
 
-#: Model/Contract.php:93
-msgid "Customer"
-msgstr "Клиент"
+#: js/ContractEditDialog.js:149
+msgid "Contact Customer"
+msgstr ""
 
-#: Model/Contract.php:94
-msgid "Partner"
-msgstr "Партнёр"
+#: js/ContractEditDialog.js:161
+msgid "Contact Responsible"
+msgstr ""
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
-msgid "My Products"
-msgstr "Мои продукты"
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Компания"
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
-msgid "Products created by myself"
-msgstr "Созданные мной продукты"
-
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
-msgid "My Contracts"
-msgstr "Мои контракты"
-
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
-msgid "Contracts created by myself"
-msgstr "Созданные мной контракты"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr ""

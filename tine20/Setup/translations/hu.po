@@ -17,66 +17,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Név"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Engedélyezett"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Sorrend"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Telepített verzió"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Elérhető verzió"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Állapot"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Függőségek"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Program telepítése"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Program eltávolítása"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Program frissítése"
-
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "{0} bejelentkezéshez ugrás"
-
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "eltávolítás"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Biztosan el szeretnéd távolítani a programo(ka)t?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Ez eltarthat egy ideig"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "Függőségek megszegése"
-
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "Minden meglévő csoport és felhasználó törlése"
@@ -89,7 +29,7 @@ msgid ""
 msgstr "SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az azonsítók tárolási hátterét LDAP-ra?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
+#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:132
 msgid "Backend"
 msgstr "Háttér"
 
@@ -155,8 +95,8 @@ msgid "Host"
 msgstr "Gép"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 msgid "Port"
 msgstr "Port"
 
@@ -165,8 +105,8 @@ msgid "Login name"
 msgstr "Felhasználó név"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
-#: js/EmailPanel.js:190
+#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:207
 msgid "Password"
 msgstr "Jelszó"
 
@@ -182,9 +122,9 @@ msgstr "Alap DN"
 msgid "Search filter"
 msgstr "Keresési szűrő"
 
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
-#: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390
+#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310
 msgid "Hostname"
 msgstr "Gépnév"
 
@@ -354,101 +294,115 @@ msgstr "Jelszó nem egyezik"
 msgid "Should not be empty"
 msgstr "Nem lehet üres"
 
-#: js/ConfigManagerPanel.js:135
-msgid "File"
-msgstr "File"
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Elolvastam a licensz megállapodást és elfogadtam"
 
-#: js/ConfigManagerPanel.js:145
-msgid "Adapter"
-msgstr "Adapter"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Licensz megállapodás"
 
-#: js/ConfigManagerPanel.js:160
-msgid "Setup Authentication"
-msgstr "Telepítési azonosítás"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Elolvastam a titoktartási megállapodást és elfogadtam"
 
-#: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
-msgid "Username"
-msgstr "Felhasználónév"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Titoktartási megállapodás"
 
-#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
-msgid "Database"
-msgstr "Adatbázis"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Kikötések és feltételek elfogadása"
 
-#: js/ConfigManagerPanel.js:203
-msgid "User"
-msgstr "Felhasználó"
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Kikötések és feltételek"
 
-#: js/ConfigManagerPanel.js:211
-msgid "Prefix"
-msgstr "Előképző"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Telepítési ellenörzések"
 
-#: js/ConfigManagerPanel.js:215
-msgid "Logging"
-msgstr "Naplózás"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Beállítások kezelése"
 
-#: js/ConfigManagerPanel.js:225
-msgid "Filename"
-msgstr "Filenév"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Azonosítás/Belépések"
 
-#: js/ConfigManagerPanel.js:228
-msgid "Priority"
-msgstr "Prioritás"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "Email"
 
-#: js/ConfigManagerPanel.js:232
-msgid "Caching"
-msgstr "Gyorsítótárazás"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Programok kezelése"
 
-#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
-msgid "Path"
-msgstr "Elérési út"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Program"
+msgstr[1] "Programok"
 
-#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
-msgid "Lifetime (seconds)"
-msgstr "Élettartam (másodperc)"
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Név"
 
-#: js/ConfigManagerPanel.js:251
-msgid "Temporary files"
-msgstr "Ideiglenes fileok"
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Engedélyezett"
 
-#: js/ConfigManagerPanel.js:259
-msgid "Temporary Files Path"
-msgstr "Ideiglenes filok elérési útja"
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Sorrend"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Session"
-msgstr "Munkafázis"
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Telepített verzió"
 
-#: js/ConfigManagerPanel.js:323
-msgid "Filestore directory"
-msgstr "Filetárolási könyvtár"
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Elérhető verzió"
 
-#: js/ConfigManagerPanel.js:331
-msgid "Filestore Path"
-msgstr "Filetárolás elérési útja"
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Állapot"
 
-#: js/ConfigManagerPanel.js:336
-msgid "Addressbook Map panel"
-msgstr "Címjegyzék Térkép fül"
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Függőségek"
 
-#: js/ConfigManagerPanel.js:344
-msgid "Map panel"
-msgstr "Térkép fül"
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Program telepítése"
 
-#: js/ConfigManagerPanel.js:346
-msgid "disabled"
-msgstr "letiltva"
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Program eltávolítása"
 
-#: js/ConfigManagerPanel.js:346
-msgid "enabled"
-msgstr "engedélyezve"
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Program frissítése"
 
-#: js/ConfigManagerPanel.js:358
-msgid "Config file is not writable"
-msgstr "Beállítási file nem írható"
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "{0} bejelentkezéshez ugrás"
 
-#: js/ConfigManagerPanel.js:376
-msgid "Download config file"
-msgstr "Beállítási file letöltése"
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "eltávolítás"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Biztosan el szeretnéd távolítani a programo(ka)t?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Ez eltarthat egy ideig"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Függőségek megszegése"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -461,6 +415,10 @@ msgstr "Standard SMTP"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "Imap"
+
+#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:167
+msgid "Username"
+msgstr "Felhasználónév"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -616,52 +574,94 @@ msgstr "Telepítési tesztek futtatása"
 msgid "Ignore setup tests"
 msgstr "Telepítési tesztek figyelmen kívül hagyása"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Kikötések és feltételek"
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr "File"
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Telepítési ellenörzések"
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr "Adapter"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Beállítások kezelése"
+#: js/ConfigManagerPanel.js:160
+msgid "Setup Authentication"
+msgstr "Telepítési azonosítás"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Azonosítás/Belépések"
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
+msgid "Database"
+msgstr "Adatbázis"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "Email"
+#: js/ConfigManagerPanel.js:203
+msgid "User"
+msgstr "Felhasználó"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Programok kezelése"
+#: js/ConfigManagerPanel.js:211
+msgid "Prefix"
+msgstr "Előképző"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Program"
-msgstr[1] "Programok"
+#: js/ConfigManagerPanel.js:215
+msgid "Logging"
+msgstr "Naplózás"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Elolvastam a licensz megállapodást és elfogadtam"
+#: js/ConfigManagerPanel.js:225
+msgid "Filename"
+msgstr "Filenév"
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Licensz megállapodás"
+#: js/ConfigManagerPanel.js:228
+msgid "Priority"
+msgstr "Prioritás"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Elolvastam a titoktartási megállapodást és elfogadtam"
+#: js/ConfigManagerPanel.js:232
+msgid "Caching"
+msgstr "Gyorsítótárazás"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Titoktartási megállapodás"
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
+msgid "Path"
+msgstr "Elérési út"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Kikötések és feltételek elfogadása"
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
+msgid "Lifetime (seconds)"
+msgstr "Élettartam (másodperc)"
+
+#: js/ConfigManagerPanel.js:251
+msgid "Temporary files"
+msgstr "Ideiglenes fileok"
+
+#: js/ConfigManagerPanel.js:259
+msgid "Temporary Files Path"
+msgstr "Ideiglenes filok elérési útja"
+
+#: js/ConfigManagerPanel.js:263
+msgid "Session"
+msgstr "Munkafázis"
+
+#: js/ConfigManagerPanel.js:323
+msgid "Filestore directory"
+msgstr "Filetárolási könyvtár"
+
+#: js/ConfigManagerPanel.js:331
+msgid "Filestore Path"
+msgstr "Filetárolás elérési útja"
+
+#: js/ConfigManagerPanel.js:336
+msgid "Addressbook Map panel"
+msgstr "Címjegyzék Térkép fül"
+
+#: js/ConfigManagerPanel.js:344
+msgid "Map panel"
+msgstr "Térkép fül"
+
+#: js/ConfigManagerPanel.js:346
+msgid "disabled"
+msgstr "letiltva"
+
+#: js/ConfigManagerPanel.js:346
+msgid "enabled"
+msgstr "engedélyezve"
+
+#: js/ConfigManagerPanel.js:358
+msgid "Config file is not writable"
+msgstr "Beállítási file nem írható"
+
+#: js/ConfigManagerPanel.js:376
+msgid "Download config file"
+msgstr "Beállítási file letöltése"

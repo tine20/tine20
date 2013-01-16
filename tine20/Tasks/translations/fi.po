@@ -1,0 +1,281 @@
+# 
+# Translators:
+#   <sahkari@saunalahti.fi>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-12-01 06:56+0000\n"
+"Last-Translator: sahkari <sahkari@saunalahti.fi>\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr "hallitse jaettua tehtävää"
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr "Luo uusi jaettu tehtävä"
+
+#: Acl/Rights.php:93
+msgid "manage shared tasks favorites"
+msgstr "hallitse jaetun tehtävän suosikkeja"
+
+#: Acl/Rights.php:94
+msgid "Create or update shared tasks favorites"
+msgstr "Luo tai päivitä jaettujen tehtävien suosikkeja"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's henkilökohtaisia tehtäviä"
+
+#: Model/Task.php:187
+msgid "Due"
+msgstr "Määräpäivä"
+
+#: Model/Task.php:188 js/TaskEditDialog.js:197
+msgid "Organizer"
+msgstr "Järjestäjä"
+
+#: Model/Task.php:189
+msgid "Description"
+msgstr "Kuvaus"
+
+#: Model/Task.php:190 js/TaskGridPanel.js:136 js/TaskEditDialog.js:189
+msgid "Priority"
+msgstr "Tärkeys"
+
+#: Model/Task.php:191 js/TaskGridPanel.js:165 js/TaskEditDialog.js:219
+#: js/Models.js:108 js/Models.js:166
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Tila"
+msgstr[1] "Tilat"
+
+#: Model/Task.php:192 js/TaskGridPanel.js:152
+msgid "Percent"
+msgstr "Prosenttia"
+
+#: Model/Task.php:199 js/TaskGridPanel.js:111
+msgid "Lead"
+msgstr ""
+
+#: Model/Task.php:205
+msgid "Telephone"
+msgstr "Puhelin"
+
+#: Model/Task.php:206
+msgid "Email"
+msgstr "Sähköposti"
+
+#: Config.php:38
+msgid "Tasks status available"
+msgstr "Tehtävien tila saatavilla"
+
+#: Config.php:40
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr "Tehtävien tärkeysjärjestys saatavilla"
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+
+#: Setup/Update/Release5.php:74 Setup/Initialize.php:34
+msgid "No response"
+msgstr "Ei vastausta"
+
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
+#: js/TaskGridPanel.js:188 js/TaskEditDialog.js:226
+msgid "Completed"
+msgstr "Valmis"
+
+#: Setup/Update/Release5.php:76 Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr "Peruutettu"
+
+#: Setup/Update/Release5.php:77 Setup/Initialize.php:37
+msgid "In process"
+msgstr "Työn alla"
+
+#: Setup/Update/Release5.php:167 Setup/Initialize.php:50
+msgid "low"
+msgstr "alhainen"
+
+#: Setup/Update/Release5.php:168 Setup/Initialize.php:51
+msgid "normal"
+msgstr "normaali"
+
+#: Setup/Update/Release5.php:169 Setup/Initialize.php:52
+msgid "high"
+msgstr "korkea"
+
+#: Setup/Update/Release5.php:170 Setup/Initialize.php:53
+msgid "urgent"
+msgstr "tärkeä"
+
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr "Avoimet tehtäväni"
+
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr "Avoimet tehtäväni tällä viikolla"
+
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr "Kaikki tehtäväni"
+
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr "Edellinen muokkaukseni"
+
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr "Kaikki tehtävät joita olen muokannut"
+
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr "Tehtävä ilman vastausta"
+
+#: Preference.php:24
+msgid "All my tasks"
+msgstr "Kaikki tehtäväni"
+
+#: Preference.php:66
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:67
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Oletus suosikki joka ladataan käynnistettäessä"
+
+#: Preference.php:70
+msgid "Default Task List"
+msgstr "Oletus tehtävälista"
+
+#: Preference.php:71
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr "Uusi tehtävä"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Haluatko poistaa valitun tehtävän?"
+msgstr[1] "Haluatko poistaa valitut tehtävät?"
+
+#: js/TaskGridPanel.js:110
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/TaskGridPanel.js:114 js/TaskEditDialog.js:178 js/Models.js:105
+msgid "Summary"
+msgstr "Yhteeneveto"
+
+#: js/TaskGridPanel.js:118
+msgid "Add a task..."
+msgstr "Lisää tehtävä..."
+
+#: js/TaskGridPanel.js:122 js/Models.js:106
+msgid "Due Date"
+msgstr "Määräpäivä"
+
+#: js/TaskGridPanel.js:181 js/Models.js:120
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/TaskGridPanel.js:195 js/Models.js:116
+msgid "Responsible"
+msgstr ""
+
+#: js/TaskEditDialog.js:136
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Määritä määräpäivä koska hälytys on asetettu!"
+
+#: js/TaskEditDialog.js:185
+msgid "Due date"
+msgstr "Määräpäivä"
+
+#: js/TaskEditDialog.js:198
+msgid "Add Responsible ..."
+msgstr ""
+
+#: js/TaskEditDialog.js:205
+msgid "Notes"
+msgstr "Huomautukset"
+
+#: js/TaskEditDialog.js:206
+msgid "Enter description..."
+msgstr "Lisää kuvaus...."
+
+#: js/TaskEditDialog.js:212
+msgid "Percentage"
+msgstr "Prosenttia"
+
+#: js/Models.js:64
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tehtävä"
+msgstr[1] "Tehtävät"
+
+#: js/Models.js:64
+msgid "Tasks"
+msgstr "Tehtävät"
+
+#: js/Models.js:68
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "tehtävälista"
+msgstr[1] "tehtävälistat"
+
+#: js/Models.js:68
+msgid "to do lists"
+msgstr "tehtävälista"
+
+#: js/Models.js:103
+msgid "Quick search"
+msgstr "Pikahaku"
+
+#: js/Models.js:118
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Models.js:119
+msgid "Last Modified By"
+msgstr "Muokannut viimeksi"
+
+#: js/Models.js:121
+msgid "Created By"
+msgstr "Luonut"
+
+#: Controller/Task.php:164
+msgid "Notification for Task "
+msgstr "Huomautukset tehtäville"

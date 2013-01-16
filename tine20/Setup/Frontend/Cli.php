@@ -311,22 +311,31 @@ class Setup_Frontend_Cli
      */
     protected function _egw14Import(Zend_Console_Getopt $_opts)
     {
-        list($host, $username, $password, $dbname, $charset) = $_opts->getRemainingArgs();
+        $args = $_opts->getRemainingArgs();
         
-        $egwDb = Zend_Db::factory('PDO_MYSQL', array(
-            'host'     => $host,
-            'username' => $username,
-            'password' => $password,
-            'dbname'   => $dbname
-        ));
-        $egwDb->query("SET NAMES $charset");
+        if (count($args) < 1 || ! is_readable($args[0])) {
+            echo "can not open config file \n";
+            echo "see tine20.org/wiki/EGW_Migration_Howto for details \n\n";
+            echo "usage: ./setup.php --egw14import /path/to/config.ini (see Tinebase/Setup/Import/Egw14/config.ini)\n\n";
+            exit(1);
+        }
+        
+        try {
+            $config = new Zend_Config(array(), TRUE);
+            $config->merge(new Zend_Config_Ini($args[0]));
+            $config = $config->merge($config->all);
+        } catch (Zend_Config_Exception $e) {
+            fwrite(STDERR, "Error while parsing config file($args[0]) " .  $e->getMessage() . PHP_EOL);
+            exit(1);
+        }
         
         $writer = new Zend_Log_Writer_Stream('php://output');
         $logger = new Zend_Log($writer);
-
-        $config = new Zend_Config(array());
         
-        $importer = new Tinebase_Setup_Import_Egw14($egwDb, $config, $logger);
+        $filter = new Zend_Log_Filter_Priority((int) $config->loglevel);
+        $logger->addFilter($filter);
+        
+        $importer = new Tinebase_Setup_Import_Egw14($config, $logger);
         $importer->import();
     }
     

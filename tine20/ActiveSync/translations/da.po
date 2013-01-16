@@ -25,6 +25,48 @@ msgstr ""
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr ""
 
+#: Setup/setup.xml:706 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Standard Politik"
+
+#: Setup/setup.xml:711 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Standard politik under opsætning"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standard Adressebog"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Standard adressebog til at oprette nye kontakter i"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standard Kalender"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Standard kalender til at oprette nye begivenheder i."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standard Opgaveliste"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Standard opgavelist til at oprette nye opgaver i."
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Enhed"
+msgstr[1] "Enheder"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Enheder"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,45 +98,3 @@ msgstr "nulstillede"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Sæt Sync Filer"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Enhed"
-msgstr[1] "Enheder"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Enheder"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standard Adressebog"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Standard adressebog til at oprette nye kontakter i"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standard Kalender"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Standard kalender til at oprette nye begivenheder i."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standard Opgaveliste"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Standard opgavelist til at oprette nye opgaver i."
-
-#: Setup/setup.xml:689 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Standard Politik"
-
-#: Setup/setup.xml:694 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Standard politik under opsætning"

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-11-28 11:47+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/tine20/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -127,31 +127,329 @@ msgstr ""
 msgid "Default IMAP user settings"
 msgstr ""
 
-#: Controller/Container.php:198
-msgid "Your container has been changed"
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
-#: Controller/Container.php:199
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
+#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Uživatel"
+msgstr[1] "Uživatelé"
+msgstr[2] "Uživatelů"
 
-#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Skupiny"
+
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Role"
+
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Počítače"
+
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "Aplikace"
+
+#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Sdílené štítky"
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr ""
+
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr ""
+
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr ""
+
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Administrátor"
+
+#: js/Admin.js:254
+msgid "Refresh"
+msgstr ""
+
+#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr "Název počítače"
+
+#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
+#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
+#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Popis"
+
+#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
+#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
+#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
+msgid "ID"
+msgstr "ID"
+
+#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
+#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
+#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
+#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
+#: js/customfield/GridPanel.js:72
+msgid "Name"
+msgstr "Jméno"
+
+#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
+#: js/customfield/GridPanel.js:131
+msgid "Confirm"
+msgstr "Potvrdit"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Opravdu chcete smazat vybrané štítky?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Mažu štítek(ky)..."
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr ""
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr ""
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr ""
+
+#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
+msgid "Search:"
+msgstr "Hledat:"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Zobrazuji štítky {0} - {1} of {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Žádné štítky ke zobrazení"
+
+#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
+msgid "Color"
+msgstr "Barva"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Určitě chcete smazat vybrané role?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Mažu roli(e)..."
+
+#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
+#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+#: js/Roles.js:69 js/RoleEditDialog.js:136
+msgid "Some error occurred while trying to delete the role."
+msgstr "Během mazání role došlo k chybě."
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr ""
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr ""
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr ""
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Zobrazuji role  {0} - {1} z {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Žádné role ke zobrazení"
+
+#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Please wait"
+msgstr "Čekejte prosím"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Aktualizuji členství"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Nepodařilo se uložit skupinu."
+
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+msgid "Errors"
+msgstr "Chyby"
+
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Název skupiny"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
+msgid "Visibility"
+msgstr "Viditelnost"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
+msgid "Display in addressbook"
+msgstr "Zobrazit v adresáři"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
+msgid "Hide from addressbook"
+msgstr "Nezobrazovat v adresáři"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Členové skupiny"
+
+#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Přídat novou skupinu"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Editovat skupinu \"{0}\""
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "Nastavení {0}"
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr ""
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr ""
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr ""
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "povolit aplikaci"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "zakázat aplikaci"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "nastavení"
+
+#: js/Applications.js:228 js/user/EditDialog.js:873
+msgid "disabled"
+msgstr "zakázáno"
+
+#: js/Applications.js:231 js/user/EditDialog.js:872
+msgid "enabled"
+msgstr "povoleno"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "neznámý stav ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Zobrazuji aplikace {0} - {1} z {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Žádné aplikace ke zobrazení"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Pořadí"
+
+#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Stav"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Verze"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Opravdu chcete smazat vybrané skupiny?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Mažu skupinu(y)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Během mazání skupiny došlo k chybě."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr ""
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr ""
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr ""
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Zobrazuji skupiny {0} - {1} z {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Žádné skupiny ke zobrazení"
+
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
 msgstr "IP adresa"
-
-#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Uživatel"
-msgstr[1] "Uživatelé"
-msgstr[2] "Uživatelů"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -172,13 +470,6 @@ msgstr "ID relace"
 #: js/AccessLog.js:130
 msgid "Login Name"
 msgstr "Přihlašovací jméno"
-
-#: js/AccessLog.js:131 js/Applications.js:280 js/container/EditDialog.js:124
-#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
-#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
-#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
-msgid "Name"
-msgstr "Jméno"
 
 #: js/AccessLog.js:135
 msgid "Result"
@@ -215,470 +506,6 @@ msgstr "chyba"
 #: js/AccessLog.js:184
 msgid "success"
 msgstr "úspěch"
-
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Skupiny"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Role"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Počítače"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Aplikace"
-
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Sdílené štítky"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr ""
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr ""
-
-#: js/Admin.js:161
-msgid "Admin"
-msgstr "Administrátor"
-
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/ApplicationFilter.js:33 js/container/EditDialog.js:136
-#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
-#: js/Models.js:128
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr "Nastavení {0}"
-
-#: js/Applications.js:83
-msgid "Enable Application"
-msgstr ""
-
-#: js/Applications.js:90
-msgid "Disable Application"
-msgstr ""
-
-#: js/Applications.js:97
-msgid "Settings"
-msgstr ""
-
-#: js/Applications.js:146
-msgid "enable application"
-msgstr "povolit aplikaci"
-
-#: js/Applications.js:147
-msgid "disable application"
-msgstr "zakázat aplikaci"
-
-#: js/Applications.js:148
-msgid "settings"
-msgstr "nastavení"
-
-#: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
-msgid "Search:"
-msgstr "Hledat:"
-
-#: js/Applications.js:228 js/user/EditDialog.js:873
-msgid "disabled"
-msgstr "zakázáno"
-
-#: js/Applications.js:231 js/user/EditDialog.js:872
-msgid "enabled"
-msgstr "povoleno"
-
-#: js/Applications.js:235
-msgid "unknown status ({0})"
-msgstr "neznámý stav ({0})"
-
-#: js/Applications.js:269
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Zobrazuji aplikace {0} - {1} z {2}"
-
-#: js/Applications.js:270
-msgid "No applications to display"
-msgstr "Žádné aplikace ke zobrazení"
-
-#: js/Applications.js:279 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Pořadí"
-
-#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
-msgid "Status"
-msgstr "Stav"
-
-#: js/Applications.js:282
-msgid "Version"
-msgstr "Verze"
-
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
-#: js/customfield/GridPanel.js:75
-msgid "Model"
-msgstr ""
-
-#: js/container/EditDialog.js:156 js/container/GridPanel.js:73
-#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
-#: js/customfield/GridPanel.js:73
-msgid "Type"
-msgstr ""
-
-#: js/container/EditDialog.js:157
-msgid "personal"
-msgstr ""
-
-#: js/container/EditDialog.js:157
-msgid "shared"
-msgstr ""
-
-#: js/container/EditDialog.js:171 js/TagEditDialog.js:232 js/Tags.js:222
-msgid "Color"
-msgstr "Barva"
-
-#: js/container/EditDialog.js:176
-msgid "Note for Owner"
-msgstr ""
-
-#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
-#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
-#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
-msgid "ID"
-msgstr "ID"
-
-#: js/container/GridPanel.js:71
-msgid "Container Name"
-msgstr ""
-
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
-msgid "Errors"
-msgstr "Chyby"
-
-#: js/customfield/EditDialog.js:137
-msgid "Please configure store for this field type"
-msgstr ""
-
-#: js/customfield/EditDialog.js:244
-msgid "Default"
-msgstr ""
-
-#: js/customfield/EditDialog.js:288
-msgid "Add a New ID..."
-msgstr ""
-
-#: js/customfield/EditDialog.js:292
-msgid "Value"
-msgstr ""
-
-#: js/customfield/EditDialog.js:297
-msgid "Add a New Value..."
-msgstr ""
-
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
-msgid "Error"
-msgstr ""
-
-#: js/customfield/EditDialog.js:307
-msgid "ID already exists"
-msgstr ""
-
-#: js/customfield/EditDialog.js:313
-msgid "Value already exists"
-msgstr ""
-
-#: js/customfield/EditDialog.js:407
-msgid "Record Class"
-msgstr ""
-
-#: js/customfield/EditDialog.js:432
-msgid "Given record class not found"
-msgstr ""
-
-#: js/customfield/EditDialog.js:465
-msgid "OK"
-msgstr ""
-
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:729
-msgid "Cancel"
-msgstr "Storno"
-
-#: js/customfield/EditDialog.js:504
-msgid "Configure store"
-msgstr ""
-
-#: js/customfield/EditDialog.js:561
-msgid "Custom field definition"
-msgstr ""
-
-#: js/customfield/EditDialog.js:572
-msgid "Text"
-msgstr ""
-
-#: js/customfield/EditDialog.js:573
-msgid "Number"
-msgstr ""
-
-#: js/customfield/EditDialog.js:574
-msgid "Date"
-msgstr ""
-
-#: js/customfield/EditDialog.js:575
-msgid "DateTime"
-msgstr ""
-
-#: js/customfield/EditDialog.js:576
-msgid "Time"
-msgstr ""
-
-#: js/customfield/EditDialog.js:577
-msgid "Boolean"
-msgstr ""
-
-#: js/customfield/EditDialog.js:578
-msgid "Search Combo"
-msgstr ""
-
-#: js/customfield/EditDialog.js:579
-msgid "Key Field"
-msgstr ""
-
-#: js/customfield/EditDialog.js:580
-msgid "Record"
-msgstr ""
-
-#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
-msgid "Label"
-msgstr ""
-
-#: js/customfield/EditDialog.js:608
-msgid "Length"
-msgstr ""
-
-#: js/customfield/EditDialog.js:613
-msgid "Required"
-msgstr ""
-
-#: js/customfield/EditDialog.js:620
-msgid "Custom field additional properties"
-msgstr ""
-
-#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/customfield/EditDialog.js:653
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
-#: js/Tags.js:64
-msgid "Confirm"
-msgstr "Potvrdit"
-
-#: js/customfield/GridPanel.js:131
-msgid "Restart application to apply new customfields?"
-msgstr ""
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
-msgid "Please wait"
-msgstr "Čekejte prosím"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Aktualizuji členství"
-
-#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
-#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:83
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Nepodařilo se uložit skupinu."
-
-#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Název skupiny"
-
-#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:294
-#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
-#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
-msgid "Description"
-msgstr "Popis"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
-msgid "Visibility"
-msgstr "Viditelnost"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Display in addressbook"
-msgstr "Zobrazit v adresáři"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Hide from addressbook"
-msgstr "Nezobrazovat v adresáři"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
-msgid "Saved in Addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Členové skupiny"
-
-#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:290
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Přídat novou skupinu"
-
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Editovat skupinu \"{0}\""
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Opravdu chcete smazat vybrané skupiny?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Mažu skupinu(y)..."
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Během mazání skupiny došlo k chybě."
-
-#: js/Groups.js:104
-msgid "Add Group"
-msgstr ""
-
-#: js/Groups.js:112
-msgid "Edit Group"
-msgstr ""
-
-#: js/Groups.js:120
-msgid "Delete Group"
-msgstr ""
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zobrazuji skupiny {0} - {1} z {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Žádné skupiny ke zobrazení"
-
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Nepodařilo se uložit roli."
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Mažu roli..."
-
-#: js/RoleEditDialog.js:136 js/Roles.js:69
-msgid "Some error occurred while trying to delete the role."
-msgstr "Během mazání role došlo k chybě."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Práva"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Členové"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Název role"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "Role"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Přidat novou roli"
-
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "Editovat roli \"{0}\""
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Určitě chcete smazat vybrané role?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Mažu roli(e)..."
-
-#: js/Roles.js:102
-msgid "Add Role"
-msgstr ""
-
-#: js/Roles.js:110
-msgid "Edit Role"
-msgstr ""
-
-#: js/Roles.js:118
-msgid "Delete Role"
-msgstr ""
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Zobrazuji role  {0} - {1} z {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Žádné role ke zobrazení"
-
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
-msgid "Computer Name"
-msgstr "Název počítače"
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Počítač"
-msgstr[1] "Počítače"
-msgstr[2] "Počítačů"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
@@ -724,36 +551,87 @@ msgstr "Přidat nový štítek"
 msgid "Edit Tag \"{0}\""
 msgstr "Editovat štítek \"{0}\""
 
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Opravdu chcete smazat vybrané štítky?"
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Nepodařilo se uložit roli."
 
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Mažu štítek(ky)..."
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Mažu roli..."
 
-#: js/Tags.js:97
-msgid "Add Tag"
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Práva"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Členové"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Název role"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "Role"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Přidat novou roli"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "Editovat roli \"{0}\""
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Počítač"
+msgstr[1] "Počítače"
+msgstr[2] "Počítačů"
+
+#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
+#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
+#: js/Models.js:128
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
+#: js/customfield/GridPanel.js:75
+msgid "Model"
 msgstr ""
 
-#: js/Tags.js:105
-msgid "Edit Tag"
+#: js/container/EditDialog.js:156 js/container/GridPanel.js:73
+#: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:73
+msgid "Type"
 msgstr ""
 
-#: js/Tags.js:113
-msgid "Delete Tag"
+#: js/container/EditDialog.js:157
+msgid "personal"
 msgstr ""
 
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zobrazuji štítky {0} - {1} of {2}"
+#: js/container/EditDialog.js:157
+msgid "shared"
+msgstr ""
 
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Žádné štítky ke zobrazení"
+#: js/container/EditDialog.js:176
+msgid "Note for Owner"
+msgstr ""
 
-#: js/Tags.js:223
-msgid "Usage:&#160;"
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
 msgstr ""
 
 #: js/user/EditDialog.js:187
@@ -928,6 +806,10 @@ msgstr "Potvrzení hesla"
 msgid "Repeat password"
 msgstr "Zopakujte heslo"
 
+#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
+msgid "Cancel"
+msgstr "Storno"
+
 #: js/user/EditDialog.js:736
 msgid "Ok"
 msgstr "OK"
@@ -1064,3 +946,130 @@ msgid_plural "Email Users"
 msgstr[0] "Uživatel emailu"
 msgstr[1] "Uživatelé emailu"
 msgstr[2] "Uživatelů emailu"
+
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/customfield/EditDialog.js:137
+msgid "Please configure store for this field type"
+msgstr ""
+
+#: js/customfield/EditDialog.js:244
+msgid "Default"
+msgstr ""
+
+#: js/customfield/EditDialog.js:288
+msgid "Add a New ID..."
+msgstr ""
+
+#: js/customfield/EditDialog.js:292
+msgid "Value"
+msgstr ""
+
+#: js/customfield/EditDialog.js:297
+msgid "Add a New Value..."
+msgstr ""
+
+#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+msgid "Error"
+msgstr ""
+
+#: js/customfield/EditDialog.js:307
+msgid "ID already exists"
+msgstr ""
+
+#: js/customfield/EditDialog.js:313
+msgid "Value already exists"
+msgstr ""
+
+#: js/customfield/EditDialog.js:407
+msgid "Record Class"
+msgstr ""
+
+#: js/customfield/EditDialog.js:432
+msgid "Given record class not found"
+msgstr ""
+
+#: js/customfield/EditDialog.js:465
+msgid "OK"
+msgstr ""
+
+#: js/customfield/EditDialog.js:504
+msgid "Configure store"
+msgstr ""
+
+#: js/customfield/EditDialog.js:561
+msgid "Custom field definition"
+msgstr ""
+
+#: js/customfield/EditDialog.js:572
+msgid "Text"
+msgstr ""
+
+#: js/customfield/EditDialog.js:573
+msgid "Number"
+msgstr ""
+
+#: js/customfield/EditDialog.js:574
+msgid "Date"
+msgstr ""
+
+#: js/customfield/EditDialog.js:575
+msgid "DateTime"
+msgstr ""
+
+#: js/customfield/EditDialog.js:576
+msgid "Time"
+msgstr ""
+
+#: js/customfield/EditDialog.js:577
+msgid "Boolean"
+msgstr ""
+
+#: js/customfield/EditDialog.js:578
+msgid "Search Combo"
+msgstr ""
+
+#: js/customfield/EditDialog.js:579
+msgid "Key Field"
+msgstr ""
+
+#: js/customfield/EditDialog.js:580
+msgid "Record"
+msgstr ""
+
+#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
+msgid "Label"
+msgstr ""
+
+#: js/customfield/EditDialog.js:608
+msgid "Length"
+msgstr ""
+
+#: js/customfield/EditDialog.js:613
+msgid "Required"
+msgstr ""
+
+#: js/customfield/EditDialog.js:620
+msgid "Custom field additional properties"
+msgstr ""
+
+#: js/customfield/EditDialog.js:653
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+#: js/customfield/GridPanel.js:131
+msgid "Restart application to apply new customfields?"
+msgstr ""
+
+#: Controller/Container.php:198
+msgid "Your container has been changed"
+msgstr ""
+
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""

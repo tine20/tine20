@@ -1,11 +1,12 @@
 # 
 # Translators:
+#   <mail@demiveo.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:57+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2012-12-27 15:25+0000\n"
+"Last-Translator: demiveo <mail@demiveo.de>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/tine20/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,6 +16,11 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's Projeleri"
 
 #: Config.php:38
 msgid "Project Status Available"
@@ -28,7 +34,7 @@ msgstr ""
 
 #: Config.php:48
 msgid "Project Attendee Role Available"
-msgstr ""
+msgstr "Katılımcı Rolleri"
 
 #: Config.php:50
 msgid ""
@@ -37,108 +43,57 @@ msgid ""
 "syncronisation."
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr ""
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr ""
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr ""
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
-msgid "Role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr ""
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr ""
-
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] ""
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr ""
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:73 js/ProjectEditDialog.js:129 js/ProjectGridPanel.js:95
-msgid "Title"
-msgstr ""
-
-#: js/Model.js:74 js/ProjectEditDialog.js:134 js/ProjectGridPanel.js:88
-msgid "Number"
-msgstr ""
-
-#: js/Model.js:75 js/ProjectEditDialog.js:170
-msgid "Description"
-msgstr ""
-
-#: js/Model.js:77 js/ProjectEditDialog.js:140 js/ProjectGridPanel.js:101
-msgid "Status"
-msgstr ""
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr ""
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr ""
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
-msgid "Attendee"
-msgstr ""
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:184
-msgid "Enter description"
-msgstr ""
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr ""
-
-#: js/Projects.js:24 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
-msgstr ""
+msgstr "Projeler"
+
+#: Setup/Initialize.php:34
+msgid "On hold"
+msgstr "Beklemekte"
+
+#: Setup/Initialize.php:35
+msgid "Completed"
+msgstr "Tamamlanmıştır"
+
+#: Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr "İptal Edilmiştir"
+
+#: Setup/Initialize.php:37
+msgid "In process"
+msgstr "İşlemde"
+
+#: Setup/Initialize.php:50
+msgid "Coworker"
+msgstr "İş Arkadaşları"
+
+#: Setup/Initialize.php:51
+msgid "Responsible"
+msgstr "Tönetici"
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr "Açık Projelerim"
+
+#: Setup/Initialize.php:99
+msgid "My projects that I'm responsible for"
+msgstr "Yönetici Olduğum Projeler"
+
+#: Setup/Initialize.php:100
+msgid "All my open projects that I am responsible for"
+msgstr "Yönetici Olduğum Benim Açık Projelerim"
+
+#: Setup/Initialize.php:120
+msgid "My waiting projects"
+msgstr "İşlemde Olan Projelerim"
+
+#: Setup/Initialize.php:121
+msgid "My projects that are on hold"
+msgstr "İşlemde Olan Projelerim"
 
 #: Preference.php:24
 msgid "All my projects"
-msgstr ""
+msgstr "Projelerim"
 
 #: Preference.php:60
 msgid "Default Favorite"
@@ -148,46 +103,92 @@ msgstr ""
 msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
-#: Setup/Initialize.php:34
-msgid "On hold"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-#: Setup/Initialize.php:35
-msgid "Completed"
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Katılımcının Rolünü Berlirtiniz"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Proje Seçiniz"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+msgid "Role"
+msgstr "Rol"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Rol Seçiniz"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "{0} Kişi Projeye Eklenmiştir"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
 msgstr ""
 
-#: Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr ""
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+msgid "Number"
+msgstr "Sayı"
 
-#: Setup/Initialize.php:37
-msgid "In process"
-msgstr ""
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+msgid "Title"
+msgstr "Başlık"
 
-#: Setup/Initialize.php:50
-msgid "Coworker"
-msgstr ""
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+msgid "Status"
+msgstr "Durum"
 
-#: Setup/Initialize.php:51
-msgid "Responsible"
-msgstr ""
+#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "one: Proje\n\nother: Projeler"
 
-#: Setup/Initialize.php:79
-msgid "All my open projects"
-msgstr ""
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "one: Proje Listesi\n\nother: Proje Listeleri"
 
-#: Setup/Initialize.php:99
-msgid "My projects that I'm responsible for"
-msgstr ""
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Proje Listeleri"
 
-#: Setup/Initialize.php:100
-msgid "All my open projects that I am responsible for"
-msgstr ""
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Hızlı Arama"
 
-#: Setup/Initialize.php:120
-msgid "My waiting projects"
-msgstr ""
+#: js/Model.js:75 js/ProjectEditDialog.js:170
+msgid "Description"
+msgstr "Açıklama"
 
-#: Setup/Initialize.php:121
-msgid "My projects that are on hold"
-msgstr ""
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Son Düzenleme Vakti"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Son Düzenlemeyi Yapan"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Oluşturma Vakti"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Oluşturan"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+msgid "Attendee"
+msgstr "Katılımcı"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Katılımcının Rolü"
+
+#: js/ProjectEditDialog.js:184
+msgid "Enter description"
+msgstr "Açıklama Giriniz"

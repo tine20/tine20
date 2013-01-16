@@ -226,9 +226,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * LAST_SESSIONS_CLEANUP_RUN
      *
-     * @var Tinebase_DateTime
+     * @var string
      */
     const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
+    
+    /**
+     * MAX_LOGIN_FAILURES
+     *
+     * @var string
+     */
+    const MAX_LOGIN_FAILURES = 'maxLoginFailures';
     
     /**
      * (non-PHPdoc)
@@ -510,7 +517,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-    );
+        self::MAX_LOGIN_FAILURES => array(
+        //_('Maximum login failures')
+            'label'                 => 'Maximum login failures',
+        //_('Maximum allowed login failures before blocking account')
+            'description'           => 'Maximum allowed login failures before blocking account',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        );
     
     /**
      * (non-PHPdoc)

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:32+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2012-11-22 19:57+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,152 +19,152 @@ msgstr ""
 #: Controller.php:114
 #, python-format
 msgid "%s's personal FAQs"
-msgstr ""
+msgstr "%s's FAQs pessoais"
 
 #: Controller.php:164
 msgid "Draft"
-msgstr ""
+msgstr "Esboço"
 
 #: Controller.php:165
 msgid "released"
-msgstr ""
+msgstr "liberado"
 
 #: Controller.php:166
 msgid "obsolete"
-msgstr ""
+msgstr "obsoleto"
 
 #: Controller.php:169
 msgid "Internal"
-msgstr ""
+msgstr "Interno"
 
 #: Controller.php:170
 msgid "Public"
-msgstr ""
+msgstr "Público"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Todas as FAQs das minhas FAQ Lisas"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Última modificada por mim"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Todas as FAQs que modifiquei recentemente"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Todas as minhas FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Favorito Básico"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "O favorito padrão que é carregado no início da FAQ"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Lista de FAQ Padrão"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Lista de FAQ padrão para criar nova FAQ em."
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Situação FAQ"
+msgstr[1] "Situação FAQ"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tipo FAQ"
+msgstr[1] "Tipos FAQ"
 
 #: js/AdminPanel.js:105
 msgid "Defaults"
-msgstr ""
-
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
-#: js/FaqGridPanel.js:120
-msgid "Question"
-msgstr ""
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr ""
-
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
-#: js/FaqGridPanel.js:127
-msgid "Answer"
-msgstr ""
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr ""
-
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
-msgid "Type"
-msgstr ""
-
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
-msgid "Status"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
-msgid "Tags"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr ""
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr ""
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr ""
+msgstr "Padrões"
 
 #: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
-msgstr ""
+msgstr "Adicione um novo Tipo de FAQ"
 
-#: js/Model.js:33 js/SimpleFAQ.js:19
+#: js/SimpleFAQ.js:19 js/Model.js:33
 msgid "FAQ"
 msgid_plural "FAQs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "Id da FAQ"
+
+#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Identificações"
+
+#: js/FaqGridPanel.js:108 js/FaqEditDialog.js:136
+msgid "Status"
+msgstr "Situação"
+
+#: js/FaqGridPanel.js:114 js/FaqEditDialog.js:124
+msgid "Type"
+msgstr "Tipo"
+
+#: js/FaqGridPanel.js:120 js/FaqEditDialog.js:108
+#: js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Pergunta"
+
+#: js/FaqGridPanel.js:127 js/FaqEditDialog.js:115
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Resposta"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Adicione uma nova Situação de FAQ..."
 
 #: js/Model.js:37
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lista de FAQs"
+msgstr[1] "Listas de FAQs"
 
 #: js/Model.js:37
 msgid "FAQ Lists"
-msgstr ""
+msgstr "Listas de FAQs"
 
 #: js/Model.js:72
 msgid "Quick search"
-msgstr ""
+msgstr "Pesquisa rápida"
 
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr ""
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Informe a pergunta"
 
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Informe a resposta..."
 
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Informações sobre FAQ"
 
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr ""
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Hora da Criação"
 
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr ""
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Criado por"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr ""
-
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr ""
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Ainda sem resposta"

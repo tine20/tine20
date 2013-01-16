@@ -25,6 +25,48 @@ msgstr "Alapértelmezett szabályok az új eszközökre"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Add meg a szabály ID-t az újonnan elkészített eszközök elfogadásához."
 
+#: Setup/setup.xml:706 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Alapértelmezett szabály"
+
+#: Setup/setup.xml:711 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Alapértelmezett Címjegyzék"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Alapértelmezett Naptár"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Alapértelmezett Naptár új események létrehozására."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Alapértelmezett Feladat Lista"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Eszköz"
+msgstr[1] "Eszközök"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Eszközök"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,45 +98,3 @@ msgstr "újraállított"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Sync szűrő beállítása"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Eszköz"
-msgstr[1] "Eszközök"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Eszközök"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Alapértelmezett Címjegyzék"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Alapértelmezett Naptár"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Alapértelmezett Naptár új események létrehozására."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Alapértelmezett Feladat Lista"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
-
-#: Setup/setup.xml:689 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Alapértelmezett szabály"
-
-#: Setup/setup.xml:694 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Alapértelmezett szabály beállításra került a telepítés közben"

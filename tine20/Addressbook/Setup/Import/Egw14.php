@@ -12,284 +12,196 @@
 /**
  * class to import addressbooks/contacts from egw14
  * 
- * NOTE: THIS CLASS IS JUST A PAST OF OLD CODE WHICH SHOULD NOT GET LOST
- *       ITS NOT YET RUNNABLE IN ANY WAYS
  * 
  * @package     Addressbook
  * @subpackage  Setup
  */
-class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
+class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
 {
-
+    protected $_appname = 'Addressbook';
+    protected $_egwTableName = 'egw_addressbook';
+    protected $_egwOwnerColumn = 'contact_owner';
+    protected $_defaultContainerConfigProperty = Addressbook_Preference::DEFAULTADDRESSBOOK;
+    protected $_tineRecordModel = 'Addressbook_Model_Contact';
+    
+    
+    protected $_tineRecordBackend = NULL;
+    
     /**
      * country mapping
      * 
      * @var array
-     * @todo    add more countries
      */
-    protected $countryMapping = array(
-        "ÖSTERREICH" => "AT",
-        "BELGIEN" => "BE",
-        "DEUTSCHLAND" => "DE",
-        "FRANKREICH" => "FR",
-        "GERMANY" => "DE",
-        "LUXEMBURG" => "LU",
-        "NIEDERLANDE" => "NL",
-        "SCHWEIZ" => "CH",
-        "SLOVAKEI" => "SK",
-        "SPANIEN" => "ES",
+    protected $_countryMapping = array(
+        
+        "BELGIEN"          => "BE",
+        "BULGARIEN"        => "BG",
+        "DEUTSCHLAND"      => "DE",
+        "FRANKREICH"       => "FR",
+        "GERMANY"          => "DE",
+        "GREAT BRITAIN"    => "GB",
+        "IRELAND"          => "IE",
+        "JAPAN"            => "JP",
+        "LUXEMBURG"        => "LU",
+        "NEW ZEALAND"      => "NZ",
+        "NIEDERLANDE"      => "NL",
+        "ÖSTERREICH"       => "AT",
+        "SCHWEIZ"          => "CH",
+        "SLOVAKEI"         => "SK",
+        "SPANIEN"          => "ES",
+        "SWEDEN"           => "SE",
+        "USA"              => "US",
         "VEREINIGTE STAATEN VON AMERIKA" => "US",
+        
     );
     
     /**
-     * import the addressbook from egw14
-     *
-     * @param string $_oldTableName [OPTIONAL]
-     * @param int $_useOldId [OPTIONAL]
-     * 
-     * @todo    use old group name for the (shared) container ?
-     * @todo    add more config params (
+     * do the import 
      */
-    public function importAddressbook( $_oldTableName = NULL, $_useOldId = TRUE )
+    public function import()
     {
-        // did nothing
-        //@set_time_limit (120);
-        $sharedContactsGroupId = -15;
-        $sharedContactsContainerName = "Metaways Kontakte";
-        $setFileasFromName = TRUE;
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' starting egw import for Adressbook');
         
-        $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'addressbook';
-        $contactsTable = new Tinebase_Db_Table(array('name' => $tableName));
+        $this->_migrationStartTime = Tinebase_DateTime::now();
+        $this->_tineRecordBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
-        // get contacts
-        $contacts = $contactsTable->fetchAll();
-
-        // get categories
-        $categories = $this->getCategories();
+        $estimate = $this->_getEgwRecordEstimate();
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . " found {$estimate} contacts for migration");
         
-        echo "Import Contacts from table ".$tableName." ... <br/>";
+        $pageSize = 100;
+        $numPages = ceil($estimate/$pageSize);
         
-        foreach($contacts as $contact) {
-
-            echo "importing " . $contact->n_given . " " . $contact->n_family . " ...";
-
-            /******************** add container ************************/
+        for ($page=1; $page <= $numPages; $page++) {
+            $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
             
-            if ( $contact->contact_owner > 0 ) {
-                // personal container for owner
-                try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Personal Contacts', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
-                } catch (Tinebase_Exception_NotFound $e) {
-                    $container = new Tinebase_Model_Container(array(
-                        'name' => 'Personal Contacts',
-                        'type' => Tinebase_Model_Container::TYPE_PERSONAL,      
-                        'owner_id' => Tinebase_Core::getUser(),
-                        'backend' => 'Sql',
-                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-                        'model' => 'Addressbook_Model_Contact'
-                    ));
-                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
-                }
-
-            } else if ( $contact->contact_owner == $sharedContactsGroupId ) {
-                // default users group -> shared container
-                $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
-                try {
-                    $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $sharedContactsContainerName, Tinebase_Model_Container::TYPE_SHARED);
-                } catch (Tinebase_Exception_NotFound $e) {
-                    $container = new Tinebase_Model_Container(array(
-                        'name' => $sharedContactsContainerName,
-                        'type' => Tinebase_Model_Container::TYPE_SHARED,      
-                        'backend' => 'Sql',
-                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-                        'model' => 'Addressbook_Model_Contact'
-                    ));
-                    $container = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
-                    Tinebase_Container::getInstance()->addGrants($container, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
-                        Tinebase_Model_Grants::GRANT_READ,
-                        Tinebase_Model_Grants::GRANT_ADD,
-                        Tinebase_Model_Grants::GRANT_EDIT,
-                        Tinebase_Model_Grants::GRANT_DELETE,
-                    ), TRUE);
-                }                
-            } else {
-                echo "skipped.<br/>";
-                continue;
-            }                   
-            $containerId = $container->getId();
-
-            /******************** set fileas ************************/
-
-            if ( $setFileasFromName ) {
-                
-                $fileas = "";
-                if ( !empty($contact->n_family) ) {
-                    if ( !empty($contact->n_given) ) {
-                        $fileas = $contact->n_family . ", " . $contact->n_given;
-                    } else {
-                        $fileas = $contact->n_family;
-                    }
-                } else {
-                    $fileas = $contact->n_given;
-                }
-
-                if ( empty($fileas) ) {
-                    $fileas = $contact->org_name;
-                } elseif ( !empty($contact->n_middle) ) {
-                    $fileas .= " " .$contact->n_middle;
-                }
-            } else {
-                $fileas = ( empty($contact->n_fileas) ) ? $contact->org_name : $contact->n_fileas;
-            }
-
-            /******************** set urls (add 'http://' if missing) ************************/
+            Tinebase_Core::setExecutionLifeTime($pageSize*10);
             
-            if ( !preg_match("/https*:\/\//i", $contact->contact_url) && !empty($contact->contact_url) ) {
-                $url = "http://".$contact->contact_url;
-            } else {
-                $url = $contact->contact_url;
-            }
-            if ( !preg_match("/https*:\/\//i", $contact->contact_url_home) && !empty($contact->contact_url_home) ) {
-                $urlHome = "http://".$contact->contact_url_home;
-            } else {
-                $urlHome = $contact->contact_url_home;
-            }
-            
-            /******************** create contact record ************************/
-            
-            $tineContact = new Addressbook_Model_Contact ( array(
-                
-                'id'                    => ( $_useOldId ) ? $contact->contact_id : 0,
-                'account_id'            => $contact->account_id,                        
-                'owner'                 => $containerId,
-
-                'n_family'              => ( empty($contact->n_family) ) ? 'imported' : $contact->n_family,
-                'n_fileas'              => $fileas,
-                'n_fn'                  => ( empty($contact->n_fn) ) ? 'imported' : $contact->n_fn,
-            
-                'adr_one_countryname'   => ( isset($this->countryMapping[$contact->adr_one_countryname]) ) ? $this->countryMapping[$contact->adr_one_countryname] : "",
-                'adr_one_locality'      => $contact->adr_one_locality,
-                'adr_one_postalcode'    => $contact->adr_one_postalcode,
-                'adr_one_region'        => $contact->adr_one_region,
-                'adr_one_street'        => $contact->adr_one_street,
-                'adr_one_street2'       => $contact->adr_one_street2,
-                'adr_two_countryname'   => ( isset($this->countryMapping[$contact->adr_two_countryname]) ) ? $this->countryMapping[$contact->adr_two_countryname] : "",
-                'adr_two_locality'      => $contact->adr_two_locality,
-                'adr_two_postalcode'    => $contact->adr_two_postalcode,
-                'adr_two_region'        => $contact->adr_two_region,
-                'adr_two_street'        => $contact->adr_two_street,
-                'adr_two_street2'       => $contact->adr_two_street2,
-
-                'last_modified_time'    => new Tinebase_DateTime ( $contact->contact_modified),
-                'assistent'             => $contact->contact_assistent,
-                'bday'                  => $contact->contact_bday,
-                'email'                 => $contact->contact_email,
-                'email_home'            => $contact->contact_email_home,
-                'note'                  => $contact->contact_note,
-                'role'                  => $contact->contact_role,
-                'title'                 => $contact->contact_title,
-                'url'                   => $url,
-                'url_home'              => $urlHome,
-                'n_given'               => $contact->n_given,
-                'n_middle'              => $contact->n_middle,
-                'n_prefix'              => $contact->n_prefix,
-                'n_suffix'              => $contact->n_suffix,
-                'org_name'              => $contact->org_name,
-                'org_unit'              => $contact->org_unit,
-                'tel_assistent'         => $contact->tel_assistent,
-                'tel_car'               => $contact->tel_car,
-                'tel_cell'              => $contact->tel_cell,
-                'tel_cell_private'      => $contact->tel_cell_private,
-                'tel_fax'               => $contact->tel_fax,
-                'tel_fax_home'          => $contact->tel_fax_home,
-                'tel_home'              => $contact->tel_home,
-                'tel_pager'             => $contact->tel_pager,
-                'tel_work'              => $contact->tel_work,     
-            
-                'tags'                  => array(),
-            
-                // no longer used?
-                /*
-                'cat_id'                => $contact->cat_id,
-                'geo'                   => $contact->contact_geo,
-                'label'                 => $contact->contact_label,
-                'private'               => $contact->contact_private,
-                'pubkey'                => $contact->contact_pubkey,
-                'room'                  => $contact->contact_room,
-                'tid'                   => $contact->contact_tid,
-                'tz'                    => $contact->contact_tz,
-                'tel_prefer'            => $contact->tel_prefer,
-                'created_by'            => $contact->contact_creator,
-                'creation_time'         => new Tinebase_DateTime ( $contact->contact_created),
-                'last_modified_by'      => $contact->contact_modifier,            
-                //'calendar_uri'          => $contact->calendar_uri,
-                //'freebusy_uri'          => $contact->freebusy_uri,            
-                //jpegphoto ?
-                */
-                ) 
-            );
-           
-            $tineContact = Addressbook_Controller_Contact::getInstance()->create($tineContact);
-            echo " ok.<br/>";
-            
-            // get categories -> tags
-            if (!empty($contact->cat_id)) {
-                $catIds = explode ( ',', $contact->cat_id );
-                $filter = new Tinebase_Model_TagFilter(array(
-                    'name'        => '%',
-                    'application' => 'Addressbook',
-                    //'owner'       => $owner,
-                ));
-                $paging = new Tinebase_Model_Pagination();
-                    
-                $contactTags = new Tinebase_Record_RecordSet ('Tinebase_Model_Tag');
-                foreach ( $catIds as $catId ) {
-                    if ( isset($categories[$catId]) ) {
-                        $filter->name = $categories[$catId]->cat_name;
-                        $tags = Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray();
-                        if ( empty($tags) ) {
-                            $tag = new Tinebase_Model_Tag (array(
-                                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                                'name'  => $categories[$catId]->cat_name,
-                            ));
-                            $tag = Tinebase_Tags::getInstance()->createTag($tag);
-                            $contactTags->addRecord($tag);
-                        } else {
-                            $contactTags->addRecord(new Tinebase_Model_Tag($tags[0]));
-                        }
-                    }
-                }        
-                            
-                $tineContact->tags = $contactTags;
-                Tinebase_Tags::getInstance()->setTagsOfRecord($tineContact);
-            }            
-        }
-        echo "done! got ".sizeof($contacts)." contacts.<br>";
-        
-    }   
-
-    /**
-     * get categories (-> tags)
-     *
-     * @param string $oldTableName [OPTIONAL]
-     * @return  array  categories
-     */
-    private function getCategories($_oldTableName = NULL)
-    {
-        $cats = array();
-        
-        // get old table data
-        $tableName = ( $_oldTableName != NULL ) ? $_oldTableName : $this->oldTablePrefix.'categories';
-        $table = new Tinebase_Db_Table(array('name' => $tableName));
-        $rows = $table->fetchAll();
-        
-        // fill array
-        $cats = array();
-        foreach ( $rows as $row ) {
-            $cats[$row->cat_id] = $row;
+            $recordPage = $this->_getRawEgwRecordPage($page, $pageSize);
+            $this->_migrateEgwRecordPage($recordPage);
         }
         
-        return $cats;
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
     }
     
+    protected function _migrateEgwRecordPage($recordPage)
+    {
+        foreach($recordPage as $egwContactData) {
+            try {
+                $this->_importResult['totalcount']++;
+                $currentUser = Tinebase_Core::get(Tinebase_Core::USER);
+                $owner = Tinebase_User::getInstance()->getFullUserById($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']));
+                Tinebase_Core::set(Tinebase_Core::USER, $owner);
+                
+                $contactData = array_merge($egwContactData, array(
+                    'id'                    => $egwContactData['contact_id'],
+                    'creation_time'         => $this->convertDate($egwContactData['contact_created']),
+                    'created_by'            => $this->mapAccountIdEgw2Tine($egwContactData['contact_creator'], FALSE),
+                    'last_modified_time'    => $egwContactData['contact_modified'] ? $this->convertDate($egwContactData['contact_modified']) : NULL,
+                    'last_modified_by'      => $egwContactData['contact_modifier'] ? $this->mapAccountIdEgw2Tine($contact['contact_modifier'], FALSE) : NULL,
+                ));
+                
+                $contactData['created_by'] = $contactData['created_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
+                $contactData['$egwContactData'] = $contactData['last_modified_time'] && !$contactData['last_modified_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
+                
+                // fix mandentory fields
+                if (! ($egwContactData['org_name'] || $egwContactData['n_family'])) {
+                    $contactData['org_name'] = 'N/A';
+                }
+                
+                // add 'http://' if missing
+                foreach(array('contact_url', 'contact_url_home') as $urlProperty) {
+                    if ( !preg_match("/^http/i", $egwContactData[$urlProperty]) && !empty($egwContactData[$urlProperty]) ) {
+                        $contactData[$urlProperty] = "http://" . $egwContactData[$urlProperty];
+                    }
+                }
+                
+                // normalize countynames
+                $contactData['adr_one_countryname'] = $this->convertCountryname2Iso($egwContactData['adr_one_countryname']);
+                $contactData['adr_two_countryname'] = $this->convertCountryname2Iso($egwContactData['adr_two_countryname']);
+                
+                // handle bday
+                if (array_key_exists('contact_bday', $egwContactData) && $egwContactData['contact_bday']) {
+                    // @TODO evaluate contact_tz
+                    $contactData['bday'] = new Tinebase_DateTime($egwContactData['contact_bday'], $this->_config->birthdayDefaultTimezone);
+                } else if (array_key_exists('bday', $egwContactData) && $egwContactData['bday']) {
+                    // egw <= 1.4
+                    $contactData['bday'] = $this->convertDate($egwContactData['bday']);
+                }
+                
+                // handle tags
+                $contactData['tags'] = $this->convertCategories($egwContactData['cat_id']);
+                
+                // @TODO handle photo
+                
+                // handle container
+                if ($egwContactData['contact_owner'] && ! $egwContactData['account_id']) {
+                    $contactData['container_id'] = $egwContactData['contact_private'] && $this->_config->setPersonalContainerGrants ? 
+                        $this->getPrivateContainer($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']))->getId() :
+                        $this->getPersonalContainer($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']))->getId();
+                }
+                
+                // finally create the record
+                $tineContact = new Addressbook_Model_Contact ($contactData);
+                $this->saveTineRecord($tineContact);
+                
+            } catch (Exception $e) {
+                $this->_importResult['failcount']++;
+                Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
+                $this->_log->ERR(__METHOD__ . '::' . __LINE__ . ' could not migrate contact "' . $egwContactData['contact_id'] . '" cause: ' . $e->getMessage());
+                $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            }
+        }
+    }
+    
+    /**
+     * save tine20 record to db
+     * 
+     * @param Tinebase_Record_Abstract $record
+     */
+    public function saveTineRecord(Tinebase_Record_Abstract $record)
+    {
+        if (! $record->account_id) {
+            $savedRecord = $this->_tineRecordBackend->create($record);
+        }
+            
+        else if ($this->_config->updateAccountRecords) {
+            $accountId = $this->mapAccountIdEgw2Tine($record->account_id);
+            $account = Tinebase_User::getInstance()->getUserById($accountId);
+            
+            if (! ($account && $account->contact_id)) {
+                $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not migrate account contact for {$record->n_fn} - no contact found");
+                return;
+            }
+            
+            $contact = $this->_tineRecordBackend->get($account->contact_id);
+            $record->setId($account->contact_id);
+            $record->container_id = $contact->container_id;
+            
+            $savedRecord = $this->_tineRecordBackend->update($record);
+        }
+        
+        // tags
+        $this->attachTags($_event->tags, $savedRecord->getId());
+    }
+    
+    /**
+     * get iso code of localised country name
+     * 
+     * @TODO iterate zend_translate
+     */
+    public function convertCountryname2Iso($countryname)
+    {
+        // normalize empty
+        if (!$countryname) return NULL;
+        
+        $countryname = strtoupper(trim($countryname));
+        
+        if (! array_key_exists($countryname, $this->_countryMapping)) {
+            $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not get coutry code for {$countryname}");
+            
+            return NULL;
+        }
+        
+        return $this->_countryMapping[$countryname];
+    }
 }

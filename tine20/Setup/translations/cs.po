@@ -16,66 +16,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Název"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Povoleno"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Pořadí"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Nainstalovaná verze"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Dostupná verze"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Stav"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Závisí na"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Odinstalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Aktualizovat aplikaci"
-
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "Jít na příhlášení do {0}"
-
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "odinstalovat"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Opravdu chcete aplikaci/e odinstalovat?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Tato operace může chvíli trvat"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "Porušení závislosti"
-
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "Smazat všechny stávající uživatele a skupiny"
@@ -88,7 +28,7 @@ msgid ""
 msgstr "Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/ConfigManagerPanel.js:132 js/EmailPanel.js:146
+#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:132
 msgid "Backend"
 msgstr "Backend"
 
@@ -154,8 +94,8 @@ msgid "Host"
 msgstr "Server"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
+#: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 msgid "Port"
 msgstr "Port"
 
@@ -164,8 +104,8 @@ msgid "Login name"
 msgstr "Přihlašovací jméno"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/ConfigManagerPanel.js:176 js/ConfigManagerPanel.js:207
-#: js/EmailPanel.js:190
+#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:176
+#: js/ConfigManagerPanel.js:207
 msgid "Password"
 msgstr "Heslo"
 
@@ -181,9 +121,9 @@ msgstr "Základní DN"
 msgid "Search filter"
 msgstr "Vyhledávací filtr"
 
-#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:191
-#: js/ConfigManagerPanel.js:310 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390
+#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
+#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:191
+#: js/ConfigManagerPanel.js:310
 msgid "Hostname"
 msgstr "Název nebo adresa počítače"
 
@@ -353,101 +293,116 @@ msgstr "Hesla se neshodují"
 msgid "Should not be empty"
 msgstr "Nemělo by být prázdné"
 
-#: js/ConfigManagerPanel.js:135
-msgid "File"
-msgstr ""
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
 
-#: js/ConfigManagerPanel.js:145
-msgid "Adapter"
-msgstr "Adaptér"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Licenční ujednání"
 
-#: js/ConfigManagerPanel.js:160
-msgid "Setup Authentication"
-msgstr "Přihlášení do instalačního programu"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
 
-#: js/ConfigManagerPanel.js:167 js/EmailPanel.js:186
-msgid "Username"
-msgstr "Uživatelské jméno"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Ujednání o ochraně soukromí"
 
-#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
-msgid "Database"
-msgstr "Databáze"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Přijmout podmínky"
 
-#: js/ConfigManagerPanel.js:203
-msgid "User"
-msgstr "Uživatel"
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Podmínky a ujednání"
 
-#: js/ConfigManagerPanel.js:211
-msgid "Prefix"
-msgstr "Prefix"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Instalační kontroly"
 
-#: js/ConfigManagerPanel.js:215
-msgid "Logging"
-msgstr "Logování"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Správce konfigurace"
 
-#: js/ConfigManagerPanel.js:225
-msgid "Filename"
-msgstr "Název souboru"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Autentikace/Účty"
 
-#: js/ConfigManagerPanel.js:228
-msgid "Priority"
-msgstr "Priorita"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "Email"
 
-#: js/ConfigManagerPanel.js:232
-msgid "Caching"
-msgstr "Kešování"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Správce aplikací"
 
-#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
-msgid "Path"
-msgstr "Cesta"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikace"
+msgstr[1] "Aplikace"
+msgstr[2] "Aplikací"
 
-#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
-msgid "Lifetime (seconds)"
-msgstr "Životnost (v sekundách)"
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Název"
 
-#: js/ConfigManagerPanel.js:251
-msgid "Temporary files"
-msgstr "Dočasné soubory"
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Povoleno"
 
-#: js/ConfigManagerPanel.js:259
-msgid "Temporary Files Path"
-msgstr "Cesta pro dočasné soubory"
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Pořadí"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Session"
-msgstr ""
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Nainstalovaná verze"
 
-#: js/ConfigManagerPanel.js:323
-msgid "Filestore directory"
-msgstr ""
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Dostupná verze"
 
-#: js/ConfigManagerPanel.js:331
-msgid "Filestore Path"
-msgstr ""
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Stav"
 
-#: js/ConfigManagerPanel.js:336
-msgid "Addressbook Map panel"
-msgstr "Mapový panel v Adresáři"
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Závisí na"
 
-#: js/ConfigManagerPanel.js:344
-msgid "Map panel"
-msgstr "Mapový panel"
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instalovat aplikaci"
 
-#: js/ConfigManagerPanel.js:346
-msgid "disabled"
-msgstr "zakázáno"
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Odinstalovat aplikaci"
 
-#: js/ConfigManagerPanel.js:346
-msgid "enabled"
-msgstr "povoleno"
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Aktualizovat aplikaci"
 
-#: js/ConfigManagerPanel.js:358
-msgid "Config file is not writable"
-msgstr "Do konfiguračního souboru nelze zapisovat"
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Jít na příhlášení do {0}"
 
-#: js/ConfigManagerPanel.js:376
-msgid "Download config file"
-msgstr "Stáhnout konfigurační soubor"
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "odinstalovat"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Opravdu chcete aplikaci/e odinstalovat?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Tato operace může chvíli trvat"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Porušení závislosti"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -460,6 +415,10 @@ msgstr "Standardní SMTP"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "IMAP"
+
+#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:167
+msgid "Username"
+msgstr "Uživatelské jméno"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -615,53 +574,94 @@ msgstr "Spustit instalační testy"
 msgid "Ignore setup tests"
 msgstr "Ignorovat instalační testy"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Podmínky a ujednání"
+#: js/ConfigManagerPanel.js:135
+msgid "File"
+msgstr ""
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Instalační kontroly"
+#: js/ConfigManagerPanel.js:145
+msgid "Adapter"
+msgstr "Adaptér"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Správce konfigurace"
+#: js/ConfigManagerPanel.js:160
+msgid "Setup Authentication"
+msgstr "Přihlášení do instalačního programu"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Autentikace/Účty"
+#: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
+msgid "Database"
+msgstr "Databáze"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "Email"
+#: js/ConfigManagerPanel.js:203
+msgid "User"
+msgstr "Uživatel"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Správce aplikací"
+#: js/ConfigManagerPanel.js:211
+msgid "Prefix"
+msgstr "Prefix"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikace"
-msgstr[1] "Aplikace"
-msgstr[2] "Aplikací"
+#: js/ConfigManagerPanel.js:215
+msgid "Logging"
+msgstr "Logování"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
+#: js/ConfigManagerPanel.js:225
+msgid "Filename"
+msgstr "Název souboru"
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Licenční ujednání"
+#: js/ConfigManagerPanel.js:228
+msgid "Priority"
+msgstr "Priorita"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
+#: js/ConfigManagerPanel.js:232
+msgid "Caching"
+msgstr "Kešování"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Ujednání o ochraně soukromí"
+#: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
+msgid "Path"
+msgstr "Cesta"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Přijmout podmínky"
+#: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
+msgid "Lifetime (seconds)"
+msgstr "Životnost (v sekundách)"
+
+#: js/ConfigManagerPanel.js:251
+msgid "Temporary files"
+msgstr "Dočasné soubory"
+
+#: js/ConfigManagerPanel.js:259
+msgid "Temporary Files Path"
+msgstr "Cesta pro dočasné soubory"
+
+#: js/ConfigManagerPanel.js:263
+msgid "Session"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:323
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:331
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:336
+msgid "Addressbook Map panel"
+msgstr "Mapový panel v Adresáři"
+
+#: js/ConfigManagerPanel.js:344
+msgid "Map panel"
+msgstr "Mapový panel"
+
+#: js/ConfigManagerPanel.js:346
+msgid "disabled"
+msgstr "zakázáno"
+
+#: js/ConfigManagerPanel.js:346
+msgid "enabled"
+msgstr "povoleno"
+
+#: js/ConfigManagerPanel.js:358
+msgid "Config file is not writable"
+msgstr "Do konfiguračního souboru nelze zapisovat"
+
+#: js/ConfigManagerPanel.js:376
+msgid "Download config file"
+msgstr "Stáhnout konfigurační soubor"

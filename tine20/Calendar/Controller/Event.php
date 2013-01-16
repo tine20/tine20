@@ -422,6 +422,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->sendNotifications(FALSE);
             
             $event = $this->get($_record->getId());
+            //NOTE we check via get(full rights) here whereas _updateACLCheck later checks limited rights from search
             if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
                 
@@ -1197,7 +1198,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
+                $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
+                
+                if ($_oldRecord->container_id != $_record->container_id) {
+                    $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD)
+                                 && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
+                }
                 break;
             case 'delete':
                 $hasGrant = (bool) $_record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
