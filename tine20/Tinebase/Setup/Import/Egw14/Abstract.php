@@ -536,13 +536,13 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             $tineDb = Tinebase_Core::getDb();
             $select = $tineDb->select()
                 ->from(array('tags' => $tineDb->table_prefix . 'tags'))
-                ->where($tineDb->quoteInto($tineDb->quoteIdentifier('id') . ' LIKE ?', $cat['cat_id']));
+                ->where($tineDb->quoteInto($tineDb->quoteIdentifier('name') . ' LIKE ?', $cat['cat_name']));
             
             $tag = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
             $tag = count($tag) > 0 ? $tag[0] : NULL;
             
-            if (count($tag) > 0) {
-                return $this->_tagMapCache[$catId] = $tag[0]['id'];
+            if ($tag) {
+                return $this->_tagMapCache[$catId] = $tag['id'];
             }
             
             // create tag
