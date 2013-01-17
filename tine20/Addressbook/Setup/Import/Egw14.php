@@ -89,7 +89,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             try {
                 $this->_importResult['totalcount']++;
                 $currentUser = Tinebase_Core::get(Tinebase_Core::USER);
-                $owner = Tinebase_User::getInstance()->getFullUserById($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']));
+                $owner = $egwContactData['contact_owner'] ? Tinebase_User::getInstance()->getFullUserById($this->mapAccountIdEgw2Tine($egwContactData['contact_owner'])) : $currentUser;
                 Tinebase_Core::set(Tinebase_Core::USER, $owner);
                 
                 $contactData = array_merge($egwContactData, array(
@@ -100,8 +100,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                     'last_modified_by'      => $egwContactData['contact_modifier'] ? $this->mapAccountIdEgw2Tine($contact['contact_modifier'], FALSE) : NULL,
                 ));
                 
-                $contactData['created_by'] = $contactData['created_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
-                $contactData['$egwContactData'] = $contactData['last_modified_time'] && !$contactData['last_modified_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
+                $contactData['created_by'] = $contactData['created_by'] ?: $owner;
+                $contactData['$egwContactData'] = $contactData['last_modified_time'] && !$contactData['last_modified_by'] ?: $owner;
                 
                 // fix mandentory fields
                 if (! ($egwContactData['org_name'] || $egwContactData['n_family'])) {

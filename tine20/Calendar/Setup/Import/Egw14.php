@@ -156,11 +156,12 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                         $this->_saveTineEvent($exception);
                     }
                     
-                    $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $this->_migrationStartTime);
-                    $event->alarms->setTime($nextOccurrence->dtstart);
+//                     $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $this->_migrationStartTime);
+//                     $event->alarms->setTime($nextOccurrence->dtstart);
                 }
                 
                 // save baseevent 
+                $event->setRruleUntil();
                 $this->_saveTineEvent($event);
                 Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
 
@@ -286,14 +287,14 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             $tineAlarm->setOption('minutes_before', $tineAlarm->minutes_before);
             $tineAlarm->setOption('custom', false);
             
-            if ($_egwEventData['rrule']) {
+            if (isset($_egwEventData['rrule'])) {
                 $dtstart = $this->convertDate($egwAlarmData['time'] + $egwAlarmData['offset']);
                 $dtstart = $dtstart ? $dtstart : Tinebase_DateTime::now();
                 
                 $recurId = $_egwEventData['cal_uid'] . '-' . $dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
             }
             
-            $tineAlarm->setOption('recurid', $_egwEventData['rrule'] ? $recurId : NULL);
+            $tineAlarm->setOption('recurid', isset($_egwEventData['rrule']) ? $recurId : NULL);
             
             $alarms->addRecord($tineAlarm);
         }
