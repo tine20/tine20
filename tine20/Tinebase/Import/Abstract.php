@@ -45,6 +45,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'encoding'          => 'auto',
         'encodingTo'        => 'UTF-8',
         'useStreamFilter'   => TRUE,
+        'postMappingHook'   => null
     );
     
     /**
@@ -317,6 +318,33 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _doMapping($_data)
     {
         return $_data;
+    }
+    
+    /**
+     * Runs a user defined script
+     *
+     * @param array $data
+     */
+    protected function _postMappingHook ($data)
+    {
+        $jsonEncodedData = Zend_Json::encode($data);
+        $jsonDecodedData = null;
+
+        $script = escapeshellcmd($this->_options['postMappingHook']['path']);
+        if (file_exists($this->_options['postMappingHook']['path'])) {
+            if (! is_executable($script)) {
+                throw new Tinebase_Exception_AccessDenied("The Script is not executable. Path: " . $script);
+            }
+            $jDataToSend =  escapeshellarg($jsonEncodedData);
+            $jsonDecodedData = Zend_Json::decode(shell_exec("$script $jDataToSend"));
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue("Script does not exists. Path: " . $script);
+        }
+        if (! is_array($jsonDecodedData) || ! $jsonDecodedData)
+        {
+            throw new Tinebase_Exception_UnexpectedValue("Something went wrong while running postMappingHook!");
+        }
+        return $jsonDecodedData;
     }
     
     /**

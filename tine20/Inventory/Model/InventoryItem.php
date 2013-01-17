@@ -174,6 +174,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'deleted_by'        => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => NULL
+            ),
+            'adt_info'              => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true)
             )
      );
     

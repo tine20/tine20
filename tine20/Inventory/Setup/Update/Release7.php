@@ -66,4 +66,22 @@ class Inventory_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Inventory', '7.3');
     }
+
+    /**
+     * update to 7.4
+     * 
+     * - Add note field
+     * - Update import / export definitions
+     */
+    public function update_3()
+    {
+        if ($this->getTableVersion('inventory_item') != 5) {
+            $release6 = new Inventory_Setup_Update_Release6($this->_backend);
+            $release6->update_4();
+        }
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Inventory'));
+        
+        $this->setApplicationVersion('Inventory', '7.4');
+    }
 }

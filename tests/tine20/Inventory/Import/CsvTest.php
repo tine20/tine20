@@ -97,13 +97,18 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         // There are two test entries, so check for 2 imported entries
         $this->assertEquals(2, $result['totalcount']);
         
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
-        $this->assertEquals($result['results'][0]['inventory_id'], '133331666');
+        $this->assertEquals($result['results'][0]['inventory_id'], '12345');
+        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][1]['inventory_id'], '1333431666');
+        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][1]['description']);
+        
     }
     
     /**
