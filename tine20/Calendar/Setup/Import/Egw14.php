@@ -74,6 +74,13 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
     );
 
     /**
+     * in class contact cache
+     * 
+     * @var array
+     */
+    protected $_contactIdCache = array();
+    
+    /**
      * do the import 
      */
     public function import()
@@ -195,7 +202,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         $tineEventData['container_id'] = $this->getPersonalContainer($this->mapAccountIdEgw2Tine($_egwEventData['cal_owner']))->getId();
 
         // handle recuring
-        if ($_egwEventData['rrule']) {
+        if (isset($_egwEventData['rrule'])) {
             $tineEventData['rrule'] = $this->_convertRrule($_egwEventData);
             $tineEventData['exdate'] = $_egwEventData['rrule']['recur_exception'];
         }
@@ -424,7 +431,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function _getContactIdByAccountId($_accountId)
     {
-        if (! $this->_contactIdCache[$_accountId]) {
+        if (! array_key_exists($_accountId,$this->_contactIdCache)) {
             
             $tineDb = Tinebase_Core::getDb();
             $select = $tineDb->select()
