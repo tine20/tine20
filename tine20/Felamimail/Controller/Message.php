@@ -232,6 +232,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message->parseStructure($structure);
         }
         
+        $message->sendReadingConfirmation();
+
         return $message;
     }
     
