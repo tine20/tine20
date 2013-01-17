@@ -41,13 +41,13 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         //@TODO move to admin module
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' starting egw import for Admin');
         
-        if ($this->config->admin->import_groups) {
+        if ($this->_config->admin->import_groups) {
             $this->importGroups();
         }
-        if ($this->config->admin->import_users) {
+        if ($this->_config->admin->import_users) {
             $this->importAccounts();
         }
-        if ($this->config->admin->import_groupmembers) {
+        if ($this->_config->admin->import_groupmembers) {
             $this->importGroupMembers();
         }
         

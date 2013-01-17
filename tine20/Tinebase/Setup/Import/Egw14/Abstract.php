@@ -76,6 +76,13 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     protected $_privateContainerCache = array();
     
     /**
+     * in class tag cache
+     * 
+     * @var array
+     */
+    protected $_tagMapCache = array();
+    
+    /**
      * map egwPriority => tine prioroty
      * 
      * @see etemplate/inc/class.select_widget.inc.php
@@ -513,7 +520,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     public function getTag($catId)
     {
-        if (! array_key_exists($catId, $this->tagMapCache)) {
+        if (! array_key_exists($catId, $this->_tagMapCache)) {
             $select = $this->_egwDb->select()
                 ->from(array('cats' => 'egw_categories'))
                 ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cat_id') . ' = ?', $catId));
@@ -523,7 +530,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
             if (! $cat) {
                 $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ . " category {$catId} not found in egw, skipping tag");
-                return $this->tagMapCache[$catId] = NULL;
+                return $this->_tagMapCache[$catId] = NULL;
             }
             
             $tineDb = Tinebase_Core::getDb();
@@ -535,17 +542,17 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             $tag = count($tag) > 0 ? $tag[0] : NULL;
             
             if (count($tag) > 0) {
-                return $this->tagMapCache[$catId] = $tag[0]['id'];
+                return $this->_tagMapCache[$catId] = $tag[0]['id'];
             }
             
             // create tag
             $catData = unserialize($cat['cat_data']);
             
-            $tagId = $cat['cat_id'];
+            $tagId = Tinebase_Record_Abstract::generateUID();
             $tagType = $cat['cat_access'] == 'public' ? Tinebase_Model_Tag::TYPE_SHARED : Tinebase_Model_Tag::TYPE_PERSONAL;
             $tagOwner = $tagType == Tinebase_Model_Tag::TYPE_SHARED ? 0 : $this->mapAccountIdEgw2Tine($cat['cat_owner']);
             
-            $this->_log->INFO(__METHOD__ . '::' . __LINE__ . " creating new {$tagType} tag '{$cat['cat_name']}'");
+            $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . " creating new {$tagType} tag '{$cat['cat_name']}'");
             
             $tineDb->insert($tineDb->table_prefix . 'tags', array(
                 'id'                     => $tagId,
@@ -569,10 +576,10 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             Tinebase_Tags::getInstance()->setRights($right);
             Tinebase_Tags::getInstance()->setContexts(array(0), $tagId);
             
-            $this->tagMapCache[$catId] = $tagId;
+            $this->_tagMapCache[$catId] = $tagId;
         }
         
-        return $this->tagMapCache[$catId];
+        return $this->_tagMapCache[$catId];
     }
     
     /**
