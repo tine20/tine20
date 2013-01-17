@@ -1006,6 +1006,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - button: ' + button);
                     if (button == 'yes') {
                         this.doApplyChanges(closeWindow);
+                    } else {
+                        this.loadMask.hide();
                     }
                 },
                 this
