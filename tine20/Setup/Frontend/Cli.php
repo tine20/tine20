@@ -410,10 +410,14 @@ class Setup_Frontend_Cli
         try {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
             echo "User $username already exists.\n";
-            $user->accountExpires = $tomorrow;
-            $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
-            Tinebase_User::getInstance()->updateUser($user);
-            echo "Activated admin user '$username' (expires tomorrow).\n";
+            Tinebase_User::getInstance()->setStatus($user->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+            echo "Activated admin user '$username'.\n";
+            
+            $expire = Tinebase_Server_Cli::promptInput('Should the admin user expire tomorrow (default: "no", "y" or "yes" for expiry)?');
+            if ($expire === 'y' or $expire === 'yes') {
+                Tinebase_User::getInstance()->setExpiryDate($user->getId(), $tomorrow);
+                echo "User expires tomorrow at $tomorrow.\n";
+            }
             
             $resetPw = Tinebase_Server_Cli::promptInput('Do you want to reset the password (default: "no", "y" or "yes" for reset)?');
             if ($resetPw === 'y' or $resetPw === 'yes') {
