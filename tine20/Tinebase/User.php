@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -253,7 +253,8 @@ class Tinebase_User
         $defaultValues = self::$_backendConfigurationDefaults[self::getConfiguredBackend()];
 
         if (is_null($_key) && !is_array($_value)) {
-            throw new Tinebase_Exception_InvalidArgument('To set backend configuration either a key and value parameter are required or the value parameter should be a hash');
+            throw new Tinebase_Exception_InvalidArgument('To set backend configuration either a key and value '
+                . 'parameter are required or the value parameter should be a hash');
         } elseif (is_null($_key) && is_array($_value)) {
             foreach ($_value as $key=> $value) {
                 self::setBackendConfiguration($value, $key);
@@ -265,7 +266,8 @@ class Tinebase_User
                 return;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Setting backend key ' . $_key . ' to ' . $_value);
+                ' Setting backend key ' . $_key . ' to ' . (preg_match('/password|pwd|pass|passwd/i', $_key) ? '********' : $_value));
+            
             self::$_backendConfiguration[$_key] = $_value;
         }
     }
