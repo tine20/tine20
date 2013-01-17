@@ -533,7 +533,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var sm = this.getSelectionModel();
         var records = sm.getSelections();
         Ext.each(records, function(record) {
-            if (record.get('address') != '') {
+            if (record.get('address') != '' && this.store.getCount() > 1) {
                 this.store.remove(record);
                 this.store.fireEvent('update', this.store);
             }
