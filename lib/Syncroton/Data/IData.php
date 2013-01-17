@@ -51,7 +51,7 @@ interface Syncroton_Data_IData
      */
     public function getAllFolders();
     
-    public function getChangedEntries($folderId, DateTime $startTimeStamp, DateTime $endTimeStamp = NULL);
+    public function getChangedEntries($folderId, DateTime $startTimeStamp, DateTime $endTimeStamp = NULL, $filterType = NULL);
     
     public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState);
     

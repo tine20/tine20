@@ -601,7 +601,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                             $serverModifications['deleted'] = array_diff($allClientEntries, $allServerEntries);
                             
                             // fetch entries changed since last sync
-                            $serverModifications['changed'] = $dataController->getChangedEntries($collectionData->collectionId, $collectionData->syncState->lastsync, $this->_syncTimeStamp);
+                            $serverModifications['changed'] = $dataController->getChangedEntries($collectionData->collectionId, $collectionData->syncState->lastsync, $this->_syncTimeStamp, $collectionData->options['filterType']);
                             $serverModifications['changed'] = array_merge($serverModifications['changed'], $clientModifications['forceChange']);
 
                             foreach($serverModifications['changed'] as $id => $serverId) {
