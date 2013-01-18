@@ -117,6 +117,11 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
     /**
      * migrates given event page
      * 
+     * @TODO: egw can have groups as owner 
+     * -> map this to shared folder
+     * -> find appropriate creator / current_user for this
+     * -> support maps for group => creator and owner => folder?
+     *
      * @param array $_eventPage
      * @return void
      */

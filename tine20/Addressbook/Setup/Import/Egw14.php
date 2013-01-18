@@ -83,6 +83,12 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
     }
     
+    /**
+     * @TODO: egw can have groups as owner 
+     * -> map this to shared folder
+     * -> find appropriate creator / current_user for this
+     * -> support maps for group => creator and owner => folder?
+     */
     protected function _migrateEgwRecordPage($recordPage)
     {
         foreach($recordPage as $egwContactData) {
