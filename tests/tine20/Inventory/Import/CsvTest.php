@@ -80,11 +80,46 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
     
     /**
      * test import of a csv
-     *
      */
-    public function testImportOfCSV()
+    public function testImportOfCSVWithHook ()
     {
         $filename = dirname(__FILE__) . '/files/inv_tine_import_csv.xml';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        $this->_filename = dirname(__FILE__) . '/files/inv_tine_import.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalInventoryItems = TRUE;
+        
+        // There are two test entries, so check for 3 imported entries because one is scripted in the postMappingHook :)
+        $this->assertEquals(3, $result['totalcount']);
+        
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        
+        $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
+        $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
+        $this->assertEquals($result['results'][0]['inventory_id'], '12345');
+        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
+        
+        $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Tolle Leute - second mapping set');
+        $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
+        $this->assertEquals($result['results'][1]['inventory_id'], '1333431646');
+        
+        $this->assertEquals($result['results'][2]['name'], 'Tine 2.0 für Profis');
+        $this->assertEquals($result['results'][2]['added_date'], '2012-01-11 00:00:00');
+        $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
+        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][2]['description']);
+        
+    }
+    
+    /**
+     * Tests if import works without the _postMappingHook
+     */
+    public function testImportOfCSVWithoutHook ()
+    {
+        $filename = dirname(__FILE__) . '/files/inv_tine_import_csv_nohook.xml';
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
         
@@ -101,14 +136,12 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
-        $this->assertEquals($result['results'][0]['inventory_id'], '12345');
+        $this->assertEquals($result['results'][0]['inventory_id'], '');
         $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][1]['inventory_id'], '1333431666');
-        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][1]['description']);
-        
     }
     
     /**
@@ -122,8 +155,9 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
     protected function _doImport(array $_options, $_definition, Inventory_Model_InventoryItemFilter $_exportFilter = NULL)
     {
         $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
+        
         $this->_instance = Inventory_Import_Csv::createFromDefinition($definition, $_options);
-
+        
         // export first
         if ($_exportFilter !== NULL) {
             $exporter = new Inventory_Export_Csv($_exportFilter, Inventory_Controller_InventoryItem::getInstance());
@@ -136,3 +170,4 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         return $result;
     }
 }
+
