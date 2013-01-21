@@ -138,6 +138,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         });
         
         this.freetimeGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
+            disabled: (this.record && this.record.id) ? false : true,
             app: this.app,
             editDialog: this,
             title: this.app.i18n.ngettext('Free Time', 'Free Times', 2),
