@@ -1215,7 +1215,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $ruleData = $this->_getRuleData();
         $ruleData[0]['id'] = $ruleData[2]['id'];
-        $ruleData[2]['id'] = 1;
+        $ruleData[2]['id'] = 11;
         $resultSet = $this->_json->saveRules($this->_account->getId(), $ruleData);
         $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
         

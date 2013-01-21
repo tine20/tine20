@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>6.3</version>
+    <version>6.4</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -654,13 +654,11 @@
         </table>
         <table>
             <name>felamimail_sieve_rule</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
+                    <type>integer</type>
                 </field>
                 <field>
                     <name>account_id</name>

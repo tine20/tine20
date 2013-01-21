@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Felamimail_Setup_Update_Release6 extends Setup_Update_Abstract
@@ -75,5 +75,24 @@ class Felamimail_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . "filter SET name = 'All inboxes' WHERE name = 'All INBOXES'");
         
         $this->setApplicationVersion('Felamimail', '6.3');
+    }
+
+    /**
+     * update to 6.4
+     * - rule id needs to be an integer
+     * 
+     * @see 0007240: order of sieve rules changes when vacation message is saved 
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>integer</type>
+            </field>');
+        $this->_backend->alterCol('felamimail_sieve_rule', $declaration);
+        $this->setTableVersion('felamimail_sieve_rule', 2);
+        
+        $this->setApplicationVersion('Felamimail', '6.4');
     }
 }
