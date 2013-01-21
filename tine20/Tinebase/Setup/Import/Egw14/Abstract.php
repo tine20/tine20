@@ -410,7 +410,11 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
             
             foreach($groupIds as $groupId) {
-                $acl_account[] = $this->mapAccountIdTine2Egw($groupId, 'Group');
+                try {
+                    $acl_account[] = $this->mapAccountIdTine2Egw($groupId, 'Group');
+                } catch (Exception $e) {
+                    $this->_log->INFO(__METHOD__ . '::' . __LINE__ . " skipping group {$groupId} in grants migration cause: " . $e);
+                }
             }
         }
         
@@ -536,13 +540,13 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             $tineDb = Tinebase_Core::getDb();
             $select = $tineDb->select()
                 ->from(array('tags' => $tineDb->table_prefix . 'tags'))
-                ->where($tineDb->quoteInto($tineDb->quoteIdentifier('id') . ' LIKE ?', $cat['cat_id']));
+                ->where($tineDb->quoteInto($tineDb->quoteIdentifier('name') . ' LIKE ?', $cat['cat_name']));
             
             $tag = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
             $tag = count($tag) > 0 ? $tag[0] : NULL;
             
-            if (count($tag) > 0) {
-                return $this->_tagMapCache[$catId] = $tag[0]['id'];
+            if ($tag) {
+                return $this->_tagMapCache[$catId] = $tag['id'];
             }
             
             // create tag
@@ -561,7 +565,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 'name'                   => $cat['cat_name'],
                 'description'            => $cat['cat_description'],
                 'color'                  => $catData['color'],
-                'created_by'             => $this->mapAccountIdEgw2Tine($cat['cat_owner']),
+                'created_by'             => $tagOwner ? $tagOwner : Tinebase_Core::getUser()->getId(),
                 'creation_time'          => $cat['last_mod'] ? $this->convertDate($cat['last_mod']) : Tinebase_DateTime::now(),
             ));
             

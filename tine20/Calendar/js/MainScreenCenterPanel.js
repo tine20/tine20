@@ -600,7 +600,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (event.isRecurBase()) {
-            this.loadMask.show();
+            if (this.loadMask) {
+                this.loadMask.show();
+            }
         }
         
         var panel = this.getCalendarPanel(this.activeView),

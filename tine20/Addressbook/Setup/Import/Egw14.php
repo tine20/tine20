@@ -83,13 +83,19 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
     }
     
+    /**
+     * @TODO: egw can have groups as owner 
+     * -> map this to shared folder
+     * -> find appropriate creator / current_user for this
+     * -> support maps for group => creator and owner => folder?
+     */
     protected function _migrateEgwRecordPage($recordPage)
     {
         foreach($recordPage as $egwContactData) {
             try {
                 $this->_importResult['totalcount']++;
                 $currentUser = Tinebase_Core::get(Tinebase_Core::USER);
-                $owner = Tinebase_User::getInstance()->getFullUserById($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']));
+                $owner = $egwContactData['contact_owner'] ? Tinebase_User::getInstance()->getFullUserById($this->mapAccountIdEgw2Tine($egwContactData['contact_owner'])) : $currentUser;
                 Tinebase_Core::set(Tinebase_Core::USER, $owner);
                 
                 $contactData = array_merge($egwContactData, array(
@@ -100,8 +106,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                     'last_modified_by'      => $egwContactData['contact_modifier'] ? $this->mapAccountIdEgw2Tine($contact['contact_modifier'], FALSE) : NULL,
                 ));
                 
-                $contactData['created_by'] = $contactData['created_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
-                $contactData['$egwContactData'] = $contactData['last_modified_time'] && !$contactData['last_modified_by'] ?: $this->mapAccountIdEgw2Tine($egwContactData['contact_owner']);
+                $contactData['created_by'] = $contactData['created_by'] ?: $owner;
+                $contactData['$egwContactData'] = $contactData['last_modified_time'] && !$contactData['last_modified_by'] ?: $owner;
                 
                 // fix mandentory fields
                 if (! ($egwContactData['org_name'] || $egwContactData['n_family'])) {
