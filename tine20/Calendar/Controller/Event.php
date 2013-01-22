@@ -647,6 +647,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // we do notifications ourself
         $sendNotifications = $this->sendNotifications(FALSE);
         
+        // EDIT for baseEvent is checked above, CREATE, DELETE for recur exceptions is implied with it
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
+        
         $db = $this->_backend->getAdapter();
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
         
@@ -831,6 +834,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->sendNotifications($sendNotifications);
         $notificationAction = $_deleteInstance ? 'deleted' : 'changed';
         $notificationEvent = $_deleteInstance ? $_event : $persistentExceptionEvent;
+        
+        // restore acl
+        $this->doContainerACLChecks($doContainerACLChecks);
         
         // send notifications
         if ($this->_sendNotifications) {
