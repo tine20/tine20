@@ -454,7 +454,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persistentEvent = $this->_eventController->create($event);
         
-        $this->assertEquals($persistentEvent->alarms->getFirstRecord()->getOption('minutes_before'), 12);
+        $this->assertEquals(12, $persistentEvent->alarms->getFirstRecord()->getOption('minutes_before'));
     }
     
     public function testSkipPastAlarm()
