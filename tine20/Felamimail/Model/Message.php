@@ -244,8 +244,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function sendReadingConfirmation()
     {
-        if (($this->headers['disposition-notification-to']) && (!$this->hasSeenFlag()))
-        {
+        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to'] && !$this->hasSeenFlag()) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
 
