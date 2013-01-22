@@ -212,3 +212,14 @@ function normalizeLineBreaks($string)
     
     return $result;
 }
+
+/**
+ * get clone to be used with right hand side operator
+ *
+ * @param  Object $obj
+ * @return Object
+ */
+function getClone($obj)
+{
+    return clone $obj;
+}
