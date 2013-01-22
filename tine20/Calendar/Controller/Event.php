@@ -990,7 +990,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // save minutes before / compute it for custom alarms
-        $minutesBefore = $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 : $_alarm->minutes_before;
+        $minutesBefore = $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM ? round(($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60) : $_alarm->minutes_before;
+        
         $_alarm->setOption('minutes_before', $minutesBefore);
         $_alarm->alarm_time = $eventStart->subMinute($minutesBefore);
         
