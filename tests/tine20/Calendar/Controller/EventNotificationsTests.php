@@ -434,6 +434,29 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(1, count(self::getMessages()));
     }
     
+    /**
+     * CalDAV/Custom can have alarms with odd times
+     */
+    public function testAlarmRoundMinutes()
+    {
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                    'minutes_before' => 12.1
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $this->assertEquals(12, $persistentEvent->alarms->getFirstRecord()->getOption('minutes_before'));
+    }
+    
     public function testSkipPastAlarm()
     {
         $event = $this->_getEvent();

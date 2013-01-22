@@ -102,7 +102,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
         if ($this->minutes_before !== self::OPTION_CUSTOM) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
             $date = clone $_date;
-            $this->alarm_time = $date->subMinute($this->minutes_before);
+            $this->alarm_time = $date->subMinute(round($this->minutes_before));
         }
         
         $this->setOption(self::OPTION_CUSTOM, $this->minutes_before === self::OPTION_CUSTOM);
@@ -121,7 +121,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
             $dtStartTS = $_date->getTimestamp();
             $alarmTimeTS = $this->alarm_time->getTimestamp();
             
-            $this->minutes_before = $dtStartTS < $alarmTimeTS ? 0 : ($dtStartTS - $alarmTimeTS) / 60;
+            $this->minutes_before = $dtStartTS < $alarmTimeTS ? 0 : round(($dtStartTS - $alarmTimeTS) / 60);
         } else {
             $this->minutes_before = self::OPTION_CUSTOM;
         }

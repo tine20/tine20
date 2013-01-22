@@ -47,4 +47,21 @@ class Felamimail_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '7.2');
     }
+    
+    /**
+     * update to 7.3
+     * 
+     * - rule id needs to be an integer
+     * 
+     * @see 0007240: order of sieve rules changes when vacation message is saved 
+     */
+    public function update_2()
+    {
+        if ($this->getTableVersion('felamimail_sieve_rule') != 2) {
+            $release6 = new Felamimail_Setup_Update_Release6($this->_backend);
+            $release6->update_3();
+        }
+        
+        $this->setApplicationVersion('Felamimail', '7.3');
+    }
 }
