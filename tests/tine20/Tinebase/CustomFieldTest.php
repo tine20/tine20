@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -28,6 +28,8 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      * transaction id if test is wrapped in an transaction
      */
     protected $_transactionId = NULL;
+    
+    protected $_user = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -63,6 +65,10 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     {
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+        }
+        
+        if ($this->_user) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_user);
         }
     }
     
@@ -190,6 +196,51 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertEquals(0, count($appCustomFields));
+    }
+    
+    /**
+     * testAddressbookCustomFieldAcl
+     * 
+     * @see 0007630: Customfield read access to all users
+     */
+    public function testAddressbookCustomFieldAcl()
+    {
+        $createdCustomField = $this->_instance->addCustomField($this->_getCustomField(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact',
+        )));
+        $anotherCustomField = $this->_instance->addCustomField($this->_getCustomField(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact',
+        )));
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'testcontact',
+            'container_id' => Tinebase_Container::getInstance()->getSharedContainer(
+                Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ)->getFirstRecord()->getId()
+        )));
+        $cfValue = array(
+            $createdCustomField->name => 'test value',
+            $anotherCustomField->name => 'test value 2'
+        );
+        $contact->customfields = $cfValue;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        $this->assertEquals($cfValue, $contact->customfields, 'cf not saved: ' . print_r($contact->toArray(), TRUE));
+        
+        // create group and only give acl to this group
+        $group = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $this->_instance->setGrants($createdCustomField, array(
+            Tinebase_Model_CustomField_Grant::GRANT_READ,
+            Tinebase_Model_CustomField_Grant::GRANT_WRITE,
+        ), Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $group->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        $this->assertEquals(2, count($contact->customfields));
+        
+        // change user and check cfs
+        $this->_user = Tinebase_Core::getUser();
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        $this->assertEquals(array($anotherCustomField->name => 'test value 2'), $contact->customfields, 'cf should be hidden: ' . print_r($contact->customfields, TRUE));
     }
     
     /**

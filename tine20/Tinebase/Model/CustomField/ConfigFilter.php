@@ -108,6 +108,9 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
                 }
                 $this->_validCustomfields = array_unique($result);
                 $this->_isResolved = TRUE;
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Found ' . print_r($result, TRUE));
             }
             
             $db = Tinebase_Core::getDb();
