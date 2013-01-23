@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -61,8 +61,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         $data = $this->_emptyArray;
         
-        foreach($vcard->children() as $property) {
-            switch($property->name) {
+        foreach ($vcard->children() as $property) {
+            switch ($property->name) {
                 case 'VERSION':
                 case 'PRODID':
                 case 'UID':
@@ -156,6 +156,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 case 'TITLE':
                     $data['title'] = $property->value;
                     break;
+
+                case 'BDAY':
+                    $this->_toTine20ModelParseBday($data, $property);
+                    break;
                     
                 default:
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
@@ -188,6 +192,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     {
     }
     
+    /**
+     * parse tel
+     * 
+     * @param array $data
+     * @param Sabre_VObject_Element $property
+     */
     protected function _toTine20ModelParseTel(&$data, $property)
     {
         $telField = null;
@@ -236,6 +246,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         }
     }
     
+    /**
+     * parse email
+     * 
+     * @param array $data
+     * @param Sabre_VObject_Element $property
+     */
     protected function _toTine20ModelParseEmail(&$_data, $_property)
     {
         $type = null;
@@ -255,5 +271,15 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 $_data['email'] = $_property->value;
                 break;
         }
+    }
+    
+    /**
+     * parse birthday
+     * 
+     * @param array $data
+     * @param Sabre_VObject_Element $property
+     */
+    protected function _toTine20ModelParseBday(&$_data, $_property)
+    {
     }
 }

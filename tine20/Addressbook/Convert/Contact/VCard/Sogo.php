@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -142,6 +142,13 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         
         $card->add(new Sabre_VObject_Property('NOTE', $_record->note));
         
+        if ($_record->bday instanceof Tinebase_DateTime) {
+            $date = $_record->bday;
+            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date = $date->format('Y-m-d');
+            $card->add(new Sabre_VObject_Property('BDAY', $date));
+        }
+        
         if(! empty($_record->jpegphoto)) {
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
@@ -164,4 +171,17 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         
         return $card;
     }    
+    
+    /**
+     * parse birthday
+     * 
+     * @param array $data
+     * @param Sabre_VObject_Element $property
+     */
+    protected function _toTine20ModelParseBday(&$_data, $_property)
+    {
+        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_data['bday'] = new Tinebase_DateTime($_property->value, $tzone);
+        $_data['bday']->setTimezone(new DateTimeZone('UTC'));
+    }
 }
