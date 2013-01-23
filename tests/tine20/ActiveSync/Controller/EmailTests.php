@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -350,6 +350,34 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         // check body
         $this->assertContains("The attached list notes all of the packages that were added or removed", $completeMessage->body);
+    }
+    
+    /**
+     * reply email test
+     * 
+     * @see 0007512: SmartReply with HTML message fails
+     */
+    public function testReplyEmail()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        $originalMessage = $this->_createTestMessage();
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_html.eml');
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
+        
+        $controller->replyEmail($originalMessage->getId(), $email, FALSE, FALSE);
+        
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'text_html.eml';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        
+        $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertContains('Sebastian
+The attached list notes all of the packages that were added or removed
+from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->body, 'reply body has not been appended correctly');
     }
     
     /**
