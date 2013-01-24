@@ -6,9 +6,7 @@
  * @subpackage  StreamFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        add regex functionality
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class StreamFilter_StringReplace extends php_user_filter
 {

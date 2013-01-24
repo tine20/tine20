@@ -243,7 +243,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             throw new Syncroton_Exception('no email account configured');
         }
         
-        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
             throw new Syncroton_Exception('no email address set for current user');
         }
         
