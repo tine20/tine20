@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,11 @@
  */
 class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    /**
+     * app name
+     * 
+     * @var string
+     */
     protected $_applicationName = 'Calendar';
     
     /**
@@ -30,6 +35,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  bool        $deleteAllFollowing
      * @param  bool        $checkBusyConflicts
      * @return array       exception Event | updated baseEvent
+     * 
+     * @todo replace $_allFollowing param with $range
+     * @deprecated replace with create/update/delete
      */
     public function createRecurException($recordData, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts = FALSE)
     {
@@ -44,12 +52,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing events
      *
-     * @param array $_ids 
+     * @param array $_ids
+     * @param string $range
      * @return string
      */
-    public function deleteEvents($ids)
+    public function deleteEvents($ids, $range = Calendar_Model_Event::RANGE_THIS)
     {
-        return $this->_delete($ids, Calendar_Controller_Event::getInstance());
+        return $this->_delete($ids, Calendar_Controller_Event::getInstance(), array($range));
     }
     
     /**
@@ -182,7 +191,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * creates/updates an event
+     * creates/updates an event / recur
      *
      * @param   array   $recordData
      * @param   bool    $checkBusyConflicts

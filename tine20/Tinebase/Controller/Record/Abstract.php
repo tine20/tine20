@@ -1062,7 +1062,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * If one of the records could not be deleted, no record is deleted
      *
-     * @param   array array of record identifiers
+     * @param   array $_ids array of record identifiers
      * @return  Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */

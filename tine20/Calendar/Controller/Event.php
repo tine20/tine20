@@ -506,11 +506,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array array of record identifiers
+     * @param   array $_ids array of record identifiers
+     * @param   string $range
      * @return  Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
-    public function delete($_ids)
+    public function delete($_ids, $range = Calendar_Model_Event::RANGE_THIS)
     {
         if ($_ids instanceof $this->_modelName) {
             $_ids = (array)$_ids->getId();
@@ -518,7 +519,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $records = $this->_backend->getMultiple((array) $_ids);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Deleting " . count($records) . ' with range ' . $range . ' ...');
+        
         foreach ($records as $record) {
+            if ($record->isRecurException() && in_array($range, array(Calendar_Model_Event::RANGE_ALL, Calendar_Model_Event::RANGE_THISANDFUTURE))) {
+                $this->_deleteExdateRange($record, $range);
+            }
+            
             try {
                 $db = $this->_backend->getAdapter();
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
@@ -529,7 +537,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $record->status = Calendar_Model_Event::STATUS_CANCELED;
                     $this->_touch($record);
                     parent::delete($record);
-                }  
+                }
                 
                 // otherwise update status for user to DECLINED
                 else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
@@ -555,6 +563,30 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 throw $e;
             }
+        }
+    }
+    
+    /**
+     * delete range of events starting with given recur exception
+     * 
+     * @param Calendar_Model_Event $exdate
+     * @param string $range
+     */
+    protected function _deleteExdateRange($exdate, $range)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting events (range: ' . $range . ') belonging to recur exception event ' . $exdate->getId());
+        
+        $baseEvent = $this->getRecurBaseEvent($exdate);
+        
+        if ($range === Calendar_Model_Event::RANGE_ALL) {
+            $exceptions = $this->getRecurExceptions($baseEvent);
+            $this->delete($exceptions->getArrayOfIds());
+            $this->delete($baseEvent->getId());
+            
+        } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
+            $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
+            $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
         }
     }
     
@@ -596,14 +628,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * creates an exception instance of a recurring event
      *
-     * NOTE: deleting persistent exceptions is done via a normal delte action
-     *       and handled in the delteInspection
+     * NOTE: deleting persistent exceptions is done via a normal delete action
+     *       and handled in the deleteInspection
      * 
      * @param  Calendar_Model_Event  $_event
      * @param  bool                  $_deleteInstance
      * @param  bool                  $_allFollowing
      * @param  bool                  $_checkBusyConflicts
      * @return Calendar_Model_Event  exception Event | updated baseEvent
+     * 
+     * @todo replace $_allFollowing param with $range
+     * @deprecated replace with create/update/delete
      */
     public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConflicts = FALSE)
     {
@@ -905,7 +940,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param  Calendar_Model_EventFilter  $_eventFilter
      * @return Tinebase_Record_RecordSet of Calendar_Model_Event
      */
-    public function getRecurExceptions($_event, $_fakeDeletedInstances = FALSE, $_eventFilter=NULL)
+    public function getRecurExceptions($_event, $_fakeDeletedInstances = FALSE, $_eventFilter = NULL)
     {
         $exceptionFilter = new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals',  'value' => $_event->uid),

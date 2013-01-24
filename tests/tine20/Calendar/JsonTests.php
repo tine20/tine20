@@ -416,7 +416,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
-        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $searchResultData = $this->_uit->searchEvents($filter, array('sort' => 'dtstart'));
         
         // we deleted one and cropped
         $this->assertEquals(3, count($searchResultData['results']));
@@ -427,6 +427,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         $this->assertTrue(array_key_exists('2009-04-01 06:00:00', $summaryMap));
         $this->assertEquals($persistentException['summary'], $summaryMap['2009-04-01 06:00:00']);
+        
+        return $searchResultData;
     }
     
     /**
@@ -550,6 +552,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to filter for me as attender');
     }
     
+    /**
+     * testFreeBusyCleanup
+     */
     public function testFreeBusyCleanup()
     {
         // give fb grants from sclever
@@ -724,5 +729,75 @@ class Calendar_JsonTests extends Calendar_TestCase
         ));
         $result = $this->_uit->searchEvents($filter, array());
         $this->assertEquals(0, $result['totalcount']);
+    }
+    
+    /**
+     * testExdateDeleteAll
+     * 
+     * @see 0007382: allow to edit / delete the whole series / thisandfuture when editing/deleting recur exceptions
+     */
+    public function testExdateDeleteAll()
+    {
+        $events = $this->testCreateRecurException();
+        $exception = $this->_getException($events);
+        $this->_uit->deleteEvents(array($exception['id']), Calendar_Model_Event::RANGE_ALL);
+        
+        $search = $this->_uit->searchEvents($events['filter'], NULL);
+        $this->assertEquals(0, $search['totalcount'], 'all events should be deleted: ' . print_r($search,TRUE));
+    }
+    
+    /**
+     * get exception from event resultset
+     * 
+     * @param array $events
+     * @param integer $index (1 = picks first, 2 = picks second, ...)
+     * @return array|NULL
+     */
+    protected function _getException($events, $index = 1)
+    {
+        $event = NULL;
+        $found = 0;
+        foreach ($events['results'] as $event) {
+            if (! empty($event['recurid'])) {
+                $found++;
+                if ($index === $found) {
+                    return $event;
+                }
+            }
+        }
+        
+        return $event;
+    }
+    
+    /**
+     * testExdateDeleteThis
+     * 
+     * @see 0007382: allow to edit / delete the whole series / thisandfuture when editing/deleting recur exceptions
+     */
+    public function testExdateDeleteThis()
+    {
+        $events = $this->testCreateRecurException();
+        $exception = $this->_getException($events);
+        $this->_uit->deleteEvents(array($exception['id']));
+        
+        $search = $this->_uit->searchEvents($events['filter'], NULL);
+        $this->assertEquals(2, $search['totalcount'], '2 events should remain: ' . print_r($search,TRUE));
+    }
+    
+    /**
+     * testExdateDeleteThisAndFuture
+     * 
+     * @see 0007382: allow to edit / delete the whole series / thisandfuture when editing/deleting recur exceptions
+     */
+    public function testExdateDeleteThisAndFuture()
+    {
+        $events = $this->testCreateRecurException();
+        //print_r($events);
+        $exception = $this->_getException($events, 1);
+        //echo $exception['dtstart'];
+        $this->_uit->deleteEvents(array($exception['id']), Calendar_Model_Event::RANGE_THISANDFUTURE);
+        
+        $search = $this->_uit->searchEvents($events['filter'], NULL);
+        $this->assertEquals(1, $search['totalcount'], '1 event should remain: ' . print_r($search,TRUE));
     }
 }

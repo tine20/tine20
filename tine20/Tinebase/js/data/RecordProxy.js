@@ -153,6 +153,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * 
      * @param   {Ext.data.Record} record
      * @param   {Object} options
+     * @param   {Object} additionalArguments
      * @return  {Number} Ext.Ajax transaction id
      * @success {Ext.data.Record}
      */
@@ -181,15 +182,19 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * 
      * @param   {Array} records Array of records or ids
      * @param   {Object} options
+     * @param   {Object} additionalArguments
      * @return  {Number} Ext.Ajax transaction id
      * @success 
      */
-    deleteRecords: function(records, options) {
+    deleteRecords: function(records, options, additionalArguments) {
         options = options || {};
         options.params = options.params || {};
         options.params.method = this.appName + '.delete' + this.modelName + 's';
         options.params.ids = this.getRecordIds(records);
-
+        if (additionalArguments) {
+            Ext.apply(options.params, additionalArguments);
+        }
+        
         // increase timeout as this can take a long time (2 mins)
         options.timeout = 120000;
         

@@ -46,6 +46,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const STATUS_TENTATIVE     = 'TENTATIVE';
     const STATUS_CANCELED      = 'CANCELED';
     
+    const RANGE_ALL           = 'ALL';
+    const RANGE_THIS          = 'THIS';
+    const RANGE_THISANDFUTURE = 'THISANDFUTURE';
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier

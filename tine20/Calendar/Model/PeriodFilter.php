@@ -121,4 +121,21 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
     }
+
+    /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        $result['value'] = array(
+            'from'  => $this->_from,
+            'until' => $this->_until,
+        );
+        
+        return $result;
+    }
 }
