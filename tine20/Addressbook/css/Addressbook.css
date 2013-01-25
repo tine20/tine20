@@ -28,3 +28,15 @@
     float: left;
     margin-right: 5px;
 }
+
+.renderer_typeAccountIcon {
+    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+
+.renderer_typeContactIcon {
+    background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}

@@ -157,7 +157,6 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
         container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
-        attender = Tine.Tinebase.registry.get('currentAccount'),
         prefs = app.getRegistry().get('preferences');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
@@ -175,7 +174,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         attendee: [
             Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',
-                user_id: attender,
+                user_id: Tine.Tinebase.registry.get('userContact'),
                 status: 'ACCEPTED'
             })
         ]

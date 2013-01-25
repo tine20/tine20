@@ -535,10 +535,15 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     renderAttenderType: function(type, metadata, attender) {
         metadata.css = 'tine-grid-cell-no-dirty';
-        var cssClass = '';
+        var cssClass = '',
+            qtipText =  '',
+            userId = attender.get('user_id'),
+            hasAccount = userId && ((userId.get && userId.get('account_id')) || userId.account_id);
+            
         switch (type) {
             case 'user':
-                cssClass = 'renderer_accountUserIcon';
+                cssClass = hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';
+                qtipText = hasAccount || ! userId ? '' : Tine.Tinebase.appMgr.get('Calendar').i18n._('External Attendee');
                 break;
             case 'group':
                 cssClass = 'renderer_accountGroupIcon';
@@ -548,7 +553,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 break;
         }
         
-        var result = '<div style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+        var qtip = qtipText ? 'ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtipText) + '" ': '';
+        
+        var result = '<div ' + qtip + 'style="background-position:0px;" class="' + cssClass + '">&#160</div>';
         
         if (! attender.get('user_id')) {
             result = Tine.Tinebase.common.cellEditorHintRenderer(result);

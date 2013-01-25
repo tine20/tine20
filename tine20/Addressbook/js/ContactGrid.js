@@ -102,7 +102,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumns: function() {
         return [
-            { id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this), hidden: false },
+            { id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTypeRenderer.createDelegate(this), hidden: false },
             { id: 'tags', header: this.app.i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
             { id: 'salutation', header: this.app.i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
@@ -285,14 +285,13 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      * @return {String} HTML
      */
-    contactTidRenderer: function(data, cell, record) {
+    contactTypeRenderer: function(data, cell, record) {
+        var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
+            hasAccount = ((record.get && record.get('account_id')) || record.account_id),
+            cssClass = hasAccount ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon',
+            qtipText = Tine.Tinebase.common.doubleEncode(hasAccount ? i18n._('Contact of a user account') : i18n._('Contact'));
         
-        switch(record.get('type')) {
-            case 'user':
-                return '<img src="images/oxygen/16x16/actions/user-female.png" width="12" height="12" alt="contact" ext:qtip="' + Ext.util.Format.htmlEncode(this.app.i18n._("Internal Contact")) + '"/>';
-            default:
-                return "<img src='images/oxygen/16x16/actions/user.png' width='12' height='12' alt='contact'/>";
-        }
+        return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
     },
     
     /**
