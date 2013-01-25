@@ -87,8 +87,8 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
         parent::__construct();
 
         // assemble data struct names
-        $this->_redisDaemonQueueStructName = $this->_config->queueName . $this->_config->redisQueueSuffix;
-        $this->_redisDaemonDataStructName = $this->_config->queueName . $this->_config->redisDataSuffix;
+        $this->_redisDaemonQueueStructName  = $this->_config->queueName . $this->_config->redisQueueSuffix;
+        $this->_redisDaemonDataStructName   = $this->_config->queueName . $this->_config->redisDataSuffix;
         $this->_redisDaemonDaemonStructName = $this->_config->queueName . $this->_config->redisDaemonSuffix . $this->_config->redisDaemonNumber;
 
         $this->_setupRedis();
@@ -101,16 +101,18 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
      */
     public function run()
     {
-        while(true) {
+        while (true) {
             // manage the number of children
             if (count ($this->_children) < $this->_config->maxChildren ) {
                 $this->_logger->info(__CLASS__ . '::' . __LINE__ .    " trying to get job");
 
                 // pop id from message queue, push it to the daemon queue, return the id
-                $id = $this->_redis->rpoplpush($this->_redisDaemonQueueStructName, $this->_redisDaemonDaemonStructName);
+                $id = $this->_redis->brpoplpush($this->_redisDaemonQueueStructName, $this->_redisDaemonDaemonStructName, 1);
 
-                if ($id != NULL) {
-                    $this->_logger->info(__CLASS__ . '::' . __LINE__ .    " forking to proecess job with id $id");
+                // previous versions of phpredis return *-1 when brpoplpush timed out
+                // current version returns false on timeout
+                if ($id !== FALSE && $id != '*-1') {
+                    $this->_logger->info(__CLASS__ . '::' . __LINE__ .    " forking to process job with id $id");
                     $child_pid = $this->_forkChildren();
                     
                     if ($child_pid == 0) {
@@ -154,8 +156,6 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
                     continue;
                 }
             }
-
-            sleep(1);
         }
     }
 
@@ -212,9 +212,9 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
                 'message=' . $message
             );
             $opts = new Zend_Console_Getopt(array(
-                         'verbose|v'             => 'Output messages',
-                         'method=s'              => 'Method to call [required]',
-                         'message=s'             => 'Message to process [required]',
+                 'verbose|v' => 'Output messages',
+                 'method=s'  => 'Method to call [required]',
+                 'message=s' => 'Message to process [required]',
             ));
             Tinebase_Core::set('opts', $opts);
             Tinebase_Core::dispatchRequest();
