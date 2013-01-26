@@ -53,7 +53,6 @@ class CustomEventHooks
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') Push to Redis queue: ' . print_r($data, TRUE));
         
-        $redisQueue = new Tinebase_Redis_Queue();
-        $redisQueue->push($data);
+        Tinebase_ActionQueue::getInstance()->send($data);
     }
 }

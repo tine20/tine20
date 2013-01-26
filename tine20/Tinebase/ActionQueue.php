@@ -1,13 +1,12 @@
 <?php
 /**
- * Action Queue 
+ * Tine 2.0
  * 
  * @package     Tinebase
+ * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        move config options to config table
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,9 +16,13 @@
  * in the application controllers 
  *
  * @package     Tinebase
+ * @subpackage  ActionQueue
  */
  class Tinebase_ActionQueue implements Tinebase_Controller_Interface
  {
+     const BACKEND_DIRECT = 'Direct';
+     const BACKEND_REDIS  = 'Redis';
+     
      /**
       * holds queue instance
       * 
@@ -72,51 +75,33 @@
     
     /**
      * constructor
-     * 
-     * @see http://framework.zend.com/manual/en/zend.queue.adapters.html for config options
      */
     private function __construct()
     {
+        $options = null;
+        $backend = self::BACKEND_DIRECT;
+        
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             $options = Tinebase_Core::getConfig()->actionqueue->toArray();
             
-            $adapter = array_key_exists('adapter', $options) ? $options['adapter'] : 'Db';
-            unset($options['adapter']);
-            
-            $options['name'] = array_key_exists('name', $options) ? $options['name'] : 'tine20actionqueue';
-            
-            switch ($adapter) {
-                case 'Redis':
-                    $options['adapterNamespace'] = 'Tinebase_Redis_Queue_Zend';
-                    $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : array ( 'namespace' => 'Application_' );
-                    break;
-                    
-                case 'Db':
-                    // use default db settings if empty
-                    $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : Tinebase_Core::getConfig()->database->toArray();
-                    if (! array_key_exists('type', $options['driverOptions'])) {
-                        $options['driverOptions']['type'] = (array_key_exists('adapter', $options['driverOptions'])) ? $options['driverOptions']['adapter'] : 'pdo_mysql';
-                    }
-                    
-                    break;
-            }
-            
-            try {
-                $this->_queue = new Zend_Queue($adapter, $options);
-            } catch (Zend_Db_Adapter_Exception $zdae) {
-                throw new Tinebase_Exception_Backend_Database('Could not connect to queue DB: ' . $zdae->getMessage());
-            }
+            $backend = array_key_exists('backend', $options) ? ucfirst(strtolower($options['backend'])) : $backend;
+            unset($options['backend']);
         }
-    }
+        
+        $className = 'Tinebase_ActionQueue_Backend_' . $backend;
+        
+        if (!class_exists($className)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . " Queue class name {$className} not found. Falling back to direct execution.");
+            
+            $className = 'Tinebase_ActionQueue_Backend_Direct';
+        }
     
-    /**
-     * returns queue
-     * 
-     * @return Zend_Queue
-     */
-    public function getAdapter()
-    {
-        return $this->_queue;
+        $this->_queue = new $className($options); 
+
+        if (! $this->_queue instanceof Tinebase_ActionQueue_Backend_Interface) {
+            throw new Tinebase_Exception_UnexpectedValue('backend does not implement Tinebase_ActionQueue_Backend_Interface');
+        }
     }
     
     /**
@@ -127,94 +112,69 @@
      * @param mixed  $_arg2
      * ...
      * 
-     * @return string
+     * @return string the job id
      */
     public function queueAction()
     {
         $params = func_get_args();
         $action = array_shift($params);
-        $decodedAction = array(
-            'action' => $action,
-            'params' => $params
+        $message = array(
+            'action'     => $action,
+            'account_id' => Tinebase_Core::getUser(),
+            'params'     => $params
         );
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
         
-        try {
-            $message = serialize($decodedAction);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
-            return;
-        }
-        
-        if ($this->_queue) {
-            $this->_queue->send($message);
-        } else {
-            // execute action immediately if no queue service is available
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
-            try {
-                $this->executeAction($message);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
-            }
-        }
-    }
-    
-    /**
-     * process number of messages in queue
-     * 
-     * @param integer $_numberOfMessagesToProcess
-     */
-    public function processQueue($_numberOfMessagesToProcess = 5)
-    {
-        if ($this->_queue && count($this->_queue) > 0) {
-            $numberToProcess = min(array($_numberOfMessagesToProcess, count($this->_queue)));
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' processing messages: ' . $numberToProcess . ' of ' . count($this->_queue));
-            
-            $messages = $this->_queue->receive($numberToProcess);
- 
-            foreach ($messages as $i => $message) {
-                try {
-                    $this->executeAction($message->body);
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
-                }
-                $this->_queue->deleteMessage($message);
-            }
-        }
+        return $this->_queue->send($message);
     }
     
     /**
      * execute action defined in queue message
      * 
-     * @param string $_message serialized action
-     * @return void
+     * @param  string  $message  action
+     * @return mixed
      */
-    public function executeAction($_message)
+    public function executeAction($message)
     {
-        $decodedMessage = unserialize($_message);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " executing action: '{$message['action']}'");
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " executing action: '{$decodedMessage['action']}'");
-        
-        return $this->_executeDecodedAction($decodedMessage);
-    }
-    
-    /**
-     * execute the decoded action
-     * 
-     * @param array $_decodedMessage
-     * @throws Exception
-     */
-    protected function _executeDecodedAction($_decodedMessage)
-    {
-        list($appName, $actionName) = explode('.', $_decodedMessage['action']);
+        list($appName, $actionName) = explode('.', $message['action']);
         $controller = Tinebase_Core::getApplicationInstance($appName);
     
         if (! method_exists($controller, $actionName)) {
-            throw new Exception('Could not execute action, requested action does not exist');
+            throw new Tinebase_Exception_NotFound('Could not execute action, requested action does not exist');
         }
         
-        call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
+        return call_user_func_array(array($controller, $actionName), $message['params']);
+    }
+    
+    /**
+     * process all jobs in queue
+     */
+    public function processQueue()
+    {
+        // loop over all jobs
+        while($jobId = Tinebase_ActionQueue::getInstance()->waitForJob()) {
+            $job = $this->receive($jobId);
+            
+            $this->executeAction($job);
+            
+            $this->delete($jobId);
+        }
+    }
+    
+    /**
+     * call function of queue backend
+     * 
+     * @param  string $name
+     * @param  array  $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array(array($this->_queue, $name), $arguments);
     }
 }

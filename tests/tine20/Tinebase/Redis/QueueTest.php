@@ -22,7 +22,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'CustomEventHooks.php';
 /**
  * redis worker
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'RedisWorker.php';
+#require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'RedisWorker.php';
 
 /**
  * Test class for Tinebase_Redis_Queue
@@ -49,13 +49,6 @@ class Tinebase_Redis_QueueTest extends PHPUnit_Framework_TestCase
     protected $_redis = NULL;
 
     /**
-     * redis config
-     * 
-     * @var array
-     */
-    protected $_redisConfig = NULL;
-    
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -67,14 +60,13 @@ class Tinebase_Redis_QueueTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('redis extension not found');
         }
         
-        $config = Tinebase_Config::getInstance()->get('redis', NULL);
-        if ($config === NULL) {
-            $this->markTestSkipped('redis not configured');
+        if (!isset(Tinebase_Core::getConfig()->actionqueue) || 
+            !isset(Tinebase_Core::getConfig()->actionqueue->backend) || 
+            ucfirst(strtolower(Tinebase_Core::getConfig()->actionqueue->backend)) != Tinebase_ActionQueue::BACKEND_REDIS) {
+            $this->markTestSkipped('no redis actionqueue configured');
         }
-        $this->_redisConfig = $config->toArray();
         
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $this->_redis = new Tinebase_Redis_Queue($this->_redisConfig);
     }
 
     /**
@@ -93,30 +85,28 @@ class Tinebase_Redis_QueueTest extends PHPUnit_Framework_TestCase
      */
     public function testAddUserEvent()
     {
-        $queueSizeBefore = $this->_redis->getQueueSize();
-        $user = $this->_createUser();
-        $queueSizeAfter = $this->_redis->getQueueSize();
-        $this->assertEquals($queueSizeBefore + 1, $queueSizeAfter);
+        $queueSizeBefore = Tinebase_ActionQueue::getInstance()->getQueueSize();
+        $testJobId = Tinebase_ActionQueue::getInstance()->queueAction('FooBar.test', array('key' => 'value'));
+        $queueSizeAfter = Tinebase_ActionQueue::getInstance()->getQueueSize();
         
-        $event = $this->_redis->pop();
-        $this->assertEquals('create', $event->action);
-        $this->assertTrue(isset($event->user));
-        $this->assertEquals($user->accountLoginName, $event->user->accountLoginName);
-    }
-    
-    /**
-     * create user
-     * 
-     * @return Tinebase_Model_FullUser
-     */
-    protected function _createUser()
-    {
-        return Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
-            'accountLoginName'     => 'redissepp',
-            'accountPrimaryGroup'  => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-            'accountLastName'      => 'redis',
-            'accountFullName'      => 'sepp',
-        )), '', '');
+        $this->assertGreaterThan($queueSizeBefore, $queueSizeAfter);
+
+        // loop over all jobs until testJob appears
+        while($jobId = Tinebase_ActionQueue::getInstance()->waitForJob()) {
+            if ($jobId != $testJobId) {
+                Tinebase_ActionQueue::getInstance()->delete($jobId);
+            } else {
+                break;
+            }
+        }
+        $this->assertEquals($jobId, $testJobId);
+        
+        $job   = Tinebase_ActionQueue::getInstance()->receive($jobId);
+        Tinebase_ActionQueue::getInstance()->delete($jobId);
+        
+        $this->assertTrue(is_array($job));
+        $this->assertEquals('FooBar.test', $job['action']);
+        $this->assertEquals(array(array('key' => 'value')), $job['params']);
     }
     
     /**
@@ -124,6 +114,8 @@ class Tinebase_Redis_QueueTest extends PHPUnit_Framework_TestCase
      */
     public function testWorker()
     {
+        $this->markTestSkipped();
+        
         $user = $this->_createUser();
         
         $worker = new RedisWorker(new Zend_Config(array(
@@ -135,5 +127,15 @@ class Tinebase_Redis_QueueTest extends PHPUnit_Framework_TestCase
         $out = ob_get_clean();
         
         $this->assertEquals('handled create job.', $out);
+    }
+    
+    /**
+     * create user
+     * 
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _createUser()
+    {
+        return Tinebase_ActionQueue::getInstance()->queueAction(array('key' => 'value'));
     }
 }
