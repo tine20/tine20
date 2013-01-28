@@ -229,7 +229,6 @@ class Felamimail_Message extends Zend_Mail_Message
         $result = array();
         $indention = 0;
         foreach ($lines as $line) {
-            
             // get indention level and remove quotes
             if (preg_match('/^>[> ]*/', $line, $matches)) {
                 $indentionLevel = substr_count($matches[0], '>');
@@ -247,11 +246,13 @@ class Felamimail_Message extends Zend_Mail_Message
                 $indention++;
             }
             while ($indention > $indentionLevel) {
-                $line .= '</blockquote>';
+                $line = '</blockquote>' . $line;
                 $indention--;
             }
             
             $result[] = $line;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Line: ' . $line);
         }
         
         $result = implode('<br />', $result);
