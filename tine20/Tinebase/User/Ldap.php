@@ -515,12 +515,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * add an user
      * 
      * @param   Tinebase_Model_FullUser  $_user
-     * @return  Tinebase_Model_FullUser
+     * @return  Tinebase_Model_FullUser|NULL
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
         if ($this->_isReadOnlyBackend) {
-            return;
+            return NULL;
         }
         
         $ldapData = $this->_user2ldap($_user);

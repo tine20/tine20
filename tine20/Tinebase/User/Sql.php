@@ -742,8 +742,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $userFromSyncBackend = $this->addUserToSyncBackend($_user);
-            // set accountId for sql backend sql backend
-            $_user->setId($userFromSyncBackend->getId());
+            if ($userFromSyncBackend !== NULL) {
+                // set accountId for sql backend sql backend
+                $_user->setId($userFromSyncBackend->getId());
+            }
         }
         
         $addedUser = $this->addUserInSqlBackend($_user);
