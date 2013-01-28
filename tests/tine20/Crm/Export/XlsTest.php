@@ -5,8 +5,8 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Export_XlsTest::main');
-}
 
 /**
  * Test class for Crm_Export_Xls
@@ -89,8 +85,4 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         unlink($csvFilename);
     }
-}       
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Export_XlsTest::main') {
-    Addressbook_ControllerTest::main();
 }
