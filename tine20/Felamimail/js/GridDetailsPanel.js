@@ -246,7 +246,7 @@ Ext.ns('Tine.Felamimail');
                     '<b>' + this.i18n._('From') + ':</b>',
                     ' {[this.showFrom(values.from_email, values.from_name, "' + this.i18n._('Add') + '", "' 
                         + this.i18n._('Add contact to addressbook') + '")]}<br/>',
-                    '<b>' + this.i18n._('Date') + ':</b> {[Tine.Tinebase.common.dateTimeRenderer(values.sent)]}',
+                    '<b>' + this.i18n._('Date') + ':</b> {[this.showDate(values.sent, values)]}',
                     '{[this.showRecipients(values.headers)]}',
                     '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
                 '</div>',
@@ -267,6 +267,11 @@ Ext.ns('Tine.Felamimail');
                     return '';
                 }
                 return value;
+            },
+            
+            showDate: function(sent, messageData) {
+                var date = (sent) ? sent : messageData.received;
+                return Tine.Tinebase.common.dateTimeRenderer(date);
             },
             
             showFrom: function(email, name, addText, qtip) {
