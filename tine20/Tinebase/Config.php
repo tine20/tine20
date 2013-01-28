@@ -217,6 +217,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_POLICY_MIN_NUMBERS = 'pwPolicyMinNumbers';
     
     /**
+     * PASSWORD_POLICY_FORBID_USERNAME
+     *
+     * @var string
+     */
+    const PASSWORD_POLICY_FORBID_USERNAME = 'pwPolicyForbidUsername';
+    
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -493,6 +500,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         //_('Minimum numbers in password')
             'description'           => 'Minimum numbers in password',
             'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PASSWORD_POLICY_FORBID_USERNAME => array(
+        //_('Forbid part of username')
+            'label'                 => 'Forbid part of username',
+        //_('Forbid part of username in password')
+            'description'           => 'Forbid part of username in password',
+            'type'                  => 'bool',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

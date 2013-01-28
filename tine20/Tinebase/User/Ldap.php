@@ -346,10 +346,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             return;
         }
         
-        $this->checkPasswordPolicy($_password);
-        
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
-
+        
+        $this->checkPasswordPolicy($_password, $user);
+        
         $metaData = $this->_getMetaData($user);
 
         $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;

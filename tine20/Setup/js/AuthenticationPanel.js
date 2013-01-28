@@ -598,7 +598,13 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, {
                 name: 'password_pwPolicyMinNumbers',
                 fieldLabel: this.app.i18n._('Minimum numbers')
-            }
+            },
+            Ext.applyIf({
+                name: 'password_pwPolicyForbidUsername',
+                fieldLabel: this.app.i18n._('Forbid part of username in password'),
+                store: [[1, this.app.i18n._('Yes')], [0, this.app.i18n._('No')]],
+                value: 0
+            }, commonComboConfig)
             ]
         }, {
             xtype: 'fieldset',

@@ -254,7 +254,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_password = '';
             $_passwordRepeat = '';
         }
-        Tinebase_User::getInstance()->checkPasswordPolicy($_password);
+        Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());

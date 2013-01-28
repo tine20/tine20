@@ -331,9 +331,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
-        $this->checkPasswordPolicy($_password);
-        
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($userId);
+        $this->checkPasswordPolicy($_password, $user);
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -376,10 +376,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * ensure password policy
      * 
-     * @param $password
+     * @param string $password
+     * @param Tinebase_Model_FullUser $user
      * @throws Tinebase_Exception_PasswordPolicyViolation
      */
-    public function checkPasswordPolicy($password)
+    public function checkPasswordPolicy($password, Tinebase_Model_FullUser $user)
     {
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_ACTIVE, FALSE)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -396,6 +397,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => '/[\w]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => '/[^0-9]*/',
+            Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME        => $user->accountLoginName,
         );
         
         foreach ($policy as $key => $regex) {
@@ -421,30 +423,37 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param string $password
      * @param string $configKey
      * @param string $regex
+     * @return mixed
      */
     protected function _testPolicy($password, $configKey, $regex = NULL)
     {
+        $result = TRUE;
+        
         if ($configKey === Tinebase_Config::PASSWORD_POLICY_ONLYASCII && Tinebase_Config::getInstance()->get($configKey, 0) && $regex !== NULL) {
             $nonAsciiFound = preg_match($regex, $password, $matches);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . print_r($matches, TRUE));
             
-            return ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
-        }
-        
-        $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
-        if ($minLength > 0) {
-            $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
-            $charCount = strlen(utf8_decode($reduced));
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
-            
-            if ($charCount < $minLength) {
-                return array('expected' => $minLength, 'got' => $charCount);
+            $result = ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
+        } else if ($configKey === Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME) {
+            // $regex contains username in this case
+            $result = preg_match('/' . preg_quote($password) . '/i', $regex);
+        } else {
+            // check min length restriction
+            $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
+            if ($minLength > 0) {
+                $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
+                $charCount = strlen(utf8_decode($reduced));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
+                
+                if ($charCount < $minLength) {
+                    $result = array('expected' => $minLength, 'got' => $charCount);
+                }
             }
         }
         
-        return TRUE;
+        return $result;
     }
     
     /**
