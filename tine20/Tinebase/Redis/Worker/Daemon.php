@@ -18,15 +18,6 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
     const EXECUTION_METHOD_DISPATCH = 'dispatch';
     const EXECUTION_METHOD_EXEC_CLI = 'exec_cli';
     
-    protected $_pidFile = '/var/run/tine20/actionqueuedaemon.pid';
-    
-    /**
-     * default config path for ini-file
-     *
-     * @var Console_Daemon
-     */
-    protected $_defaultConfigPath = '/etc/tine20/actionQueue.ini';
-
     /**
      * @var Redis
      */
@@ -59,22 +50,25 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
      * @var array
      */
     protected static $_defaultConfig = array(
-        'host'              => 'localhost',
-        'port'              => 6379,
-        'timeout'           => 5,
-        
-        'queueName'         => 'TinebaseQueue',
-        'redisQueueSuffix'  => 'Queue',
-        'redisDataSuffix'   => 'Data',
-        'redisDaemonSuffix' => 'Daemon',
-        'redisDaemonNumber' => 1,
-        
-        'executionMethod'   => self::EXECUTION_METHOD_DISPATCH,
-        'maxRetry'          => 10,
-        'maxChildren'       => 5,
-        
-        'loglevel'          => 4,
-        'logfile'           => NULL, //STDOUT
+        'general' => array(
+            'configfile' => '/etc/tine20/actionQueue.ini', 
+            'pidfile'    => '/var/run/tine20/actionQueue.pid',
+        ),
+        'tine20' => array (
+            'host'              => 'localhost',
+            'port'              => 6379,
+            'timeout'           => 5,
+            
+            'queueName'         => 'TinebaseQueue',
+            'redisQueueSuffix'  => 'Queue',
+            'redisDataSuffix'   => 'Data',
+            'redisDaemonSuffix' => 'Daemon',
+            'redisDaemonNumber' => 1,
+            
+            'executionMethod'   => self::EXECUTION_METHOD_DISPATCH,
+            'maxRetry'          => 10,
+            'maxChildren'       => 5,
+        )
     );
 
     /**
@@ -87,14 +81,13 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
         parent::__construct();
 
         // assemble data struct names
-        $this->_redisDaemonQueueStructName  = $this->_config->queueName . $this->_config->redisQueueSuffix;
-        $this->_redisDaemonDataStructName   = $this->_config->queueName . $this->_config->redisDataSuffix;
-        $this->_redisDaemonDaemonStructName = $this->_config->queueName . $this->_config->redisDaemonSuffix . $this->_config->redisDaemonNumber;
+        $this->_redisDaemonQueueStructName  = $this->_config->tine20->queueName . $this->_config->tine20->redisQueueSuffix;
+        $this->_redisDaemonDataStructName   = $this->_config->tine20->queueName . $this->_config->tine20->redisDataSuffix;
+        $this->_redisDaemonDaemonStructName = $this->_config->tine20->queueName . $this->_config->tine20->redisDaemonSuffix . $this->_config->tine20->redisDaemonNumber;
 
         $this->_setupRedis();
-        $this->_setupLogger();
     }
-
+    
     /**
      * infinite loop where daemon manages the execution of the messages from the Message Queue
      * 
@@ -103,7 +96,7 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
     {
         while (true) {
             // manage the number of children
-            if (count ($this->_children) < $this->_config->maxChildren ) {
+            if (count ($this->_children) < $this->_config->tine20->maxChildren ) {
                 $this->_logger->info(__CLASS__ . '::' . __LINE__ .    " trying to get job");
 
                 // pop id from message queue, push it to the daemon queue, return the id
@@ -129,7 +122,7 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
 
                             $retryCount = (int) $this->_redis->hGet($this->_redisDaemonDataStructName . ":" . $id, 'retry' ) + 1;
 
-                            if ($retryCount < $this->_config->maxRetry) {
+                            if ($retryCount < $this->_config->tine20->maxRetry) {
                                 $this->_logger->debug(__CLASS__ . '::' . __LINE__ .    " requeue job $id ... ");
                                 
                                 // NOTE: status duplicate is not yet evaluated. We need to evaluate it
@@ -139,17 +132,19 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
                                 $this->_redis->lPush($this->_redisDaemonQueueStructName, $id);
                                 $this->_redis->lRemove($this->_redisDaemonDaemonStructName , $id);
                                 $this->_redis->hSet($this->_redisDaemonDataStructName . ":" . $id, 'status', "inQueue");
+                                
                                 exit(0);
                             }
 
                             $errMessage = "job $id could not be executed. giving up after $retryCount retries. \n$message";
-                            fwrite(STDERR, "$errMessage\n");
+                            #fwrite(STDERR, "$errMessage\n");
                             $this->_logger->err(__METHOD__ . '::' . __LINE__ . " $errMessage");
                         }
 
                         // remove from redis
                         $this->_redis->lRemove($this->_redisDaemonDaemonStructName , $id);
                         $this->_redis->delete($this->_redisDaemonDataStructName . ":" . $id);
+                        
                         exit(0);
                     }
                     
@@ -179,14 +174,7 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
     protected function _setupRedis()
     {
         $this->_redis = new Redis;
-        $this->_redis->connect($this->_config->host, $this->_config->port, $this->_config->timeout);
-    }
-    
-    protected function _setupLogger()
-    {
-        $this->_logger = new Zend_Log();
-        $this->_logger->addWriter(new Zend_Log_Writer_Stream($this->_config->logfile ? $this->_config->logfile : STDOUT));
-        $this->_logger->addFilter(new Zend_Log_Filter_Priority((int) $this->_config->loglevel));
+        $this->_redis->connect($this->_config->tine20->host, $this->_config->tine20->port, $this->_config->tine20->timeout);
     }
     
     /**
@@ -198,7 +186,7 @@ class Tinebase_Redis_Worker_Daemon extends Console_Daemon
     protected function _executeAction($message)
     {
         // execute in subprocess
-        if ($this->_config->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
+        if ($this->_config->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
             $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($message), $exitCode );
             if (exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . $output);

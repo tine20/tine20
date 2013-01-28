@@ -21,13 +21,14 @@ declare(ticks = 1);
  */
 abstract class Console_Daemon
 {
-    protected $_defaultConfigPath;
-    
-    protected $_pidFile = '/var/run/tine20/daemon.pid';
-    
     protected $_children = array();
     
     protected $_verbose = FALSE;
+    
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
     
     /**
      * @var Zend_Config
@@ -37,7 +38,15 @@ abstract class Console_Daemon
     /**
      * @var array $_defaultConfig
      */
-    protected static $_defaultConfig = array();
+    protected static $_defaultConfig = array(
+        'general' => array(
+            'configfile' => null, 
+            'pidfile'    => null,
+            'daemonize'  => 0,
+            'logfile'    => null, //STDOUT
+            'loglevel'   => 3
+        )
+    );
     
     /**
      * @var array
@@ -51,11 +60,6 @@ abstract class Console_Daemon
     );
     
     /**
-     * @var Zend_Log
-     */
-    protected $_logger;
-    
-    /**
      * constructor
      * 
      * @param Zend_Config $config
@@ -66,22 +70,16 @@ abstract class Console_Daemon
         pcntl_signal(SIGINT,  array($this, "handleSigINT"));
         pcntl_signal(SIGCHLD, array($this, "handleSigCHLD"));
         
-        // @TODO config or ini should be able to configure deamon
-        if ($config === NULL) {
-            $options = $this->_getOptions();
-            if (isset($options->d)) {
-                $this->_pidFile = isset($options->p) ? $options->p : $this->_pidFile;
-                $pid = $this->_becomeDaemon($options->p);
-            }
-            
-            if (isset($options->v)) {
-                $this->_verbose = TRUE;
-            }
-            
-            $configPath = (isset($options->config)) ? $options->config : $this->_defaultConfigPath;
-            $this->_config = $this->_loadConfig($configPath);
-        } else {
-            $this->_config = $config;
+        $this->_config = new Zend_Config(self::getDefaultConfig(), TRUE);
+
+        $this->_parseOptions();
+        
+        if (file_exists($this->_config->general->configfile)) {
+            $this->_loadConfigFile($this->_config->general->configfile);
+        }
+        
+        if ($this->_config->general->daemonize == 1) {
+            $pid = $this->_becomeDaemon();
         }
         
         if ($this->_verbose) {
@@ -91,10 +89,17 @@ abstract class Console_Daemon
         if (isset($this->_config->general) && isset($this->_config->general->user) && isset($this->_config->general->group)) {
             $this->_changeIdentity($this->_config->general->user, $this->_config->general->group);
         }
+        
+        $this->_setupLogger();
     }
     
     abstract public function run();
     
+    /**
+     * get Zend_Config object
+     * 
+     * @return Zend_Config
+     */
     public function getConfig()
     {
         return $this->_config;
@@ -107,12 +112,12 @@ abstract class Console_Daemon
      */
     public static function getDefaultConfig()
     {
-        return static::$_defaultConfig;
+        return array_merge(self::$_defaultConfig, static::$_defaultConfig);
     }
     
     public function getPidFile()
     {
-        return $this->_pidFile;
+        return $this->_config->general->pidfile;
     }
     
     protected function _changeIdentity($_username, $_groupname)
@@ -139,22 +144,25 @@ abstract class Console_Daemon
      * @param string $_path
      * @return Zend_Config_Ini
      */
-    protected function _loadConfig($_path)
+    protected function _loadConfigFile($path)
     {
-        $config = new Zend_Config(self::getDefaultConfig(), TRUE);
-        
         try {
-            $configFromFile = new Zend_Config_Ini($_path);
+            $configFromFile = new Zend_Config_Ini($path);
         } catch (Zend_Config_Exception $e) {
-            fwrite(STDERR, "Error while parsing config file($_path) " .  $e->getMessage() . PHP_EOL);
+            fwrite(STDERR, "Error while parsing config file($path) " .  $e->getMessage() . PHP_EOL);
             exit(1);
         }
         
-        $config->merge($configFromFile);
-        
-        return $config;
+        $this->_config->merge($configFromFile);
     }
-      
+    
+    protected function _setupLogger()
+    {
+        $this->_logger = new Zend_Log();
+        $this->_logger->addWriter(new Zend_Log_Writer_Stream($this->_config->general->logfile ? $this->_config->general->logfile : STDOUT));
+        $this->_logger->addFilter(new Zend_Log_Filter_Priority((int) $this->_config->general->loglevel));
+    }
+    
     protected function _forkChildren()
     {
         $this->_beforeFork();
@@ -203,8 +211,10 @@ abstract class Console_Daemon
      */
     protected function _becomeDaemon()
     {
-        if (! is_writable(dirname($this->_pidFile))) {
-            fwrite(STDERR, "cannot write pidfile '{$this->_pidFile}'" . PHP_EOL);
+        $pidFile = $this->getPidFile();
+        
+        if ( $pidFile !== null && ! is_writable(dirname($pidFile))) {
+            fwrite(STDERR, "cannot write pidfile '{$pidFile}'" . PHP_EOL);
             exit(1);
         }
         
@@ -218,8 +228,10 @@ abstract class Console_Daemon
         // fork was successfull
         // we can finish the main process
         if ($childPid > 0) {
-            echo "We are master. Exiting main process now..." . PHP_EOL;
-            file_put_contents($this->getPidFile(), $childPid);
+            #echo "We are master. Exiting main process now..." . PHP_EOL;
+            if ($pidFile !== null) {
+                file_put_contents($pidFile, $childPid);
+            }
             exit;
         }
         
@@ -239,7 +251,7 @@ abstract class Console_Daemon
      * 
      * @return Zend_Console_Getopt
      */
-    protected function _getOptions()
+    protected function _parseOptions()
     {
         try {
             $opts = new Zend_Console_Getopt($this->_options);
@@ -251,7 +263,22 @@ abstract class Console_Daemon
         
         if ($opts->h) {
             fwrite(STDOUT, $opts->getUsageMessage());
+            
             exit(0);
+        }
+
+        // pid file path
+        if (isset($opts->p)) {
+            $this->_config->general->pidfile = $opts->p;
+        }
+        
+        // become daemon
+        if (isset($opts->d)) {
+            $this->_config->general->daemonize = 1;
+        }
+        
+        if (isset($options->v)) {
+            $this->_verbose = TRUE;
         }
         
         return $opts;
@@ -271,9 +298,12 @@ abstract class Console_Daemon
             posix_kill($pid, SIGTERM);
         }
         
-        if ($this->_pidFile) {
-            @unlink($this->_pidFile);
+        $pidFile = $this->getPidFile();
+        
+        if ($pidFile) {
+            @unlink($pidFile);
         }
+        
         exit(0);
     }
     

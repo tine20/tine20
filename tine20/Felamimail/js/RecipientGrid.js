@@ -380,8 +380,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.setFixedHeight(true);
         
-        this.relayEvents(this.searchCombo, ['blur']);
-        
         this.initDropTarget();
     },
     
