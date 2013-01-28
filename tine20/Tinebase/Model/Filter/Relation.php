@@ -149,7 +149,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         $filters = $this->_value;
         foreach ($filters as $idx => $filterData) {
             
-            if ($filters[$idx]['field'] === 'relation_type') {
+            if (isset($filters[$idx]['field']) && $filters[$idx]['field'] === 'relation_type') {
                 $this->_relationTypeFilter = $filters[$idx];
                 unset($filters[$idx]);
             }
