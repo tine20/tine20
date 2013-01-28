@@ -138,8 +138,10 @@ class TestServer
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
             '/-c [\S]+\D/',
+            '/--log-junit [\S]+\D/'
         ), array(
             '/php',
+            '',
             '',
             '',
             '',
