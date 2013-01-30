@@ -203,11 +203,11 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testAddressbookCustomFieldAcl()
     {
-        $createdCustomField = $this->_instance->addCustomField($this->_getCustomField(array(
+        $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model'             => 'Addressbook_Model_Contact',
         )));
-        $anotherCustomField = $this->_instance->addCustomField($this->_getCustomField(array(
+        $anotherCustomField = $this->_instance->addCustomField(self::getCustomField(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'model'             => 'Addressbook_Model_Contact',
         )));
