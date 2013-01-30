@@ -305,7 +305,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $updatedAlarm = $updatedEvent->exdate[0]->alarms->getFirstRecord();
         
         $diff = $persistentAlarm->diff($updatedAlarm);
-        $this->assertTrue(empty($diff));
+        $this->assertTrue($diff->isEmpty());
     }
     
     public function testAttendeeStatusUpdate()
