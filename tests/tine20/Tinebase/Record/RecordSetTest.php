@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -50,14 +50,6 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => 1, 'string' => 'idFull1'), true));
         $this->object->addRecord(new Tinebase_Record_DummyRecord(array('id' => 2, 'string' => 'idFull2'), true));
     }
-    /**
-     * Tears down the fixture.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown ()
-    {}
     
     public function testCloneRecordSet()
     {
@@ -409,5 +401,26 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $filterResultWIndices = $recordSet->filter('string', '/^bommel.*/', TRUE);
         $this->assertEquals(count($filterResultWOIndices), count($filterResultWIndices));
         $this->assertEquals(array(100, 300), $filterResultWIndices->getArrayOfIds());
+    }
+
+    /**
+     * test diff function
+     * 
+     * @see 0000996: add changes in relations/linked objects to modlog/history
+     */
+    public function testDiff()
+    {
+        $compareRecordSet = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        $compareRecordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => 1, 'string' => 'idFull1'), true));
+        $compareRecordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => 2, 'string' => 'idFull22'), true));
+        $compareRecordSet->addRecord(new Tinebase_Record_DummyRecord(array('id' => 3, 'string' => 'idFull3'), true));
+        
+        $diff = $compareRecordSet->diff($this->object);
+        
+        $this->assertFalse($diff->isEmpty());
+        foreach (array('added' => 2, 'removed' => 1, 'modified' => 1) as $field => $expectedCount) {
+            $this->assertEquals($expectedCount, count($diff->{$field}), $expectedCount . ' record(s) should be ' . $field . ': ' . print_r($diff->toArray(), TRUE));
+        }
+        $this->assertEquals('idFull2', $diff->modified->getFirstRecord()->diff['string']);
     }
 }

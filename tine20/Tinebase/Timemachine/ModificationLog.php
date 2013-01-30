@@ -60,7 +60,10 @@ class Tinebase_Timemachine_ModificationLog
      * 
      * @var array
      * 
-     * @todo move more 'toOmit' fields to record (getModlogOmitFields)
+     * @todo move 'toOmit' fields to record (getModlogOmitFields)
+     * @todo allow notes modlog
+     * 
+     * @see 0007494: add changes in notes to modlog/history
      */
     protected $_metaProperties = array(
         'created_by',
@@ -71,16 +74,11 @@ class Tinebase_Timemachine_ModificationLog
         'deleted_time',
         'deleted_by',
         'seq',
-        'relations',
+    // @todo allow notes modlog
         'notes',
-    // record specific properties / no meta properties / @todo to be moved to record definition
-        'products',
+    // record specific properties / no meta properties 
+    // @todo to be moved to (contact) record definition
         'jpegphoto',
-        'grants',
-        'account_grants',
-        'exdate',
-        'attendee',
-        'alarms',
     );
     
     /**
@@ -131,18 +129,18 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * Returns modification of a given record in a given timespan
      * 
-     * @param string _application application of given identifier  
-     * @param string _id identifier to retreave modification log for
-     * @param string _type 
-     * @param string _backend 
-     * @param Tinebase_DateTime _from beginning point of timespan, excluding point itself
-     * @param Tinebase_DateTime _until end point of timespan, including point itself 
-     * @param int _modifierId optional
+     * @param string $_application application of given identifier  
+     * @param string $_id identifier to retreave modification log for
+     * @param string $_type 
+     * @param string $_backend 
+     * @param Tinebase_DateTime $_from beginning point of timespan, excluding point itself
+     * @param Tinebase_DateTime $_until end point of timespan, including point itself 
+     * @param int $_modifierId optional
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * 
      * @todo use backend search() + Tinebase_Model_ModificationLogFilter
      */
-    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, DateTime $_from, DateTime $_until,  $_modifierId = NULL )
+    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', DateTime $_from = NULL, DateTime $_until = NULL,  $_modifierId = NULL)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
@@ -153,25 +151,33 @@ class Tinebase_Timemachine_ModificationLog
             ->from($this->_tablename)
             ->order('modification_time ASC')
             ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' = ?', $application->id))
-            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $_id))
-            ->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' > ?', $_from->toString($isoDef)))
-            ->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $_until->toString($isoDef)));
+            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $_id));
+        
+        if ($_from) {
+            $select->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' > ?', $_from->toString($isoDef)));
+        }
+        
+        if ($_until) {
+            $select->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $_until->toString($isoDef)));
+        }
             
-       if ($_type) {
-           $select->where($db->quoteInto($db->quoteIdentifier('record_type') . ' LIKE ?', $_type));
-       }
-       if ($_backend) {
-           $select->where($db->quoteInto($db->quoteIdentifier('record_backend') . ' LIKE ?', $_backend));
-       }
-       if ($_modifierId) {
-           $select->where($db->quoteInto($db->quoteIdentifier('modification_account') . ' = ?', $_modifierId));
-       }
+        if ($_type) {
+            $select->where($db->quoteInto($db->quoteIdentifier('record_type') . ' LIKE ?', $_type));
+        }
+        
+        if ($_backend) {
+            $select->where($db->quoteInto($db->quoteIdentifier('record_backend') . ' LIKE ?', $_backend));
+        }
+        
+        if ($_modifierId) {
+            $select->where($db->quoteInto($db->quoteIdentifier('modification_account') . ' = ?', $_modifierId));
+        }
        
-       $stmt = $db->query($select);
-       $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt = $db->query($select);
+        $resultArray = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
        
-       $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $resultArray);
-       return $modifications;
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $resultArray);
+        return $modifications;
     }
 
     /**
@@ -203,12 +209,13 @@ class Tinebase_Timemachine_ModificationLog
      * properties of the last change to the attribute, besides the 
      * 'modified_from', which holds the modified_from of the first change.
      * 
-     * @param Tinebase_Record_RecordSet _modifications
+     * @param Tinebase_Record_RecordSet $modifications
      * @return Tinebase_Record_RecordSet differences
      */
-    public function computeDiff(Tinebase_Record_RecordSet $_modifications) {
+    public function computeDiff(Tinebase_Record_RecordSet $modifications)
+    {
         $diff = array();
-        foreach ($_modifications as $modification) {
+        foreach ($modifications as $modification) {
             if (array_key_exists($modification->modified_attribute, $diff)) {
                 $modification->old_value = $diff[$modification->modified_attribute]->old_value;
             }
@@ -224,7 +231,8 @@ class Tinebase_Timemachine_ModificationLog
      * @return  Tinebase_Model_ModificationLog
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getModification( $_id ) {
+    public function getModification($_id)
+    {
         $db = $this->_table->getAdapter();
         $stmt = $db->query($db->select()
            ->from($this->_tablename)
@@ -333,6 +341,11 @@ class Tinebase_Timemachine_ModificationLog
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ 
                         . " Non resolvable conflict for field '" . $diff->modified_attribute . "'!");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' new user value: ' . $newUserValue
+                        . ' new diff value: ' . $diff->new_value
+                        . ' old diff value: ' . $diff->old_value);
+                    
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
             }
@@ -432,7 +445,7 @@ class Tinebase_Timemachine_ModificationLog
             'last_modified_by'   => $_newRecord->last_modified_by,
             'seq'                => ($_newRecord->has('seq')) ? $_newRecord->seq : 0,
         ), $_id);
-        $diffs = $_curRecord->diff($_newRecord);
+        $diffs = $_curRecord->diff($_newRecord)->diff;
         
         if (! empty($diffs) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Diffs: ' . print_r($diffs, TRUE));
@@ -490,8 +503,6 @@ class Tinebase_Timemachine_ModificationLog
      * @param Tinebase_Record_RecordSet $_modifications
      * @param array $_currentData
      * @param array $_toOmit
-     * 
-     * @todo support more "second order" (relations, ...) records in modlog
      */
     protected function _loopModifications($_newData, Tinebase_Model_ModificationLog $_commonModlog, Tinebase_Record_RecordSet $_modifications, $_currentData, $_toOmit = array())
     {
@@ -503,15 +514,9 @@ class Tinebase_Timemachine_ModificationLog
             
             $curValue = (isset($_currentData[$field])) ? $_currentData[$field] : '';
             
-            switch ($field) {
-                case 'tags':
-                case 'customfields':
-                    $curValue = $this->_convertToJsonString($curValue);
-                    $newValue = $this->_convertToJsonString($newValue);
-                    break;
-                default:
-            }
-
+            $curValue = $this->_convertToJsonString($curValue);
+            $newValue = $this->_convertToJsonString($newValue);
+            
             if ($curValue === $newValue) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Current and new value match. It looks like the diff() failed or you passed identical data for field ' . $field);
@@ -528,7 +533,7 @@ class Tinebase_Timemachine_ModificationLog
             $modLogEntry->old_value = $curValue;
             $modLogEntry->new_value = $newValue;
             $modLogEntry->setId($this->setModification($modLogEntry));
-    
+            
             $_modifications->addRecord($modLogEntry);
         }
     }
@@ -541,24 +546,20 @@ class Tinebase_Timemachine_ModificationLog
      */
     protected function _convertToJsonString($_value)
     {
-        $result = $_value;
-        if ($result instanceof Tinebase_Record_RecordSet) {
-            $result = $result->toArray();
-        }
-        if (is_array($result)) {
-            // deal with RecordSet diff()
-            foreach (array('removed', 'added') as $index) {
-                if (isset($result[$index])) {
-                    $result[$index] = $result[$index]->toArray();
-                }
-            }
-            $result = Zend_Json::encode($result);
-        }
-        if (empty($result)) {
-            $result = '[]';
+        if (is_scalar($_value)) {
+            return $_value;
         }
         
-        return $result;
+        $result = $_value;
+        if ($result instanceof Tinebase_Record_RecordSet) {
+            $result = $result->getArrayOfIds();
+        } else if ($result instanceof Tinebase_Record_RecordSetDiff) {
+            $result = $result->toArray();
+        } else if (method_exists($result, 'toString')) {
+            return $result->toString();
+        }
+        
+        return (is_array($result)) ? Zend_Json::encode($result) : '';
     }
     
     /**
@@ -637,7 +638,7 @@ class Tinebase_Timemachine_ModificationLog
             try {
                 $record = $controller->get($modlog->record_id);
                 
-                if (! in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->{$modlog->modified_attribute} === $modlog->new_value)) {
+                if (! in_array($modlog->modified_attribute, $notUndoableFields) && ($overwrite || $record->seq === $modlog->seq)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' Reverting change id ' . $modlog->getId());
                     
@@ -647,6 +648,9 @@ class Tinebase_Timemachine_ModificationLog
                     }
                     $updateCount++;
                     $undoneModlogs->addRecord($modlog);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Not reverting change of ' . $modlog->modified_attribute . ' of record ' . $modlog->record_id);
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e);

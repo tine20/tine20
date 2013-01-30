@@ -320,7 +320,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     /**
      * returns next occurrence _ignoring exceptions_ or NULL if there is none/not computable
      * 
-     * NOTE: computing the next occurrence of an open end rrule can be dangoures, as it might result
+     * NOTE: computing the next occurrence of an open end rrule can be dangerous, as it might result
      *       in a endless loop. Therefore we only make a limited number of attempts before giving up.
      * 
      * @param  Calendar_Model_Event         $_event

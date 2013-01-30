@@ -318,7 +318,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         return $oldMaxExcecutionTime;
     }
-
+    
     /**
      * update properties of record by id
      *
@@ -340,26 +340,28 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
         return $this->_recordToJson($savedRecord);
     }
-
+    
     /**
      * deletes existing records
      *
      * @param array|string $_ids
      * @param Tinebase_Controller_Record_Interface $_controller the record controller
+     * @param array $_additionalArguments
      * @return array
      */
-    protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller)
+    protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller, $additionalArguments = array())
     {
         if (! is_array($_ids) && strpos($_ids, '[') !== false) {
             $_ids = Zend_Json::decode($_ids);
         }
-        $_controller->delete($_ids);
+        $args = array_merge(array($_ids), $additionalArguments);
+        $savedRecord = call_user_func_array(array($_controller, 'delete'), $args);
 
         return array(
             'status'    => 'success'
         );
     }
-
+    
     /**
      * import records
      *

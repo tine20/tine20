@@ -840,6 +840,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
     }
     
+    /**
+     * testUpdateRecurDtstartOverDst
+     */
     public function testUpdateRecurDtstartOverDst()
     {
         // note: 2009-03-29 Europe/Berlin switched to DST
@@ -879,7 +882,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $until->addDay(5); //08
         
         $currentPersistentEvent = $this->_controller->get($persistentEvent);
-        $persistentEvent->last_modified_time = $currentPersistentEvent->last_modified_time;
+        $persistentEvent->seq = 2; // satisfy modlog
         $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
@@ -887,7 +890,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
         )));
         
-        //print_r($persistentEvents->toArray());
         // we don't 'see' the persistent exception from 28/
         $this->assertEquals(2, count($persistentEvents));
                 

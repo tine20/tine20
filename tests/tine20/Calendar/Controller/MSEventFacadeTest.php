@@ -158,7 +158,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
             $alarms->setId(NULL);
         }
         
-        $this->_fixConcurrencyTimestamp($event);
+        $this->_fixConcurrency($event);
         $event = $this->_uit->update($event);
         $this->_assertTestEvent($event);
         
@@ -179,13 +179,13 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     }
     
     /**
-     * adjusts last_modified_time for event to prevent concurrency errors
+     * adjusts seq for event to prevent concurrency errors
      * 
      * @param Calendar_Model_Event $event
      */
-    protected function _fixConcurrencyTimestamp($event)
+    protected function _fixConcurrency($event)
     {
-        $event->last_modified_time = ($event->exdate && count($event->exdate) > 1) ? $event->exdate[1]->last_modified_time : Tinebase_DateTime::now();
+        $event->seq = 2;
     }
     
     /**
@@ -219,7 +219,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     {
         $event = $this->testCreate();
 
-        $this->_fixConcurrencyTimestamp($event);
+        $this->_fixConcurrency($event);
         $event->exdate = NULL;
         $updatedEvent = $this->_uit->update($event);
         
@@ -245,7 +245,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $newDeletedInstance->is_deleted = TRUE;
         $event->exdate->addRecord($newDeletedInstance);
         
-        $this->_fixConcurrencyTimestamp($event);
+        $this->_fixConcurrency($event);
         $updatedEvent = $this->_uit->update($event);
         
         $this->assertEquals(4, $updatedEvent->exdate->count());
@@ -260,7 +260,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentException->dtend->addHour(2);
         $persistentException->summary = 'updated exception';
         
-        $this->_fixConcurrencyTimestamp($event);
+        $this->_fixConcurrency($event);
         $updatedEvent = $this->_uit->update($event);
         
         $this->assertEquals(2, $updatedEvent->exdate->count());
@@ -381,7 +381,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
                 )
         ))));
         
-        $this->_fixConcurrencyTimestamp($event);
+        $this->_fixConcurrency($event);
         $event = $this->_uit->update($event);
         
         $event = $this->_uit->get($event->getId());

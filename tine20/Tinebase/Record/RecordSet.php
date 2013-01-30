@@ -238,6 +238,17 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $idx !== false ? $this[$idx] : false;
     }
+
+    /**
+     * returns record identified by its id
+     * 
+     * @param  integer $index of record
+     * @return Tinebase_Record_Abstract::|bool    record or false if not in set
+     */
+    public function getByIndex($index)
+    {
+        return (isset($this->_listOfRecords[$index])) ? $this->_listOfRecords[$index] : false;
+    }
     
     /**
      * returns array of ids
@@ -466,6 +477,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param array $_toCompareWithRecordsIds Array to compare this record sets ids with
      * @return array An array with sub array indices 'toDeleteIds', 'toCreateIds' and 'toUpdateIds'
+     * 
+     * @deprecated please use diff() as this returns wrong result when idless records have been added
+     * @see 0007492: replace getMigration() with diff() when comparing Tinebase_Record_RecordSets
      */
     public function getMigration(array $_toCompareWithRecordsIds)
     {
@@ -595,45 +609,59 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *  - added    -> all records that are in $_recordSet but not in $this
      *  - modified -> array of diffs  for all different records that are in both record sets
      * 
-     * @param Tinebase_Record_RecordSet $_recordSet
-     * @return array
+     * @param Tinebase_Record_RecordSet $recordSet
+     * @return Tinebase_Record_RecordSetDiff
      */
-    public function diff($_recordSet)
+    public function diff($recordSet)
     {
-        if (! $_recordSet instanceof Tinebase_Record_RecordSet) {
+        if (! $recordSet instanceof Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' 
                 . ' Did not get Tinebase_Record_RecordSet, skipping diff()');
             return array();
         }
         
-        if ($this->getRecordClassName() !== $_recordSet->getRecordClassName()) {
+        if ($this->getRecordClassName() !== $recordSet->getRecordClassName()) {
             throw new Tinebase_Exception_InvalidArgument('can only compare recordsets with the same type of records');
         }
+        
+        $existingRecordsIds = $this->getArrayOfIds();
+        $toCompareWithRecordsIds = $recordSet->getArrayOfIds();
+        
+        $removedIds = array_diff($existingRecordsIds, $toCompareWithRecordsIds);
+        $addedIds = array_diff($toCompareWithRecordsIds, $existingRecordsIds);
+        $modifiedIds = array_intersect($existingRecordsIds, $toCompareWithRecordsIds);
+        
         $removed = new Tinebase_Record_RecordSet($this->getRecordClassName());
         $added = new Tinebase_Record_RecordSet($this->getRecordClassName());
-        $modified = array();
+        $modified = new Tinebase_Record_RecordSet('Tinebase_Record_Diff');
         
-        $result = array();
-        
-        $migration = $this->getMigration($_recordSet->getArrayOfIds());
-        foreach ($migration['toDeleteIds'] as $id) {
-            $added->addRecord($this->getById($id));
+        foreach ($addedIds as $id) {
+            $added->addRecord($recordSet->getById($id));
         }
-        foreach ($migration['toCreateIds'] as $id) {
-            $removed->addRecord($_recordSet->getById($id));
+        // consider records without id, too
+        foreach ($recordSet->getIdLessIndexes() as $index) {
+            $added->addRecord($recordSet->getByIndex($index));
         }
-        foreach ($migration['toUpdateIds'] as $id) {
-            $diff = $this->getById($id)->diff($_recordSet->getById($id));
-            if (! empty($diff)) {
-                $modified[$id] = $diff;
+        foreach ($removedIds as $id) {
+            $removed->addRecord($this->getById($id));
+        }
+        // consider records without id, too
+        foreach ($this->getIdLessIndexes() as $index) {
+            $removed->addRecord($this->getByIndex($index));
+        }
+        foreach ($modifiedIds as $id) {
+            $diff = $this->getById($id)->diff($recordSet->getById($id));
+            if (! $diff->isEmpty()) {
+                $modified->addRecord($diff);
             }
         }
         
-        foreach (array('removed', 'added', 'modified') as $subresult) {
-            if (count($$subresult) > 0) {
-                $result[$subresult] = $$subresult;
-            }
-        }
+        $result = new Tinebase_Record_RecordSetDiff(array(
+            'model'    => $this->getRecordClassName(),
+            'added'    => $added,
+            'removed'  => $removed,
+            'modified' => $modified,
+        ));
         
         return $result;
     }

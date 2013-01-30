@@ -296,6 +296,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         return this.doXHTTPRequest(options);
     },
     
+    
     /**
      * updates a recuring event series
      * 

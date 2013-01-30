@@ -780,8 +780,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var panel = this.getCalendarPanel(this.activeView);
         var selection = panel.getSelectionModel().getSelectedEvents();
         
-        var containsRecurBase = false;
-        var containsRecurInstance = false;
+        var containsRecurBase = false,
+            containsRecurInstance = false,
+            containsRecurException = false;
         
         Ext.each(selection, function (event) {
             if(event.ui) event.ui.markDirty();
@@ -790,6 +791,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
             if (event.isRecurBase()) {
                 containsRecurBase = true;
+            }
+            if (event.isRecurException()) {
+                containsRecurException = true;
             }
         });
         
@@ -807,8 +811,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
-        if (selection.length === 1 && (containsRecurBase || containsRecurInstance)) {
-
+        if (selection.length === 1 && (containsRecurBase || containsRecurInstance || containsRecurException)) {
             this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Delete Event'),
                 scope: this,
@@ -842,10 +845,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                     }
                                 };
                                 
-                                if (option === 'all') {
-                                    Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
+                                if (containsRecurException) {
+                                    var range = (option === 'future') ? 'THISANDFUTURE' : Ext.util.Format.uppercase(option);
+                                    Tine.Calendar.backend.deleteRecords([selection[0]], options, {range: range});
                                 } else {
-                                    Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                    if (option === 'all') {
+                                        Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
+                                    } else {
+                                        Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                    }
                                 }
                                 break;
                             default:

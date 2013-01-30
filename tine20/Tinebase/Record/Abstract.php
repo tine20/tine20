@@ -466,16 +466,27 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         if ($_recursive) {
             foreach ($recordArray as $property => $value) {
-                if (is_object($value) && 
-                        (in_array('Tinebase_Record_Interface', class_implements($value)) || 
-                        $value instanceof Tinebase_Record_Recordset) ||
-                        (is_object($value) && method_exists($value, 'toArray'))) {
+                if ($this->_hasToArray($value)) {
                     $recordArray[$property] = $value->toArray();
                 }
             }
         }
         
         return $recordArray;
+    }
+    
+    /**
+     * checks if variable has toArray()
+     * 
+     * @param mixed $mixed
+     * @return boolean
+     */
+    protected function _hasToArray($mixed)
+    {
+        return (is_object($mixed) && 
+                        (in_array('Tinebase_Record_Interface', class_implements($mixed)) || 
+                        $mixed instanceof Tinebase_Record_Recordset) ||
+                        (is_object($mixed) && method_exists($mixed, 'toArray')));
     }
     
     /**
@@ -969,10 +980,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * returns an array with differences to the given record
+     * returns a Tinebase_Record_Diff record with differences to the given record
      * 
      * @param  Tinebase_Record_Interface $_record record for comparison
-     * @return array with differences field => different value
+     * @return Tinebase_Record_Diff|NULL
      */
     public function diff($_record)
     {
@@ -980,6 +991,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return $_record;
         }
         
+        $result = new Tinebase_Record_Diff(array(
+            'id'     => $this->getId(),
+            'model'  => get_class($_record),
+        ));
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
             $ownField = $this->__get($fieldName);
@@ -1002,9 +1017,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } 
             } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } else if ($recordField instanceof Tinebase_Record_Abstract || $recordField instanceof Tinebase_Record_RecordSet) {
-                $subdiv = $recordField->diff($ownField);
-                if (! empty($subdiv)) {
+            } else if ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
+                $subdiv = $ownField->diff($recordField);
+                if (is_object($subdiv) && ! $subdiv->isEmpty()) {
                     $diff[$fieldName] = $subdiv;
                 }
                 continue;
@@ -1016,7 +1031,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             
             $diff[$fieldName] = $recordField;
         }
-        return $diff;
+        
+        $result->diff = $diff;
+        return $result;
     }
     
     /**
@@ -1028,21 +1045,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function isEqual($_record, array $_toOmit = array())
     {
-        $allDiffs = $this->diff($_record);
-        $diff = array_diff(array_keys($allDiffs), $_toOmit);
-        
-        /*
-        print_r($diff);
-        if (count($diff) > 0) {
-            foreach ($diff as $field) {
-                echo $field .":\n";
-                var_dump($_record->$field);
-                var_dump($this->$field);
-            }
-        }
-        */
-        
-        return count($diff) == 0;
+        return $this->diff($_record)->isEmpty($_toOmit);
     }
     
     /**

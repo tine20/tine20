@@ -377,7 +377,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
         
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ([] -> {');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
         
         // check invalid data
         
@@ -400,21 +400,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     protected function _createCustomfield($cfName = NULL)
     {
         $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
-        
-        $cfc = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'name'              => $cfName,
-            'model'             => 'Addressbook_Model_Contact',
-            'definition'        => array(
-                'label' => Tinebase_Record_Abstract::generateUID(),
-                'type'  => 'string',
-                'uiconfig' => array(
-                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
-                    'length' => 10,
-                    'group'  => 'unittest',
-                    'order'  => 100,
-                )
-            )
+        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'          => 'Addressbook_Model_Contact',
+            'name'           => $cfName,
         ));
         
         $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
@@ -477,7 +466,11 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->saveContact($contact);
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
-        $this->_checkChangedNote($result['id'], array('tags ([] -> {"added":[{"id":', '"type":"personal"', ',"name":"' . $tagName . '","description":"testModlog","color":"#009B31"'));
+        $this->_checkChangedNote($result['id'], array(
+            '[] -> {"model":"Tinebase_Model_Tag","added":[{"id":"',
+            '"type":"personal"',
+            ',"name":"' . $tagName . '","description":"testModlog","color":"#009B31"'
+        ));
         
         return $result;
     }
@@ -506,7 +499,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact['tags'] = array();
         sleep(1); // make sure that the second change always gets last when fetching notes
         $result = $this->_instance->saveContact($contact);
-        $this->_checkChangedNote($result['id'], array('tags ([{"id":', ' -> {"removed":[{'), 4);
+        $this->_checkChangedNote($result['id'], array('-> {"model":"Tinebase_Model_Tag","added":[],"removed":[{"id":"'), 4);
     }
     
     /**

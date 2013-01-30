@@ -225,6 +225,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      * try to update the same task twice with the same values, should be resolved by concurrency handling
      * 
      * @see 0007108: inspect and solve concurrency conflicts when setting lead relations
+     * @see 0000996: add changes in relations/linked objects to modlog/history
      */
     public function testConcurrencyDateTime()
     {
@@ -233,19 +234,23 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " 2. Update");
         $resolvableConcurrencyTask = clone $utask;
-        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
         $resolvableConcurrencyTask->due = $utask->due->addMonth(1);
         $resolvableConcurrencyTask->percent = 50;
         $resolvableConcurrencyTask->summary = 'Update of test task 1';
         $this->_controller->update($resolvableConcurrencyTask);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " 3. Update");
-        $resolvableConcurrencyTask = clone $utask;
-        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
-        $resolvableConcurrencyTask->due = $resolvableConcurrencyTask->due;
-        $resolvableConcurrencyTask->percent = 50;
-        $resolvableConcurrencyTask->summary = 'Update of test task 1';
-        $this->_controller->update($resolvableConcurrencyTask);
+        $resolvableConcurrencyTask2 = clone $utask;
+        $resolvableConcurrencyTask2->due = $resolvableConcurrencyTask->due;
+        $resolvableConcurrencyTask2->percent = 50;
+        $resolvableConcurrencyTask2->summary = 'Update of test task 1';
+        
+        try {
+            $updatedTask = $this->_controller->update($resolvableConcurrencyTask2);
+            $this->assertEquals($resolvableConcurrencyTask2->due, $updatedTask->due);
+        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+            $this->fail($ttecc);
+        }
     }
     
     /**
