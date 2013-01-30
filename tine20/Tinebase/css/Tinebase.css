@@ -492,6 +492,14 @@ html, body {
     margin-top: 2px;
 }
 
+.x-menu-item-text .tb-grid-tags {
+    margin-top: 4px;
+}
+
+.x-menu-item-text .x-widget-tag-tagitem-text {
+    line-height: 16px;
+}
+
 /* ----- account renderer ------------------------------------------------------------*/
 .renderer {
     width: 12px;

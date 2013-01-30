@@ -381,7 +381,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account->accountId))->toArray();
         
         // encode the account array
-        $result['accountPrimaryGroup'] = $group;
+        $result['accountPrimaryGroup'] = $group->toArray();
         
         // encode the groups array
         $result['groups'] = array(

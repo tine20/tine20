@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2010 PHPExcel
+ * Copyright (c) 2006 - 2012 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
  *
  * @category   PHPExcel
  * @package	PHPExcel_Style
- * @copyright  Copyright (c) 2006 - 2010 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version	1.7.5, 2010-12-10
+ * @version	1.7.8, 2012-10-12
  */
 
 
@@ -31,7 +31,7 @@
  *
  * @category   PHPExcel
  * @package	PHPExcel_Style
- * @copyright  Copyright (c) 2006 - 2010 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 {
@@ -126,11 +126,22 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 
 	/**
 	 * Create a new PHPExcel_Style_NumberFormat
+	 *
+	 * @param	boolean	$isSupervisor	Flag indicating if this is a supervisor or not
+	 *									Leave this value at default unless you understand exactly what
+	 *										its ramifications are
+	 * @param	boolean	$isConditional	Flag indicating if this is a conditional style or not
+	 *									Leave this value at default unless you understand exactly what
+	 *										its ramifications are
 	 */
-	public function __construct($isSupervisor = false)
+	public function __construct($isSupervisor = false, $isConditional = false)
 	{
 		// Supervisor?
 		$this->_isSupervisor = $isSupervisor;
+
+		if ($isConditional) {
+			$this->_formatCode = NULL;
+		}
 	}
 
 	/**
@@ -447,12 +458,18 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 		}
 	}
 
+	/**
+	 * Search/replace values to convert Excel date/time format masks to PHP format masks
+	 *
+	 * @var array
+	 */
 	private static $_dateFormatReplacements = array(
 			// first remove escapes related to non-format characters
 			'\\'	=> '',
 			//	12-hour suffix
 			'am/pm'	=> 'A',
 			//	4-digit year
+			'e'	=> 'Y',
 			'yyyy'	=> 'Y',
 			//	2-digit year
 			'yy'	=> 'y',
@@ -481,10 +498,20 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 			//	fractional seconds - no php equivalent
 			'.s'	=> ''
 		);
+	/**
+	 * Search/replace values to convert Excel date/time format masks hours to PHP format masks (24 hr clock)
+	 *
+	 * @var array
+	 */
 	private static $_dateFormatReplacements24 = array(
 			'hh'	=> 'H',
 			'h'		=> 'G'
 		);
+	/**
+	 * Search/replace values to convert Excel date/time format masks hours to PHP format masks (12 hr clock)
+	 *
+	 * @var array
+	 */
 	private static $_dateFormatReplacements12 = array(
 			'hh'	=> 'h',
 			'h'		=> 'g'
@@ -605,8 +632,8 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 				// Some non-number characters are escaped with \, which we don't need
 				$format = preg_replace("/\\\\/", '', $format);
 
-				// Some non-number strings are quoted, so we'll get rid of the quotes
-				$format = preg_replace('/"/', '', $format);
+				// Some non-number strings are quoted, so we'll get rid of the quotes, likewise any positional * symbols
+				$format = str_replace(array('"','*'), '', $format);
 
 				// Find out if we need thousands separator
 				// This is indicated by a comma enclosed by a digit placeholder:
@@ -663,9 +690,10 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 					// Strip #
 					$format = preg_replace('/\\#/', '', $format);
 
+					$n = "/\[[^\]]+\]/";
+					$m = preg_replace($n, '', $format);
 					$number_regex = "/(0+)(\.?)(0*)/";
-					$matches = array();
-					if (preg_match($number_regex, $format, $matches)) {
+					if (preg_match($number_regex, $m, $matches)) {
 						$left = $matches[1];
 						$dec = $matches[2];
 						$right = $matches[3];
@@ -675,12 +703,11 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 
 						if ($useThousands) {
 							$value = number_format(
-								$value
-								, strlen($right)
-								, PHPExcel_Shared_String::getDecimalSeparator()
-								, PHPExcel_Shared_String::getThousandsSeparator()
-							);
-
+										$value
+										, strlen($right)
+										, PHPExcel_Shared_String::getDecimalSeparator()
+										, PHPExcel_Shared_String::getThousandsSeparator()
+									);
 						} else {
 							$sprintf_pattern = "%0$minWidth." . strlen($right) . "f";
 							$value = sprintf($sprintf_pattern, $value);
@@ -688,6 +715,16 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
 
 						$value = preg_replace($number_regex, $value, $format);
 					}
+				}
+				if (preg_match('/\[\$(.*)\]/u', $format, $m)) {
+					//	Currency or Accounting
+					$currencyFormat = $m[0];
+					$currencyCode = $m[1];
+					list($currencyCode) = explode('-',$currencyCode);
+					if ($currencyCode == '') {
+						$currencyCode = PHPExcel_Shared_String::getCurrencyCode();
+					}
+					$value = preg_replace('/\[\$([^\]]*)\]/u',$currencyCode,$value);
 				}
 			}
 		}

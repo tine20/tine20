@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
 
@@ -155,9 +155,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testPasswordPolicy()
     {
-        // activate pw policies
-        $policy = array(
-            Tinebase_Config::PASSWORD_POLICY_ACTIVE                 => TRUE,
+        $policies = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => TRUE,
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => 20,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => 4,
@@ -165,26 +163,59 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => 3,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => 3,
         );
-        foreach ($policy as $key => $value) {
+        $this->_setPwPolicies($policies);
+        
+        $this->_assertPolicy('nOve!ry1leverPw2ä', 'pwPolicyOnlyASCII|pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers');
+        $this->_assertPolicy('', 'pwPolicyMinLength');
+    }
+    
+    /**
+     * set pw policy
+     * 
+     * @param array $policies
+     */
+    protected function _setPwPolicies($policies)
+    {
+        $policies[Tinebase_Config::PASSWORD_POLICY_ACTIVE] = TRUE;
+        foreach ($policies as $key => $value) {
             Tinebase_Config::getInstance()->set($key, $value);
         }
-        
+    }
+    
+    /**
+     * assert pw policy
+     * 
+     * @param string $pw
+     * @param string $expectedMessage
+     * @param boolean 
+     */
+    protected function _assertPolicy($pw, $expectedMessage, $pwIsValid = FALSE)
+    {
         $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
-        
         try {
-            Tinebase_User::getInstance()->setPassword($sclever, 'nOve!ry1leverPw2ä');
-            $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation');
+            Tinebase_User::getInstance()->setPassword($sclever, $pw);
+            if (! $pwIsValid) {
+                $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation with message: ' . $expectedMessage . ' / used pw: ' . $pw);
+            }
         } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
-            $this->assertContains('Password failed to match the following policy requirements: '.
-                'pwPolicyOnlyASCII|pwPolicyMinLength|pwPolicyMinUppercaseChars|pwPolicyMinSpecialChars|pwPolicyMinNumbers', $tppv->getMessage());
+            $this->assertContains('Password failed to match the following policy requirements: ' . $expectedMessage, $tppv->getMessage());
         }
+    }
 
-        try {
-            Tinebase_User::getInstance()->setPassword($sclever, '');
-            $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation');
-        } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
-            $this->assertContains('Password failed to match the following policy requirements: '.
-                'pwPolicyMinLength', $tppv->getMessage());
-        }
+    /**
+     * testPasswordPolicyUsername
+     * 
+     * @see 0007716: pw policy: do not allow pws that contain parts of username
+     */
+    public function testPasswordPolicyUsername()
+    {
+        $this->_setPwPolicies(array(
+            Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => TRUE
+        ));
+        $this->_assertPolicy('sclever', 'pwPolicyForbidUsername');
+        $this->_assertPolicy('clever', 'pwPolicyForbidUsername');
+        $this->_assertPolicy('cle', 'pwPolicyForbidUsername');
+        $this->_assertPolicy('ver', 'pwPolicyForbidUsername');
+        $this->_assertPolicy('sclever123', '', TRUE); // valid
     }
 }

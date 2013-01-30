@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.ns('Tine.Felamimail')
@@ -18,6 +18,10 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     autoScroll: false,
     
     initComponent: function() {
+        if (Ext.isString(this.record)) {
+            this.record = Tine.Felamimail.messageBackend.recordReader({responseText: this.record});
+        }
+        
         this.addEvents('remove');
         
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
@@ -28,6 +32,9 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         
         this.initActions();
         this.initToolbar();
+        
+        Tine.log.debug('Tine.Felamimail.MessageDisplayDialog::initComponent() -> message record:');
+        Tine.log.debug(this.record);
         
         this.supr().initComponent.apply(this, arguments);
     },

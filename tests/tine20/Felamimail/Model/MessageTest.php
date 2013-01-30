@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -93,12 +93,13 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             ">  >\n" . 
             ">  > xyz\n" .
             "\n\n" .
-            "jojo\n";
+            "> jojo\n" .
+            "jojo\n" ;
         
         $result = Felamimail_Message::convertFromTextToHTML($plaintextMessage);
         
         $this->assertEquals('blabla<br /><blockquote class="felamimail-body-blockquote">lalülüüla<br /><br />'
             . '<blockquote class="felamimail-body-blockquote"><blockquote class="felamimail-body-blockquote">lala<br />'
-            . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br />jojo<br />', $result);
+            . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br /><blockquote class="felamimail-body-blockquote">jojo<br /></blockquote>jojo<br />', $result);
     }
 }

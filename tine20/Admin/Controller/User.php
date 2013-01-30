@@ -182,6 +182,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($oldUser->accountLoginName !== $_user->accountLoginName) {
             $this->_checkLoginNameExistance($_user);
         }
+        $this->_checkPrimaryGroupExistance($_user);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
         
@@ -245,6 +246,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
         
         $this->_checkLoginNameExistance($_user);
+        $this->_checkPrimaryGroupExistance($_user);
         
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
@@ -252,7 +254,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_password = '';
             $_passwordRepeat = '';
         }
-        Tinebase_User::getInstance()->checkPasswordPolicy($_password);
+        Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -305,6 +307,26 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         return TRUE;
+    }
+    
+    /**
+     * look for primary group, if it does not exist, fallback to default user group
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkPrimaryGroupExistance(Tinebase_Model_FullUser $user)
+    {
+        try {
+            $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Group with id ' . $user->accountPrimaryGroup . ' not found. Use default group (' . $defaultUserGroup->name
+                . ') as primary group for ' . $user->accountLoginName);
+            
+            $user->accountPrimaryGroup = $defaultUserGroup->getId();
+        }
     }
     
     /**

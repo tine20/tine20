@@ -242,6 +242,53 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * render single tag
+     * 
+     * @param {Tine.Tinebase.Model.Tag} tag
+     */
+    tagRenderer: function(tag) {
+        if (! Tine.Tinebase.common.tagRenderer.tpl) {
+            Tine.Tinebase.common.tagRenderer.tpl = new Ext.XTemplate(
+                '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
+                '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
+                    '{[this.encode(values.name)]}', 
+                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                    '</i>&nbsp;[{occurrence}]',
+                    '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
+                    
+                    '&nbsp;{[this.encode(values.name)]}',
+                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                '</div>',
+            {
+                encode: function(value) {
+                     if (value) {
+                        return Tine.Tinebase.common.doubleEncode(value);
+                    } else {
+                        return '';
+                    }
+                }
+            }).compile();
+        }
+        
+        var result =  _('No Information');
+        
+        if (tag && Ext.isFunction(tag.beginEdit)) {
+            // support records
+            tag = tag.data;
+        } else if (arguments[2] && Ext.isFunction(arguments[2].beginEdit)) {
+            // support grid renderers
+            tag = arguments[2].data;
+        }
+        
+        // non objects are treated as ids and -> No Information
+        if (Ext.isObject(tag)) {
+            result = Tine.Tinebase.common.tagRenderer.tpl.apply(tag);
+        }
+        
+        return result;
+    },
+    
+    /**
      * Returns rendered containers
      * 
      * @TODO show qtip with grants

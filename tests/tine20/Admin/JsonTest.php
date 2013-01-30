@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -255,7 +255,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
         
-        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup'], Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId());
         $account['container_id'] = $internalContainer->getId();
         $account = $this->_json->saveUser($account);
@@ -275,7 +275,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
         
         $adminGroupId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
-        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup'], $adminGroupId);
         $account['container_id'] = $account['container_id']['id'];
         $account = $this->_json->saveUser($account);
@@ -284,7 +284,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
         $this->assertEquals(array($adminRole->getId()), $roles);
 
-        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']->getId();
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup']);
         
         if (is_array($account['container_id']) && is_array($account['container_id']['id']))
@@ -297,6 +297,24 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);
+    }
+
+    /**
+     * testUpdateUserRemovedPrimaryGroup
+     * 
+     * @see 0006710: save user fails if primary group no longer exists
+     */
+    public function testUpdateUserRemovedPrimaryGroup()
+    {
+        $this->testAddGroup();
+        
+        $accountData = $this->objects['user']->toArray();
+        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
+        
+        Admin_Controller_Group::getInstance()->delete(array($accountData['accountPrimaryGroup']));
+        
+        $savedAccount = $this->_json->saveUser($accountData);
+        $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $savedAccount['accountPrimaryGroup']['id']);
     }
     
     /**

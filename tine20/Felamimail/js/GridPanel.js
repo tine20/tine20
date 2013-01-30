@@ -988,7 +988,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
         } else {
             win = Tine.Felamimail.MessageDisplayDialog.openWindow({
-                record: record,
+                record: Ext.encode(record.data),
                 listeners: {
                     scope: this,
                     'update': this.onAfterCompose.createDelegate(this, ['compose', []], 1),
