@@ -51,9 +51,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
     /**
      * content type multipart/alternative
-     *
      */
     const CONTENT_TYPE_MULTIPART = 'multipart/alternative';
+    
+    /**
+     * content type multipart/related
+     */
+    const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
     
     /**
      * content type text/calendar
@@ -295,7 +299,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->_setStructure($_structure);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Parsing structure: ' . print_r($this->structure, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Parsing structure: ' . print_r($this->structure, TRUE));
         
         $this->content_type  = isset($this->structure['contentType']) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
         $this->_setBodyContentType();
@@ -329,7 +334,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             if (is_array($part) && array_key_exists('contentType', $part)) {
                 if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
                     $_bodyContentTypes[] = $part['contentType'];
-                } else if ($part['contentType'] == self::CONTENT_TYPE_MULTIPART && array_key_exists('parts', $part)) {
+                } else if (($part['contentType'] == self::CONTENT_TYPE_MULTIPART || $part['contentType'] == self::CONTENT_TYPE_MULTIPART_RELATED) 
+                    && array_key_exists('parts', $part))
+                {
                     $_bodyContentTypes = array_merge($_bodyContentTypes, $this->_getBodyContentTypes($part['parts']));
                 }
             }
@@ -460,9 +467,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $result = array();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Structure: ' . print_r($_structure, TRUE));
         
-        if ($_structure['subType'] == 'alternative') {
+        if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'related') {
             $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
                 ? Zend_Mime::TYPE_TEXT 
                 : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
@@ -471,8 +479,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $foundParts[$part['contentType']] = $part['partId'];
             }
             
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Found parts: ' . print_r($foundParts, TRUE));
+            
             if (array_key_exists($_preferedMimeType, $foundParts)) {
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
+            } else if (array_key_exists(self::CONTENT_TYPE_MULTIPART_RELATED, $foundParts)) {
+                $result = $this->getBodyParts($_structure['parts'][$foundParts[self::CONTENT_TYPE_MULTIPART_RELATED]], $_preferedMimeType);
             } else if (array_key_exists($alternativeType, $foundParts)) {
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
             } else if (array_key_exists('multipart/mixed', $foundParts)) {
@@ -489,6 +502,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     
     /**
      * parse structure to get text_partid and html_partid
+     * 
+     * @deprecated should be replaced by getBodyParts
+     * @see 0007742: refactoring: replace parseBodyParts with getBodyParts
      */
     public function parseBodyParts()
     {

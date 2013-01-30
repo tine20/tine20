@@ -382,9 +382,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Message $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
+     * @param array $_partStructure (is fetched if NULL/omitted)
      * @return Zend_Mime_Part
      */
-    public function getMessagePart($_id, $_partId = NULL, $_onlyBodyOfRfc822 = FALSE)
+    public function getMessagePart($_id, $_partId = NULL, $_onlyBodyOfRfc822 = FALSE, $_partStructure = NULL)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -392,7 +393,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
         
-        $partStructure  = $message->getPartStructure($_partId, FALSE);
+        $partStructure  = ($_partStructure !== NULL ) ? $_partStructure : $message->getPartStructure($_partId, FALSE);
         
         $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822);
         
@@ -563,6 +564,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_contentType
      * @param Felamimail_Model_Account $_account
      * @return string
+     * 
+     * @todo multipart_related messages should deliver inline images
      */
     protected function _getAndDecodeMessageBody(Felamimail_Model_Message $_message, $_partId, $_contentType, $_account = NULL)
     {
@@ -576,7 +579,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $messageBody = '';
         
         foreach ($bodyParts as $partId => $partStructure) {
-            $bodyPart = $this->getMessagePart($_message, $partId, TRUE);
+            $bodyPart = $this->getMessagePart($_message, $partId, TRUE, $partStructure);
             
             $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
             
@@ -622,7 +625,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure)
     {
         $charset = $this->_appendCharsetFilter($_bodyPart, $_partStructure);
-            
+        
         // need to set error handler because stream_get_contents just throws a E_WARNING
         set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
         try {
@@ -630,6 +633,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             restore_error_handler();
             
         } catch (Felamimail_Exception $e) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " Decoding of " . $_bodyPart->encoding . '/' . $_partStructure['encoding'] . ' encoded message failed: ' . $e->getMessage());
+            
             // trying to fix decoding problems
             restore_error_handler();
             $_bodyPart->resetStream();

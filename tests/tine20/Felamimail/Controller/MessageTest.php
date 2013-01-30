@@ -1278,6 +1278,22 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($message->attachments));
         $this->assertEquals('äöppopä.txt', $message->attachments[0]['filename']);
     }
+
+    /**
+     * testNewsletterMultipartRelated
+     * 
+     * @see 0007722: improve handling of newsletters
+     */
+    public function testNewsletterMultipartRelated()
+    {
+        $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
+        $bodyParts = $cachedMessage->getBodyParts();
+        $this->assertEquals(Zend_Mime::TYPE_HTML, $bodyParts['2.1']['contentType'], 'multipart/related html part missing: ' . print_r($bodyParts, TRUE));
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        $this->assertContains('<p style="color:#999999;"><strong>Die Glühweinzeit hat bereits begonnen und kälter geworden ist es auch...</strong></p>', $message->body);
+        $this->assertEquals(Zend_Mime::TYPE_HTML, $message->body_content_type);
+    }
     
     /********************************* protected helper funcs *************************************/
     
