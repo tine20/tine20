@@ -290,7 +290,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             ref: '../btnSaveAndClose',
             scope: this,
             // TODO: remove the defer when all subpanels use the deferByTicket mechanism
-            handler: function() { this.onSaveAndClose.defer(500, this) },
+            handler: function() { this.onSaveAndClose.defer(500, this); },
             iconCls: 'action_saveAndClose'
         });
     
@@ -327,15 +327,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * init buttons
      */
     initButtons: function() {
-        var genericButtons = [
-            this.action_delete
-        ];
-        
         this.fbar = [
             '->',
             this.action_cancel,
             this.action_saveAndClose
-       ];
+        ];
        
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({
@@ -406,7 +402,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         } else {
             return false;
         }
-        
     },
     
     /**
@@ -526,17 +521,21 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
         
         // generalized keybord map for edit dlgs
-        var map = new Ext.KeyMap(this.el, [
+        new Ext.KeyMap(this.el, [
             {
                 key: [10,13], // ctrl + return
                 ctrl: true,
                 scope: this,
                 fn: function() {
-                    // focus ok btn
-                    if (this.action_saveAndClose.items && this.action_saveAndClose.items.length > 0) {
-                        this.action_saveAndClose.items[0].focus();
+                    if (this.getForm().hasOwnProperty('items')) {
+                        // force set last selected field
+                        this.getForm().items.each(function(item) {
+                            if (item.hasFocus) {
+                                item.setValue(item.getRawValue());
+                            }
+                        }, this);
                     }
-                    this.onSaveAndClose();
+                    this.action_saveAndClose.execute();
                 }
             }
         ]);
