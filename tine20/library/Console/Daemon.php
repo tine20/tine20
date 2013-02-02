@@ -213,7 +213,7 @@ abstract class Console_Daemon
             exit(1);
         }
         
-        // fork was successfull
+        // fork was successful
         $this->_afterFork($childPid);
         
         // add childPid to internal scoreboard

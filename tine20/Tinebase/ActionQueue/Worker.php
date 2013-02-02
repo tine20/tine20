@@ -9,7 +9,7 @@
  */
 
 /**
- * Daemon checks the message queue and manages the execution
+ * Daemon to check the job queue and process jobs in separate processes
  * 
  * @package     Tinebase
  * @subpackage  ActionQueue
@@ -44,8 +44,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     protected $_jobScoreBoard = array();
     
     /**
-     * infinite loop where daemon manages the execution of the messages from the Message Queue
-     * 
+     * infinite loop where daemon manages the execution of the jobs from the job queue
      */
     public function run()
     {
@@ -53,7 +52,8 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             
             // manage the number of children
             if (count ($this->_children) >= $this->_getConfig()->tine20->maxChildren ) {
-                $this->_getLogger()->warn(__METHOD__ . '::' . __LINE__ .    " reached max children limit");
+                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " reached max children limit: " . $this->_getConfig()->tine20->maxChildren);
+                $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " number of pending jobs:" . Tinebase_ActionQueue::getInstance()->getQueueSize());
                 usleep(100); // save some trees
                 continue;
             }
@@ -68,10 +68,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             }
             
             try {
-                $message = Tinebase_ActionQueue::getInstance()->receive($jobId);
+                $job = Tinebase_ActionQueue::getInstance()->receive($jobId);
             } catch (RuntimeException $re) {
                 $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to receive message: " . $re->getMessage());
-                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " message details: " . print_r($message, TRUE)); 
                 
                 // we are unable to process the job
                 Tinebase_ActionQueue::getInstance()->delete($jobId);
@@ -79,39 +78,41 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 continue;
             }
             
-            $this->_getLogger()->info (__METHOD__ . '::' . __LINE__ . " forking to process job with id $jobId");
-            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($message, TRUE)); 
+            $this->_getLogger()->info (__METHOD__ . '::' . __LINE__ . " forking to process job {$job['action']} with id $jobId");
+            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($job, TRUE)); 
             
             $childPid = $this->_forkChild();
             
-            if ($childPid == 0) { // child process
+            if ($childPid == 0) { // executed in child process
                 try {
-                    $this->_executeAction($message);
+                    $this->_executeAction($job);
 
                     exit(0); // message will be deleted in parent process
                     
                 } catch (Exception $e) {
-                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute action : " . $e->getMessage());
-                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute action : " . $e->getTraceAsString());
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $job['action']);
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $e->getMessage());
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $e->getTraceAsString());
 
                     exit(1); // message will be rescheduled in parent process
                 }
                 
-            } else { // parent process
+            } else { // executed in parent process
                 $this->_jobScoreBoard[$childPid] = $jobId;
             }
         }
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Console_Daemon::_afterFork()
+     * We have to destroy the Tinebase_ActionQueue instance before the process forks.
+     * Otherwise the resource containing the connection to the queue backend will be
+     * shared between the parent and the child which leads to strange problems
+     * 
+     * @see Console_Daemon::_beforeFork()
      */
-    protected function _afterFork($childPid)
+    protected function _beforeFork()
     {
-        if ($childPid) { // reconnect to queue server in main process
-            Tinebase_ActionQueue::getInstance()->connect();
-        }
+        Tinebase_ActionQueue::destroyInstance();
     }
     
     /**
@@ -146,14 +147,14 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
     /**
      * execute the action
      *
-     * @param  string  $message
+     * @param  string  $job
      */
-    protected function _executeAction($message)
+    protected function _executeAction($job)
     {
         // execute in subprocess
         if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
             // @todo make self::EXECUTION_METHOD_EXEC_CLI working
-            $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($message), $exitCode );
+            $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($job), $exitCode );
             if (exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . $output);
             }
@@ -162,9 +163,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         } else {
             Tinebase_Core::initFramework();
     
-            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($message['account_id']));
+            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserById($job['account_id']));
             
-            Tinebase_ActionQueue::getInstance()->executeAction($message);
+            Tinebase_ActionQueue::getInstance()->executeAction($job);
         }
     }
 }

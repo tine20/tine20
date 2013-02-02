@@ -60,6 +60,14 @@
     }
     
     /**
+     * destroy instance of this class
+     */
+    public static function destroyInstance()
+    {
+        self::$_instance = NULL;
+    }
+    
+    /**
      * suspend processing of event
      */
     public function suspendEvents()
