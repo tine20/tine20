@@ -105,7 +105,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
     /**
      * We have to destroy the Tinebase_ActionQueue instance before the process forks.
-     * Otherwise the resource containing the connection to the queue backend will be
+     * Otherwise the resource holding the connection to the queue backend will be
      * shared between the parent and the child which leads to strange problems
      * 
      * @see Console_Daemon::_beforeFork()
@@ -148,12 +148,12 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      * execute the action
      *
      * @param  string  $job
+     * @todo make self::EXECUTION_METHOD_EXEC_CLI working
      */
     protected function _executeAction($job)
     {
         // execute in subprocess
         if ($this->_getConfig()->tine20->executionMethod === self::EXECUTION_METHOD_EXEC_CLI) {
-            // @todo make self::EXECUTION_METHOD_EXEC_CLI working
             $output = system('php $paths ./../../tine20.php --method Tinebase.executeQueueJob message=' . escapeshellarg($job), $exitCode );
             if (exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . $output);
