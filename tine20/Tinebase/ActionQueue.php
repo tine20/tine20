@@ -68,20 +68,6 @@
     }
     
     /**
-     * suspend processing of event
-     */
-    public function suspendEvents()
-    {
-    }
-
-    /**
-     * resume processing of events
-     */
-    public function resumeEvents()
-    {
-    }
-    
-    /**
      * constructor
      */
     private function __construct()
@@ -113,32 +99,6 @@
     }
     
     /**
-     * queues an action
-     * 
-     * @param string $_action
-     * @param mixed  $_arg1
-     * @param mixed  $_arg2
-     * ...
-     * 
-     * @return string the job id
-     */
-    public function queueAction()
-    {
-        $params = func_get_args();
-        $action = array_shift($params);
-        $message = array(
-            'action'     => $action,
-            'account_id' => Tinebase_Core::getUser(),
-            'params'     => $params
-        );
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
-        
-        return $this->_queue->send($message);
-    }
-    
-    /**
      * execute action defined in queue message
      * 
      * @param  string  $message  action
@@ -160,6 +120,16 @@
     }
     
     /**
+     * check if the backend is async
+     *  
+     * @return boolean true if queue backend is async
+     */
+    public function hasAsyncBackend()
+    {
+        return ! $this->_queue instanceof Tinebase_ActionQueue_Backend_Direct;
+    }
+    
+    /**
      * process all jobs in queue
      */
     public function processQueue()
@@ -174,6 +144,46 @@
         }
     }
     
+    /**
+     * queues an action
+     * 
+     * @param string $_action
+     * @param mixed  $_arg1
+     * @param mixed  $_arg2
+     * ...
+     * 
+     * @return string the job id
+     */
+    public function queueAction()
+    {
+        $params = func_get_args();
+        $action = array_shift($params);
+        $message = array(
+            'action'     => $action,
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'params'     => $params
+        );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " queueing action: '{$action}'");
+        
+        return $this->_queue->send($message);
+    }
+    
+    /**
+     * resume processing of events
+     */
+    public function resumeEvents()
+    {
+    }
+    
+    /**
+     * suspend processing of event
+     */
+    public function suspendEvents()
+    {
+    }
+
     /**
      * call function of queue backend
      * 
