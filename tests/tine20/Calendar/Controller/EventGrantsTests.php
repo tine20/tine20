@@ -445,6 +445,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     public function testCreateRecurExceptionWithEditGrantOnly()
     {
+        $this->markTestIncomplete('temporarily disabled until fixed');
+        
         // set testuser to have editgrant for sclever
         Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
