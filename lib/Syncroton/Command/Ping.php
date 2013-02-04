@@ -89,7 +89,12 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
         
         $intervalEnd = $intervalStart + $lifeTime;
         $secondsLeft = $intervalEnd;
+        
         $folders = unserialize($this->_device->pingfolder);
+        
+        if ($status === self::STATUS_NO_CHANGES_FOUND && (!is_array($folders) || count($folders) == 0)) {
+            $status = self::STATUS_MISSING_PARAMETERS;
+        }
         
         if ($this->_logger instanceof Zend_Log) 
             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " Folders to monitor($lifeTime / $intervalStart / $intervalEnd / $status): " . print_r($folders, true));
@@ -104,7 +109,7 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
-                foreach ((array) $folders as $folderId) {
+                foreach ($folders as $folderId) {
                     try {
                         $folder         = $this->_folderBackend->get($folderId);
                         $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
