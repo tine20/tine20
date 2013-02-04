@@ -473,9 +473,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     
     /**
      * 
-     * @param unknown_type $_folderId
-     * @param unknown_type $_filterType
-     * @return Ambigous <Tinebase_Record_RecordSet, multitype:>
+     * @param  string  $folderId
+     * @param  int     $filterType
+     * @return Tinebase_Record_RecordSet
      */
     public function getServerEntries($folderId, $filterType)
     {
@@ -490,10 +490,24 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $pagination = null;
         }
         
+        $this->_inspectGetServerEntries($folderId, $filterType, $filter);
+        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
         $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
         return $result;
+    }
+    
+    /**
+     * inspect getServerEntries parameters
+     * 
+     * @param  string                             $folderId
+     * @param  int                                $filterType
+     * @param  Tinebase_Model_Filter_FilterGroup  $filter
+     */
+    protected function _inspectGetServerEntries($folderId, $filterType, Tinebase_Model_Filter_FilterGroup $filter)
+    {
+        // does nothing by default
     }
     
     /**
