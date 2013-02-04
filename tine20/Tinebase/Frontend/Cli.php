@@ -293,7 +293,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $where = array();
         }
         $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
-    
+        
         foreach ($args['tables'] as $table) {
             try {
                 $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
@@ -308,11 +308,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             try {
                 $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
             } catch (Zend_Db_Statement_Exception $zdse) {
-                // try again with foreign key checks off
-                echo "\nTurning off foreign key checks for table $table.";
-                $db->query("SET FOREIGN_KEY_CHECKS=0");
-                $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
-                $db->query("SET FOREIGN_KEY_CHECKS=1");
+                echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
             }
             if ($deleteCount > 0) {
                 echo "\nCleared table $table (deleted $deleteCount records).";

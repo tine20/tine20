@@ -115,6 +115,16 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
+     * returns clone to be used with right hand operators
+     * 
+     * @return Tinebase_DateTime
+     */
+    public function getClone()
+    {
+        return clone $this;
+    }
+    
+    /**
      * call interceptor
      * 
      * @param string $name

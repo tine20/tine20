@@ -443,6 +443,50 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertEquals(0, count($events), 'testuser has not edit grant, but serach for action update found the event');
     }
     
+    public function testCreateRecurExceptionWithEditGrantOnly()
+    {
+        // set testuser to have editgrant for sclever
+        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ), array(
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => false,
+            Tinebase_Model_Grants::GRANT_ADD      => false,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => false,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => false,
+            Tinebase_Model_Grants::GRANT_ADMIN    => false,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => false,
+        ))), TRUE);
+        
+        $persistentEvent = $this->_createEventInPersonasCalendar('sclever', 'sclever');
+        $persistentEvent->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $updatedEvent = $this->_uit->update($persistentEvent);
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId()),
+        )), NULL, FALSE, FALSE);
+        
+        $this->assertEquals(1, count($events), 'failed to search fb event');
+        
+        
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $updatedEvent->dtstart, $updatedEvent->dtstart->getClone()->addDay(7));
+        
+        $events[3]->summary = 'exception';
+        $exception = $this->_uit->createRecurException($events[3]);
+        
+        $this->assertEquals('exception', $exception->summary);
+    }
+    
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL, $_classification = Calendar_Model_Event::CLASS_PUBLIC)
     {
         $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
