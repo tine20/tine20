@@ -683,4 +683,57 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue(is_array($syncrotonEvent->categories));
         $this->assertTrue(in_array('test tag', $syncrotonEvent->categories), 'tag not found in categories: ' . print_r($syncrotonEvent->categories, TRUE));
     }
+    
+    /**
+     * calendar has different grant handling
+     * @see 0007450: shared calendars of other users (iOS)
+     */
+    public function testGetAllFoldersWithContainerSyncFilter()
+    {
+        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $device, new Tinebase_DateTime(null, null, 'de_DE'));
+    
+        $folderA = $this->testCreateFolder(); // personal of test user
+        
+        $sclever = array_value('sclever', Zend_Registry::get('personas'));
+        $folderB = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $sclever->getId());
+
+        // have syncGerant for sclever
+        Tinebase_Container::getInstance()->setGrants($folderB, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'    => $sclever->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            ),
+            array(
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+                Tinebase_Model_Grants::GRANT_SYNC     => true,
+        ))), TRUE);
+        
+        $syncFilter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array(
+                $folderA->serverId,
+                $folderB,
+            ))
+        ));
+        
+        $syncFavorite = Tinebase_PersistentFilter::getInstance()->create(new Tinebase_Model_PersistentFilter(array(
+            'application_id'        => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'account_id'            => Tinebase_Core::getUser()->getId(),
+            'model'                 => 'Calendar_Model_EventFilter',
+            'filters'               => $syncFilter,
+            'name'                  => 'testSyncFilter',
+            'description'           => 'test two folders'
+        )));
+        
+        $device->calendarfilterId = $syncFavorite->getId();
+
+        $allSyncrotonFolders = $controller->getAllFolders();
+        
+        $this->assertEquals(2, count($allSyncrotonFolders));
+        $this->assertArrayHasKey($folderA->serverId, $allSyncrotonFolders);
+        $this->assertArrayHasKey($folderB, $allSyncrotonFolders);
+    }
 }

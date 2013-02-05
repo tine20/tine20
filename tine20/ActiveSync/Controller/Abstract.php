@@ -177,6 +177,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             // @TODO work with multiple container filters?
             $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
             if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
+                $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
                 $wantedFolders = $containerFilter->getContainerIds();
                 
                 foreach($allowedFolders as $allowedFolder) {
