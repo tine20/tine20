@@ -315,7 +315,7 @@ class Felamimail_Message extends Zend_Mail_Message
     public static function replaceUris($_content) 
     {
         // uris
-        $pattern = '@(https?://|ftp://)([^\s<>\)]+)@';
+        $pattern = '@(https?://|ftp://)([^\s<>\)]+)@u';
         $result = preg_replace($pattern, "<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $_content);
         
         return $result;
