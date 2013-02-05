@@ -34,6 +34,13 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
     protected $_fetches = array();
     
     /**
+     * list of folder to empty
+     * 
+     * @var array
+     */
+    protected $_emptyFolderContents = array();
+    
+    /**
      * parse MoveItems request
      *
      */
@@ -43,59 +50,13 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
         
         if (isset($xml->Fetch)) {
             foreach ($xml->Fetch as $fetch) {
-                $fetchArray = array(
-                    'store' => (string)$fetch->Store,
-                    'options' => array()
-                );
-                
-                // try to fetch element from namespace AirSync
-                $airSync = $fetch->children('uri:AirSync');
-                
-                if (isset($airSync->CollectionId)) {
-                    $fetchArray['collectionId'] = (string)$airSync->CollectionId;
-                    $fetchArray['serverId']     = (string)$airSync->ServerId;
-                }
-                
-                // try to fetch element from namespace Search
-                $search = $fetch->children('uri:Search');
-                
-                if (isset($search->LongId)) {
-                    $fetchArray['longId'] = (string)$search->LongId;
-                }
-                
-                // try to fetch element from namespace AirSyncBase
-                $airSyncBase = $fetch->children('uri:AirSyncBase');
-                
-                if (isset($airSyncBase->FileReference)) {
-                    $fetchArray['fileReference'] = (string)$airSyncBase->FileReference;
-                }
-                
-                if (isset($fetch->Options)) {
-                    // try to fetch element from namespace AirSyncBase
-                    $airSyncBase = $fetch->Options->children('uri:AirSyncBase');
-                    
-                    if (isset($airSyncBase->BodyPreference)) {
-                        foreach ($airSyncBase->BodyPreference as $bodyPreference) {
-                            $type = (int) $bodyPreference->Type;
-                            $fetchArray['options']['bodyPreferences'][$type] = array(
-                                'type' => $type
-                            );
-                    
-                            // optional
-                            if (isset($bodyPreference->TruncationSize)) {
-                                $fetchArray['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
-                            }
-                            
-                            // optional
-                            if (isset($bodyPreference->AllOrNone)) {
-                                $fetchArray['options']['bodyPreferences'][$type]['allOrNone'] = (int) $bodyPreference->AllOrNone;
-                            }
-                        }
-                    }
-                    
-                    
-                }
-                $this->_fetches[] = $fetchArray;
+                $this->_fetches[] = $this->_handleFetch($fetch);
+            }
+        }
+        
+        if (isset($xml->EmptyFolderContents)) {
+            foreach ($xml->EmptyFolderContents as $emptyFolderContents) {
+                $this->_emptyFolderContents[] = $this->_handleEmptyFolderContents($emptyFolderContents);
             }
         }
         
@@ -187,6 +148,98 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
             }
         }
         
+        foreach ($this->_emptyFolderContents as $emptyFolderContents) {
+            
+            $folder = $this->_folderBackend->getFolder($this->_device, $emptyFolderContents['collectionId']);
+            
+            $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+            
+            $dataController->emptyFolderContents($emptyFolderContents['collectionId']);
+            
+            $emptyFolderContentsTag = $this->_outputDom->createElementNS('uri:ItemOperations', 'EmptyFolderContents');
+            
+            $emptyFolderContentsTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
+            
+            $emptyFolderContentsTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $emptyFolderContents['collectionId']));
+            
+            $response->appendChild($emptyFolderContentsTag);
+        }
+        
         return $this->_outputDom;
+    }
+    
+    protected function _handleFetch(SimpleXMLElement $fetch)
+    {
+        $fetchArray = array(
+            'store' => (string)$fetch->Store,
+            'options' => array()
+        );
+        
+        // try to fetch element from namespace AirSync
+        $airSync = $fetch->children('uri:AirSync');
+        
+        if (isset($airSync->CollectionId)) {
+            $fetchArray['collectionId'] = (string)$airSync->CollectionId;
+            $fetchArray['serverId']     = (string)$airSync->ServerId;
+        }
+        
+        // try to fetch element from namespace Search
+        $search = $fetch->children('uri:Search');
+        
+        if (isset($search->LongId)) {
+            $fetchArray['longId'] = (string)$search->LongId;
+        }
+        
+        // try to fetch element from namespace AirSyncBase
+        $airSyncBase = $fetch->children('uri:AirSyncBase');
+        
+        if (isset($airSyncBase->FileReference)) {
+            $fetchArray['fileReference'] = (string)$airSyncBase->FileReference;
+        }
+        
+        if (isset($fetch->Options)) {
+            // try to fetch element from namespace AirSyncBase
+            $airSyncBase = $fetch->Options->children('uri:AirSyncBase');
+            
+            if (isset($airSyncBase->BodyPreference)) {
+                foreach ($airSyncBase->BodyPreference as $bodyPreference) {
+                    $type = (int) $bodyPreference->Type;
+                    $fetchArray['options']['bodyPreferences'][$type] = array(
+                        'type' => $type
+                    );
+            
+                    // optional
+                    if (isset($bodyPreference->TruncationSize)) {
+                        $fetchArray['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
+                    }
+                    
+                    // optional
+                    if (isset($bodyPreference->AllOrNone)) {
+                        $fetchArray['options']['bodyPreferences'][$type]['allOrNone'] = (int) $bodyPreference->AllOrNone;
+                    }
+                }
+            }
+        }
+        
+        return $fetchArray;
+    }
+    
+    protected function _handleEmptyFolderContents(SimpleXMLElement $emptyFolderContent)
+    {
+        $folderArray = array(
+            'collectiondId' => null,
+            'options'       => array('deleteSubFolders' => FALSE)
+        );
+        
+        // try to fetch element from namespace AirSync
+        $airSync = $emptyFolderContent->children('uri:AirSync');
+        
+        $folderArray['collectionId'] = (string)$airSync->CollectionId;
+        
+        if (isset($emptyFolderContent->Options)) {
+            $folderArray['options']['deleteSubFolders'] = isset($emptyFolderContent->Options->DeleteSubFolders); 
+        }
+        
+        return $folderArray;
     }
 }

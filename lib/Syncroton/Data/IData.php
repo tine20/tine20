@@ -43,7 +43,19 @@ interface Syncroton_Data_IData
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData);
     
-    public function deleteFolder($_folderId);
+    /**
+     * delete folder
+     * 
+     * @param string $folderId
+     */
+    public function deleteFolder($folderId);
+    
+    /**
+     * empty folder
+     * 
+     * @param string $folderId
+     */
+    public function emptyFolderContents($folderId);
     
     /**
      * return list off all folders
