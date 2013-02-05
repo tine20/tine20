@@ -118,9 +118,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $filter = new Tinebase_Model_Filter_Text($_property, 'equals', $_value);
         $filters->addFilter($filter);
         
-        // for get operations we need to take all attendee into account
-        $filters->addFilter($filters->createFilter('attender', 'specialNode', 'all'));
-        
         $resultSet = $this->search($filters, NULL, FALSE, $_getDeleted);
         
         switch (count($resultSet)) {
@@ -242,23 +239,19 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     }
                 }
                 
-                $requiredGrants = $grantsFilter ? $grantsFilter->getRequiredGrants() : array(
-                    Tinebase_Model_Grants::GRANT_FREEBUSY,
-                    Tinebase_Model_Grants::GRANT_READ,
-                    Tinebase_Model_Grants::GRANT_ADMIN,
-                );
-                
-                $requiredGrants = array_intersect($requiredGrants, $this->_recordBasedGrants);
-                
-                $hasGrant = FALSE;
-                foreach($requiredGrants as $requiredGrant) {
-                    if ($event->{$requiredGrant}) {
-                        $hasGrant |= $event->{$requiredGrant};
+                if ($grantsFilter) {
+                    $requiredGrants = array_intersect($grantsFilter->getRequiredGrants(), $this->_recordBasedGrants);
+                    
+                    $hasGrant = FALSE;
+                    foreach($requiredGrants as $requiredGrant) {
+                        if ($event->{$requiredGrant}) {
+                            $hasGrant |= $event->{$requiredGrant};
+                        }
                     }
-                }
-                
-                if (! $hasGrant) {
-                    $toRemove[] = $event;
+                    
+                    if (! $hasGrant) {
+                        $toRemove[] = $event;
+                    }
                 }
             }
         }

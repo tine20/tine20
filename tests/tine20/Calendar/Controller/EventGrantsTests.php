@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_EventGrantsTests::main');
-}
 
 /**
  * Test class for Calendar_Controller_Event
@@ -480,8 +476,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $this->assertEquals(1, count($events), 'failed to search fb event');
         
-        
         Calendar_Model_Rrule::mergeRecurrenceSet($events, $updatedEvent->dtstart, $updatedEvent->dtstart->getClone()->addDay(7));
+        
+        $this->assertEquals(8, count($events), 'failed to merge recurrence set');
         
         $events[3]->summary = 'exception';
         $exception = $this->_uit->createRecurException($events[3]);
@@ -691,9 +688,4 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             }
         }
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_EventGrantsTests::main') {
-    Calendar_Controller_EventGrantsTests::main();
 }
