@@ -459,17 +459,23 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
     }
     
     /**
+     * testGetServerEntries (inbox folder cache should be updated here by _inspectGetServerEntries fn)
      * 
-     * @return DOMDocument
+     * @see 0006232: Emails get only synched, if the user is logged on with an browser
      */
-    #protected function _getOutputDOMDocument()
-    #{
-    #    $dom = new DOMDocument();
-    #    $dom->formatOutput = false;
-    #    $dom->encoding     = 'utf-8';
-    #    $dom->loadXML($this->_testXMLOutput);
-    #    #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
-    #    
-    #    return $dom;
-    #}
+    public function testGetServerEntries()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
+        
+        // set inbox timestamp a long time ago (15 mins)
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $inbox->cache_timestamp = Tinebase_DateTime::now()->subMinute(15);
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folderBackend->update($inbox);
+        
+        $serverEntriesAfter = $controller->getServerEntries($inbox->getId(), Syncroton_Command_Sync::FILTER_1_DAY_BACK);
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        
+        $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));
+    }
 }

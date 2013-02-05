@@ -456,15 +456,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see Syncroton_Data_IDataSearch::getSearchEntry()
-     */
-    public function getSearchEntry($longId, $options)
-    {
-        // @todo remove from Search Interface
-    }
-    
-    /**
-     * (non-PHPdoc)
      * @see Syncroton_Data_IDataSearch::search()
      */
     public function search(Syncroton_Model_StoreRequest $store)
@@ -628,6 +619,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         }
         
         return $synrotonBody;
+    }
+    
+    /**
+     * inspect getServerEntries parameters
+     * 
+     * @param  string                             $folderId
+     * @param  int                                $filterType
+     * @param  Tinebase_Model_Filter_FilterGroup  $filter
+     */
+    protected function _inspectGetServerEntries($folderId, $filterType, Tinebase_Model_Filter_FilterGroup $filter)
+    {
+        $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
+        
+        // update folder cache if last cache update was more than 10 minutes ago
+        if (
+            ! $folder->cache_timestamp instanceof Tinebase_DateTime ||
+            $folder->cache_timestamp->compare(Tinebase_DateTime::now()->subMinute(10)) == -1
+        ) {
+            Felamimail_Controller_Cache_Message::getInstance()->updateCache($folderId, 10);
+        }
     }
     
     /**
