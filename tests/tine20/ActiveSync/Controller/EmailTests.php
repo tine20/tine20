@@ -382,15 +382,40 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
     
     /**
      * validate getAllFolders
+     * 
+     * @see 0007206: ActiveSync doesn't show all folder tree until it's fully viewed in web-interface
      */
     public function testGetAllFolders()
     {
+        // create a subfolder of INBOX
+        $emailAccount = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        try {
+            $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // folder exists
+        }
+        
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
         $folders = $controller->getAllFolders();
         
         $this->assertGreaterThanOrEqual(1, count($folders));
         $this->assertTrue(array_pop($folders) instanceof Syncroton_Model_Folder);
+        
+        // look for 'INBOX/sub'
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $found = FALSE;
+        $foundFolders = array();
+        foreach ($folders as $folder) {
+            $foundFolders[] = $folder->displayName;
+            if ($folder->displayName === 'sub' && $folder->parentId === $inbox->getId()) {
+                $found = TRUE;
+                break;
+            }
+        }
+        
+        Felamimail_Controller_Folder::getInstance()->delete($emailAccount->getId(), 'INBOX/sub');
+        $this->assertTrue($found, 'could not find INBOX/sub with getAllFolders(): ' . print_r($foundFolders, TRUE));
     }
     
     /**
