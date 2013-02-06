@@ -622,23 +622,12 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     }
     
     /**
-     * inspect getServerEntries parameters
-     * 
-     * @param  string                             $folderId
-     * @param  int                                $filterType
-     * @param  Tinebase_Model_Filter_FilterGroup  $filter
+     * (non-PHPdoc)
+     * @see ActiveSync_Controller_Abstract::_inspectGetCountOfChanges()
      */
-    protected function _inspectGetServerEntries($folderId, $filterType, Tinebase_Model_Filter_FilterGroup $filter)
+    protected function _inspectGetCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
-        $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
-        
-        // update folder cache if last cache update was more than 10 minutes ago
-        if (
-            ! $folder->cache_timestamp instanceof Tinebase_DateTime ||
-            $folder->cache_timestamp->compare(Tinebase_DateTime::now()->subMinute(10)) == -1
-        ) {
-            Felamimail_Controller_Cache_Message::getInstance()->updateCache($folderId, 10);
-        }
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder->serverId, 10);
     }
     
     /**
