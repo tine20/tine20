@@ -347,13 +347,11 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getDevice($_deviceType)
     {
-        if (isset($this->objects['devices'][$_deviceType])) {
-            return $this->objects['devices'][$_deviceType];
+        if (! isset($this->objects['devices'][$_deviceType])) {
+            $this->objects['devices'][$_deviceType] = Syncroton_Registry::getDeviceBackend()->create( 
+                ActiveSync_TestCase::getTestDevice($_deviceType)
+            );
         }
-        
-        $this->objects['devices'][$_deviceType] = Syncroton_Registry::getDeviceBackend()->create( 
-            ActiveSync_TestCase::getTestDevice($_deviceType)
-        );
 
         return $this->objects['devices'][$_deviceType];
     }
