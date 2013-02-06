@@ -145,6 +145,25 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     }
     
     /**
+     * test if record is dirty
+     *
+     */
+    public function testIsDirty()
+    {
+        $record = new Tinebase_Record_DummyRecord(array(
+            'string' => 'test',
+            'test_1' => 25,
+            'test_2' => 99,
+            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+        ), true);
+        
+        $this->assertFalse($record->isDirty(), 'record is not clean');
+        
+        $record->string = 'anders';
+        $this->assertTrue($record->isDirty(), 'records is not dirty');
+    }
+    
+    /**
      * test if equal
      *
      */
