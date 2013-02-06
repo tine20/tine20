@@ -24,7 +24,7 @@
  * @property    Syncroton_Model_EmailBody  Body
  */
 
-class Syncroton_Model_Contact extends Syncroton_Model_AEntry
+class Syncroton_Model_Contact extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
     

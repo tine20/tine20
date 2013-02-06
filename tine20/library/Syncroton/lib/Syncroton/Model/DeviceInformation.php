@@ -21,7 +21,7 @@
  * @property    string  phoneNumber
  */
 
-class Syncroton_Model_DeviceInformation extends Syncroton_Model_AEntry
+class Syncroton_Model_DeviceInformation extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'Set';
     

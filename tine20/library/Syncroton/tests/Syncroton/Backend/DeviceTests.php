@@ -110,6 +110,25 @@ class Syncroton_Backend_DeviceTests extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * valiadte isDirty of model
+     */
+    public function testIsDirty()
+    {
+        $device = $this->getTestDevice(Syncroton_Model_Device::TYPE_ANDROID);
+        
+        $this->assertEquals(false, $device->isDirty(), 'initial value mismatch');
+        
+        $device->remotewipe = 0;
+        $device->acsversion = '12.0';
+        
+        $this->assertEquals(false, $device->isDirty(), 'dirty should be false, after update with same values');
+        
+        $device->acsversion = '14.1';
+        
+        $this->assertEquals(true, $device->isDirty());
+    }
+    
+    /**
      * 
      * @return Syncroton_Model_Device
      */

@@ -19,7 +19,7 @@
  * @property  array   range
  * @property  int     total
  */
-class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
+class Syncroton_Model_StoreResponse extends Syncroton_Model_AXMLEntry
 {
     /**
      * status constants
@@ -51,7 +51,7 @@ class Syncroton_Model_StoreResponse extends Syncroton_Model_AEntry
 
     /**
      * (non-PHPdoc)
-     * @see Syncroton_Model_AEntry::appendXML()
+     * @see Syncroton_Model_AXMLEntry::appendXML()
      */
     public function appendXML(DOMElement $_domParrent, Syncroton_Model_IDevice $device)
     {

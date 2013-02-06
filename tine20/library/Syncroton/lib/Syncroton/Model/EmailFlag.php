@@ -28,7 +28,7 @@
  * @property    DateTime  UtcDueDate
  * @property    DateTime  UtcStartDate
  */
-class Syncroton_Model_EmailFlag extends Syncroton_Model_AEntry
+class Syncroton_Model_EmailFlag extends Syncroton_Model_AXMLEntry
 {
     const STATUS_CLEARED  = 0;
     const STATUS_COMPLETE = 1;

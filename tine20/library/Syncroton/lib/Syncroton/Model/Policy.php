@@ -14,7 +14,7 @@
  * @package     Model
  */
 
-class Syncroton_Model_Policy extends Syncroton_Model_AEntry implements Syncroton_Model_IPolicy
+class Syncroton_Model_Policy extends Syncroton_Model_AXMLEntry implements Syncroton_Model_IPolicy
 {
     protected $_xmlBaseElement = 'EASProvisionDoc';
     

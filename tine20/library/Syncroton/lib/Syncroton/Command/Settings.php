@@ -54,8 +54,10 @@ class Syncroton_Command_Settings extends Syncroton_Command_Wbxml
             $this->_device->os              = $this->_deviceInformation->oS;
             $this->_device->oslanguage      = $this->_deviceInformation->oSLanguage;
             $this->_device->phonenumber     = $this->_deviceInformation->phoneNumber;
-                        
-            $this->_device = $this->_deviceBackend->update($this->_device);
+
+            if ($this->_device->isDirty()) {
+                $this->_device = $this->_deviceBackend->update($this->_device);
+            }
         }
         
         if(isset($xml->UserInformation->Get)) {
