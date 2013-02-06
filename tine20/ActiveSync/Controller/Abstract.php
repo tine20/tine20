@@ -442,7 +442,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::getChangedEntries()
      */
-    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
         $filter = $this->_getContentFilter(0);
         

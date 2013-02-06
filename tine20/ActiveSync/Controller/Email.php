@@ -176,7 +176,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
      * @param unknown_type $_endTimeStamp
      * @return array
      */
-    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
         $filter = $this->_getContentFilter(0);
         
