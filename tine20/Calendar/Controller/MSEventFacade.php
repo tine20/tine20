@@ -238,7 +238,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     /**
      * add one record
      *
-     * @param   Calendar_Model_Event $_record
+     * @param   Calendar_Model_Event $_event
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
@@ -270,8 +270,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     
     /**
      * update one record
-     *
-     * @param   Calendar_Model_Event $_record
+     * 
+     * NOTE: clients might send their original (creation) data w.o. our adoptions for update
+     *       therefore we need reapply them
+     *       
+     * @param   Calendar_Model_Event $_event
      * @param   bool                 $_checkBusyConflicts
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
@@ -284,6 +287,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         $currentOriginEvent = $this->_eventController->get($_event->getId());
         $this->_fromiTIP($_event, $currentOriginEvent);
+        
+        $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $exceptions->addIndices(array('is_deleted'));
@@ -299,11 +304,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
         
         foreach($migration['toCreate'] as $exception) {
+            $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
         
         foreach($migration['toUpdate'] as $exception) {
+            $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->update($exception, $_checkBusyConflicts);
         }

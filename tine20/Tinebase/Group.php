@@ -237,7 +237,7 @@ class Tinebase_Group
         
         $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' sync group: ' . $group->name);
             // update or create user in local sql backend
             try {

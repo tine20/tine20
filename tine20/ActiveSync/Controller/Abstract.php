@@ -282,9 +282,18 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::deleteFolder()
      */
-    public function deleteFolder($_folderId)
+    public function deleteFolder($folderId)
     {
         
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::emptyFolderContents()
+     */
+    public function emptyFolderContents($folderId)
+    {
+        return true;
     }
     
     /**
@@ -397,16 +406,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     #}
     
     /**
-     * used by the mail backend only. Used to update the folder cache
-     * 
-     * @param  string  $_folderId
-     */
-    public function updateCache($_folderId)
-    {
-        // does nothing by default
-    }
-    
-    /**
      * add container acl filter to filter group
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -443,7 +442,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::getChangedEntries()
      */
-    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
         $filter = $this->_getContentFilter(0);
         
@@ -491,8 +490,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $pagination = null;
         }
         
-        $this->_inspectGetServerEntries($folderId, $filterType, $filter);
-        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
         $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
@@ -500,13 +497,13 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     }
     
     /**
-     * inspect getServerEntries parameters
+     * inspect getCountOfChanges
      * 
-     * @param  string                             $folderId
-     * @param  int                                $filterType
-     * @param  Tinebase_Model_Filter_FilterGroup  $filter
+     * @param Syncroton_Backend_IContent  $contentBackend
+     * @param Syncroton_Model_IFolder     $folder
+     * @param Syncroton_Model_ISyncState  $syncState
      */
-    protected function _inspectGetServerEntries($folderId, $filterType, Tinebase_Model_Filter_FilterGroup $filter)
+    protected function _inspectGetCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
         // does nothing by default
     }
@@ -517,7 +514,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
-        $this->updateCache($folder->serverId);
+        $this->_inspectGetCountOfChanges($contentBackend, $folder, $syncState);
         
         $allClientEntries = $contentBackend->getFolderState($this->_device, $folder);
         $allServerEntries = $this->getServerEntries($folder->serverId, $folder->lastfiltertype);
@@ -528,6 +525,17 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::hasChanges()
+     */
+    public function hasChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
+    {
+        return !!$this->getCountOfChanges($contentBackend, $folder, $syncState);
+    }
+     
+    /**
     
     /**
      * return (outer) contentfilter array

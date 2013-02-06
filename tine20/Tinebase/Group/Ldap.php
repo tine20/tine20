@@ -222,6 +222,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      *
      * @param  string  $_groupId
      * @param  array   $_groupMembers array of ids
+     * @return array with current group memberships (account ids)
      */
     public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
@@ -230,7 +231,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         }
         
         $metaData = $this->_getMetaData($_groupId);
-        $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers);
+        
+        $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers, FALSE);
+        if (count($_groupMembers) !== count($membersMetaDatas)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Removing ' . count($_groupMembers) - count($membersMetaDatas) . ' no longer existing group members from group ' . $_groupId);
+            
+            $_groupMembers = array();
+            foreach ($membersMetaDatas as $account) {
+                $_groupMembers[] = $account[$this->_userUUIDAttribute][0];
+            }
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($metaData, true));
@@ -253,9 +264,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         if ($this->_options['useRfc2307bis']) {
             if (!empty($memberDn)) {
-                $ldapData['member'] = $memberDn; // array of dn's
+                $ldapData['member'] = $memberDn; // array of dns
             } else {
-                $ldapData['member'] = $groupDn; // singöe dn
+                $ldapData['member'] = $groupDn; // single dn
             }
         }
         
@@ -265,6 +276,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->_ldap->update($metaData['dn'], $ldapData);
+        
+        return $_groupMembers;
     }
     
     /**
@@ -292,7 +305,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $userId = Tinebase_Model_user::convertUserIdToInt($_userId);
         
         $groupMemberships = $this->getGroupMembershipsFromSyncBackend($userId);
-                        
+        
         $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
         
@@ -664,9 +677,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      * returns arrays of metainfo from given accountIds
      *
      * @param array $_accountIds
+     * @param boolean $throwExceptionOnMissingAccounts
      * @return array of strings
      */
-    protected function _getAccountsMetaData(array $_accountIds)
+    protected function _getAccountsMetaData(array $_accountIds, $throwExceptionOnMissingAccounts)
     {
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
@@ -696,7 +710,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $retrievedAccountIds[] = $account[$this->_userUUIDAttribute][0];
             }
             
-            throw new Tinebase_Exception_NotFound("Some dn's are missing. "  . print_r(array_diff($wantedAccountIds, $retrievedAccountIds), true));
+            $message = "Some dn's are missing. "  . print_r(array_diff($wantedAccountIds, $retrievedAccountIds), true);
+            if ($throwExceptionOnMissingAccounts) {
+                throw new Tinebase_Exception_NotFound($message);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+            }
         }
         
         $result = array();

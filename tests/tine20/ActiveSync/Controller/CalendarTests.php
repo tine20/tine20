@@ -736,4 +736,72 @@ Zeile 3</AirSyncBase:Data>
         $this->assertArrayHasKey($folderA->serverId, $allSyncrotonFolders);
         $this->assertArrayHasKey($folderB, $allSyncrotonFolders);
     }
+    
+    /**
+     * validate that current is not removed from the event after creating and updating event from phone 
+     * 
+     * @link https://forge.tine20.org/mantisbt/view.php?id=7606
+     */
+    public function testUpdateAfterCreate()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+    
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_SMASUNGGALAXYS2), Tinebase_DateTime::now());
+    
+        $xml = new SimpleXMLElement('
+            <ApplicationData xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+              <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAEAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Timezone>
+              <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+              <StartTime xmlns="uri:Calendar">20130124T070000Z</StartTime>
+              <EndTime xmlns="uri:Calendar">20130124T080000Z</EndTime>
+              <DtStamp xmlns="uri:Calendar">20121228T001432Z</DtStamp>
+              <Subject xmlns="uri:Calendar">Neues Ereignis</Subject>
+              <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+              <Body xmlns="uri:AirSyncBase">
+                <Type>1</Type>
+                <Data></Data>
+              </Body>
+              <OrganizerEmail xmlns="uri:Calendar">rep@tine.de</OrganizerEmail>
+              <UID xmlns="uri:Calendar">24f59962-7243-4938-8b8c-a81fda46977e</UID>
+              <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+              <MeetingStatus xmlns="uri:Calendar">0</MeetingStatus>
+            </ApplicationData>
+        ');
+        $syncrotonEvent = new Syncroton_Model_Event($xml);
+    
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+    
+        #var_dump(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
+        $this->assertEquals(1, count(Calendar_Controller_Event::getInstance()->get($serverId)->attendee), 'count after create');
+        
+        $xml = new SimpleXMLElement('
+            <ApplicationData xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+                <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAEAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Timezone>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+                <StartTime xmlns="uri:Calendar">20130124T070000Z</StartTime>
+                <EndTime xmlns="uri:Calendar">20130124T080000Z</EndTime>
+                <DtStamp xmlns="uri:Calendar">20121228T001526Z</DtStamp>
+                <Subject xmlns="uri:Calendar">Neues Ereignis geändert</Subject>
+                <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+                <Body xmlns="uri:AirSyncBase">
+                  <Type>1</Type>
+                  <Data></Data>
+                </Body>
+                <OrganizerEmail xmlns="uri:Calendar">rep@tine.de</OrganizerEmail>
+                <UID xmlns="uri:Calendar">24f59962-7243-4938-8b8c-a81fda46977e</UID>
+                <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+                <MeetingStatus xmlns="uri:Calendar">0</MeetingStatus>
+            </ApplicationData>
+        ');
+        $syncrotonEvent = new Syncroton_Model_Event($xml);
+        
+        // need to creaate new controller to set new sync timestamp for concurrency handling
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->creation_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_SMASUNGGALAXYS2), $syncTimestamp);
+        
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        
+        #var_dump(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
+        $this->assertEquals(1, count(Calendar_Controller_Event::getInstance()->get($serverId)->attendee), 'count after update');
+    }
 }

@@ -368,10 +368,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
         
-        // iCal does sends back an old value, because it does not refresh the vcalendar after 
-        // update. Moreover concurrency management is based on etag in CalDAV, so we set last_modified to
+        // concurrency management is based on etag in CalDAV, so we set last_modified to
         // now to circumvent internal concurrency checks
-        $event->assertCurrentUserAsAttendee(TRUE, TRUE);
         $event->last_modified_time = Tinebase_DateTime::now();
         if ($event->exdate instanceof Tinebase_Record_RecordSet) {
             foreach ($event->exdate as $idx => $exdate) {
