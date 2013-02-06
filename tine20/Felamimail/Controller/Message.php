@@ -393,7 +393,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
         
-        $partStructure  = ($_partStructure !== NULL ) ? $_partStructure : $message->getPartStructure($_partId, FALSE);
+        // need to refetch part structure of RFC822 messages because message structure is used instead
+        $partContentType = ($_partId && isset($message->structure['parts'][$_partId])) ? $message->structure['parts'][$_partId]['contentType'] : NULL;
+        $partStructure  = ($_partStructure !== NULL && $partContentType !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? $_partStructure : $message->getPartStructure($_partId, FALSE);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($partStructure, TRUE));
         
         $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822);
         
@@ -604,7 +609,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $body = Felamimail_Message::replaceEmails($body);
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
             
             $messageBody .= $body;
