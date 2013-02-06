@@ -664,4 +664,48 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $readGrant = $this->_instance->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
         $this->assertFalse($readGrant);
     }
+    
+    /**
+     * cache invalidation needs a second 
+     */
+    public function testSetGrantsCacheInvalidation()
+    {
+        $container = $this->objects['initialContainer'];
+        $sclever = array_value('sclever', Zend_Registry::get('personas'));
+        
+        $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
+        
+        // have readGrant for sclever
+        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            ),
+            array(
+                'account_id'    => $sclever->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+        ))), TRUE);
+        
+        sleep(1);
+        $this->assertEquals(TRUE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever _should have_ a read grant');
+        
+        // remove readGrant for sclever again
+        $this->_instance->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            ),
+            array(
+                'account_id'    => $sclever->getId(),
+                'account_type'  => 'user',
+                Tinebase_Model_Grants::GRANT_READ     => false,
+        ))), TRUE);
+        
+        sleep(1);
+        $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
+        
+    }
 }
