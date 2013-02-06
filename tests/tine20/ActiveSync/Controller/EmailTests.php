@@ -392,7 +392,7 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
         try {
             $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            // folder exists
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $zmse);
         }
         
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
@@ -414,7 +414,11 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
             }
         }
         
-        Felamimail_Controller_Folder::getInstance()->delete($emailAccount->getId(), 'INBOX/sub');
+        try {
+            Felamimail_Controller_Folder::getInstance()->delete($emailAccount->getId(), 'INBOX/sub');
+        } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $feifnf);
+        }
         $this->assertTrue($found, 'could not find INBOX/sub with getAllFolders(): ' . print_r($foundFolders, TRUE));
     }
     
