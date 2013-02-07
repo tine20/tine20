@@ -166,15 +166,22 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
         $this->groupMembersTable->delete($where);
         
+        // check if users have accounts
+        $userIdsWithExistingAccounts = Tinebase_User::getInstance()->getMultiple($_groupMembers)->getArrayOfIds();
+        
         if (count($_groupMembers) > 0) {
-            
             // add new members
             foreach ($_groupMembers as $accountId) {
                 $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
-                $this->_db->insert(SQL_TABLE_PREFIX . 'group_members', array(
-                    'group_id'    => $groupId,
-                    'account_id'  => $accountId
-                ));
+                if (in_array($accountId, $userIdsWithExistingAccounts)) {
+                    $this->_db->insert(SQL_TABLE_PREFIX . 'group_members', array(
+                        'group_id'    => $groupId,
+                        'account_id'  => $accountId
+                    ));
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' User with ID ' . $accountId . ' does not have an account!');
+                }
                 
                 $this->_clearCache(array('groupMemberships' => $accountId));
             }
