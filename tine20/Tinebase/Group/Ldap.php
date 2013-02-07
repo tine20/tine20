@@ -235,11 +235,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers, FALSE);
         if (count($_groupMembers) !== count($membersMetaDatas)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Removing ' . count($_groupMembers) - count($membersMetaDatas) . ' no longer existing group members from group ' . $_groupId);
+                . ' Removing ' . (count($_groupMembers) - count($membersMetaDatas)) . ' no longer existing group members from group ' . $_groupId);
             
             $_groupMembers = array();
             foreach ($membersMetaDatas as $account) {
-                $_groupMembers[] = $account[$this->_userUUIDAttribute][0];
+                $_groupMembers[] = $account[$this->_userUUIDAttribute];
             }
         }
         
