@@ -1,10 +1,4 @@
 <?php
-// Call Setup_Backend_Schema_FieldTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_Schema_FieldTest::main');
-}
-
-require_once 'PHPUnit/Framework.php';
 
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
@@ -14,7 +8,6 @@ require_once dirname(__FILE__) . '/../../../TestHelper.php';
  */
 class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
 {
-    
     public function testIsValid()
     {
         $string ="
@@ -39,7 +32,7 @@ class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
         $field->isValid(true); //Test if the parameter throwException works as expected
     }
     
-public function testEquals_001()
+    public function testEquals_001()
     {
         $string ="
             <field>
@@ -194,9 +187,3 @@ public function testEquals_001()
     }
 
 }
-
-// Call Setup_Backend_Schema_FieldTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'Setup_Backend_Schema_FieldTest::main') {
-    Setup_Backend_Schema_FieldTest::main();
-}
-?>
