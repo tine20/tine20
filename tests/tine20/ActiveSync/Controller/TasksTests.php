@@ -117,4 +117,26 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         return array($serverId, $syncrotonTask);
     }
+    
+    /**
+     * test conversion to Tine 2.0 model
+     */
+    public function testToTineModel()
+    {
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncrotonTask = new Syncroton_Model_Task(array(
+            'body'          => 'a finished task',
+            'complete'      => 1,
+            'dateCompleted' => new DateTime('2009-02-20T09:30:00.000Z', new DateTimeZone('UTC')),
+            'subject'       => 'lars'
+        ));
+        
+        $tine20Task = $controller->toTineModel($syncrotonTask);
+        
+        //var_dump($tine20Task->toArray());
+        
+        $this->assertEquals('lars', $tine20Task->summary);
+        $this->assertEquals('2009-02-20 09:30:00', $tine20Task->completed->format(Tinebase_Record_Abstract::ISO8601LONG));
+    }
 }

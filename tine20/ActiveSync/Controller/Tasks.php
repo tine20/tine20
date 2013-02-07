@@ -201,7 +201,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 case 'completed':
                     if ($data->$syncrotonProperty === 1) {
                         $task->status = 'COMPLETED';
-                        $task->$tine20Property = $data->DateCompleted;
+                        $task->$tine20Property = $data->dateCompleted;
                     } else {
                         $task->status = 'IN-PROCESS';
                         $task->$tine20Property = NULL;
@@ -214,7 +214,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     if ($data->$syncrotonProperty instanceof Syncroton_Model_EmailBody) {
                         $task->$tine20Property = preg_replace("/(\r\n?|\n)/", "\r\n", $data->$syncrotonProperty->data);
                     } else {
-                        $event->$tine20Property = null;
+                        $task->$tine20Property = null;
                     }
                 
                     break;
