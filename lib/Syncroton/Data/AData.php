@@ -107,6 +107,15 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return (bool) $result;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::emptyFolderContents()
+     */
+    public function emptyFolderContents($folderId)
+    {
+        return true;
+    }
+    
     public function getAllFolders()
     {
         $select = $this->_db->select()
