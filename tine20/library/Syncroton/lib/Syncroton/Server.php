@@ -366,7 +366,7 @@ class Syncroton_Server
     
     /**
      * get existing device of owner or create new device for owner
-     * 
+     *
      * @param unknown_type $ownerId
      * @param unknown_type $deviceId
      * @param unknown_type $deviceType
@@ -382,7 +382,9 @@ class Syncroton_Server
             $device->useragent  = $requestParameters['userAgent'];
             $device->acsversion = $requestParameters['protocolVersion'];
             
-            $device = $this->_deviceBackend->update($device);
+            if ($device->isDirty()) {
+                $device = $this->_deviceBackend->update($device);
+            }
         
         } catch (Syncroton_Exception_NotFound $senf) {
             $device = $this->_deviceBackend->create(new Syncroton_Model_Device(array(
@@ -394,7 +396,7 @@ class Syncroton_Server
                 'policyId'   => Syncroton_Registry::isRegistered(Syncroton_Registry::DEFAULT_POLICY) ? Syncroton_Registry::get(Syncroton_Registry::DEFAULT_POLICY) : null
             )));
         }
-        
+
         return $device;
     }
 }

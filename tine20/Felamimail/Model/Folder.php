@@ -20,6 +20,8 @@
  * @property  string  account_id
  * @property  string  localname
  * @property  string  globalname
+ * @property  boolean has_children
+ * @property  boolean is_selectable
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {

@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_Event extends Syncroton_Model_AEntry
+class Syncroton_Model_Event extends Syncroton_Model_AXMLEntry
 {
     /**
      * busy status constants

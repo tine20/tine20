@@ -25,7 +25,7 @@
  * @property    int       WeekOfMonth
  */
 
-class Syncroton_Model_EventRecurrence extends Syncroton_Model_AEntry
+class Syncroton_Model_EventRecurrence extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'Recurrence';
     

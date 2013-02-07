@@ -16,7 +16,7 @@
  * @package    Syncroton
  * @subpackage Model
  */
-class Syncroton_Model_SmartReply extends Syncroton_Model_AEntry
+class Syncroton_Model_SmartReply extends Syncroton_Model_AXMLEntry
 {
     protected $_properties = array(
         'ComposeMail' => array(

@@ -19,7 +19,7 @@
  * @property    string  syncKey
  * @property    int     windowSize
  */
-class Syncroton_Model_Task extends Syncroton_Model_AEntry
+class Syncroton_Model_Task extends Syncroton_Model_AXMLEntry
 {
     protected $_xmlBaseElement = 'ApplicationData';
     

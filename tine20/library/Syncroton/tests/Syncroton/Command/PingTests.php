@@ -128,5 +128,52 @@ class Syncroton_Command_PingTests extends Syncroton_Command_ATestCase
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertEquals('addressbookFolderId', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
         
+    }
+    
+    /**
+     * test status code for empty folder list 
+     */
+    public function testPingWithNoFoldersDefined()
+    {
+        // first do a foldersync
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
+        $folderSync->handle();
+        $folderSync->getResponse();
+        
+        
+        // request initial synckey
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>addressbookFolderId</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync->handle();
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        
+        // and now we can start the ping request
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval></Ping>'
+        );
+        $ping = new Syncroton_Command_Ping($doc, $this->_device, null);
+        $ping->handle();
+        $responseDoc = $ping->getResponse();
+        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('Ping', 'uri:Ping');
+        
+        $nodes = $xpath->query('//Ping:Ping/Ping:Status');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Ping::STATUS_MISSING_PARAMETERS, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }    
 }

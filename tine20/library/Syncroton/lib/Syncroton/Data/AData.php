@@ -132,7 +132,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         return $result;
     }
     
-    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL)
+    public function getChangedEntries($_folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
         if (!isset(Syncroton_Data_AData::$changedEntries[get_class($this)])) {
             return array();
@@ -171,7 +171,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
-        $changedEntries     = $this->getChangedEntries($folder->serverId, $syncState->lastsync);
+        $changedEntries     = $this->getChangedEntries($folder->serverId, $syncState->lastsync, null, $folder->lastfiltertype);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
     }
@@ -199,6 +199,15 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         }
         
         return unserialize($entry);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::hasChanges()
+     */
+    public function hasChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
+    {
+        return !!$this->getCountOfChanges($contentBackend, $folder, $syncState);
     }
     
     public function moveItem($_srcFolderId, $_serverId, $_dstFolderId)

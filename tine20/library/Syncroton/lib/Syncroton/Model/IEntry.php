@@ -29,33 +29,13 @@ interface Syncroton_Model_IEntry
     public function __construct($properties = null);
     
     /**
-     * 
-     * @param DOMElement $_domParrent
+     * return true if data have got changed after initial data got loaded via constructor
      */
-    /**
-     * 
-     * @param DOMElement $_domParrent
-     * @param Syncroton_Model_IDevice $device
-     */
-    public function appendXML(DOMElement $_domParrent, Syncroton_Model_IDevice $device);
-    
-    /**
-     * return array of valid properties
-     *  
-     * @return array
-     */
-    public function getProperties();
+    public function isDirty();
     
     /**
      * 
      * @param array $properties
      */
-    public function setFromArray(array $properties);
-    
-    /**
-     * 
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
-     */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties);
+    public function setFromArray(array $properties);    
 }

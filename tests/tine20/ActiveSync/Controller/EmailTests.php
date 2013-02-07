@@ -382,15 +382,44 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
     
     /**
      * validate getAllFolders
+     * 
+     * @see 0007206: ActiveSync doesn't show all folder tree until it's fully viewed in web-interface
      */
     public function testGetAllFolders()
     {
+        // create a subfolder of INBOX
+        $emailAccount = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        try {
+            $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $zmse);
+        }
+        
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
         $folders = $controller->getAllFolders();
         
         $this->assertGreaterThanOrEqual(1, count($folders));
         $this->assertTrue(array_pop($folders) instanceof Syncroton_Model_Folder);
+        
+        // look for 'INBOX/sub'
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $found = FALSE;
+        $foundFolders = array();
+        foreach ($folders as $folder) {
+            $foundFolders[] = $folder->displayName;
+            if ($folder->displayName === 'sub' && $folder->parentId === $inbox->getId()) {
+                $found = TRUE;
+                break;
+            }
+        }
+        
+        try {
+            Felamimail_Controller_Folder::getInstance()->delete($emailAccount->getId(), 'INBOX/sub');
+        } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $feifnf);
+        }
+        $this->assertTrue($found, 'could not find INBOX/sub with getAllFolders(): ' . print_r($foundFolders, TRUE));
     }
     
     /**
@@ -467,8 +496,6 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
      */
     public function testGetCountOfChanges()
     {
-        $this->markTestIncomplete('Needs to be fixed: set correct params of getCountOfChanges');
-        
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
         // set inbox timestamp a long time ago (15 mins)
@@ -477,8 +504,18 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
         $folderBackend = new Felamimail_Backend_Folder();
         $folderBackend->update($inbox);
         
-        // TODO set correct params of getCountOfChanges
-        $serverEntriesAfter = $controller->getCountOfChanges($contentBackend, $folder, $syncState);
+        $numberOfChanges = $controller->getCountOfChanges(
+            Syncroton_Registry::getContentStateBackend(), 
+            new Syncroton_Model_Folder(array(
+                'id'             => Tinebase_Record_Abstract::generateUID(),
+                'serverId'       => $inbox->getId(),
+                'lastfiltertype' => Syncroton_Command_Sync::FILTER_NOTHING
+            )), 
+            new Syncroton_Model_SyncState(array(
+                'lastsync' => Tinebase_DateTime::now()->subHour(1)
+            ))
+        );
+        
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         
         $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));

@@ -20,7 +20,7 @@
  * @property    string    Status
  * @property    string    Data
  */
-class Syncroton_Model_GALPicture extends Syncroton_Model_AEntry
+class Syncroton_Model_GALPicture extends Syncroton_Model_AXMLEntry
 {
     const STATUS_SUCCESS   = 1;
     const STATUS_NOPHOTO   = 173;

@@ -24,7 +24,7 @@
  * @property  string  $policykey          the current policykey
  * @property  string  $tasksfilter_id     the tasks filter id
  */
-class ActiveSync_Model_Device extends Tinebase_Record_Abstract implements Syncroton_Model_IDevice
+class ActiveSync_Model_Device extends Tinebase_Record_Abstract #implements Syncroton_Model_IDevice
 {
     /**
      * key in $_validators/$_properties array for the filed which 

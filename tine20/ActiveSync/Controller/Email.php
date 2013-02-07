@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -50,14 +50,24 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     protected $_messageController;
     
     /**
-     * felamimail folder controller
-     *
-     * @var Felamimail_Controller_Folder
+     * felamimail account
+     * 
+     * @var Felamimail_Model_Account
      */
-    protected $_folderController;
+    protected $_account;
     
+    /**
+     * app name (required by abstract class)
+     * 
+     * @var string
+     */
     protected $_applicationName     = 'Felamimail';
     
+    /**
+     * model name (required by abstract class)
+     * 
+     * @var string
+     */
     protected $_modelName           = 'Message';
     
     /**
@@ -723,33 +733,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     }
     
     /**
-     * convert contact from xml to Addressbook_Model_ContactFilter
-     *
-     * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_ContactFilter
-     */
-    #protected function _toTineFilterArray(SimpleXMLElement $_data)
-    #{
-    #    $xmlData = $_data->children('Email');
-    #    
-    #    $filterArray = array();
-    #    
-    #    foreach($this->_mapping as $fieldName => $value) {
-    #        if(isset($xmlData->$fieldName)) {
-    #            $filterArray[] = array(
-    #                'field'     => $value,
-    #                'operator'  => 'equals',
-    #                'value'     => (string)$xmlData->$fieldName
-    #            );
-    #        }
-    #    }
-    #    
-    #    #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
-    #    
-    #    return $filterArray;
-    #}
-    
-    /**
      * return list of supported folders for this backend
      *
      * @return array
@@ -761,20 +744,48 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             return array();
         }
         
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        $this->_updateFolderCache();
+        $result = $this->_getFolders();
         
-        if (empty($defaultAccountId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
+        return $result;
+    }
+    
+    /**
+     * get felamimail account
+     * 
+     * @return Felamimail_Model_Account|NULL
+     */
+    protected function _getAccount()
+    {
+        if ($this->_account === NULL) {
+            $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
             
-            return array();
+            if (empty($defaultAccountId)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
+                return NULL;
+            }
+            
+            try {
+                $this->_account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
+            } catch (Tinebase_Exception_NotFound $ten) {
+                return NULL;
+            }
         }
         
-        try {
-            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
-            // return no folders
-            return array();
+        return $this->_account;
+    }
+    
+    /**
+     * update the folder cache
+     * 
+     * @throws Syncroton_Exception_Status_FolderSync
+     */
+    protected function _updateFolderCache()
+    {
+        $account = $this->_getAccount();
+        if (! $account) {
+            return;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -793,35 +804,49 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
                 __METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feiic);
             throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
         }
+    }
+    
+    /**
+     * get Syncroton_Model_Folder folders recursively by parentFolder
+     * 
+     * @param Felamimail_Model_Folder $parentFolder
+     * @param array $result
+     * @return array of Syncroton_Model_Folder
+     */
+    protected function _getFolders($parentFolder = NULL, &$result = array())
+    {
+        $globalname = ($parentFolder) ? $parentFolder->globalname : '';
+        $account = $this->_getAccount();
+        if (! $account) {
+            return array();
+        }
         
-        // get folders
-        $folderController = Felamimail_Controller_Folder::getInstance();
-        $folders = $folderController->getSubfolders($account->getId(), '');
-
-        $result = array();
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'startswith',  'value' => $globalname),
+            array('field' => 'account_id', 'operator' => 'equals',      'value' => $account->getId()),
+        ));
+        
+        $folders = Felamimail_Controller_Folder::getInstance()->search($filter);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Found " . count($folders) . ' subfolders of folder "' . $globalname . '"');
         
         foreach ($folders as $folder) {
-            if (! empty($folder->parent)) {
-                try {
-                    $parent   = $folderController->getByBackendAndGlobalName($folder->account_id, $folder->parent);
-                    $parentId = $parent->getId();
-                } catch (Tinebase_Exception_NotFound $ten) {
-                    continue;
-                }
-            } else {
-                $parentId = 0;
+            if (! $folder->is_selectable) {
+                continue;
             }
             
             $result[$folder->getId()] = new Syncroton_Model_Folder(array(
                 'serverId'      => $folder->getId(),
-                'parentId'      => $parentId,
+                'parentId'      => ($parentFolder) ? $parentFolder->getId() : 0,
                 'displayName'   => $folder->localname,
                 'type'          => $this->_getFolderType($folder->localname)
             ));
+            
+            if ($folder->has_children) {
+                $this->_getFolders($folder, $result);
+            }
         }
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-        #    __METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
         
         return $result;
     }
@@ -871,7 +896,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
      */
     protected function _getFolderType($_folderName)
     {
-        if(strtoupper($_folderName) == 'INBOX') {
+        if (strtoupper($_folderName) == 'INBOX') {
             return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
         } elseif (strtoupper($_folderName) == 'TRASH') {
             return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;

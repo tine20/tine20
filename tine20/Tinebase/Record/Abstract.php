@@ -61,6 +61,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected $_application = NULL;
     
     /**
+     * stores if values got modified after loaded via constructor
+     * 
+     * @var bool
+     */
+    protected $_isDirty = false;
+    
+    /**
      * holds properties of record
      * 
      * @var array 
@@ -230,6 +237,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if (is_array($_data)) {
             $this->setFromArray($_data);
         }
+        
+        $this->_isDirty = false;
     }
     
     /**
@@ -557,6 +566,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $this->_properties[$_name] = $_value;
         $this->_isValidated = false;
+        $this->_isDirty     = true;
         
         if ($this->bypassFilters !== true) {
             $this->isValid(true);
@@ -1034,6 +1044,16 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $result->diff = $diff;
         return $result;
+    }
+    
+    /**
+     * check if data got modified
+     * 
+     * @return boolean
+     */
+    public function isDirty()
+    {
+        return $this->_isDirty;
     }
     
     /**

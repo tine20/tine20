@@ -14,25 +14,13 @@
  *
  * @package     Model
  */
-class Syncroton_Model_Device implements Syncroton_Model_IDevice
+class Syncroton_Model_Device extends Syncroton_Model_AEntry implements Syncroton_Model_IDevice
 {
     const TYPE_IPHONE          = 'iphone';
     const TYPE_WEBOS           = 'webos';
     const TYPE_ANDROID         = 'android';
     const TYPE_ANDROID_40      = 'android40';
     const TYPE_SMASUNGGALAXYS2 = 'samsunggti9100'; // Samsung Galaxy S-3
-    
-    public function __construct(array $_data = array())
-    {
-        $this->setFromArray($_data);
-    }
-    
-    public function setFromArray(array $_data)
-    {
-        foreach($_data as $key => $value) {
-            $this->$key = $value;
-        }
-    }
     
     /**
      * Returns major firmware version of this device

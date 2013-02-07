@@ -20,7 +20,7 @@
  * @property    int     windowSize
  */
 
-class Syncroton_Model_SyncCollection extends Syncroton_Model_AEntry
+class Syncroton_Model_SyncCollection extends Syncroton_Model_AXMLEntry
 {
     protected $_elements = array(
         'syncState' => null,
