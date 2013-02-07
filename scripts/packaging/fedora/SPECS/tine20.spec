@@ -25,12 +25,13 @@
 # Wbxml/        - not found in Fedora
 # Zend/         - there is php-ZendFramework, strip it out
 
-%global vyear 2012
-%global vmonth 10
-%global vmin 3
+%global vyear 2013
+%global vmonth 03
+%global vmin 1
+%global vpost ~alpha1
 
 Name:           tine20
-Version:        %{vyear}.%{vmonth}.%{vmin}
+Version:        %{vyear}.%{vmonth}.%{vmin}%{vpost}
 Release:        1%{?dist}
 Summary:        Open Source Groupware and CRM
 
@@ -301,6 +302,9 @@ fi
 %files webstack
 
 %changelog
+* Thu Feb 07 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.1~alpha1-1
+- New upstream release Kristina Alpha 1
+
 * Wed Jan 04 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.3-1
 - New upstream release Joey SR 3 (2012.10.3)
 
