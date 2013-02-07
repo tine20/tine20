@@ -496,8 +496,6 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
      */
     public function testGetCountOfChanges()
     {
-        $this->markTestIncomplete('Needs to be fixed: set correct params of getCountOfChanges');
-        
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
         
         // set inbox timestamp a long time ago (15 mins)
@@ -506,8 +504,18 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
         $folderBackend = new Felamimail_Backend_Folder();
         $folderBackend->update($inbox);
         
-        // TODO set correct params of getCountOfChanges
-        $serverEntriesAfter = $controller->getCountOfChanges($contentBackend, $folder, $syncState);
+        $numberOfChanges = $controller->getCountOfChanges(
+            Syncroton_Registry::getContentStateBackend(), 
+            new Syncroton_Model_Folder(array(
+                'id'             => Tinebase_Record_Abstract::generateUID(),
+                'serverId'       => $inbox->getId(),
+                'lastfiltertype' => Syncroton_Command_Sync::FILTER_NOTHING
+            )), 
+            new Syncroton_Model_SyncState(array(
+                'lastsync' => Tinebase_DateTime::now()->subHour(1)
+            ))
+        );
+        
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         
         $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));
