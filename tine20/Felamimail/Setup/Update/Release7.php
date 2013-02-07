@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Felamimail_Setup_Update_Release7 extends Setup_Update_Abstract
@@ -63,5 +63,26 @@ class Felamimail_Setup_Update_Release7 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Felamimail', '7.3');
+    }
+    
+    /**
+     * update to 7.4
+     * 
+     * - imap_uidvalidity needs to be an integer
+     * 
+     * @see 0005764: convert $_folder->cache_uidvalidity to integer (in DB)
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>imap_uidvalidity</name>
+                <type>integer</type>
+                <length>64</length>
+            </field>');
+        $this->_backend->alterCol('felamimail_folder', $declaration);
+        $this->setTableVersion('felamimail_folder', 12);
+        
+        $this->setApplicationVersion('Felamimail', '7.4');
     }
 }
