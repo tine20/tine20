@@ -921,6 +921,29 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($messageToSave['bcc'][0],   $message['bcc'][0], 'bcc recipient not found');
     }
     
+    /**
+     * testSendReadingConfirmation
+     * 
+     * @see 0007736: ask user before sending reading confirmation
+     */
+    public function testSendReadingConfirmation()
+    {
+        $messageToSave = $this->_getMessageData();
+        $messageToSave['headers']['disposition-notification-to'] = $this->_account->email;
+        $returned = $this->_json->saveMessageInFolder($this->_testFolderName, $messageToSave);
+        $messageWithReadingConfirmationHeader = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_testFolderName);
+        $this->_messageIds[] = $messageWithReadingConfirmationHeader['id'];
+        $this->_json->sendReadingConfirmation($messageWithReadingConfirmationHeader['id']);
+        
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        $subject = $translate->_('Reading Confirmation:') . ' '. $messageToSave['subject'];
+        $message = $this->_searchForMessageBySubject($subject);
+        $this->_messageIds[] = $message['id'];
+        
+        $complete = $this->_json->getMessage($message['id']);
+        $this->assertContains($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
+    }
+    
     /*********************** sieve tests ****************************/
     
     /**

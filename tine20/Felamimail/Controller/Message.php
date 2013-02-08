@@ -172,6 +172,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
+        $this->_checkMessageAccount($message, $account);
+        
         $message = $this->_getCompleteMessageContent($message, $account, $_partId);
         
         if ($_setSeen) {
@@ -183,6 +185,23 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
         return $message;
+    }
+    
+    /**
+     * check if account of message is belonging to user
+     * 
+     * @param Felamimail_Model_Message $message
+     * @param Felamimail_Model_Account $account
+     * @throws Tinebase_Exception_AccessDenied
+     * 
+     * @todo think about moving this to get() / _checkGrant()
+     */
+    protected function _checkMessageAccount($message, $account = NULL)
+    {
+        $account = ($account) ? $account : Felamimail_Controller_Account::getInstance()->get($message->account_id);
+        if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to access this message');
+        }
     }
     
     /**
@@ -232,9 +251,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message->parseStructure($structure);
         }
         
-        $message->sendReadingConfirmation();
-
         return $message;
+    }
+    
+    /**
+     * send reading confirmation for message
+     * 
+     * @param string $messageId
+     */
+    public function sendReadingConfirmation($messageId)
+    {
+        $message = $this->get($messageId);
+        $this->_checkMessageAccount($message);
+        $message->sendReadingConfirmation();
     }
     
     /**

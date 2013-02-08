@@ -25,6 +25,7 @@
  * @property  string    type
  * @property  string    signature_position
  * @property  string    email
+ * @property  string    user_id
  * @package   Felamimail
  * @subpackage    Model
  */

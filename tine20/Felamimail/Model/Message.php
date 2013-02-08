@@ -248,19 +248,25 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function sendReadingConfirmation()
     {
-        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to'] && !$this->hasSeenFlag()) {
+        if (! is_array($this->headers)) {
+            $this->headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
+        }
+        
+        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']/* && !$this->hasSeenFlag() */) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
 
             $message = new Felamimail_Model_Message();
             $message->account_id = $this->account_id;
 
-            $message->to         = $this->headers['disposition-notification-to'];
-            $message->subject    = $translate->_('Reading Confirmation:') . ' '. $this->subject;
-            $message->body       = $translate->_('Your message:'). ' ' . $this->subject . "\n" .
-                                   $translate->_('Received in')  . ' ' . $this->received . "\n" .
-                                   $translate->_('Was readed by:') . ' ' . $from->from .  ' <' . $from->email .'> ' .
-                                   $translate->_('in') . ' ' . (date('Y-m-d H:i:s'));
+            $message->content_type = Felamimail_Model_Message::CONTENT_TYPE_HTML;
+            $message->to           = $this->headers['disposition-notification-to'];
+            $message->subject      = $translate->_('Reading Confirmation:') . ' '. $this->subject;
+            $message->body         = $translate->_('Your message:'). ' ' . $this->subject . "\n" .
+                                     $translate->_('Received on')  . ' ' . $this->received . "\n" .
+                                     $translate->_('Was read by:') . ' ' . $from->from .  ' <' . $from->email .'> ' .
+                                     $translate->_('on') . ' ' . (date('Y-m-d H:i:s'));
+            $message->body         = Felamimail_Message::convertFromTextToHTML($message->body);
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         }
     }

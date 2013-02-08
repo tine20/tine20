@@ -952,9 +952,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
+            Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Selected unread message');
+            Tine.log.debug(record);
+            
             record.addFlag('\\Seen');
             Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
             this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+            
+            if (record.get('headers')['disposition-notification-to']) {
+                Ext.Msg.confirm(
+                    this.app.i18n._('Send Reading Confirmation'),
+                    this.app.i18n._('Do you want to send a reading confirmation message?'), 
+                    function(btn) {
+                        if (btn == 'yes'){
+                            Tine.Felamimail.sendReadingConfirmation(record.id);
+                        }
+                    }, 
+                    this
+                );
+            }
         }
     },
     

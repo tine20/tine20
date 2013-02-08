@@ -390,6 +390,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($folder);
     }
     
+    /**
+     * send reading confirmation
+     * 
+     * @param string $messageId
+     * @return array
+     */
+    public function sendReadingConfirmation($messageId)
+    {
+        Felamimail_Controller_Message::getInstance()->sendReadingConfirmation($messageId);
+        
+        return array(
+            'status' => 'success'
+        );
+    }
+    
     /***************************** accounts funcs *******************************/
     
     /**
