@@ -61,7 +61,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller_Lead();
+            self::$_instance = new self();
         }
         
         return self::$_instance;

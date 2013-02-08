@@ -296,8 +296,8 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $sicknessStatusConfig = array(
             'name'    => HumanResources_Config::SICKNESS_STATUS,
             'records' => array(
-                array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => true),  //_('Excused')
-                array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => true),  //_('Unexcused')
+                array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => TRUE),  //_('Excused')
+                array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => TRUE),  //_('Unexcused')
             ),
         );
 
@@ -360,7 +360,7 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config',
             'tableName' => 'config',
-            'modlogActive' => false
+            'modlogActive' => FALSE
         ));
     
         $appId = Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId();
@@ -371,8 +371,8 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         
         $existing = $val->records;
         
-        $existing[] = array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true);
-        $existing[] = array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true);
+        $existing[] = array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE);
+        $existing[] = array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE);
         
         $freeTimeTypeConfig = array(
             'name'    => HumanResources_Config::FREETIME_TYPE,
@@ -385,7 +385,7 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         // update json of workingtime models if they still exist
         
         $controller = HumanResources_Controller_WorkingTime::getInstance();
-        $controller->modlogActive(false);
+        $controller->modlogActive(FALSE);
         
         $filter = new HumanResources_Model_WorkingTimeFilter(array());//array('field' => 'working_hours', 'operator' => 'equals', 'value' => '40')));
         $allWT = $controller->search($filter);

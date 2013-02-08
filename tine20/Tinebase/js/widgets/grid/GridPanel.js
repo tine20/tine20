@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -33,7 +33,7 @@ Tine.widgets.grid.GridPanel = function(config) {
     this.defaultPaging = this.defaultPaging || {
         start: 0,
         limit: 50
-    };
+    };      
 
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
@@ -125,13 +125,33 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     i18nDeleteActionText: null,
 
     /**
-     * @cfg {Object} editDialogConfig 
-     * config passed to edit dialog
+     * if this resides in a editDialog, this property holds it
+     * if it is so, the grid can't save records itsef, just update
+     * the editDialogs record property holding these records
+     * 
+     * @cfg {Tine.widgets.dialog.EditDialog} editDialog
+     */
+    editDialog: null,
+    
+    /**
+     * if this resides in an editDialog, this property defines the 
+     * property of the record of the editDialog, holding these records
+     * 
+     * @type {String} editDialogRecordProperty
+     */
+    editDialogRecordProperty: null,
+    
+    /**
+     * config passed to edit dialog to open from this grid
+     * 
+     * @cfg {Object} editDialogConfig
      */
     editDialogConfig: null,
 
     /**
-     * @cfg {String} editDialogClass 
+     * the edit dialog class to open from this grid
+     * 
+     * @cfg {String} editDialogClass
      */
     editDialogClass: null,
 
@@ -279,16 +299,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initComponent: function(){
         // init some translations
-        this.i18nRecordName = this.recordClass.getRecordName();
-        this.i18nRecordsName = this.recordClass.getRecordsName();
-        this.i18nContainerName = this.recordClass.getContainerName();
-        this.i18nContainersName = this.recordClass.getContainersName();
+        this.i18nRecordName = this.i18nRecordName ? this.i18nRecordName : this.recordClass.getRecordName();
+        this.i18nRecordsName = this.i18nRecordsName ? this.i18nRecordsName : this.recordClass.getRecordsName();
+        this.i18nContainerName = this.i18nContainerName ? this.i18nContainerName : this.recordClass.getContainerName();
+        this.i18nContainersName = this.i18nContainersName ? this.i18nContainersName : this.recordClass.getContainersName();
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName);
 
         this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
 
         this.editDialogConfig = this.editDialogConfig || {};
-        
         this.editBuffer = [];
         this.deleteQueue = [];
         
@@ -319,87 +338,103 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
-
+        
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
     /**
-     * initializes generic stuff
+     * initializes generic stuff when used with ModelConfiguration
      */
     initGeneric: function() {
-        
         if (this.modelConfig) {
             
             Tine.log.debug('init generic gridpanel with config:');
             Tine.log.debug(this.modelConfig);
             
-            var meta = this.modelConfig.meta;
-            
-            if (meta.hasOwnProperty('multiEdit') && (meta.multiEdit === true)) {
+            if (this.modelConfig.hasOwnProperty('multipleEdit') && (this.modelConfig.multipleEdit === true)) {
                 this.multipleEdit = true;
-                this.multipleEditRequiredRight = (meta.hasOwnProperty('multiEditRight')) ? meta.multiEditRight : null;
+                this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight')) ? this.modelConfig.multipleEditRequiredRight : null;
             }
             
             // init generic filter toolbar
             this.initGenericFilterToolbar();
-        
             // init generic columnModel
             this.initGenericColumnModel();
         }
     },
     
     /**
-     * initialises generic filter toolbar
+     * initializes generic filter toolbar when used with ModelConfiguration
+     * 
      * @private
      */
     initGenericFilterToolbar: function() {
-        var plugins = [];
-        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
-            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-            plugins.push(this.quickSearchFilterToolbarPlugin);
+        if (this.modelConfig && ! this.editDialog) {
+            // check if quicksearch plugin shall be assigned, do not use if grid is nested in an editdialog
+            var plugins = [];
+            if (! this.editDialog && (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin)) {
+                this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+                plugins.push(this.quickSearchFilterToolbarPlugin);
+            }
+            
+            // create the filter toolbar
+            this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+                defaultFilter: this.recordClass.getMeta('defaultFilter'),
+                recordClass: this.recordClass,
+                plugins: plugins,
+                filterModels: this.modelConfig.filterModels
+            });
+            
+            // add the filter toolbar to the gridpanel plugins
+            this.plugins = this.plugins ? this.plugins : [];
+            this.plugins.push(this.filterToolbar);
         }
-        
-        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
-            app: this.app,
-            recordClass: this.recordClass,
-            allowSaving: true,
-            filterModels: this.recordClass.getFilterModel(),
-            defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
-            plugins: plugins,
-            filters: []
-        });
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
     },
 
     /**
      * initializes the generic column model on auto bootstrap
      */
     initGenericColumnModel: function() {
-        var columns = [];
-        Ext.each(this.modelConfig.keys, function(key) {
-            // When no label exists, don't use in grid
-            if (this.modelConfig.fields[key].label) {
-                var config = {
-                    id: key,
-                    dataIndex: key,
-                    header: this.app.i18n._(this.modelConfig.fields[key].label),
-                    hidden: this.modelConfig.fields[key].hidden 
-                };
-                var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
-                if (renderer) {
-                    config.renderer = renderer;
+        if (this.modelConfig) {
+            var columns = [];
+            Ext.each(this.modelConfig.fieldKeys, function(key) {
+                var fieldConfig = this.modelConfig.fields[key];
+                
+                // don't show multiple record fields
+                if (fieldConfig.type == 'records') {
+                    return true;
                 }
-                columns.push(config);
-            }
-        }, this);
-        this.gridConfig.cm = new Ext.grid.ColumnModel({ 
-            defaults: {
-                sortable: true,
-                resizable: true
-            },
-            columns: columns
-        });
+                
+                // don't show parent property in dependency of an editDialog
+                
+                if (this.editDialog && fieldConfig.hasOwnProperty('config') && fieldConfig.config.isParent) {
+                    return true;
+                }
+                
+                // If no label exists, don't use in grid
+                if (fieldConfig.label) {
+                    var config = {
+                        id: key,
+                        dataIndex: key,
+                        header: this.app.i18n._(fieldConfig.label),
+                        hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false
+                    }
+                    var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
+                    if (renderer) {
+                        config.renderer = renderer;
+                    }
+                    columns.push(config);
+                }
+            }, this);
+            
+            this.gridConfig.cm = new Ext.grid.ColumnModel({
+                defaults: {
+                    sortable: true,
+                    resizable: true
+                },
+                columns: columns
+            });
+        }
     },
     
     /**
@@ -563,6 +598,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     /**
      * initializes the delete action
+     * 
      * @param {Object} services the rpc service map from the registry
      */
     initDeleteAction: function(services) {
@@ -579,8 +615,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             iconCls: 'action_delete',
             scope: this
         });
-        
-        this.disableDeleteActionCheckServiceMap(services);
+        // if nested in a editDialog (dependent record), the service won't exist
+        if (! this.editDialog) {
+            this.disableDeleteActionCheckServiceMap(services);
+        }
     },
     
     /**
@@ -659,7 +697,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Boolean}
      */
     onStoreNewEntry: function(recordData) {
-
         var initialData = null;
         if (Ext.isFunction(this.recordClass.getDefaultData)) {
             initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
@@ -731,31 +768,42 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     /**
      * called when the store gets updated, e.g. from editgrid
+     * 
+     * @param {Ext.data.store} store
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {String} operation
      */
     onStoreUpdate: function(store, record, operation) {
-
         switch (operation) {
             case Ext.data.Record.EDIT:
-
                 this.addToEditBuffer(record);
+                
                 if (this.usePagingToolbar) {
                     this.pagingToolbar.refresh.disable();
                 }
-
-                this.recordProxy.saveRecord(record, {
-                    scope: this,
-                    success: function(updatedRecord) {
-                        store.commitChanges();
-
-                        // update record in store to prevent concurrency problems
-                        record.data = updatedRecord.data;
-
-                        this.loadGridData({
-                            removeStrategy: 'keepBuffered'
-                        });
-                    }
-                });
-                break;
+                // don't save these records. Add them to the parents' record store
+                if (this.editDialog) {
+                    var items = [];
+                    store.each(function(item) {
+                        items.push(item.data);
+                    });
+                    this.editDialog.record.set(this.editDialogRecordProperty, items);
+                } else {
+                    this.recordProxy.saveRecord(record, {
+                        scope: this,
+                        success: function(updatedRecord) {
+                            store.commitChanges();
+    
+                            // update record in store to prevent concurrency problems
+                            record.data = updatedRecord.data;
+    
+                            this.loadGridData({
+                                removeStrategy: 'keepBuffered'
+                            });
+                        }
+                    });
+                    break;
+                }
             case Ext.data.Record.COMMIT:
                 //nothing to do, as we need to reload the store anyway.
                 break;
@@ -923,9 +971,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
-            this.store.load.defer(10, this.store, [
-                typeof this.autoLoad == 'object' ?
-                    this.autoLoad : undefined]);
+            if (! this.editDialog) {
+                this.store.load.defer(10, this.store, [ typeof this.autoLoad == 'object' ? this.autoLoad : undefined]);
+            } else {
+                // editDialog exists, so get the records from there, using recordReader is not needed in grid
+                var items = this.editDialog.record.get(this.editDialogRecordProperty);
+                if (Ext.isArray(items)) {
+                    Ext.each(items, function(item) {
+                        var record = new this.recordClass(item);
+                        this.store.addSorted(record);
+                    }, this);
+                }
+            }
         }
 
         if (this.usePagingToolbar && this.recordProxy) {
@@ -962,7 +1019,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
                 displaySelectionHelper: true,
                 sm: this.selectionModel,
-                disableSelectAllPages: this.disableSelectAllPages
+                disableSelectAllPages: this.disableSelectAllPages,
+                nested: this.editDialog ? true : false
             }, this.pagingConfig));
             // mark next grid refresh as paging-refresh
             this.pagingToolbar.on('beforechange', function() {
@@ -1256,6 +1314,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * get modlog columns
      * 
+     * shouldn' be used anymore
+     * @TODO: use applicationstarter and modelconfiguration
+     * 
+     * @deprecated
      * @return {Array}
      */
     getModlogColumns: function() {
@@ -1489,7 +1551,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Boolean}
      */
     onEditInNewWindow: function(button, record, plugins) {
-        if (!record) {
+        if (! record) {
             if (button.actionType == 'edit' || button.actionType == 'copy') {
                 if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
                     // if edit action is disabled or not available, we also don't open a new window
@@ -1507,7 +1569,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
-            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isArray(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
+            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
             editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
         
         // add "multiple_edit_dialog" plugin to dialog, if required
@@ -1549,10 +1611,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * on update after edit
+     * 
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record, mode) {
-
         if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
@@ -1560,7 +1622,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
-        Tine.log.debug(record);
+        Tine.log.debug(record, mode);
         
         if (record && Ext.isFunction(record.copy)) {
             var idx = this.getStore().indexOfId(record.id);
@@ -1678,6 +1740,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.each(records, function(record) {
                 this.store.remove(record);
             });
+            // if nested in an editDialog, just change the parent record
+            if (this.editDialog) {
+                var items = [];
+                this.store.each(function(item) {
+                    items.push(item.data);
+                });
+                this.editDialog.record.set(this.editDialogRecordProperty, items);
+                return;
+            }
         }
 
         if (this.recordProxy) {
@@ -1708,7 +1779,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 failure: function (exception) {
                     this.refreshAfterDelete(recordIds);
                     this.loadGridData();
-                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);                }
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                }
             };
 
             if (sm.isFilterSelect && this.filterSelectionDelete) {

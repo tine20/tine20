@@ -41,20 +41,20 @@ class HumanResources_Model_WorkingTime extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'json' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'title' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'json' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'working_hours'       => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
 
         // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
     );
 
     /**

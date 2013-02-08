@@ -13,7 +13,7 @@ Ext.namespace('Tine.Courses');
 Tine.Courses.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Course',
     contentTypes: [
-        {model: 'Course',  requiredRight: null, singularContainerMode: true}
+        {modelName: 'Course',  requiredRight: null, singularContainerMode: true}
     ]
 });
 

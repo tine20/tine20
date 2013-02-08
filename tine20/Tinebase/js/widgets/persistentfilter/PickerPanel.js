@@ -61,17 +61,16 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent : function() {
-        
         this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name + '_' + this.contentType;
 
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
         var state = Ext.state.Manager.get(this.stateId, {});
         
         this.recordCollection = this.store.queryBy(function(record, id) {
-            if(record.get('application_id') == this.app.id) {
+            if (record.get('application_id') == this.app.id) {
                 if(this.contentType) {
                     var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter';
-                    if(record.get('model') == modelName) {
+                    if (record.get('model') == modelName) {
                         return true;
                     } else {
                         return false;

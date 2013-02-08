@@ -47,7 +47,7 @@ Tine.Crm.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Crm.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Lead',
     contentTypes: [
-        {model: 'Lead', requiredRight: null, singularContainerMode: false}
+        {modelName: 'Lead', requiredRight: null, singularContainerMode: false}
         ]
 });
 

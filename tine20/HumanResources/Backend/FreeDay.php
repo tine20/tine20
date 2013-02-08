@@ -37,5 +37,5 @@ class HumanResources_Backend_FreeDay extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = false;
+    protected $_modlogActive = FALSE;
 }

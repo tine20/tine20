@@ -23,6 +23,13 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     app: null,
     
     /**
+     * If this component is called from another app than the container belongs to, set this to this app
+     * 
+     * @cfg {Tine.Tinebase.Application} callingApp
+     */
+    callingApp: null,
+    
+    /**
      * @cfg {Tine.Tinebase.data.Record} recordClass
      * record definition class  (required)
      */
@@ -39,6 +46,13 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     field: 'container_id',
     
     /**
+     * the label of the filter (autoset from containing recordClass, if none is given)
+     * 
+     * @type {String}
+     */
+    label: null,
+    
+    /**
      * @cfg {String} defaultOperator default operator, one of <tt>{@link #operators} (defaults to equals)
      */
     defaultOperator: 'equals',
@@ -52,24 +66,28 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        
         // get recordClass if string is given
-        if(Ext.isString(this.recordClass)) {
+        if (Ext.isString(this.recordClass)) {
             var split = this.recordClass.split('.');
             this.recordClass = Tine[split[0]].Model[split[1]];
         }
         
         // get application if string is given
-        if(Ext.isString(this.app)) {
-            this.app = Tine[this.app];
+        if (Ext.isString(this.app)) {
+            this.app = Tine.Tinebase.appMgr.get(this.app);
+        }
+        
+        // get calling application if string is given
+        if (Ext.isString(this.callingApp)) {
+            this.callingApp = Tine.Tinebase.appMgr.get(this.callingApp);
         }
         
         Tine.widgets.container.FilterModel.superclass.initComponent.call(this);
         
-        this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
+        this.containerName  = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
-        
-        this.label = this.containerName;
+
+        this.label = this.label ? this.callingApp.i18n._(this.label) : this.containerName;
     },
     
     /**

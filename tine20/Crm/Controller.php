@@ -69,11 +69,11 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Controller;
+        if (static::$_instance === NULL) {
+            static::$_instance = new self();
         }
         
-        return self::$_instance;
+        return static::$_instance;
     }    
         
     /********************* event handler and personal folder ***************************/

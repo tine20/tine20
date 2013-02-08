@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -30,9 +30,15 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         );
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Currently employed employee", // _("Currently employed")
+            'name'              => "Currently employed employees", // _("Currently employed employees")
             'description'       => "Employees which are currently employed", // _("Employees which are currently employed")
             'filters'           => array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => 1)),
+        ))));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All employees", // _("All employees")
+            'description'       => "All available employees", // _("All available employees")
+            'filters'           => array(),
         ))));
     }
     
@@ -51,10 +57,10 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $freeTimeTypeConfig = array(
             'name'    => HumanResources_Config::FREETIME_TYPE,
             'records' => array(
-                array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/oxygen/16x16/actions/book.png',  'system' => true),  //_('Sickness')
-                array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true),  //_('Vacation')
-                array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true),  //_('Remaining Vacation')
-                array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => true),  //_('Extra Vacation')
+                array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/oxygen/16x16/actions/book.png',  'system' => TRUE),  //_('Sickness')
+                array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Vacation')
+                array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Remaining Vacation')
+                array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Extra Vacation')
             ),
         );
 
@@ -68,10 +74,10 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $vacationStatusConfig = array(
             'name'    => HumanResources_Config::VACATION_STATUS,
             'records' => array(
-                array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true),  //_('Requested')
-                array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true),  //_('In process')
-                array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/oxygen/16x16/actions/ok.png', 'system' => true),  //_('Accepted')
-                array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png', 'system' => true),  //_('Declined')
+                array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => TRUE),  //_('Requested')
+                array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => TRUE),  //_('In process')
+                array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/oxygen/16x16/actions/ok.png', 'system' => TRUE),  //_('Accepted')
+                array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png', 'system' => TRUE),  //_('Declined')
 
             ),
         );
@@ -86,8 +92,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $sicknessStatusConfig = array(
             'name'    => HumanResources_Config::SICKNESS_STATUS,
             'records' => array(
-                array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => true),  //_('Excused')
-                array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => true),  //_('Unexcused')
+                array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => TRUE),  //_('Excused')
+                array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => TRUE),  //_('Unexcused')
 
             ),
         );

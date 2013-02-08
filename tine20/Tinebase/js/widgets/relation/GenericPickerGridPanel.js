@@ -144,15 +144,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.constrainsConfig = {};
         
         Ext.each(this.app.getRegistry().get('relatableModels'), function(rel) {
-            if(rel.ownModel == this.ownRecordClass.getMeta('modelName')) {
-                if(rel.keyfieldConfig) {
-                    if(rel.keyfieldConfig.from == 'foreign') {
+            if (rel.ownModel == this.ownRecordClass.getMeta('modelName')) {
+                if (rel.keyfieldConfig) {
+                    if (rel.keyfieldConfig.from == 'foreign') {
                         this.keyFieldConfigs[rel.relatedApp + rel.relatedModel] = {app: rel.relatedApp, name: rel.keyfieldConfig.name};
                     } else {
                         this.keyFieldConfigs[this.app.name + rel.ownModel] = {app: this.app.name, name: rel.keyfieldConfig.name};
                     }
                 }
-                if(rel.config) {
+                if (rel.config) {
                     this.constrainsConfig[rel.relatedApp + rel.relatedModel] = rel.config;
                 }
             }

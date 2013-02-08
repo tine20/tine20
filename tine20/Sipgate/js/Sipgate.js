@@ -23,9 +23,9 @@ Tine.Sipgate.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Sipgate.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Connection',
     contentTypes: [
-        {model: 'Connection',  requiredRight: null, singularContainerMode: true},
-        {model: 'Line',  requiredRight: null, singularContainerMode: true},
-        {model: 'Account',  requiredRight: 'manage', singularContainerMode: true}
+        {modelName: 'Connection',  requiredRight: null, singularContainerMode: true},
+        {modelName: 'Line',  requiredRight: null, singularContainerMode: true},
+        {modelName: 'Account',  requiredRight: 'manage', singularContainerMode: true}
     ]
 });
 

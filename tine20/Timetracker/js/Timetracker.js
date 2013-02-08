@@ -48,8 +48,8 @@ Tine.Timetracker.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Timesheet',
     contentTypes: [
-        {model: 'Timesheet', requiredRight: null, singularContainerMode: true},
-        {model: 'Timeaccount', requiredRight: 'manage', singularContainerMode: true}]
+        {modelName: 'Timesheet',   requiredRight: null,     singularContainerMode: true},
+        {modelName: 'Timeaccount', requiredRight: 'manage', singularContainerMode: true}]
 });
 
 /**

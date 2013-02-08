@@ -37,6 +37,13 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
     sm: null,
     
     /**
+     * if this paging toolbar belongs to a nested grid, this must set to true to disable the reload
+     * 
+     * @type Boolean
+     */
+    nested: false,
+    
+    /**
      * @cfg {Bool} disableSelectAllPages
      */
     disableSelectAllPages: false,
@@ -54,6 +61,12 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
         };
 
         Ext.ux.grid.PagingToolbar.superclass.initComponent.call(this);
+        // if the grid is nested in an editdialog, disable refresh
+        // TODO: remove this when using memoryproxy
+        if (this.nested) {
+            this.refresh.disable();
+            this.refresh.addClass('x-ux-pagingtb-refresh-disabled');
+        }
     },
     
     /**

@@ -1,18 +1,18 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     HumanResources
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
  * HumanResources Controller
- * 
+ *
  * @package HumanResources
  * @subpackage  Controller
  */
@@ -30,36 +30,36 @@ class HumanResources_Controller extends Tinebase_Controller_Event
      * @var string
      */
     protected static $_defaultModel = 'HumanResources_Model_Employee';
-    
+
     /**
      * constructor (get current user)
      */
     private function __construct() {
         $this->_applicationName = 'HumanResources';
     }
-    
+
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() 
+    private function __clone()
     {
     }
-    
+
     /**
      * the singleton pattern
      *
      * @return HumanResources_Controller
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new HumanResources_Controller;
         }
-        
+
         return self::$_instance;
     }
-    
+
     /**
      * save HR settings
      *
@@ -70,12 +70,15 @@ class HumanResources_Controller extends Tinebase_Controller_Event
      */
     public function setConfig($config)
     {
-        if(!Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
+        if (! Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on HumanResources'));
         }
-        
-        HumanResources_Config::getInstance()->set(HumanResources_Config::DEFAULT_FEAST_CALENDAR, $config[HumanResources_Config::DEFAULT_FEAST_CALENDAR]);
-        
-        return array('SUCCESS' => true);
+
+        HumanResources_Config::getInstance()->set(
+            HumanResources_Config::DEFAULT_FEAST_CALENDAR,
+            $config[HumanResources_Config::DEFAULT_FEAST_CALENDAR]
+        );
+
+        return array('SUCCESS' => TRUE);
     }
 }

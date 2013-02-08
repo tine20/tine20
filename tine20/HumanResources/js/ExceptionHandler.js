@@ -34,18 +34,12 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
     Tine.log.warn(exception);
     
     var app = Tine.Tinebase.appMgr.get('HumanResources');
+    
     switch(exception.code) {
-        case 910:
-            if(exception.nearestRecord) {
-                callbackScope.editDialog.contractPicker.setValue(exception.nearestRecord);
-                callbackScope.editDialog.contractPicker.selectedRecord = new Tine.HumanResources.Model.Contract(exception.nearestRecord); 
-                callbackScope.editDialog.contractPicker.fireEvent('select');
-                break;
-            }
         case 911:
             Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('No contract could be found.'), 
-                    msg: _('Please create a contract for this employee!'),
+                    title: app.i18n._('No contract could be found.'), 
+                    msg: app.i18n._('Please create a contract for this employee!'),
                     icon: Ext.MessageBox.ERROR
                 }));
             break;

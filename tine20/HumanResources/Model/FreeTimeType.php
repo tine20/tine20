@@ -25,8 +25,8 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Config_KeyFieldRecord
      */
     protected $_application = 'HumanResources';
 
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
-        $this->_validators['states'] =  array('allowEmpty' => true);
+    public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = TRUE) {
+        $this->_validators['states'] =  array('allowEmpty' => TRUE);
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 }

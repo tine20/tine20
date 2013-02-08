@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,76 +18,76 @@
 class HumanResources_Model_Contract extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
-     * @var string
+     * holds the configuration object (must be set in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
-
-    /**
-     * application the record belongs to
-     * @var string
-     */
-    protected $_application = 'HumanResources';
-
-    protected static $_resolveForeignIdFields = array(
-        'HumanResources_Model_Employee' => 'employee_id',
-        'HumanResources_Model_WorkingTime' => 'workingtime_id',
-        'Tinebase_Model_Container' => 'feast_calendar_id',
-    );
-
-    /**
-     * list of zend validator
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employee_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'workingtime_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-        'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'vacation_days'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'feast_calendar_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'workingtime_json'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // relations (linked HumanResources_Model_Contract records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-
-    /**
-     * name of fields containing datetime or an array of datetime information
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-        'start_date',
-        'end_date'
-    );
+    protected static $_configurationObject;
     
     /**
-     * returns the foreignId fields (used in Tinebase_Convert_Json)
-     * @return array
+     * Holds the model configuration
+     *
+     * @var array
      */
-    public static function getResolveForeignIdFields()
-    {
-        $rf = static::$_resolveForeignIdFields;
-        if (! Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
-            unset($rf['Sales_Model_CostCenter']);
-        }
-        
-        return $rf;
-    }
+    protected static $_modelConfiguration = array(
+        'recordName'      => 'Contract', // _('Contract')
+        'recordsName'     => 'Contracts', // _('Contracts')
+        'hasRelations'    => FALSE,
+        'hasCustomFields' => FALSE,
+        'hasNotes'        => FALSE,
+        'hasTags'         => FALSE,
+        'modlogActive'    => TRUE,
+        'containerProperty' => NULL,
+        'createModule'    => FALSE,
+        'isDependent'     => TRUE,
+        'appName'         => 'HumanResources',
+        'modelName'       => 'Contract',
+        'fields'          => array(
+            'employee_id'       => array(
+                'label'      => 'Employee',    // _('Employee')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'HumanResources',
+                    'modelName'   => 'Employee',
+                    'idProperty'  => 'id',
+                    'isParent'    => TRUE
+                )
+            ),
+            'start_date'        => array(
+                'label'      => 'Start Date',    // _('Start Date')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'date',
+                 'default'    => 'now',
+                 'showInDetailsPanel' => TRUE
+            ),
+            'end_date'          => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'   => 'End Date',    // _('End Date')
+                'type'    => 'date',
+                'showInDetailsPanel' => TRUE
+            ),
+            'vacation_days'     => array(
+                'label'   => 'Vacation Days',    // _('Vacation Days')
+                'type'    => 'integer',
+                'default' => 23,
+                'queryFilter' => TRUE,
+                'showInDetailsPanel' => TRUE
+            ),
+            'feast_calendar_id' => array(
+                'label' => 'Feast Calendar',    // _('Feast Calendar')
+                'type'  => 'container',
+                'config' => array(
+                    'appName'   => 'Calendar',
+                    'modelName' => 'Event',
+                ),
+                'showInDetailsPanel' => TRUE
+            ),
+            'workingtime_json'  => array(
+                'label'   => 'Workingtime', // _('Workingtime')
+                'default' => '{"days": [8,8,8,8,8,0,0]}',
+                'showInDetailsPanel' => TRUE
+            )
+        )
+    );
 }

@@ -104,8 +104,13 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $cc = new Sales_Model_CostCenter(
                 array('remark' => $title, 'number' => $id)
             );
-            $record = $controller->create($cc);
-            $this->_costcenters->addRecord($record);
+            try {
+                $record = $controller->create($cc);
+                $this->_costcenters->addRecord($record);
+            } catch (Zend_Db_Statement_Exception $e) {
+                $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+            }
+
             $id++;
         }
         
@@ -134,9 +139,9 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'backend'        => 'SQL',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
             'color'          => '#00FF00'
-        ), true));
+        ), TRUE));
         
-        $controller->transferUserAccounts(false, $this->_feastCalendar->getId(), NULL, 27, true);
+        $controller->transferUserAccounts(FALSE, $this->_feastCalendar->getId(), NULL, 27, TRUE);
         
         $employees = $controller->search(new HumanResources_Model_EmployeeFilter(array()));
 
@@ -241,8 +246,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'employee_id' => null,
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_feastCalendar,
-            'workingtime_id'    => $this->_getWorkingTime()->getId()
-        ), true);
+            'workingtime_json'  => $this->_getWorkingTime()->json
+        ), TRUE);
 
         return $c;
     }

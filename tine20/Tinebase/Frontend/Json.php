@@ -641,10 +641,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
                 if (class_exists($jsonAppName)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
+                    }
                     
                     try {
-                        $applicationJson = new $jsonAppName;
+                        $applicationJson = new $jsonAppName();
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e->getMessage());
                         Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);

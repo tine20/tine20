@@ -61,6 +61,27 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
         this.on('afteredit', this.onAfterEdit, this);
         this.editDialog.on('load', this.loadRecord, this);
         this.store.sort();
+        
+        // sync record on these events
+        this.store.on('update', this.syncStoreToRecord.createDelegate(this));
+        this.store.on('add', this.syncStoreToRecord.createDelegate(this));
+        this.store.on('remove', this.syncStoreToRecord.createDelegate(this));
+    },
+    
+    /**
+     * 
+     * @param {} store
+     * @param {} record
+     * @param {} operation
+     */
+    syncStoreToRecord: function(store, record, operation) {
+        if (this.editDialog.record) {
+            var items = [];
+            store.each(function(item) {
+                items.push(item.data);
+            });
+            this.editDialog.record.set('costcenters', items);
+        }
     },
     
     /**

@@ -4,38 +4,15 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * employee filter Class
+ * contract filter Class
  * @package     HumanResources
  */
 class HumanResources_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
 {
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'HumanResources';
-
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'HumanResources_Model_Contract';
-
-    /**
-     * @var string class name of this filter group
-     */
-    protected $_className = 'HumanResources_Model_ContractFilter';
-
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'id'          => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'HumanResources_Model_Contract')),
-        'employee_id' => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'HumanResources_Model_Employee')),
-        'start_date'  => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'end_date'    => array('filter' => 'Tinebase_Model_Filter_Date'),
-    );
+    protected $_configuredModel = 'HumanResources_Model_Contract';
 }

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
@@ -27,27 +27,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    windowNamePrefix: 'EmployeeEditWindow_',
-    appName: 'HumanResources',
-    recordClass: Tine.HumanResources.Model.Employee,
-    recordProxy: Tine.HumanResources.employeeBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
-    /**
-     * use the sales app
-     * 
-     * @type {Boolean}
-     */
-    useSales: null,
-    
-    showContainerSelector: false,
-    
-    /**
-     * holds window instances dependent to this dialog
-     * @type {Array}
-     */
-    openSubPanels: null,
+    windowWidth: 800,
+    windowHeight: 620,
     
     /**
      * show private Information (autoset due to rights)
@@ -55,37 +39,13 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @type {Boolean}
      */
     showPrivateInformation: null,
-
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-    updateToolbars: function() {
-    },
-
     /**
      * inits the component
      */
     initComponent: function() {
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.useSales = Tine.Tinebase.appMgr.get('Sales') ? true : false;
-        this.openSubPanels = [];
         Tine.HumanResources.EmployeeEditDialog.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * executed after record got updated from proxy
-     * 
-     * @private
-     */
-    onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
-        this.contractGridPanel.onRecordLoad();
-        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordLoad.call(this);
     },
 
     /**
@@ -95,59 +55,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var nfn = this.getForm().findField('n_given').getValue() + (this.getForm().findField('n_family').getValue() ? ' ' + this.getForm().findField('n_family').getValue() : '');
         this.getForm().findField('n_fn').setValue(nfn);
     },
-    
-    /**
-     * closes open subpanels on cancel
-     */
-    onCancel: function() {
-        if (this.openSubPanels.length) {
-            Ext.each(this.openSubPanels, function(window) {
-                window.purgeListeners();
-                window.close();
-            }, this);
-        }
-        Tine.HumanResources.EmployeeEditDialog.superclass.onCancel.call(this);
-    },
-    
-    /**
-     * show message if there are some subpanels
-     */
-    onSaveAndClose: function() {
-        if (this.openSubPanels.length) {
-            Ext.MessageBox.show({
-                title: _('Dependent Windows'), 
-                msg: _('There are still some windows active dependent to this one. Please save or cancel them before closing this one!'),
-                buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.WARNING
-            });
-            return;
-        }
-        Tine.HumanResources.EmployeeEditDialog.superclass.onSaveAndClose.call(this);
-    },
-    
-    /**
-     * executed when record gets updated from form
-     * @private
-     */
-    onRecordUpdate: function() {
-        var contracts = [];
-        this.contractGridPanel.store.query().each(function(contract) {
-            contracts.push(contract.data);
-        }, this);
-        
-        this.record.set('contracts', contracts);
-        
-        if (this.useSales) {
-            var costcenters = [];
-            this.costCenterGridPanel.store.query().each(function(c) {
-                costcenters.push(c.data);
-            }, this);
-            this.record.set('costcenters', costcenters);
-        }
-        
-        Tine.HumanResources.EmployeeEditDialog.superclass.onRecordUpdate.call(this);
-    },
-    
     /**
      * returns dialog
      * 
@@ -166,11 +73,11 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         var firstRow = [
             Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
-                    allowLinkingItself: false,
-                    name: 'supervisor_id',
-                    fieldLabel: this.app.i18n._('Supervisor'),
-                    editDialog: this,
-                    allowBlank: true
+                allowLinkingItself: false,
+                name: 'supervisor_id',
+                fieldLabel: this.app.i18n._('Supervisor'),
+                editDialog: this,
+                allowBlank: true
             })];
             
         if (this.useSales) {
@@ -180,31 +87,49 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     allowBlank: true
             }));
         }
-       
+        
         firstRow.push({
             name: 'health_insurance',
             fieldLabel: this.app.i18n._('Health Insurance'),
             allowBlank: true,
             maxLength: 128
         });
-        
+
         this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
             app: this.app,
             editDialog: this,
-            disabled: ! this.showPrivateInformation
-        });
-        
-        this.freetimeGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
-            disabled: (this.record && this.record.id) ? false : true,
-            app: this.app,
-            editDialog: this,
-            title: this.app.i18n.ngettext('Free Time', 'Free Times', 2),
-            frame: true,
+            disabled: ! this.showPrivateInformation,
+            frame: false,
             border: true,
             autoScroll: true,
             layout: 'border'
         });
         
+        var disableFreetimeGrids = (! this.showPrivateInformation) ? true : (! (this.record && (this.record.id  && Ext.isArray(this.record.get('contracts')))));
+        
+        this.vacationGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
+            app: this.app,
+            editDialog: this,
+            disabled: disableFreetimeGrids,
+            frame: false,
+            border: true,
+            autoScroll: true,
+            layout: 'border',
+            freetimeType: 'VACATION',
+            editDialogRecordProperty: 'vacation'
+        });
+        this.sicknessGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
+            app: this.app,
+            editDialog: this,
+            disabled: disableFreetimeGrids,
+            frame: false,
+            border: true,
+            autoScroll: true,
+            layout: 'border',
+            freetimeType: 'SICKNESS',
+            editDialogRecordProperty: 'sickness'
+        });
+            
         var tabs = [{
             title: this.app.i18n._('Employee'),
             autoScroll: true,
@@ -479,42 +404,22 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         tabs = tabs.concat([
             this.contractGridPanel,
-            this.freetimeGridPanel,
+            this.vacationGridPanel,
+            this.sicknessGridPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                record_model: 'HumanResources_Model_Employee'
             })
         ]);
         
         return {
             xtype: 'tabpanel',
             border: false,
-            plain:true,
-            plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
-            }],
+            plain: true,
             activeTab: 0,
-            border: false,
             items: tabs
         };
+        return tabs;
     }
 });
-
-/**
- * HumanResources Edit Popup
- * 
- * @param   {Object} config
- * @return  {Ext.ux.Window}
- */
-Tine.HumanResources.EmployeeEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 620,
-        name: Tine.HumanResources.EmployeeEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.HumanResources.EmployeeEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};

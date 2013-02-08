@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.ns('Ext.ux.display');
@@ -17,17 +17,42 @@ Ext.ns('Ext.ux.display');
  * 
  * <b>Panel for displaying information on record basis.</b>
  */
-Ext.ux.display.DisplayPanel = Ext.extend(Ext.form.FormPanel, {
-    cls : 'x-ux-display',
+Ext.ux.display.DisplayPanel = Ext.extend(Ext.Panel, {
     
+    /*
+     * private
+     */
+    cls : 'x-ux-display',
     layout: 'ux.display',
     
-    loadRecord: function(record) {
-        return this.getForm().loadRecord(record);
-    },
+    /**
+     * holds all display fields of the panel
+     * 
+     * @type {Ext.util.MixedCollection}
+     */
+    fields: null,
     
-    onRender: function() {
-        this.supr().onRender.apply(this, arguments);
+    /**
+     * initializes the component, builds this.fields, calls parent
+     */
+    initComponent: function() {
+        Ext.ux.display.DisplayPanel.superclass.initComponent.call(this);
+        
+        this.fields = new Ext.util.MixedCollection();
+        this.fields.addAll(this.findByType('ux.displayfield'));
+        this.fields.addAll(this.findByType('ux.displaytextarea'));
+    },
+    /**
+     * fills this fields with the corresponding record data
+     * 
+     * @param {} record
+     */
+    loadRecord: function(record) {
+        this.fields.each(function(field) {
+            if (data = record.get(field.name)) {
+                field.setValue(data);
+            }
+        });
     }
 });
 

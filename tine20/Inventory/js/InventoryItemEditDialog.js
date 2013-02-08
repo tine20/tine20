@@ -15,9 +15,9 @@ Ext.ns('Tine.Inventory');
  * <p>InventoryItem Compose Dialog</p>
  * <p></p>
  * 
- *  @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -28,19 +28,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    windowNamePrefix: 'InventoryItemEditWindow_',
-    
-    appName: 'Inventory',
-    modelName: 'InventoryItem',
-    
     windowHeight: 470,
     windowWidth: 800,
-    
-    loadRecord: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: true,
-    showContainerSelector: true,
-    multipleEdit: true,
     
     /**
      * check validity of activ number field
@@ -64,7 +53,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @return {Object}
      * @private
      */
-        getFormItems: function() {
+    getFormItems: function() {
         return {
             xtype: 'tabpanel',
             border: false,
@@ -91,7 +80,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             columnWidth: .333,
                             disabled: (this.useMultiple) ? true : false
                         },
-                        //Start first line
+                        // Start first line
                         items: [
                             [{
                                 columnWidth: 1,
@@ -263,15 +252,14 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'price',
                             fieldLabel: this.app.i18n._('Price'),
                             columnWidth: 0.5
-                        }, (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales'))
-                            ? Tine.widgets.form.RecordPickerManager.get("Sales", "CostCenter", {
-                                    columnWidth: 0.5,
-                                    fieldLabel: this.app.i18n._('Cost centre'),
-                                    name: 'costcentre',
-                                    maxLength: 255,
-                                    allowBlank: true
-                              })
-                            : {
+                        }, 
+                        (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) ?
+                            Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {
+                                name: 'costcentre',
+                                allowBlank: true,
+                                fieldLabel: this.app.i18n._('Cost centre'),
+                                columnWidth: 0.5
+                            }) : {
                                     xtype: 'textfield',
                                     name: 'costcentre',
                                     disabled: true,
@@ -307,6 +295,11 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             ]
         };
     },
+    /**
+     * vaidates on multiple edit
+     * 
+     * @return {Boolean}
+     */
     isMultipleValid: function() {
         return true;
     }

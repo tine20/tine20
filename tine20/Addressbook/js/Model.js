@@ -69,11 +69,11 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'tz', omitDuplicateResolving: true},
     {name: 'pubkey', omitDuplicateResolving: true},
     {name: 'jpegphoto', omitDuplicateResolving: true},
-    {name: 'account_id', isMetaField: true},
+    {name: 'account_id', omitDuplicateResolving: true},
     {name: 'tags'},
     {name: 'notes', omitDuplicateResolving: true},
     {name: 'relations', omitDuplicateResolving: true},
-    {name: 'customfields', isMetaField: true},
+    {name: 'customfields', omitDuplicateResolving: true},
     {name: 'type', omitDuplicateResolving: true}
 ]);
 

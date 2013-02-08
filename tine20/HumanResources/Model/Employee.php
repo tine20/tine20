@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,167 +15,253 @@
  * @package     HumanResources
  * @subpackage  Model
  */
+
 class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
-     * @var string
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
-
-    /**
-     * application the record belongs to
-     * @var string
-     */
-    protected $_application = 'HumanResources';
+    protected static $_configurationObject = NULL;
     
     /**
-     * if foreign Id fields should be resolved on search and get from json
-     * should have this format: 
-     *     array('Calendar_Model_Contact' => 'contact_id', ...)
-     * or for more fields:
-     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
-     * (e.g. resolves contact_id with the corresponding Model)
-     * 
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
      * @var array
      */
-    protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User'           => array('created_by', 'last_modified_by', 'account_id'),
-        'Sales_Model_Division'          => array('division_id'),
-        'HumanResources_Model_Employee' => array('supervisor_id')
-    );
-
-    /**
-     * list of zend validator
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'countryname'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'locality'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'postalcode'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'region'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'street'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'street2'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'email'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'salutation'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'number'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_given'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_fn'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bday'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bank_account_holder' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bank_account_number' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bank_name'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bank_code_number'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employment_begin'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'employment_end'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'supervisor_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'division_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'health_insurance'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'profession'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Employee', // _('Employee')
+        'recordsName'       => 'Employees', // _('Employees')
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
         
-        // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // relations
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-
-        'contracts'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-
-    /**
-     * name of fields containing datetime or an array of datetime information
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-        'bday',
-        'employment_begin',
-        'employment_end'
-    );
-
-    protected $_privateFields = array(
-        'countryname',
-        'locality',
-        'postalcode',
-        'region',
-        'street',
-        'street2',
-        'email',
-        'tel_home',
-        'tel_cell',
-        'bday',
-        'bank_account_holder',
-        'bank_account_number',
-        'bank_name',
-        'bank_code_number',
-        'employment_begin',
-        'employment_end',
-        'contracts'
-    );
-
-    /**
-     * returns the foreignId fields (used in Tinebase_Convert_Json)
-     * @return array
-     */
-    public static function getResolveForeignIdFields()
-    {
-        $rf = static::$_resolveForeignIdFields;
-        if (! Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
-            unset($rf['Sales_Model_Division']);
-        }
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
+      
+        'titleProperty'     => 'n_fn',
+        'appName'           => 'HumanResources',
+        'modelName'         => 'Employee',
         
-        return $rf;
-    }
-    
-    /**
-     * the constructor
-     * @see Tinebase_Record_Abstract
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true) {
-        $this->_doPrivateCleanup();
-        $this->_filters['division_id'] = new Zend_Filter_Empty(NULL);
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Sales', true)) {
-            $this->_validators['costcenters'] = array(Zend_Filter_Input::ALLOW_EMPTY => true);
-        }
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
+        'fieldGroups'       => array(
+            'banking' => 'Banking Information',    // _('Banking Information')
+            'private' => 'Private Information',    // _('Private Information')
+        ),
+        'fieldGroupRights'  => array(
+            'private' => array(
+                // TODO: handle see right
+                'see'  => HumanResources_Acl_Rights::EDIT_PRIVATE,
+                'edit' => HumanResources_Acl_Rights::EDIT_PRIVATE,
+            )
+        ),
 
-    /**
-     * removes privat information from the Employee if user is no admin and has no EDIT_PRIVATE rights on this application
-     */
-    protected function _doPrivateCleanup()
-    {
-        $user = Tinebase_Core::getUser();
-        if ($user instanceof Tinebase_Model_FullUser) {
-            // no private cleanup with admin rights
-            if ($user->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
-                $user->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
-                $user->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
-                return;
-            } else {
-                $this->_validators = array_diff_key($this->_validators, array_flip($this->_privateFields));
-            }
-        }
-    }
+        'filterModel' => array(
+            'is_employed' => array(
+                'label' => 'Is employed',    // _('Is employed')
+                'filter' => 'HumanResources_Model_EmployeeEmployedFilter',
+                'jsConfig' => array('valueType' => 'bool')
+            )
+        ),
+        
+        'fields'            => array(
+            'number' => array(
+                'label' => 'Number', //_('Number')
+                'duplicateCheckGroup' => 'number',
+                'group' => 'employee',
+                'queryFilter' => TRUE,
+            ),
+            'account_id' => array(
+                'label' => 'Account', //_('Account')
+                'duplicateCheckGroup' => 'account',
+                'type' => 'user',
+                'group' => 'employee'
+            ),
+            'description' => array(
+                'label'   => 'Description', // _('Description')
+                'type'    => 'text'
+            ),
+            'countryname' => array(
+                'label'   => 'Country', //_('Country')
+                'group'   => 'private',
+                'default' => 'Germany', // _('Germany')
+                'shy'     => TRUE
+            ),
+            'locality' => array(
+                'label' => 'Locality', //_('Locality')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'postalcode' => array(
+                'label' => 'Postalcode', //_('Postalcode')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'region' => array(
+                'label' => 'Region', //_('Region')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'street' => array(
+                'label' => 'Street', //_('Street')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'street2' => array(
+                'label' => 'Street 2', //_('Street 2')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'email' => array(
+                'label' => 'E-Mail', //_('E-Mail')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'tel_home' => array(
+                'label' => 'Telephone Number', //_('Telephone Number')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'tel_cell' => array(
+                'label' => 'Cell Phone Number', //_('Cell Phone Number')
+                'group' => 'private',
+                'shy'   => TRUE
+            ),
+            'title' => array(
+                'label' => 'Title', //_('Title')
+            ),
+            'salutation' => array(
+                'label' => 'Salutation', //_('Salutation')
+            ),
+            'n_family' => array(
+                'label' => 'Last Name', //_('Last Name')
+            ),
+            'n_given' => array(
+                'label' => 'First Name', //_('First Name')
+            ),
+            'n_fn' => array(
+                'label'       => 'Employee name', //_('Employee name')
+                'queryFilter' => TRUE,
+                'shy'         => TRUE
+            ),
+            'bday' => array(
+                'label' => 'Birthday', //_('Birthday')
+                'type'  => 'date',
+                'group' => 'private',
+            ),
+            'bank_account_holder' => array(
+                'label' => 'Account Holder', //_('Account Holder')
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
+            'bank_account_number' => array(
+                'label' => 'Account Number', //_('Account Number')
+                'duplicateCheckGroup' => 'bankaccount',
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
+            'bank_name' => array(
+                'label' => 'Bank Name', //_('Bank Name')
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
+            'bank_code_number' => array(
+                'label' => 'Code Number', //_('Code Number')
+                'duplicateCheckGroup' => 'bankaccount',
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
+            'employment_begin' => array(
+                'label' => 'Employment begin', //_('Employment begin')
+                'type'  => 'date',
+                'group' => 'private',
+            ),
+            'employment_end' => array(
+                'label' => 'Employment end', //_('Employment end')
+                'type'  => 'date',
+                'group' => 'private',
+            ),
+            'supervisor_id' => array(
+                'label' => 'Supervisor', //_('Supervisor')
+                'type'  => 'record',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'config' => array(
+                    'appName'     => 'HumanResources',
+                    'modelName'   => 'Employee',
+                    'idProperty'  => 'id'
+                )
+            ),
+            'division_id' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label' => 'Division', //_('Division')
+                'type'  => 'record',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Division',
+                    'idProperty'  => 'id'
+                )
+            ),
+            'health_insurance' => array(
+                'label' => 'Health Insurance', //_('Health Insurance')
+                'shy'   => TRUE
+            ),
+            'profession' => array(
+                'label' => 'Profession', //_('Profession')
+            ),
+            'contracts' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Contracts', // _('Contracts')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName'     => 'HumanResources',
+                    'modelName'   => 'Contract',
+                    'refIdField'  => 'employee_id',
+                    'paging'      => array('sort' => 'start_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+                'group' => 'private',
+            ),
+            'costcenters' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Cost Centers', // _('Cost Centers')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'HumanResources',
+                    'modelName'   => 'CostCenter',
+                    'refIdField'  => 'employee_id',
+                    'paging'        => array('sort' => 'start_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            'vacation' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Vacation', // _('Vacation')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'HumanResources',
+                    'modelName'   => 'FreeTime',
+                    'refIdField'  => 'employee_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')),
+                    'paging'        => array('sort' => 'firstday_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            'sickness' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Sickness', // _('Sickness')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'HumanResources',
+                    'modelName'   => 'FreeTime',
+                    'refIdField'  => 'employee_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')),
+                    'paging'        => array('sort' => 'firstday_date', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            )
+        )
+    );
 }

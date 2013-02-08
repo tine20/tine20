@@ -37,5 +37,5 @@ class HumanResources_Backend_FreeTime extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = true;
+    protected $_modlogActive = TRUE;
 }

@@ -13,13 +13,16 @@ Ext.ns('Tine.Tinebase');
 Tine.Tinebase.configManager = function(){
     return {
         get: function(name, appName) {
-            var app = Tine.Tinebase.appMgr.get(appName),
+            var app = Tine.Tinebase.hasOwnProperty('appMgr') ? Tine.Tinebase.appMgr.get(appName) : null;
+            if (app) {
                 registry = app ? app.getRegistry() : Tine.Tinebase.registry,
                 config = registry ? registry.get('config') : false,
                 struct = config ? config[name] : false,
                 def = struct ? struct.definition : false,
                 value = struct ? struct.value : null;
-            
+            } else {
+                var value = null;
+            }
             return value;
         }
     }
