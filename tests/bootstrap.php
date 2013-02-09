@@ -63,49 +63,57 @@ function getTestDatabase()
         }
     }
     
+    $creationTime = new DateTime(null, new DateTimeZone('utc'));
+    
     // create test folders
     $folders = array(
         array(
-            'id'        => 'addressbookFolderId',
-            'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
-            'name'      => 'Default Contacts Folder',
-            'owner_id'  => '1234',
-            'parent_id' => '0'
+            'id'            => 'addressbookFolderId',
+            'type'          => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT,
+            'name'          => 'Default Contacts Folder',
+            'owner_id'      => '1234',
+            'parent_id'     => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         ),
         array(
             'id'        => 'anotherAddressbookFolderId',
             'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED,
             'name'      => 'Another Contacts Folder',
             'owner_id'  => '1234',
-            'parent_id' => '0'
+            'parent_id' => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         ),
         array(
             'id'        => 'calendarFolderId',
             'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR,
             'name'      => 'Default Contacts Folder',
             'owner_id'  => '1234',
-            'parent_id' => '0'
+            'parent_id' => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         ),
         array(
             'id'        => 'tasksFolderId',
             'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_TASK,
             'name'      => 'Default Tasks Folder',
             'owner_id'  => '1234',
-            'parent_id' => '0'
+            'parent_id' => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         ),
         array(
             'id'        => 'emailInboxFolderId',
             'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_INBOX,
             'name'      => 'Inbox',
             'owner_id'  => '1234',
-            'parent_id' => '0'
+            'parent_id' => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         ),
         array(
             'id'        => 'emailSentFolderId',
             'type'      => Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL,
             'name'      => 'Sent',
             'owner_id'  => '1234',
-            'parent_id' => '0'
+            'parent_id' => '0',
+            'creation_time' => $creationTime->format('Y-m-d H:i:s')
         )
     );
     

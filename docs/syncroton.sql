@@ -128,9 +128,11 @@ CREATE TABLE IF NOT EXISTS `syncroton_data` (
 
 CREATE TABLE IF NOT EXISTS `syncroton_data_folder` (
     `id` varchar(40) NOT NULL,
+    `owner_id` varchar(40) NOT NULL,
     `type` int(11) NOT NULL,
     `name` varchar(255) NOT NULL,
-    `owner_id` varchar(40) NOT NULL,
     `parent_id` varchar(40) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    `creation_time` datetime NOT NULL,
+    `last_modified_time` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`, `owner_id`)
 );

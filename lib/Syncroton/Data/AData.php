@@ -64,11 +64,12 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         $id = !empty($folder->serverId) ? $folder->serverId : sha1(mt_rand(). microtime());
         
         $this->_db->insert($this->_tablePrefix . 'data_folder', array(
-            'id'        => $id,
-            'type'      => $folder->type,
-            'name'      => $folder->displayName,
-            'owner_id'  => $this->_ownerId,
-            'parent_id' => $folder->parentId
+            'id'            => $id,
+            'type'          => $folder->type,
+            'name'          => $folder->displayName,
+            'owner_id'      => $this->_ownerId,
+            'parent_id'     => $folder->parentId,
+            'creation_time' => $this->_timestamp->format('Y-m-d H:i:s')
         ));
         
         return $this->getFolder($id);
@@ -148,6 +149,39 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
         } else {
             return Syncroton_Data_AData::$changedEntries[get_class($this)];
         }
+    }
+    
+    /**
+     * retrieve folders which were modified since last sync
+     * 
+     * @param DateTime $startTimeStamp
+     * @param DateTime $endTimeStamp
+     */
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    {
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . 'data_folder')
+            ->where('type IN (?)', $this->_supportedFolderTypes)
+            ->where('owner_id = ?', $this->_ownerId)
+            ->where('last_modified_time > ?', $startTimeStamp->format('Y-m-d H:i:s'))
+            ->where('last_modified_time <= ?', $endTimeStamp->format('Y-m-d H:i:s'));
+        
+        $stmt    = $this->_db->query($select);
+        $folders = $stmt->fetchAll();
+        $stmt = null; # see https://bugs.php.net/bug.php?id=44081
+        
+        $result = array();
+        
+        foreach ((array) $folders as $folder) {
+            $result[$folder['id']] =  new Syncroton_Model_Folder(array(
+                'serverId'    => $folder['id'],
+                'displayName' => $folder['name'],
+                'type'        => $folder['type'],
+                'parentId'    => $folder['parent_id']
+            ));
+        }
+        
+        return $result;
     }
     
     /**
@@ -243,11 +277,15 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {
         $this->_db->update($this->_tablePrefix . 'data_folder', array(
-            'name'      => $folder->displayName,
-            'parent_id' => $folder->parentId
+            'name'               => $folder->displayName,
+            'parent_id'          => $folder->parentId,
+            'last_modified_time' => $this->_timestamp->format('Y-m-d H:i:s')
         ), array(
-            'id = ?' => $folder->serverId
+            'id = ?'       => $folder->serverId,
+            'owner_id = ?' => $this->_ownerId
         ));
+        
+        return $this->getFolder($folder->serverId);
     }
 }
 
