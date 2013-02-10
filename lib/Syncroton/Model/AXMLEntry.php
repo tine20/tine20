@@ -93,11 +93,14 @@ abstract class Syncroton_Model_AXMLEntry extends Syncroton_Model_AEntry implemen
      * (non-PHPdoc)
      * @see Syncroton_Model_IEntry::getProperties()
      */
-    public function getProperties()
+    public function getProperties($selectedNamespace = null)
     {
         $properties = array();
         
         foreach($this->_properties as $namespace => $namespaceProperties) {
+            if ($selectedNamespace !== null && $namespace != $selectedNamespace) {
+                continue;
+            }
             $properties = array_merge($properties, array_keys($namespaceProperties));
         }
         
