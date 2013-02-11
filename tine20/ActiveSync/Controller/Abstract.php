@@ -118,6 +118,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     protected $_contentControllerName;
     
+    protected $_devicesWithMultipleFolders = array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook');
+    
     /**
      * the constructor
      *
@@ -163,30 +165,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     {
         $syncrotonFolders = array();
         
-        // device supports multiple folders ?
-        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook'))) {
+        // device supports multiple folders?
+        if(in_array(strtolower($this->_device->devicetype), $this->_devicesWithMultipleFolders)) {
         
-            // get the folders the user has access to
-            $allowedFolders = $this->_getSyncableFolders();
-            
-            $wantedFolders = null;
-            
-            // check if contentfilter has a container limitation
-            $filter = $this->_getContentFilter(0);
-            
-            // @TODO work with multiple container filters?
-            $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
-            if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
-                $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
-                $wantedFolders = $containerFilter->getContainerIds();
-                
-                foreach($allowedFolders as $allowedFolder) {
-                    if (! in_array($allowedFolder->getId(), $wantedFolders)) {
-                        $allowedFolders->removeRecord($allowedFolder);
-                    }
-                }
-            }
-            $folders = $allowedFolders;
+            $folders = $this->_getAllFolders();
             
             foreach ($folders as $container) {
                 $syncrotonFolders[$container->id] = new Syncroton_Model_Folder(array(
@@ -361,7 +343,17 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {
+        if ($folder->serverId == $this->_specialFolderName) {
+            throw new Syncroton_Exception_UnexpectedValue($this->_specialFolderName . " can't be updated");
+        }
         
+        $container = Tinebase_Container::getInstance()->get($folder->serverId);
+        
+        $container->name = $folder->displayName;
+        
+        Tinebase_Container::getInstance()->update($container);
+        
+        return $folder;
     }
     
     /**
@@ -469,7 +461,74 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
         
         return $result;
-    }    
+    }
+    
+    /**
+     * retrieve folders which were modified since last sync
+     * 
+     * @param  DateTime $startTimeStamp
+     * @param  DateTime $endTimeStamp
+     * @return array
+     */
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    {
+        $syncrotonFolders = array();
+        
+        // device supports multiple folders ?
+        if(! in_array(strtolower($this->_device->devicetype), $this->_devicesWithMultipleFolders)) {
+            return $syncrotonFolders;
+        }
+        
+        $folders = $this->_getAllFolders();
+        
+        foreach ($folders as $folder) {
+            if (! ($folder->last_modified_time > $startTimeStamp && $folder->last_modified_time <= $endTimeStamp)) {
+                $folders->removeRecord($folder);
+            }
+        }
+        
+        foreach ($folders as $container) {
+            $syncrotonFolders[$container->id] = new Syncroton_Model_Folder(array(
+                'serverId'      => $container->id,
+                'parentId'      => 0,
+                'displayName'   => $container->name,
+                'type'          => (count($syncrotonFolders) == 0) ? $this->_defaultFolderType : $this->_folderType
+            ));
+        }
+        
+        return $syncrotonFolders;
+    }
+    
+    /**
+     * return recordset with all folders
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getAllFolders()
+    {
+        // get the folders the user has access to
+        $allowedFolders = $this->_getSyncableFolders();
+        
+        $wantedFolders = null;
+        
+        // check if contentfilter has a container limitation
+        $filter = $this->_getContentFilter(0);
+        
+        // @TODO work with multiple container filters?
+        $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
+        if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
+            $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
+            $wantedFolders = $containerFilter->getContainerIds();
+            
+            foreach($allowedFolders as $allowedFolder) {
+                if (! in_array($allowedFolder->getId(), $wantedFolders)) {
+                    $allowedFolders->removeRecord($allowedFolder);
+                }
+            }
+        }
+        
+        return $allowedFolders;
+    }
     
     /**
      * 

@@ -195,7 +195,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
-        // @todo filter also for create_timestamo??
+        // @todo filter also for create_timestamp??
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'timestamp',
             'after',
@@ -213,6 +213,26 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
         
         return $result;
+    }
+    
+    /**
+     * retrieve folders which were modified since last sync
+     * 
+     * @param  DateTime $startTimeStamp
+     * @param  DateTime $endTimeStamp
+     * @return array
+     * 
+     * @todo implement
+     * 
+     * @see 0007786: changed email folder names do not sync to device
+     */
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp)
+    {
+        $syncrotonFolders = array();
+        
+        // @todo calculate changed folders
+        
+        return $syncrotonFolders;
     }
     
     /**
@@ -709,6 +729,17 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $this->_contentController->update($message);
         
         return;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::updateFolder()
+     */
+    public function updateFolder(Syncroton_Model_IFolder $folder)
+    {
+        $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($folder->serverId);
+        Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $folder->displayName, $fmailFolder->globalname);
+        return $folder;
     }
     
     /**
