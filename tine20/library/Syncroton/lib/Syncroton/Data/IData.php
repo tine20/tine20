@@ -43,7 +43,19 @@ interface Syncroton_Data_IData
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData);
     
-    public function deleteFolder($_folderId);
+    /**
+     * delete folder
+     * 
+     * @param string $folderId
+     */
+    public function deleteFolder($folderId);
+    
+    /**
+     * empty folder
+     * 
+     * @param string $folderId
+     */
+    public function emptyFolderContents($folderId);
     
     /**
      * return list off all folders
@@ -52,6 +64,14 @@ interface Syncroton_Data_IData
     public function getAllFolders();
     
     public function getChangedEntries($folderId, DateTime $startTimeStamp, DateTime $endTimeStamp = NULL, $filterType = NULL);
+    
+    /**
+     * retrieve folders which were modified since last sync
+     * 
+     * @param DateTime $startTimeStamp
+     * @param DateTime $endTimeStamp
+     */
+    public function getChangedFolders(DateTime $startTimeStamp, DateTime $endTimeStamp);
     
     public function getCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState);
     

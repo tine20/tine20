@@ -121,7 +121,8 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             $this->_headers = array_merge($this->_headers, $optionsCommand->getHeaders());
         }
         
-        $adds = array();
+        $adds    = array();
+        $updates = array();
         $deletes = array();
 
         foreach($this->_classes as $class) {
@@ -138,6 +139,13 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
                 // retrieve all folders available in data backend
                 $serverFolders = $dataController->getAllFolders();
 
+                if ($this->_syncState->counter > 0) {
+                    // retrieve all folders changed since last sync
+                    $changedFolders = $dataController->getChangedFolders($this->_syncState->lastsync, $this->_syncTimeStamp);
+                } else {
+                    $changedFolders = array();
+                }
+                
                 // retrieve all folders sent to client
                 $clientFolders = $this->_folderBackend->getFolderState($this->_device, $class);
                 
@@ -186,6 +194,17 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
                 $adds[] = $add;
             }
 
+            // calculate changed entries
+            foreach ($changedFolders as $changedFolder) {
+                $change = $clientFolders[$changedFolder->serverId];
+                
+                $change->displayName = $changedFolder->displayName;
+                $change->parentId    = $changedFolder->parentId;
+                $change->type        = $changedFolder->type;
+                
+                $updates[] = $change;
+            }
+            
             // calculate deleted entries
             $serverDiff = array_diff($clientFoldersIds, $serverFoldersIds);
             foreach ($serverDiff as $serverFolderId) {
@@ -195,7 +214,7 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
 
         $folderSync->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Status', self::STATUS_SUCCESS));
 
-        $count = count($adds) + /*count($changes) + */count($deletes);
+        $count = count($adds) + count($updates) + count($deletes);
         if($count > 0) {
             $this->_syncState->counter++;
             $this->_syncState->lastsync = $this->_syncTimeStamp;
@@ -216,6 +235,14 @@ class Syncroton_Command_FolderSync extends Syncroton_Command_Wbxml
             if (empty($folder->id)) {
                 $this->_folderBackend->create($folder);
             }
+        }
+        
+        foreach($updates as $folder) {
+            $update = $changes->appendChild($this->_outputDom->createElementNS('uri:FolderHierarchy', 'Update'));
+            
+            $folder->appendXML($update, $this->_device);
+            
+            $this->_folderBackend->update($folder);
         }
         
         foreach($deletes as $folder) {

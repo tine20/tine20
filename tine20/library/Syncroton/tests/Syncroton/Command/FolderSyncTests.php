@@ -76,11 +76,25 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
     {
         $this->testGetFoldersSyncKey0();
         
-        Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime('now'))->createFolder(
+        // rewind back last sync timestamp
+        $syncState = Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device, 'FolderSync');
+        $syncState->lastsync = new DateTime('2013-02-09 10:40:36', new DateTimeZone('utc'));
+        $syncState = Syncroton_Registry::getSyncStateBackend()->update($syncState);
+        
+        Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('utc')))->createFolder(
             new Syncroton_Model_Folder(array(
                 'serverId'    => 'addressbookFolderId2',
                 'parentId'    => null,
                 'displayName' => 'User created Contacts Folder',
+                'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+            ))
+        );
+        
+        Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('utc')))->updateFolder(
+            new Syncroton_Model_Folder(array(
+                'serverId'    => 'anotherAddressbookFolderId',
+                'parentId'    => null,
+                'displayName' => 'User updated Contacts Folder',
                 'type'        => Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
             ))
         );
@@ -111,6 +125,16 @@ class Syncroton_Command_FolderSyncTests extends Syncroton_Command_ATestCase
 
         $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Add');
         $this->assertGreaterThanOrEqual(1, $nodes->length, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Add/FolderHierarchy:DisplayName');
+        $this->assertGreaterThanOrEqual('User created Contacts Folder', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Update');
+        $this->assertGreaterThanOrEqual(1, $nodes->length, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//FolderHierarchy:FolderSync/FolderHierarchy:Changes/FolderHierarchy:Update/FolderHierarchy:DisplayName');
+        $this->assertGreaterThanOrEqual('User updated Contacts Folder', $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
     }
     
     /**
