@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>6.3</version>
+    <version>6.4</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -9,7 +9,7 @@
     <tables>
         <table>
             <name>acsync_policy</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -35,171 +35,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>allow_bluetooth</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_browser</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_camera</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_consumer_email</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_desktop_sync</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_h_t_m_l_email</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_internet_sharing</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_ir_d_a</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_p_o_p_i_m_a_p_email</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_remote_desktop</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_simple_device_password</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_s_m_i_m_e_encryption_algorithm_negotiation</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_s_m_i_m_e_soft_certs</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_storage_card</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_text_messaging</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_unsigned_applications</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_unsigned_installation_packages</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>allow_wifi</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>alphanumeric_device_password_required</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>approved_application_list</name>
-                    <type>blob</type>
-                </field>
-                <field>
-                    <name>attachments_enabled</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>device_password_enabled</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>device_password_expiration</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>device_password_history</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_attachment_size</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_calendar_age_filter</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_device_password_failed_attempts</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_email_age_filter</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_email_body_truncation_size</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_email_h_t_m_l_body_truncation_size</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>max_inactivity_time_device_lock</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>min_device_password_complex_characters</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>min_device_password_length</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>password_recovery_enabled</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_device_encryption</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_encrypted_s_m_i_m_e_messages</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_encryption_s_m_i_m_e_algorithm</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_manual_sync_when_roaming</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_signed_s_m_i_m_e_algorithm</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_signed_s_m_i_m_e_messages</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>require_storage_card_encryption</name>
-                    <type>boolean</type>
-                </field>
-                <field>
-                    <name>unapproved_in_r_o_m_application_list</name>
+                    <name>json_policy</name>
                     <type>blob</type>
                 </field>
                 <index>
@@ -715,8 +551,8 @@
                 <value special='uid'/>
             </field>
             <field>
-                <name>device_password_enabled</name>
-                <value>1</value>
+                <name>json_policy</name>
+                <value>{"DevicePasswordEnabled":"1"}</value>
             </field>
         </record>
     </defaultRecords>
