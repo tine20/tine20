@@ -31,18 +31,19 @@ class Syncroton_Backend_Policy extends Syncroton_Backend_ABackend #implements Sy
     protected function _convertModelToArray($model)
     {
         $policyValues = $model->getProperties('Provision');
+        
         $policy = array();
         
         foreach ($policyValues as $policyName) {
             if ($model->$policyName !== NULL) { 
-                $policy[$this->_fromCamelCase($policyName)] = $model->$policyName;
+                $policy[$policyName] = $model->$policyName;
             }
             
             unset($model->$policyName);
         }
 
         $data = parent::_convertModelToArray($model);
-
+        
         $data['json_policy'] = Zend_Json::encode($policy);
         
         return $data;
