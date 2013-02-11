@@ -1,11 +1,4 @@
 <?php
-// Call Setup_Backend_Schema_IndexTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Setup_Backend_Schema_IndexTest::main');
-}
-
-require_once 'PHPUnit/Framework.php';
-
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**
@@ -80,9 +73,3 @@ class Setup_Backend_Schema_IndexTest extends Setup_Backend_AbstractTest
         );
     }
 }
-
-// Call Setup_Backend_Schema_IndexTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'Setup_Backend_Schema_IndexTest::main') {
-    Setup_Backend_Schema_IndexTest::main();
-}
-?>

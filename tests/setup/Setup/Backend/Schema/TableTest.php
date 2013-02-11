@@ -4,8 +4,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Setup_Backend_Schema_TableTest::main');
 }
 
-require_once 'PHPUnit/Framework.php';
-
 require_once dirname(__FILE__) . '/../../../TestHelper.php';
 
 /**

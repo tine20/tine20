@@ -260,7 +260,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         if (r){
             text = r.getTitle();
-            
+            this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
                 if (r.getId() == this.editDialog.record.getId()) {
                     Ext.MessageBox.show({

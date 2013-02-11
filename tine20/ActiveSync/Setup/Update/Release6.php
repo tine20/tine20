@@ -374,11 +374,126 @@ class ActiveSync_Setup_Update_Release6 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 6.4
+     * 
+     * @see 0007452: use json encoded array for saving of policy settings
+     */
+    public function update_3()
+    {
+        $fieldsToRemove = array(
+            'allow_bluetooth',
+            'allow_browser',
+            'allow_camera',
+            'allow_consumer_email',
+            'allow_desktop_sync',
+            'allow_h_t_m_l_email',
+            'allow_internet_sharing',
+            'allow_ir_d_a',
+            'allow_p_o_p_i_m_a_p_email',
+            'allow_remote_desktop',
+            'allow_simple_device_password',
+            'allow_s_m_i_m_e_encryption_algorithm_negotiation',
+            'allow_s_m_i_m_e_soft_certs',
+            'allow_storage_card',
+            'allow_text_messaging',
+            'allow_unsigned_applications',
+            'allow_unsigned_installation_packages',
+            'allow_wifi',
+            'alphanumeric_device_password_required',
+            'approved_application_list',
+            'attachments_enabled',
+            'device_password_enabled',
+            'device_password_expiration',
+            'device_password_history',
+            'max_attachment_size',
+            'max_calendar_age_filter',
+            'max_device_password_failed_attempts',
+            'max_email_age_filter',
+            'max_email_body_truncation_size',
+            'max_email_h_t_m_l_body_truncation_size',
+            'max_inactivity_time_device_lock',
+            'min_device_password_complex_characters',
+            'min_device_password_length',
+            'password_recovery_enabled',
+            'require_device_encryption',
+            'require_encrypted_s_m_i_m_e_messages',
+            'require_encryption_s_m_i_m_e_algorithm',
+            'require_manual_sync_when_roaming',
+            'require_signed_s_m_i_m_e_algorithm',
+            'require_signed_s_m_i_m_e_messages',
+            'require_storage_card_encryption',
+            'unapproved_in_r_o_m_application_list'
+        );
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>json_policy</name>
+                <type>blob</type>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_policy', $declaration);
+        
+        // read values from old columns and convert to JSON encoded array
+        $select = $this->_db->select()
+            ->from(
+                array('acsync_policy' => SQL_TABLE_PREFIX . 'acsync_policy')
+            );
+        $result = $this->_db->fetchAll($select);
+        
+        foreach ($result as $row) {
+            $policy = array();
+            
+            foreach ($row as $key => $value) {
+                if (! in_array($key, $fieldsToRemove)) {
+                    continue;
+                }
+                
+                if ($value !== null) {
+                    $policy[$this->_toCamelCase($key)] = $value;
+                }
+            }
+            
+            // update json_policy
+            $this->_db->update(
+                SQL_TABLE_PREFIX . 'acsync_policy', 
+                array(
+                    'json_policy' => Zend_Json::encode($policy)
+                ), 
+                $this->_db->quoteInto("id = ?", $row['id']));
+        }
+        
+        // drop old columns
+        foreach ($fieldsToRemove as $fieldName) {
+            $this->_backend->dropCol('acsync_policy', $fieldName);
+        }
+        
+        $this->setTableVersion('acsync_policy', 3);
+        
+        $this->setApplicationVersion('ActiveSync', '6.4');
+    }
+    
+    /**
+     * convert from camel_case to camelCase
+     * 
+     * @param  string $string
+     * @param  bool   $ucFirst
+     * @return string
+     */
+    protected function _toCamelCase($string, $ucFirst = true)
+    {
+        if ($ucFirst === true) {
+            $string = ucfirst($string);
+        }
+        
+        return preg_replace_callback('/_([a-z])/', function ($string) {return strtoupper($string[1]);}, $string);
+    }
+    
+    /**
     * update to 7.0
     *
     * @return void
     */
-    public function update_3()
+    public function update_4()
     {
         $this->setApplicationVersion('ActiveSync', '7.0');
     }
