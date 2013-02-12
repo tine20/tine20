@@ -424,11 +424,14 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         // disable lineCombo if only 1 line available
         if (form) {
             var lineCombo = form.findField('lineId');
-            lineCombo.setDisabled((this.linesStore.getCount() <= 1));
+            var count = this.linesStore.getCount();
+            lineCombo.setDisabled(count <= 1);
             
-            // set first line
-            lineCombo.setValue(this.linesStore.getAt(0).id);
-        }         
+            if (count) {
+                // set first line
+                lineCombo.setValue(this.linesStore.getAt(0).id);
+            }
+        }
     }
 });
 
@@ -484,6 +487,9 @@ Tine.Phone.Main = {
             scope: this
         });
         
+        
+        var node = Ext.getCmp('phone-tree').getSelectionModel().getSelectedNode()
+        
         // @todo generalise this for panel & main
         this.actions.editPhoneSettings = new Ext.Action({
             id: 'phone-settings-button',
@@ -514,6 +520,8 @@ Tine.Phone.Main = {
         });
         
         this.initStore();
+        
+        this.actions.editPhoneSettings.setDisabled(node && node.id == 'root');
     },
     
     handlers: 
