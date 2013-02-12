@@ -63,9 +63,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             // MySQL throws an exception         if the table does not exist
             // PostgreSQL returns an empty array if the table does not exist
-            $addressBookInstalled = $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . 'addressbook');
-            if (! empty($addressBookInstalled)) {
-                $this->_addressBookInstalled = true;
+            $adbSchema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . 'addressbook');
+            $adbListsSchema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . 'addressbook_lists');
+            if (! empty($adbSchema) && ! empty($adbListsSchema) ) {
+                $this->_addressBookInstalled = TRUE;
             }
         } catch (Zend_Db_Statement_Exception $zdse) {
             // nothing to do
@@ -570,7 +571,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function getGroupByName($_name)
     {
         $select = $this->_getSelect();
-                
+        
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_name);
         
         $stmt = $this->_db->query($select);
