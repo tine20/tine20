@@ -99,8 +99,9 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
 
         private function getOptions($_preferenceName, $_options) {
                 $preference = $this->_getDefaultBasePreference($_preferenceName);
-
-                if($_preferenceName == self::INTERNATIONAL_PREFIX) {
+                $opt = NULL;
+                
+                if ($_preferenceName == self::INTERNATIONAL_PREFIX) {
                     $file = dirname(__FILE__) . '/Setup/calling-codes.xml';
                     $preference->options = file_get_contents($file);
                 } else {
@@ -132,7 +133,9 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
                     }
                     $preference->options = $doc->saveXML();
                     // save last option in pref value per default
-                    if($opt) $preference->value = $id;
+                    if ($opt) {
+                        $preference->value = $id;
+                    }
                 }
                 
                 return $preference;
