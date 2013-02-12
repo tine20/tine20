@@ -188,6 +188,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     {
     }
     
+    /**
+     * parse telephone
+     * 
+     * @param array $data
+     * @param Sabre_VObject_Element $property
+     */
     protected function _toTine20ModelParseTel(&$data, $property)
     {
         $telField = null;
@@ -236,21 +242,36 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         }
     }
     
+    /**
+     * parse email
+     * 
+     * @param array $_data
+     * @param Sabre_VObject_Element $_property
+     */
     protected function _toTine20ModelParseEmail(&$_data, $_property)
     {
         $type = null;
-        foreach($_property['TYPE'] as $typeProperty) {
-            if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
+        foreach ($_property['TYPE'] as $typeProperty) {
+            if (strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
                 $type = strtolower($typeProperty);
                 break;
+            } else if (strtolower($typeProperty) == 'internet') {
+                $type = strtolower($typeProperty);
             }
         }
         
         switch ($type) {
+            case 'internet':
+                if (empty($_data['email'])) {
+                    // do not replace existing value
+                    $_data['email'] = $_property->value;
+                }
+                break;
+            
             case 'home':
                 $_data['email_home'] = $_property->value;
                 break;
-        
+            
             case 'work':
                 $_data['email'] = $_property->value;
                 break;
