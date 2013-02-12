@@ -297,21 +297,21 @@ abstract class Tinebase_Config_Abstract
     protected function _loadAllAppConfigsInCache()
     {
         if (empty($this->_appName)) {
-            if (Setup_Core::isLogLevel(Zend_Log::WARN)) Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
             $this->_cachedApplicationConfig = array();
         }
         
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
         
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
     
         $filter = new Tinebase_Model_ConfigFilter(array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
         ));
         $allConfigs = $this->_getBackend()->search($filter);
         
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');
-        if (Setup_Core::isLogLevel(Zend_Log::TRACE)) Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allConfigs->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allConfigs->toArray(), TRUE));
         
         foreach ($allConfigs as $config) {
             $this->_cachedApplicationConfig[$config->name] = $config;
@@ -328,7 +328,7 @@ abstract class Tinebase_Config_Abstract
      */
     protected function _saveConfig(Tinebase_Model_Config $_config)
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
         
         $config = $this->_loadConfig($_config->name);
         
@@ -354,7 +354,7 @@ abstract class Tinebase_Config_Abstract
      */
     public function clearCache()
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing config cache');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing config cache');
         $this->_cachedApplicationConfig = NULL;
     }
     

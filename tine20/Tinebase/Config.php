@@ -770,7 +770,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     */
     protected function _saveConfigOld(Tinebase_Model_Config $_config)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
     
         $config = $this->_loadConfigOld($_config->name, $_config->application_id);
         if ($config) {

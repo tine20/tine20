@@ -174,7 +174,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         // try to get definition and update if it exists
         try {
             $existing = $this->getByName($definition->name);
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $copyFields = array('filename', 'plugin_options', 'description');
             foreach ($copyFields as $field) {
                 $existing->{$field} = $definition->{$field};
