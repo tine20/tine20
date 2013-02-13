@@ -155,36 +155,44 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     },
     
     /**
+     * Is called when a record gets selected in the picker combo
+     * 
+     * @param {Ext.form.ComboBox} picker
      * @param {Record} recordToAdd
      */
-    onAddRecordFromCombo: function(recordToAdd) {
+    onAddRecordFromCombo: function(picker, recordToAdd) {
+        
+        if(! recordToAdd) {
+            return;
+        }
         
         var recordData = {
             asteriskline_id: recordToAdd.data,
-            linenumber: this.recordStore.getCount()+1,
+            linenumber: this.store.getCount() + 1,
             lineactive: 1
         };
-        var record = new this.newRecordClass(recordData);
+        
+        var record = new Tine.Voipmanager.Model.SnomLine(recordData);
+        
         var fields = ['cfi_mode','cfi_number','cfb_mode','cfb_number','cfd_mode','cfd_number','cfd_time' ];
         for (var i=0; i < fields.length; i++) {
             record.data[fields[i]] = recordToAdd.data[fields[i]];
         }
-
+        
         // check if already in
         var found = false;
-        this.recordStore.each(function (line) {
+        this.store.each(function (line) {
             if (line.data.asteriskline_id.id == recordToAdd.data.id) {
                 found = true;
             }
         }, this);
+        
         if (! found) {
             // if not found -> add
-            this.recordStore.add([record]);
+            this.store.add([record]);
         }
         
-        this.collapse();
-        this.clearValue();
-        this.reset();
+        picker.reset();
     },
     
     /**

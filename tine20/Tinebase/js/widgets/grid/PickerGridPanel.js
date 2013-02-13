@@ -302,6 +302,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
+     * Is called when a record gets selected in the picker combo
+     * 
      * @param {Ext.form.ComboBox} picker
      * @param {Record} recordToAdd
      */
