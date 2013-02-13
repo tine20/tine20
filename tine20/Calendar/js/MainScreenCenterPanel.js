@@ -619,19 +619,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     onUpdateEvent: function(event, pastChecked, actionType) {
         
-        if(!actionType || actionType == 'edit') actionType = 'update';
+        if (! actionType || actionType == 'edit') {
+            actionType = 'update';
+        }
         this.setLoading(true);
         
-        if(!pastChecked) {
+        if(! pastChecked) {
             this.checkPastEvent(event, null, actionType);
             return;
         }
         
-        if (event.isRecurBase()) {
-           if(this.loadMask) this.loadMask.show();
+        if (event.isRecurBase() && this.loadMask) {
+           this.loadMask.show();
         }
         
-        if (event.isRecurInstance() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
+        if (event.isRecurInstance() || event.isRecurException() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Update Event'),
                 height: 170,
@@ -650,7 +652,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
                     switch (option) {
                         case 'series':
-                            if(this.loadMask) this.loadMask.show();
+                            if (this.loadMask) {
+                                this.loadMask.show();
+                            }
                             
                             var options = {
                                 scope: this,
@@ -660,7 +664,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 failure: this.onProxyFail.createDelegate(this, [event], true)
                             };
                             
-                            Tine.Calendar.backend.updateRecurSeries(event, options);
+                            if (event.isRecurException()) {
+                                Tine.Calendar.backend.saveRecord(event, options, {range: 'ALL', checkBusyConflicts: false});
+                            } else {
+                                Tine.Calendar.backend.updateRecurSeries(event, options);
+                            }
                             break;
                             
                         case 'this':
@@ -678,7 +686,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 failure: this.onProxyFail.createDelegate(this, [event], true)
                             };
                             
-                            Tine.Calendar.backend.createRecurException(event, false, option == 'future', options);
+                            if (event.isRecurException()) {
+                                Tine.Calendar.backend.saveRecord(event, options, {range: (option === 'this' ? 'THIS' : 'THISANDFUTURE'), checkBusyConflicts: false});
+                            } else {
+                                Tine.Calendar.backend.createRecurException(event, false, option === 'future', options);
+                            }
                             break;
                             
                         default:

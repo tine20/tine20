@@ -195,11 +195,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @param   bool    $checkBusyConflicts
+     * @param   string  $range
      * @return  array   created/updated event
      */
-    public function saveEvent($recordData, $checkBusyConflicts = FALSE)
+    public function saveEvent($recordData, $checkBusyConflicts = FALSE, $range = Calendar_Model_Event::RANGE_THIS)
     {
-        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConflicts));
+        return $this->_save($recordData, Calendar_Controller_Event::getInstance(), 'Event', 'id', array($checkBusyConflicts, $range));
     }
     
     /**
