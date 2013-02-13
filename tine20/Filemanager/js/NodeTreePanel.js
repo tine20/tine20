@@ -343,8 +343,12 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             this.contextMenuOtherUserFolder.showAt(event.getXY());
         } else if (node.id == 'personal' || node.id == 'shared') {
             this.contextMenuRootFolder.showAt(event.getXY());
-        } else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
-                || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))) {
+        } else if (path.match(/^\/shared/) 
+                && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
+                    || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))
+                    || container.account_grants && container.account_grants.adminGrant
+                )
+            {
             if (typeof container.name == 'object') {
                 this.contextMenuContainerFolder.showAt(event.getXY());
             } else {

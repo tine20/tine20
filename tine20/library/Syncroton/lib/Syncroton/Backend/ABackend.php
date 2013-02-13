@@ -13,7 +13,6 @@
  *
  * @package     Backend
  */
- 
 abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
 {
     /**
@@ -31,6 +30,12 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
     
     protected $_modelInterfaceName;
     
+    /**
+     * the constructor
+     * 
+     * @param  Zend_Db_Adapter_Abstract  $_db
+     * @param  string                    $_tablePrefix
+     */
     public function __construct(Zend_Db_Adapter_Abstract $_db, $_tablePrefix = 'Syncroton_')
     {
         $this->_db          = $_db;
@@ -58,6 +63,12 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return $this->get($data['id']);
     }
     
+    /**
+     * convert iteratable object to array
+     * 
+     * @param  unknown   $model
+     * @return array
+     */
     protected function _convertModelToArray($model)
     {
         $data = array();
@@ -99,6 +110,12 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return $this->_getObject($data);
     }
     
+    /**
+     * convert array to object
+     * 
+     * @param  array  $data
+     * @return object
+     */
     protected function _getObject($data)
     {
         foreach ($data as $key => $value) {
@@ -114,6 +131,10 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return new $this->_modelClassName($data);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_IBackend::delete()
+     */
     public function delete($id)
     {
         $id = $id instanceof $this->_modelInterfaceName ? $id->id : $id;
@@ -123,6 +144,10 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return (bool) $result;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Backend_IBackend::update()
+     */
     public function update($model)
     {
         if (! $model instanceof $this->_modelInterfaceName) {
@@ -138,6 +163,11 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return $this->get($model->id);
     }
 
+    /**
+     * convert from camelCase to camel_case
+     * @param  string  $string
+     * @return string
+     */
     protected function _fromCamelCase($string)
     {
         $string = lcfirst($string);
@@ -145,6 +175,13 @@ abstract class Syncroton_Backend_ABackend implements Syncroton_Backend_IBackend
         return preg_replace_callback('/([A-Z])/', function ($string) {return '_' . strtolower($string[0]);}, $string);
     }
     
+    /**
+     * convert from camel_case to camelCase
+     * 
+     * @param  string $string
+     * @param  bool   $ucFirst
+     * @return string
+     */
     protected function _toCamelCase($string, $ucFirst = true)
     {
         if ($ucFirst === true) {

@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_Convert_Contact_VCard_IOSTest::main');
-}
-
 /**
  * Test class for Addressbook_Convert_Contact_VCard_IOS
  */
@@ -84,8 +80,8 @@ class Addressbook_Convert_Contact_VCard_IOSTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(null,                      $contact->adr_two_region);
         $this->assertEquals('Address Privat 1',        $contact->adr_two_street);
         $this->assertEquals(null,                      $contact->adr_two_street2);
-        $this->assertEquals('l.kneschke@metaways.de',  $contact->email);
-        $this->assertEquals('lars@kneschke.de',        $contact->email_home);
+        $this->assertEquals('l.kneschke@metaways.de',  $contact->email, 'email wrong');
+        $this->assertEquals('lars@kneschke.de',        $contact->email_home, 'email_home wrong');
         $this->assertEquals('Kneschke',                $contact->n_family);
         $this->assertEquals('Kneschke, Lars',          $contact->n_fileas);
         $this->assertEquals('Lars',                    $contact->n_given);
@@ -105,7 +101,7 @@ class Addressbook_Convert_Contact_VCard_IOSTest extends PHPUnit_Framework_TestCa
         $this->assertEquals('Team Leader',             $contact->title);
         $this->assertEquals('www.work.de',             $contact->url);
         $this->assertEquals('www.private.de',          $contact->url_home);
-                
+        
         return $contact;
     }
 

@@ -423,6 +423,29 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
     }
     
     /**
+     * test if changed folders got returned
+     * 
+     * @see 0007786: changed email folder names do not sync to device
+     * 
+     * @todo implement
+     */
+    public function testGetChangedFolders()
+    {
+        $this->markTestIncomplete('not yet implemented in controller/felamimail');
+        
+        $syncrotonFolder = $this->testUpdateFolder();
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $changedFolders = $controller->getChangedFolders(Tinebase_DateTime::now()->subMinute(1), Tinebase_DateTime::now());
+        
+        //var_dump($changedFolders);
+        
+        $this->assertEquals(1, count($changedFolders));
+        $this->assertArrayHasKey($syncrotonFolder->serverId, $changedFolders);
+    }
+    
+    /**
      * test search for emails
      */
     public function testSearch()
@@ -491,8 +514,6 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
      * testGetCountOfChanges (inbox folder cache should be updated here by _inspectGetServerEntries fn)
      * 
      * @see 0006232: Emails get only synched, if the user is logged on with an browser
-     * 
-     * @todo reactivate test
      */
     public function testGetCountOfChanges()
     {

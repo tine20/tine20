@@ -140,7 +140,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         isHtml5ChunkedUpload: function() {
 
           if(window.File == undefined) return false;
-          if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
+          if(this.isHostMethod(File.prototype, 'slice') || this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
               return true;
           }
           else {

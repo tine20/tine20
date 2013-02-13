@@ -658,12 +658,12 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     isHtml5ChunkedUpload: function() {
                     
         if(window.File == undefined) return false;
-        if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
+        if(this.isHostMethod(File.prototype, 'slice') || this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
             return this.fileSize > this.minChunkSize;
         }
         else {
             return false;
-        }       
+        }
     },
     
     // private
@@ -686,7 +686,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     sliceFile: function(file, start, end, type) {
         
-        if(file.mozSlice) {
+        if(file.slice) {
+            return file.slice(start, end);
+        }
+        else if(file.mozSlice) {
             return file.mozSlice(start, end, type);
         }
         else if(file.webkitSlice) {

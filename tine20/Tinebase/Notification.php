@@ -85,8 +85,8 @@ class Tinebase_Notification
                 }
             } catch (Exception $e) {
                 $exception = $e;
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Failed to send notification message to '{$recipient->email}'");
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " $e");
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " Failed to send notification message to '{$recipient->email}'. Exception: " . $e);
             }
         }
         

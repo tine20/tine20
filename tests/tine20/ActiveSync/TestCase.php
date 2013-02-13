@@ -102,7 +102,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     
     /**
      *
-     * @return Syncroton_Model_IFolder
+     * @return Syncroton_Model_Folder
      */
     public function testCreateFolder()
     {
@@ -118,21 +118,64 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         return $syncrotonFolder;
     }
     
+    /**
+     * 
+     * @return Syncroton_Model_Folder
+     */
     public function testUpdateFolder()
     {
-        $this->markTestIncomplete();
-    
         $syncrotonFolder = $this->testCreateFolder();
+        $syncrotonFolder->displayName = 'RenamedTestFolder';
     
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
     
-        $controller->updateFolder($syncrotonFolder);
+        $updatedSyncrotonFolder = $controller->updateFolder($syncrotonFolder);
+        
+        $allFolders = $controller->getAllFolders();
+        
+        $this->assertArrayHasKey($syncrotonFolder->serverId, $allFolders);
+        $this->assertEquals('RenamedTestFolder', $allFolders[$syncrotonFolder->serverId]->displayName);
+        
+        return $updatedSyncrotonFolder;
+    }
+    
+    /**
+     * @return Syncroton_Model_Folder
+     */
+    public function testUpdateFolderAndroid()
+    {
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncrotonFolders = $controller->getAllFolders();
+    
+        #var_dump($syncrotonFolders); return;
+        
+        $this->setExpectedException('Syncroton_Exception_UnexpectedValue');
+        
+        $updatedSyncrotonFolder = $controller->updateFolder($syncrotonFolders[$this->_specialFolderName]);
+    }
+    
+    /**
+     * test if changed folders got returned
+     */
+    public function testGetChangedFolders()
+    {
+        $syncrotonFolder = $this->testUpdateFolder();
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $changedFolders = $controller->getChangedFolders(Tinebase_DateTime::now()->subMinute(1), Tinebase_DateTime::now());
+        
+        //var_dump($changedFolders);
+        
+        $this->assertEquals(1, count($changedFolders));
+        $this->assertArrayHasKey($syncrotonFolder->serverId, $changedFolders);
     }
     
     public function testDeleteFolder()
     {
-        $this->markTestIncomplete();
-    
+        $this->markTestIncomplete('not yet implemented in controller');
+        
         $syncrotonFolder = $this->testCreateFolder();
     
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
@@ -247,7 +290,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      * test xml generation for sync to client
      */
     abstract public function testUpdateEntry($syncrotonFolder = null);
-        
+    
     /**
      * create container with sync grant
      * 
