@@ -690,14 +690,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
             
             if(static::_checkMetaProperty('useModlog')) {
-                static::$_fields['created_by']         = array('label' => 'Created By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['creation_time']      = array('label' => 'Creation Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['last_modified_by']   = array('label' => 'Last Modified By', 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['last_modified_time'] = array('label' => 'Last Modification Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['created_by']         = array('label' => 'Created By',         'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['creation_time']      = array('label' => 'Creation Time',      'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['last_modified_by']   = array('label' => 'Last Modified By',   'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['last_modified_time'] = array('label' => 'Last Modified Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 // don't show deleted information
-                static::$_fields['deleted_by']         = array('label' => NULL, 'type' => 'user', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['deleted_by']         = array('label' => NULL, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
                 static::$_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
-                static::$_fields['is_deleted']         = array('label' => NULL, 'type' => 'bool', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                static::$_fields['is_deleted']         = array('label' => NULL, 'type' => 'bool',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
             }
         }
 
