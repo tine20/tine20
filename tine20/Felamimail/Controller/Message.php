@@ -55,13 +55,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_punycodeConverter = NULL;
     
     /**
-     * elements to remove from html body of a message / only images are supported atm
-     * 
-     * @var array
-     */
-    protected $_purifyElements = array('images');
-    
-    /**
      * fallback charset constant
      * 
      * @var string
@@ -525,16 +518,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * set elements to purify
-     * 
-     * @param array $_elementsToPurify
-     */
-    public function setPurifyElements($_elementsToPurify = array('images'))
-    {
-        $this->_purifyElements = $_elementsToPurify;
-    }
-    
-    /**
      * get message body
      * 
      * @param string|Felamimail_Model_Message $_messageId
@@ -586,9 +569,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . $_message->getId()
             . str_replace('.', '', $_partId)
             . substr($_contentType, -4)
-            . (($_account !== NULL) ? 'acc' : '')
-            . implode('', $this->_purifyElements);
-                                    
+            . (($_account !== NULL) ? 'acc' : '');
+        
         return $cacheId;
     }
     
@@ -801,18 +783,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('CSS.AllowTricky', true);
         */
         $config->set('Cache.SerializerPath', $path);
+        $config->set('URI.AllowedSchemes', array(
+            'http' => true,
+            'https' => true,
+            'mailto' => true,
+            'data' => true
+        ));
 
-        if (in_array('images', $this->_purifyElements)) {
-            $config->set('HTML.ForbiddenElements', array('img'));
-            $config->set('CSS.ForbiddenProperties', array('background-image'));
-        }
-        
-        
         // add target="_blank" to anchors
         if ($def = $config->maybeGetRawHTMLDefinition()) {
             $a = $def->addBlankElement('a');
             $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
         }
+        
+        // add uri filter
+        $uri = $config->getDefinition('URI');
+        $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);

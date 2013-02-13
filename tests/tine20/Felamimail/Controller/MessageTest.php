@@ -1295,6 +1295,48 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Zend_Mime::TYPE_HTML, $message->body_content_type);
     }
     
+    /**
+     * testHtmlPurify
+     * 
+     * @see 0007726: show inline images of multipart/related message parts
+     * 
+     * @todo allow external resources
+     * @todo remove $_SERVER stuff?
+     */
+    public function testHtmlPurify()
+    {
+//         $_SERVER['SERVER_NAME'] = 'localhost';
+//         $_SERVER['REQUEST_URI'] = '/tine20';
+        $cachedMessage = $this->messageTestHelper('text_html_urls.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+//         unset($_SERVER['SERVER_NAME']);
+//         unset($_SERVER['REQUEST_URI']);
+        
+//         $this->assertContains('<div></div>
+//     <img src="http://localhost/tine20/index.php?Felamimail.getResource&amp;uri=aHR0cDovL3d3dy50aW5lMjAub3JnL2ZpbGVhZG1pbi90ZW1wbGF0ZXMvaW1hZ2VzL3RpbmUyMC5wbmc=&amp;type=img" alt="tine20.png" /><img src="http://localhost/tine20.png" alt="tine20.png" />
+    
+//     <p>text</p>', $message->body);
+        $this->assertContains('<div></div>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="w38GIAXDIBKE0DHxgljNBAAO 9TXL0Y4OHwAAAAB" />
+    
+    <p>text</p>', $message->body);
+    }
+
+    /**
+     * testNewsletterMultipartRelated
+     * 
+     * @see 0007726: show inline images of multipart/related message parts
+     * 
+     * @todo implement
+     */
+    public function testNewsletterMultipartRelatedWithImages()
+    {
+        $this->markTestIncomplete('implement');
+        $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
+    }
+    
+    
     /********************************* protected helper funcs *************************************/
     
     /**
