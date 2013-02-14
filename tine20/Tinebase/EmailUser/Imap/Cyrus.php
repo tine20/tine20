@@ -117,8 +117,11 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $imap = $this->_getImapConnection();
         
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
-
+        
         $quota = $imap->getQuotaRoot($mailboxString);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got quota: ' . print_r($quota, TRUE));
         
         $emailUser = new Tinebase_Model_EmailUser(array(
             'emailUsername'  => $this->_appendDomain($_user->accountLoginName),
@@ -126,13 +129,13 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             'emailMailQuota' => isset($quota['STORAGE']) ? round($quota['STORAGE']['limit'] / 1024) : null,
             'emailMailSize'  => isset($quota['STORAGE']) ? round($quota['STORAGE']['usage'] / 1024) : null
         ));
-                
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
         $_user->imapUser  = $emailUser;
         $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
     }
-        
+    
     /**
      * update/set email user password
      * 
@@ -180,7 +183,6 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         }
         
         $this->_setImapQuota($_newUserProperties, $imap, $mailboxString);
-        
         $this->inspectGetUserByProperty($_addedUser);
     }
     
@@ -196,8 +198,14 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
         $mailboxString = ($_mailboxString !== NULL) ? $_mailboxString : $this->_getUserMailbox($_user->accountLoginName);
         
-        $limit = (isset($_user->imapUser) && $_user->imapUser->emailMailQuota) > 0 ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
-        $imap->setQuota($mailboxString, 'STORAGE', $limit);
+        if (isset($_user->imapUser)) {
+            $limit = ($_user->imapUser->emailMailQuota) > 0 ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . " Setting quota of user " . $_user->getId() . " to " . $limit);
+            
+            $imap->setQuota($mailboxString, 'STORAGE', $limit);
+        }
     }
     
     /**
