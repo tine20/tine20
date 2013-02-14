@@ -28,7 +28,7 @@
 %global vyear 2013
 %global vmonth 03
 %global vmin 1
-%global vpost ~alpha1
+%global vpost ~beta1
 
 Name:           tine20
 Version:        %{vyear}.%{vmonth}.%{vmin}%{vpost}
