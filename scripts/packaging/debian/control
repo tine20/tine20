@@ -39,7 +39,7 @@ Depends: ${misc:Depends},
  wwwconfig-common, 
  apache2 | lighttpd | nginx,
  libapache2-mod-php5 | php5-fpm, 
- php5-mysql | php5-mysqli | php5-pgsql
+ php5-mysql | php5-mysqli | php5-pgsql,
  php5-mcrypt, 
  php5-gd,
  php-apc,
@@ -153,11 +153,11 @@ Package: tine20-worker
 Architecture: all
 Depends: ${tine20:Modules},
  tine20-libraries (= ${binary:Version}),
- php5-mysql | php5-mysqli | php5-pgsql
+ php5-mysql | php5-mysqli | php5-pgsql,
  php5-mcrypt, 
  php5-gd,
- php-apc
- php5-cli
+ php-apc,
+ php5-cli,
  php5-redis (>= 2.2.2)
 Description: webbased groupware and crm - asynchronous worker
  This package contains the asynchronous worker of Tine 2.0. Install this package

@@ -90,7 +90,7 @@ function createDirectories()
 
 function getOptions()
 {
-    while getopts ":pr:s:b:c:" optname
+    while getopts "pr:s:b:c:" optname
     do
         case "$optname" in
           "c")
@@ -224,7 +224,7 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/jsb2tk;  rm -rf JSBuilder2 tests)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles docs config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php"
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles docs config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php"
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     
@@ -367,10 +367,10 @@ function prepareFedoraPackaging()
     echo "done"
 }
 
-getOptions $*
+getOptions "$@"
 
 createDirectories
-checkout "$GITURL" $GITBRANCH
+checkout "$GITURL" "$GITBRANCH"
 setupPackageDir
 activateReleaseMode
 buildClient
