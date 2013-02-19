@@ -12,7 +12,7 @@ Package: tine20
 Architecture: all
 Depends: ${misc:Depends}, 
  tine20-webstack (= ${binary:Version}),
- mysql-server
+ mysql-server | postgresql (>= 9.1)
 Description: webbased groupware and crm - metapackage
  Tine 2.0 is an open source project which combines groupware and CRM in one
  consistent interface. Tine 2.0 is web-based and optimises collaboration and
@@ -39,12 +39,12 @@ Depends: ${misc:Depends},
  wwwconfig-common, 
  apache2 | lighttpd | nginx,
  libapache2-mod-php5 | php5-fpm, 
- php5-mysql | php5-mysqli, 
+ php5-mysql | php5-mysqli | php5-pgsql
  php5-mcrypt, 
  php5-gd,
  php-apc,
  makepasswd
-Recommends: mysql-client
+Recommends: mysql-client | postgresql-client (>= 9.1)
 Description: Tine 2.0 webserver integration package
  This package integrates Tine 2.0 with the webserver, by installing all needed
  dependencies to make Tine 2.0 available via HTTP(S).
@@ -148,3 +148,17 @@ Depends: tine20-tinebase (= ${binary:Version}), tine20-sales (= ${binary:Version
 Description: webbased groupware and crm - humanresources module
  This package contains the humanresources module of Tine 2.0. Installing this package
  enables you to manage personal data about your employees. 
+
+Package: tine20-worker
+Architecture: all
+Depends: ${tine20:Modules},
+ tine20-libraries (= ${binary:Version}),
+ php5-mysql | php5-mysqli | php5-pgsql
+ php5-mcrypt, 
+ php5-gd,
+ php-apc
+ php5-cli
+ php5-redis (>= 2.2.2)
+Description: webbased groupware and crm - asynchronous worker
+ This package contains the asynchronous worker of Tine 2.0. Install this package
+ if you have a high number of users.
