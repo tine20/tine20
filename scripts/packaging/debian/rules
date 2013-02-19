@@ -32,10 +32,10 @@
 #export DH_VERBOSE=1
 
 PACKAGES := $(shell dh_listpackages)
-MODULES = $(filter-out webstack courses,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
+MODULES = $(filter-out worker webstack courses,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
 
 %:
-	dh  $@
+	dh $@
 
 # overwrite dh_installdeb to execute an additional shell script
 override_dh_installdeb:
