@@ -81,6 +81,7 @@ Ext.apply(Ext.form.VTypes, {
     }
 });
 
+
 /**
  * fix textfield allowBlank validation
  */
@@ -175,6 +176,18 @@ Ext.form.TimeField.prototype.getValue = function(){
     
     return value ? this.parseDate(value).dateFormat('H:i') : "";
 };
+
+/**
+ * check if sort field is in column list to avoid server exceptions
+ */
+Ext.grid.GridPanel.prototype.applyState  = Ext.grid.GridPanel.prototype.applyState.createInterceptor(function(state){
+    var cm = this.colModel,
+        s = state.sort;
+    
+    if (s && cm.getIndexById(s.field) < 0) {
+        delete state.sort;
+    }
+});
 
 /**
  * fix interpretation of ISO-8601  formatcode (Date.patterns.ISO8601Long) 
