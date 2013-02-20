@@ -1,180 +1,178 @@
 # 
 # Translators:
-# Tamás Faragó <>, 2012-2013.
+# sao sang <saosangmo@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-16 21:12+0000\n"
-"Last-Translator: Tamás Faragó <>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
+"PO-Revision-Date: 2013-02-15 07:50+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:185
 msgid "manage access log"
-msgstr "hozzáférési napló kezelése"
+msgstr "quản lý nhật ký truy cập"
 
 #: Acl/Rights.php:186
 msgid "delete access log entries"
-msgstr "hozzáférési napló bejegyzés törlése"
+msgstr "xóa nhật ký truy cập"
 
 #: Acl/Rights.php:189
 msgid "manage accounts"
-msgstr "fiókok kezelése"
+msgstr "quản lý tài khoản"
 
 #: Acl/Rights.php:190
 msgid ""
 "add and edit users and groups, add group members, change user passwords"
-msgstr "felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, felhasználó jelszó megváltoztatása"
+msgstr "thêm và sửa người dùng và nhóm, thêm thành viên nhóm, thay đổi mật khẩu người dùng"
 
 #: Acl/Rights.php:193
 msgid "manage applications"
-msgstr "alkalmazások kezelése"
+msgstr "quản lý ứng dụng"
 
 #: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
-msgstr "alkalmazások be és kikapcsolása és beállítások módosítása"
+msgstr "mở và tắt ứng dụng, sửa thiết lập ứng dụng"
 
 #: Acl/Rights.php:197
 msgid "manage roles"
-msgstr "szerepek kezelése"
+msgstr "quản lý vai trò"
 
 #: Acl/Rights.php:198
 msgid ""
 "add and edit roles, add new members to roles, add application rights to "
 "roles"
-msgstr "szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, alkalmazás hozzáférések szerepekhez adása"
+msgstr "thêm và sửa vai trò, thêm thành viên mới vào vai trò, thêm quyền ứng dụng vào vai trò"
 
 #: Acl/Rights.php:201
 msgid "manage shared tags"
-msgstr "megosztott címkék kezelése"
+msgstr "quản lý từ khóa chia sẻ"
 
 #: Acl/Rights.php:202
 msgid "add, delete and edit shared tags"
-msgstr "címkék hozzáadása, szerkesztése, törlése"
+msgstr "thêm, xóa và sửa thẻ chia sẻ"
 
 #: Acl/Rights.php:205
 msgid "manage computers"
-msgstr "számítógépek kezelése"
+msgstr "quản lý máy tính"
 
 #: Acl/Rights.php:206
 msgid "add, delete and edit (samba) computers"
-msgstr "számítógép (samba) hozzáadása, szerkesztése, törlése"
+msgstr "thêm, xóa và sửa máy tính (samba)"
 
 #: Acl/Rights.php:209
 msgid "manage containers"
-msgstr "konténerek kezelése"
+msgstr "quản lý bộ chứa"
 
 #: Acl/Rights.php:210
 msgid "add, delete and edit containers and manage container grants"
-msgstr "konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
+msgstr "thêm, xóa và sửa bộ chứa, và quản lý quyền bộ chứa"
 
 #: Acl/Rights.php:213
 msgid "view access log"
-msgstr "hozzáférési napló megtekintése"
+msgstr "xem nhật ký truy cập"
 
 #: Acl/Rights.php:214
 msgid "view access log list"
-msgstr "hozzáférési napló listája"
+msgstr "xem danh sách nhật ký truy cập"
 
 #: Acl/Rights.php:217
 msgid "view accounts"
-msgstr "fiókok megtekintése"
+msgstr "xem tài khoản"
 
 #: Acl/Rights.php:218
 msgid "view accounts list and details"
-msgstr "fiók lista és részletek listája"
+msgstr "xem danh sách tài khoản và chi tiết"
 
 #: Acl/Rights.php:221
 msgid "view applications"
-msgstr "alkalmazások megtekintése"
+msgstr "xem ứng dụng"
 
 #: Acl/Rights.php:222
 msgid "view applications list and details"
-msgstr "alkalmazás lista és részletek"
+msgstr "xem danh sách ứng dụng và chi tiết"
 
 #: Acl/Rights.php:225
 msgid "view roles"
-msgstr "szerepek megtekintése"
+msgstr "xem vai trò"
 
 #: Acl/Rights.php:226
 msgid "view roles list and details"
-msgstr "szerepek és részletek listjája"
+msgstr "xem danh sách vai trò và chi tiết"
 
 #: Acl/Rights.php:229
 msgid "view computers"
-msgstr "számítógépek megtekintése"
+msgstr "xem máy tính"
 
 #: Acl/Rights.php:230
 msgid "view computers list and details"
-msgstr "számítógépek és részletek listája"
+msgstr "xem danh sách máy tính và chi tiết"
 
 #: Acl/Rights.php:233
 msgid "view containers"
-msgstr "konténerek megtekintése"
+msgstr "xem bộ chứa"
 
 #: Acl/Rights.php:234
 msgid "view personal and shared containers"
-msgstr "személyes és megosztott konténerek megtekintése"
+msgstr "xem bộ chứa chia sẻ và cá nhân"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
-msgstr "Alapértelmezett IMAP felhasználó beállítások"
+msgstr "Default IMAP user settings"
 
 #: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
-msgstr "Alapértelmezett Címjegyzék új kapcsolatokhoz és csoportokhoz"
+msgstr "Danh bạ mặc định cho nhóm và liên lạc mới"
 
 #: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
-msgstr[0] "Felhasználó"
-msgstr[1] "Felhasználók"
+msgstr[0] "one: Người dùng\nother: Người dùng"
 
 #: js/Admin.js:36 js/Models.js:87
 msgid "Groups"
-msgstr "Csoportok"
+msgstr "Nhóm"
 
 #: js/Admin.js:49
 msgid "Roles"
-msgstr "Szerepek"
+msgstr "Vai trò"
 
 #: js/Admin.js:61
 msgid "Computers"
-msgstr "Számítógépek"
+msgstr "Máy tính"
 
 #: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
-msgstr "Alkalmazások"
+msgstr "Ứng dụng"
 
 #: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
-msgstr[0] "Hozzáférési Napló"
-msgstr[1] "Hozzáférési Napló"
+msgstr[0] "one: Nhật ký truy cập\nother: Nhật ký truy cập"
 
 #: js/Admin.js:100
 msgid "Shared Tags"
-msgstr "Megosztott címkék"
+msgstr "Từ khóa chia sẻ"
 
 #: js/Admin.js:113
 msgid "Containers"
-msgstr "Konténerek"
+msgstr "Bộ chứa"
 
 #: js/Admin.js:125
 msgid "Customfields"
-msgstr "Egyedi mezők"
+msgstr "Trường tùy biến"
 
 #: js/Admin.js:137
 msgid "Server Information"
-msgstr "Szerver információ"
+msgstr "Thông tin máy chủ"
 
 #: js/Admin.js:172
 msgid "Admin"
@@ -182,17 +180,17 @@ msgstr "Admin"
 
 #: js/Admin.js:254
 msgid "Refresh"
-msgstr "Frissítés"
+msgstr "Nạp lại"
 
 #: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
-msgstr "Számítógép Név"
+msgstr "Tên máy tính"
 
 #: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
 #: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
 #: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
 msgid "Description"
-msgstr "Leírás"
+msgstr "Mô tả"
 
 #: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
 #: js/container/GridPanel.js:70 js/user/GridPanel.js:175
@@ -206,386 +204,384 @@ msgstr "ID"
 #: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
 #: js/customfield/GridPanel.js:72
 msgid "Name"
-msgstr "Név"
+msgstr "Tên"
 
 #: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
 #: js/customfield/GridPanel.js:131
 msgid "Confirm"
-msgstr "Megerősít"
+msgstr "Xác nhận"
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
-msgstr "Biztos törölni akarja a kiválaszott címkéket?"
+msgstr "Bạn có muốn xóa các từ khóa đa chọn?"
 
 #: js/Tags.js:82
 msgid "Deleting tag(s)..."
-msgstr "Címke(ék) törlése..."
+msgstr "Đang xóa từ khóa ..."
 
 #: js/Tags.js:97
 msgid "Add Tag"
-msgstr "Címke hozzáadása"
+msgstr "Thêm từ khóa"
 
 #: js/Tags.js:105
 msgid "Edit Tag"
-msgstr "Címke szerkesztése"
+msgstr "Sửa từ khóa"
 
 #: js/Tags.js:113
 msgid "Delete Tag"
-msgstr "Címke törlése"
+msgstr "Xóa từ khóa"
 
 #: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
 msgid "Search:"
-msgstr "Keresés:"
+msgstr "Tìm kiếm:"
 
 #: js/Tags.js:211
 msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Címkék megjelenítése {0} - {1} / {2}"
+msgstr "Hiển thị từ khóa {0} - {1} của {2}"
 
 #: js/Tags.js:212 js/Tags.js:268
 msgid "No tags to display"
-msgstr "Nincs megjeleníthető címke"
+msgstr "Không có từ khóa nào"
 
 #: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
 msgid "Color"
-msgstr "Szín"
+msgstr "Màu"
 
 #: js/Tags.js:223
 msgid "Usage:&#160;"
-msgstr "Használat:&#160;"
+msgstr "Sử dụng:&#160;"
 
 #: js/Roles.js:47
 msgid "Do you really want to delete the selected roles?"
-msgstr "Biztos törölni akarod a kiválasztott szerepeket?"
+msgstr "Bạn có muốn xóa vai trò đã chọn"
 
 #: js/Roles.js:64
 msgid "Deleting role(s)..."
-msgstr "Szerep(ek) törlése..."
+msgstr "Đang xóa vai trò..."
 
 #: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
 #: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
 msgid "Failed"
-msgstr "Nem sikerült"
+msgstr "Hỏng"
 
 #: js/Roles.js:69 js/RoleEditDialog.js:136
 msgid "Some error occurred while trying to delete the role."
-msgstr "Valamilyen hiba történt a szerep mentése közben."
+msgstr "Có lỗi khi xóa vai trò"
 
 #: js/Roles.js:102
 msgid "Add Role"
-msgstr "Szabály hozzáadása"
+msgstr "Thêm vai trò"
 
 #: js/Roles.js:110
 msgid "Edit Role"
-msgstr "Szabály szerkesztése"
+msgstr "Sửa vai trò"
 
 #: js/Roles.js:118
 msgid "Delete Role"
-msgstr "Szabály törlése"
+msgstr "Xóa vai trò"
 
 #: js/Roles.js:226
 msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Szerepek megjelenítése{0} - {1} / {2}"
+msgstr "Hiển thị vai trò {0} - {1} của {2}"
 
 #: js/Roles.js:227 js/Roles.js:281
 msgid "No roles to display"
-msgstr "Nincs megjelenthető szerep"
+msgstr "Không có vai trò nào"
 
 #: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
 msgid "Please wait"
-msgstr "Kérlek várj"
+msgstr "Xin hãy đợi"
 
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
 msgid "Updating Memberships"
-msgstr "Tagságok frissítése"
+msgstr "Đang cập nhật thành viên"
 
 #: js/GroupEditDialog.js:73
 msgid "Could not save group."
-msgstr "Nem sikerült a csoportot menteni."
+msgstr "Không thể lưu nhóm"
 
 #: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
 #: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
 msgid "Errors"
-msgstr "Hibák"
+msgstr "Lỗi"
 
 #: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
 msgid "Please fix the errors noted."
-msgstr "Kérjük javítsa kis a jelölt hibákat."
+msgstr "Xin hãy sửa các lỗi được ghi chú."
 
 #: js/GroupEditDialog.js:121
 msgid "Group Name"
-msgstr "Csoport neve"
+msgstr "Tên nhóm"
 
 #: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
 msgid "Visibility"
-msgstr "Láthatóság"
+msgstr "Có thể nhìn thấy"
 
 #: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
 msgid "Display in addressbook"
-msgstr "Megjelenítés a címjegyzékben"
+msgstr "Hiển thị trong sổ địa chỉ"
 
 #: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
 msgid "Hide from addressbook"
-msgstr "Elrejtés a címjegyzékben"
+msgstr "Ẩn từ sổ địa chỉ"
 
 #: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
 msgid "Saved in Addressbook"
-msgstr "Címjegyzékben mentve"
+msgstr "Đã lưu trong Sổ địa chỉ"
 
 #: js/GroupEditDialog.js:170
 msgid "Group Members"
-msgstr "Csoport tagok"
+msgstr "Nhóm thành viên"
 
 #: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
 msgid "Transferring {0}..."
-msgstr "{0} átvitele..."
+msgstr "Đang chuyển {0} ..."
 
 #: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
-msgstr[0] "Csoport"
-msgstr[1] "Csoport"
+msgstr[0] "one: Nhóm\nother: Nhóm"
 
 #: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
 msgid "Add new group"
-msgstr "Új csoport"
+msgstr "Thêm nhóm mới"
 
 #: js/GroupEditDialog.js:240
 msgid "Edit Group \"{0}\""
-msgstr "Csoport szerkesztése  \"{0}\""
+msgstr "Sửa nhóm \"{0}\""
 
 #: js/Applications.js:43
 msgid "{0} Settings"
-msgstr "{0} Beállítások"
+msgstr "{0} Thiết lập"
 
 #: js/Applications.js:83
 msgid "Enable Application"
-msgstr "Alkalmazás engedélyezése"
+msgstr "Mở ứng dụng"
 
 #: js/Applications.js:90
 msgid "Disable Application"
-msgstr "Alkalmazás letiltása"
+msgstr "Cấm ứng dụng"
 
 #: js/Applications.js:97
 msgid "Settings"
-msgstr "Beállítása"
+msgstr "Thiết lập"
 
 #: js/Applications.js:146
 msgid "enable application"
-msgstr "alkalmazás engedélyezése"
+msgstr "mở ứng dụng"
 
 #: js/Applications.js:147
 msgid "disable application"
-msgstr "alkalmazás felfüggesztése"
+msgstr "tắt ứng dụng"
 
 #: js/Applications.js:148
 msgid "settings"
-msgstr "beállítások"
+msgstr "thiết lập"
 
 #: js/Applications.js:228 js/user/EditDialog.js:873
 msgid "disabled"
-msgstr "felfüggesztve"
+msgstr "đã tắt"
 
 #: js/Applications.js:231 js/user/EditDialog.js:872
 msgid "enabled"
-msgstr "engedélyezve"
+msgstr "đang mở"
 
 #: js/Applications.js:235
 msgid "unknown status ({0})"
-msgstr "ismeretlen állapot ({0})"
+msgstr "không rõ trạng thái ({0})"
 
 #: js/Applications.js:269
 msgid "Displaying application {0} - {1} of {2}"
-msgstr "Alkalmazások megjelenítése {0} - {1} / {2}"
+msgstr "Hiển thị ứng dụng {0} - {1} của {2}"
 
 #: js/Applications.js:270
 msgid "No applications to display"
-msgstr "Nincs megjeleníthető alkalamazás"
+msgstr "Không có ứng dụng nào"
 
 #: js/Applications.js:279 js/customfield/EditDialog.js:630
 msgid "Order"
-msgstr "Sorrend"
+msgstr "Xắp xếp"
 
 #: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
 msgid "Status"
-msgstr "Állapot"
+msgstr "Trạng thái"
 
 #: js/Applications.js:282
 msgid "Version"
-msgstr "Verzió"
+msgstr "Phiên bản"
 
 #: js/Groups.js:52
 msgid "Do you really want to delete the selected groups?"
-msgstr "Valóban törölni akarja a kiválasztott csoportokat?"
+msgstr "Bạn có muốn xóa nhóm được chọn"
 
 #: js/Groups.js:69
 msgid "Deleting group(s)..."
-msgstr "Csoport(ok) törlése..."
+msgstr "Đang xóa nhóm ..."
 
 #: js/Groups.js:74
 msgid "Some error occurred while trying to delete the group."
-msgstr "Valamilyen hiba történt a csoport törlése közben."
+msgstr "Có lỗi xảy ra khi xóa nhóm"
 
 #: js/Groups.js:104
 msgid "Add Group"
-msgstr "Csoport hozzáadása"
+msgstr "Tạo nhóm"
 
 #: js/Groups.js:112
 msgid "Edit Group"
-msgstr "Csoport szerkesztése"
+msgstr "Sửa nhóm"
 
 #: js/Groups.js:120
 msgid "Delete Group"
-msgstr "Csoport törlése"
+msgstr "Xóa nhóm"
 
 #: js/Groups.js:223
 msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Csoportok megjelenítése {0} - {1} / {2}"
+msgstr "Hiển thị nhóm {0} - {1} của {2}"
 
 #: js/Groups.js:224 js/Groups.js:278
 msgid "No groups to display"
-msgstr "Nincs megjeleníthető csoport"
+msgstr "Không có nhóm bài được hiển thị"
 
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
-msgstr "IP Cím"
+msgstr "Địa chỉ IP"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
-msgstr "Bejelentkezés ideje"
+msgstr "Thời gian đăng nhập"
 
 #: js/AccessLog.js:109 js/AccessLog.js:134
 msgid "Logout Time"
-msgstr "Kijelentkezés ideje"
+msgstr "Thời gian thoát"
 
 #: js/AccessLog.js:110 js/AccessLog.js:136
 msgid "Client Type"
-msgstr "Kliens típus"
+msgstr "Loại người dùng"
 
 #: js/AccessLog.js:129
 msgid "Session ID"
-msgstr "Hozzáférés ID"
+msgstr "Session ID"
 
 #: js/AccessLog.js:130
 msgid "Login Name"
-msgstr "Bejelentkezési név"
+msgstr "Tên đăng nhập"
 
 #: js/AccessLog.js:135
 msgid "Result"
-msgstr "Eredmény"
+msgstr "Kết quả"
 
 #: js/AccessLog.js:156
 msgid "user blocked"
-msgstr "felhasználó blokkolva"
+msgstr "người dùng đã bị phong tỏa"
 
 #: js/AccessLog.js:160
 msgid "password expired"
-msgstr "jelszó lejárt"
+msgstr "mật khẩu đã hết hạn"
 
 #: js/AccessLog.js:164
 msgid "user disabled"
-msgstr "felhasználó letiltva"
+msgstr "người dùng đã bị cấm"
 
 #: js/AccessLog.js:168
 msgid "invalid password"
-msgstr "érvénytelen jelszó"
+msgstr "sai mật khẩu"
 
 #: js/AccessLog.js:172
 msgid "ambiguous username"
-msgstr "kétértelmű felhasználó név"
+msgstr "Tên truy cập không rõ"
 
 #: js/AccessLog.js:176
 msgid "user not found"
-msgstr "felhasználó nem található"
+msgstr "không tìm thấy người dùng"
 
 #: js/AccessLog.js:180
 msgid "failure"
-msgstr "hiba"
+msgstr "hỏng"
 
 #: js/AccessLog.js:184
 msgid "success"
-msgstr "siker"
+msgstr "thành công"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
-msgstr "Címke frissítése"
+msgstr "Đang cập nhật từ khóa"
 
 #: js/TagEditDialog.js:83
 msgid "Could not save tag."
-msgstr "Nem lehetett a címkét menteni."
+msgstr "Không thể lưu vai trò"
 
 #: js/TagEditDialog.js:169
 msgid "Allowed Contexts"
-msgstr "Megengedett kontextus"
+msgstr "Ngữ cảnh được phép"
 
 #: js/TagEditDialog.js:175
 msgid "Context"
-msgstr "Kontextus"
+msgstr "Ngữ cảnh"
 
 #: js/TagEditDialog.js:188
 msgid "Account Rights"
-msgstr "Fiók jogok"
+msgstr "Quyền tài khoản"
 
 #: js/TagEditDialog.js:197
 msgid "View"
-msgstr "Megtekintés"
+msgstr "Xem"
 
 #: js/TagEditDialog.js:202
 msgid "Use"
-msgstr "Használ"
+msgstr "Sử dụng"
 
 #: js/TagEditDialog.js:219
 msgid "Tag Name"
-msgstr "Címke név"
+msgstr "Tên từ khóa"
 
 #: js/TagEditDialog.js:290
 msgid "Tag"
-msgstr "Címke"
+msgstr "Từ khóa"
 
 #: js/TagEditDialog.js:300
 msgid "Add New Tag"
-msgstr "Új címke hozzáadása"
+msgstr "Thêm từ khóa"
 
 #: js/TagEditDialog.js:302
 msgid "Edit Tag \"{0}\""
-msgstr "Címke szerkesztése  \"{0}\""
+msgstr "Sửa từ khóa \"{0}\""
 
 #: js/RoleEditDialog.js:108
 msgid "Could not save role."
-msgstr "Szerep mentése nem sikerült."
+msgstr "Không thể lưu vai trò"
 
 #: js/RoleEditDialog.js:128
 msgid "Deleting role..."
-msgstr "Szerep törlése..."
+msgstr "Đang xóa vai trò ..."
 
 #: js/RoleEditDialog.js:160
 msgid "Rights"
-msgstr "Jogok"
+msgstr "Quyền"
 
 #: js/RoleEditDialog.js:262
 msgid "Members"
-msgstr "Tagok"
+msgstr "Thành viên"
 
 #: js/RoleEditDialog.js:286
 msgid "Role Name"
-msgstr "Szerep neve"
+msgstr "Tên vai trò"
 
 #: js/RoleEditDialog.js:361
 msgid "Role"
-msgstr "Szerep"
+msgstr "Vai trò"
 
 #: js/RoleEditDialog.js:371
 msgid "Add New Role"
-msgstr "Új szerep hozzáadása"
+msgstr "Thêm vai trò"
 
 #: js/RoleEditDialog.js:373
 msgid "Edit Role \"{0}\""
-msgstr "Szerep szerkesztése \"{0}\""
+msgstr "Sửa vai trò \"{0}\""
 
 #: js/SambaMachineModel.js:39
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] "Számítógép"
-msgstr[1] "Számítógépek"
+msgstr[0] "one: Máy tính\nother: Máy tính"
 
 #: js/container/EditDialog.js:136 js/container/GridPanel.js:72
 #: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
@@ -593,58 +589,56 @@ msgstr[1] "Számítógépek"
 #: js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] "Alkalmazás"
-msgstr[1] "Alkalmazások"
+msgstr[0] "one: Ứng dụng\nother: Ứng dụng"
 
 #: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
 #: js/customfield/GridPanel.js:75
 msgid "Model"
-msgstr "Modell"
+msgstr "Model"
 
 #: js/container/EditDialog.js:156 js/container/GridPanel.js:73
 #: js/container/GridPanel.js:104 js/customfield/EditDialog.js:584
 #: js/customfield/GridPanel.js:73
 msgid "Type"
-msgstr "Típus"
+msgstr "Loại"
 
 #: js/container/EditDialog.js:157
 msgid "personal"
-msgstr "személyes"
+msgstr "cá nhân"
 
 #: js/container/EditDialog.js:157
 msgid "shared"
-msgstr "megosztott"
+msgstr "dùng chung"
 
 #: js/container/EditDialog.js:176
 msgid "Note for Owner"
-msgstr "Feljegyzés a tulajdonosnak"
+msgstr "Ghi chép cho chủ sở huwuxu"
 
 #: js/container/Container.js:46 js/container/GridPanel.js:103
 msgid "Container"
 msgid_plural "Containers"
-msgstr[0] "Konténer"
-msgstr[1] "Konténerek"
+msgstr[0] "one: Bộ chứa\nother: Bộ chứa"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
-msgstr "Konténer Név"
+msgstr "Tên bộ chứa"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domain nem engedélyezett. Nézd meg az SMTP domain konfigurációt."
+msgstr "Tên miền không được phép. Kiểm tra cấu hình tên miền SMTP"
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:726
 msgid "Passwords do not match!"
-msgstr "A jelszavak nem egyeznek!"
+msgstr "Mật khẩu không giống nhau"
 
 #: js/user/EditDialog.js:240
 msgid "Passwords match!"
-msgstr "Jelszó megegyezik!"
+msgstr "Mật khẩu giống nhau"
 
 #: js/user/EditDialog.js:286 js/user/EditDialog.js:848
 msgid "Primary group"
-msgstr "Elsődleges csoport"
+msgstr "Nhóm chính"
 
 #: js/user/EditDialog.js:363
 msgid "Unix"
@@ -652,11 +646,11 @@ msgstr "Unix"
 
 #: js/user/EditDialog.js:377
 msgid "Home Directory"
-msgstr "Home könyvtár"
+msgstr "Thư mục Home"
 
 #: js/user/EditDialog.js:381
 msgid "Login Shell"
-msgstr "Bejelentkezési Környezet"
+msgstr "Shell Login"
 
 #: js/user/EditDialog.js:387
 msgid "Windows"
@@ -664,146 +658,146 @@ msgstr "Windows"
 
 #: js/user/EditDialog.js:401
 msgid "Home Drive"
-msgstr "Home meghajtó"
+msgstr "Home Drive"
 
 #: js/user/EditDialog.js:406
 msgid "Logon Time"
-msgstr "Bejelentkezés ideje"
+msgstr "Thơi gian đăng nh"
 
 #: js/user/EditDialog.js:408 js/user/EditDialog.js:959
 #: js/user/EditDialog.js:963
 msgid "never logged in"
-msgstr "sosem jelentkezett be"
+msgstr "chưa bao giờ đăng nhập"
 
 #: js/user/EditDialog.js:411
 msgid "Home Path"
-msgstr "Home útvonal"
+msgstr "Đường dẫn trang chủ"
 
 #: js/user/EditDialog.js:416
 msgid "Logoff Time"
-msgstr "Kijelentkezés ideje"
+msgstr "Thời gian thoát"
 
 #: js/user/EditDialog.js:418
 msgid "never logged off"
-msgstr "sosem jelentkezett ki"
+msgstr "chưa bao giờ thoát"
 
 #: js/user/EditDialog.js:421
 msgid "Profile Path"
-msgstr "Profil útvonal"
+msgstr "Đường dẫn hồ sơ"
 
 #: js/user/EditDialog.js:426
 msgid "Password Last Set"
-msgstr "Utolsónak megadott jelszó"
+msgstr "Đặt mật khẩu lần cuối"
 
 #: js/user/EditDialog.js:428 js/user/EditDialog.js:907
 #: js/user/EditDialog.js:967
 msgid "never"
-msgstr "soha"
+msgstr "chưa bao giờ"
 
 #: js/user/EditDialog.js:431
 msgid "Logon Script"
-msgstr "Bejelentkezési Script"
+msgstr "Script đăng nhập"
 
 #: js/user/EditDialog.js:436
 msgid "Password Can Change"
-msgstr "A jelszó megváltozhat"
+msgstr "Mật khẩu có thể đổi"
 
 #: js/user/EditDialog.js:438 js/user/EditDialog.js:443
 #: js/user/EditDialog.js:448
 msgid "not set"
-msgstr "nincs beállítva"
+msgstr "chưa đặt"
 
 #: js/user/EditDialog.js:441
 msgid "Password Must Change"
-msgstr "A jelszót meg kell változtatni"
+msgstr "Mật khẩu phải được thay đổi"
 
 #: js/user/EditDialog.js:446
 msgid "Kick Off Time"
-msgstr "Kirúgás ideje"
+msgstr "Thời gian bắt đầu"
 
 #: js/user/EditDialog.js:466
 msgid "IMAP Quota (MB)"
-msgstr "IMAP kvóta (MB)"
+msgstr "IMAP Quota (MB)"
 
 #: js/user/EditDialog.js:485 js/user/EditDialog.js:523
 msgid "Quota"
-msgstr "Kvóta"
+msgstr "Quota"
 
 #: js/user/EditDialog.js:486 js/user/EditDialog.js:524
 msgid "no quota set"
-msgstr "nincs kvóta beállítva"
+msgstr "chưa đặt quota"
 
 #: js/user/EditDialog.js:496
 msgid "Current Mailbox size"
-msgstr "Mostani Postafiók mérete"
+msgstr "Dung lượng Mailbox hiện tại"
 
 #: js/user/EditDialog.js:504
 msgid "Sieve Quota (MB)"
-msgstr "Sieve Kvóta (MB)"
+msgstr "Sieve Quota (MB)"
 
 #: js/user/EditDialog.js:534
 msgid "Current Sieve size"
-msgstr "Mostani Sieve mérete"
+msgstr "Current Sieve size"
 
 #: js/user/EditDialog.js:543 js/user/EditDialog.js:942
 msgid "Information"
-msgstr "Információ"
+msgstr "Thông tin"
 
 #: js/user/EditDialog.js:557
 msgid "Last Login"
-msgstr "Utolsó bejelentkezés"
+msgstr "Đăng nhập lần cuối"
 
 #: js/user/EditDialog.js:611
 msgid "Domain not allowed"
-msgstr "Domain nem engedélyezett"
+msgstr "Tên miền không được phép sử dụng"
 
 #: js/user/EditDialog.js:612
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
 "primary domain nor set as a secondary domain in the setup."
-msgstr "Az {1} alias domainje: {0}, amit hozzáadni próbáltál, sem nincs elsődleges domainnek konfigurálva, sem nem másodlagosnak a telepítésben."
+msgstr "Tên miền {0} của ánh xạ {1} bạn đang cố thêm không được cấu hình như tên miền chính cũng không được cấu hình là tên miền phụ khi cài đặt"
 
 #: js/user/EditDialog.js:621
 msgid "Email Alias"
-msgstr "Email Aliasz"
+msgstr "Ánh xạ email"
 
 #: js/user/EditDialog.js:627
 msgid "Add an alias address..."
-msgstr "Aliasz cím hozzáadása..."
+msgstr "Thêm 1 địa chỉ ánh xạ email..."
 
 #: js/user/EditDialog.js:645
 msgid "Forwarding to self"
-msgstr "Továbbítás magamnak"
+msgstr "Chuyển tiếp tới chính tôi"
 
 #: js/user/EditDialog.js:646
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
-msgstr "Nincs lehetőséged beállítani egy olyan továbbítási email címet, amely azonos a felhasználó elsődleges email címével vagy valamelyik aliasával."
+msgstr "Bạn không được phép đặt 1 email chuyển tiếp giống với email chính của người dùng hoặc 1 trong các ánh xạ của h"
 
 #: js/user/EditDialog.js:655
 msgid "Email Forward"
-msgstr "Email Továbbítás"
+msgstr "Chuyến tiếp email"
 
 #: js/user/EditDialog.js:661
 msgid "Add a forward address..."
-msgstr "Továbbítási cím hozzáadása..."
+msgstr "Thêm 1 địa chỉ chuyển tiếp..."
 
 #: js/user/EditDialog.js:674
 msgid "Forward Only"
-msgstr "Csak továbbítás"
+msgstr "Chỉ chuyển tiếp"
 
 #: js/user/EditDialog.js:693
 msgid "Password confirmation"
-msgstr "Jelszó megerősítés"
+msgstr "Xác nhận mật khẩu"
 
 #: js/user/EditDialog.js:710
 msgid "Repeat password"
-msgstr "Jelszó ismétlése"
+msgstr "Nhập lại mật khẩu"
 
 #: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
 msgid "Cancel"
-msgstr "Megszakítás"
+msgstr "Hủy"
 
 #: js/user/EditDialog.js:736
 msgid "Ok"
@@ -811,24 +805,24 @@ msgstr "OK"
 
 #: js/user/EditDialog.js:771
 msgid "Account"
-msgstr "Fiók"
+msgstr "Tài khoản"
 
 #: js/user/EditDialog.js:786 js/user/GridPanel.js:180
 msgid "First name"
-msgstr "Keresztnév"
+msgstr "Tên họ"
 
 #: js/user/EditDialog.js:796 js/user/GridPanel.js:179
 msgid "Last name"
-msgstr "Vezetéknév"
+msgstr "Tên"
 
 #: js/user/EditDialog.js:801 js/user/EditDialog.js:843
 #: js/user/GridPanel.js:178
 msgid "Login name"
-msgstr "Bejelentkezési név"
+msgstr "Tên đăng nhập"
 
 #: js/user/EditDialog.js:806
 msgid "Password"
-msgstr "Jelszó"
+msgstr "Mật khẩu"
 
 #: js/user/EditDialog.js:836 js/user/GridPanel.js:181
 msgid "Email"
@@ -840,53 +834,53 @@ msgstr "OpenID"
 
 #: js/user/EditDialog.js:874
 msgid "expired"
-msgstr "lejárt"
+msgstr "hết hạn"
 
 #: js/user/EditDialog.js:875
 msgid "blocked"
-msgstr "blokkolt"
+msgstr "đã bị phong tỏa"
 
 #: js/user/EditDialog.js:882
 msgid "Invalid Status"
-msgstr "Érvénytelen állapot"
+msgstr "Trạng thái không hợp lệ"
 
 #: js/user/EditDialog.js:883
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr "A blokkolt állapot csak akkor él, ha egy felhasználó túl gyakran próbált meg rossz jelszóval bejelentkezni. Itt nem lehetséges ezt az állapotot beállítani."
+msgstr "Trạng thái bị phong tỏa chỉ hợp lệ khi người dùng cố đăng nhập với một mật khẩu sai một cách thường xuyên. Nó không thể được đặt trạng thái này ở đây."
 
 #: js/user/EditDialog.js:905 js/user/GridPanel.js:186
 msgid "Expires"
-msgstr "Lejár"
+msgstr "Hết hạn"
 
 #: js/user/EditDialog.js:957 js/user/GridPanel.js:183
 msgid "Last login at"
-msgstr "Utolsó bejelentkezés"
+msgstr "Đăng nhập lần cuối lúc"
 
 #: js/user/EditDialog.js:959 js/user/EditDialog.js:963
 msgid "don't know"
-msgstr "nem tudom"
+msgstr "không biết"
 
 #: js/user/EditDialog.js:961 js/user/GridPanel.js:184
 msgid "Last login from"
-msgstr "Utolsó bejelentkezés helye"
+msgstr "Đawng nhập lần cuối từ"
 
 #: js/user/EditDialog.js:965
 msgid "Password set"
-msgstr "Beállított jelszó"
+msgstr "Mật khẩu được đặt"
 
 #: js/user/EditDialog.js:972
 msgid "User groups"
-msgstr "Felhasználói csoportok"
+msgstr "Nhóm người dùng"
 
 #: js/user/EditDialog.js:978
 msgid "User roles"
-msgstr "Felhasználó szerepek"
+msgstr "Vai trò người dùng"
 
 #: js/user/EditDialog.js:984
 msgid "Fileserver"
-msgstr "Fileserver"
+msgstr "Máy chủ file"
 
 #: js/user/EditDialog.js:990
 msgid "IMAP"
@@ -898,93 +892,90 @@ msgstr "SMTP"
 
 #: js/user/GridPanel.js:56
 msgid "Enable Account"
-msgstr "Fiók engedélyezése"
+msgstr "Mở tài khoản"
 
 #: js/user/GridPanel.js:66
 msgid "Disable Account"
-msgstr "Fiók törlése"
+msgstr "Tắt tài khoản"
 
 #: js/user/GridPanel.js:76
 msgid "Reset Password"
-msgstr "Jelszó visszaállítása"
+msgstr "Nhập lại mật khẩu"
 
 #: js/user/GridPanel.js:177
 msgid "Display name"
-msgstr "Megjelenítési név"
+msgstr "Tên hiển thị"
 
 #: js/user/GridPanel.js:185
 msgid "Password changed"
-msgstr "Jelszó megváltoztatása"
+msgstr "Đã đổi mật khẩu"
 
 #: js/user/GridPanel.js:244
 msgid "Set new password"
-msgstr "Új jelszó beállítása"
+msgstr "Đặt mật khẩu mới"
 
 #: js/user/GridPanel.js:244
 msgid "Please enter the new password:"
-msgstr "Kérjük adja meg az új jelszavat:"
+msgstr "Xin hãy nhập mật khẩu mới"
 
 #: js/user/Users.js:72
 msgid "Users"
-msgstr "Felhasználók"
+msgstr "Người dùng"
 
 #: js/user/Users.js:120
 msgid "Samba User"
 msgid_plural "Samba Users"
-msgstr[0] "Samba User"
-msgstr[1] "Samba Users"
+msgstr[0] "one: Người dùng Samba\nother: Người dùng Samba"
 
 #: js/user/Users.js:146
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] "Email User"
-msgstr[1] "Email Users"
+msgstr[0] "one: Người sử dụng email\nother: Người sử dụng email"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
-msgstr[0] "Egyedi mező"
-msgstr[1] "Egyedi mezők"
+msgstr[0] "one: Trường tùy biến\nother: Trường tùy biến"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
-msgstr "Kérlek állítsd be ennek a mező típusnak a tárolását"
+msgstr "Xin cấu hình store cho loại trường này"
 
 #: js/customfield/EditDialog.js:244
 msgid "Default"
-msgstr "Alapértelmezett"
+msgstr "Mặc định"
 
 #: js/customfield/EditDialog.js:288
 msgid "Add a New ID..."
-msgstr "Új ID hozzáadása..."
+msgstr "Thêm 1 ID mới"
 
 #: js/customfield/EditDialog.js:292
 msgid "Value"
-msgstr "Érték"
+msgstr "Giá trị"
 
 #: js/customfield/EditDialog.js:297
 msgid "Add a New Value..."
-msgstr "Új érték hozzáadása..."
+msgstr "Thêm 1 giá trị mới ..."
 
 #: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
 msgid "Error"
-msgstr "Hiba"
+msgstr "Lỗi"
 
 #: js/customfield/EditDialog.js:307
 msgid "ID already exists"
-msgstr "ID már létezik"
+msgstr "ID đã tồn tại"
 
 #: js/customfield/EditDialog.js:313
 msgid "Value already exists"
-msgstr "Érték már létezik"
+msgstr "Giá trị đã tồn tại"
 
 #: js/customfield/EditDialog.js:407
 msgid "Record Class"
-msgstr "Adat osztály"
+msgstr "Record Class"
 
 #: js/customfield/EditDialog.js:432
 msgid "Given record class not found"
-msgstr "Megadott adat osztály nem találató"
+msgstr "Lớp (class) biểu ghi đã cho không tồn tại"
 
 #: js/customfield/EditDialog.js:465
 msgid "OK"
@@ -992,76 +983,76 @@ msgstr "OK"
 
 #: js/customfield/EditDialog.js:504
 msgid "Configure store"
-msgstr "Tárolás beállítása"
+msgstr "Cấu hình store"
 
 #: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
-msgstr "Egyedi mező leírás"
+msgstr "Định nghĩa trường tùy biến"
 
 #: js/customfield/EditDialog.js:572
 msgid "Text"
-msgstr "Szöveg"
+msgstr "Chữ"
 
 #: js/customfield/EditDialog.js:573
 msgid "Number"
-msgstr "Szám"
+msgstr "Số"
 
 #: js/customfield/EditDialog.js:574
 msgid "Date"
-msgstr "Dátum"
+msgstr "Ngày"
 
 #: js/customfield/EditDialog.js:575
 msgid "DateTime"
-msgstr "DátumIdő"
+msgstr "DateTime"
 
 #: js/customfield/EditDialog.js:576
 msgid "Time"
-msgstr "Idő"
+msgstr "Time"
 
 #: js/customfield/EditDialog.js:577
 msgid "Boolean"
-msgstr "Logikai"
+msgstr "Boolean"
 
 #: js/customfield/EditDialog.js:578
 msgid "Search Combo"
-msgstr "Kombó kerés"
+msgstr "Kết hợp tìm kiếm"
 
 #: js/customfield/EditDialog.js:579
 msgid "Key Field"
-msgstr "Kulcs mező"
+msgstr "Trường chính"
 
 #: js/customfield/EditDialog.js:580
 msgid "Record"
-msgstr "Adat"
+msgstr "Biểu ghi"
 
 #: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:71
 msgid "Label"
-msgstr "Osztályozás"
+msgstr "Nhãn"
 
 #: js/customfield/EditDialog.js:608
 msgid "Length"
-msgstr "Hossz"
+msgstr "Độ dài"
 
 #: js/customfield/EditDialog.js:613
 msgid "Required"
-msgstr "Szükséges"
+msgstr "Yêu cầu"
 
 #: js/customfield/EditDialog.js:620
 msgid "Custom field additional properties"
-msgstr "Egyedi mező további beállításai"
+msgstr "Thuộc tính khác cho trường tùy biến"
 
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
-msgstr "Egyedi mező már létezik. Kérlek válassz egy másik nevet."
+msgstr "Trường tùy biến đã tồn tại. Xin chọn tên khác."
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
-msgstr "Újraindítsam az programot az egyedi mezők alkalmazásához?"
+msgstr "Khởi động ứng dụng để xem các thay đổi với trường tùy biến mới?"
 
 #: Controller/Container.php:198
 msgid "Your container has been changed"
-msgstr "Konténered megváltozott"
+msgstr "Bộ chứa của bạn đã được thay đổi"
 
 #: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Konténeredet megváltozotta %1$s %2$sFeljegyzés: %3$s"
+msgstr "Bộ chứa của bạn đã được đổi từ %1$s %2$s. Ghi chú: %3$s"

@@ -1,115 +1,115 @@
 # 
 # Translators:
-# Tamás Faragó <>, 2012-2013.
+# sao sang <saosangmo@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-16 21:33+0000\n"
-"Last-Translator: Tamás Faragó <>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
+"PO-Revision-Date: 2013-02-07 09:05+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:103
 msgid "manage products"
-msgstr "termékek kezelése"
+msgstr "quản lý sản phẩm"
 
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
-msgstr "termékek hozzáadása, szerkesztése és törlése"
+msgstr "thêm, xóa, sửa sản phẩm"
 
 #: Controller.php:83 Controller.php:103
 msgid "You do not have admin rights on Sales"
-msgstr "Nincs rendszergazda jogosultságod a Salesban"
+msgstr "Bạn không có quyền quản trị trên hệ thống Kinh doanh"
 
 #: Model/Contract.php:92
 msgid "Responsible"
-msgstr "Felelős"
+msgstr "Chịu trách nhiệm"
 
 #: Model/Contract.php:93
 msgid "Customer"
-msgstr "Ügyfél"
+msgstr "Khách hàng"
 
 #: Model/Contract.php:94
 msgid "Partner"
-msgstr "Partner"
+msgstr "Đối tác"
 
 #: Config.php:49
 msgid "Contract Number Creation"
-msgstr "Szerződés szám készítés"
+msgstr "Tạo số hợp đồng"
 
 #: Config.php:51
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr "A szerződés szám kézzel vagy automatikusan készíthető?"
+msgstr "Sẽ tự động hay tự nhập"
 
 #: Config.php:54
 msgid "automatically"
-msgstr "automatikusan"
+msgstr "tự động"
 
 #: Config.php:55
 msgid "manually"
-msgstr "kézzel"
+msgstr "tự nhập"
 
 #: Config.php:62
 msgid "Contract Number Validation"
-msgstr "Szerződés szám érvényesítés"
+msgstr "Phê chuẩn số hợp đồng"
 
 #: Config.php:64
 msgid "The Number can be validated as text or number."
-msgstr "A szám érvényesíthető szövegként vagy számként."
+msgstr "Số có thể được phê chuẩn khi là chữ hoặc số"
 
 #: Config.php:67 js/Models.js:200 js/ContractEditDialog.js:136
 msgid "Number"
-msgstr "Szám"
+msgstr "Số"
 
 #: Config.php:68
 msgid "Text"
-msgstr "Szöveg"
+msgstr "Chữ"
 
 #: Config.php:75
 msgid "Contract Status Available"
-msgstr "Szerződés állapot elérhető"
+msgstr "Trạng thái hợp đồng sẵn sàng"
 
 #: Config.php:77
 msgid ""
 "Possible Contract status. Please note that additional contract status might "
 "impact other Sales systems on export or syncronisation."
-msgstr "Lehetséges Szerződés állapot. Kérlek jegyezd meg, hogy a további szerződés állapotok más Sales rendszerekkel ütközhet exportáláskor vagy szinkronizáláskor."
+msgstr "Trạng thái hợp đồng có thể. Xin nhớ rằng trạng thái hợp đồng thêm vào có thể xung đột với hệ thống kinh doanh khi xuất dữ liệu hoặc đồng bộ."
 
 #: Config.php:85
 msgid "Contract Cleared State Available"
-msgstr "Szerződés lezárt állapot elérhető"
+msgstr "Hợp đồng có trạng thái sẵn sàng xóa"
 
 #: Config.php:87
 msgid "Possible Contract cleared states."
-msgstr "Lehetséges Szerződés lezárt állapotok."
+msgstr "Trạng thái đã xóa của hợp đồng có thể"
 
 #: Setup/Update/Release5.php:63 Setup/Initialize.php:34
 msgid "My Products"
-msgstr "Termékeim"
+msgstr "Sản phẩm của tôi"
 
 #: Setup/Update/Release5.php:64 Setup/Initialize.php:35
 msgid "Products created by myself"
-msgstr "Általam készített termékek"
+msgstr "Sản phẩm tạo bởi tôi"
 
 #: Setup/Update/Release5.php:84 Setup/Initialize.php:55
 msgid "My Contracts"
-msgstr "Szerződéseim"
+msgstr "Hợp đồng của tôi"
 
 #: Setup/Update/Release5.php:85 Setup/Initialize.php:56
 msgid "Contracts created by myself"
-msgstr "Általam készített szerződések"
+msgstr "Hợp đồng tạo bởi tôi"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
-msgstr "Mégse"
+msgstr "Hủy"
 
 #: js/AdminPanel.js:69
 msgid "OK"
@@ -117,135 +117,128 @@ msgstr "OK"
 
 #: js/AdminPanel.js:90
 msgid "Loading..."
-msgstr "Betöltés..."
+msgstr "Đang tải"
 
 #: js/ContractGridPanel.js:82
 msgid "Contract number"
-msgstr "Szerződés száma"
+msgstr "Số hợp đồng"
 
 #: js/ContractGridPanel.js:88 js/Models.js:237 js/ContractEditDialog.js:143
 msgid "Title"
-msgstr "Cím"
+msgstr "Tiêu đề"
 
 #: js/ContractGridPanel.js:94 js/Models.js:147 js/ContractEditDialog.js:176
 msgid "Status"
-msgstr "Állapot"
+msgstr "Trạng thái"
 
 #: js/ContractGridPanel.js:101 js/Models.js:154 js/ContractEditDialog.js:183
 msgid "Cleared"
-msgstr "Lezárva"
+msgstr "Đã xóa"
 
 #: js/ContractGridPanel.js:108 js/Models.js:160 js/ContractEditDialog.js:187
 msgid "Cleared in"
-msgstr "Lezárva ekkor:"
+msgstr "Xóa vào"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
 msgid "Name"
-msgstr "Név"
+msgstr "Tên"
 
 #: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
 msgid "Price"
-msgstr "Ár"
+msgstr "Giá"
 
 #: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
 msgid "Manufacturer"
-msgstr "Gyártó"
+msgstr "Nhà sản xuất"
 
 #: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
 msgid "Category"
-msgstr "Kategória"
+msgstr "Danh mục"
 
 #: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
 #: js/ContractEditDialog.js:193
 msgid "Description"
-msgstr "Leírás"
+msgstr "Mo tả"
 
 #: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
 msgid "Enter description..."
-msgstr "Leírás bevitele..."
+msgstr "Nhập vào mô tả"
 
 #: js/ProductGridPanel.js:120
 msgid "Tags"
-msgstr "Címke"
+msgstr "Thẻ"
 
 #: js/Models.js:39
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] "Termék"
-msgstr[1] "Termékek"
+msgstr[0] "one:Sản phẩm\nother:Sản phẩm"
 
 #: js/Models.js:43 js/Models.js:226
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "adat lista"
-msgstr[1] "adat listák"
+msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
 
 #: js/Models.js:77 js/Models.js:143 js/Models.js:199 js/Models.js:236
 msgid "Quick search"
-msgstr "Gyors keresés"
+msgstr "Tìm nhanh"
 
 #: js/Models.js:78
 msgid "Product name"
-msgstr "Termék neve"
+msgstr "Tên sản phẩm"
 
 #: js/Models.js:80 js/Models.js:145
 msgid "Creator"
-msgstr "Készítő"
+msgstr "Người tạo"
 
 #: js/Models.js:113
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] "Szerződés"
-msgstr[1] "Szerződések"
+msgstr[0] "one:Hợp đồng\nother:Hợp đồng"
 
 #: js/Models.js:117
 msgid "All Contracts"
 msgid_plural "contracts lists"
-msgstr[0] "Minden szerződés"
-msgstr[1] "szerződés listák"
+msgstr[0] "one:Mọi hợp đồng\nother:Danh sách hợp đồng"
 
 #: js/Models.js:144
 msgid "Contract name"
-msgstr "Szerződés neve"
+msgstr "Tên hợp đồng"
 
 #: js/Models.js:186
 msgid "CostCenter"
 msgid_plural "CostCenters"
-msgstr[0] "Költséghely"
-msgstr[1] "Költséghelyek"
+msgstr[0] "one:Giá trung tâm\nother:Giá trung tâm"
 
 #: js/Models.js:189
 msgid "All CostCenters"
 msgid_plural "All CostCenters"
-msgstr[0] "Minden költséghely"
-msgstr[1] "Minden költséghelyek"
+msgstr[0] "one: Mọi giá trung tâm\nother: Mọi giá trung tâm"
 
 #: js/Models.js:201
 msgid "Remark"
-msgstr "Megjegyzés"
+msgstr "Đánh dấu lại"
 
 #: js/Models.js:223
 msgid "Division"
 msgid_plural "Divisions"
-msgstr[0] "Részleg"
-msgstr[1] "Részlegek"
+msgstr[0] "one: Bộ phận\nother: Bộ phận"
 
 #: js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"
-msgstr "Kérlek itt egész számot használj!"
+msgstr "Xin sử dụng 1 số thập phân tại đây!"
 
 #: js/ContractEditDialog.js:149
 msgid "Contact Customer"
-msgstr "Szerződő ügyfél"
+msgstr "Liên hệ khách hàng"
 
 #: js/ContractEditDialog.js:161
 msgid "Contact Responsible"
-msgstr "Szerződés felelőse"
+msgstr "Liên hệ chịu trách nhiệm "
 
 #: js/ContractEditDialog.js:170
 msgid "Company"
-msgstr "Cég"
+msgstr "Công ty"
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
-msgstr "A beállítani próbált szám használatban van!"
+msgstr "Số bạn đang đặt đã tồn tại!"

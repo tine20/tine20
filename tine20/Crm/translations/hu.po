@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Tamás Faragó <>, 2012.
+# Tamás Faragó <>, 2012-2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-01-16 21:15+0000\n"
+"Last-Translator: Tamás Faragó <>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -304,7 +304,7 @@ msgstr "Szerep kiválasztása"
 
 #: js/AddToLeadPanel.js:93
 msgid "Adding {0} contacts to lead"
-msgstr ""
+msgstr "{0} kapcsolat hozzáadása az ügylethez"
 
 #: js/Task.js:109
 msgid "No Tasks to display"

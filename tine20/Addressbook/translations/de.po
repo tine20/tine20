@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Juergen Heine <transifex.com@sysdef.de>, 2013.
 #   <p.schuele@metaways.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 14:30+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-01-28 16:47+0000\n"
+"Last-Translator: sysdef <transifex.com@sysdef.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +28,11 @@ msgstr "Neue gemeinsame Adressbücher anlegen"
 
 #: Acl/Rights.php:102
 msgid "manage shared addressbook favorites"
-msgstr "Gemeinsame Adressbuch Favoriten verwalten"
+msgstr "Gemeinsame Adressbuch-Favoriten verwalten"
 
 #: Acl/Rights.php:103
 msgid "Create or update shared addressbook favorites"
-msgstr "Gemeinsame Adressbuch Favoriten erstellen oder ändern"
+msgstr "Gemeinsame Adressbuch-Favoriten erstellen oder ändern"
 
 #: Controller.php:103
 #, python-format
@@ -90,7 +91,7 @@ msgstr "Verfügbare Kontaktanreden"
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr "Mögliche Kontaktanreden. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgstr "Mögliche Kontaktanreden. Bitte beachten Sie, dass sich zusätzliche Werte beim Export oder der Synchronisation auf andere Systeme auswirken."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -209,7 +210,7 @@ msgstr "URL"
 
 #: Export/Pdf.php:73
 msgid "Role"
-msgstr "Rolle"
+msgstr "Funktion"
 
 #: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:179
 #: js/Model.js:33
@@ -222,7 +223,7 @@ msgstr "Assistent"
 
 #: Export/Pdf.php:82
 msgid "Assistant Telephone"
-msgstr "Telefon Assistent"
+msgstr "Telefon des Assistenten"
 
 #: Export/Pdf.php:86
 msgid "Private Contact Data"
@@ -236,11 +237,11 @@ msgstr "Private Anschrift"
 
 #: Export/Pdf.php:96
 msgid "Email Home"
-msgstr "E-Mail"
+msgstr "E-Mail  (Zuhause)"
 
 #: Export/Pdf.php:99
 msgid "Telephone Home"
-msgstr "Telefon"
+msgstr "Telefon  (Zuhause)"
 
 #: Export/Pdf.php:102
 msgid "Telephone Cellphone Private"
@@ -248,11 +249,11 @@ msgstr "Telefon (Mobil)"
 
 #: Export/Pdf.php:105
 msgid "Telephone Fax Home"
-msgstr "Fax"
+msgstr "Fax (Zuhause)"
 
 #: Export/Pdf.php:108
 msgid "URL Home"
-msgstr "URL"
+msgstr "URL (Zuhause)"
 
 #: Export/Pdf.php:112
 msgid "Other Data"
@@ -307,7 +308,7 @@ msgstr "Abteilung"
 #: js/ContactGrid.js:115 js/ContactEditDialog.js:175 js/Model.js:31
 #: js/Model.js:145
 msgid "Job Role"
-msgstr "Rolle"
+msgstr "Funktion"
 
 #: js/ContactGrid.js:117 js/ContactEditDialog.js:270
 #: js/ContactEditDialog.js:299 js/Model.js:150 js/Model.js:155
@@ -425,11 +426,11 @@ msgstr[1] "{0} exportieren"
 
 #: js/ContactGrid.js:163
 msgid "Export as PDF"
-msgstr "Als Pdf exportieren"
+msgstr "Als PDF exportieren"
 
 #: js/ContactGrid.js:170
 msgid "Export as CSV"
-msgstr "Als Csv exportieren"
+msgstr "Als CSV exportieren"
 
 #: js/ContactGrid.js:177
 msgid "Export as ODS"
@@ -441,7 +442,7 @@ msgstr "Als XLS exportieren"
 
 #: js/ContactGrid.js:191
 msgid "Export as ..."
-msgstr "Als ... exportieren"
+msgstr "Exportieren als ..."
 
 #: js/ContactGrid.js:203
 msgid "Import contacts"
@@ -494,7 +495,7 @@ msgstr "Titel"
 
 #: js/ContactEditDialog.js:128 js/Model.js:21
 msgid "Middle Name"
-msgstr "Zweitname"
+msgstr "zweiter Vorname"
 
 #: js/ContactEditDialog.js:171 js/Model.js:23
 msgid "Suffix"
@@ -515,7 +516,7 @@ msgstr "Geschäftliche Anschrift"
 
 #: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 msgid "Street 2"
-msgstr "Weitere Straße"
+msgstr "Straße 2"
 
 #: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
 #: js/Model.js:157
@@ -532,7 +533,7 @@ msgstr "Bitte geben Sie eine Beschreibung an"
 
 #: js/ContactEditDialog.js:399
 msgid "Export as pdf"
-msgstr "Als Pdf exportieren"
+msgstr "Als PDF exportieren"
 
 #: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
 msgid "Parse address"

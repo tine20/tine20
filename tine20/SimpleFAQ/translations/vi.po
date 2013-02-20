@@ -1,0 +1,167 @@
+# 
+# Translators:
+# sao sang <saosangmo@yahoo.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-02-07 08:19+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:114
+#, python-format
+msgid "%s's personal FAQs"
+msgstr "Việc cá nhân của %s"
+
+#: Controller.php:164
+msgid "Draft"
+msgstr "Bản nháp"
+
+#: Controller.php:165
+msgid "released"
+msgstr "đã ban hành"
+
+#: Controller.php:166
+msgid "obsolete"
+msgstr "Quá hạn"
+
+#: Controller.php:169
+msgid "Internal"
+msgstr "Nội bộ"
+
+#: Controller.php:170
+msgid "Public"
+msgstr "Công khai"
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Tất cả câu hỏi trong danh sách hỏi đáp của tôi"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Tất cả hỏi đáp tôi đã sửa"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Tất cả hỏi đáp của tôi"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Lối tắt mặc định"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Lối tắt mặc định sẽ được nạp vào khi khởi động hỏi đáp"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Danh sách hỏi đáp mặc định"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Danh sách hỏi đáp mặc định để tạo câu hỏi trong đó"
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Trạng thái câu hỏi"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Loại câu hỏi"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Mặc định"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Thêm mới kiểu câu hỏi"
+
+#: js/SimpleFAQ.js:19 js/Model.js:33
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "one:Hỏi đáp\nother:Hỏi đáp"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "Mã câu hỏi"
+
+#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/FaqGridPanel.js:108 js/FaqEditDialog.js:136
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/FaqGridPanel.js:114 js/FaqEditDialog.js:124
+msgid "Type"
+msgstr "Gõ"
+
+#: js/FaqGridPanel.js:120 js/FaqEditDialog.js:108
+#: js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Câu hỏi"
+
+#: js/FaqGridPanel.js:127 js/FaqEditDialog.js:115
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Trả lời"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Thêm mới trạng thái câu hỏi"
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "one:Danh sách hỏi đáp\nother:Danh sách hỏi đáp"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "Danh sách hỏi đáp"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Tìm kiếm nhanh"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Nhập 1 câu hỏi..."
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Nhập 1 câu trả lời"
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Thông tin câu hỏi"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Chưa có câu trả lời"

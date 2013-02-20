@@ -1,78 +1,76 @@
 # 
 # Translators:
-# Niklas Ye <niklas@idontgetlaid.com>, 2013.
-#   <tulken_hultan@hotmail.com>, 2012.
+# sao sang <saosangmo@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-18 12:09+0000\n"
-"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
+"PO-Revision-Date: 2013-02-08 06:40+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:89
 msgid "manage shared task lists"
-msgstr "hantera delade uppgifts listor"
+msgstr "Quản lý danh sách công việc dùng chung"
 
 #: Acl/Rights.php:90
 msgid "Create new shared tasks lists"
-msgstr "Skapa nya delade uppgifts listor"
+msgstr "Tạo danh sách công việc dùng chung"
 
 #: Acl/Rights.php:93
 msgid "manage shared tasks favorites"
-msgstr "hantera delade uppgifter favoriter"
+msgstr "Quản lý lối tắt công việc chung"
 
 #: Acl/Rights.php:94
 msgid "Create or update shared tasks favorites"
-msgstr "Skapa eller uppdatera delade uppgifter favoriter"
+msgstr "Tạo/ cập nhật lối tắt công việc chung"
 
 #: Controller.php:102
 #, python-format
 msgid "%s's personal tasks"
-msgstr "%s personliga uppgifter"
+msgstr "Việc cá nhân của %s"
 
 #: Model/Task.php:187
 msgid "Due"
-msgstr "För"
+msgstr "Hạn"
 
 #: Model/Task.php:188 js/TaskEditDialog.js:197
 msgid "Organizer"
-msgstr "Organiserare"
+msgstr "Người tổ chức"
 
 #: Model/Task.php:189
 msgid "Description"
-msgstr "Beskrivning"
+msgstr "Mô tả"
 
 #: Model/Task.php:190 js/TaskGridPanel.js:136 js/TaskEditDialog.js:189
 msgid "Priority"
-msgstr "Prioritet"
+msgstr "Độ quan trọng"
 
 #: Model/Task.php:191 js/TaskGridPanel.js:165 js/TaskEditDialog.js:219
 #: js/Models.js:108 js/Models.js:166
 msgid "Status"
 msgid_plural "Status"
-msgstr[0] "Status"
-msgstr[1] "statusar"
+msgstr[0] "one: Trạng thái\nother: Trạng thái"
 
 #: Model/Task.php:192 js/TaskGridPanel.js:152
 msgid "Percent"
-msgstr "Procent"
+msgstr "Phần trăm"
 
 #: Model/Task.php:199 js/TaskGridPanel.js:111
 msgid "Lead"
-msgstr "Lead"
+msgstr "Chủ trì"
 
 #: Model/Task.php:205
 msgid "Telephone"
-msgstr "Telefon"
+msgstr "Điện thoại"
 
 #: Model/Task.php:206
 msgid "Email"
@@ -80,203 +78,200 @@ msgstr "Email"
 
 #: Config.php:38
 msgid "Tasks status available"
-msgstr "uppgifter status tillgänglig"
+msgstr "Trạng thái công việc sẵn sàng"
 
 #: Config.php:40
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
 "impact other Tasks systems on export or syncronisation."
-msgstr "Möjlig uppgifter status. Observera att ytterligare deltagare status kan påverka andra uppgifter system på export eller synkronisering."
+msgstr "Trạng thái công việc có thể. Xin nhớ rằng trạng thái người tham dự thêm phải liên quan tới hệ thống công việc khác trong việc xuất hoặc đồng bộ dữ liệu."
 
 #: Config.php:48
 msgid "Task priorities available"
-msgstr "Uppgift prioriteringar tillgängligt"
+msgstr "Độ quan trọng sẵn có"
 
 #: Config.php:50
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
-msgstr "Möjliga uppgift prioriteringar. Observera att ytterligare prioriteringar kan påverka andra uppgifter system på export eller synkronisering."
+msgstr "Độ quan trọng có thể. Xin nhớ rằng độ quan trọng khác phải liên quan hệ thống công việc khác khi xuất hoặc đồng bộ dữ liệu."
 
 #: Setup/Update/Release5.php:74 Setup/Initialize.php:34
 msgid "No response"
-msgstr "inget svar"
+msgstr "Không trả lời"
 
 #: Setup/Update/Release5.php:75 Setup/Initialize.php:35
 #: js/TaskGridPanel.js:188 js/TaskEditDialog.js:226
 msgid "Completed"
-msgstr "Avslutande"
+msgstr "Hoàn thành"
 
 #: Setup/Update/Release5.php:76 Setup/Initialize.php:36
 msgid "Cancelled"
-msgstr "Avbruten"
+msgstr "Đã hủy"
 
 #: Setup/Update/Release5.php:77 Setup/Initialize.php:37
 msgid "In process"
-msgstr "I process"
+msgstr "Đang xử lý"
 
 #: Setup/Update/Release5.php:167 Setup/Initialize.php:50
 msgid "low"
-msgstr "låg"
+msgstr "Thấp"
 
 #: Setup/Update/Release5.php:168 Setup/Initialize.php:51
 msgid "normal"
-msgstr "normal"
+msgstr "Thường"
 
 #: Setup/Update/Release5.php:169 Setup/Initialize.php:52
 msgid "high"
-msgstr "hög"
+msgstr "Cao"
 
 #: Setup/Update/Release5.php:170 Setup/Initialize.php:53
 msgid "urgent"
-msgstr "viktig"
+msgstr "Khẩn cấp"
 
 #: Setup/Update/Release3.php:65 Setup/Initialize.php:81
 msgid "All tasks of my taskslists"
-msgstr "Alla uppgifter av min uppgiftslista"
+msgstr "Tất cả việc trong danh sách của tôi"
 
 #: Setup/Initialize.php:90
 msgid "My open tasks"
-msgstr "Mina öppna uppgifter"
+msgstr "Công việc đang mở"
 
 #: Setup/Initialize.php:99
 msgid "My open tasks this week"
-msgstr "Mina öppna uppgifter denna vecka"
+msgstr "Danh sách công việc đang mở trong tuần"
 
 #: Setup/Initialize.php:108
 msgid "All tasks for me"
-msgstr "Alla uppgifter för mig"
+msgstr "Mọi việc cho tôi"
 
 #: Setup/Initialize.php:109
 msgid "All tasks that I am responsible for"
-msgstr "Alla uppgifter som Jag är ansvarig för"
+msgstr "Mọi việc của tôi cần trả lời"
 
 #: Setup/Initialize.php:116
 msgid "Last modified by me"
-msgstr "Senast ändrad av mig"
+msgstr "Sửa lần cuối bởi tôi"
 
 #: Setup/Initialize.php:117
 msgid "All tasks that I have last modified"
-msgstr "Alla uppgifter som jag senast har ändrat"
+msgstr "Mọi việc tôi đã sửa"
 
 #: Setup/Initialize.php:126
 msgid "Tasks without responsible"
-msgstr "Uppgifter utan ansvar"
+msgstr "Công việc không có trách nhiệm"
 
 #: Preference.php:24
 msgid "All my tasks"
-msgstr "Alla mina uppgifter"
+msgstr "Tất cả việc của tôi"
 
 #: Preference.php:66
 msgid "Default Favorite"
-msgstr "Standard Favorit"
+msgstr "Lối tắt mặc định"
 
 #: Preference.php:67
 msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Standard favorit som är laddad på Uppgifts start"
+msgstr "Lối tắt mặc định là cái sẽ được nạp khi công việc khởi động"
 
 #: Preference.php:70
 msgid "Default Task List"
-msgstr "Standard Uppgift Lista"
+msgstr "Danh sách việc mặc định"
 
 #: Preference.php:71
 msgid "The default task list to create new tasks in."
-msgstr "Standard uppgift lista för att skapa nya uppgifter i."
+msgstr "Danh sách việc mặc định sẽ cần tạo việc mới trong đó"
 
 #: js/Tasks.js:24
 msgid "New Task"
-msgstr "Ny Uppgift"
+msgstr "Tạo việc mới"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Vill du verkligen radera den valda uppgiften?"
-msgstr[1] "Vill du verkligen radera dem valda uppgifterna?"
+msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn có muốn xóa những công việc đã chọn?"
 
 #: js/TaskGridPanel.js:110
 msgid "Tags"
-msgstr "Taggar"
+msgstr "Thẻ"
 
 #: js/TaskGridPanel.js:114 js/TaskEditDialog.js:178 js/Models.js:105
 msgid "Summary"
-msgstr "Summa"
+msgstr "Tóm tắt"
 
 #: js/TaskGridPanel.js:118
 msgid "Add a task..."
-msgstr "Lägg till en uppgift..."
+msgstr "Thêm 1 việc"
 
 #: js/TaskGridPanel.js:122 js/Models.js:106
 msgid "Due Date"
-msgstr "Förfallo datum"
+msgstr "Ngày đến hạn"
 
 #: js/TaskGridPanel.js:181 js/Models.js:120
 msgid "Creation Time"
-msgstr "Skapande Tid"
+msgstr "Thời gian tạo"
 
 #: js/TaskGridPanel.js:195 js/Models.js:116
 msgid "Responsible"
-msgstr "Ansvarig"
+msgstr "Có thể trả lời"
 
 #: js/TaskEditDialog.js:136
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Du måste ange ett förfallodatum, för ett alarm är ställt"
+msgstr "Bạn phải cung cấp ngày đến hạn, bởi vì bộ nhắc đã được chọn"
 
 #: js/TaskEditDialog.js:185
 msgid "Due date"
-msgstr "Förfallo datum"
+msgstr "Ngày đến hạn"
 
 #: js/TaskEditDialog.js:198
 msgid "Add Responsible ..."
-msgstr "Lägg till Ansvarig ..."
+msgstr "Thêm trả lời..."
 
 #: js/TaskEditDialog.js:205
 msgid "Notes"
-msgstr "Noteringar"
+msgstr "Ghi chú"
 
 #: js/TaskEditDialog.js:206
 msgid "Enter description..."
-msgstr "Ange beskrivning"
+msgstr "Nhập mô tả..."
 
 #: js/TaskEditDialog.js:212
 msgid "Percentage"
-msgstr "Procent"
+msgstr "Phần trăm"
 
 #: js/Models.js:64
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] "Uppgift"
-msgstr[1] "Uppgifter"
+msgstr[0] "one: Công việc\nothers: Công việc"
 
 #: js/Models.js:64
 msgid "Tasks"
-msgstr "Uppgifter"
+msgstr "Công việc"
 
 #: js/Models.js:68
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] "att göra lista"
-msgstr[1] "att göra listor"
+msgstr[0] "one: danh sách cần làm\nother: danh sách cần làm"
 
 #: js/Models.js:68
 msgid "to do lists"
-msgstr "att göra listor"
+msgstr "Danh sách cần làm"
 
 #: js/Models.js:103
 msgid "Quick search"
-msgstr "Snabb sök"
+msgstr "Tìm nhanh"
 
 #: js/Models.js:118
 msgid "Last Modified Time"
-msgstr "Senast ändrad"
+msgstr "Thời gian sửa"
 
 #: js/Models.js:119
 msgid "Last Modified By"
-msgstr "Senast ändrad av"
+msgstr "Sửa lần cuối bởi"
 
 #: js/Models.js:121
 msgid "Created By"
-msgstr "Skapad av"
+msgstr "Tạo bởi"
 
 #: Controller/Task.php:164
 msgid "Notification for Task "
-msgstr "Notifiering för uppgift"
+msgstr "Thông báo cho công việc"
