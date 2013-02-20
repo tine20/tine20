@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -594,19 +594,23 @@ class Tinebase_Core
                         break;
                         
                     case 'Memcached':
+                        $host = $config->caching->host ? $config->caching->host : ($config->caching->memcached->host ? $config->caching->memcached->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port : ($config->caching->memcached->port ? $config->caching->memcached->port : 11211);
                         $backendOptions = array(
                             'servers' => array(
-                                'host' => ($config->caching->host) ? $config->caching->host : 'localhost',
-                                'port' => ($config->caching->port) ? $config->caching->port : 11211,
+                                'host' => $host,
+                                'port' => $port,
                                 'persistent' => TRUE
                         ));
                         break;
                         
                     case 'Redis':
+                        $host = $config->caching->host ? $config->caching->host : ($config->caching->redis->host ? $config->caching->redis->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port : ($config->caching->redis->port ? $config->caching->redis->port : 6379);
                         $backendOptions = array(
                             'servers' => array(
-                                'host'   => ($config->caching->host) ? $config->caching->host : 'localhost',
-                                'port'   => ($config->caching->port) ? $config->caching->port : 6379,
+                                'host'   => $host,
+                                'port'   => $port,
                                 'prefix' =>  Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_CACHE_'
                         ));
                         break;
@@ -665,7 +669,7 @@ class Tinebase_Core
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
         self::set(self::CACHE, $cache);
     }
-
+    
     /**
      * places user credential cache id from cache adapter (if present) into registry
      */
