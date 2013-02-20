@@ -150,4 +150,23 @@ class Inventory_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('inventory_item', '5');
     }
     
+    /**
+     * Change price field from float to text
+     * #0007706
+     */
+    public function update_5()
+    {
+        $field = '
+             <field>
+                    <name>price</name>
+                    <type>text</type>
+                    <length>50</length>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('inventory_item', $declaration, 'price');
+        
+        $this->setApplicationVersion('Inventory', '6.6');
+        $this->setTableVersion('inventory_item', '7');
+    }
 }
