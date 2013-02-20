@@ -522,14 +522,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 scope: this,
                 options: [
                     {text: optionYes, name: 'yes'},
-                    {text: optionNo, name: 'no'}                   
+                    {text: optionNo, name: 'no'}
                 ],
                 
                 handler: function(option) {
                     try {
                         switch (option) {
                             case 'yes':
-                                if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
+                                if (actionType == 'update') this.onUpdateEvent(event, true);
                                 else this.onAddEvent(event, checkBusyConflicts, true);
                                 break;
                             case 'no':
@@ -571,7 +571,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }             
             });
         } else {
-            if (actionType == 'update') this.onUpdateEvent(event, true, actionType);
+            if (actionType == 'update') this.onUpdateEvent(event, true);
             else this.onAddEvent(event, checkBusyConflicts, true);
         }
     },
@@ -597,7 +597,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var panel = this.getCalendarPanel(this.activeView),
             store = panel.getStore(),
             view = panel.getView();
-                        
+        
         Tine.Calendar.backend.saveRecord(event, {
             scope: this,
             success: function(createdEvent) {
@@ -617,15 +617,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
-    onUpdateEvent: function(event, pastChecked, actionType) {
-        
-        if (! actionType || actionType == 'edit') {
-            actionType = 'update';
-        }
+    onUpdateEvent: function(event, pastChecked) {
         this.setLoading(true);
         
-        if(! pastChecked) {
-            this.checkPastEvent(event, null, actionType);
+        if(!pastChecked) {
+            this.checkPastEvent(event, null, 'update');
             return;
         }
         
@@ -660,14 +656,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 scope: this,
                                 success: function() {
                                     store.load({refresh: true});
-                                },
-                                failure: this.onProxyFail.createDelegate(this, [event], true)
+                                }
                             };
+                            options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.updateRecurSeries.createDelegate(Tine.Calendar.backend, [event, false, options])], true);
                             
                             if (event.isRecurException()) {
                                 Tine.Calendar.backend.saveRecord(event, options, {range: 'ALL', checkBusyConflicts: false});
                             } else {
-                                Tine.Calendar.backend.updateRecurSeries(event, options);
+                                Tine.Calendar.backend.updateRecurSeries(event, true, options);
                             }
                             break;
                             
@@ -682,14 +678,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                     } else {
                                         store.load({refresh: true});
                                     }
-                                },
-                                failure: this.onProxyFail.createDelegate(this, [event], true)
+                                }
                             };
+                            options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.createRecurException.createDelegate(Tine.Calendar.backend, [event, false, option == 'future', false, options])], true);
                             
                             if (event.isRecurException()) {
                                 Tine.Calendar.backend.saveRecord(event, options, {range: (option === 'this' ? 'THIS' : 'THISANDFUTURE'), checkBusyConflicts: false});
                             } else {
-                                Tine.Calendar.backend.createRecurException(event, false, option === 'future', options);
+                                Tine.Calendar.backend.createRecurException(event, false, option === 'future', true, options);
                             }
                             break;
                             
@@ -736,7 +732,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
 
     /**
-     * checks, if the last filter still matches after update 
+     * checks, if the last filter still matches after update
+     * 
      * @param {Tine.Calendar.Model.Event} event
      * @param {Tine.Calendar.Model.Event} updatedEvent
      */
@@ -844,7 +841,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                     if (option === 'all') {
                                         Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
                                     } else {
-                                        Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                        Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', false, options);
                                     }
                                 }
                                 break;
@@ -965,7 +962,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         store.add(updatedEvent);
                     }
                     
-                    this.onUpdateEvent(updatedEvent, false, action);
+                    this.onUpdateEvent(updatedEvent, false);
                 }
             }
         });
@@ -1099,7 +1096,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    onProxyFail: function(error, event) {
+    onProxyFail: function(error, event, ignoreFn) {
         this.setLoading(false);
         if(this.loadMask) this.loadMask.hide();
         
@@ -1174,7 +1171,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
                     switch (option) {
                         case 'ignore':
-                            this.onAddEvent(event, false, true);
+                            if (Ext.isFunction(ignoreFn)) {
+                                ignoreFn();
+                            } else {
+                                this.onAddEvent(event, false, true);
+                            }
                             this.conflictConfirmWin.close();
                             break;
                         
