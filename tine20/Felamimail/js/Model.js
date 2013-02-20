@@ -443,7 +443,7 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
         sieve_port: 2000,
         sieve_ssl: 'none',
         signature: 'Sent with love from the new tine 2.0 email client ...<br/>'
-            + 'Please visit <a href="http://tine20.org">http://tine20.org</a>',
+            + 'Please visit <a href="http://www.tine20.com">http://www.tine20.com</a>',
         sent_folder: (defaults.sent_folder) ? defaults.sent_folder : 'Sent',
         trash_folder: (defaults.trash_folder) ? defaults.trash_folder : 'Trash'
     };
