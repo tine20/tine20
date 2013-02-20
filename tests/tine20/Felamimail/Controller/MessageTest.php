@@ -1294,6 +1294,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('<p style="color:#999999;"><strong>Die Glühweinzeit hat bereits begonnen und kälter geworden ist es auch...</strong></p>', $message->body);
         $this->assertEquals(Zend_Mime::TYPE_HTML, $message->body_content_type);
     }
+
+    /**
+     * testNewsletterMultipartRelated
+     * 
+     * @see 0007858: could not parse structure of multipart/related msg
+     */
+    public function testMultipartRelatedAlternative()
+    {
+        $cachedMessage = $this->messageTestHelper('multipart_alternative_related.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        $this->assertContains('some body contentsome body contentsome body content', $message->body);
+    }
     
     /********************************* protected helper funcs *************************************/
     
