@@ -34,6 +34,13 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
             $this->_backend->alterCol('timemachine_modlog', $declaration);
         }
         
+        // try to drop "timemachine_modlog::application_id--applications::id" if it still exists
+        try {
+            $this->_backend->dropForeignKey('timemachine_modlog', 'timemachine_modlog::application_id--applications::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already dropped
+        }
+        
         $declaration = new Setup_Backend_Schema_Index_Xml('
            <index>
                 <name>unique-fields</name>

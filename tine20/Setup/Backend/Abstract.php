@@ -382,6 +382,9 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         try {
             $this->execQueryVoid($statement);
         } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $zdse);
+            
             // try it again with table prefix
             $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP INDEX " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_indexName);
             $this->execQueryVoid($statement);
