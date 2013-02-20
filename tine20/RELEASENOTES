@@ -3,117 +3,20 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:     Joey (2012/10)
-Last change: 2012-11-12
+Release:     Kristina (2013.03)
+Last change: 2013-02-11
 
 Contents
 --
-
 1. New Queue management
-2. Calendar Default Sync Filter
-3. Calendar Edit Views
-4. Calendar Alarms
-5. Calendar colours and tags
-6. Calendar organiser change
-7. Password policies
-8. PostgreSQL support
-9. Felamimail vacation templates
-10. Felamimail body caching
-11. PHP 5.3 required
-12. Example .htaccess
 
 1. New Queue management
 -----------------
-- Cli method Tinebase.processQueue got deleted. The Queue worker must not 
-  longer be a cronjob.
-- A queue worker daemon got added see Tinebase/Redis/Worker/Daemon.php
-- The new daemon only supports Redis as queue backend atm.
-- The Rediska library is not longer supported
-- PhpRedis is now required for the Redis adapter
-- configuration in config.inc.php:
+- Configuration for Redis queue backend in config.inc.php:
     'actionqueue' => array(
-      'adapter'       => 'Redis',
-      'driverOptions' => array(
-        'host'  => 'HOSTNAME',
-      ),
+      'backend'       => 'Redis',
+      'host'          => 'localhost',
+      'port'          => 6379,
+      'timeout'       => 5,
+      'queueName'     => 'TinebaseQueue',
     ),
-
-2. Calendar Default Sync Filter
------------------
-The default calendar sync filter is now:
-Event is in one of my personal calendars AND I'm attendee AND I have not declined.
-This way you don't see recurring exceptions you don't attend any longer and
-duplicate events originating in other users personal calendars are suppressed
-
-3. Calendar Edit Views
------------------
-When editing an event, the user can now choose which perspective he want's to
-edit via the "view" combo box. The view can be "organiser" or one of the 
-attendee. In organiser view, the event details and the default alarms and 
-transparency can be set. In attendee view alarms and transparency for the
-particular attendee can be set. This attendee details overwrite the organiser
-defaults for the attendee
-
-4. Calendar Alarms
------------------
-Multiple event alarms could be configured by the organiser. Each attendee can
-add further alarms and remove organiser alarms for herself.
-In the calendar preference each user can now define if he wan't default alarms
-and how many minutes before this default alarms should occur. Default alarms
-are appended to new events the user create via the Tine 2.0 Client.
-
-5. Calendar colours and tags
------------------
-The event colour in the sheet views is now determined by the colour of the
-originating calendar if the user has access to this calendar. A mouse over on
-the calendar in the details panel now shows both calendars, the originating and
-the display calendar. Tags are now presented in the events for the sheet views.
-
-6. Calendar organiser change
------------------
-The organiser can now be changed for existing events.
-
-7. Password policies
------------------
-New password policies can be configured in the setup "Authentication and Accounts" panel.
-You can define minimal length, number of special chars/numbers/uppercase chars and so on.
-
-8. PostgreSQL support
------------------
-The PostgreSQL database is now fully supported and can be selected in the setup.
-
-9. Felamimail vacation templates
------------------
-The sieve vacation message configuration now supports templates for easier setup of 
-default vacation messages for all users. To activate the usage of templates, all you need
-to do is to put a template file into the following webdav directory:
-
- /webdav/Felamimail/shared/Vacation Templates
-
-An example template file might look like this:
-
-    Ich bin vom {startDate-de_DE} bis zum {endDate-de_DE} im Urlaub. Bitte kontaktieren Sie
-     {representation-n_fn-1} ({representation-email-1}) oder {representation-n_fn-2} ({representation-email-2}).
-    
-    I am on vacation until {endDate-en_US}. Please contact {representation-n_fn-1}
-    ({representation-email-1}) or {representation-n_fn-2} ({representation-email-2}) instead.
-    
-    {owncontact-n_fn}
-
-10. Felamimail body caching
------------------
-It is now possible to deactivate the caching of email bodies. This can be useful for fast IMAP
-servers and is done by switching the value of the Felamimail config "cacheEmailBody" to "0".
-This can be done by calling the following CLI command:
-
- php setup.php --setconfig -- configkey=cacheEmailBody configvalue=0 app=Felamimail
-
-11. PHP 5.3 required
---------------------
-Tine 2.0 now requires a minimal PHP version of 5.3.0.
-
-12. Example .htaccess
---------------------
-
-We added an example .htaccess file for Apache 2 webservers. You can activate it by moving the file 
-docs/htaccess to the Tine 2.0 root and renaming it to .htaccess.
