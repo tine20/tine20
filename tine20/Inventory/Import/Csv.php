@@ -67,4 +67,22 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         $result['container_id'] = $this->_options['container_id'];
         return $result;
     }
+    
+    /**
+     * do conversions
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doConversions($_data)
+    {
+        $result = parent::_doConversions($_data);
+        
+        if (array_key_exists("name", $result)) {
+            if ($result['name'] == "")
+                $result['name'] = "!Not defined!";
+        }
+        
+        return $result;
+    }
 }
