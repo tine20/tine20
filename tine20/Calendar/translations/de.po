@@ -2,14 +2,15 @@
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012.
 #   <info@kay-strobach.de>, 2012.
+# Juergen Heine <transifex.com@sysdef.de>, 2013.
 #   <mail@corneliusweiss.de>, 2012.
 #   <p.schuele@metaways.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-12-03 11:23+0000\n"
-"Last-Translator: kaystrobach <info@kay-strobach.de>\n"
+"PO-Revision-Date: 2013-01-28 18:52+0000\n"
+"Last-Translator: sysdef <transifex.com@sysdef.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +23,7 @@ msgstr ""
 
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
-msgstr "Gemeinsame Kalender Verwalten"
+msgstr "verwalte gemeinsame Kalender"
 
 #: Acl/Rights.php:97
 msgid "Create new shared calendars"
@@ -30,7 +31,7 @@ msgstr "Neuen gemeinsamen Kalender anlegen"
 
 #: Acl/Rights.php:100
 msgid "manage shared calendars favorites"
-msgstr "Gemeinsame Kalender Favoriten verwalten"
+msgstr "verwalte Favoriten gemeinsamer Kalender"
 
 #: Acl/Rights.php:101
 msgid "Create or update shared calendars favorites"
@@ -38,7 +39,7 @@ msgstr "Gemeinsame Kalender Favoriten erstellen oder ändern"
 
 #: Acl/Rights.php:104
 msgid "manage resources"
-msgstr "Ressourcen Verwalten"
+msgstr "verwalten Ressourcen"
 
 #: Acl/Rights.php:105
 msgid "All Rights to administrate resources"
@@ -82,7 +83,7 @@ msgstr "Beschreibung"
 #: Model/Event.php:290 js/GridView.js:148 js/EventDetailsPanel.js:272
 #: js/Model.js:197 js/EventEditDialog.js:121 js/ResourcesGridPanel.js:52
 msgid "Location"
-msgstr "Ort"
+msgstr "Lokation"
 
 #: Model/Event.php:291 js/GridView.js:154 js/PerspectiveCombo.js:112
 #: js/EventDetailsPanel.js:276 js/Model.js:217 js/EventEditDialog.js:295
@@ -130,7 +131,7 @@ msgstr "Ja"
 
 #: Config.php:45
 msgid "Fixed Calendars"
-msgstr "Fester Kalender"
+msgstr "Feste Kalender"
 
 #: Config.php:47
 msgid ""
@@ -248,7 +249,7 @@ msgstr "Der Standard Favorit der beim öffnen des Kalenders geladen wird"
 
 #: Preference.php:103
 msgid "Get Notification Emails"
-msgstr "Empfangen von Benachrichtigungs-Emails"
+msgstr "Empfangen von Benachrichtigungs-E-Mails"
 
 #: Preference.php:104
 msgid ""
@@ -333,7 +334,7 @@ msgstr "Name"
 
 #: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
 msgid "Is a location"
@@ -349,7 +350,7 @@ msgstr "nicht-blockierend"
 
 #: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
-msgstr "Bitte einen Termin auswählen, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte einen Termin auswählen, dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:102
 msgid "Role"
@@ -558,7 +559,7 @@ msgstr "Kopiere {0}"
 
 #: js/MainScreenCenterPanel.js:507
 msgid "Updating event in the past"
-msgstr "Vergangenen Termin Aktualisieren"
+msgstr "Vergangenen Termin aktualisieren"
 
 #: js/MainScreenCenterPanel.js:508
 msgid "Update this event"
@@ -570,7 +571,7 @@ msgstr "Diesen Termin nicht aktualisieren"
 
 #: js/MainScreenCenterPanel.js:513
 msgid "Creating event in the past"
-msgstr "Vergangenen Termin Anlegen"
+msgstr "Vergangenen Termin anlegen"
 
 #: js/MainScreenCenterPanel.js:514
 msgid "Create this event"

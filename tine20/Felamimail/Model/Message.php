@@ -61,6 +61,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
     
     /**
+     * content type multipart/mixed
+     */
+    const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
+    
+    /**
      * content type text/calendar
      */
     const CONTENT_TYPE_CALENDAR = 'text/calendar';
@@ -504,10 +509,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             . ' Structure: ' . print_r($_structure, TRUE));
         
         if ($_structure['subType'] == 'alternative' || $_structure['subType'] == 'related') {
-            $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
-                ? Zend_Mime::TYPE_TEXT 
-                : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
-            
             foreach ($_structure['parts'] as $part) {
                 $foundParts[$part['contentType']] = $part['partId'];
             }
@@ -516,13 +517,25 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 . ' Found parts: ' . print_r($foundParts, TRUE));
             
             if (array_key_exists($_preferedMimeType, $foundParts)) {
+                // found our desired body part
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
-            } else if (array_key_exists(self::CONTENT_TYPE_MULTIPART_RELATED, $foundParts)) {
-                $result = $this->getBodyParts($_structure['parts'][$foundParts[self::CONTENT_TYPE_MULTIPART_RELATED]], $_preferedMimeType);
-            } else if (array_key_exists($alternativeType, $foundParts)) {
+            }
+            
+            $multipartTypes = array(self::CONTENT_TYPE_MULTIPART, self::CONTENT_TYPE_MULTIPART_RELATED, self::CONTENT_TYPE_MULTIPART_MIXED);
+            foreach ($multipartTypes as $multipartType) {
+                if (array_key_exists($multipartType, $foundParts)) {
+                    // dig deeper into the structure to find the desired part(s)
+                    $partStructure = $_structure['parts'][$foundParts[$multipartType]];
+                    $result = $this->getBodyParts($partStructure, $_preferedMimeType);
+                }
+            }
+            
+            $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
+                ? Zend_Mime::TYPE_TEXT 
+                : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
+            if (empty($result) && array_key_exists($alternativeType, $foundParts)) {
+                // found the alternative body part
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
-            } else if (array_key_exists('multipart/mixed', $foundParts)) {
-                $result = $result + $this->getBodyParts($_structure['parts'][$foundParts['multipart/mixed']], $_preferedMimeType);
             }
         } else {
             foreach ($_structure['parts'] as $part) {

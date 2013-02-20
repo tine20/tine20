@@ -1,15 +1,16 @@
 # 
 # Translators:
-# Alexander Stintzing <a.stintzing@metaways.de>, 2012.
+# Alexander Stintzing <a.stintzing@metaways.de>, 2012-2013.
 # Björn Balazs <transifex@lazs.de>, 2012.
+# Juergen Heine <transifex.com@sysdef.de>, 2013.
 #   <mail@corneliusweiss.de>, 2012.
 #   <p.schuele@metaways.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-12-10 11:07+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-02-12 11:17+0000\n"
+"Last-Translator: Alexander Stintzing <a.stintzing@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,7 +71,7 @@ msgstr "Das Recht, den eigenen Client-Status zu ändern/setzen."
 
 #: Acl/Rights/Abstract.php:71
 msgid "admin"
-msgstr "admin"
+msgstr "Admin"
 
 #: Acl/Rights/Abstract.php:72
 msgid "admin right description"
@@ -94,7 +95,7 @@ msgstr "Anmeldung erforderlich"
 
 #: Frontend/Http.php:388
 msgid "Your session is not valid. You need to login again."
-msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+msgstr "Ihre Sitzung ist ungültig. Bitte melden Sie sich erneut an."
 
 #: Frontend/Http.php:413 js/ExceptionDialog.js:62
 msgid "Abnormal End"
@@ -120,27 +121,27 @@ msgstr "unbekannt"
 
 #: Config.php:239
 msgid "System IMAP"
-msgstr "System IMAP"
+msgstr "System-IMAP"
 
 #: Config.php:241
 msgid "System IMAP server configuration."
-msgstr "System IMAP Serverkonfiguration."
+msgstr "System-IMAP E-Mail-Empfangs-Serverkonfiguration."
 
 #: Config.php:250
 msgid "System SMTP"
-msgstr "System SMTP"
+msgstr "System-SMTP"
 
 #: Config.php:252
 msgid "System SMTP server configuration."
-msgstr "System SMTP Serverkonfiguration."
+msgstr "System-SMTP Email-Sende-Serverkonfiguration."
 
 #: Config.php:261
 msgid "System SIEVE"
-msgstr "System SIEVE"
+msgstr "System-SIEVE"
 
 #: Config.php:263
 msgid "System SIEVE server configuration."
-msgstr "System SIEVE Serverkonfiguration."
+msgstr "System-SIEVE Serverkonfiguration."
 
 #: Config.php:272
 msgid "Authentication Backend"
@@ -148,7 +149,7 @@ msgstr "Authentifizierungs-Backend"
 
 #: Config.php:274
 msgid "Backend adapter for user authentication."
-msgstr "Benutzer-Authentifizierungs-Backend"
+msgstr "Backend zur Benutzer-Authentifizierung"
 
 #: Config.php:282
 msgid "Authentication Configuration"
@@ -176,7 +177,7 @@ msgstr "Benutzer-Backend Konfiguration"
 
 #: Config.php:314
 msgid "Cronuser ID"
-msgstr "Cronuser ID"
+msgstr "Cronuser-ID"
 
 #: Config.php:316
 msgid "User ID of the cron user."
@@ -192,7 +193,7 @@ msgstr "Zeichenkette, die dem Titel der Installation vorangestellt wird"
 
 #: Config.php:334
 msgid "Redirect URL"
-msgstr "Weiterleitungs URL"
+msgstr "Weiterleitungs-URL"
 
 #: Config.php:336
 msgid "Redirect to this URL after logout."
@@ -216,15 +217,15 @@ msgstr "Für den Login zur konfigurierten URL weiterleiten."
 
 #: Config.php:364
 msgid "Accepted Terms Version"
-msgstr "Nutzungsbedingungenversion"
+msgstr "Version der akzeptierten Nutzungsbedingungen"
 
 #: Config.php:366
 msgid "Accepted version number of the terms and conditions document."
-msgstr "Version der Zustimmung zu den Nutzungsbedingungen."
+msgstr "Versionsnummer der Nutzungsbedingungen, denen zugestimmt wurde."
 
 #: Config.php:374
 msgid "Use Geolocation Services"
-msgstr "Geolocation-Dienst benutzen"
+msgstr "Geolokatisierungs-Dienst nutzen"
 
 #: Config.php:376
 msgid "Use of external Geolocation services is allowed."
@@ -232,19 +233,19 @@ msgstr "Benutzung eines externen Geodaten-Dienstes wird erlaubt."
 
 #: Config.php:384
 msgid "IP Session Validator"
-msgstr "IP Session Validator"
+msgstr "IP-Sitzungsüberwachung"
 
 #: Config.php:386
 msgid "Destroy session if the users IP changes."
-msgstr "Session beenden, wenn der Benutzer seine IP ändert."
+msgstr "Sitzung abbrechen, wenn der Benutzer seine IP ändert."
 
 #: Config.php:394
 msgid "UA Session Validator"
-msgstr "UA Session Validator"
+msgstr "UA-Sitzungsüberwachung"
 
 #: Config.php:396
 msgid "Destroy session if the users user agent string changes."
-msgstr "Session beenden, wenn der Benutzer seine User-Agent-Zeichenkette ändert."
+msgstr "Session beenden, wenn der Benutzer seine Clientkennung (user agent) ändert."
 
 #: Config.php:404
 msgid "Files Directory"
@@ -252,7 +253,7 @@ msgstr "Verzeichnis für Dateien"
 
 #: Config.php:406
 msgid "Directory with web server write access for user files."
-msgstr "Verzeichnis für Benutzerdateien, zu dem der Webserver Schreibzugriff hat"
+msgstr "Verzeichnis für Benutzerdateien, zu dem der Webserver Schreibzugriff hat."
 
 #: Config.php:414 Config.php:416
 msgid "User may change password"
@@ -435,7 +436,7 @@ msgstr "Anwenden"
 #: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
 #: js/widgets/LangChooser.js:68
 msgid "Please Wait"
-msgstr "Bitte Warten"
+msgstr "Bitte warten"
 
 #: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
 msgid "Read"
@@ -492,7 +493,7 @@ msgstr " Mitwirkenden"
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
-msgstr "Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren Administrator und aktualisieren Sie Ihre Browser-Ansicht."
+msgstr "Fataler Fehler: Client-Update fehlgeschlagen. Bitte kontaktieren Sie Ihren Administrator und/oder aktualisieren Sie Ihre Browser-Ansicht."
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -579,7 +580,7 @@ msgstr "Übersetzungen"
 msgid ""
 "If you miss a language, or your language is not supported completely, you "
 "can help our translation teams at transifex."
-msgstr ""
+msgstr "Wenn Sie eine Sprache vermissen oder Ihre Sprache wird nicht vollständig unterstützt, können Sie unsere Teams bei Transifex mit Übersetzungen helfen."
 
 #: js/LoginPanel.js:155
 msgid "Tine 2.0 Translation Portal"
@@ -597,7 +598,7 @@ msgstr "Tine 2.0 benötigt Deine Hilfe"
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
-msgstr "Wir brauchen regelmäßiges Feedback von Tine 2.0 Benutzern um die nächste Version noch besser an Eure Bedürfnisse anzupassen. Helft uns und Euch mit Eurer Teilnahme:"
+msgstr "Wir brauchen regelmäßiges Feedback von Tine 2.0 -Benutzern um die nächste Version noch besser an Eure Bedürfnisse anzupassen. Helft uns und Euch mit Eurer Teilnahme:"
 
 #: js/LoginPanel.js:213
 msgid "participate!"
@@ -656,7 +657,7 @@ msgstr "Bitte warten!"
 
 #: js/LoginPanel.js:371 js/ExceptionHandler.js:214
 msgid "Connection lost, please check your network!"
-msgstr "Verbindungsabbruch, bitte überprüfen Sie ihre Netzwerkeinstellungen!"
+msgstr "Verbindungsabbruch. Bitte überprüfen Sie ihre Netzwerkverbindung!"
 
 #: js/LoginPanel.js:375
 msgid "Login failure"
@@ -664,7 +665,7 @@ msgstr "Anmeldung fehlgeschlagen"
 
 #: js/LoginPanel.js:376
 msgid "Your username and/or your password are wrong!!!"
-msgstr "Ihre Benutzername/Passwort-Kombination ist leider falsch!"
+msgstr "Ihr Benutzername und/oder Ihr Passwort ist falsch!"
 
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:245
@@ -678,7 +679,7 @@ msgstr "Fehler"
 #: js/widgets/dialog/EditDialog.js:679 js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:610
 msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die gekennzeichneten Fehler"
+msgstr "Bitte beheben Sie die genannten Fehler."
 
 #: js/LoginPanel.js:403
 msgid "Please enter your login data"
@@ -702,7 +703,7 @@ msgstr "Neues Passwort"
 
 #: js/PasswordChangeDialog.js:56
 msgid "Repeat new Password"
-msgstr "Wiederholung neues Passwort"
+msgstr "Wiederhole das neue Passwort"
 
 #: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
 #: js/widgets/tags/TagToggleBox.js:59
@@ -725,7 +726,7 @@ msgstr "Bitte warten!"
 
 #: js/PasswordChangeDialog.js:76
 msgid "changing password..."
-msgstr "Passwort wird geändert..."
+msgstr "Passwort wird geändert ..."
 
 #: js/PasswordChangeDialog.js:87
 msgid "Success"
@@ -733,7 +734,7 @@ msgstr "Erfolg"
 
 #: js/PasswordChangeDialog.js:88
 msgid "Your password has been changed."
-msgstr "Ihr Passwort wurde geändert"
+msgstr "Ihr Passwort wurde geändert."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
 #: js/widgets/relation/GenericPickerGridPanel.js:633
@@ -742,11 +743,11 @@ msgstr "Ihr Passwort wurde geändert"
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:267
 msgid "Failure"
-msgstr "Fehler"
+msgstr "Gescheitert"
 
 #: js/PasswordChangeDialog.js:111
 msgid "The new passwords mismatch, please correct them."
-msgstr "Die neuen Passwörter stimmen nicht überein. Bitte wiederholen Sie die Eingabe."
+msgstr "Die neuen Passwörter stimmen nicht überein. Bitte korrigieren Sie die Eingabe."
 
 #: js/MainMenu.js:62
 msgid "User: {0}"
@@ -774,7 +775,7 @@ msgstr "Abmelden"
 
 #: js/MainMenu.js:146
 msgid "Logout from {0}"
-msgstr "{0} Sitzung Beenden"
+msgstr "{0} Sitzung beenden"
 
 #: js/MainMenu.js:153
 msgid "Allow desktop notifications"
@@ -844,13 +845,13 @@ msgstr "Ihre Anfrage konnte aufgrund von fehlenden Daten nicht beantwortet werde
 
 #: js/ExceptionHandler.js:183
 msgid "Concurrent Updates"
-msgstr "Passende Updates"
+msgstr "konkurrierende Aktualisierung"
 
 #: js/ExceptionHandler.js:184
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
-msgstr "Der Eintrag wurde von jemand anderem geändert während Sie daran arbeiteten. Sie müssen aktualisieren und die Änderungen erneut durchführen."
+msgstr "Der Eintrag wurde von jemand anderem geändert, während Sie daran arbeiteten. Sie müssen aktualisieren und die Änderungen erneut durchführen."
 
 #: js/ExceptionHandler.js:192
 msgid "Service Unavailable"
@@ -907,7 +908,7 @@ msgstr "Entschuldigung, der Server hat keinen Arbeitsspeicher mehr zur Verfügun
 
 #: js/ExceptionHandler.js:254
 msgid "No Role Memberships"
-msgstr "Keine Mitgliedschaften in Rollen"
+msgstr "Keine Rollen-Mitgliedschaften vorhanden"
 
 #: js/ExceptionHandler.js:255
 msgid ""
@@ -1101,7 +1102,7 @@ msgstr "Tag Hinzufügen"
 
 #: js/widgets/tags/TagsMassAttachAction.js:76
 msgid "Attach the following tag to all selected items:"
-msgstr "Das folgende Tag zu den Einträgen hinzufügen:"
+msgstr "Folgende Tags der Auswahl zuordnen:"
 
 #: js/widgets/tags/TagsMassAttachAction.js:98
 msgid "Select Tag"
@@ -1890,7 +1891,7 @@ msgstr "2 Tage davor"
 
 #: js/widgets/dialog/AlarmPanel.js:46
 msgid "Custom Datetime"
-msgstr "Beliebiger Zeitpunkt"
+msgstr "Benutzerdefinierter Zeitpunkt"
 
 #: js/widgets/dialog/AlarmPanel.js:58
 msgid "Alarm Time"
@@ -2042,7 +2043,7 @@ msgstr "{0} {1} hat invalide Daten nach der Aktualisierung. Dieser {1} wurde nic
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "Export"
-msgstr[1] "Export"
+msgstr[1] "Exporte"
 
 #: js/widgets/dialog/ExportDialog.js:84
 msgid "Export {0} {1}"
@@ -2302,7 +2303,7 @@ msgstr "Gemeinsame Favoriten (sichtbar für alle Benutzer)"
 
 #: js/widgets/CountryCombo.js:34
 msgid "Select a country..."
-msgstr "Wählen Sie ein Land..."
+msgstr "Wählen Sie ein Land ..."
 
 #: js/widgets/account/PickerGridPanel.js:154
 msgid "Search User"
@@ -2362,7 +2363,7 @@ msgstr "Fehler"
 
 #: js/widgets/container/GrantsDialog.js:126
 msgid "You are not allowed to remove all admins for this container!"
-msgstr "Sie dürfen nicht alle Administratoren entfernen!"
+msgstr "Sie dürfen nicht alle Administratoren für diesen Container entfernen!"
 
 #: js/widgets/container/FilterModel.js:142
 msgid "is personal of"
@@ -2476,7 +2477,7 @@ msgstr "Fehlerhafte Einstellungen"
 
 #: js/widgets/form/ConfigPanel.js:158
 msgid "Transferring Configuration..."
-msgstr "Übertrage Konfiguration..."
+msgstr "Übertrage Konfiguration ..."
 
 #: js/widgets/form/ConfigPanel.js:254
 msgid "Save config"
@@ -2496,7 +2497,7 @@ msgstr "Bitte wählen Sie eine Datei mit einer der folgenden Dateiendungen:"
 
 #: js/ExceptionDialog.js:110
 msgid "Send Report"
-msgstr "Bericht Senden"
+msgstr "Bericht senden"
 
 #: js/ExceptionDialog.js:138
 msgid "The last action you made was potentially not performed correctly."
@@ -2526,7 +2527,7 @@ msgstr "Bitte warten Sie einen Moment"
 
 #: js/ExceptionDialog.js:243
 msgid "Transmission Completed"
-msgstr "Übermittlung beendet"
+msgstr "Übermittlung abgeschlossen"
 
 #: js/ExceptionDialog.js:244
 msgid "Your report has been sent. Thanks for your contribution"
@@ -2570,7 +2571,7 @@ msgstr "Benutzername"
 
 #: js/UserRegistration.js:125
 msgid "Emailaddress"
-msgstr "Email-Adresse"
+msgstr "E-Mail-Adresse"
 
 #: js/UserRegistration.js:171
 msgid "Congratulations!"
@@ -2580,7 +2581,7 @@ msgstr "Herzlichen Glückwunsch!"
 msgid ""
 "You have entered all needed information. If you press the Finish button we "
 "will send you the registration email."
-msgstr "Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den Fertig Knopf drücken, wird ihnen eine Bestätigungsemail zugesandt."
+msgstr "Sie haben alle benötigten Informationen eingegeben. Wenn Sie nun den \"Fertig\"-Knopf drücken, wird ihnen eine E-mail zur abschließenden Registrierung zugesandt."
 
 #: js/ux/PopupWindowManager.js:164
 msgid ""
@@ -2628,7 +2629,7 @@ msgstr "Software Version"
 
 #: js/ux/form/ImageField.js:73
 msgid "Loading"
-msgstr "Laden"
+msgstr "lädt"
 
 #: js/ux/form/ImageField.js:76
 msgid "Click to edit"

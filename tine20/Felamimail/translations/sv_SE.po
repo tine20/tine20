@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Niklas Ye <niklas@idontgetlaid.com>, 2013.
 #   <tulken_hultan@hotmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-28 11:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-01-20 12:14+0000\n"
+"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,25 +36,25 @@ msgstr "Skapa nya email konton"
 
 #: Config.php:45
 msgid "Vacation Templates Container ID"
-msgstr ""
+msgstr "Container-ID för semester-mallar"
 
 #: Config.php:54
 msgid "Custom Vacation Message"
-msgstr ""
+msgstr "Anpassat semester-meddelande"
 
 #: Config.php:56
 msgid "User is allowed to set custom vacation message for system account"
-msgstr ""
+msgstr "Användare tillåts sätta eget semestermeddelande för systemkonto"
 
 #: Config.php:65
 msgid "Cache email body"
-msgstr ""
+msgstr "Lagra mails innehåll i cache"
 
 #: Config.php:67
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
-msgstr ""
+msgstr "Skall mails innehåll lagras i cache (rekommenderas för långsamma anslutningar till IMAP-server)"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
@@ -225,11 +226,11 @@ msgstr "Mail"
 
 #: js/Felamimail.js:129
 msgid "Active Vacation Message"
-msgstr "Aktivt semester Meddelande"
+msgstr "Aktuellt semestermeddelande"
 
 #: js/Felamimail.js:130
 msgid "Email account \"{0}\" has an active vacation message."
-msgstr "E-postkonto \"{0}\" har ett aktivt semester meddelande."
+msgstr "E-postkonto \"{0}\" har ett aktivt semestermeddelande."
 
 #: js/Felamimail.js:527
 msgid "New mails"
@@ -237,7 +238,7 @@ msgstr "nya mail"
 
 #: js/Felamimail.js:528
 msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "Du har {0} ny mail (er) i mappen {1} ({2})."
+msgstr "Du har {0} ny mail(s) i mappen {1} ({2})."
 
 #: js/Felamimail.js:648
 msgid "IMAP Credentials for {0}"
@@ -245,7 +246,7 @@ msgstr "IMAP Referenser för {0}"
 
 #: js/Felamimail.js:651
 msgid "Credentials"
-msgstr "referenser"
+msgstr "Inloggningsuppgifter"
 
 #: js/Felamimail.js:802 js/Felamimail.js:835
 msgid "IMAP Error"
@@ -257,11 +258,11 @@ msgstr "Ingen anslutning till IMAP server."
 
 #: js/Felamimail.js:819
 msgid "IMAP Credentials Error"
-msgstr "IMAP Referens Fel"
+msgstr "Fel på IMAP inloggningsuppgifter"
 
 #: js/Felamimail.js:820
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Din e-referenser är fel. Vänligen kontakta din administratör"
+msgstr "Dina mail-inloggningsuppgifter är felaktiga. Vänligen kontakta din administratör"
 
 #: js/Felamimail.js:836
 msgid ""
@@ -271,7 +272,7 @@ msgstr "En av dina mappar har tagits bort eller har bytts namn på av någon ann
 
 #: js/Felamimail.js:865
 msgid "SMTP Error"
-msgstr "SMTP Fel"
+msgstr "SMTP-fel"
 
 #: js/Felamimail.js:866
 msgid "No connection to SMTP server."
@@ -279,19 +280,19 @@ msgstr "Ingen anslutning till SMTP server"
 
 #: js/Felamimail.js:874
 msgid "Sieve Error"
-msgstr "Såll Fel"
+msgstr "Filterfel"
 
 #: js/Felamimail.js:875
 msgid "No connection to Sieve server."
-msgstr "Ingen anslutning till Såll server"
+msgstr "Ingen anslutning till Filterserver"
 
 #: js/Felamimail.js:883
 msgid "Save Sieve Script Error"
-msgstr "Spara Såll Skript Fel"
+msgstr "Fel vid sparning av filter-skript"
 
 #: js/Felamimail.js:884
 msgid "Could not save script on Sieve server."
-msgstr "Kunde inte spara skriptet på Sieve server."
+msgstr "Kunde inte spara skriptet på Filterserver."
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -311,7 +312,7 @@ msgstr "Avbryt"
 
 #: js/FolderSelectPanel.js:84
 msgid "Ok"
-msgstr "Okej"
+msgstr "Ok"
 
 #: js/FolderSelectPanel.js:175
 msgid "Folders of account {0}"
@@ -336,11 +337,11 @@ msgstr "Svara"
 
 #: js/MessageDisplayDialog.js:53 js/GridPanel.js:262
 msgid "Reply To All"
-msgstr "Svara Till Alla"
+msgstr "Svara till alla"
 
 #: js/MessageDisplayDialog.js:59 js/GridPanel.js:271
 msgid "Forward"
-msgstr "Framåt"
+msgstr "Vidarebefodra"
 
 #: js/MessageDisplayDialog.js:65
 msgid "Save"
@@ -361,25 +362,25 @@ msgstr "Skicka"
 
 #: js/MessageEditDialog.js:151
 msgid "Search Recipients"
-msgstr "Sök Mottagare"
+msgstr "Sök mottagare"
 
 #: js/MessageEditDialog.js:159
 msgid "Save As Draft"
-msgstr "Spara Som utkast"
+msgstr "Spara som utkast"
 
 #: js/MessageEditDialog.js:167
 msgid "Save As Template"
-msgstr "Spara Som Mall"
+msgstr "Spara som mall"
 
 #: js/MessageEditDialog.js:176
 msgid "Save Email Note"
-msgstr "Spara E-post Notifiering"
+msgstr "Spara e-post notifiering"
 
 #: js/MessageEditDialog.js:184
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the"
 " recipient(s) contact(s)."
-msgstr "Aktivera denna växlingsknappen för att spara e-post som en anteckning till mottagare kontakt (er)."
+msgstr "Aktivera denna växlingsknappen för att spara e-post som en bifogad anteckning till mottagare kontakt (er)."
 
 #: js/MessageEditDialog.js:202
 msgid "Click to search for and add recipients from the Addressbook."
@@ -391,7 +392,7 @@ msgstr "På {0}, {1} skrev"
 
 #: js/MessageEditDialog.js:355
 msgid "Original message"
-msgstr "Orginal meddelande"
+msgstr "Ursprungligt meddelande"
 
 #: js/MessageEditDialog.js:580
 msgid "Fwd:"
@@ -407,7 +408,7 @@ msgstr "Misslyckades"
 
 #: js/MessageEditDialog.js:636
 msgid "{0} account setting empty."
-msgstr "{0} konto inställning tomt."
+msgstr "{0} kontoinställning tom."
 
 #: js/MessageEditDialog.js:651
 msgid "Errors"
@@ -453,11 +454,11 @@ msgstr "Filer laddas fortfarande upp."
 
 #: js/MessageEditDialog.js:1000
 msgid "Empty subject"
-msgstr ""
+msgstr "Inget ämne"
 
 #: js/MessageEditDialog.js:1001
 msgid "Do you really want to send a message with an empty subject?"
-msgstr ""
+msgstr "Vill du verkligen skicka ett meddelande utan ämne?"
 
 #: js/MessageEditDialog.js:1020
 msgid "Add Note"
@@ -465,7 +466,7 @@ msgstr "Lägg till Notifiering"
 
 #: js/MessageEditDialog.js:1021
 msgid "Edit Email Note Text:"
-msgstr "Ändra E-post Notifierings test:"
+msgstr "Ändra E-post Notifierings text:"
 
 #: js/MessageEditDialog.js:1044
 msgid "No recipients set."
@@ -473,7 +474,7 @@ msgstr "Inga mottagare inställd."
 
 #: js/GridDetailsPanel.js:158
 msgid "Message not available."
-msgstr ""
+msgstr "Meddelande är inte tillgängligt."
 
 #: js/GridDetailsPanel.js:247
 msgid "Add"
@@ -489,7 +490,7 @@ msgstr "Datum"
 
 #: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:476
 msgid "Show or hide header information"
-msgstr "Vise eller dölj rubrik information"
+msgstr "Visa eller dölj rubrik-information"
 
 #: js/TreePanel.js:700
 msgid "Total Messages:"
@@ -660,43 +661,43 @@ msgstr "Jag är inte tillgänglig (semester-meddelande aktiverat)"
 
 #: js/sieve/VacationEditDialog.js:227
 msgid "Start Date"
-msgstr ""
+msgstr "Startdatum"
 
 #: js/sieve/VacationEditDialog.js:228
 msgid "Set vacation start date ..."
-msgstr ""
+msgstr "Sätt startdatum för semester ..."
 
 #: js/sieve/VacationEditDialog.js:232
 msgid "End Date"
-msgstr ""
+msgstr "Slutdatum"
 
 #: js/sieve/VacationEditDialog.js:233
 msgid "Set vacation end date ..."
-msgstr ""
+msgstr "Sätt slutdatum för semester ..."
 
 #: js/sieve/VacationEditDialog.js:238
 msgid "Representative #1"
-msgstr ""
+msgstr "Representant #1"
 
 #: js/sieve/VacationEditDialog.js:239
 msgid "Choose first Representative ..."
-msgstr ""
+msgstr "Välj den första representanten ..."
 
 #: js/sieve/VacationEditDialog.js:247
 msgid "Representative #2"
-msgstr ""
+msgstr "Representant #2"
 
 #: js/sieve/VacationEditDialog.js:248
 msgid "Choose second Representative ..."
-msgstr ""
+msgstr "Välj den andra representanten ..."
 
 #: js/sieve/VacationEditDialog.js:256
 msgid "Message Template"
-msgstr ""
+msgstr "Meddelande-mall"
 
 #: js/sieve/VacationEditDialog.js:267
 msgid "Choose Template ..."
-msgstr ""
+msgstr "Välj mall"
 
 #: js/sieve/RulesDialog.js:51
 msgid "Sieve Filter Rules"
@@ -844,11 +845,11 @@ msgstr "kvotanvändning"
 
 #: js/GridPanel.js:244
 msgid "Compose"
-msgstr "komponera"
+msgstr "Skapa nytt mail"
 
 #: js/GridPanel.js:279
 msgid "Toggle highlighting"
-msgstr "växla markering"
+msgstr "Växla markering"
 
 #: js/GridPanel.js:288
 msgid "Mark read/unread"
@@ -856,7 +857,7 @@ msgstr "Markera läst/oläst"
 
 #: js/GridPanel.js:309
 msgid "Add Account"
-msgstr "Lägg till Användare"
+msgstr "Lägg till användare"
 
 #: js/GridPanel.js:464
 msgid "Id"
@@ -884,7 +885,7 @@ msgstr "{0} %"
 
 #: js/GridPanel.js:1179
 msgid "Your quota"
-msgstr "Din andel"
+msgstr "Din kvota"
 
 #: js/GridPanel.js:1180
 msgid "{0} available (total: {1})"
@@ -896,11 +897,11 @@ msgstr "Signatur"
 
 #: js/AccountEditDialog.js:119
 msgid "Account Name"
-msgstr "Konto namn"
+msgstr "Kontonamn"
 
 #: js/AccountEditDialog.js:123
 msgid "User Email"
-msgstr "Användare mail"
+msgstr "Användares mail-address"
 
 #: js/AccountEditDialog.js:128
 msgid "User Name (From)"
@@ -908,7 +909,7 @@ msgstr "Användarnamn (från)"
 
 #: js/AccountEditDialog.js:131
 msgid "Organization"
-msgstr "Orginisation"
+msgstr "Organisation"
 
 #: js/AccountEditDialog.js:135
 msgid "Signature position"
@@ -975,7 +976,7 @@ msgstr "Logga in"
 
 #: js/AccountEditDialog.js:238
 msgid "Plain"
-msgstr "Plan"
+msgstr "Plain"
 
 #: js/AccountEditDialog.js:241
 msgid "Username (optional)"
@@ -987,7 +988,7 @@ msgstr "Lösenord (tillval)"
 
 #: js/AccountEditDialog.js:250
 msgid "Sieve"
-msgstr "såll"
+msgstr "Filter"
 
 #: js/AccountEditDialog.js:261
 msgid "Port (Default: 2000)"
@@ -999,23 +1000,23 @@ msgstr "Andra Inställningar"
 
 #: js/AccountEditDialog.js:288
 msgid "Sent Folder Name"
-msgstr "Skickat Mapp Namn"
+msgstr "Namn på Skickat-mapppen"
 
 #: js/AccountEditDialog.js:294
 msgid "Trash Folder Name"
-msgstr "Skräp Mapp Namn"
+msgstr "Namn på Skräp-mappen"
 
 #: js/AccountEditDialog.js:300
 msgid "Drafts Folder Name"
-msgstr "Utkast Mapp namn"
+msgstr "Namn på Utkasts-mappen"
 
 #: js/AccountEditDialog.js:306
 msgid "Templates Folder Name"
-msgstr "Mallar Mappnamn"
+msgstr "Namn på Mall-mappen"
 
 #: js/AccountEditDialog.js:312
 msgid "Display Format"
-msgstr "Bildformat"
+msgstr "Visningsformat"
 
 #: js/AccountEditDialog.js:323
 msgid "HTML"
@@ -1027,7 +1028,7 @@ msgstr "Vanlig Text"
 
 #: js/AccountEditDialog.js:325
 msgid "Depending on content type (experimental)"
-msgstr "Beroende på innehålls typ (experimentell)"
+msgstr "Beroende på innehållstyp (experimentell)"
 
 #: Controller/Message/Flags.php:25
 msgid "Seen"

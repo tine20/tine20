@@ -1,202 +1,198 @@
 # 
 # Translators:
-# Niklas Ye <niklas@idontgetlaid.com>, 2013.
-#   <tulken_hultan@hotmail.com>, 2012.
+# sao sang <saosangmo@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-27 09:33+0000\n"
-"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
+"PO-Revision-Date: 2013-02-07 08:32+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr "Lägg till ny användare"
+msgstr "Thêm người dùng mới"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr "Lägg till ny användare som medlem i en kurs"
+msgstr "Thêm người dùng mới như là thành viên của 1 khóa học"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr "Lägg till befintlig användare"
+msgstr "Thêm người dùng đã tồn tại"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr "Lägg till befintlig användare som medlem i en kurs"
+msgstr "Thêm người dùng đã tồn tại là thành viên của khóa học"
 
 #: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
-msgstr "Internet Tillgängligt"
+msgstr "Truy cập internet"
 
 #: Config.php:77
 msgid "Internet access options."
-msgstr "Inställningar för internettillgänglighet."
+msgstr "Tùy chọn truy cập internet"
 
 #: Config.php:84 Config.php:86
 msgid "Internet Access Group (ON)"
-msgstr "Internetåtkomsts-grupp (ON)"
+msgstr "Nhóm truy cập internet (MỞ)"
 
 #: Config.php:92 Config.php:94
 msgid "Internet Access Group (FILTERED)"
-msgstr "Internetåkomsts-grupp (FILTERED)"
+msgstr "Nhóm truy cập internet (BỊ LỌC)"
 
 #: Config.php:100 Config.php:102
 msgid "Students Group"
-msgstr "Studentgrupp"
+msgstr "Nhóm sinh viên"
 
 #: Config.php:108 Config.php:110
 msgid "Students Import Definition"
-msgstr "Studentimports-definition"
+msgstr "Nhập định nghĩa sinh viên"
 
 #: Config.php:116
 msgid "Students login name prefix"
-msgstr "Prefix för studenters inloggningsnamn"
+msgstr "Tiền tố tên đăng nhập của sinh viên"
 
 #: Config.php:123 Config.php:125
 msgid "Samba user settings"
-msgstr "Samba användarinställningar"
+msgstr "Thiết lập người dùng Samba"
 
 #: Setup/setup.xml:4
 msgid "Courses"
-msgstr "Kurser"
+msgstr "Khóa học"
 
 #: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
 #: Preference.php:60
 msgid "All courses"
-msgstr "Alla Kurser"
+msgstr "Tất cả khóa học"
 
 #: Setup/Initialize.php:66
 msgid "On"
-msgstr "På"
+msgstr "Mở"
 
 #: Setup/Initialize.php:67
 msgid "Off"
-msgstr "Av"
+msgstr "Tắt"
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
-msgstr "Filtrerad"
+msgstr "Đã lọc"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr "Standard favoriten som laddas på lektionsstart"
+msgstr "Lối tắt mặc định được nạp khi lớp học bắt đầu"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
-msgstr "Importera kurs medlemmar"
+msgstr "Nhập học viên"
 
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
-msgstr "Lägg till ny medlem"
+msgstr "Thêm thành viên mới"
 
 #: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurser"
+msgstr[0] "one:Khóa học\nother:Khóa học"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
-msgstr "Kurs namn "
+msgstr "Tên khóa học"
 
 #: js/CourseEditDialog.js:210
 msgid "Course / School Type"
-msgstr "Kurs / Skol Typ"
+msgstr "Loại khóa/ trường"
 
 #: js/CourseEditDialog.js:221
 msgid "Description"
-msgstr "Beskrivning"
+msgstr "Mô tả"
 
 #: js/CourseEditDialog.js:237
 msgid "Fileserver Access"
-msgstr "Filserver Tillgänglighet"
+msgstr "Truy cập máy chủ file"
 
 #: js/CourseEditDialog.js:269
 msgid "Members"
-msgstr "Medlemmar"
+msgstr "Thành viên"
 
 #: js/CourseEditDialog.js:296
 msgid "Login"
-msgstr "Logga in"
+msgstr "Đăng nhập"
 
 #: js/CourseEditDialog.js:300
 msgid "unknown"
-msgstr "Okänd"
+msgstr "không rõ"
 
 #: js/CourseEditDialog.js:305
 msgid "Reset Password"
-msgstr "Återställ lösenord"
+msgstr "Khởi tạo mật khẩu"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
-msgstr "Förnamn"
+msgstr "Họ và đệm"
 
 #: js/AddMemberDialog.js:67
 msgid "Last Name"
-msgstr "Efternamn"
+msgstr "Tên"
 
 #: js/AddMemberDialog.js:86
 msgid "Add new member to course"
-msgstr "Lägg till ny medlem till kurs"
+msgstr "Thêm mới thành viên cho khóa học"
 
 #: js/AddMemberDialog.js:118
 msgid "Errors"
-msgstr "Fel"
+msgstr "Lỗi"
 
 #: js/AddMemberDialog.js:118
 msgid "Please fix the errors noted."
-msgstr "Vänligen åtgärda de fel som noterats."
+msgstr "Xin hãy sửa lỗi đã được ghi chú"
 
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
-msgstr "Namn"
+msgstr "Tên"
 
 #: js/CourseGridPanel.js:54
 msgid "Type"
-msgstr "Typ"
+msgstr "Loại"
 
 #: js/CourseGridPanel.js:99
 msgid "Failed"
-msgstr "Misslyckades"
+msgstr "Lỗi"
 
 #: js/CourseGridPanel.js:100
 msgid "Some error occured while trying to update the courses."
-msgstr "Fel uppstod vid försök att uppdatera kurserna"
+msgstr "Có lỗi xảy ra khi cập nhật khóa học"
 
 #: js/Models.js:45
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] "post lista"
-msgstr[1] "post listor"
+msgstr[0] "one:danh sách biểu ghi\nother:danh sách biểu ghi"
 
 #: js/Models.js:69
 msgid "Quick search"
-msgstr "Snabb sök"
+msgstr "Tìm nhanh"
 
 #: js/Models.js:107
 msgid "Course Type"
 msgid_plural "Course Types"
-msgstr[0] "Kurs Typ"
-msgstr[1] "Kurs Typer"
+msgstr[0] "one:Loại khóa học\nothers:Loại khóa học"
 
 #: Controller/Course.php:247 Controller/Course.php:291
 msgid "Teacher"
-msgstr "Lärare"
+msgstr "Giáo viên"
 
 #: Controller/Course.php:248
 msgid "Teacher Account"
-msgstr "Lärar Konto"
+msgstr "Tài khoản giáo viên"
 
 #: Controller/Course.php:308
 msgid "My course"
-msgstr "Min kurs"
+msgstr "Khóa học của tôi"

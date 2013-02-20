@@ -286,6 +286,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // set X-Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
         //header("X-Content-Security-Policy: allow 'self' https://*.officespot20.com;");
+        
+        // cache mainscreen for 10 minutes
+        $maxAge = 600;
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        
+        // overwrite Pragma header from session
+        header("Pragma: cache");
+ 
     }
     
     /**

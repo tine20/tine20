@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Niklas Ye <niklas@idontgetlaid.com>, 2013.
 #   <tulken_hultan@hotmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-28 11:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-01-27 13:35+0000\n"
+"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,67 +20,67 @@ msgstr ""
 
 #: Exception/NoConnection.php:29
 msgid "Could not connect to sipgate."
-msgstr ""
+msgstr "Kunde inte ansluta till sipgate."
 
 #: Exception/Authorization.php:29
 msgid "Could not authenticate to sipgate."
-msgstr ""
+msgstr "Kunde inte autentisera till sipgate."
 
 #: Exception/ResolveCredentials.php:29
 msgid "Could not resolve account settings."
-msgstr ""
+msgstr "Kunde inte lösa kontoinställningar."
 
 #: Exception/Backend.php:29
 msgid "General Backend Exception."
-msgstr ""
+msgstr "Generellt backend-fel."
 
 #: Exception/MissingConfig.php:29
 msgid "The configuration is missing."
-msgstr ""
+msgstr "Konfigurationen fattas."
 
 #: Acl/Rights.php:94
 msgid "manage accounts"
-msgstr ""
+msgstr "hantera konton"
 
 #: Acl/Rights.php:95
 msgid "enables the account module in the application"
-msgstr ""
+msgstr "aktiverar konto-modulen i applikationen"
 
 #: Acl/Rights.php:98
 msgid "sync lines"
-msgstr ""
+msgstr "synkronisera rader"
 
 #: Acl/Rights.php:99
 msgid "allows the user to sync the call history"
-msgstr ""
+msgstr "tillåter användaren att synkronisera samtals-historiken"
 
 #: Acl/Rights.php:102
 msgid "manage shared accounts"
-msgstr ""
+msgstr "hantera delade konton"
 
 #: Acl/Rights.php:103
 msgid "add, edit and delete shared accounts"
-msgstr ""
+msgstr "lägg till, editera och ta bort delade konton"
 
 #: Acl/Rights.php:106
 msgid "manage private accounts"
-msgstr ""
+msgstr "hantera privata konton"
 
 #: Acl/Rights.php:107
 msgid "add, edit and delete private accounts"
-msgstr ""
+msgstr "lägg till, editera och ta bort privata konton"
 
 #: Controller.php:95
 msgid "You do not have admin rights on Sales"
-msgstr ""
+msgstr "Du har inte administratörsrättigheter för Sälj"
 
 #: Controller.php:117
 msgid "You do not have admin rights on Sipgate"
-msgstr ""
+msgstr "Du har inte administratörsrättigheter för Sipgate"
 
 #: Config.php:48
 msgid "Connection Status"
-msgstr ""
+msgstr "Uppkopplingsstatus"
 
 #: Config.php:50
 msgid "Possible connection states"

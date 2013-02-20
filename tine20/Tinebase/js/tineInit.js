@@ -53,7 +53,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.title = 'Tine 2.0';
-Tine.weburl = 'http://www.tine20.org/';
+Tine.weburl = 'http://www.tine20.com/';
 
 /**
  * quiet logging in release mode

@@ -1,62 +1,61 @@
 # 
 # Translators:
-# Niklas Ye <niklas@idontgetlaid.com>, 2013.
-#   <tulken_hultan@hotmail.com>, 2012.
+# sao sang <saosangmo@yahoo.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-19 11:49+0000\n"
-"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
+"PO-Revision-Date: 2013-02-14 16:14+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
-msgstr "radera alla existerande användare och grupper"
+msgstr "Xóa mọi người dùng và nhóm người dùng"
 
 #: js/AuthenticationPanel.js:127
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
 "and Roles. Do you really want to switch the accounts storage backend to LDAP"
 " ?"
-msgstr "Växla från SQL till LDAP kommer att ta bort alla befintliga användarkonton, grupper och roller. Vill du verkligen byta konto lagring backend till LDAP?"
+msgstr "Chuyển từ SQL sang LDAP sẽ xóa mọi người dùng, nhóm, và vai trò hiện tại. Bạn có thật sự muốn chuyển chế độ lưu trữ tài khoản sang LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
 #: js/EmailPanel.js:146 js/ConfigManagerPanel.js:132
 msgid "Backend"
-msgstr "Backend"
+msgstr "Nền tảng"
 
 #: js/AuthenticationPanel.js:233
 msgid "Initial Admin User"
-msgstr "Första Administratörs Användare"
+msgstr "Người Quản trị chính"
 
 #: js/AuthenticationPanel.js:246
 msgid "Initial admin login name"
-msgstr "Första administratörs användarnamn"
+msgstr "Tên đăng nhập Quản trị chính"
 
 #: js/AuthenticationPanel.js:251
 msgid "Initial admin Password"
-msgstr "Första administratörs Lösenord"
+msgstr "Mật khẩu Quản trị chính"
 
 #: js/AuthenticationPanel.js:255
 msgid "Password confirmation"
-msgstr "Lösenords konfirmation"
+msgstr "Xác nhận mật khẩu"
 
 #: js/AuthenticationPanel.js:263
 msgid "Authentication provider"
-msgstr "autentiserings leverantör"
+msgstr "Nguồn xác thực"
 
 #: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:391
 msgid "Try to split username"
-msgstr "Försök att dela användarnamn"
+msgstr "Thử tách tên đăng nhập"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
@@ -65,7 +64,7 @@ msgstr "Försök att dela användarnamn"
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "Yes"
-msgstr "Ja"
+msgstr "Có"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
 #: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
@@ -74,22 +73,22 @@ msgstr "Ja"
 #: js/AuthenticationPanel.js:620 js/AuthenticationPanel.js:626
 #: js/EmailPanel.js:207
 msgid "No"
-msgstr "nej"
+msgstr "Không"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:341
 #: js/AuthenticationPanel.js:405
 msgid "Account canonical form"
-msgstr "Konto canonical form"
+msgstr "Form đăng nhập duy nhất"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:347
 #: js/AuthenticationPanel.js:409
 msgid "Account domain name "
-msgstr "Konto domän namn"
+msgstr "Tên domain"
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:350
 #: js/AuthenticationPanel.js:414
 msgid "Account domain short name"
-msgstr "Konto Domän kort namn"
+msgstr "Tên ngắn của domain"
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
 msgid "Host"
@@ -99,45 +98,45 @@ msgstr "Host"
 #: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 #: js/ConfigManagerPanel.js:196 js/ConfigManagerPanel.js:314
 msgid "Port"
-msgstr "port"
+msgstr "Cổng"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
 msgid "Login name"
-msgstr "Inloggnins namn"
+msgstr "Tên đăng nhập"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
 #: js/EmailPanel.js:190 js/ConfigManagerPanel.js:176
 #: js/ConfigManagerPanel.js:207
 msgid "Password"
-msgstr "Lösenord"
+msgstr "Mật khẩu"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
 msgid "Bind requires DN"
-msgstr "Bind kräver DN"
+msgstr "Bind requires DN"
 
 #: js/AuthenticationPanel.js:334
 msgid "Base DN"
-msgstr "Bas DN"
+msgstr "Base DN"
 
 #: js/AuthenticationPanel.js:337
 msgid "Search filter"
-msgstr "Sök filter"
+msgstr "Bộ lọc tìm kiếm"
 
 #: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
 #: js/EmailPanel.js:390 js/ConfigManagerPanel.js:191
 #: js/ConfigManagerPanel.js:310
 msgid "Hostname"
-msgstr "Host namn"
+msgstr "Hostname"
 
 #: js/AuthenticationPanel.js:370 js/EmailPanel.js:199 js/EmailPanel.js:294
 #: js/EmailPanel.js:398
 msgid "Secure Connection"
-msgstr "Säker Anslutning"
+msgstr "Kết nối bảo mật"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:303 js/EmailPanel.js:401
 msgid "None"
-msgstr "Ingen"
+msgstr "Không"
 
 #: js/AuthenticationPanel.js:372 js/EmailPanel.js:202 js/EmailPanel.js:297
 #: js/EmailPanel.js:401
@@ -151,259 +150,258 @@ msgstr "SSL"
 
 #: js/AuthenticationPanel.js:377 js/EmailPanel.js:212
 msgid "Append domain to login name"
-msgstr "Fäst domän till inloggnings namn"
+msgstr "Ghép domain vào tên đăng nhập"
 
 #: js/AuthenticationPanel.js:426
 msgid "Accounts storage"
-msgstr "Konto lagring"
+msgstr "Lưu trữ tài khoản"
 
 #: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
 msgid "Default user group name"
-msgstr "Standard användare grupp namn"
+msgstr "Tên nhóm nguwowfi dùng mặc định"
 
 #: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:542
 msgid "Default admin group name"
-msgstr "Standard admin grupp namn"
+msgstr "Tên nhóm quản trị mặc định"
 
 #: js/AuthenticationPanel.js:483
 msgid "User DN"
-msgstr "Användar DN"
+msgstr "User DN"
 
 #: js/AuthenticationPanel.js:486
 msgid "User Filter"
-msgstr "Användar Filter"
+msgstr "User Filter"
 
 #: js/AuthenticationPanel.js:490
 msgid "User Search Scope"
-msgstr "Användar Sök Fällt"
+msgstr "User Search Scope"
 
 #: js/AuthenticationPanel.js:496
 msgid "Groups DN"
-msgstr "Grupp DN"
+msgstr "Groups DN"
 
 #: js/AuthenticationPanel.js:499
 msgid "Group Filter"
-msgstr "Grupp Filter"
+msgstr "Lọc nhóm"
 
 #: js/AuthenticationPanel.js:503
 msgid "Group Search Scope"
-msgstr "Grupp Sök Fällt"
+msgstr "Phạm vi tìm nhóm"
 
 #: js/AuthenticationPanel.js:509
 msgid "Password encoding"
-msgstr "Lösenord kodning"
+msgstr "Mã hóa mật khaaru"
 
 #: js/AuthenticationPanel.js:515
 msgid "Use Rfc 2307 bis"
-msgstr "Använd Rfc 2307 bis"
+msgstr "Sử dụng Rfc 2307 bis"
 
 #: js/AuthenticationPanel.js:521
 msgid "Min User Id"
-msgstr "Minsta Användar Id"
+msgstr "Độ dài người dùng ngắn nhất"
 
 #: js/AuthenticationPanel.js:524
 msgid "Max User Id"
-msgstr "Max användar Id"
+msgstr "Độ dài người dùng dài nhất"
 
 #: js/AuthenticationPanel.js:527
 msgid "Min Group Id"
-msgstr "Minsta Grupp Id"
+msgstr "Độ dài nhóm người dùng ngắn nhất"
 
 #: js/AuthenticationPanel.js:530
 msgid "Max Group Id"
-msgstr "Max Grupp Id"
+msgstr "Độ dài nhóm người dùng dài nhất"
 
 #: js/AuthenticationPanel.js:533
 msgid "Group UUID Attribute name"
-msgstr "Grupp UUID Attributnamn"
+msgstr "Tên thuộc tính UUID nhóm"
 
 #: js/AuthenticationPanel.js:536
 msgid "User UUID Attribute name"
-msgstr "Användare UUID Attributnamn"
+msgstr "Tên thuộc tính UUID người dùng"
 
 #: js/AuthenticationPanel.js:546
 msgid "Readonly access"
-msgstr "Bara läsrättighet"
+msgstr "Truy cập chỉ đọc"
 
 #: js/AuthenticationPanel.js:556
 msgid "Password Settings"
-msgstr "Lösenordsinställningar"
+msgstr "Thiết lập mật khẩu"
 
 #: js/AuthenticationPanel.js:571
 msgid "User can change password"
-msgstr "Användare kan byta lösenord"
+msgstr "Người dùng có thể đổi mật khẩu"
 
 #: js/AuthenticationPanel.js:577
 msgid "Enable password policy"
-msgstr "Aktivera lösenordspolicy"
+msgstr "Bật chính sách mật khẩu"
 
 #: js/AuthenticationPanel.js:583
 msgid "Only ASCII"
-msgstr "Endast ASCII"
+msgstr "Chỉ ASCII"
 
 #: js/AuthenticationPanel.js:588
 msgid "Minimum length"
-msgstr "Minst antal tecken"
+msgstr "Độ dài tối thiểu"
 
 #: js/AuthenticationPanel.js:591
 msgid "Minimum word chars"
-msgstr "Minsta antal små bokstäver"
+msgstr "Ký tự chữ cái tối tiểu"
 
 #: js/AuthenticationPanel.js:594
 msgid "Minimum uppercase chars"
-msgstr "Minsta antal stora bokstäver"
+msgstr "Ký tự in hoa tối thiểu"
 
 #: js/AuthenticationPanel.js:597
 msgid "Minimum special chars"
-msgstr "Minsta antal specialtecken"
+msgstr "Ký tự đặc biệt tối thiểu"
 
 #: js/AuthenticationPanel.js:600
 msgid "Minimum numbers"
-msgstr "Minsta antal siffror"
+msgstr "Số tối thiểu"
 
 #: js/AuthenticationPanel.js:607
 msgid "Redirect Settings"
-msgstr "Ändra Inställningar"
+msgstr "Thiết lập chuyển hướng"
 
 #: js/AuthenticationPanel.js:615
 msgid "Redirect Url (redirect to login screen if empty)"
-msgstr "Ändra Url (Ändra till logga in sida om det är tomt)"
+msgstr "URL chuyển hướng (chuyển hướng tới màn hình đăng nhập rỗng)"
 
 #: js/AuthenticationPanel.js:619
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr "Ändra Alltid (om Nej, bara ändra efter utloggning)"
+msgstr "Luôn chuyển hướng (Nếu không, chỉ chuyển hướng sau khi thoát)"
 
 #: js/AuthenticationPanel.js:625
 msgid "Redirect to referring site, if exists"
-msgstr "Ändra till hänvisnings sida, om en sådan existerar"
+msgstr "Chuyển hướng tới trang trước đó, nếu có"
 
 #: js/AuthenticationPanel.js:639
 msgid "Save config and install"
-msgstr "Spara ändring och installera"
+msgstr "Lưu cấu hình và cài đặt"
 
 #: js/AuthenticationPanel.js:641 js/ConfigManagerPanel.js:360
 msgid "Save config"
-msgstr "Spara ändring"
+msgstr "Lưu cấu hình"
 
 #: js/AuthenticationPanel.js:666
 msgid "Passwords don't match"
-msgstr "Lösenord matchar inte"
+msgstr "Mật khẩu không trùng nhau"
 
 #: js/AuthenticationPanel.js:676 js/AuthenticationPanel.js:683
 #: js/AuthenticationPanel.js:687 js/AuthenticationPanel.js:699
 #: js/AuthenticationPanel.js:710
 msgid "Should not be empty"
-msgstr "Ska inte vara tom"
+msgstr "Không thể rỗng"
 
 #: js/TermsPanel.js:30
 msgid "I have read the license agreement and accept it"
-msgstr "Jag har läst licens avtalet och accepterat det"
+msgstr "Tôi đã đọc thỏa thuận về giấy phép sử dụng và chấp nhận nó."
 
 #: js/TermsPanel.js:37
 msgid "License Agreement"
-msgstr "Licens Avtal"
+msgstr "Thỏa thuận giấy phép sử dụng"
 
 #: js/TermsPanel.js:56
 msgid "I have read the privacy agreement and accept it"
-msgstr "jag har läst sekretess avtalet och accepterat det."
+msgstr "Tôi đã đọc chính sách riêng tư và chấp nhận nó"
 
 #: js/TermsPanel.js:63
 msgid "Privacy Agreement"
-msgstr "Sekretess Avtal"
+msgstr "Thỏa thuận chính sách"
 
 #: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
-msgstr "Acceptera Villkor"
+msgstr "Điều khoản sử dụng"
 
 #: js/Setup.js:53
 msgid "Terms and Conditions"
-msgstr "Villkor"
+msgstr "Điều khỏa sử dụng"
 
 #: js/Setup.js:58
 msgid "Setup Checks"
-msgstr "Inställnings Kontroller"
+msgstr "Kiểm tra cài đặt"
 
 #: js/Setup.js:64
 msgid "Config Manager"
-msgstr "Config hanterare"
+msgstr "Quản lý cấu hình"
 
 #: js/Setup.js:70
 msgid "Authentication/Accounts"
-msgstr "Verifiering / konton"
+msgstr "Xác thực/ Tài khoản"
 
 #: js/Setup.js:76
 msgid "Email"
-msgstr "E-post"
+msgstr "Email"
 
 #: js/Setup.js:82
 msgid "Application Manager"
-msgstr "Applikation Hanterare"
+msgstr "Quản lý ứng dụng"
 
 #: js/Setup.js:185
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] "Applikation"
-msgstr[1] "Applikationer"
+msgstr[0] "one: Ứng dụng\nother: Ứng dụng"
 
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
-msgstr "Namn"
+msgstr "Tên"
 
 #: js/ApplicationGridPanel.js:64
 msgid "Enabled"
-msgstr "Aktiverad"
+msgstr "Đã mở"
 
 #: js/ApplicationGridPanel.js:65
 msgid "Order"
-msgstr "Order"
+msgstr "Sắp xếp"
 
 #: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
-msgstr "Installerad Version"
+msgstr "Phiên bản đã cài"
 
 #: js/ApplicationGridPanel.js:67
 msgid "Available Version"
-msgstr "Tillgänglig Version"
+msgstr "Phiên bản sẵn sàng"
 
 #: js/ApplicationGridPanel.js:68
 msgid "Status"
-msgstr "Status"
+msgstr "Trạng thái"
 
 #: js/ApplicationGridPanel.js:69
 msgid "Depends on"
-msgstr "Beror på"
+msgstr "Phụ thuộc vào"
 
 #: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
 msgid "Install application"
-msgstr "Installera applikation"
+msgstr "Cài đặt ứng dụng"
 
 #: js/ApplicationGridPanel.js:87
 msgid "Uninstall application"
-msgstr "Avinstallera applikation"
+msgstr "Gỡ ứng dụng"
 
 #: js/ApplicationGridPanel.js:96
 msgid "Update application"
-msgstr "Uppdatera applikation"
+msgstr "Cập nhật ứng dụng"
 
 #: js/ApplicationGridPanel.js:105
 msgid "Go to {0} login"
-msgstr "Gå till {0} Logga in"
+msgstr "Tới đăng nhập {0}"
 
 #: js/ApplicationGridPanel.js:175
 msgid "uninstall"
-msgstr "Avinstallera"
+msgstr "gỡ bỏ"
 
 #: js/ApplicationGridPanel.js:175
 msgid "Do you really want to uninstall the application(s)?"
-msgstr "Vill du verkligen avinstallera programmet (n)?"
+msgstr "Bạn có muốn gỡ bỏ ứng dụng?"
 
 #: js/ApplicationGridPanel.js:235
 msgid "This may take a while"
-msgstr "Detta kan ta ett tag"
+msgstr "Có thể bạn phải đợi lâu"
 
 #: js/ApplicationGridPanel.js:267
 msgid "Dependency Violation"
-msgstr "Överträdelse"
+msgstr "Xung đột các thành phần "
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -419,19 +417,19 @@ msgstr "Imap"
 
 #: js/EmailPanel.js:186 js/ConfigManagerPanel.js:167
 msgid "Username"
-msgstr "Användarnamn"
+msgstr "Tên đăng nhập"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
-msgstr "Använd system konto"
+msgstr "Sử dụng tài khoản hệ thống"
 
 #: js/EmailPanel.js:258
 msgid "Cyrus Admin"
-msgstr "Cyrus Administratör"
+msgstr "Cyrus Admin"
 
 #: js/EmailPanel.js:261
 msgid "Cyrus Admin Password"
-msgstr "Cyrus Administratörs Lösenord"
+msgstr "Cyrus Admin Password"
 
 #: js/EmailPanel.js:278
 msgid "Smtp"
@@ -439,39 +437,39 @@ msgstr "Smtp"
 
 #: js/EmailPanel.js:300
 msgid "Authentication"
-msgstr "Autentisering"
+msgstr "Authentication"
 
 #: js/EmailPanel.js:303
 msgid "Login"
-msgstr "Logga in"
+msgstr "Đăng nhập"
 
 #: js/EmailPanel.js:303
 msgid "Plain"
-msgstr "Vanlig"
+msgstr "Thuần text"
 
 #: js/EmailPanel.js:307
 msgid "Primary Domain"
-msgstr "Primär Domän"
+msgstr "Domain chính"
 
 #: js/EmailPanel.js:311
 msgid "Secondary Domains (comma separated)"
-msgstr "Sekundära Domäner (komma separerade)"
+msgstr "Domain phụ (cách nhau bằng dấu phẩy)"
 
 #: js/EmailPanel.js:315
 msgid "Notifications service address"
-msgstr "Meddelande service adress"
+msgstr "Địa chỉ thông báo dịch vụ"
 
 #: js/EmailPanel.js:319
 msgid "Notification Username"
-msgstr "Meddelande Användarnamn"
+msgstr "Người dùng thông báo"
 
 #: js/EmailPanel.js:323
 msgid "Notification Password"
-msgstr "Meddelande Lösenord"
+msgstr "Mật khẩu thông báo"
 
 #: js/EmailPanel.js:328
 msgid "Notifications local client (hostname or IP address)"
-msgstr "Meddelande lokal klient (hostname eller IP adress)"
+msgstr "Notifications local client (hostname or IP address)"
 
 #: js/EmailPanel.js:384
 msgid "SIEVE"
@@ -483,15 +481,15 @@ msgstr "MySql Hostname"
 
 #: js/EmailPanel.js:428
 msgid "MySql Database"
-msgstr "Mysql Databas"
+msgstr "MySql Database"
 
 #: js/EmailPanel.js:431
 msgid "MySql User"
-msgstr "MySql Användare"
+msgstr "MySql User"
 
 #: js/EmailPanel.js:434
 msgid "MySql Password"
-msgstr "MySql Lösenord"
+msgstr "MySql Password"
 
 #: js/EmailPanel.js:438
 msgid "MySql Port"
@@ -499,23 +497,23 @@ msgstr "MySql Port"
 
 #: js/EmailPanel.js:454
 msgid "User or UID"
-msgstr "Användare eller UID"
+msgstr "User or UID"
 
 #: js/EmailPanel.js:457
 msgid "Group or GID"
-msgstr "Grupp eller GID"
+msgstr "Group or GID"
 
 #: js/EmailPanel.js:460
 msgid "Home Template"
-msgstr "hem-mall"
+msgstr "Home Template"
 
 #: js/EmailPanel.js:462
 msgid "Password Scheme"
-msgstr "Lösenord ordning"
+msgstr "Password Scheme"
 
 #: js/EmailPanel.js:473
 msgid "PLAIN-MD5"
-msgstr "VANLIG-MD5"
+msgstr "PLAIN-MD5"
 
 #: js/EmailPanel.js:474
 msgid "MD5-CRYPT"
@@ -543,41 +541,41 @@ msgstr "SSHA512"
 
 #: js/EmailPanel.js:480
 msgid "PLAIN"
-msgstr "VANLIG"
+msgstr "PLAIN"
 
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
-msgstr "Gör Omgivnings Kontroller..."
+msgstr "Đang thực hiện kiểm tra môi trường ..."
 
 #: js/EnvCheckGridPanel.js:130
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr "Inga "
+msgstr "Không có gì được tìm thấy {0}. Xin thay đổi điều kiện tìm kiếm của bạn, tùy chọn xem hoặc {1} bạn tìm kiếm trong đó."
 
 #: js/EnvCheckGridPanel.js:160
 msgid "Check"
-msgstr "Kontrollera"
+msgstr "Kiểm tra"
 
 #: js/EnvCheckGridPanel.js:161
 msgid "Result"
-msgstr "Resultat"
+msgstr "Kết quả"
 
 #: js/EnvCheckGridPanel.js:162
 msgid "Error"
-msgstr "Fel"
+msgstr "Lỗi"
 
 #: js/EnvCheckGridPanel.js:180
 msgid "Run setup tests"
-msgstr "Kör installations tester"
+msgstr "Chạy kiếm tra cài đặt"
 
 #: js/EnvCheckGridPanel.js:189
 msgid "Ignore setup tests"
-msgstr "Ignorera installations tester"
+msgstr "Bỏ qua kiểm tra cài đặt"
 
 #: js/ConfigManagerPanel.js:135
 msgid "File"
-msgstr "Fil"
+msgstr "File"
 
 #: js/ConfigManagerPanel.js:145
 msgid "Adapter"
@@ -585,84 +583,84 @@ msgstr "Adapter"
 
 #: js/ConfigManagerPanel.js:160
 msgid "Setup Authentication"
-msgstr "Inställnings Autentisering"
+msgstr "Cài đặt xác thực"
 
 #: js/ConfigManagerPanel.js:181 js/ConfigManagerPanel.js:199
 msgid "Database"
-msgstr "Databas"
+msgstr "Cơ sở dữ liệu"
 
 #: js/ConfigManagerPanel.js:203
 msgid "User"
-msgstr "Användare"
+msgstr "Người dùng"
 
 #: js/ConfigManagerPanel.js:211
 msgid "Prefix"
-msgstr "Prefix"
+msgstr "Tiền tố"
 
 #: js/ConfigManagerPanel.js:215
 msgid "Logging"
-msgstr "Loggar"
+msgstr "Ghi lỗi"
 
 #: js/ConfigManagerPanel.js:225
 msgid "Filename"
-msgstr "Filnamn"
+msgstr "Tên file"
 
 #: js/ConfigManagerPanel.js:228
 msgid "Priority"
-msgstr "Prioritet"
+msgstr "Độ quan trọng"
 
 #: js/ConfigManagerPanel.js:232
 msgid "Caching"
-msgstr "Fångar"
+msgstr "Đệm"
 
 #: js/ConfigManagerPanel.js:242 js/ConfigManagerPanel.js:296
 msgid "Path"
-msgstr "Väg"
+msgstr "Đường dẫn"
 
 #: js/ConfigManagerPanel.js:246 js/ConfigManagerPanel.js:271
 msgid "Lifetime (seconds)"
-msgstr "Livstid (sekunder)"
+msgstr "Lifetime (seconds)"
 
 #: js/ConfigManagerPanel.js:251
 msgid "Temporary files"
-msgstr "Temporära filer"
+msgstr "Temporary files"
 
 #: js/ConfigManagerPanel.js:259
 msgid "Temporary Files Path"
-msgstr "Temporära Fil Vägar"
+msgstr "Temporary Files Path"
 
 #: js/ConfigManagerPanel.js:263
 msgid "Session"
-msgstr "Se"
+msgstr "Session"
 
 #: js/ConfigManagerPanel.js:323
 msgid "Filestore directory"
-msgstr "Session"
+msgstr "Filestore directory"
 
 #: js/ConfigManagerPanel.js:331
 msgid "Filestore Path"
-msgstr "Fillagrings väg"
+msgstr "Filestore Path"
 
 #: js/ConfigManagerPanel.js:336
 msgid "Addressbook Map panel"
-msgstr "Adressboks karta"
+msgstr "Addressbook Map panel"
 
 #: js/ConfigManagerPanel.js:344
 msgid "Map panel"
-msgstr "Karta"
+msgstr "Map panel"
 
 #: js/ConfigManagerPanel.js:346
 msgid "disabled"
-msgstr "Inaktiverad"
+msgstr "tắt"
 
 #: js/ConfigManagerPanel.js:346
 msgid "enabled"
-msgstr "Aktiverad"
+msgstr "mở"
 
 #: js/ConfigManagerPanel.js:358
 msgid "Config file is not writable"
-msgstr "Config fil är inte skrivbar"
+msgstr "File cấu hình không thể lưu lại"
 
 #: js/ConfigManagerPanel.js:376
 msgid "Download config file"
-msgstr "Ladda ner config fil"
+msgstr "Download file cấu hình"

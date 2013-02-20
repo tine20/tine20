@@ -531,7 +531,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $message = ($_messageId instanceof Felamimail_Model_Message) ? $_messageId : $this->get($_messageId);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Get Message body of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
+            . ' Get Message body (part: ' . $_partId . ') of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
         
         $cacheBody = Felamimail_Config::getInstance()->get(Felamimail_Config::CACHE_EMAIL_BODY, TRUE);
         if ($cacheBody) {
@@ -625,6 +625,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Adding part ' . $partId . ' to message body.');
             
             $messageBody .= $body;
         }
