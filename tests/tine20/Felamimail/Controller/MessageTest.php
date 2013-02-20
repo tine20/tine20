@@ -1291,6 +1291,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Zend_Mime::TYPE_HTML, $bodyParts['2.1']['contentType'], 'multipart/related html part missing: ' . print_r($bodyParts, TRUE));
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertNotContains('----------------------------<br />TINE 2.0<br />-----------------------', $message->body, 'message body contains plain/text part');
         $this->assertContains('<p style="color:#999999;"><strong>Die Glühweinzeit hat bereits begonnen und kälter geworden ist es auch...</strong></p>', $message->body);
         $this->assertEquals(Zend_Mime::TYPE_HTML, $message->body_content_type);
     }
