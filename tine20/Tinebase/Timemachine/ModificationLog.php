@@ -130,7 +130,7 @@ class Tinebase_Timemachine_ModificationLog
      * Returns modification of a given record in a given timespan
      * 
      * @param string $_application application of given identifier  
-     * @param string $_id identifier to retreave modification log for
+     * @param string $_id identifier to retrieve modification log for
      * @param string $_type 
      * @param string $_backend 
      * @param Tinebase_DateTime $_from beginning point of timespan, excluding point itself
@@ -142,6 +142,7 @@ class Tinebase_Timemachine_ModificationLog
      */
     public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', DateTime $_from = NULL, DateTime $_until = NULL,  $_modifierId = NULL)
     {
+        $id = ($_id instanceof Tinebase_Record_Abstract) ? $_id->getId() : $_id;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         $isoDef = 'Y-m-d\TH:i:s';
@@ -151,7 +152,7 @@ class Tinebase_Timemachine_ModificationLog
             ->from($this->_tablename)
             ->order('modification_time ASC')
             ->where($db->quoteInto($db->quoteIdentifier('application_id') . ' = ?', $application->id))
-            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $_id));
+            ->where($db->quoteInto($db->quoteIdentifier('record_id') . ' = ?', $id));
         
         if ($_from) {
             $select->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' > ?', $_from->toString($isoDef)));
@@ -160,7 +161,7 @@ class Tinebase_Timemachine_ModificationLog
         if ($_until) {
             $select->where($db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $_until->toString($isoDef)));
         }
-            
+        
         if ($_type) {
             $select->where($db->quoteInto($db->quoteIdentifier('record_type') . ' LIKE ?', $_type));
         }

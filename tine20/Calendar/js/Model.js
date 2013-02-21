@@ -269,7 +269,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
      * @param {Object} options
      * @return {String} transaction id
      */
-    createRecurException: function(event, deleteInstance, deleteAllFollowing, options) {
+    createRecurException: function(event, deleteInstance, deleteAllFollowing, checkBusyConflicts, options) {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
@@ -281,6 +281,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         p.recordData = event.data;
         p.deleteInstance = deleteInstance ? 1 : 0;
         p.deleteAllFollowing = deleteAllFollowing ? 1 : 0;
+        p.checkBusyConflicts = checkBusyConflicts ? 1 : 0;
         
         return this.doXHTTPRequest(options);
     },
@@ -311,7 +312,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
      * @param {Object} options
      * @return {String} transaction id
      */
-    updateRecurSeries: function(event, options) {
+    updateRecurSeries: function(event, checkBusyConflicts, options) {
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
@@ -321,6 +322,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
         var p = options.params;
         p.method = this.appName + '.updateRecurSeries';
         p.recordData = event.data;
+        p.checkBusyConflicts = checkBusyConflicts ? 1 : 0;
         
         return this.doXHTTPRequest(options);
     }
