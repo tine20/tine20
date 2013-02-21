@@ -206,58 +206,48 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param mixed $_resource
      * @param array $_clientRecordData
      */
-    protected function _doImport($_resource = NULL, $_clientRecordData = array())
+    protected function _doImport($_resource = NULL, $_clientRecordDatas = array())
     {
-        $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
+        $clientRecordDatas = $this->_sortClientRecordsByIndex($_clientRecordDatas);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Client record data: ' . print_r($clientRecordDatas, TRUE));
         
         $recordIndex = 0;
         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
-            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Importing record ' . $recordIndex . ' ...');
-            
             $recordToImport = NULL;
             try {
-                if (isset($clientRecordData[$recordIndex])) {
-                    // client record overwrites record in import data (only if set)
-                    $recordDataToImport = (isset($clientRecordData[$recordIndex]['recordData'])) 
-                        ? $clientRecordData[$recordIndex]['recordData'] : $this->_processRawData($recordData);
-                    $resolveStrategy = $clientRecordData[$recordIndex]['resolveStrategy'];
-                } else {
-                    $recordDataToImport = $this->_processRawData($recordData);
-                    $resolveStrategy = NULL;
+                // client record overwrites record in import data (only if set)
+                $clientRecordData = array_key_exists($recordIndex, $clientRecordDatas) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
+                if ($clientRecordData && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Client record: ' . print_r($clientRecordData, TRUE));
                 }
                 
-                if (empty($recordDataToImport)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Empty record, invalid data or mapping failed.');
-                    if (empty($recordData)) {
-                        $recordIndex++;
-                        continue;
+                // NOTE _processRawData might return multiple recordDatas
+                // NOTE $clientRecordData is always one record
+                $recordDataToImport = $clientRecordData ? array($clientRecordData) : $this->_processRawData($recordData);
+                $resolveStrategy = $clientRecordData ? $clientRecordDatas[$recordIndex]['resolveStrategy'] : NULL;
+                
+                foreach ($recordDataToImport as $idx => $processedRecordData) {
+                    $recordToImport = $this->_createRecordToImport($processedRecordData);
+                    if ($resolveStrategy !== 'discard') {
+                        $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
                     } else {
-                        $recordToImport = $recordData;
-                        throw new Tinebase_Exception_Record_Validation('Invalid data or mapping failed');
-                    }
-                }
-                
-                $recordToImport = $this->_createRecordToImport($recordDataToImport);
-                if ($resolveStrategy !== 'discard') {
-                    $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $recordDataToImport);
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Discarding record ' . $recordIndex);
-                    
-                    // just add autotags to record (if id is available)
-                    if ($recordToImport->getId()) {
-                        $record = call_user_func(array($this->_controller, 'get'), $recordToImport->getId());
-                        $this->_addAutoTags($record);
-                        call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Discarding record ' . $recordIndex);
+                        
+                        // just add autotags to record (if id is available)
+                        if ($recordToImport->getId()) {
+                            $record = call_user_func(array($this->_controller, 'get'), $recordToImport->getId());
+                            $this->_addAutoTags($record);
+                            call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
+                        }
                     }
                 }
             } catch (Exception $e) {
                 $this->_handleImportException($e, $recordIndex, $recordToImport);
             }
-            
             $recordIndex++;
         }
     }
@@ -284,28 +274,45 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * process raw data (mapping + conversions)
      * 
+     * NOTE: returns empty Traversable if record should be skipped on purpose
+     * NOTE: If there will occur any import error the client management will only work for 1 imported entry
+     *       and not if multiple were stored in ArrayObject
+     *
      * @param array $_data
-     * @return array|NULL
+     * @return Traversable
+     * @throws Tinebase_Exception_Record_Validation on broken mapping
      */
     protected function _processRawData($_data)
     {
-        $result = NULL;
+        $result = array();
+        
         $mappedData = $this->_doMapping($_data);
         
+        if (array_key_exists("postMappingHook", $this->_options)) {
+            if (isset($this->_options['postMappingHook']['path'])) {
+               $mappedData = $this->_postMappingHook($mappedData);
+            }
+        }
+        
+        if (empty($mappedData) && empty($_data)) {
+            Throw new Tinebase_Exception_UnexpectedValue("_processRawData got no data and could not map any.");
+        }
+        
+        $mappedData = $mappedData instanceof ArrayObject ? $mappedData : new ArrayObject(array($mappedData), ArrayObject::STD_PROP_LIST);
+        
         if (! empty($mappedData)) {
-            $convertedData = $this->_doConversions($mappedData);
-
-            // merge additional values (like group id, container id ...)
-            $result = array_merge($convertedData, $this->_addData($convertedData));
+            foreach ($mappedData as $idx => $recordArray) {
+                $convertedData = $this->_doConversions($recordArray);
+                $mappedData[$idx] = array_merge($convertedData, $this->_addData($convertedData));
+            }
+            $result = $mappedData;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Merged data: ' . print_r($result, true));
-                
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Got empty record from mapping! Was: ' . print_r($_data, TRUE));
         }
-        
         return $result;
     }
     
@@ -323,28 +330,44 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * Runs a user defined script
      *
+     * After your data are mapped and the hook is enabled in your definition every data set will be
+     *  parsed through this hook.
+     * 
+     * It will convert the data set to a json object and send it to the stdin of a script.
+     *  The script should usualy print a json object of the extended, manipulated or corrected data set. 
+     * 
+     * But if you intend to split the data to two or more sets or import data from different sources
+     *  you have to print a json array.
+     * 
      * @param array $data
+     * @return Array|ArrayObject
      */
     protected function _postMappingHook ($data)
     {
         $jsonEncodedData = Zend_Json::encode($data);
         $jsonDecodedData = null;
-
-        $script = escapeshellcmd($this->_options['postMappingHook']['path']);
-        if (file_exists($this->_options['postMappingHook']['path'])) {
-            if (! is_executable($script)) {
-                throw new Tinebase_Exception_AccessDenied("The Script is not executable. Path: " . $script);
-            }
-            $jDataToSend =  escapeshellarg($jsonEncodedData);
-            $jsonDecodedData = Zend_Json::decode(shell_exec("$script $jDataToSend"));
+        
+        $script = $this->_options['postMappingHook']['path'];
+        if (! is_executable($script)) {
+            throw new Tinebase_Exception_UnexpectedValue("Script does not exists or isn't executable. Path: " . $script);
+        }
+        
+        $jDataToSend =  escapeshellarg($jsonEncodedData);
+        $jsonReceivedData = shell_exec(escapeshellcmd($script) . " $jDataToSend");
+        
+        $returnJDecodedData = Zend_Json_Decoder::decode($jsonReceivedData);
+        if (! $returnJDecodedData) {
+            throw new Tinebase_Exception_UnexpectedValue("Something went wrong by decoding the received json data!");
+        }
+        
+        if (strpos($jsonReceivedData, '[') === 0) {
+            $return = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
+            foreach ($returnJDecodedData as $key => $val)
+                $return[$key] = $val;
         } else {
-            throw new Tinebase_Exception_UnexpectedValue("Script does not exists. Path: " . $script);
+            $return = $returnJDecodedData;
         }
-        if (! is_array($jsonDecodedData) || ! $jsonDecodedData)
-        {
-            throw new Tinebase_Exception_UnexpectedValue("Something went wrong while running postMappingHook!");
-        }
-        return $jsonDecodedData;
+        return $return;
     }
     
     /**
@@ -367,7 +390,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         foreach ($data as $key => $value) { 
             $data[$key] = $this->_convertEncoding($value);
         }
-
+        
         return $data;
     }
     

@@ -167,11 +167,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Mapped data: ' . print_r($data, true));
-        
-        if (is_array($this->_options['postMappingHook']) && isset($this->_options['postMappingHook']['path'])) {
-            $data = $this->_postMappingHook($data);
-        }
-        
         return $data;
     }
     
