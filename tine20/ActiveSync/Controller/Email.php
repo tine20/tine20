@@ -369,12 +369,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             )
         );
         
+        $subject = $incomingMessage->headerExists('subject') ? $incomingMessage->getHeader('subject') : null;
+        
         if (Tinebase_Mail::isiMIPMail($incomingMessage)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Do not send iMIP message with subject "' . $incomingMessage->getHeader('subject') . '". The server should handle those.');
+                . ' Do not send iMIP message with subject "' . $subject . '". The server should handle those.');
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $incomingMessage->getHeader('subject') . " (saveInSent: " . $saveInSent . ")");
+                __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $subject . " (saveInSent: " . $saveInSent . ")");
             
             $mail = Tinebase_Mail::createFromZMM($incomingMessage);
         

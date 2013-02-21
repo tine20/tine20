@@ -541,4 +541,28 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
         
         $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));
     }
+
+    /**
+     * testSendMailWithoutSubject
+     * 
+     * @see 0007870: Can't send mail without subject
+     */
+    public function testSendMailWithoutSubject()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/text_plain.eml');
+        $email = str_replace('gentoo-dev@lists.gentoo.org, webmaster@changchung.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace('gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org', $this->_emailTestClass->getEmailAddress(), $email);
+        $email = str_replace("Subject: Re: [gentoo-dev] `paludis --info' is not like `emerge --info'\n", '', $email);
+        
+        $controller->sendEmail($email, true);
+        
+        // check if mail is in INBOX of test account
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'text/plain';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        $this->assertTrue(empty($message->subject));
+    }
 }
