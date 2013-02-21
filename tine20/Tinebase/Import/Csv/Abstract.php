@@ -142,13 +142,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             $_data_indexed = array_combine($this->_headline, $_data);
         }
         
-        if ($this->_options['mapUndefinedFieldsEnable'] == 1) {
-            $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
-            if (! $undefinedFieldsText === false) {
-                $data[$this->_options['mapUndefinedFieldsTo']] = $this->_createInfoTextForUnmappedFields($_data_indexed);
-            }
-        }
-        
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order
@@ -162,6 +155,17 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                     continue;
                 }
                 $data[$field['destination']] = $_data_indexed[$field['source']];
+            }
+        }
+        
+        if ($this->_options['mapUndefinedFieldsEnable'] == 1) {
+            $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
+            if (! $undefinedFieldsText === false) {
+                if (array_key_exists($this->_options['mapUndefinedFieldsTo'], $data)) {
+                    $data[$this->_options['mapUndefinedFieldsTo']] .= $this->_createInfoTextForUnmappedFields($_data_indexed);
+                } else {
+                    $data[$this->_options['mapUndefinedFieldsTo']] = $this->_createInfoTextForUnmappedFields($_data_indexed);
+                }
             }
         }
         

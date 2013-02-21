@@ -2,13 +2,13 @@
 <application>
     <name>Inventory</name>
     <!-- gettext('Inventory') -->   
-    <version>7.4</version>
+    <version>7.5</version>
     <order>60</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>inventory_item</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -72,7 +72,8 @@
                 </field>
                 <field>
                     <name>price</name>
-                    <type>float</type>
+                    <type>text</type>
+                    <length>50</length>
                 </field>
                 <field>
                     <name>costcentre</name>

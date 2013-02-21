@@ -8,7 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <mapUndefinedFieldsEnable>1</mapUndefinedFieldsEnable>
-    <mapUndefinedFieldsTo>adt_info</mapUndefinedFieldsTo>
+    <mapUndefinedFieldsTo>description</mapUndefinedFieldsTo>
     <label>Inventory CSV import</label>
     <!-- _("Inventory CSV import") -->
     <description>tine inv import</description>
@@ -45,11 +45,13 @@
         </field>
         <field>
             <source>Erscheinungs Datum</source>
+            <typecast>datetime</typecast>
             <destination>Erscheinungs Datum</destination>
         </field>
         <field>
             <source>Anschaffung</source>
             <destination>added_date</destination>
+            <typecast>datetime</typecast>
         </field>
         <field>
             <source>Inventarnummer</source>

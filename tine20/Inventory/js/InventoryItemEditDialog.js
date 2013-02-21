@@ -56,7 +56,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         return isValid && Tine.Inventory.InventoryItemEditDialog.superclass.isValid.apply(this, arguments);
     },
     
-    
     /**
      * returns dialog
      * 
@@ -225,25 +224,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     border: true,
                     
                     items: [
-                         new Ext.Panel({
-                            title: this.app.i18n._('Additional Information'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype: 'textarea',
-                                name: 'adt_info',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter Information'),
-                                requiredGrant: 'editGrant'
-                            }]
-                        }),
                         new Tine.widgets.activities.ActivitiesPanel({
                             app: 'Inventory',
                             showAddNoteForm: false,
@@ -283,13 +263,21 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'price',
                             fieldLabel: this.app.i18n._('Price'),
                             columnWidth: 0.5
-                        },
-                        {
-                            xtype: 'textfield',
-                            name: 'costcentre',
-                            fieldLabel: this.app.i18n._('Cost centre'),
-                            columnWidth: 0.5
-                        }],
+                        }, (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales'))
+                            ? Tine.widgets.form.RecordPickerManager.get("Sales", "CostCenter", {
+                                    columnWidth: 0.5,
+                                    fieldLabel: this.app.i18n._('Cost centre'),
+                                    name: 'costcentre',
+                                    maxLength: 255
+                              })
+                            : {
+                                    xtype: 'textfield',
+                                    name: 'costcentre',
+                                    disabled: true,
+                                    hidden: true,
+                                    columnWidth: 0.5
+                              }
+                        ],
                         [{
                             xtype: 'textfield',
                             name: 'invoice',
