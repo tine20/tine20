@@ -145,12 +145,12 @@ class Syncroton_Server
             if ($this->_logger instanceof Zend_Log) 
                 $this->_logger->info(__METHOD__ . '::' . __LINE__ . " provisioning needed");
             
+            header("HTTP/1.1 449 Retry after sending a PROVISION command");
+            
             if (version_compare($device->acsversion, '14.0', '>=')) {
                 $response = $sepn->domDocument;
             } else {
                 // pre 14.0 method
-                header("HTTP/1.1 449 Retry after sending a PROVISION command");
-                   
                 return;
             }
             
