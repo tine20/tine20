@@ -14,6 +14,8 @@
  *
  * @package     Redis
  * @subpackage  Queue
+ * 
+ * @deprecated should be removed and replaced with Tinebase_ActionQueue_Backend_Redis
  */
 class Tinebase_Redis_Queue
 {
@@ -47,9 +49,9 @@ class Tinebase_Redis_Queue
             throw new Tinebase_Exception('The redis extension must be loaded for using redis job queue!');
         }
         
-        $config = Tinebase_Config::getInstance()->get('redis', NULL);
+        $config = Tinebase_Config::getInstance()->get('actionqueue', NULL);
         
-        if ($config === NULL) {
+        if ($config === NULL && $config->adapter !== 'Redis') {
             throw new Tinebase_Exception('No redis config found!');
         } else {
             $this->_config = array_merge($this->_config, $config->toArray(), $additionalConfig);

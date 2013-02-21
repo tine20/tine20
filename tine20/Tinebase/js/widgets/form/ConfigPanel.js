@@ -299,11 +299,13 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
      */
     changeCard: function(combo, backendIdPrefix) {
         var value = combo.getValue();
+        Tine.log.debug('changeCard() -> value: ' + value);
         
         var cardPanel = Ext.getCmp(backendIdPrefix + 'CardLayout'),
             cardLayout = (cardPanel) ? cardPanel.getLayout() : null;
-            
+        
         if (cardLayout && cardLayout !== 'card') {
+            Tine.log.debug('changeCard() -> set active item: ' + backendIdPrefix + value);
             cardLayout.setActiveItem(backendIdPrefix + value);
         }
     }

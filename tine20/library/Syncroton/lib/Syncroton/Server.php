@@ -181,7 +181,19 @@ class Syncroton_Server
             $outputStream = fopen("php://temp", 'r+');
             
             $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
-            $encoder->encode($response);
+            
+            try {
+                 $encoder->encode($response);
+            } catch (Syncroton_Wbxml_Exception $swe) {
+                if ($this->_logger instanceof Zend_Log) {
+                    $this->_logger->err(__METHOD__ . '::' . __LINE__ . " Could not encode output: " . $swe);
+                    $this->_logger->err(__METHOD__ . '::' . __LINE__ . " xml response:\n" . $response->saveXML());
+                }
+                
+                header("HTTP/1.1 500 Internal server error");
+                
+                return;
+            }
             
             if ($requestParameters['acceptMultipart'] == true) {
                 $parts = $command->getParts();

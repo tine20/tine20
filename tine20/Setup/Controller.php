@@ -6,11 +6,9 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
- * @todo        add role rights (run, admin) to all new installed apps
- * @todo        test user defined paths (logger/cache/tmpdir)
  */
 
 /**
@@ -203,7 +201,7 @@ class Setup_Controller
     }
     
     /**
-     * Check if logger is propperly configured (or not configured at all)
+     * Check if logger is properly configured (or not configured at all)
      *
      * @return boolean
      */
@@ -224,18 +222,114 @@ class Setup_Controller
     }
     
     /**
-     * Check if caching is propperly configured (or not configured at all)
+     * Check if caching is properly configured (or not configured at all)
      *
      * @return boolean
      */
     public function checkConfigCaching()
     {
+        $result = FALSE;
+        
         $config = Setup_Core::get(Setup_Core::CONFIG);
-        if (!isset($config->caching) || !$config->caching->active) {
-            return true;
-        } else {
-            return (isset($config->caching->path) && is_writable($config->caching->path));
+        
+        if (! isset($config->caching) || !$config->caching->active) {
+            $result = TRUE;
+            
+        } else if (ucfirst($config->caching->backend) === 'File') {
+            $result = $this->checkDir('path', 'caching', FALSE);
+            
+        } else if (ucfirst($config->caching->backend) === 'Redis') {
+            $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+            
+        } else if (ucfirst($config->caching->backend) === 'Memcached') {
+            $result = $this->_checkMemcacheConnect(isset($config->caching->memcached) ? $config->caching->memcached->toArray() : array());
+            
         }
+        
+        return $result;
+    }
+    
+    /**
+     * checks redis extension and connection
+     * 
+     * @param array $config
+     * @return boolean
+     */
+    protected function _checkRedisConnect($config)
+    {
+        if (! extension_loaded('redis')) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' redis extension not loaded');
+            return FALSE;
+        }
+        $redis = new Redis;
+        $host = isset($config['host']) ? $config['host'] : 'localhost';
+        $port = isset($config['port']) ? $config['port'] : 6379;
+        
+        $result = $redis->connect($host, $port);
+        if ($result) {
+            $redis->close();
+        } else {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not connect to redis server at ' . $host . ':' . $port);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * checks memcached extension and connection
+     * 
+     * @param array $config
+     * @return boolean
+     */
+    protected function _checkMemcacheConnect($config)
+    {
+        if (! extension_loaded('memcache')) {
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' memcache extension not loaded');
+            return FALSE;
+        }
+        $memcache = new Memcache;
+        $host = isset($config['host']) ? $config['host'] : 'localhost';
+        $port = isset($config['port']) ? $config['port'] : 11211;
+        $result = $memcache->connect($host, $port);
+        
+        return $result;
+    }
+    
+    /**
+     * Check if queue is properly configured (or not configured at all)
+     *
+     * @return boolean
+     */
+    public function checkConfigQueue()
+    {
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if (! isset($config->actionqueue) || ! $config->actionqueue->active) {
+            $result = TRUE;
+        } else {
+            $result = $this->_checkRedisConnect($config->actionqueue->toArray());
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * check config session
+     * 
+     * @return boolean
+     */
+    public function checkConfigSession()
+    {
+        $result = FALSE;
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if (! isset($config->session) || !$config->session->active) {
+            return TRUE;
+        } else if (ucfirst($config->session->backend) === 'File') {
+            return $this->checkDir('path', 'session', FALSE);
+        } else if (ucfirst($config->session->backend) === 'Redis') {
+            $result = $this->_checkRedisConnect($config->session->toArray());
+        }
+        
+        return $result;
     }
     
     /**
@@ -245,7 +339,7 @@ class Setup_Controller
      * @param string $_group
      * @return boolean
      */
-    public function checkDir($_name, $_group = NULL)
+    public function checkDir($_name, $_group = NULL, $allowEmptyPath = TRUE)
     {
         $config = $this->getConfigData();
         if ($_group !== NULL && array_key_exists($_group, $config)) {
@@ -254,7 +348,7 @@ class Setup_Controller
         
         $path = array_key_exists($_name, $config) ? $config[$_name] : false;
         if (empty($path)) {
-            return true;
+            return $allowEmptyPath;
         } else {
             return @is_writable($path);
         }
@@ -341,7 +435,7 @@ class Setup_Controller
             'updated'  => $this->_updatedApplications,
         );
     }    
-        
+    
     /**
      * load the setup.xml file and returns a simplexml object
      *
@@ -735,7 +829,7 @@ class Setup_Controller
         if (Setup_Core::configFileExists() && !Setup_Core::configFileWritable()) {
             throw new Setup_Exception('Config File is not writeable.');
         }
-            
+        
         if (Setup_Core::configFileExists()) {
             $doLogin = FALSE;
             $filename = Setup_Core::getConfigFilePath();
@@ -1239,7 +1333,7 @@ class Setup_Controller
             }
         }
         $applications = $this->_sortInstallableApplications($applications);
-                
+        
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {

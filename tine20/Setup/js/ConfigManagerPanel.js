@@ -21,7 +21,6 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * <p>Configuration Panel</p>
  * <p><pre>
- * TODO         add cache backend config(s)
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -72,6 +71,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
     initComponent: function () {
         this.idPrefix                  = Ext.id();
         this.sessionBackendIdPrefix    = this.idPrefix + '-sessionBackend-';
+        this.cacheBackendIdPrefix    = this.idPrefix + '-cacheBackend-';
+        this.queueBackendIdPrefix    = this.idPrefix + '-queueBackend-';
 
         Tine.Setup.ConfigManagerPanel.superclass.initComponent.call(this);
     },
@@ -81,6 +82,20 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      */
     onChangeSessionBackend: function () {
         this.changeCard(this.sessionBackendCombo, this.sessionBackendIdPrefix);
+    },
+
+    /**
+     * Change cache card layout depending on selected combo box entry
+     */
+    onChangeCacheBackend: function () {
+        this.changeCard(this.cacheBackendCombo, this.cacheBackendIdPrefix);
+    },
+    
+    /**
+     * Change queue card layout depending on selected combo box entry
+     */
+    onChangeQueueBackend: function () {
+        this.changeCard(this.queueBackendCombo, this.queueBackendIdPrefix);
     },
     
     /**
@@ -131,18 +146,41 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             name: 'session_backend',
             fieldLabel: this.app.i18n._('Backend'),
             value: 'File',
-            // TODO add redis again when we are ready
-            store: [['File', this.app.i18n._('File')]/*, ['Redis','Redis'] */],
+            store: [['File', this.app.i18n._('File')], ['Redis','Redis']],
             listeners: {
                 scope: this,
                 change: this.onChangeSessionBackend,
                 select: this.onChangeSessionBackend
             }
         }, commonComboConfig));
+
+        this.cacheBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
+            name: 'caching_backend',
+            fieldLabel: this.app.i18n._('Backend'),
+            value: 'File',
+            store: [['File', this.app.i18n._('File')], ['Redis','Redis'], ['Memcached', 'Memcached']],
+            listeners: {
+                scope: this,
+                change: this.onChangeCacheBackend,
+                select: this.onChangeCacheBackend
+            }
+        }, commonComboConfig));
+
+        this.queueBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
+            name: 'actionqueue_backend',
+            fieldLabel: this.app.i18n._('Backend'),
+            value: 'Redis',
+            store: [['Redis','Redis']],
+            listeners: {
+                scope: this,
+                change: this.onChangeQueueBackend,
+                select: this.onChangeQueueBackend
+            }
+        }, commonComboConfig));
         
         this.sqlBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
             name: 'database_adapter',
-            fieldLabel: this.app.i18n._('Adapter'),
+            fieldLabel: this.app.i18n._('Backend'),
             value: 'pdo_mysql',
             store: [
                 ['pdo_mysql', 'MySQL'],
@@ -237,27 +275,116 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 width: 300,
                 tabIndex: this.getTabIndex
             },
-            items: [{
-                name: 'caching_path',
-                fieldLabel: this.app.i18n._('Path')
-            }, {
+            items: [ {
                 xtype: 'numberfield',
                 name: 'caching_lifetime',
                 fieldLabel: this.app.i18n._('Lifetime (seconds)'),
                 minValue: 0,
                 maxValue: 3600
+            }, this.cacheBackendCombo, 
+            {
+                id: this.cacheBackendIdPrefix + 'CardLayout',
+                xtype: 'panel',
+                layout: 'card',
+                activeItem: this.cacheBackendIdPrefix + 'File',
+                border: false,
+                width: '100%',
+                defaults: {border: false},
+                items: [{
+                    id: this.cacheBackendIdPrefix + 'File',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield',
+                        tabIndex: this.getTabIndex
+                    },
+                    items: [{
+                        name: 'caching_path',
+                        fieldLabel: this.app.i18n._('Path')
+                    }]
+                }, {
+                    id: this.cacheBackendIdPrefix + 'Redis',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield',
+                        tabIndex: this.getTabIndex
+                    },
+                    items: [{
+                        name: 'caching_redis_host',
+                        fieldLabel: this.app.i18n._('Hostname'),
+                        value: 'localhost'
+                    }, {
+                        name: 'caching_redis_port',
+                        fieldLabel: this.app.i18n._('Port'),
+                        xtype: 'numberfield',
+                        minValue: 0,
+                        value: 6379
+                    }]
+                }, {
+                    id: this.cacheBackendIdPrefix + 'Memcached',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield',
+                        tabIndex: this.getTabIndex
+                    },
+                    items: [{
+                        name: 'caching_memcached_host',
+                        fieldLabel: this.app.i18n._('Hostname'),
+                        value: 'localhost'
+                    }, {
+                        name: 'caching_memcached_port',
+                        fieldLabel: this.app.i18n._('Port'),
+                        xtype: 'numberfield',
+                        minValue: 0,
+                        value: 11211
+                    }]
+                }]
             }]
         }, {
-            title: this.app.i18n._('Temporary files'),
-            id: 'setup-tmpDir-group',
+            title: this.app.i18n._('Queue'),
+            id: 'setup-actionqueue-group',
+            checkboxToggle: true,
+            collapsed: true,
             defaults: {
                 width: 300,
                 tabIndex: this.getTabIndex
             },
-            items: [{
-                name: 'tmpdir',
-                fieldLabel: this.app.i18n._('Temporary Files Path'),
-                value: Tine.Setup.registry.get(this.registryKey).tmpdir
+            items: [this.queueBackendCombo, 
+            {
+                id: this.queueBackendIdPrefix + 'CardLayout',
+                xtype: 'panel',
+                layout: 'card',
+                activeItem: this.queueBackendIdPrefix + 'Redis',
+                border: false,
+                width: '100%',
+                defaults: {border: false},
+                items: [{
+                    // redis config options
+                    id: this.queueBackendIdPrefix + 'Redis',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield',
+                        tabIndex: this.getTabIndex
+                    },
+                    items: [{
+                        name: 'actionqueue_host',
+                        fieldLabel: this.app.i18n._('Hostname'),
+                        value: 'localhost'
+                    }, {
+                        name: 'actionqueue_port',
+                        fieldLabel: this.app.i18n._('Port'),
+                        xtype: 'numberfield',
+                        minValue: 0,
+                        value: 6379
+                    }]
+                }]
             }]
         }, {
             title: this.app.i18n._('Session'),
@@ -319,6 +446,18 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 }]
             }]
         }, {
+            title: this.app.i18n._('Temporary files'),
+            id: 'setup-tmpDir-group',
+            defaults: {
+                width: 300,
+                tabIndex: this.getTabIndex
+            },
+            items: [{
+                name: 'tmpdir',
+                fieldLabel: this.app.i18n._('Temporary Files Path'),
+                value: Tine.Setup.registry.get(this.registryKey).tmpdir
+            }]
+        }, {
             // TODO this should be not saved in the config.inc.php
             title: this.app.i18n._('Filestore directory'),
             id: 'setup-filesDir-group',
@@ -363,8 +502,9 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         Ext.getCmp('setup-database-group').setIconClass(Tine.Setup.registry.get('checkDB') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-logger-group').setIconClass(Tine.Setup.registry.get('checkLogger') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-caching-group').setIconClass(Tine.Setup.registry.get('checkCaching') ? 'setup_checks_success' : 'setup_checks_fail');
+        Ext.getCmp('setup-actionqueue-group').setIconClass(Tine.Setup.registry.get('checkQueue') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-tmpDir-group').setIconClass(Tine.Setup.registry.get('checkTmpDir') ? 'setup_checks_success' : 'setup_checks_fail');
-        Ext.getCmp('setup-session-group').setIconClass(Tine.Setup.registry.get('checkSessionDir') ? 'setup_checks_success' : 'setup_checks_fail');
+        Ext.getCmp('setup-session-group').setIconClass(Tine.Setup.registry.get('checkSession') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-filesDir-group').setIconClass(Tine.Setup.registry.get('checkFilesDir') ? 'setup_checks_success' : 'setup_checks_fail');
     },
     

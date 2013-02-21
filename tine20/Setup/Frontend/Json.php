@@ -195,10 +195,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function checkConfig()
     {
-        // check first if db settings have changed?
-        //if (!Setup_Core::get(Setup_Core::CHECKDB))
         Setup_Core::setupDatabaseConnection();
-        
         $checkDB = Setup_Core::get(Setup_Core::CHECKDB);
         
         $result = array(
@@ -207,8 +204,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'checkDB'         => $checkDB,
             'checkLogger'     => $this->_controller->checkConfigLogger(),
             'checkCaching'    => $this->_controller->checkConfigCaching(),
+            'checkQueue'      => $this->_controller->checkConfigQueue(),
             'checkTmpDir'     => $this->_controller->checkDir('tmpdir'),
-            'checkSessionDir' => $this->_controller->checkDir('path', 'session'),
+            'checkSession'    => $this->_controller->checkConfigSession(),
             'checkFilesDir'   => $this->_controller->checkDir('filesdir'),
             'setupRequired'      => empty($checkDB) ? TRUE : $this->_controller->setupRequired(),
         );
