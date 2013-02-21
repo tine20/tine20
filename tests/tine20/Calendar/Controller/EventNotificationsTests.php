@@ -639,6 +639,32 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals('2012-04-02 06:30:00', $alarm->alarm_time->toString());
     }
     
+    public function testAlarmSkipDeclined()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
+        $event->organizer = $this->_personasContacts['sclever']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        $sclever = Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $event->attendee[0]);
+        $sclever->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $this->_eventController->attenderStatusUpdate($persistentEvent, $sclever, $sclever->status_authkey);
+        
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('pwulf', 'Alarm');
+        $this->assertEquals(1, count(self::getMessages()));
+    }
+    
     /**
      * get test alarm emails
      * 
