@@ -144,7 +144,11 @@ class Inventory_Setup_Update_Release6 extends Setup_Update_Abstract
                 </field>';
         
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->addCol('inventory_item', $declaration);
+        try {
+            $this->_backend->addCol('inventory_item', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already there
+        }
         
         $this->setApplicationVersion('Inventory', '6.5');
         $this->setTableVersion('inventory_item', '5');
