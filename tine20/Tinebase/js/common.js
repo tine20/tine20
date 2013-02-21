@@ -157,9 +157,9 @@ Tine.Tinebase.common = {
     floatRenderer: function(v, format) {
         if (! format) {
             // default format by locale and with two decimals
-            format = '0' + Tine.Tinebase.registry.get('thousandSeparator') + '000' + Tine.Tinebase.registry.get('decimalSeparator') + '00'
+            format = '0' + Tine.Tinebase.registry.get('thousandSeparator') + '000' + Tine.Tinebase.registry.get('decimalSeparator') + '00';
         }
-        return Ext.util.Format.number(v, format)
+        return Ext.util.Format.number(v, format);
     },
     
     /**

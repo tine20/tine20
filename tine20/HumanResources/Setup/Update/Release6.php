@@ -253,7 +253,7 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
             </declaration>
         </table>');
         
-        $this->_backend->createTable($table);
+        $this->_backend->createTable($table, 'HumanResources');
         
         // find all contracts
         $select = $this->_db->select()->from( SQL_TABLE_PREFIX . 'humanresources_contract')->where('is_deleted=0');
