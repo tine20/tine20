@@ -142,7 +142,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         $result = parent::toArray($_valueToJson);
         
         foreach ($result as &$filterData) {
-            if ($filterData['field'] == 'id' && $_valueToJson == true && ! empty($filterData['value'])) {
+            if (isset($filterData['field']) && $filterData['field'] == 'id' && $_valueToJson == true && ! empty($filterData['value'])) {
                 try {
                     $filterData['value'] = Timetracker_Controller_Timeaccount::getInstance()->get($filterData['value'])->toArray();
                 } catch (Tinebase_Exception_NotFound $nfe) {
