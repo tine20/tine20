@@ -947,7 +947,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Boolean} now
      */
     onRowSelection: function(sm, rowIndex, record, now) {
-        if (! now) {
+        if (! now || ! record.bodyIsFetched()) {
+            Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Deferring onRowSelection');
             return this.onRowSelection.defer(250, this, [sm, rowIndex, record, true]);
         }
         
