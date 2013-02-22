@@ -163,8 +163,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
-                                    requiredGrants: this.record.data.id ? ['editGrant'] : ['addGrant'],
+                                    requiredGrant: this.record.data.id ? ['editGrant'] : ['addGrant'],
                                     disabled: true
+                                }), Ext.apply(this.perspectiveCombo.getAttendeeContainerField(), {
+                                    columnWidth: 1
                                 })]]
                             }]
                         }, {

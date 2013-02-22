@@ -58,6 +58,11 @@ Ext.USE_NATIVE_JSON = !Ext.isIE;
 Ext.QuickTips.init();
 
 /**
+ * hide the field label when the field is hidden
+ */
+Ext.layout.FormLayout.prototype.trackLabels = true;
+
+/**
  * html encode all grid columns per default and convert spaces to &nbsp;
  */
 Ext.grid.ColumnModel.defaultRenderer = Ext.util.Format.htmlEncode;
