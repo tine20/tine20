@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
@@ -219,7 +219,12 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         // fetch modlog records for model
         $modlogTable = SQL_TABLE_PREFIX . 'timemachine_modlog';
         $db = Tinebase_Core::getDb();
-        $sql = "SELECT DISTINCT record_id,modification_time,seq from $modlogTable WHERE record_type ='{$model}' ORDER BY modification_time ASC ";
+        $sql = "SELECT DISTINCT record_id,modification_time,seq "
+            . "FROM $modlogTable WHERE record_type ='{$model}' "
+            . "ORDER BY modification_time ASC ";
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' SQL for fetching modlogs: ' . $sql);
+        
         $result = $db->fetchAll($sql);
         
         if (empty($result)) {
@@ -229,8 +234,9 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         }
         
         $recordSeqs = array();
+        $updateSeqs = array();
         
-        // update modlog
+        // collect modlog data
         foreach ($result as $modification) {
             if ($modification['seq'] != 0) {
                 $recordSeqs[$modification['record_id']] = $modification['seq'];
@@ -242,32 +248,67 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
             } else {
                 $seq = ++$recordSeqs[$modification['record_id']];
             }
+            
+            if (! isset($updateSeqs[$seq])) {
+                $updateSeqs[$seq] = array();
+            }
+            $updateSeqs[$seq][] = array(
+                'record_id'         => $modification['record_id'],
+                'modification_time' => $modification['modification_time']
+            );
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+            ' Found ' . count($recordSeqs) . ' (different seqs: ' . count($updateSeqs) . ') records for modlog sequence update.');
+        
+        // update modlog
+        foreach ($updateSeqs as $seq => $modsBySeq) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Updating ' . count($modsBySeq) . ' modification(s) to seq ' . $seq);
+            
             $updateData = array(
                 'seq' => $seq
             );
-            $where = array(
-                $db->quoteInto('record_id = ?', $modification['record_id']),
-                $db->quoteInto('modification_time = ?', $modification['modification_time']),
-            );
-            $db->update($modlogTable, $updateData, $where);
+            $i = 0;
+            while ($i < count($modsBySeq)) {
+                $whereArray = array();
+                // step by 1000 
+                for ($j = 0; $j < 1000 && ($i + $j) < count($modsBySeq); $j++) {
+                    $whereArray[] = '(' . $db->quoteInto('record_id = ?', $modsBySeq[$i+$j]['record_id']) . ' AND '
+                        . $db->quoteInto('modification_time = ?', $modsBySeq[$i+$j]['modification_time']) . ')';
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+                    ' Stepping from ' . $i . ' to ' . ($i + $j) . '(' . count($whereArray) . ' mods)');
+                
+                if (count($whereArray) > 0) {
+                    $where = implode(' OR ', $whereArray);
+                    $db->update($modlogTable, $updateData, $where);
+                }
+                $i += $j;
+            }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-            ' Found ' . count($recordSeqs) . ' records for modlog sequence update.');
-        
         // update records
+        $maxSeqs = array();
         foreach ($recordSeqs as $recordId => $maxSeq) {
+            $maxSeqs[$maxSeq][] = (string) $recordId;
+        }
+        
+        foreach ($maxSeqs as $maxSeq => $recordIds) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Setting max seq to ' . $maxSeq . ' for ' . count($recordIds) . ' record(s).');
+            
             $updateData = array(
                 'seq' => $maxSeq
             );
-            $where = $db->quoteInto($db->quoteIdentifier('id') . ' = ?', (string) $recordId);
+            $where = $db->quoteInto($db->quoteIdentifier('id') . ' IN (?)', (array) $recordIds);
             try {
                 $db->update(SQL_TABLE_PREFIX . $recordTable, $updateData, $where);
             } catch (Zend_Db_Statement_Exception $zdse) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
                     ' Could not update record seq: ' . $zdse->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                    ' Data: ' . print_r($updateData, TRUE) . ' Where: ' . $where);
+                    ' Data: ' . print_r($updateData, TRUE) . ' Where: ' . substr($where, 0, 256));
             }
         }
         
