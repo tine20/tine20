@@ -75,7 +75,7 @@
         $options = null;
         $backend = self::BACKEND_DIRECT;
         
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+        if (isset(Tinebase_Core::getConfig()->actionqueue) && Tinebase_Core::getConfig()->actionqueue->active) {
             $options = Tinebase_Core::getConfig()->actionqueue->toArray();
             
             $backend = array_key_exists('backend', $options) ? ucfirst(strtolower($options['backend'])) : $backend;
