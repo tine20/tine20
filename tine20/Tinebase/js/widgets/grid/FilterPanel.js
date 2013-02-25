@@ -203,6 +203,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.criteriaCount--;
         
         this.fireEvent('filterpanelremoved', this, filterPanel);
+        
+        for (var id in this.filterPanels) {
+            if (this.filterPanels.hasOwnProperty(id)) {
+                return this.setActiveFilterPanel(this.filterPanels[id]);
+            }
+        }
     },
     
     setActiveFilterPanel: function(filterPanel) {
