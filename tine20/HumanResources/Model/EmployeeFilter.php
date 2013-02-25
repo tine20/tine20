@@ -58,5 +58,9 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
                 'controller'        => 'Sales_Controller_Division'
             )
         ),
+        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'humanresources_employee.id',
+            'applicationName' => 'HumanResources',
+        ))
     );
 }
