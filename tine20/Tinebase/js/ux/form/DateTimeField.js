@@ -21,6 +21,7 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
 Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     autoEl: 'div',
     value: '',
+    disabledClass: '',
     increment: 15,
     timeEditable: true,
     markedInvalid: false,

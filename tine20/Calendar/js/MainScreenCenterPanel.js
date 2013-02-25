@@ -692,13 +692,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             var options = {
                                 scope: this,
                                 success: function(updatedEvent) {
-                                    if (option === 'this') {
-                                        event =  store.indexOf(event) != -1 ? event : store.getById(event.id);
-                                        this.congruenceFilterCheck(event, updatedEvent);
-                                    } else {
-                                        store.load({refresh: true});
-                                    }
-                                }
+                                    // NOTE: we also need to refresh for 'this' as otherwise
+                                    //       baseevent is not refreshed -> concurrency failures
+                                    store.load({refresh: true});
+                                },
+                                failure: this.onProxyFail.createDelegate(this, [event], true)
                             };
                             options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.createRecurException.createDelegate(Tine.Calendar.backend, [event, false, option == 'future', false, options])], true);
                             

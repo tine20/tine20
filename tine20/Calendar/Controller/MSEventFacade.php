@@ -567,6 +567,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
+        // filter out attendee w.o. email
+        $attendeeClone = clone $_event->attendee;
+        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
+        foreach($_event->attendee->getEmail() as $idx => $email) {
+            if ($email) {
+                $filteredAttendee->addRecord($_event->attendee[$idx]);
+            }
+        }
+        $_event->attendee = $filteredAttendee;
+        
         // get alarms for baseEvents w.o. exdate
         if (! $_event->isRecurException() && ! $_event->exdate) {
             $this->getAlarms($_event);
@@ -633,6 +644,18 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     }
                 }
                 $this->_fromiTIP($exdate, $currExdate ? $currExdate : clone $_currentEvent);
+            }
+        }
+        
+        // re add attendee w.o. email
+        if ($_currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
+            $attendeeClone = clone $_currentEvent->attendee;
+            $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+            Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
+            foreach($_currentEvent->attendee->getEmail() as $idx => $email) {
+                if (! $email) {
+                    $_event->attendee->addRecord($_currentEvent->attendee[$idx]);
+                }
             }
         }
         

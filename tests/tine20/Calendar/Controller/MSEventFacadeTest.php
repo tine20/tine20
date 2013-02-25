@@ -391,6 +391,35 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertNull($persistentException);
     }
     
+    public function testMissingEmailAttendee()
+    {
+        $noMailContact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'org_name' => 'nomail'
+        )));
+        
+        $noMailAttendee = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $noMailContact->getId()
+        ));
+        
+        $event = $this->_getEvent();
+        $event->attendee->addRecord($noMailAttendee);
+        
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $loadedEvent = $this->_uit->get($persistentEvent->getId());
+        
+        $this->assertTrue((bool) Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $noMailAttendee));
+        $this->assertFalse((bool) Calendar_Model_Attender::getAttendee($loadedEvent->attendee, $noMailAttendee));
+        
+        $loadedEvent->summary = 'update';
+        $update = $this->_uit->update($loadedEvent);
+        
+        $loadedEvent = Calendar_Controller_Event::getInstance()->get($persistentEvent->getId());
+        
+        $this->assertEquals('update', $loadedEvent->summary);
+        $this->assertTrue((bool) Calendar_Model_Attender::getAttendee($loadedEvent->attendee, $noMailAttendee));
+    }
+    
     /**
      * asserts tested event
      * 
