@@ -24,118 +24,29 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr ""
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr ""
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr ""
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr ""
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr ""
-
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
-msgid "Save locally"
-msgstr ""
-
-#: js/NodeEditDialog.js:94 js/NodeEditDialog.js:107
-msgid "Node"
-msgstr ""
-
-#: js/NodeEditDialog.js:113 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr ""
-
-#: js/NodeEditDialog.js:120 js/Model.js:531
-msgid "Type"
-msgstr ""
-
-#: js/NodeEditDialog.js:128 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr ""
-
-#: js/NodeEditDialog.js:131 js/Model.js:533 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr ""
-
-#: js/NodeEditDialog.js:140
-msgid "Modified By"
-msgstr ""
-
-#: js/NodeEditDialog.js:143
-msgid "Last Modified"
-msgstr ""
-
-#: js/NodeEditDialog.js:166
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:180
-msgid "Enter description"
-msgstr ""
-
-#: js/NodeTreePanel.js:662 js/NodeTreePanel.js:772 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr ""
-
-#: js/NodeTreePanel.js:663 js/NodeGridPanel.js:652
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/NodeTreePanel.js:773 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr ""
-
-#: js/GridContextMenu.js:34
-msgid "Please enter the new name of the {0}:"
-msgstr ""
-
-#: js/GridContextMenu.js:40
-msgid "Not renamed {0}"
-msgstr ""
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
-msgid "You have to supply a {0} name!"
-msgstr ""
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
-msgid "Do you really want to delete the following files?"
-msgstr ""
-
-#: js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-
-#: js/Model.js:44 js/NodeGridPanel.js:155
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-
-#: js/Model.js:282 js/Model.js:298
-msgid "Copying data .. {0}"
-msgstr ""
-
-#: js/Model.js:285 js/Model.js:300
-msgid "Moving data .. {0}"
-msgstr ""
-
-#: js/Model.js:304
-msgid "Please wait"
-msgstr ""
-
-#: js/Model.js:530
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:532 js/NodeGridPanel.js:147
-msgid "Contenttype"
-msgstr ""
-
 #: js/Filemanager.js:26
 msgid "Filemanager"
+msgstr ""
+
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+msgid "Save locally"
 msgstr ""
 
 #: js/Filemanager.js:81
@@ -162,6 +73,88 @@ msgstr ""
 
 #: js/Filemanager.js:138
 msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/GridContextMenu.js:34
+msgid "Please enter the new name of the {0}:"
+msgstr ""
+
+#: js/GridContextMenu.js:40
+msgid "Not renamed {0}"
+msgstr ""
+
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
+msgid "Do you really want to delete the following files?"
+msgstr ""
+
+#: js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+
+#: js/Model.js:43 js/NodeGridPanel.js:155
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+
+#: js/Model.js:281 js/Model.js:297
+msgid "Copying data .. {0}"
+msgstr ""
+
+#: js/Model.js:284 js/Model.js:299
+msgid "Moving data .. {0}"
+msgstr ""
+
+#: js/Model.js:303
+msgid "Please wait"
+msgstr ""
+
+#: js/Model.js:529
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr ""
+
+#: js/Model.js:531 js/NodeGridPanel.js:147
+msgid "Contenttype"
+msgstr ""
+
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr ""
+
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr ""
+
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr ""
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr ""
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
 msgstr ""
 
 #: js/NodeGridPanel.js:125
@@ -220,14 +213,21 @@ msgstr ""
 msgid "No {0} added"
 msgstr ""
 
-#: Controller/Node.php:318
-msgid "My folders"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
+#: js/NodeTreePanel.js:776
+msgid "Upload Failed"
 msgstr ""
 
-#: Controller/Node.php:325
-msgid "Shared folders"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
 msgstr ""
 
-#: Controller/Node.php:332
-msgid "Other users folders"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
+msgid "Putting files in this folder is not allowed!"
+msgstr ""
+
+#: js/PathFilterModel.js:50
+msgid "path"
 msgstr ""

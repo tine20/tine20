@@ -25,121 +25,30 @@ msgstr "megosztott könyvtárak kezelése"
 msgid "Create new shared folders"
 msgstr "Új megosztott könyvtár létrehozása"
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Saját könyvtárak"
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Megosztott könyvtárak"
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Többi felhasználó megosztott könyvtárai"
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "%s személyes file-ai"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "elérési út"
-
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
-msgid "Save locally"
-msgstr "Mentés helyileg"
-
-#: js/NodeEditDialog.js:94 js/NodeEditDialog.js:107
-msgid "Node"
-msgstr "Csomópont"
-
-#: js/NodeEditDialog.js:113 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Név"
-
-#: js/NodeEditDialog.js:120 js/Model.js:531
-msgid "Type"
-msgstr "Típus"
-
-#: js/NodeEditDialog.js:128 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Készítő"
-
-#: js/NodeEditDialog.js:131 js/Model.js:533 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/NodeEditDialog.js:140
-msgid "Modified By"
-msgstr "Készítette"
-
-#: js/NodeEditDialog.js:143
-msgid "Last Modified"
-msgstr "Utolsó módosítás"
-
-#: js/NodeEditDialog.js:166
-msgid "Description"
-msgstr "Leírás"
-
-#: js/NodeEditDialog.js:180
-msgid "Enter description"
-msgstr "Leírás bevitele"
-
-#: js/NodeTreePanel.js:662 js/NodeTreePanel.js:772 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr "Feltöltés sikertelen"
-
-#: js/NodeTreePanel.js:663 js/NodeGridPanel.js:652
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
-
-#: js/NodeTreePanel.js:773 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
-
-#: js/GridContextMenu.js:34
-msgid "Please enter the new name of the {0}:"
-msgstr "Kérlek írd be a {0} új nevét:"
-
-#: js/GridContextMenu.js:40
-msgid "Not renamed {0}"
-msgstr "{0} átnevezése sikertelen"
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
-msgid "You have to supply a {0} name!"
-msgstr "Biztosítanos kell egy {0} nevet!"
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
-msgid "Do you really want to delete the following files?"
-msgstr "Biztosan szeretnéd törölni a következő filokat?"
-
-#: js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "File"
-msgstr[1] "Fileok"
-
-#: js/Model.js:44 js/NodeGridPanel.js:155
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] "Könyvtár"
-
-#: js/Model.js:282 js/Model.js:298
-msgid "Copying data .. {0}"
-msgstr "Adat másolása.. {0}"
-
-#: js/Model.js:285 js/Model.js:300
-msgid "Moving data .. {0}"
-msgstr "Adat áthelyezése.. {0}"
-
-#: js/Model.js:304
-msgid "Please wait"
-msgstr "Kérlek várj"
-
-#: js/Model.js:530
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/Model.js:532 js/NodeGridPanel.js:147
-msgid "Contenttype"
-msgstr "Tartalomtípus"
-
 #: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr "Filekezelő"
+
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+msgid "Save locally"
+msgstr "Mentés helyileg"
 
 #: js/Filemanager.js:81
 msgid "Service Unavailable"
@@ -166,6 +75,90 @@ msgstr "Hiba a könyvtár létrehozásakor"
 #: js/Filemanager.js:138
 msgid "Item with this name already exists!"
 msgstr "Ezen a néven már létezik adat!"
+
+#: js/GridContextMenu.js:34
+msgid "Please enter the new name of the {0}:"
+msgstr "Kérlek írd be a {0} új nevét:"
+
+#: js/GridContextMenu.js:40
+msgid "Not renamed {0}"
+msgstr "{0} átnevezése sikertelen"
+
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
+msgid "You have to supply a {0} name!"
+msgstr "Biztosítanos kell egy {0} nevet!"
+
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
+msgid "Do you really want to delete the following files?"
+msgstr "Biztosan szeretnéd törölni a következő filokat?"
+
+#: js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+msgstr[1] "Fileok"
+
+#: js/Model.js:43 js/NodeGridPanel.js:155
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] "Könyvtár"
+
+#: js/Model.js:281 js/Model.js:297
+msgid "Copying data .. {0}"
+msgstr "Adat másolása.. {0}"
+
+#: js/Model.js:284 js/Model.js:299
+msgid "Moving data .. {0}"
+msgstr "Adat áthelyezése.. {0}"
+
+#: js/Model.js:303
+msgid "Please wait"
+msgstr "Kérlek várj"
+
+#: js/Model.js:529
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr "Típus"
+
+#: js/Model.js:531 js/NodeGridPanel.js:147
+msgid "Contenttype"
+msgstr "Tartalomtípus"
+
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Csomópont"
+
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Név"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Készítő"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Készítette"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Utolsó módosítás"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Leírás"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Leírás bevitele"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -223,14 +216,21 @@ msgstr "Kérlek add meg az új könyvtár nevét:"
 msgid "No {0} added"
 msgstr "{0} hozzáadása sikertelen"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Saját könyvtárak"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
+#: js/NodeTreePanel.js:776
+msgid "Upload Failed"
+msgstr "Feltöltés sikertelen"
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Megosztott könyvtárak"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "File nem tölthető fel. Fileméret túl nagy lehet. Kérlek értesítsd a rendszergazdádat. Max. feltöltési méret: "
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Többi felhasználó megosztott könyvtárai"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
+msgid "Putting files in this folder is not allowed!"
+msgstr "Fileok ebbe a könyvtárba helyezése nem engedélyezett!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "elérési út"

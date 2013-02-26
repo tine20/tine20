@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-24 15:13+0000\n"
-"Last-Translator: brankablag <brankablag@gmail.com>\n"
+"PO-Revision-Date: 2013-02-20 11:51+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,10 +17,13 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s osobni projekti"
+#: Acl/Rights.php:91
+msgid "Manage shared project favorites"
+msgstr ""
+
+#: Acl/Rights.php:92
+msgid "Create new shared project favorites"
+msgstr ""
 
 #: Config.php:38
 msgid "Project Status Available"
@@ -43,9 +46,120 @@ msgid ""
 "syncronisation."
 msgstr "Moguće uloge sudionika projekta. Napomena da dodatne uloge sudionika projekta mogu utjecati na ostale projekte prilikom izvoza ili sinkronizacije."
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s osobni projekti"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Odaberite projekt kojem će se dodati kontakti"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Odaberite uloge sudionika"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Odaberite projekt"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+msgid "Role"
+msgstr "Uloga"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Odaberite ulogu"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "Dodavanje {0} sudionika projekta"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekta"
+msgstr[2] "Projekta"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Lista projekta"
+msgstr[1] "Liste projekta"
+msgstr[2] "Listi projekta"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Liste projekta"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Brzo pretraživanje"
+
+#: js/Model.js:73 js/ProjectEditDialog.js:129 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Naslov"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:134 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Broj"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:170
+msgid "Description"
+msgstr "Opis"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:140 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Vrijeme zadnje izmjene"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Zadnji izmijenio"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Vrijeme kreiranja"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+msgid "Attendee"
+msgstr "Sudionik"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Uloga sudionika"
+
+#: js/ProjectEditDialog.js:184
+msgid "Enter description"
+msgstr "Unesi opis"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Oznake"
+
+#: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekti"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Moji projekti"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Zadani favorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Zadani favorit prilikom pokretanja Projekata"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -90,109 +204,3 @@ msgstr "Moji projekti na čekanju"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Moji projekti na čekanju"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Moji projekti"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Zadani favorit"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Zadani favorit prilikom pokretanja Projekata"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Odaberite projekt kojem će se dodati kontakti"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Odaberite uloge sudionika"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Odaberite projekt"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
-msgid "Role"
-msgstr "Uloga"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Odaberite ulogu"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "Dodavanje {0} sudionika projekta"
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr "Oznake"
-
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
-msgid "Number"
-msgstr "Broj"
-
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
-msgid "Title"
-msgstr "Naslov"
-
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
-msgid "Status"
-msgstr "Status"
-
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekta"
-msgstr[2] "Projekta"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Lista projekta"
-msgstr[1] "Liste projekta"
-msgstr[2] "Listi projekta"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Liste projekta"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Brzo pretraživanje"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:170
-msgid "Description"
-msgstr "Opis"
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr "Vrijeme zadnje izmjene"
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr "Zadnji izmijenio"
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr "Vrijeme kreiranja"
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr "Kreirao"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
-msgid "Attendee"
-msgstr "Sudionik"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Uloga sudionika"
-
-#: js/ProjectEditDialog.js:184
-msgid "Enter description"
-msgstr "Unesi opis"

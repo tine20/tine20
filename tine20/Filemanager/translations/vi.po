@@ -25,119 +25,30 @@ msgstr "quản lý thư mục chung"
 msgid "Create new shared folders"
 msgstr "Tạo 1 thư mục chung"
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Thư mục của tôi"
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Thư mục chung"
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Thư mục người dùng khác"
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "File cá nhân của %s"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "đường dẫn"
-
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
-msgid "Save locally"
-msgstr "Lưu tại máy"
-
-#: js/NodeEditDialog.js:94 js/NodeEditDialog.js:107
-msgid "Node"
-msgstr "Node"
-
-#: js/NodeEditDialog.js:113 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Tên"
-
-#: js/NodeEditDialog.js:120 js/Model.js:531
-msgid "Type"
-msgstr "Kiểu"
-
-#: js/NodeEditDialog.js:128 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/NodeEditDialog.js:131 js/Model.js:533 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/NodeEditDialog.js:140
-msgid "Modified By"
-msgstr "Sửa bởi"
-
-#: js/NodeEditDialog.js:143
-msgid "Last Modified"
-msgstr "Sửa lần cuối"
-
-#: js/NodeEditDialog.js:166
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/NodeEditDialog.js:180
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/NodeTreePanel.js:662 js/NodeTreePanel.js:772 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr "Lỗi upload"
-
-#: js/NodeTreePanel.js:663 js/NodeGridPanel.js:652
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Không thể upload file"
-
-#: js/NodeTreePanel.js:773 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr "Đặt file vào thư mục này là không được phép!"
-
-#: js/GridContextMenu.js:34
-msgid "Please enter the new name of the {0}:"
-msgstr "Xin hãy nhập tên mới cho {0}"
-
-#: js/GridContextMenu.js:40
-msgid "Not renamed {0}"
-msgstr "Chưa đổi tên {0}"
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
-msgid "You have to supply a {0} name!"
-msgstr "Bạn phải nhập 1 tên {0}"
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
-msgid "Do you really want to delete the following files?"
-msgstr "Bạn có muốn xóa các file sau?"
-
-#: js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "File"
-
-#: js/Model.js:44 js/NodeGridPanel.js:155
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "one:Thư mục\nother:Thư mục"
-
-#: js/Model.js:282 js/Model.js:298
-msgid "Copying data .. {0}"
-msgstr "Đang copy dữ liệu.... {0}"
-
-#: js/Model.js:285 js/Model.js:300
-msgid "Moving data .. {0}"
-msgstr "Di chuyển thư mục... {0}"
-
-#: js/Model.js:304
-msgid "Please wait"
-msgstr "Xin hãy đợi"
-
-#: js/Model.js:530
-msgid "Quick search"
-msgstr "Tìm nhanh"
-
-#: js/Model.js:532 js/NodeGridPanel.js:147
-msgid "Contenttype"
-msgstr "Contenttype"
-
 #: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr "Quản lý file"
+
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+msgid "Save locally"
+msgstr "Lưu tại máy"
 
 #: js/Filemanager.js:81
 msgid "Service Unavailable"
@@ -164,6 +75,88 @@ msgstr "Lỗi khi tạo thư mục"
 #: js/Filemanager.js:138
 msgid "Item with this name already exists!"
 msgstr "Mục với tên này đã tồn tại!"
+
+#: js/GridContextMenu.js:34
+msgid "Please enter the new name of the {0}:"
+msgstr "Xin hãy nhập tên mới cho {0}"
+
+#: js/GridContextMenu.js:40
+msgid "Not renamed {0}"
+msgstr "Chưa đổi tên {0}"
+
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
+msgid "You have to supply a {0} name!"
+msgstr "Bạn phải nhập 1 tên {0}"
+
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
+msgid "Do you really want to delete the following files?"
+msgstr "Bạn có muốn xóa các file sau?"
+
+#: js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+
+#: js/Model.js:43 js/NodeGridPanel.js:155
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "one:Thư mục\nother:Thư mục"
+
+#: js/Model.js:281 js/Model.js:297
+msgid "Copying data .. {0}"
+msgstr "Đang copy dữ liệu.... {0}"
+
+#: js/Model.js:284 js/Model.js:299
+msgid "Moving data .. {0}"
+msgstr "Di chuyển thư mục... {0}"
+
+#: js/Model.js:303
+msgid "Please wait"
+msgstr "Xin hãy đợi"
+
+#: js/Model.js:529
+msgid "Quick search"
+msgstr "Tìm nhanh"
+
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr "Kiểu"
+
+#: js/Model.js:531 js/NodeGridPanel.js:147
+msgid "Contenttype"
+msgstr "Contenttype"
+
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Node"
+
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Tên"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Sửa bởi"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Sửa lần cuối"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Nhập mô tả"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -221,14 +214,21 @@ msgstr "Xin nhập vào tên của thư mục mới:"
 msgid "No {0} added"
 msgstr "Không thêm được {0}"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Thư mục của tôi"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
+#: js/NodeTreePanel.js:776
+msgid "Upload Failed"
+msgstr "Lỗi upload"
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Thư mục chung"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Không thể upload file"
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Thư mục người dùng khác"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
+msgid "Putting files in this folder is not allowed!"
+msgstr "Đặt file vào thư mục này là không được phép!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "đường dẫn"

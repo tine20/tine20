@@ -18,56 +18,13 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:29
+#: Config.php:31
 msgid "Default policy for new devices"
 msgstr "Политика по умолчанию для новых устройств"
 
-#: Config.php:31
+#: Config.php:33
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Введите ID политики для применения к вновь созданным устройствам."
-
-#: Setup/setup.xml:706 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Политика по умолчанию"
-
-#: Setup/setup.xml:711 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Политика по умолчанию заданная при установке"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Адресная книга по умолчанию"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Адресная книга для создания контактов по умолчанию"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Календарь по умолчанию"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Календарь для создания новых событий по умолчанию"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Список задач по умолчанию"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Список задач для создания новых задач по умолчанию"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Устройство"
-msgstr[1] "Устройства"
-msgstr[2] "Устройства"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Устройства"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -100,3 +57,46 @@ msgstr "сброшен"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Установить фильтр синхронизации"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Устройство"
+msgstr[1] "Устройства"
+msgstr[2] "Устройства"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Устройства"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Адресная книга по умолчанию"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Адресная книга для создания контактов по умолчанию"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Календарь по умолчанию"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Календарь для создания новых событий по умолчанию"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Список задач по умолчанию"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Список задач для создания новых задач по умолчанию"
+
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Политика по умолчанию"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Политика по умолчанию заданная при установке"

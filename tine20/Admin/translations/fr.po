@@ -129,326 +129,29 @@ msgstr "Voir les composants personnels et partagés"
 msgid "Default IMAP user settings"
 msgstr "Configuration IMAP par défaut"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Carnet d'adresse par défaut pour un nouveau contact ou groupe"
+#: Controller/Container.php:198
+msgid "Your container has been changed"
+msgstr "Votre composant a été modifié"
 
-#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Utilisateur"
-msgstr[1] "Utilisateurs"
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Votre composant a été modifié par %1$s %2$s Note: %3$s"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Groupes"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Rôles"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Ordinateurs"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Applications"
-
-#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "Journal d'accès"
 msgstr[1] "Journaux d'accès"
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Marqueurs partagés"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr "Composants"
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr "Champs personnalisés"
-
-#: js/Admin.js:137
-msgid "Server Information"
-msgstr "Informations du serveur"
-
-#: js/Admin.js:172
-msgid "Admin"
-msgstr "Admininstration"
-
-#: js/Admin.js:254
-msgid "Refresh"
-msgstr "Actualiser"
-
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
-msgid "Computer Name"
-msgstr "Nom d'ordinateur"
-
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
-#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
-#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
-msgid "Description"
-msgstr "Description"
-
-#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
-#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
-msgid "ID"
-msgstr "ID"
-
-#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
-#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
-#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
-#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
-#: js/customfield/GridPanel.js:72
-msgid "Name"
-msgstr "Nom"
-
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-#: js/customfield/GridPanel.js:131
-msgid "Confirm"
-msgstr "Confirmer"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Confirmez la suppression des marqueurs sélectionnés ?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Suppression des marqueurs..."
-
-#: js/Tags.js:97
-msgid "Add Tag"
-msgstr "Ajouter un tag"
-
-#: js/Tags.js:105
-msgid "Edit Tag"
-msgstr "Modifier un tag"
-
-#: js/Tags.js:113
-msgid "Delete Tag"
-msgstr "Supprimer un tag"
-
-#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
-msgid "Search:"
-msgstr "Chercher:"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Affichage des marqueurs {0} - {1} de {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Pas de marqueur à afficher"
-
-#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
-msgid "Color"
-msgstr "Couleur"
-
-#: js/Tags.js:223
-msgid "Usage:&#160;"
-msgstr "Usage:&#160;"
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Confirmez vous la suppression des rôles sélectionnés ?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Suppression de(s) rôle(s)..."
-
-#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
-#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-msgid "Failed"
-msgstr "Échec"
-
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "Une erreur est survenue lors de la suppression du rôle."
-
-#: js/Roles.js:102
-msgid "Add Role"
-msgstr "Ajouter un role"
-
-#: js/Roles.js:110
-msgid "Edit Role"
-msgstr "Modifier un role"
-
-#: js/Roles.js:118
-msgid "Delete Role"
-msgstr "Supprimer un role"
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Affichage des rôles {0} - {1} de {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Pas de rôle à afficher"
-
-#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Veuillez patienter"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Mise à jour des appartenances"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Échec de la sauvegarde du groupe."
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-msgid "Errors"
-msgstr "Erreurs"
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-msgid "Please fix the errors noted."
-msgstr "Veuillez corriger les erreurs indiquées."
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Nom du groupe"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
-msgid "Visibility"
-msgstr "Visibilité"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Display in addressbook"
-msgstr "Afficher dans le carnet d'adresses"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Hide from addressbook"
-msgstr "Masquer dans le carnet d'adresses"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
-msgid "Saved in Addressbook"
-msgstr "Sauvegarder dans le carnet d'adresses"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Membres du groupe"
-
-#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
-msgid "Transferring {0}..."
-msgstr "Transfert de {0} en cours..."
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Groupe"
-msgstr[1] "Groupes"
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Ajouter un nouveau groupe"
-
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Éditer le groupe \"{0}\""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr "{0} paramètres"
-
-#: js/Applications.js:83
-msgid "Enable Application"
-msgstr "Activer l'application"
-
-#: js/Applications.js:90
-msgid "Disable Application"
-msgstr "Désactiver l'application"
-
-#: js/Applications.js:97
-msgid "Settings"
-msgstr "Paramètres"
-
-#: js/Applications.js:146
-msgid "enable application"
-msgstr "activer l'application"
-
-#: js/Applications.js:147
-msgid "disable application"
-msgstr "désactiver l'application"
-
-#: js/Applications.js:148
-msgid "settings"
-msgstr "paramètres"
-
-#: js/Applications.js:228 js/user/EditDialog.js:873
-msgid "disabled"
-msgstr "désactivé"
-
-#: js/Applications.js:231 js/user/EditDialog.js:872
-msgid "enabled"
-msgstr "activé"
-
-#: js/Applications.js:235
-msgid "unknown status ({0})"
-msgstr "statut inconnu ({0})"
-
-#: js/Applications.js:269
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Affichage des applications {0} - {1} de {2}"
-
-#: js/Applications.js:270
-msgid "No applications to display"
-msgstr "Pas d'application à afficher"
-
-#: js/Applications.js:279 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Ordre"
-
-#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
-msgid "Status"
-msgstr "Statut"
-
-#: js/Applications.js:282
-msgid "Version"
-msgstr "Version"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Confirmez-vous la suppression des groupes sélectionnés?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Suppression de(s) groupe(s)..."
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Une erreur est survenue lors de la suppression du groupe."
-
-#: js/Groups.js:104
-msgid "Add Group"
-msgstr "Ajouter un groupe"
-
-#: js/Groups.js:112
-msgid "Edit Group"
-msgstr "Modifier un groupe"
-
-#: js/Groups.js:120
-msgid "Delete Group"
-msgstr "Supprimer un groupe"
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Affichage des groupes {0} - {1} de {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Pas de groupe à afficher"
-
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
 msgstr "Adresse IP"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Utilisateur"
+msgstr[1] "Utilisateurs"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -469,6 +172,13 @@ msgstr "ID de session"
 #: js/AccessLog.js:130
 msgid "Login Name"
 msgstr "Identifiant"
+
+#: js/AccessLog.js:131 js/Applications.js:280 js/container/EditDialog.js:124
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Nom"
 
 #: js/AccessLog.js:135
 msgid "Result"
@@ -506,96 +216,128 @@ msgstr "échec"
 msgid "success"
 msgstr "réussi"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Mise à jour du marqueur"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Groupes"
 
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Échec de sauvegarde."
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Rôles"
 
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Contextes autorisés"
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Ordinateurs"
 
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Contexte"
+#: js/Admin.js:74 js/Models.js:127
+msgid "Applications"
+msgstr "Applications"
 
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Droits"
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Marqueurs partagés"
 
-#: js/TagEditDialog.js:197
-msgid "View"
-msgstr "Visualiser"
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Composants"
 
-#: js/TagEditDialog.js:202
-msgid "Use"
-msgstr "Utiliser"
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr "Champs personnalisés"
 
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Nom"
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr "Informations du serveur"
 
-#: js/TagEditDialog.js:290
-msgid "Tag"
-msgstr "Marqueur"
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Admininstration"
 
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Ajouter"
+#: js/Admin.js:256
+msgid "Refresh"
+msgstr "Actualiser"
 
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Éditer le marqueur \"{0}\""
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Carnet d'adresse par défaut pour un nouveau contact ou groupe"
 
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Le rôle n'a pas pu être sauvegardé."
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Suppression du rôle..."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Droits"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Membres"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Nom du rôle"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "Rôle"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Ajouter un nouveau rôle"
-
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "Éditer le rôle \"{0}\""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Ordinateur"
-msgstr[1] "Ordinateurs"
-
-#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
-#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:136
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
-#: js/Models.js:128
+#: js/Models.js:127
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"
 msgstr[1] "Applications"
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} paramètres"
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr "Activer l'application"
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr "Désactiver l'application"
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr "Paramètres"
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "activer l'application"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "désactiver l'application"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "paramètres"
+
+#: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Chercher:"
+
+#: js/Applications.js:228 js/user/EditDialog.js:877
+msgid "disabled"
+msgstr "désactivé"
+
+#: js/Applications.js:231 js/user/EditDialog.js:876
+msgid "enabled"
+msgstr "activé"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "statut inconnu ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Affichage des applications {0} - {1} de {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Pas d'application à afficher"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Ordre"
+
+#: js/Applications.js:281 js/user/EditDialog.js:869 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Statut"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Version"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Composant"
+msgstr[1] "Composants"
 
 #: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
 #: js/customfield/GridPanel.js:75
@@ -616,336 +358,34 @@ msgstr "Personnel"
 msgid "shared"
 msgstr "Partagé"
 
+#: js/container/EditDialog.js:171 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Couleur"
+
 #: js/container/EditDialog.js:176
 msgid "Note for Owner"
 msgstr "Note au propriétaire"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Composant"
-msgstr[1] "Composants"
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
 msgstr "Nom du composant"
-
-#: js/user/EditDialog.js:187
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domaine non autorisé. Vérifierla configuration SMTP"
-
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:726
-msgid "Passwords do not match!"
-msgstr "Les mots de passes ne correspondent pas !"
-
-#: js/user/EditDialog.js:240
-msgid "Passwords match!"
-msgstr "Les mot s de passe correspondent"
-
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:848
-msgid "Primary group"
-msgstr "Groupe principal"
-
-#: js/user/EditDialog.js:363
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:377
-msgid "Home Directory"
-msgstr "Répertoire personnel"
-
-#: js/user/EditDialog.js:381
-msgid "Login Shell"
-msgstr "Login Shell"
-
-#: js/user/EditDialog.js:387
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:401
-msgid "Home Drive"
-msgstr "Lecteur personnel"
-
-#: js/user/EditDialog.js:406
-msgid "Logon Time"
-msgstr "Heure de connexion"
-
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:959
-#: js/user/EditDialog.js:963
-msgid "never logged in"
-msgstr "jamais connecté"
-
-#: js/user/EditDialog.js:411
-msgid "Home Path"
-msgstr "Chemin du Home"
-
-#: js/user/EditDialog.js:416
-msgid "Logoff Time"
-msgstr "Heure de déconnexion"
-
-#: js/user/EditDialog.js:418
-msgid "never logged off"
-msgstr "jamais déconnecté"
-
-#: js/user/EditDialog.js:421
-msgid "Profile Path"
-msgstr "Chemin du profil"
-
-#: js/user/EditDialog.js:426
-msgid "Password Last Set"
-msgstr "Mot de passe défini le"
-
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:907
-#: js/user/EditDialog.js:967
-msgid "never"
-msgstr "jamais"
-
-#: js/user/EditDialog.js:431
-msgid "Logon Script"
-msgstr "Script d'ouverture de session"
-
-#: js/user/EditDialog.js:436
-msgid "Password Can Change"
-msgstr "le mot de passe peut être mis à jour"
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
-msgid "not set"
-msgstr "non défini"
-
-#: js/user/EditDialog.js:441
-msgid "Password Must Change"
-msgstr "le mot de passe doit être mis à jour"
-
-#: js/user/EditDialog.js:446
-msgid "Kick Off Time"
-msgstr "Durée de bannissement"
-
-#: js/user/EditDialog.js:466
-msgid "IMAP Quota (MB)"
-msgstr "IMAP quota (MB)"
-
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
-msgid "Quota"
-msgstr "Quota"
-
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
-msgid "no quota set"
-msgstr "Pas de quota"
-
-#: js/user/EditDialog.js:496
-msgid "Current Mailbox size"
-msgstr "Taille actuelle de la boite mail"
-
-#: js/user/EditDialog.js:504
-msgid "Sieve Quota (MB)"
-msgstr "Quota pour Sieve (Mo)"
-
-#: js/user/EditDialog.js:534
-msgid "Current Sieve size"
-msgstr "Taille actuelle de Sieve"
-
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:942
-msgid "Information"
-msgstr "Information"
-
-#: js/user/EditDialog.js:557
-msgid "Last Login"
-msgstr "Dernier login à"
-
-#: js/user/EditDialog.js:611
-msgid "Domain not allowed"
-msgstr "Domaine non autorisé"
-
-#: js/user/EditDialog.js:612
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr "Le domaine {0} de l'alias {1} que vous avez configuré n'est pas autorisé par la configuration"
-
-#: js/user/EditDialog.js:621
-msgid "Email Alias"
-msgstr "Alias email"
-
-#: js/user/EditDialog.js:627
-msgid "Add an alias address..."
-msgstr "Ajouter un alias..."
-
-#: js/user/EditDialog.js:645
-msgid "Forwarding to self"
-msgstr "Me transférer"
-
-#: js/user/EditDialog.js:646
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr "Impossible de transférer vers une adresse qui est identique à une des votres"
-
-#: js/user/EditDialog.js:655
-msgid "Email Forward"
-msgstr "Transfert de courriels"
-
-#: js/user/EditDialog.js:661
-msgid "Add a forward address..."
-msgstr "Ajouter une adresse de transfert..."
-
-#: js/user/EditDialog.js:674
-msgid "Forward Only"
-msgstr "Transfert seulement"
-
-#: js/user/EditDialog.js:693
-msgid "Password confirmation"
-msgstr "Confirmation du mot de passe"
-
-#: js/user/EditDialog.js:710
-msgid "Repeat password"
-msgstr "Ressaisir le mot de passe"
-
-#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr "Annuler"
-
-#: js/user/EditDialog.js:736
-msgid "Ok"
-msgstr "Ok"
-
-#: js/user/EditDialog.js:771
-msgid "Account"
-msgstr "Compte"
-
-#: js/user/EditDialog.js:786 js/user/GridPanel.js:180
-msgid "First name"
-msgstr "Prénom"
-
-#: js/user/EditDialog.js:796 js/user/GridPanel.js:179
-msgid "Last name"
-msgstr "Nom"
-
-#: js/user/EditDialog.js:801 js/user/EditDialog.js:843
-#: js/user/GridPanel.js:178
-msgid "Login name"
-msgstr "Login"
-
-#: js/user/EditDialog.js:806
-msgid "Password"
-msgstr "Mot de passe"
-
-#: js/user/EditDialog.js:836 js/user/GridPanel.js:181
-msgid "Email"
-msgstr "Email"
-
-#: js/user/EditDialog.js:842 js/user/GridPanel.js:182
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/EditDialog.js:874
-msgid "expired"
-msgstr "expiré"
-
-#: js/user/EditDialog.js:875
-msgid "blocked"
-msgstr "bloqué"
-
-#: js/user/EditDialog.js:882
-msgid "Invalid Status"
-msgstr "Statut invalide"
-
-#: js/user/EditDialog.js:883
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr "Le statut bloqué n'est possible que lorsqu'un utilisateur utilise un mauvais mot de passe. Il est impossible de l'utiliser ici."
-
-#: js/user/EditDialog.js:905 js/user/GridPanel.js:186
-msgid "Expires"
-msgstr "Expiration"
-
-#: js/user/EditDialog.js:957 js/user/GridPanel.js:183
-msgid "Last login at"
-msgstr "Dernier login à"
-
-#: js/user/EditDialog.js:959 js/user/EditDialog.js:963
-msgid "don't know"
-msgstr "je ne sais pas"
-
-#: js/user/EditDialog.js:961 js/user/GridPanel.js:184
-msgid "Last login from"
-msgstr "Dernier login depuis"
-
-#: js/user/EditDialog.js:965
-msgid "Password set"
-msgstr "Mot de passe défini"
-
-#: js/user/EditDialog.js:972
-msgid "User groups"
-msgstr "Groupes d'utilisateurs"
-
-#: js/user/EditDialog.js:978
-msgid "User roles"
-msgstr "Roles des utilisateurs"
-
-#: js/user/EditDialog.js:984
-msgid "Fileserver"
-msgstr "Serveur de fichier"
-
-#: js/user/EditDialog.js:990
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:999
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/GridPanel.js:56
-msgid "Enable Account"
-msgstr "Activer un compte"
-
-#: js/user/GridPanel.js:66
-msgid "Disable Account"
-msgstr "Désactiver un compte"
-
-#: js/user/GridPanel.js:76
-msgid "Reset Password"
-msgstr "Réinitialiser le mot de passe"
-
-#: js/user/GridPanel.js:177
-msgid "Display name"
-msgstr "Nom donné"
-
-#: js/user/GridPanel.js:185
-msgid "Password changed"
-msgstr "Mot de passe mis à jour."
-
-#: js/user/GridPanel.js:244
-msgid "Set new password"
-msgstr "Changer de mot de passe"
-
-#: js/user/GridPanel.js:244
-msgid "Please enter the new password:"
-msgstr "Veuillez saisir le nouveau mot de passe :"
-
-#: js/user/Users.js:72
-msgid "Users"
-msgstr "Utilisateurs"
-
-#: js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Utilisateur Samba"
-msgstr[1] "Utilisateurs Samba"
-
-#: js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Envoyer un courriel à l'utilisateur"
-msgstr[1] "Envoyer un courriel aux utilisateurs"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] "Champ personnalisé"
 msgstr[1] "Champs personnalisés"
+
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Erreurs"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
@@ -990,6 +430,10 @@ msgstr "Type d’enregistrement inconnu"
 #: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr "OK"
+
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:733
+msgid "Cancel"
+msgstr "Annuler"
 
 #: js/customfield/EditDialog.js:504
 msgid "Configure store"
@@ -1051,18 +495,573 @@ msgstr "Obligatoire"
 msgid "Custom field additional properties"
 msgstr "Propriétés additionnelles du champ personnalisé"
 
+#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Groupe"
+msgstr[1] "Groupes"
+
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
 msgstr "Ce champ personnalisé existe déjà. Choisissez un autre nom."
+
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Confirmer"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
 msgstr "Voulez-vous redémarrer l'application pour appliquer les champs personnalisés ?"
 
-#: Controller/Container.php:198
-msgid "Your container has been changed"
-msgstr "Votre composant a été modifié"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Veuillez patienter"
 
-#: Controller/Container.php:199
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Votre composant a été modifié par %1$s %2$s Note: %3$s"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Mise à jour des appartenances"
+
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
+#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:83
+msgid "Failed"
+msgstr "Échec"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Échec de la sauvegarde du groupe."
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Veuillez corriger les erreurs indiquées."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Nom du groupe"
+
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:294
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Description"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:914
+msgid "Visibility"
+msgstr "Visibilité"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Display in addressbook"
+msgstr "Afficher dans le carnet d'adresses"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Hide from addressbook"
+msgstr "Masquer dans le carnet d'adresses"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:934
+msgid "Saved in Addressbook"
+msgstr "Sauvegarder dans le carnet d'adresses"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Membres du groupe"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
+msgstr "Transfert de {0} en cours..."
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Ajouter un nouveau groupe"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Éditer le groupe \"{0}\""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Confirmez-vous la suppression des groupes sélectionnés?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Suppression de(s) groupe(s)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Une erreur est survenue lors de la suppression du groupe."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr "Ajouter un groupe"
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr "Modifier un groupe"
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr "Supprimer un groupe"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Affichage des groupes {0} - {1} de {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Pas de groupe à afficher"
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Le rôle n'a pas pu être sauvegardé."
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Suppression du rôle..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Une erreur est survenue lors de la suppression du rôle."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Droits"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Membres"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Nom du rôle"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "Rôle"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Ajouter un nouveau rôle"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "Éditer le rôle \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Confirmez vous la suppression des rôles sélectionnés ?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Suppression de(s) rôle(s)..."
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr "Ajouter un role"
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr "Modifier un role"
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr "Supprimer un role"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Affichage des rôles {0} - {1} de {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Pas de rôle à afficher"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "Nom d'ordinateur"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Ordinateur"
+msgstr[1] "Ordinateurs"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Mise à jour du marqueur"
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "Échec de sauvegarde."
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr "Contextes autorisés"
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr "Contexte"
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr "Droits"
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "Visualiser"
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "Utiliser"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "Nom"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr "Marqueur"
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "Ajouter"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "Éditer le marqueur \"{0}\""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Confirmez la suppression des marqueurs sélectionnés ?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Suppression des marqueurs..."
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr "Ajouter un tag"
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr "Modifier un tag"
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr "Supprimer un tag"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Affichage des marqueurs {0} - {1} de {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Pas de marqueur à afficher"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr "Usage:&#160;"
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domaine non autorisé. Vérifierla configuration SMTP"
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:730
+msgid "Passwords do not match!"
+msgstr "Les mots de passes ne correspondent pas !"
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr "Les mot s de passe correspondent"
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:852
+msgid "Primary group"
+msgstr "Groupe principal"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Répertoire personnel"
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Login Shell"
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Lecteur personnel"
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Heure de connexion"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:963
+#: js/user/EditDialog.js:967
+msgid "never logged in"
+msgstr "jamais connecté"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Chemin du Home"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Heure de déconnexion"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "jamais déconnecté"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Chemin du profil"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Mot de passe défini le"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:911
+#: js/user/EditDialog.js:971
+msgid "never"
+msgstr "jamais"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Script d'ouverture de session"
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "le mot de passe peut être mis à jour"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "non défini"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "le mot de passe doit être mis à jour"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Durée de bannissement"
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr "IMAP quota (MB)"
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Quota"
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr "Pas de quota"
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "Taille actuelle de la boite mail"
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr "Quota pour Sieve (Mo)"
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr "Taille actuelle de Sieve"
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:946
+msgid "Information"
+msgstr "Information"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Dernier login à"
+
+#: js/user/EditDialog.js:615
+msgid "Domain not allowed"
+msgstr "Domaine non autorisé"
+
+#: js/user/EditDialog.js:616
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr "Le domaine {0} de l'alias {1} que vous avez configuré n'est pas autorisé par la configuration"
+
+#: js/user/EditDialog.js:625
+msgid "Email Alias"
+msgstr "Alias email"
+
+#: js/user/EditDialog.js:631
+msgid "Add an alias address..."
+msgstr "Ajouter un alias..."
+
+#: js/user/EditDialog.js:649
+msgid "Forwarding to self"
+msgstr "Me transférer"
+
+#: js/user/EditDialog.js:650
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr "Impossible de transférer vers une adresse qui est identique à une des votres"
+
+#: js/user/EditDialog.js:659
+msgid "Email Forward"
+msgstr "Transfert de courriels"
+
+#: js/user/EditDialog.js:665
+msgid "Add a forward address..."
+msgstr "Ajouter une adresse de transfert..."
+
+#: js/user/EditDialog.js:678
+msgid "Forward Only"
+msgstr "Transfert seulement"
+
+#: js/user/EditDialog.js:697
+msgid "Password confirmation"
+msgstr "Confirmation du mot de passe"
+
+#: js/user/EditDialog.js:714
+msgid "Repeat password"
+msgstr "Ressaisir le mot de passe"
+
+#: js/user/EditDialog.js:740
+msgid "Ok"
+msgstr "Ok"
+
+#: js/user/EditDialog.js:775
+msgid "Account"
+msgstr "Compte"
+
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Prénom"
+
+#: js/user/EditDialog.js:800 js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Nom"
+
+#: js/user/EditDialog.js:805 js/user/EditDialog.js:847
+#: js/user/GridPanel.js:178
+msgid "Login name"
+msgstr "Login"
+
+#: js/user/EditDialog.js:810
+msgid "Password"
+msgstr "Mot de passe"
+
+#: js/user/EditDialog.js:840 js/user/GridPanel.js:181
+msgid "Email"
+msgstr "Email"
+
+#: js/user/EditDialog.js:846 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/EditDialog.js:878
+msgid "expired"
+msgstr "expiré"
+
+#: js/user/EditDialog.js:879
+msgid "blocked"
+msgstr "bloqué"
+
+#: js/user/EditDialog.js:886
+msgid "Invalid Status"
+msgstr "Statut invalide"
+
+#: js/user/EditDialog.js:887
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr "Le statut bloqué n'est possible que lorsqu'un utilisateur utilise un mauvais mot de passe. Il est impossible de l'utiliser ici."
+
+#: js/user/EditDialog.js:909 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Expiration"
+
+#: js/user/EditDialog.js:961 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Dernier login à"
+
+#: js/user/EditDialog.js:963 js/user/EditDialog.js:967
+msgid "don't know"
+msgstr "je ne sais pas"
+
+#: js/user/EditDialog.js:965 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Dernier login depuis"
+
+#: js/user/EditDialog.js:969
+msgid "Password set"
+msgstr "Mot de passe défini"
+
+#: js/user/EditDialog.js:976
+msgid "User groups"
+msgstr "Groupes d'utilisateurs"
+
+#: js/user/EditDialog.js:982
+msgid "User roles"
+msgstr "Roles des utilisateurs"
+
+#: js/user/EditDialog.js:988
+msgid "Fileserver"
+msgstr "Serveur de fichier"
+
+#: js/user/EditDialog.js:994
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1003
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "Enable Account"
+msgstr "Activer un compte"
+
+#: js/user/GridPanel.js:66
+msgid "Disable Account"
+msgstr "Désactiver un compte"
+
+#: js/user/GridPanel.js:76
+msgid "Reset Password"
+msgstr "Réinitialiser le mot de passe"
+
+#: js/user/GridPanel.js:177
+msgid "Display name"
+msgstr "Nom donné"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Mot de passe mis à jour."
+
+#: js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Changer de mot de passe"
+
+#: js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Veuillez saisir le nouveau mot de passe :"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Utilisateur Samba"
+msgstr[1] "Utilisateurs Samba"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Envoyer un courriel à l'utilisateur"
+msgstr[1] "Envoyer un courriel aux utilisateurs"

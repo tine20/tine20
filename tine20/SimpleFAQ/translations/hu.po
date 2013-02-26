@@ -42,17 +42,101 @@ msgstr "Belső"
 msgid "Public"
 msgstr "Publikus"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Minden GYIK a GYIK listámból"
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
+#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "GYIK állapot"
+msgstr[1] "GYIK állapot"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Utoljára álltalam módosított"
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
+#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "GYIK típus"
+msgstr[1] "GYIK típusok"
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Minden GYIK amit utoljára én módosítottam"
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Alapérelmezettek"
+
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
+#: js/FaqGridPanel.js:120
+msgid "Question"
+msgstr "Kérdés"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Írj be egy kérdést..."
+
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
+#: js/FaqGridPanel.js:127
+msgid "Answer"
+msgstr "Válasz"
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Írj be egy választ..."
+
+#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr "Típus"
+
+#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr "Állapot"
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "GYIK információk"
+
+#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
+msgid "Tags"
+msgstr "Címkék"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Létrehozás ideje"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Készítette"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Nincs még válasz"
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "GYIK id"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Új GYIK állapot hozzáadása..."
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Új GYIK típus hozzáadása..."
+
+#: js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "GYIK"
+msgstr[1] "GYIK"
+
+#: js/Model.js:37
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "GYIK lista"
+msgstr[1] "GYIK listák"
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr "GYIK listák"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Gyors keresés"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -74,98 +158,14 @@ msgstr "Alapértelmezett GYIK lista"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Az alapértelmezett GYIK lista új GYIK létrehozására."
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
-#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "GYIK állapot"
-msgstr[1] "GYIK állapot"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Minden GYIK a GYIK listámból"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "GYIK típus"
-msgstr[1] "GYIK típusok"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Utoljára álltalam módosított"
 
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Alapérelmezettek"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Új GYIK típus hozzáadása..."
-
-#: js/SimpleFAQ.js:19 js/Model.js:33
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "GYIK"
-msgstr[1] "GYIK"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "GYIK id"
-
-#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Címkék"
-
-#: js/FaqGridPanel.js:108 js/FaqEditDialog.js:136
-msgid "Status"
-msgstr "Állapot"
-
-#: js/FaqGridPanel.js:114 js/FaqEditDialog.js:124
-msgid "Type"
-msgstr "Típus"
-
-#: js/FaqGridPanel.js:120 js/FaqEditDialog.js:108
-#: js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Kérdés"
-
-#: js/FaqGridPanel.js:127 js/FaqEditDialog.js:115
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Válasz"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Új GYIK állapot hozzáadása..."
-
-#: js/Model.js:37
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "GYIK lista"
-msgstr[1] "GYIK listák"
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr "GYIK listák"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Írj be egy kérdést..."
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Írj be egy választ..."
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "GYIK információk"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Létrehozás ideje"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Készítette"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Nincs még válasz"
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Minden GYIK amit utoljára én módosítottam"

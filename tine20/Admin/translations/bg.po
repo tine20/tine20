@@ -127,326 +127,29 @@ msgstr ""
 msgid "Default IMAP user settings"
 msgstr ""
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
+#: Controller/Container.php:198
+msgid "Your container has been changed"
 msgstr ""
 
-#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Потребител"
-msgstr[1] "Потребители"
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Групи"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Правомощия за достъп"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Комрютри"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Апликации"
-
-#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Общи категории"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr ""
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr ""
-
-#: js/Admin.js:137
-msgid "Server Information"
-msgstr ""
-
-#: js/Admin.js:172
-msgid "Admin"
-msgstr "Администратор"
-
-#: js/Admin.js:254
-msgid "Refresh"
-msgstr ""
-
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
-msgid "Computer Name"
-msgstr "Име на компютьра"
-
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
-#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
-#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
-msgid "Description"
-msgstr "Описание"
-
-#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
-#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
-msgid "ID"
-msgstr "ID (идентификационен номер)"
-
-#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
-#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
-#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
-#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
-#: js/customfield/GridPanel.js:72
-msgid "Name"
-msgstr "Име"
-
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-#: js/customfield/GridPanel.js:131
-msgid "Confirm"
-msgstr "Потвърждение"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Наистина ли желаете да изтриете селектираните категории?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Изтрива категория(-и)..."
-
-#: js/Tags.js:97
-msgid "Add Tag"
-msgstr ""
-
-#: js/Tags.js:105
-msgid "Edit Tag"
-msgstr ""
-
-#: js/Tags.js:113
-msgid "Delete Tag"
-msgstr ""
-
-#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
-msgid "Search:"
-msgstr "Търси:"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Намерени категории {0} - {1} от {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Няма намерени категории"
-
-#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
-msgid "Color"
-msgstr "Цвят"
-
-#: js/Tags.js:223
-msgid "Usage:&#160;"
-msgstr ""
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Наистина ли желаете да изтриете селектираните роли?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Изтрива роля(-и)."
-
-#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
-#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-msgid "Failed"
-msgstr "Неуспех"
-
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "Настъпила е грешка при опит за изтриване на ролята."
-
-#: js/Roles.js:102
-msgid "Add Role"
-msgstr ""
-
-#: js/Roles.js:110
-msgid "Edit Role"
-msgstr ""
-
-#: js/Roles.js:118
-msgid "Delete Role"
-msgstr ""
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Показва роли {0} - {1} от {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Няма намерени роли"
-
-#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Моля изчакайте"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Актуализира членство"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Групата не можа да бъде съхранена"
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-msgid "Errors"
-msgstr "Грешки"
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-msgid "Please fix the errors noted."
-msgstr "Моля коригирайте грешките."
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Име на група"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
-msgid "Visibility"
-msgstr ""
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Display in addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Hide from addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
-msgid "Saved in Addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Членове на група"
-
-#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Добави нова група"
-
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Редактира група \"{0}\""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr ""
-
-#: js/Applications.js:83
-msgid "Enable Application"
-msgstr ""
-
-#: js/Applications.js:90
-msgid "Disable Application"
-msgstr ""
-
-#: js/Applications.js:97
-msgid "Settings"
-msgstr ""
-
-#: js/Applications.js:146
-msgid "enable application"
-msgstr "активира арликация"
-
-#: js/Applications.js:147
-msgid "disable application"
-msgstr "деактивира арликация"
-
-#: js/Applications.js:148
-msgid "settings"
-msgstr "настройки"
-
-#: js/Applications.js:228 js/user/EditDialog.js:873
-msgid "disabled"
-msgstr "деактивиран"
-
-#: js/Applications.js:231 js/user/EditDialog.js:872
-msgid "enabled"
-msgstr "активиран"
-
-#: js/Applications.js:235
-msgid "unknown status ({0})"
-msgstr "непознат статус ({0})"
-
-#: js/Applications.js:269
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Намерени апликации {0} - {1} of {2}"
-
-#: js/Applications.js:270
-msgid "No applications to display"
-msgstr "Няма намерени апликации"
-
-#: js/Applications.js:279 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Последователност"
-
-#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
-msgid "Status"
-msgstr "Статус"
-
-#: js/Applications.js:282
-msgid "Version"
-msgstr "Версия"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Наистина ли желаете да изтриете селектираните групи?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Изтрива група(и)..."
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Настъпила е грешка при опит за изтриване на групата."
-
-#: js/Groups.js:104
-msgid "Add Group"
-msgstr ""
-
-#: js/Groups.js:112
-msgid "Edit Group"
-msgstr ""
-
-#: js/Groups.js:120
-msgid "Delete Group"
-msgstr ""
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Намерени групи {0} - {1} от {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Няма намерени групи"
-
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
 msgstr "IP Адрес"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Потребител"
+msgstr[1] "Потребители"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -467,6 +170,13 @@ msgstr "ID на сесия"
 #: js/AccessLog.js:130
 msgid "Login Name"
 msgstr "Потребителско име"
+
+#: js/AccessLog.js:131 js/Applications.js:280 js/container/EditDialog.js:124
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Име"
 
 #: js/AccessLog.js:135
 msgid "Result"
@@ -504,94 +214,126 @@ msgstr "неуспех"
 msgid "success"
 msgstr "успех"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Актуализира таг..."
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Групи"
 
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Неуспешно запаметяване на категория."
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Правомощия за достъп"
 
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Позволен Контекст"
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Комрютри"
 
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Контекст"
+#: js/Admin.js:74 js/Models.js:127
+msgid "Applications"
+msgstr "Апликации"
 
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Права на конто"
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Общи категории"
 
-#: js/TagEditDialog.js:197
-msgid "View"
-msgstr "Преглед"
-
-#: js/TagEditDialog.js:202
-msgid "Use"
-msgstr "Употреба"
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Име на таг"
-
-#: js/TagEditDialog.js:290
-msgid "Tag"
+#: js/Admin.js:113
+msgid "Containers"
 msgstr ""
 
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Добавя нов таг"
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Обработи таг \"{0}\""
-
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Неуспешно запаметяване на роля."
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Изтрива роля..."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Права"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Членове"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Име на роля"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
+#: js/Admin.js:125
+msgid "Customfields"
 msgstr ""
 
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Добави нова роля"
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr ""
 
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "Редактира роля \"{0}\""
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Администратор"
 
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Комрютър"
-msgstr[1] "Комрютъра"
+#: js/Admin.js:256
+msgid "Refresh"
+msgstr ""
 
-#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
-#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:136
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
-#: js/Models.js:128
+#: js/Models.js:127
 msgid "Application"
 msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr ""
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr ""
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr ""
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr ""
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "активира арликация"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "деактивира арликация"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "настройки"
+
+#: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Търси:"
+
+#: js/Applications.js:228 js/user/EditDialog.js:877
+msgid "disabled"
+msgstr "деактивиран"
+
+#: js/Applications.js:231 js/user/EditDialog.js:876
+msgid "enabled"
+msgstr "активиран"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "непознат статус ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Намерени апликации {0} - {1} of {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Няма намерени апликации"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Последователност"
+
+#: js/Applications.js:281 js/user/EditDialog.js:869 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Статус"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Версия"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -614,336 +356,34 @@ msgstr ""
 msgid "shared"
 msgstr ""
 
+#: js/container/EditDialog.js:171 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Цвят"
+
 #: js/container/EditDialog.js:176
 msgid "Note for Owner"
 msgstr ""
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID (идентификационен номер)"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
 msgstr ""
-
-#: js/user/EditDialog.js:187
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:726
-msgid "Passwords do not match!"
-msgstr ""
-
-#: js/user/EditDialog.js:240
-msgid "Passwords match!"
-msgstr ""
-
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:848
-msgid "Primary group"
-msgstr "Основна група"
-
-#: js/user/EditDialog.js:363
-msgid "Unix"
-msgstr ""
-
-#: js/user/EditDialog.js:377
-msgid "Home Directory"
-msgstr "Home-Директория"
-
-#: js/user/EditDialog.js:381
-msgid "Login Shell"
-msgstr "Login Shell"
-
-#: js/user/EditDialog.js:387
-msgid "Windows"
-msgstr ""
-
-#: js/user/EditDialog.js:401
-msgid "Home Drive"
-msgstr "Home-Твърд диск"
-
-#: js/user/EditDialog.js:406
-msgid "Logon Time"
-msgstr "Дата и час на влизане"
-
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:959
-#: js/user/EditDialog.js:963
-msgid "never logged in"
-msgstr "До този момент няма регистрирано влизане."
-
-#: js/user/EditDialog.js:411
-msgid "Home Path"
-msgstr "Home-Адрес"
-
-#: js/user/EditDialog.js:416
-msgid "Logoff Time"
-msgstr "Дата и час на излизане"
-
-#: js/user/EditDialog.js:418
-msgid "never logged off"
-msgstr "До този момент няма регистрирано излизане."
-
-#: js/user/EditDialog.js:421
-msgid "Profile Path"
-msgstr "Адрес на профила"
-
-#: js/user/EditDialog.js:426
-msgid "Password Last Set"
-msgstr "Последно зададена парола"
-
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:907
-#: js/user/EditDialog.js:967
-msgid "never"
-msgstr "никога"
-
-#: js/user/EditDialog.js:431
-msgid "Logon Script"
-msgstr "Скрирт за влизане"
-
-#: js/user/EditDialog.js:436
-msgid "Password Can Change"
-msgstr "Паролата може де бъде сменена"
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
-msgid "not set"
-msgstr "не е създаден"
-
-#: js/user/EditDialog.js:441
-msgid "Password Must Change"
-msgstr "Паролата трябва де бъде сменена"
-
-#: js/user/EditDialog.js:446
-msgid "Kick Off Time"
-msgstr "Време на излизане"
-
-#: js/user/EditDialog.js:466
-msgid "IMAP Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
-msgid "Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
-msgid "no quota set"
-msgstr ""
-
-#: js/user/EditDialog.js:496
-msgid "Current Mailbox size"
-msgstr ""
-
-#: js/user/EditDialog.js:504
-msgid "Sieve Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:534
-msgid "Current Sieve size"
-msgstr ""
-
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:942
-msgid "Information"
-msgstr ""
-
-#: js/user/EditDialog.js:557
-msgid "Last Login"
-msgstr ""
-
-#: js/user/EditDialog.js:611
-msgid "Domain not allowed"
-msgstr ""
-
-#: js/user/EditDialog.js:612
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr ""
-
-#: js/user/EditDialog.js:621
-msgid "Email Alias"
-msgstr ""
-
-#: js/user/EditDialog.js:627
-msgid "Add an alias address..."
-msgstr ""
-
-#: js/user/EditDialog.js:645
-msgid "Forwarding to self"
-msgstr ""
-
-#: js/user/EditDialog.js:646
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr ""
-
-#: js/user/EditDialog.js:655
-msgid "Email Forward"
-msgstr ""
-
-#: js/user/EditDialog.js:661
-msgid "Add a forward address..."
-msgstr ""
-
-#: js/user/EditDialog.js:674
-msgid "Forward Only"
-msgstr ""
-
-#: js/user/EditDialog.js:693
-msgid "Password confirmation"
-msgstr ""
-
-#: js/user/EditDialog.js:710
-msgid "Repeat password"
-msgstr ""
-
-#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr ""
-
-#: js/user/EditDialog.js:736
-msgid "Ok"
-msgstr ""
-
-#: js/user/EditDialog.js:771
-msgid "Account"
-msgstr "Потребител"
-
-#: js/user/EditDialog.js:786 js/user/GridPanel.js:180
-msgid "First name"
-msgstr "Име"
-
-#: js/user/EditDialog.js:796 js/user/GridPanel.js:179
-msgid "Last name"
-msgstr "Фамилия"
-
-#: js/user/EditDialog.js:801 js/user/EditDialog.js:843
-#: js/user/GridPanel.js:178
-msgid "Login name"
-msgstr ""
-
-#: js/user/EditDialog.js:806
-msgid "Password"
-msgstr "Парола"
-
-#: js/user/EditDialog.js:836 js/user/GridPanel.js:181
-msgid "Email"
-msgstr "Имейл"
-
-#: js/user/EditDialog.js:842 js/user/GridPanel.js:182
-msgid "OpenID"
-msgstr ""
-
-#: js/user/EditDialog.js:874
-msgid "expired"
-msgstr ""
-
-#: js/user/EditDialog.js:875
-msgid "blocked"
-msgstr ""
-
-#: js/user/EditDialog.js:882
-msgid "Invalid Status"
-msgstr ""
-
-#: js/user/EditDialog.js:883
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr ""
-
-#: js/user/EditDialog.js:905 js/user/GridPanel.js:186
-msgid "Expires"
-msgstr "Краен срок"
-
-#: js/user/EditDialog.js:957 js/user/GridPanel.js:183
-msgid "Last login at"
-msgstr "Последно регистрирано влизане"
-
-#: js/user/EditDialog.js:959 js/user/EditDialog.js:963
-msgid "don't know"
-msgstr "неизвестен"
-
-#: js/user/EditDialog.js:961 js/user/GridPanel.js:184
-msgid "Last login from"
-msgstr "Последното регистрирано влизане е от"
-
-#: js/user/EditDialog.js:965
-msgid "Password set"
-msgstr "Задава парола"
-
-#: js/user/EditDialog.js:972
-msgid "User groups"
-msgstr ""
-
-#: js/user/EditDialog.js:978
-msgid "User roles"
-msgstr ""
-
-#: js/user/EditDialog.js:984
-msgid "Fileserver"
-msgstr "Файлов сървър"
-
-#: js/user/EditDialog.js:990
-msgid "IMAP"
-msgstr ""
-
-#: js/user/EditDialog.js:999
-msgid "SMTP"
-msgstr ""
-
-#: js/user/GridPanel.js:56
-msgid "Enable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:66
-msgid "Disable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:76
-msgid "Reset Password"
-msgstr ""
-
-#: js/user/GridPanel.js:177
-msgid "Display name"
-msgstr ""
-
-#: js/user/GridPanel.js:185
-msgid "Password changed"
-msgstr "Паролата е сменена"
-
-#: js/user/GridPanel.js:244
-msgid "Set new password"
-msgstr "Създаване на нова рарола"
-
-#: js/user/GridPanel.js:244
-msgid "Please enter the new password:"
-msgstr "Моля вкарайте новата парола:"
-
-#: js/user/Users.js:72
-msgid "Users"
-msgstr ""
-
-#: js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba Потребител"
-msgstr[1] "Samba Потребители"
-
-#: js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Грешки"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
@@ -987,6 +427,10 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:465
 msgid "OK"
+msgstr ""
+
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:733
+msgid "Cancel"
 msgstr ""
 
 #: js/customfield/EditDialog.js:504
@@ -1049,18 +493,573 @@ msgstr ""
 msgid "Custom field additional properties"
 msgstr ""
 
+#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
+
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Потвърждение"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
 msgstr ""
 
-#: Controller/Container.php:198
-msgid "Your container has been changed"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Моля изчакайте"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Актуализира членство"
+
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
+#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:83
+msgid "Failed"
+msgstr "Неуспех"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Групата не можа да бъде съхранена"
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Моля коригирайте грешките."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Име на група"
+
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:294
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Описание"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:914
+msgid "Visibility"
 msgstr ""
 
-#: Controller/Container.php:199
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Display in addressbook"
 msgstr ""
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Hide from addressbook"
+msgstr ""
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:934
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Членове на група"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Добави нова група"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Редактира група \"{0}\""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Наистина ли желаете да изтриете селектираните групи?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Изтрива група(и)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Настъпила е грешка при опит за изтриване на групата."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr ""
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr ""
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr ""
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Намерени групи {0} - {1} от {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Няма намерени групи"
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Неуспешно запаметяване на роля."
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Изтрива роля..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Настъпила е грешка при опит за изтриване на ролята."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Права"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Членове"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Име на роля"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Добави нова роля"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "Редактира роля \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Наистина ли желаете да изтриете селектираните роли?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Изтрива роля(-и)."
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr ""
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr ""
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr ""
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Показва роли {0} - {1} от {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Няма намерени роли"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "Име на компютьра"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Комрютър"
+msgstr[1] "Комрютъра"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Актуализира таг..."
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "Неуспешно запаметяване на категория."
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr "Позволен Контекст"
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr "Контекст"
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr "Права на конто"
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "Преглед"
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "Употреба"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "Име на таг"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "Добавя нов таг"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "Обработи таг \"{0}\""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Наистина ли желаете да изтриете селектираните категории?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Изтрива категория(-и)..."
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr ""
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr ""
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr ""
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Намерени категории {0} - {1} от {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Няма намерени категории"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:730
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr ""
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:852
+msgid "Primary group"
+msgstr "Основна група"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr ""
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Home-Директория"
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Login Shell"
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr ""
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Home-Твърд диск"
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Дата и час на влизане"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:963
+#: js/user/EditDialog.js:967
+msgid "never logged in"
+msgstr "До този момент няма регистрирано влизане."
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Home-Адрес"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Дата и час на излизане"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "До този момент няма регистрирано излизане."
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Адрес на профила"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Последно зададена парола"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:911
+#: js/user/EditDialog.js:971
+msgid "never"
+msgstr "никога"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Скрирт за влизане"
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "Паролата може де бъде сменена"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "не е създаден"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "Паролата трябва де бъде сменена"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Време на излизане"
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr ""
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr ""
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:946
+msgid "Information"
+msgstr ""
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr ""
+
+#: js/user/EditDialog.js:615
+msgid "Domain not allowed"
+msgstr ""
+
+#: js/user/EditDialog.js:616
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr ""
+
+#: js/user/EditDialog.js:625
+msgid "Email Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:631
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/user/EditDialog.js:649
+msgid "Forwarding to self"
+msgstr ""
+
+#: js/user/EditDialog.js:650
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:659
+msgid "Email Forward"
+msgstr ""
+
+#: js/user/EditDialog.js:665
+msgid "Add a forward address..."
+msgstr ""
+
+#: js/user/EditDialog.js:678
+msgid "Forward Only"
+msgstr ""
+
+#: js/user/EditDialog.js:697
+msgid "Password confirmation"
+msgstr ""
+
+#: js/user/EditDialog.js:714
+msgid "Repeat password"
+msgstr ""
+
+#: js/user/EditDialog.js:740
+msgid "Ok"
+msgstr ""
+
+#: js/user/EditDialog.js:775
+msgid "Account"
+msgstr "Потребител"
+
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Име"
+
+#: js/user/EditDialog.js:800 js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Фамилия"
+
+#: js/user/EditDialog.js:805 js/user/EditDialog.js:847
+#: js/user/GridPanel.js:178
+msgid "Login name"
+msgstr ""
+
+#: js/user/EditDialog.js:810
+msgid "Password"
+msgstr "Парола"
+
+#: js/user/EditDialog.js:840 js/user/GridPanel.js:181
+msgid "Email"
+msgstr "Имейл"
+
+#: js/user/EditDialog.js:846 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr ""
+
+#: js/user/EditDialog.js:878
+msgid "expired"
+msgstr ""
+
+#: js/user/EditDialog.js:879
+msgid "blocked"
+msgstr ""
+
+#: js/user/EditDialog.js:886
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:887
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:909 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Краен срок"
+
+#: js/user/EditDialog.js:961 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Последно регистрирано влизане"
+
+#: js/user/EditDialog.js:963 js/user/EditDialog.js:967
+msgid "don't know"
+msgstr "неизвестен"
+
+#: js/user/EditDialog.js:965 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Последното регистрирано влизане е от"
+
+#: js/user/EditDialog.js:969
+msgid "Password set"
+msgstr "Задава парола"
+
+#: js/user/EditDialog.js:976
+msgid "User groups"
+msgstr ""
+
+#: js/user/EditDialog.js:982
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:988
+msgid "Fileserver"
+msgstr "Файлов сървър"
+
+#: js/user/EditDialog.js:994
+msgid "IMAP"
+msgstr ""
+
+#: js/user/EditDialog.js:1003
+msgid "SMTP"
+msgstr ""
+
+#: js/user/GridPanel.js:56
+msgid "Enable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:66
+msgid "Disable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:76
+msgid "Reset Password"
+msgstr ""
+
+#: js/user/GridPanel.js:177
+msgid "Display name"
+msgstr ""
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Паролата е сменена"
+
+#: js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Създаване на нова рарола"
+
+#: js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Моля вкарайте новата парола:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr ""
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba Потребител"
+msgstr[1] "Samba Потребители"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] ""
+msgstr[1] ""

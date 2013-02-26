@@ -25,119 +25,30 @@ msgstr "Ortak Dosyaları Yönet"
 msgid "Create new shared folders"
 msgstr "Ortak Dosya Oluştur"
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Dosyalarım"
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Ortak Dosyalar"
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Dığer Kullanıcıların Dosyaları"
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's Dosyaları"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "Klasör Yolu"
-
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
-msgid "Save locally"
-msgstr ""
-
-#: js/NodeEditDialog.js:94 js/NodeEditDialog.js:107
-msgid "Node"
-msgstr "Node"
-
-#: js/NodeEditDialog.js:113 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "İsim"
-
-#: js/NodeEditDialog.js:120 js/Model.js:531
-msgid "Type"
-msgstr "Tür"
-
-#: js/NodeEditDialog.js:128 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Oluşturan"
-
-#: js/NodeEditDialog.js:131 js/Model.js:533 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Oluşturma Vakti"
-
-#: js/NodeEditDialog.js:140
-msgid "Modified By"
-msgstr "Düzenlemeyi Yapan"
-
-#: js/NodeEditDialog.js:143
-msgid "Last Modified"
-msgstr "Son Düzenleme"
-
-#: js/NodeEditDialog.js:166
-msgid "Description"
-msgstr "Açıklama"
-
-#: js/NodeEditDialog.js:180
-msgid "Enter description"
-msgstr "Detaylı Bilgi Gir"
-
-#: js/NodeTreePanel.js:662 js/NodeTreePanel.js:772 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr "Upload Başarısız idi"
-
-#: js/NodeTreePanel.js:663 js/NodeGridPanel.js:652
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Dosya Karşıya Yüklenemedi. Dosya Boyutu Çok Büyük Olabilir. Lütfen Sistem Yöneticisi ile İrtibata Geçiniz. Maximum Upload Boyutu:"
-
-#: js/NodeTreePanel.js:773 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr "Bu Dosyaya Yüklemek Yasaktır!"
-
-#: js/GridContextMenu.js:34
-msgid "Please enter the new name of the {0}:"
-msgstr "{0} İçin Yeni İsim Giriniz:"
-
-#: js/GridContextMenu.js:40
-msgid "Not renamed {0}"
-msgstr "{0} Yeniden Adlandırılmamıştır"
-
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
-msgid "You have to supply a {0} name!"
-msgstr ""
-
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
-msgid "Do you really want to delete the following files?"
-msgstr "Doyaları Silmek İstediğinizden Emin Misiniz?"
-
-#: js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "one: Dosya\n\nother: Dosyalar"
-
-#: js/Model.js:44 js/NodeGridPanel.js:155
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "one: Dosya\n\nother: Dosyalar"
-
-#: js/Model.js:282 js/Model.js:298
-msgid "Copying data .. {0}"
-msgstr "Dosyalar Kopalanıyor .. {0}"
-
-#: js/Model.js:285 js/Model.js:300
-msgid "Moving data .. {0}"
-msgstr "Dosyalar Taşınılıyor .. {0}"
-
-#: js/Model.js:304
-msgid "Please wait"
-msgstr "Lütfen Bekleyiniz"
-
-#: js/Model.js:530
-msgid "Quick search"
-msgstr "Hızlı Arama"
-
-#: js/Model.js:532 js/NodeGridPanel.js:147
-msgid "Contenttype"
-msgstr "Tür"
-
 #: js/Filemanager.js:26
 msgid "Filemanager"
 msgstr "Dosya Töneticisi"
+
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+msgid "Save locally"
+msgstr ""
 
 #: js/Filemanager.js:81
 msgid "Service Unavailable"
@@ -164,6 +75,88 @@ msgstr "Dosyayı Oluştururken Bir Hata Ortaya Çıktı!"
 #: js/Filemanager.js:138
 msgid "Item with this name already exists!"
 msgstr "Girdiğiniz İsim İle Aynı İsime Sahip Olan Bir Dosya Aynı Yerde Bulunmaktadır"
+
+#: js/GridContextMenu.js:34
+msgid "Please enter the new name of the {0}:"
+msgstr "{0} İçin Yeni İsim Giriniz:"
+
+#: js/GridContextMenu.js:40
+msgid "Not renamed {0}"
+msgstr "{0} Yeniden Adlandırılmamıştır"
+
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
+msgid "Do you really want to delete the following files?"
+msgstr "Doyaları Silmek İstediğinizden Emin Misiniz?"
+
+#: js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "one: Dosya\n\nother: Dosyalar"
+
+#: js/Model.js:43 js/NodeGridPanel.js:155
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "one: Dosya\n\nother: Dosyalar"
+
+#: js/Model.js:281 js/Model.js:297
+msgid "Copying data .. {0}"
+msgstr "Dosyalar Kopalanıyor .. {0}"
+
+#: js/Model.js:284 js/Model.js:299
+msgid "Moving data .. {0}"
+msgstr "Dosyalar Taşınılıyor .. {0}"
+
+#: js/Model.js:303
+msgid "Please wait"
+msgstr "Lütfen Bekleyiniz"
+
+#: js/Model.js:529
+msgid "Quick search"
+msgstr "Hızlı Arama"
+
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr "Tür"
+
+#: js/Model.js:531 js/NodeGridPanel.js:147
+msgid "Contenttype"
+msgstr "Tür"
+
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Oluşturma Vakti"
+
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Node"
+
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "İsim"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Oluşturan"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Düzenlemeyi Yapan"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Son Düzenleme"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Açıklama"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Detaylı Bilgi Gir"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -221,14 +214,21 @@ msgstr "Yeni Dosyanın İsmini Giriniz"
 msgid "No {0} added"
 msgstr "{0} Eklenmemiştir"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Dosyalarım"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
+#: js/NodeTreePanel.js:776
+msgid "Upload Failed"
+msgstr "Upload Başarısız idi"
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Ortak Dosyalar"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Dosya Karşıya Yüklenemedi. Dosya Boyutu Çok Büyük Olabilir. Lütfen Sistem Yöneticisi ile İrtibata Geçiniz. Maximum Upload Boyutu:"
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Dığer Kullanıcıların Dosyaları"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
+msgid "Putting files in this folder is not allowed!"
+msgstr "Bu Dosyaya Yüklemek Yasaktır!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "Klasör Yolu"

@@ -18,14 +18,39 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Telefon azarlarını düzelt"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Kişiyi ara"
 
-#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "İş"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Ev"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Cep"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Özel cep"
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "one: Telefon\n\nother: Telefonlar"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "one: Telefon listesi\n\nother: Telefon listeleri"
+
+#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
+msgid "Edit phone settings"
+msgstr "Telefon azarlarını düzelt"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -130,28 +155,3 @@ msgstr "Çalıyor"
 #: js/Phone.js:712
 msgid "Call ID"
 msgstr "Arama-ID"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "one: Telefon listesi\n\nother: Telefon listeleri"
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Kişiyi ara"
-
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "İş"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Ev"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Cep"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Özel cep"

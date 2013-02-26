@@ -65,30 +65,44 @@ msgstr "Studenski prefiks prijave"
 msgid "Samba user settings"
 msgstr "Samba korisničke postavke"
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Tečajevi"
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Tečaj"
+msgstr[1] "Tečajevi"
+msgstr[2] "Tečajeva"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Svi tečajevi"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Učitelj"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "uključen"
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Račun učitelja"
 
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "isključen"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Moji tečajevi"
 
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtriran"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Ime"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Zadani favorit koji se pokreče za nastavu "
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Prezime"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Dodaj novog člana tečaja"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Greške"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Molimo popraviti uočene pogreške."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -97,13 +111,6 @@ msgstr "Uvoz članova tečaja"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Dodaj novog člana"
-
-#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Tečaj"
-msgstr[1] "Tečajevi"
-msgstr[2] "Tečajeva"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -136,26 +143,6 @@ msgstr "nepoznat"
 #: js/CourseEditDialog.js:305
 msgid "Reset Password"
 msgstr "Resetirati lozinku"
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Ime"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Prezime"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Dodaj novog člana tečaja"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Greške"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Molimo popraviti uočene pogreške."
 
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
@@ -191,14 +178,27 @@ msgstr[0] "Vrsta tečaja"
 msgstr[1] "Vrste tečajeva"
 msgstr[2] "Vrste tečajeva"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Učitelj"
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Svi tečajevi"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Račun učitelja"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Zadani favorit koji se pokreče za nastavu "
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Moji tečajevi"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "uključen"
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "isključen"
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtriran"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Tečajevi"

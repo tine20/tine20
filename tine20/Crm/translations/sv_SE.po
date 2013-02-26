@@ -18,119 +18,527 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:106
+#: Acl/Rights.php:113
 msgid "manage leads"
 msgstr "hantera leads"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:114
 msgid "add, edit and delete leads"
 msgstr "lägg till, redigera och ta bort leads"
 
-#: Acl/Rights.php:110
+#: Acl/Rights.php:117
 msgid "manage shared lead folders"
 msgstr "hantera delade lead mappar"
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:118
 msgid "Create new shared lead folders"
 msgstr "Skapa nya delade lead mappar"
 
-#: Acl/Rights.php:114
+#: Acl/Rights.php:121
 msgid "manage shared leads favorites"
 msgstr "hantera delade leads favoriter"
 
-#: Acl/Rights.php:115
+#: Acl/Rights.php:122
 msgid "Create or update shared leads favorites"
 msgstr "Skapa eller uppdatera delade leads favoriter"
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr "tillstånd"
+
+#: Controller/Lead.php:178 js/AddToLeadPanel.js:78 js/Contact.js:252
+msgid "Role"
+msgstr "Roll"
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "Källa"
+
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:396
+#: js/LeadGridDetailsPanel.js:445
+msgid "Start"
+msgstr "Start"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "Schemalagt slut"
+
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:227
+msgid "End"
+msgstr "Slut"
+
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:129
+#: js/Model.js:108
+msgid "Turnover"
+msgstr "omsättning"
+
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:220
+#: js/LeadGridPanel.js:128 js/Model.js:107
+msgid "Probability"
+msgstr "sannolikt"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "Mapp"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "Uppdaterad av"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "Uppdaterade Fält:"
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s ändrades från %s till %s."
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Lead %s har ändrats"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Lead %s har skapats"
 
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s personlig leads"
 
-#: Controller.php:159 Model/Lead.php:117 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 js/LeadGridPanel.js:126
+#: Controller.php:162 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:488
+#: js/LeadGridPanel.js:126 Model/Lead.php:118
 msgid "Customer"
 msgstr "Kund"
 
-#: Controller.php:160 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:125
+#: Controller.php:163 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:471
+#: js/LeadGridPanel.js:125
 msgid "Partner"
 msgstr "Partner"
 
-#: Controller.php:161
+#: Controller.php:164
 msgid "Reseller"
 msgstr "återförsäljare"
 
-#: Controller.php:164
+#: Controller.php:167
 msgid "open"
 msgstr "Öppna"
 
-#: Controller.php:165
+#: Controller.php:168
 msgid "contacted"
 msgstr "Kontaktad"
 
-#: Controller.php:166
+#: Controller.php:169
 msgid "waiting for feedback"
 msgstr "väntar på feedback"
 
-#: Controller.php:167
+#: Controller.php:170
 msgid "quote sent"
 msgstr "citera skickat"
 
-#: Controller.php:168
+#: Controller.php:171
 msgid "accepted"
 msgstr "Godkännd"
 
-#: Controller.php:169
+#: Controller.php:172
 msgid "lost"
 msgstr "Förlorad"
 
-#: Controller.php:172
+#: Controller.php:175
 msgid "Market"
 msgstr "Marknad"
 
-#: Controller.php:173 Export/Pdf.php:219
+#: Controller.php:176 Export/Pdf.php:219
 msgid "Email"
 msgstr "E-post"
 
-#: Controller.php:174 Export/Pdf.php:218
+#: Controller.php:177 Export/Pdf.php:218
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Controller.php:175
+#: Controller.php:178
 msgid "Website"
 msgstr "Webbsida"
 
-#: Model/Lead.php:116 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:124
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Lead Data"
+
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:338
+#: js/LeadGridPanel.js:127 js/LeadStateFilterModel.js:32
+msgid "Leadstate"
+msgstr "Leadstatus"
+
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:357
+#: js/LeadGridDetailsPanel.js:455
+msgid "Leadtype"
+msgstr "Leadtyp"
+
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:364
+#: js/LeadGridDetailsPanel.js:460
+msgid "Leadsource"
+msgstr "Leadkälla"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "avsluta Schemalagd"
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Kontakter"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Adress"
+
+#: Export/Pdf.php:232 js/LeadEditDialog.js:243 js/Task.js:83
+msgid "Tasks"
+msgstr "Uppgifter"
+
+#: Export/Pdf.php:252 js/Task.js:176
+msgid "Due Date"
+msgstr "Förfallo Datum"
+
+#: Export/Pdf.php:259 js/Task.js:189
+msgid "Priority"
+msgstr "Prioritet"
+
+#: Export/Pdf.php:274 js/LeadEditDialog.js:254 js/Product.js:85
+msgid "Products"
+msgstr "Produkter"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "Låg"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "Normal"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "Hög"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "Viktig"
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Välj Lead till att lägga till kontakter till"
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr "Välj deltagarnas roll"
+
+#: js/AddToLeadPanel.js:73 js/LeadEditDialog.js:269 js/Model.js:49
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Leads"
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr "Välj Lead"
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr "Välj Roll"
+
+#: js/AddToLeadPanel.js:93
+msgid "Adding {0} contacts to lead"
+msgstr "Lägger till {0} kontakter som projektledare"
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
+msgstr "Leadtillstånd"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
+msgstr "Leadtyper"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
+msgstr "Leadkällor"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr "standardvärden"
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr "Ändra typ till kund"
+
+#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
+#: js/LeadGridPanel.js:124 Model/Lead.php:117
 msgid "Responsible"
 msgstr "Ansvarig"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
-msgid "All leads I have read grants for"
-msgstr "Alla leads Jag har läs rättigheter för"
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr "Ändra typ till Ansvarig"
 
-#: Setup/Initialize.php:62
-msgid "Last modified by me"
-msgstr "Senast uppdaterad av mig"
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr "Ändra typ till Partner"
 
-#: Setup/Initialize.php:63
-msgid "All leads that I have last modified"
-msgstr "Alla leads jag senast har modifierat"
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr "Ändra kontakt typ"
 
-#: Setup/Initialize.php:72
-msgid "My leads"
-msgstr "Mina leads"
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr "Sök på kontakter att lägga till ..."
 
-#: Setup/Initialize.php:73
-msgid "All leads that I am responsible for"
-msgstr "Alla leads som jag är ansvarig för"
+#: js/Contact.js:222
+msgid "Name"
+msgstr "namn"
 
-#: Setup/Initialize.php:86
-msgid "Leads with overdue tasks"
-msgstr "Leads med förfallna arbetsuppgifter"
+#: js/Contact.js:242
+msgid "Data"
+msgstr "Data"
+
+#: js/Contact.js:245 js/LeadGridDetailsPanel.js:48
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Mobiltelefon"
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Ny Lead"
+
+#: js/LeadEditDialog.js:244
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "Du har inte kör rättigheter för Uppgifts applikation eller är det inte aktiverat"
+
+#: js/LeadEditDialog.js:255
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "Du har inte kör rättigheter för Sälj applikatio så är det inte aktiverat."
+
+#: js/LeadEditDialog.js:296
+msgid "Enter short name"
+msgstr "Skriv kort namn"
+
+#: js/LeadEditDialog.js:380
+msgid "Expected turnover"
+msgstr "Förväntad omsättning"
+
+#: js/LeadEditDialog.js:402 js/LeadGridDetailsPanel.js:450
+msgid "Estimated end"
+msgstr "beräknat slut"
+
+#: js/LeadEditDialog.js:434 js/Product.js:139
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/LeadEditDialog.js:448
+msgid "Enter description"
+msgstr "Skriv beskrivning"
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "CRM Roll"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "E-post"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "Webb"
+
+#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridPanel.js:121
+msgid "Lead id"
+msgstr "Lead id"
+
+#: js/LeadGridPanel.js:122
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/LeadGridPanel.js:123 js/Model.js:105
+msgid "Lead name"
+msgstr "Lead Namn"
+
+#: js/LeadGridPanel.js:130
+msgid "Probable Turnover"
+msgstr "Trolig Omsättning"
+
+#: js/LeadGridPanel.js:172
+msgid "Export Lead"
+msgstr "Exportera Lead"
+
+#: js/LeadGridPanel.js:181
+msgid "Export as PDF"
+msgstr "Exportera som PDF"
+
+#: js/LeadGridPanel.js:188
+msgid "Export as CSV"
+msgstr "Exportera som CSV"
+
+#: js/LeadGridPanel.js:195
+msgid "Export as ODS"
+msgstr "Exportera som ODS"
+
+#: js/LeadGridPanel.js:202
+msgid "Export as XLS"
+msgstr "Exportera som XLS"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] "lead Källa"
+msgstr[1] "Lead Källor"
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr "Lägg till Leadkälla..."
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "Lead status"
+msgstr[1] "Lead statusar"
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr "Lägg till Leadstatus"
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr "Visa stängda"
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Lead Typ"
+msgstr[1] "Lead Typer"
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr "Lägg till en Leadtyp..."
+
+#: js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr "Lägg till ny {0}"
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+msgid "Unlink {0}"
+msgstr "Avlänka {0}"
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+msgid "Unlink selected {0}"
+msgstr "Avlänk {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Redigera {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Redigering valt {0}"
+
+#: js/Model.js:53
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "lead lista"
+msgstr[1] "lead listor"
+
+#: js/Model.js:53
+msgid "lead lists"
+msgstr "lead listor"
+
+#: js/Model.js:103
+msgid "Quick search"
+msgstr "Snabbsök"
+
+#: js/Model.js:110
+msgid "Last Modified Time"
+msgstr "Senast ändrad"
+
+#: js/Model.js:111
+msgid "Last Modified By"
+msgstr "Senast ändrad av"
+
+#: js/Model.js:112
+msgid "Creation Time"
+msgstr "Skapad Tid"
+
+#: js/Model.js:113
+msgid "Created By"
+msgstr "Skapad av"
+
+#: js/Model.js:152
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Inställningar"
+msgstr[1] "Inställningar"
+
+#: js/Model.js:155
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "postlista"
+msgstr[1] "postlistor"
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Produkt"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Pris"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr "kvantitet"
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr "Sök på produkter att lägga till ..."
+
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr "Inga uppgifter att visa"
+
+#: js/Task.js:168
+msgid "Summary"
+msgstr "sammanfattning"
+
+#: js/Task.js:172
+msgid "Add a task..."
+msgstr "Lägg till en uppgift ..."
+
+#: js/Task.js:205
+msgid "Percent"
+msgstr "procent"
 
 #: Preference.php:37
 msgid "All leads"
@@ -168,434 +576,26 @@ msgstr "Standard Favorit"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Standard favoriten som laddas på crm start"
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Lead Data"
-
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:338 js/LeadGridPanel.js:127
-msgid "Leadstate"
-msgstr "Leadstatus"
-
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
-#: js/LeadEditDialog.js:357
-msgid "Leadtype"
-msgstr "Leadtyp"
-
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
-#: js/LeadEditDialog.js:364
-msgid "Leadsource"
-msgstr "Leadkälla"
-
-#: Export/Pdf.php:87 js/Model.js:108 js/LeadGridPanel.js:129
-#: Controller/Lead.php:183
-msgid "Turnover"
-msgstr "omsättning"
-
-#: Export/Pdf.php:90 js/Model.js:107 js/LeadEditDialog.js:220
-#: js/LeadGridPanel.js:128 Controller/Lead.php:184
-msgid "Probability"
-msgstr "sannolikt"
-
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:396
-#: Controller/Lead.php:180
-msgid "Start"
-msgstr "Start"
-
-#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
-msgid "End"
-msgstr "Slut"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "avsluta Schemalagd"
-
-#: Export/Pdf.php:184
-msgid "Contacts"
-msgstr "Kontakter"
-
-#: Export/Pdf.php:211 js/Contact.js:231
-msgid "Address"
-msgstr "Adress"
-
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:243
-msgid "Tasks"
-msgstr "Uppgifter"
-
-#: Export/Pdf.php:252 js/Task.js:176
-msgid "Due Date"
-msgstr "Förfallo Datum"
-
-#: Export/Pdf.php:259 js/Task.js:189
-msgid "Priority"
-msgstr "Prioritet"
-
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:254
-msgid "Products"
-msgstr "Produkter"
-
-#: Export/Pdf.php:315
-msgid "low"
-msgstr "Låg"
-
-#: Export/Pdf.php:316
-msgid "normal"
-msgstr "Normal"
-
-#: Export/Pdf.php:317
-msgid "high"
-msgstr "Hög"
-
-#: Export/Pdf.php:318
-msgid "urgent"
-msgstr "Viktig"
-
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
-msgid "Leadstates"
-msgstr "Leadtillstånd"
-
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
-msgid "Leadtypes"
-msgstr "Leadtyper"
-
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
-msgid "Leadsources"
-msgstr "Leadkällor"
-
-#: js/AdminPanel.js:138
-msgid "Defaults"
-msgstr "standardvärden"
-
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "Lead Typ"
-msgstr[1] "Lead Typer"
-
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr "Lägg till en Leadtyp..."
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Välj Lead till att lägga till kontakter till"
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr "Välj deltagarnas roll"
-
-#: js/AddToLeadPanel.js:73 js/Model.js:49 js/LeadEditDialog.js:269
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Lead"
-msgstr[1] "Leads"
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr "Välj Lead"
-
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
-msgid "Role"
-msgstr "Roll"
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr "Välj Roll"
-
-#: js/AddToLeadPanel.js:93
-msgid "Adding {0} contacts to lead"
-msgstr "Lägger till {0} kontakter som projektledare"
-
-#: js/Task.js:109
-msgid "No Tasks to display"
-msgstr "Inga uppgifter att visa"
-
-#: js/Task.js:168
-msgid "Summary"
-msgstr "sammanfattning"
-
-#: js/Task.js:172
-msgid "Add a task..."
-msgstr "Lägg till en uppgift ..."
-
-#: js/Task.js:205
-msgid "Percent"
-msgstr "procent"
-
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
-msgid "Status"
-msgstr "Status"
-
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] "Lead status"
-msgstr[1] "Lead statusar"
-
-#: js/LeadState.js:166
-msgid "Add a Leadstate..."
-msgstr "Lägg till Leadstatus"
-
-#: js/LeadGridContactFilter.js:47
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "CRM Roll"
-
-#: js/LeadStateFilterModel.js:37
-msgid "Show closed"
-msgstr "Visa stängda"
-
-#: js/Product.js:134
-msgid "Product"
-msgstr "Produkt"
-
-#: js/Product.js:139 js/LeadEditDialog.js:434
-msgid "Description"
-msgstr "Beskrivning"
-
-#: js/Product.js:146
-msgid "Price"
-msgstr "Pris"
-
-#: js/Product.js:158
-msgid "Quantity"
-msgstr "kvantitet"
-
-#: js/Product.js:185 js/LinkGridPanel.js:56
-msgid "Unlink {0}"
-msgstr "Avlänka {0}"
-
-#: js/Product.js:186 js/LinkGridPanel.js:57
-msgid "Unlink selected {0}"
-msgstr "Avlänk {0}"
-
-#: js/Product.js:216
-msgid "Search for Products to add ..."
-msgstr "Sök på produkter att lägga till ..."
-
-#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr "Mobil"
-
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr "E-post"
-
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr "Webb"
-
-#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:402
-msgid "Estimated end"
-msgstr "beräknat slut"
-
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] "lead Källa"
-msgstr[1] "Lead Källor"
-
-#: js/LeadSource.js:136
-msgid "Add a Leadsource..."
-msgstr "Lägg till Leadkälla..."
-
-#: js/Model.js:53
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "lead lista"
-msgstr[1] "lead listor"
-
-#: js/Model.js:53
-msgid "lead lists"
-msgstr "lead listor"
-
-#: js/Model.js:103
-msgid "Quick search"
-msgstr "Snabbsök"
-
-#: js/Model.js:105 js/LeadGridPanel.js:123
-msgid "Lead name"
-msgstr "Lead Namn"
-
-#: js/Model.js:110
-msgid "Last Modified Time"
-msgstr "Senast ändrad"
-
-#: js/Model.js:111
-msgid "Last Modified By"
-msgstr "Senast ändrad av"
-
-#: js/Model.js:112
-msgid "Creation Time"
-msgstr "Skapad Tid"
-
-#: js/Model.js:113
-msgid "Created By"
-msgstr "Skapad av"
-
-#: js/Model.js:152
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Inställningar"
-msgstr[1] "Inställningar"
-
-#: js/Model.js:156
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "postlista"
-msgstr[1] "postlistor"
-
-#: js/LeadEditDialog.js:244
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr "Du har inte kör rättigheter för Uppgifts applikation eller är det inte aktiverat"
-
-#: js/LeadEditDialog.js:255
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr "Du har inte kör rättigheter för Sälj applikatio så är det inte aktiverat."
-
-#: js/LeadEditDialog.js:296
-msgid "Enter short name"
-msgstr "Skriv kort namn"
-
-#: js/LeadEditDialog.js:380
-msgid "Expected turnover"
-msgstr "Förväntad omsättning"
-
-#: js/LeadEditDialog.js:448
-msgid "Enter description"
-msgstr "Skriv beskrivning"
-
-#: js/Contact.js:162
-msgid "Change type to Customer"
-msgstr "Ändra typ till kund"
-
-#: js/Contact.js:172
-msgid "Change type to Responsible"
-msgstr "Ändra typ till Ansvarig"
-
-#: js/Contact.js:182
-msgid "Change type to Partner"
-msgstr "Ändra typ till Partner"
-
-#: js/Contact.js:193
-msgid "Change contact type"
-msgstr "Ändra kontakt typ"
-
-#: js/Contact.js:205
-msgid "Search for Contacts to add ..."
-msgstr "Sök på kontakter att lägga till ..."
-
-#: js/Contact.js:222
-msgid "Name"
-msgstr "namn"
-
-#: js/Contact.js:242
-msgid "Data"
-msgstr "Data"
-
-#: js/Contact.js:246
-msgid "Cellphone"
-msgstr "Mobiltelefon"
-
-#: js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr "Lägg till ny {0}"
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Redigera {0}"
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Redigering valt {0}"
-
-#: js/LeadGridPanel.js:121
-msgid "Lead id"
-msgstr "Lead id"
-
-#: js/LeadGridPanel.js:122
-msgid "Tags"
-msgstr "Taggar"
-
-#: js/LeadGridPanel.js:130
-msgid "Probable Turnover"
-msgstr "Trolig Omsättning"
-
-#: js/LeadGridPanel.js:172
-msgid "Export Lead"
-msgstr "Exportera Lead"
-
-#: js/LeadGridPanel.js:181
-msgid "Export as PDF"
-msgstr "Exportera som PDF"
-
-#: js/LeadGridPanel.js:188
-msgid "Export as CSV"
-msgstr "Exportera som CSV"
-
-#: js/LeadGridPanel.js:195
-msgid "Export as ODS"
-msgstr "Exportera som ODS"
-
-#: js/LeadGridPanel.js:202
-msgid "Export as XLS"
-msgstr "Exportera som XLS"
-
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Ny Lead"
-
-#: Controller/Lead.php:177
-msgid "State"
-msgstr "tillstånd"
-
-#: Controller/Lead.php:179
-msgid "Source"
-msgstr "Källa"
-
-#: Controller/Lead.php:181
-msgid "Scheduled end"
-msgstr "Schemalagt slut"
-
-#: Controller/Lead.php:185
-msgid "Folder"
-msgstr "Mapp"
-
-#: Controller/Lead.php:186
-msgid "Updated by"
-msgstr "Uppdaterad av"
-
-#: Controller/Lead.php:187
-msgid "Updated Fields:"
-msgstr "Uppdaterade Fält:"
-
-#: Controller/Lead.php:188
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s ändrades från %s till %s."
-
-#: Controller/Lead.php:194
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Lead %s har ändrats"
-
-#: Controller/Lead.php:196
-#, python-format
-msgid "Lead %s has been created"
-msgstr "Lead %s har skapats"
+#: Setup/Initialize.php:55 Setup/Update/Release3.php:37
+msgid "All leads I have read grants for"
+msgstr "Alla leads Jag har läs rättigheter för"
+
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
+msgstr "Senast uppdaterad av mig"
+
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
+msgstr "Alla leads jag senast har modifierat"
+
+#: Setup/Initialize.php:72
+msgid "My leads"
+msgstr "Mina leads"
+
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
+msgstr "Alla leads som jag är ansvarig för"
+
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
+msgstr "Leads med förfallna arbetsuppgifter"

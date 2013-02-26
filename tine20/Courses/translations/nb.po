@@ -64,29 +64,42 @@ msgstr ""
 msgid "Samba user settings"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurs"
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "Kurs"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Lærer"
+
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Lærer Konto"
+
+#: Controller/Course.php:308
+msgid "My course"
 msgstr ""
 
-#: Setup/Initialize.php:66
-msgid "On"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
 msgstr ""
 
-#: Setup/Initialize.php:67
-msgid "Off"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
 msgstr ""
 
-#: Setup/Initialize.php:68
-msgid "Filtered"
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
 msgstr ""
 
 #: js/CourseEditDialog.js:33
@@ -96,12 +109,6 @@ msgstr "Importer kurs medlemmer"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr ""
-
-#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurs"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -135,26 +142,6 @@ msgstr ""
 msgid "Reset Password"
 msgstr "Nullstill Passord"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr ""
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr ""
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr ""
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr ""
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr ""
-
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Navn"
@@ -187,14 +174,27 @@ msgid_plural "Course Types"
 msgstr[0] "Kurs Type"
 msgstr[1] "Kurs Typer"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Lærer"
-
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Lærer Konto"
-
-#: Controller/Course.php:308
-msgid "My course"
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
 msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurs"

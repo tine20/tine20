@@ -127,326 +127,29 @@ msgstr ""
 msgid "Default IMAP user settings"
 msgstr ""
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
+#: Controller/Container.php:198
+msgid "Your container has been changed"
 msgstr ""
 
-#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Bruker"
-msgstr[1] "Brukere"
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Grupper"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Roller"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Datamaskiner"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Programmer"
-
-#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Delte Emner"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr ""
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr ""
-
-#: js/Admin.js:137
-msgid "Server Information"
-msgstr ""
-
-#: js/Admin.js:172
-msgid "Admin"
-msgstr "Administrator"
-
-#: js/Admin.js:254
-msgid "Refresh"
-msgstr ""
-
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
-msgid "Computer Name"
-msgstr "PC Navn"
-
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
-#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
-#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
-#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
-msgid "ID"
-msgstr "ID"
-
-#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
-#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
-#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
-#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
-#: js/customfield/GridPanel.js:72
-msgid "Name"
-msgstr "Navn"
-
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-#: js/customfield/GridPanel.js:131
-msgid "Confirm"
-msgstr "Bekreft"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Vil du virkelig slette valgte overskrifter?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Sletter overskrift(er)..."
-
-#: js/Tags.js:97
-msgid "Add Tag"
-msgstr ""
-
-#: js/Tags.js:105
-msgid "Edit Tag"
-msgstr ""
-
-#: js/Tags.js:113
-msgid "Delete Tag"
-msgstr ""
-
-#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
-msgid "Search:"
-msgstr "Søk:"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Viser overskrifter {0} - {1} of {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Ingen overskrifter å vise"
-
-#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
-msgid "Color"
-msgstr "Farge"
-
-#: js/Tags.js:223
-msgid "Usage:&#160;"
-msgstr ""
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Vil du virkelig slette valgte roller?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Sletter rolle(r)..."
-
-#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
-#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-msgid "Failed"
-msgstr "Feilet"
-
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "En feil har oppstått ved forsøk på å slette rollen."
-
-#: js/Roles.js:102
-msgid "Add Role"
-msgstr ""
-
-#: js/Roles.js:110
-msgid "Edit Role"
-msgstr ""
-
-#: js/Roles.js:118
-msgid "Delete Role"
-msgstr ""
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Viser roller {0} - {1} of {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Ingen roller å vise"
-
-#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Vennligst vent"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Oppdaterer Medlemskap"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Klarte ikke å lagre gruppen."
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-msgid "Errors"
-msgstr "Feil"
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-msgid "Please fix the errors noted."
-msgstr "Vennligst rett felene listet."
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Gruppe Navn"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
-msgid "Visibility"
-msgstr "Synlighet"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Display in addressbook"
-msgstr "Vis i adressebok"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Hide from addressbook"
-msgstr "Skjul fra adressebok"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
-msgid "Saved in Addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Gruppe Medlemmer"
-
-#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Legg til gruppe"
-
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Rediger Gruppe  \"{0}\""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr "{0} Instillinger"
-
-#: js/Applications.js:83
-msgid "Enable Application"
-msgstr ""
-
-#: js/Applications.js:90
-msgid "Disable Application"
-msgstr ""
-
-#: js/Applications.js:97
-msgid "Settings"
-msgstr ""
-
-#: js/Applications.js:146
-msgid "enable application"
-msgstr "aktiver program"
-
-#: js/Applications.js:147
-msgid "disable application"
-msgstr "deaktiver program"
-
-#: js/Applications.js:148
-msgid "settings"
-msgstr "instillinger"
-
-#: js/Applications.js:228 js/user/EditDialog.js:873
-msgid "disabled"
-msgstr "deaktivert"
-
-#: js/Applications.js:231 js/user/EditDialog.js:872
-msgid "enabled"
-msgstr "aktivert"
-
-#: js/Applications.js:235
-msgid "unknown status ({0})"
-msgstr "ukjent status ({0})"
-
-#: js/Applications.js:269
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Viser program {0} - {1} of {2}"
-
-#: js/Applications.js:270
-msgid "No applications to display"
-msgstr "Ingen program å vise"
-
-#: js/Applications.js:279 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Ordre"
-
-#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
-msgid "Status"
-msgstr "Status"
-
-#: js/Applications.js:282
-msgid "Version"
-msgstr "Versjon"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Vil du virkelig slette valgte grupper?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Sletter gruppe(r)"
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "En feil oppsto ved forsøk på å slette gruppen."
-
-#: js/Groups.js:104
-msgid "Add Group"
-msgstr ""
-
-#: js/Groups.js:112
-msgid "Edit Group"
-msgstr ""
-
-#: js/Groups.js:120
-msgid "Delete Group"
-msgstr ""
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Viser grupper  {0} - {1} of {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Ingen grupper å vise"
-
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
 msgstr "IP Adresse"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Bruker"
+msgstr[1] "Brukere"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -467,6 +170,13 @@ msgstr "Sessjons ID"
 #: js/AccessLog.js:130
 msgid "Login Name"
 msgstr "Logg inn Navn"
+
+#: js/AccessLog.js:131 js/Applications.js:280 js/container/EditDialog.js:124
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Navn"
 
 #: js/AccessLog.js:135
 msgid "Result"
@@ -504,94 +214,126 @@ msgstr "feil"
 msgid "success"
 msgstr "vellykket"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Oppdaterer Overskrift"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Grupper"
 
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Klarte ikke å lagre overskrift."
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Roller"
 
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Tillatte Contekster"
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Datamaskiner"
 
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Contekst"
+#: js/Admin.js:74 js/Models.js:127
+msgid "Applications"
+msgstr "Programmer"
 
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Konto Rettigheter"
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Delte Emner"
 
-#: js/TagEditDialog.js:197
-msgid "View"
-msgstr "Vis"
-
-#: js/TagEditDialog.js:202
-msgid "Use"
-msgstr "Bruk"
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Overskrift Navn"
-
-#: js/TagEditDialog.js:290
-msgid "Tag"
+#: js/Admin.js:113
+msgid "Containers"
 msgstr ""
 
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Legg til Ny Overskrift"
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Rediger Overskrift \"{0}\""
-
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Klarte ikke å lagre rolle."
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Sletter rolle..."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Rettigheter"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Medlemmer"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Rolle Navn"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
+#: js/Admin.js:125
+msgid "Customfields"
 msgstr ""
 
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Legg til Ny Rolle"
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr ""
 
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "Rediger Rolle \"{0}\""
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Administrator"
 
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "PC"
-msgstr[1] "PC'er"
+#: js/Admin.js:256
+msgid "Refresh"
+msgstr ""
 
-#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
-#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:136
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
-#: js/Models.js:128
+#: js/Models.js:127
 msgid "Application"
 msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Instillinger"
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr ""
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr ""
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr ""
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "aktiver program"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "deaktiver program"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "instillinger"
+
+#: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Søk:"
+
+#: js/Applications.js:228 js/user/EditDialog.js:877
+msgid "disabled"
+msgstr "deaktivert"
+
+#: js/Applications.js:231 js/user/EditDialog.js:876
+msgid "enabled"
+msgstr "aktivert"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "ukjent status ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Viser program {0} - {1} of {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Ingen program å vise"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Ordre"
+
+#: js/Applications.js:281 js/user/EditDialog.js:869 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Status"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Versjon"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -614,336 +356,34 @@ msgstr ""
 msgid "shared"
 msgstr ""
 
+#: js/container/EditDialog.js:171 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Farge"
+
 #: js/container/EditDialog.js:176
 msgid "Note for Owner"
 msgstr ""
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
 msgstr ""
-
-#: js/user/EditDialog.js:187
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:726
-msgid "Passwords do not match!"
-msgstr "Passordene stemmer ikke!"
-
-#: js/user/EditDialog.js:240
-msgid "Passwords match!"
-msgstr ""
-
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:848
-msgid "Primary group"
-msgstr "Primær gruppe"
-
-#: js/user/EditDialog.js:363
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:377
-msgid "Home Directory"
-msgstr "Hjemme Mappe"
-
-#: js/user/EditDialog.js:381
-msgid "Login Shell"
-msgstr "Logg inn skall"
-
-#: js/user/EditDialog.js:387
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:401
-msgid "Home Drive"
-msgstr "Hjemme Stasjon"
-
-#: js/user/EditDialog.js:406
-msgid "Logon Time"
-msgstr "Logg in Tid"
-
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:959
-#: js/user/EditDialog.js:963
-msgid "never logged in"
-msgstr "aldri logget på"
-
-#: js/user/EditDialog.js:411
-msgid "Home Path"
-msgstr "Hjemme Sti"
-
-#: js/user/EditDialog.js:416
-msgid "Logoff Time"
-msgstr "Logg av Tid"
-
-#: js/user/EditDialog.js:418
-msgid "never logged off"
-msgstr "aldri logget av"
-
-#: js/user/EditDialog.js:421
-msgid "Profile Path"
-msgstr "Profil Sti"
-
-#: js/user/EditDialog.js:426
-msgid "Password Last Set"
-msgstr "Passord Sist Satt"
-
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:907
-#: js/user/EditDialog.js:967
-msgid "never"
-msgstr "aldri"
-
-#: js/user/EditDialog.js:431
-msgid "Logon Script"
-msgstr "Logg inn Skript"
-
-#: js/user/EditDialog.js:436
-msgid "Password Can Change"
-msgstr "Passord Kan Endres"
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
-msgid "not set"
-msgstr "ikke satt"
-
-#: js/user/EditDialog.js:441
-msgid "Password Must Change"
-msgstr "Passord Må Endres"
-
-#: js/user/EditDialog.js:446
-msgid "Kick Off Time"
-msgstr "Utkastelses Tid"
-
-#: js/user/EditDialog.js:466
-msgid "IMAP Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
-msgid "Quota"
-msgstr "Kvote"
-
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
-msgid "no quota set"
-msgstr ""
-
-#: js/user/EditDialog.js:496
-msgid "Current Mailbox size"
-msgstr ""
-
-#: js/user/EditDialog.js:504
-msgid "Sieve Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:534
-msgid "Current Sieve size"
-msgstr ""
-
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:942
-msgid "Information"
-msgstr "Informasjon"
-
-#: js/user/EditDialog.js:557
-msgid "Last Login"
-msgstr "Siste logg inn"
-
-#: js/user/EditDialog.js:611
-msgid "Domain not allowed"
-msgstr ""
-
-#: js/user/EditDialog.js:612
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr ""
-
-#: js/user/EditDialog.js:621
-msgid "Email Alias"
-msgstr "E-post Alias"
-
-#: js/user/EditDialog.js:627
-msgid "Add an alias address..."
-msgstr "Legg til en alias adresse..."
-
-#: js/user/EditDialog.js:645
-msgid "Forwarding to self"
-msgstr ""
-
-#: js/user/EditDialog.js:646
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr ""
-
-#: js/user/EditDialog.js:655
-msgid "Email Forward"
-msgstr "E-post Videresending"
-
-#: js/user/EditDialog.js:661
-msgid "Add a forward address..."
-msgstr "Legg til en videresendings adresse..."
-
-#: js/user/EditDialog.js:674
-msgid "Forward Only"
-msgstr "Kun Videresending"
-
-#: js/user/EditDialog.js:693
-msgid "Password confirmation"
-msgstr "Passord bekreftelse"
-
-#: js/user/EditDialog.js:710
-msgid "Repeat password"
-msgstr "Gjenta passord"
-
-#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr "Avbryt"
-
-#: js/user/EditDialog.js:736
-msgid "Ok"
-msgstr "Ok"
-
-#: js/user/EditDialog.js:771
-msgid "Account"
-msgstr "Konto"
-
-#: js/user/EditDialog.js:786 js/user/GridPanel.js:180
-msgid "First name"
-msgstr "For navn"
-
-#: js/user/EditDialog.js:796 js/user/GridPanel.js:179
-msgid "Last name"
-msgstr "Etter navn"
-
-#: js/user/EditDialog.js:801 js/user/EditDialog.js:843
-#: js/user/GridPanel.js:178
-msgid "Login name"
-msgstr ""
-
-#: js/user/EditDialog.js:806
-msgid "Password"
-msgstr "Passord"
-
-#: js/user/EditDialog.js:836 js/user/GridPanel.js:181
-msgid "Email"
-msgstr "E-post"
-
-#: js/user/EditDialog.js:842 js/user/GridPanel.js:182
-msgid "OpenID"
-msgstr "ÅpenID"
-
-#: js/user/EditDialog.js:874
-msgid "expired"
-msgstr "Utgått"
-
-#: js/user/EditDialog.js:875
-msgid "blocked"
-msgstr ""
-
-#: js/user/EditDialog.js:882
-msgid "Invalid Status"
-msgstr ""
-
-#: js/user/EditDialog.js:883
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr ""
-
-#: js/user/EditDialog.js:905 js/user/GridPanel.js:186
-msgid "Expires"
-msgstr "Utgår"
-
-#: js/user/EditDialog.js:957 js/user/GridPanel.js:183
-msgid "Last login at"
-msgstr "Siste logg inn kl"
-
-#: js/user/EditDialog.js:959 js/user/EditDialog.js:963
-msgid "don't know"
-msgstr "vet ikke"
-
-#: js/user/EditDialog.js:961 js/user/GridPanel.js:184
-msgid "Last login from"
-msgstr "Siste logg inn fra"
-
-#: js/user/EditDialog.js:965
-msgid "Password set"
-msgstr "Passord satt"
-
-#: js/user/EditDialog.js:972
-msgid "User groups"
-msgstr ""
-
-#: js/user/EditDialog.js:978
-msgid "User roles"
-msgstr ""
-
-#: js/user/EditDialog.js:984
-msgid "Fileserver"
-msgstr "Fil server"
-
-#: js/user/EditDialog.js:990
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:999
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/GridPanel.js:56
-msgid "Enable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:66
-msgid "Disable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:76
-msgid "Reset Password"
-msgstr ""
-
-#: js/user/GridPanel.js:177
-msgid "Display name"
-msgstr ""
-
-#: js/user/GridPanel.js:185
-msgid "Password changed"
-msgstr "Passord endret"
-
-#: js/user/GridPanel.js:244
-msgid "Set new password"
-msgstr "Sett nytt passord"
-
-#: js/user/GridPanel.js:244
-msgid "Please enter the new password:"
-msgstr "Vennligst skriv det nye passordet:"
-
-#: js/user/Users.js:72
-msgid "Users"
-msgstr ""
-
-#: js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba Bruker"
-msgstr[1] "Samba Brukere"
-
-#: js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "E-post Bruker"
-msgstr[1] "E-Post Brukere"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Feil"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
@@ -988,6 +428,10 @@ msgstr ""
 #: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr ""
+
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:733
+msgid "Cancel"
+msgstr "Avbryt"
 
 #: js/customfield/EditDialog.js:504
 msgid "Configure store"
@@ -1049,18 +493,573 @@ msgstr ""
 msgid "Custom field additional properties"
 msgstr ""
 
+#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
+
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Bekreft"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
 msgstr ""
 
-#: Controller/Container.php:198
-msgid "Your container has been changed"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Vennligst vent"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Oppdaterer Medlemskap"
+
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
+#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:83
+msgid "Failed"
+msgstr "Feilet"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Klarte ikke å lagre gruppen."
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Vennligst rett felene listet."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Gruppe Navn"
+
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:294
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:914
+msgid "Visibility"
+msgstr "Synlighet"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Display in addressbook"
+msgstr "Vis i adressebok"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Hide from addressbook"
+msgstr "Skjul fra adressebok"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:934
+msgid "Saved in Addressbook"
 msgstr ""
 
-#: Controller/Container.php:199
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Gruppe Medlemmer"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
 msgstr ""
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Legg til gruppe"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Rediger Gruppe  \"{0}\""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Vil du virkelig slette valgte grupper?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Sletter gruppe(r)"
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "En feil oppsto ved forsøk på å slette gruppen."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr ""
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr ""
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr ""
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Viser grupper  {0} - {1} of {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Ingen grupper å vise"
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Klarte ikke å lagre rolle."
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Sletter rolle..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "En feil har oppstått ved forsøk på å slette rollen."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Rettigheter"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Medlemmer"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Rolle Navn"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Legg til Ny Rolle"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "Rediger Rolle \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Vil du virkelig slette valgte roller?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Sletter rolle(r)..."
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr ""
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr ""
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr ""
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Viser roller {0} - {1} of {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Ingen roller å vise"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "PC Navn"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "PC"
+msgstr[1] "PC'er"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Oppdaterer Overskrift"
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "Klarte ikke å lagre overskrift."
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr "Tillatte Contekster"
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr "Contekst"
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr "Konto Rettigheter"
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "Vis"
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "Bruk"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "Overskrift Navn"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr ""
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "Legg til Ny Overskrift"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "Rediger Overskrift \"{0}\""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Vil du virkelig slette valgte overskrifter?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Sletter overskrift(er)..."
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr ""
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr ""
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr ""
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Viser overskrifter {0} - {1} of {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Ingen overskrifter å vise"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr ""
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:730
+msgid "Passwords do not match!"
+msgstr "Passordene stemmer ikke!"
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr ""
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:852
+msgid "Primary group"
+msgstr "Primær gruppe"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Hjemme Mappe"
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Logg inn skall"
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Hjemme Stasjon"
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Logg in Tid"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:963
+#: js/user/EditDialog.js:967
+msgid "never logged in"
+msgstr "aldri logget på"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Hjemme Sti"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Logg av Tid"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "aldri logget av"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Profil Sti"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Passord Sist Satt"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:911
+#: js/user/EditDialog.js:971
+msgid "never"
+msgstr "aldri"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Logg inn Skript"
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "Passord Kan Endres"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "ikke satt"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "Passord Må Endres"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Utkastelses Tid"
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Kvote"
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr ""
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr ""
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:946
+msgid "Information"
+msgstr "Informasjon"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Siste logg inn"
+
+#: js/user/EditDialog.js:615
+msgid "Domain not allowed"
+msgstr ""
+
+#: js/user/EditDialog.js:616
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr ""
+
+#: js/user/EditDialog.js:625
+msgid "Email Alias"
+msgstr "E-post Alias"
+
+#: js/user/EditDialog.js:631
+msgid "Add an alias address..."
+msgstr "Legg til en alias adresse..."
+
+#: js/user/EditDialog.js:649
+msgid "Forwarding to self"
+msgstr ""
+
+#: js/user/EditDialog.js:650
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:659
+msgid "Email Forward"
+msgstr "E-post Videresending"
+
+#: js/user/EditDialog.js:665
+msgid "Add a forward address..."
+msgstr "Legg til en videresendings adresse..."
+
+#: js/user/EditDialog.js:678
+msgid "Forward Only"
+msgstr "Kun Videresending"
+
+#: js/user/EditDialog.js:697
+msgid "Password confirmation"
+msgstr "Passord bekreftelse"
+
+#: js/user/EditDialog.js:714
+msgid "Repeat password"
+msgstr "Gjenta passord"
+
+#: js/user/EditDialog.js:740
+msgid "Ok"
+msgstr "Ok"
+
+#: js/user/EditDialog.js:775
+msgid "Account"
+msgstr "Konto"
+
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:180
+msgid "First name"
+msgstr "For navn"
+
+#: js/user/EditDialog.js:800 js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Etter navn"
+
+#: js/user/EditDialog.js:805 js/user/EditDialog.js:847
+#: js/user/GridPanel.js:178
+msgid "Login name"
+msgstr ""
+
+#: js/user/EditDialog.js:810
+msgid "Password"
+msgstr "Passord"
+
+#: js/user/EditDialog.js:840 js/user/GridPanel.js:181
+msgid "Email"
+msgstr "E-post"
+
+#: js/user/EditDialog.js:846 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr "ÅpenID"
+
+#: js/user/EditDialog.js:878
+msgid "expired"
+msgstr "Utgått"
+
+#: js/user/EditDialog.js:879
+msgid "blocked"
+msgstr ""
+
+#: js/user/EditDialog.js:886
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:887
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:909 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Utgår"
+
+#: js/user/EditDialog.js:961 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Siste logg inn kl"
+
+#: js/user/EditDialog.js:963 js/user/EditDialog.js:967
+msgid "don't know"
+msgstr "vet ikke"
+
+#: js/user/EditDialog.js:965 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Siste logg inn fra"
+
+#: js/user/EditDialog.js:969
+msgid "Password set"
+msgstr "Passord satt"
+
+#: js/user/EditDialog.js:976
+msgid "User groups"
+msgstr ""
+
+#: js/user/EditDialog.js:982
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:988
+msgid "Fileserver"
+msgstr "Fil server"
+
+#: js/user/EditDialog.js:994
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1003
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "Enable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:66
+msgid "Disable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:76
+msgid "Reset Password"
+msgstr ""
+
+#: js/user/GridPanel.js:177
+msgid "Display name"
+msgstr ""
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Passord endret"
+
+#: js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Sett nytt passord"
+
+#: js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Vennligst skriv det nye passordet:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr ""
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba Bruker"
+msgstr[1] "Samba Brukere"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "E-post Bruker"
+msgstr[1] "E-Post Brukere"

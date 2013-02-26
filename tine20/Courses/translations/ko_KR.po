@@ -1,0 +1,197 @@
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/tine20/language/ko_KR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:99
+msgid "Add new user"
+msgstr ""
+
+#: Acl/Rights.php:100
+msgid "Add new user as member to a course"
+msgstr ""
+
+#: Acl/Rights.php:103
+msgid "Add existing user"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "Add existing user as member to a course"
+msgstr ""
+
+#: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
+msgid "Internet Access"
+msgstr ""
+
+#: Config.php:77
+msgid "Internet access options."
+msgstr ""
+
+#: Config.php:84 Config.php:86
+msgid "Internet Access Group (ON)"
+msgstr ""
+
+#: Config.php:92 Config.php:94
+msgid "Internet Access Group (FILTERED)"
+msgstr ""
+
+#: Config.php:100 Config.php:102
+msgid "Students Group"
+msgstr ""
+
+#: Config.php:108 Config.php:110
+msgid "Students Import Definition"
+msgstr ""
+
+#: Config.php:116
+msgid "Students login name prefix"
+msgstr ""
+
+#: Config.php:123 Config.php:125
+msgid "Samba user settings"
+msgstr ""
+
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr ""
+
+#: Controller/Course.php:308
+msgid "My course"
+msgstr ""
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
+msgstr ""
+
+#: js/CourseEditDialog.js:203
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:210
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:221
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:237
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:269
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:296
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:300
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:305
+msgid "Reset Password"
+msgstr ""
+
+#: js/CourseGridPanel.js:48 js/Models.js:70
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:54
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:99
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:100
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+
+#: js/Models.js:69
+msgid "Quick search"
+msgstr ""
+
+#: js/Models.js:107
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr ""

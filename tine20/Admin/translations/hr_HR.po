@@ -131,329 +131,31 @@ msgstr "pregled privatnih i dijeljenih spremnika"
 msgid "Default IMAP user settings"
 msgstr "Glavne IMAP korisničke postavke"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Početni adresar za nove kontakte i grupe"
+#: Controller/Container.php:198
+msgid "Your container has been changed"
+msgstr "Vaš spremnik je izmijenjen"
 
-#: js/Admin.js:23 js/AccessLog.js:107 js/user/Users.js:72
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Korisnika"
-msgstr[1] "Korisnika"
-msgstr[2] "Korisnika"
+#: Controller/Container.php:199
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Vaš spremnik je izmijenje id %1$s %2$s. Bilješka: %3$s"
 
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "Grupe"
-
-#: js/Admin.js:49
-msgid "Roles"
-msgstr "Uloge"
-
-#: js/Admin.js:61
-msgid "Computers"
-msgstr "Računala"
-
-#: js/Admin.js:74 js/Models.js:128
-msgid "Applications"
-msgstr "Moduli"
-
-#: js/Admin.js:87 js/AccessLog.js:105 js/Models.js:51
+#: js/AccessLog.js:105 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "Pristupni logovi"
 msgstr[1] "Pristupna loga"
 msgstr[2] "Pristupnih logova"
 
-#: js/Admin.js:100
-msgid "Shared Tags"
-msgstr "Zajedničke oznake"
-
-#: js/Admin.js:113
-msgid "Containers"
-msgstr "Spremnici"
-
-#: js/Admin.js:125
-msgid "Customfields"
-msgstr "Dodatna polja"
-
-#: js/Admin.js:137
-msgid "Server Information"
-msgstr "Informacije o poslužitelju"
-
-#: js/Admin.js:172
-msgid "Admin"
-msgstr "Admin"
-
-#: js/Admin.js:254
-msgid "Refresh"
-msgstr "Osvježiti"
-
-#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
-msgid "Computer Name"
-msgstr "Naziv računala"
-
-#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Tags.js:226
-#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
-#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:99
-msgid "Description"
-msgstr "Opis"
-
-#: js/SambaMachineGrid.js:79 js/Roles.js:237 js/Groups.js:234
-#: js/container/GridPanel.js:70 js/user/GridPanel.js:175
-#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:70
-msgid "ID"
-msgstr "ID"
-
-#: js/SambaMachineGrid.js:86 js/Tags.js:225 js/Roles.js:238
-#: js/Applications.js:280 js/Groups.js:235 js/AccessLog.js:131
-#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
-#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
-#: js/customfield/GridPanel.js:72
-msgid "Name"
-msgstr "Naziv"
-
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-#: js/customfield/GridPanel.js:131
-msgid "Confirm"
-msgstr "Potvrdi"
-
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Želite li izbrisati označene oznake?"
-
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Brisanje oznake(a)..."
-
-#: js/Tags.js:97
-msgid "Add Tag"
-msgstr "Dodaj Oznaku"
-
-#: js/Tags.js:105
-msgid "Edit Tag"
-msgstr "Uredi Oznaku"
-
-#: js/Tags.js:113
-msgid "Delete Tag"
-msgstr "Obriši Oznaku"
-
-#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:185 js/Groups.js:176
-msgid "Search:"
-msgstr "Pretraži:"
-
-#: js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Prikaz oznaka {0} - {1} od {2}"
-
-#: js/Tags.js:212 js/Tags.js:268
-msgid "No tags to display"
-msgstr "Nema oznaka za prikaz"
-
-#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
-msgid "Color"
-msgstr "Boja"
-
-#: js/Tags.js:223
-msgid "Usage:&#160;"
-msgstr "Iskorišteno:&#160;"
-
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Želite li izbrisati označene uloge?"
-
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Brisanje uloge(a)..."
-
-#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
-#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-msgid "Failed"
-msgstr "Neuspjelo"
-
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "Pojavila se greška tijekom brisanja uloge."
-
-#: js/Roles.js:102
-msgid "Add Role"
-msgstr "Dodaj Rolu"
-
-#: js/Roles.js:110
-msgid "Edit Role"
-msgstr "Uredi Rolu"
-
-#: js/Roles.js:118
-msgid "Delete Role"
-msgstr "Obriši Rolu"
-
-#: js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Prikaz uloga {0} - {1} od {2}"
-
-#: js/Roles.js:227 js/Roles.js:281
-msgid "No roles to display"
-msgstr "Nema uloga za prikaz"
-
-#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Molimo pričekajte"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Ažuriranje članova"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Nije moguće spremiti grupu."
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-msgid "Errors"
-msgstr "Greške"
-
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-msgid "Please fix the errors noted."
-msgstr "Molimo Vas da ispravite zabilježene greške."
-
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Naziv grupe"
-
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:910
-msgid "Visibility"
-msgstr "Vidljivost"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Display in addressbook"
-msgstr "Prikaži u imeniku"
-
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:916
-msgid "Hide from addressbook"
-msgstr "Sakrij u imeniku"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:930
-msgid "Saved in Addressbook"
-msgstr "Spremljeno u adresar"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Članovi grupe"
-
-#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
-msgid "Transferring {0}..."
-msgstr "Prijenos {0}..."
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grupa"
-msgstr[1] "Grupe"
-msgstr[2] "Grupa"
-
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Dodaj novu grupu"
-
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Uredi Grupu \"{0}\""
-
-#: js/Applications.js:43
-msgid "{0} Settings"
-msgstr "{0} Postavke"
-
-#: js/Applications.js:83
-msgid "Enable Application"
-msgstr "Omogući Modul"
-
-#: js/Applications.js:90
-msgid "Disable Application"
-msgstr "Onemogući Modul"
-
-#: js/Applications.js:97
-msgid "Settings"
-msgstr "Postavke"
-
-#: js/Applications.js:146
-msgid "enable application"
-msgstr "Omogući Modul"
-
-#: js/Applications.js:147
-msgid "disable application"
-msgstr "Onemogući Modul"
-
-#: js/Applications.js:148
-msgid "settings"
-msgstr "Postavke"
-
-#: js/Applications.js:228 js/user/EditDialog.js:873
-msgid "disabled"
-msgstr "Onemogućeno"
-
-#: js/Applications.js:231 js/user/EditDialog.js:872
-msgid "enabled"
-msgstr "Omogućeno"
-
-#: js/Applications.js:235
-msgid "unknown status ({0})"
-msgstr "Nepoznat status ({0})"
-
-#: js/Applications.js:269
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Prikaz modula {0} - {1} od {2}"
-
-#: js/Applications.js:270
-msgid "No applications to display"
-msgstr "Nema modula za prikaz"
-
-#: js/Applications.js:279 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Redoslijed"
-
-#: js/Applications.js:281 js/user/EditDialog.js:865 js/user/GridPanel.js:176
-msgid "Status"
-msgstr "Status"
-
-#: js/Applications.js:282
-msgid "Version"
-msgstr "Verzija"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Želite li izbrisati označene grupe?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Brisanje grupe(a)..."
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "Pojavila se greška tijekom brisanja grupe."
-
-#: js/Groups.js:104
-msgid "Add Group"
-msgstr "Dodaj grupu"
-
-#: js/Groups.js:112
-msgid "Edit Group"
-msgstr "Uredi grupu"
-
-#: js/Groups.js:120
-msgid "Delete Group"
-msgstr "Izbriši grupu"
-
-#: js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Prikaz grupa {0} - {1} od {2}"
-
-#: js/Groups.js:224 js/Groups.js:278
-msgid "No groups to display"
-msgstr "Nema grupa za prikaz"
-
 #: js/AccessLog.js:106 js/AccessLog.js:132
 msgid "IP Address"
 msgstr "IP Adresa"
+
+#: js/AccessLog.js:107 js/Admin.js:23 js/user/Users.js:72
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Korisnika"
+msgstr[1] "Korisnika"
+msgstr[2] "Korisnika"
 
 #: js/AccessLog.js:108 js/AccessLog.js:133
 msgid "Login Time"
@@ -474,6 +176,13 @@ msgstr "ID sesije"
 #: js/AccessLog.js:130
 msgid "Login Name"
 msgstr "Korisničko ime"
+
+#: js/AccessLog.js:131 js/Applications.js:280 js/container/EditDialog.js:124
+#: js/customfield/EditDialog.js:596 js/customfield/GridPanel.js:72
+#: js/Groups.js:235 js/Roles.js:238 js/SambaMachineGrid.js:86 js/Tags.js:225
+#: js/user/EditDialog.js:285 js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Naziv"
 
 #: js/AccessLog.js:135
 msgid "Result"
@@ -511,98 +220,130 @@ msgstr "neuspješno"
 msgid "success"
 msgstr "uspješno"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Ažuriranje oznake"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Grupe"
 
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Nije moguće spremiti oznaku."
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "Uloge"
 
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Dozvoljena značenja"
+#: js/Admin.js:61
+msgid "Computers"
+msgstr "Računala"
 
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Značenje"
+#: js/Admin.js:74 js/Models.js:127
+msgid "Applications"
+msgstr "Moduli"
 
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Prava korisničkog računa"
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Zajedničke oznake"
 
-#: js/TagEditDialog.js:197
-msgid "View"
-msgstr "Pregled"
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Spremnici"
 
-#: js/TagEditDialog.js:202
-msgid "Use"
-msgstr "Korištenje"
+#: js/Admin.js:125
+msgid "Customfields"
+msgstr "Dodatna polja"
 
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Naziv oznake"
+#: js/Admin.js:137
+msgid "Server Information"
+msgstr "Informacije o poslužitelju"
 
-#: js/TagEditDialog.js:290
-msgid "Tag"
-msgstr "Oznaka"
+#: js/Admin.js:172
+msgid "Admin"
+msgstr "Admin"
 
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Dodaj novu oznaku"
+#: js/Admin.js:256
+msgid "Refresh"
+msgstr "Osvježiti"
 
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Uredi Oznaku \"{0}\""
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Početni adresar za nove kontakte i grupe"
 
-#: js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "Nije moguće spremiti ulogu."
-
-#: js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "Brisanje uloge..."
-
-#: js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "Prava"
-
-#: js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "Članovi"
-
-#: js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "Naziv uloge"
-
-#: js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "Uloga"
-
-#: js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "Dodaj novu ulogu"
-
-#: js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "Uredi Ulogu \"{0}\""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Računalo"
-msgstr[1] "Računala"
-msgstr[2] "Računala"
-
-#: js/container/EditDialog.js:136 js/container/GridPanel.js:72
-#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/ApplicationFilter.js:33 js/container/EditDialog.js:136
+#: js/container/GridPanel.js:72 js/customfield/EditDialog.js:387
 #: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:74
-#: js/Models.js:128
+#: js/Models.js:127
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Modul"
 msgstr[1] "Moduli"
 msgstr[2] "Modula"
+
+#: js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Postavke"
+
+#: js/Applications.js:83
+msgid "Enable Application"
+msgstr "Omogući Modul"
+
+#: js/Applications.js:90
+msgid "Disable Application"
+msgstr "Onemogući Modul"
+
+#: js/Applications.js:97
+msgid "Settings"
+msgstr "Postavke"
+
+#: js/Applications.js:146
+msgid "enable application"
+msgstr "Omogući Modul"
+
+#: js/Applications.js:147
+msgid "disable application"
+msgstr "Onemogući Modul"
+
+#: js/Applications.js:148
+msgid "settings"
+msgstr "Postavke"
+
+#: js/Applications.js:185 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Pretraži:"
+
+#: js/Applications.js:228 js/user/EditDialog.js:877
+msgid "disabled"
+msgstr "Onemogućeno"
+
+#: js/Applications.js:231 js/user/EditDialog.js:876
+msgid "enabled"
+msgstr "Omogućeno"
+
+#: js/Applications.js:235
+msgid "unknown status ({0})"
+msgstr "Nepoznat status ({0})"
+
+#: js/Applications.js:269
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Prikaz modula {0} - {1} od {2}"
+
+#: js/Applications.js:270
+msgid "No applications to display"
+msgstr "Nema modula za prikaz"
+
+#: js/Applications.js:279 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Redoslijed"
+
+#: js/Applications.js:281 js/user/EditDialog.js:869 js/user/GridPanel.js:176
+msgid "Status"
+msgstr "Status"
+
+#: js/Applications.js:282
+msgid "Version"
+msgstr "Verzija"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Spremnik"
+msgstr[1] "Spremnika"
+msgstr[2] "Spremnika"
 
 #: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
 #: js/customfield/GridPanel.js:75
@@ -623,333 +364,23 @@ msgstr "osobni"
 msgid "shared"
 msgstr "dijeljeni"
 
+#: js/container/EditDialog.js:171 js/TagEditDialog.js:232 js/Tags.js:222
+msgid "Color"
+msgstr "Boja"
+
 #: js/container/EditDialog.js:176
 msgid "Note for Owner"
 msgstr "Biljaška za vlasnika"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:103
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Spremnik"
-msgstr[1] "Spremnika"
-msgstr[2] "Spremnika"
+#: js/container/GridPanel.js:70 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:70 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:79 js/user/GridPanel.js:175
+msgid "ID"
+msgstr "ID"
 
 #: js/container/GridPanel.js:71
 msgid "Container Name"
 msgstr "Naziv spremnika"
-
-#: js/user/EditDialog.js:187
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domena nije dopuštena. Provjerite konfiguraciju Vašeg SMTP servera."
-
-#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:726
-msgid "Passwords do not match!"
-msgstr "Zaporke nisu jednake!"
-
-#: js/user/EditDialog.js:240
-msgid "Passwords match!"
-msgstr "Lozinke su iste!"
-
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:848
-msgid "Primary group"
-msgstr "Primarna grupa"
-
-#: js/user/EditDialog.js:363
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:377
-msgid "Home Directory"
-msgstr "Početna mapa"
-
-#: js/user/EditDialog.js:381
-msgid "Login Shell"
-msgstr "Login Shell"
-
-#: js/user/EditDialog.js:387
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:401
-msgid "Home Drive"
-msgstr "Početni disk"
-
-#: js/user/EditDialog.js:406
-msgid "Logon Time"
-msgstr "Vrijeme prijave"
-
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:959
-#: js/user/EditDialog.js:963
-msgid "never logged in"
-msgstr "Nikada prijavljen"
-
-#: js/user/EditDialog.js:411
-msgid "Home Path"
-msgstr "Početna lokacija"
-
-#: js/user/EditDialog.js:416
-msgid "Logoff Time"
-msgstr "Vrijeme odjave"
-
-#: js/user/EditDialog.js:418
-msgid "never logged off"
-msgstr "Nikada odjavljen"
-
-#: js/user/EditDialog.js:421
-msgid "Profile Path"
-msgstr "Lokacija profila"
-
-#: js/user/EditDialog.js:426
-msgid "Password Last Set"
-msgstr "Zadnja postavljena zaporka"
-
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:907
-#: js/user/EditDialog.js:967
-msgid "never"
-msgstr "nikada"
-
-#: js/user/EditDialog.js:431
-msgid "Logon Script"
-msgstr "Skripta prijave"
-
-#: js/user/EditDialog.js:436
-msgid "Password Can Change"
-msgstr "Dozvoljena promjena zaporke"
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
-#: js/user/EditDialog.js:448
-msgid "not set"
-msgstr "nije postavljeno"
-
-#: js/user/EditDialog.js:441
-msgid "Password Must Change"
-msgstr "Potrebna promjena zaporke"
-
-#: js/user/EditDialog.js:446
-msgid "Kick Off Time"
-msgstr "Vrijeme početka"
-
-#: js/user/EditDialog.js:466
-msgid "IMAP Quota (MB)"
-msgstr "IMAP Ogranićenje (MB)"
-
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
-msgid "Quota"
-msgstr "Ograničenje"
-
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
-msgid "no quota set"
-msgstr "ograničenje nije postavljeno"
-
-#: js/user/EditDialog.js:496
-msgid "Current Mailbox size"
-msgstr "Trenutna veličina Sandučića"
-
-#: js/user/EditDialog.js:504
-msgid "Sieve Quota (MB)"
-msgstr "Sieve kvota (MB)"
-
-#: js/user/EditDialog.js:534
-msgid "Current Sieve size"
-msgstr "Trenutna veličina Sieve"
-
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:942
-msgid "Information"
-msgstr "Informacija"
-
-#: js/user/EditDialog.js:557
-msgid "Last Login"
-msgstr "Zadnja prijava"
-
-#: js/user/EditDialog.js:611
-msgid "Domain not allowed"
-msgstr "Domena nije dozvoljena"
-
-#: js/user/EditDialog.js:612
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr "Domena {0} aliasa {1} koju pokušavate dodati u postavkama nije zadana kao primarna, niti je postavljena kao sekundarna domena."
-
-#: js/user/EditDialog.js:621
-msgid "Email Alias"
-msgstr "E-mail aliasi"
-
-#: js/user/EditDialog.js:627
-msgid "Add an alias address..."
-msgstr "Dodaj alias adresu..."
-
-#: js/user/EditDialog.js:645
-msgid "Forwarding to self"
-msgstr "Prosjediti na sebe"
-
-#: js/user/EditDialog.js:646
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr "Nije dopušteno postaviti adresu za prosljeđivanje ukoliko je ona identična korisničkoj primarnoj adresi ili bilo kojem aliasu."
-
-#: js/user/EditDialog.js:655
-msgid "Email Forward"
-msgstr "Proslijedi e-mail"
-
-#: js/user/EditDialog.js:661
-msgid "Add a forward address..."
-msgstr "Dodaj adresu za proslijeđivanje..."
-
-#: js/user/EditDialog.js:674
-msgid "Forward Only"
-msgstr "Samo proslijedi"
-
-#: js/user/EditDialog.js:693
-msgid "Password confirmation"
-msgstr "Potvrda zaporke"
-
-#: js/user/EditDialog.js:710
-msgid "Repeat password"
-msgstr "Ponovite zaporku"
-
-#: js/user/EditDialog.js:729 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr "Odustani"
-
-#: js/user/EditDialog.js:736
-msgid "Ok"
-msgstr "Spremi"
-
-#: js/user/EditDialog.js:771
-msgid "Account"
-msgstr "Račun"
-
-#: js/user/EditDialog.js:786 js/user/GridPanel.js:180
-msgid "First name"
-msgstr "Ime"
-
-#: js/user/EditDialog.js:796 js/user/GridPanel.js:179
-msgid "Last name"
-msgstr "Prezime"
-
-#: js/user/EditDialog.js:801 js/user/EditDialog.js:843
-#: js/user/GridPanel.js:178
-msgid "Login name"
-msgstr "Korisničko ime"
-
-#: js/user/EditDialog.js:806
-msgid "Password"
-msgstr "Zaporka"
-
-#: js/user/EditDialog.js:836 js/user/GridPanel.js:181
-msgid "Email"
-msgstr "E-mail"
-
-#: js/user/EditDialog.js:842 js/user/GridPanel.js:182
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/EditDialog.js:874
-msgid "expired"
-msgstr "Isteklo"
-
-#: js/user/EditDialog.js:875
-msgid "blocked"
-msgstr "Blokiran"
-
-#: js/user/EditDialog.js:882
-msgid "Invalid Status"
-msgstr "Status ne postoji"
-
-#: js/user/EditDialog.js:883
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr "Status Blokiran je moguć samo ukoliko se korisnik pokuša prijaviti sa krivom lozinkom prevelik broj puta. Taj status nije moguće ovdje postaviti."
-
-#: js/user/EditDialog.js:905 js/user/GridPanel.js:186
-msgid "Expires"
-msgstr "Ističe"
-
-#: js/user/EditDialog.js:957 js/user/GridPanel.js:183
-msgid "Last login at"
-msgstr "Zadnja prijava"
-
-#: js/user/EditDialog.js:959 js/user/EditDialog.js:963
-msgid "don't know"
-msgstr "ne zna"
-
-#: js/user/EditDialog.js:961 js/user/GridPanel.js:184
-msgid "Last login from"
-msgstr "Zadnja prijava od"
-
-#: js/user/EditDialog.js:965
-msgid "Password set"
-msgstr "Zaporka postavljena"
-
-#: js/user/EditDialog.js:972
-msgid "User groups"
-msgstr "Korisničke grupe"
-
-#: js/user/EditDialog.js:978
-msgid "User roles"
-msgstr "Korisničke role"
-
-#: js/user/EditDialog.js:984
-msgid "Fileserver"
-msgstr "Fileserver"
-
-#: js/user/EditDialog.js:990
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:999
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/GridPanel.js:56
-msgid "Enable Account"
-msgstr "Omogući račun"
-
-#: js/user/GridPanel.js:66
-msgid "Disable Account"
-msgstr "Onemogući račun"
-
-#: js/user/GridPanel.js:76
-msgid "Reset Password"
-msgstr "Resetiraj lozinku"
-
-#: js/user/GridPanel.js:177
-msgid "Display name"
-msgstr "Prikaz imena"
-
-#: js/user/GridPanel.js:185
-msgid "Password changed"
-msgstr "Zaporka je promijenjena"
-
-#: js/user/GridPanel.js:244
-msgid "Set new password"
-msgstr "Postavi novu zaporku"
-
-#: js/user/GridPanel.js:244
-msgid "Please enter the new password:"
-msgstr "Molimo Vas da unesete novu zaporku:"
-
-#: js/user/Users.js:72
-msgid "Users"
-msgstr "Korisnici"
-
-#: js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba korisnik"
-msgstr[1] "Samba korisnika"
-msgstr[2] "Samba korisnika"
-
-#: js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "E-mail korisnik"
-msgstr[1] "E-mail korisnika"
-msgstr[2] "E-mail korisnika"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:115
 msgid "Customfield"
@@ -957,6 +388,11 @@ msgid_plural "Customfields"
 msgstr[0] "Dodatno polje"
 msgstr[1] "Dodatna polja"
 msgstr[2] "Dodatnih polja"
+
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Greške"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
@@ -1001,6 +437,10 @@ msgstr "Zadni zapisnik klase nije pronađen"
 #: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr "U redu"
+
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:733
+msgid "Cancel"
+msgstr "Odustani"
 
 #: js/customfield/EditDialog.js:504
 msgid "Configure store"
@@ -1062,18 +502,577 @@ msgstr "Obavezno"
 msgid "Custom field additional properties"
 msgstr "Dodatne opcije Dodatnih polja"
 
+#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grupa"
+msgstr[1] "Grupe"
+msgstr[2] "Grupa"
+
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
 msgstr "Dodatno polje već postoji. Molimo odaberite drugo ime."
+
+#: js/customfield/GridPanel.js:131 js/Groups.js:52 js/Roles.js:47
+#: js/Tags.js:64
+msgid "Confirm"
+msgstr "Potvrdi"
 
 #: js/customfield/GridPanel.js:131
 msgid "Restart application to apply new customfields?"
 msgstr "Osvježiti modul kako bi se primijenila nova Dodatna polja?"
 
-#: Controller/Container.php:198
-msgid "Your container has been changed"
-msgstr "Vaš spremnik je izmijenjen"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Molimo pričekajte"
 
-#: Controller/Container.php:199
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Vaš spremnik je izmijenje id %1$s %2$s. Bilješka: %3$s"
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Ažuriranje članova"
+
+#: js/GroupEditDialog.js:73 js/Groups.js:74 js/RoleEditDialog.js:108
+#: js/RoleEditDialog.js:136 js/Roles.js:69 js/TagEditDialog.js:83
+msgid "Failed"
+msgstr "Neuspjelo"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Nije moguće spremiti grupu."
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:115 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Molimo Vas da ispravite zabilježene greške."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Naziv grupe"
+
+#: js/GroupEditDialog.js:129 js/Groups.js:236 js/RoleEditDialog.js:294
+#: js/Roles.js:239 js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92
+#: js/TagEditDialog.js:226 js/Tags.js:226 js/user/GridPanel.js:99
+msgid "Description"
+msgstr "Opis"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:914
+msgid "Visibility"
+msgstr "Vidljivost"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Display in addressbook"
+msgstr "Prikaži u imeniku"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:920
+msgid "Hide from addressbook"
+msgstr "Sakrij u imeniku"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:934
+msgid "Saved in Addressbook"
+msgstr "Spremljeno u adresar"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Članovi grupe"
+
+#: js/GroupEditDialog.js:222 js/RoleEditDialog.js:361 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
+msgstr "Prijenos {0}..."
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Dodaj novu grupu"
+
+#: js/GroupEditDialog.js:240
+msgid "Edit Group \"{0}\""
+msgstr "Uredi Grupu \"{0}\""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Želite li izbrisati označene grupe?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Brisanje grupe(a)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Pojavila se greška tijekom brisanja grupe."
+
+#: js/Groups.js:104
+msgid "Add Group"
+msgstr "Dodaj grupu"
+
+#: js/Groups.js:112
+msgid "Edit Group"
+msgstr "Uredi grupu"
+
+#: js/Groups.js:120
+msgid "Delete Group"
+msgstr "Izbriši grupu"
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Prikaz grupa {0} - {1} od {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "Nema grupa za prikaz"
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "Nije moguće spremiti ulogu."
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "Brisanje uloge..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Pojavila se greška tijekom brisanja uloge."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "Prava"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Članovi"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "Naziv uloge"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "Uloga"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "Dodaj novu ulogu"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "Uredi Ulogu \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Želite li izbrisati označene uloge?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Brisanje uloge(a)..."
+
+#: js/Roles.js:102
+msgid "Add Role"
+msgstr "Dodaj Rolu"
+
+#: js/Roles.js:110
+msgid "Edit Role"
+msgstr "Uredi Rolu"
+
+#: js/Roles.js:118
+msgid "Delete Role"
+msgstr "Obriši Rolu"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Prikaz uloga {0} - {1} od {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "Nema uloga za prikaz"
+
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:61
+msgid "Computer Name"
+msgstr "Naziv računala"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Računalo"
+msgstr[1] "Računala"
+msgstr[2] "Računala"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Ažuriranje oznake"
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "Nije moguće spremiti oznaku."
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr "Dozvoljena značenja"
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr "Značenje"
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr "Prava korisničkog računa"
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "Pregled"
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "Korištenje"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "Naziv oznake"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr "Oznaka"
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "Dodaj novu oznaku"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "Uredi Oznaku \"{0}\""
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Želite li izbrisati označene oznake?"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Brisanje oznake(a)..."
+
+#: js/Tags.js:97
+msgid "Add Tag"
+msgstr "Dodaj Oznaku"
+
+#: js/Tags.js:105
+msgid "Edit Tag"
+msgstr "Uredi Oznaku"
+
+#: js/Tags.js:113
+msgid "Delete Tag"
+msgstr "Obriši Oznaku"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Prikaz oznaka {0} - {1} od {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "Nema oznaka za prikaz"
+
+#: js/Tags.js:223
+msgid "Usage:&#160;"
+msgstr "Iskorišteno:&#160;"
+
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domena nije dopuštena. Provjerite konfiguraciju Vašeg SMTP servera."
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:730
+msgid "Passwords do not match!"
+msgstr "Zaporke nisu jednake!"
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr "Lozinke su iste!"
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:852
+msgid "Primary group"
+msgstr "Primarna grupa"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr "Početna mapa"
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr "Login Shell"
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr "Početni disk"
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "Vrijeme prijave"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:963
+#: js/user/EditDialog.js:967
+msgid "never logged in"
+msgstr "Nikada prijavljen"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr "Početna lokacija"
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "Vrijeme odjave"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "Nikada odjavljen"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr "Lokacija profila"
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr "Zadnja postavljena zaporka"
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:911
+#: js/user/EditDialog.js:971
+msgid "never"
+msgstr "nikada"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr "Skripta prijave"
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "Dozvoljena promjena zaporke"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "nije postavljeno"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "Potrebna promjena zaporke"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr "Vrijeme početka"
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr "IMAP Ogranićenje (MB)"
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr "Ograničenje"
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr "ograničenje nije postavljeno"
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "Trenutna veličina Sandučića"
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr "Sieve kvota (MB)"
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr "Trenutna veličina Sieve"
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:946
+msgid "Information"
+msgstr "Informacija"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "Zadnja prijava"
+
+#: js/user/EditDialog.js:615
+msgid "Domain not allowed"
+msgstr "Domena nije dozvoljena"
+
+#: js/user/EditDialog.js:616
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr "Domena {0} aliasa {1} koju pokušavate dodati u postavkama nije zadana kao primarna, niti je postavljena kao sekundarna domena."
+
+#: js/user/EditDialog.js:625
+msgid "Email Alias"
+msgstr "E-mail aliasi"
+
+#: js/user/EditDialog.js:631
+msgid "Add an alias address..."
+msgstr "Dodaj alias adresu..."
+
+#: js/user/EditDialog.js:649
+msgid "Forwarding to self"
+msgstr "Prosjediti na sebe"
+
+#: js/user/EditDialog.js:650
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr "Nije dopušteno postaviti adresu za prosljeđivanje ukoliko je ona identična korisničkoj primarnoj adresi ili bilo kojem aliasu."
+
+#: js/user/EditDialog.js:659
+msgid "Email Forward"
+msgstr "Proslijedi e-mail"
+
+#: js/user/EditDialog.js:665
+msgid "Add a forward address..."
+msgstr "Dodaj adresu za proslijeđivanje..."
+
+#: js/user/EditDialog.js:678
+msgid "Forward Only"
+msgstr "Samo proslijedi"
+
+#: js/user/EditDialog.js:697
+msgid "Password confirmation"
+msgstr "Potvrda zaporke"
+
+#: js/user/EditDialog.js:714
+msgid "Repeat password"
+msgstr "Ponovite zaporku"
+
+#: js/user/EditDialog.js:740
+msgid "Ok"
+msgstr "Spremi"
+
+#: js/user/EditDialog.js:775
+msgid "Account"
+msgstr "Račun"
+
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:180
+msgid "First name"
+msgstr "Ime"
+
+#: js/user/EditDialog.js:800 js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "Prezime"
+
+#: js/user/EditDialog.js:805 js/user/EditDialog.js:847
+#: js/user/GridPanel.js:178
+msgid "Login name"
+msgstr "Korisničko ime"
+
+#: js/user/EditDialog.js:810
+msgid "Password"
+msgstr "Zaporka"
+
+#: js/user/EditDialog.js:840 js/user/GridPanel.js:181
+msgid "Email"
+msgstr "E-mail"
+
+#: js/user/EditDialog.js:846 js/user/GridPanel.js:182
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/EditDialog.js:878
+msgid "expired"
+msgstr "Isteklo"
+
+#: js/user/EditDialog.js:879
+msgid "blocked"
+msgstr "Blokiran"
+
+#: js/user/EditDialog.js:886
+msgid "Invalid Status"
+msgstr "Status ne postoji"
+
+#: js/user/EditDialog.js:887
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr "Status Blokiran je moguć samo ukoliko se korisnik pokuša prijaviti sa krivom lozinkom prevelik broj puta. Taj status nije moguće ovdje postaviti."
+
+#: js/user/EditDialog.js:909 js/user/GridPanel.js:186
+msgid "Expires"
+msgstr "Ističe"
+
+#: js/user/EditDialog.js:961 js/user/GridPanel.js:183
+msgid "Last login at"
+msgstr "Zadnja prijava"
+
+#: js/user/EditDialog.js:963 js/user/EditDialog.js:967
+msgid "don't know"
+msgstr "ne zna"
+
+#: js/user/EditDialog.js:965 js/user/GridPanel.js:184
+msgid "Last login from"
+msgstr "Zadnja prijava od"
+
+#: js/user/EditDialog.js:969
+msgid "Password set"
+msgstr "Zaporka postavljena"
+
+#: js/user/EditDialog.js:976
+msgid "User groups"
+msgstr "Korisničke grupe"
+
+#: js/user/EditDialog.js:982
+msgid "User roles"
+msgstr "Korisničke role"
+
+#: js/user/EditDialog.js:988
+msgid "Fileserver"
+msgstr "Fileserver"
+
+#: js/user/EditDialog.js:994
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1003
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:56
+msgid "Enable Account"
+msgstr "Omogući račun"
+
+#: js/user/GridPanel.js:66
+msgid "Disable Account"
+msgstr "Onemogući račun"
+
+#: js/user/GridPanel.js:76
+msgid "Reset Password"
+msgstr "Resetiraj lozinku"
+
+#: js/user/GridPanel.js:177
+msgid "Display name"
+msgstr "Prikaz imena"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "Zaporka je promijenjena"
+
+#: js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Postavi novu zaporku"
+
+#: js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Molimo Vas da unesete novu zaporku:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Korisnici"
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba korisnik"
+msgstr[1] "Samba korisnika"
+msgstr[2] "Samba korisnika"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "E-mail korisnik"
+msgstr[1] "E-mail korisnika"
+msgstr[2] "E-mail korisnika"
