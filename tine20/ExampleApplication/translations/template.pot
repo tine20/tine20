@@ -13,37 +13,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Config.php:31
-msgid "Status Available"
-msgstr ""
-
-#: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-msgstr ""
-
 #: Controller.php:79
 #, python-format
 msgid "%s's personal example records"
-msgstr ""
-
-#: js/ExampleRecordDetailsPanel.js:56
-msgid "Total Example Records"
-msgstr ""
-
-#: js/ExampleRecordDetailsPanel.js:74 js/ExampleRecordEditDialog.js:70
-#: Model/ExampleRecord.php:59
-msgid "Name"
-msgstr ""
-
-#: js/ExampleRecordDetailsPanel.js:78 js/ExampleRecordEditDialog.js:76
-#: Model/ExampleRecord.php:63
-msgid "Status"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:53
-msgid "ExampleRecord"
 msgstr ""
 
 #: Model/ExampleRecord.php:35
@@ -62,12 +34,28 @@ msgstr ""
 msgid "example record lists"
 msgstr ""
 
-#: Preference.php:60
-msgid "Default Example Record Container"
+#: Model/ExampleRecord.php:59 js/ExampleRecordEditDialog.js:70
+#: js/ExampleRecordDetailsPanel.js:74
+msgid "Name"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default container for new records"
+#: Model/ExampleRecord.php:63 js/ExampleRecordEditDialog.js:76
+#: js/ExampleRecordDetailsPanel.js:78
+msgid "Status"
+msgstr ""
+
+#: Config.php:31
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid ""
+"Possible status. Please note that additional status might impact other "
+"ExampleApplication systems on export or syncronisation."
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr ""
 
 #: Setup/Initialize.php:33
@@ -82,6 +70,18 @@ msgstr ""
 msgid "In process"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:53
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordDetailsPanel.js:56
+msgid "Total Example Records"
 msgstr ""
