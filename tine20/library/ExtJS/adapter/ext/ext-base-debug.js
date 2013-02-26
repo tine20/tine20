@@ -51,6 +51,7 @@ Ext.apply = function(o, c, defaults){
             return r.test(ua);
         },
         DOC = document,
+        docMode = DOC.documentMode,
         isStrict = DOC.compatMode == "CSS1Compat",
         isOpera = check(/opera/),
         isChrome = check(/\bchrome\b/),
@@ -60,9 +61,10 @@ Ext.apply = function(o, c, defaults){
         isSafari3 = isSafari && check(/version\/3/),
         isSafari4 = isSafari && check(/version\/4/),
         isIE = !isOpera && check(/msie/),
-        isIE7 = isIE && check(/msie 7/),
-        isIE8 = isIE && check(/msie 8/),
-        isIE6 = isIE && !isIE7 && !isIE8,
+        isIE7 = isIE && ((check(/msie 7/) && docMode != 8 && docMode != 9) || docMode == 7),
+        isIE8 = isIE && ((check(/msie 8/) && docMode != 7 && docMode != 9) || docMode == 8),
+        isIE9 = isIE && ((check(/msie 9/) && docMode != 7 && docMode != 8) || docMode == 9),
+        isIE6 = isIE && check(/msie 6/),
         isGecko = !isWebKit && check(/gecko/),
         isGecko2 = isGecko && check(/rv:1\.8/),
         isGecko3 = isGecko && check(/rv:1\.9/),
@@ -732,6 +734,11 @@ function(el){
          * @type Boolean
          */
         isIE8 : isIE8,
+        /**
+         * True if the detected browser is Internet Explorer 9.x.
+         * @type Boolean
+         */
+        isIE9 : isIE9,
         /**
          * True if the detected browser uses the Gecko layout engine (e.g. Mozilla, Firefox).
          * @type Boolean
