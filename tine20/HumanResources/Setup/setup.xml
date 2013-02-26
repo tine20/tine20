@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.8</version>
+    <version>6.9</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -169,7 +169,7 @@
                 <field>
                     <name>health_insurance</name>
                     <type>text</type>
-                    <length>24</length>
+                    <length>128</length>
                 </field>
                 <field>
                     <name>employment_end</name>
