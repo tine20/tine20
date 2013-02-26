@@ -97,11 +97,12 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, $result['totalcount']);
         
         $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '12345');
-        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
+        $this->assertContains($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Tolle Leute - second mapping set');
         $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
@@ -110,7 +111,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][2]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][2]['added_date'], '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
-        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][2]['description']);
+        $this->assertContains($translatedString, $result['results'][2]['description']);
         
     }
     
@@ -133,11 +134,12 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $result['totalcount']);
         
         $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '');
-        $this->assertContains($translation->_("The following fields weren't imported: \n"), $result['results'][0]['description']);
+        $this->assertContains($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
