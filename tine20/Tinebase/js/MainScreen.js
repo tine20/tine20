@@ -99,7 +99,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 region: 'west',
                 id: 'west',
                 stateful: false,
-                layout: 'border',
                 split: true,
                 width: 200,
                 minSize: 100,
@@ -108,91 +107,36 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 collapsible:true,
                 collapseMode: 'mini',
                 header: false,
+                layout: 'fit',
+                autoScroll: true,
+                tbar: [{
+                    buttonAlign : 'center'
+                }],
+                
                 items: [{
-                    cls: 'tine-mainscreen-centerpanel-west-apptitle',
-                    hidden: this.appPickerStyle != 'pile',
-                    region: 'north',
+                    id: 'moduletree',
+                    cls: 'tine-mainscreen-centerpanel-west-modules',
                     border: false,
-                    height: 40,
-                    baseCls: 'x-panel-header',
-                    html: '<div class ="app-panel-title"></div>'
-                }, {
-                    cls: 'tine-mainscreen-centerpanel-west-center',
-                    border: false,
-                    region: 'center',
-                    layout: {
-                        type: 'column',
-                        align: 'stretch'
+                    autoScroll: false,
+                    autoHeight: true,
+                    style: {
+                        width: '100%'
                     },
-                    items:[{
-                        xtype: 'toolbar',
-                        height: 27,
-                        flex: 0,
-                        buttonAlign : 'center',
-                        style: {
-                            padding: '2px'
-                        },
-                        items: [],
-                        ref: '../../../westPanelToolbar'
-                    }, {
-                        border: false,
-                        frame: false,
-                        id: 'westpanel-scroll-wrapper',
-                        autoScroll:true,
-                        style: {
-                                width: '100%',
-                                'overflow-y': 'auto',
-                                'overflow-x': 'hidden'
-                            },
-                        layout: {
-                            type: 'column',
-                            align: 'stretch'
-                        },
-                        doLayout: function(shallow, force) {
-                            var el = this.getEl();
-                            this.supr().doLayout.call(this, shallow, force);
-                            var wrap = Ext.get('west').select('div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct'),
-                                height = wrap.first().getHeight() - 27;
-                            el.setStyle('height', height + 'px');
-                            el.dom.firstChild.firstChild.style.overflow = 'hidden';
-                            },
-                        items: [{
-                            cls: 'tine-mainscreen-centerpanel-west-modules',
-                            border: false,
-                            autoScroll: false,
-                            style: {
-                                width: '100%'
-                            },
-                            id: 'moduletree',
-                            flex: 1,
-                            layout: 'card',
-                            activeItem: 0,
-                            items: []
-                        }, {
-                            cls: 'tine-mainscreen-centerpanel-west-treecards',
-                            border: false,
-                            style: {
-                                width: '100%'
-                            },
-                            autoScroll: false,
-                            flex:1,
-                            id: 'treecards',
-                            layout: 'card',
-                            activeItem: 0,
-                            items: []
-                        }]
-                    }]
-                }, new Tine.Tinebase.AppPile({
-                    cls: 'tine-mainscreen-centerpanel-west-apppile',
-                    hidden: this.appPickerStyle != 'pile',
-                    region: 'south',
-                    layout: 'fit',
+                    layout: 'card',
+                    activeItem: 0,
+                    items: []
+                }, {
+                    id: 'treecards',
+                    cls: 'tine-mainscreen-centerpanel-west-treecards',
                     border: false,
-                    split: true,
-                    collapsible:true,
-                    collapseMode: 'mini',
-                    header: false
-                })]
+                    style: {
+                        width: '100%'
+                    },
+                    autoScroll: false,
+                    layout: 'card',
+                    activeItem: 0,
+                    items: []
+                }]
             }]
         }];
     },
@@ -228,35 +172,6 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             // TODO generalize this
             appPostfix = (document.title.match(/^\([0-9]+\) /)) ? document.title.match(/^\([0-9]+\) /)[0] : '';
         document.title = appPostfix + Tine.title + postfix  + ' - ' + app.getTitle();
-        
-        // set left top title
-        Ext.DomQuery.selectNode('div[class=app-panel-title]').innerHTML = app.getTitle();
-        
-        // add save favorites button to toolbar if favoritesPanel exists
-        var westPanel = app.getMainScreen().getWestPanel();
-        var favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : null;
-        
-        this.westPanelToolbar.removeAll();
-        if (favoritesPanel) {
-            this.westPanelToolbar.addButton({
-                xtype: 'button',
-                text: _('Save current view as favorite'),
-                iconCls: 'action_saveFilter',
-                scope: this,
-                handler: function() {
-                    favoritesPanel.saveFilter.call(favoritesPanel);
-                }
-            });
-            
-            this.westPanelToolbar.show();
-        } else {
-            this.westPanelToolbar.hide();
-        }
-        
-        this.westPanelToolbar.doLayout();
-        
-        this.getEl().select('div#treecards div.x-column-layout-ct').setStyle('height', null);
-        this.getEl().select('div#moduletree div.ux-arrowcollapse-body.ux-arrowcollapse-body-noborder').setStyle('height', null);
     },
     
     /**

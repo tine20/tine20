@@ -351,11 +351,6 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         return this.portalColumn;
     },
     
-    doLayout: function(shallow, force) {
-        this.body.setStyle({overflow: 'hidden', height: null});
-        Tine.widgets.mainscreen.WestPanel.superclass.doLayout.call(this, shallow, force);
-    },
-    
     /**
      * gets state of this cmp
      */

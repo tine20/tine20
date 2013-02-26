@@ -251,6 +251,31 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * shows west panel in mainscreen
      */
     showWestPanel: function() {
+        // add save favorites button to toolbar if favoritesPanel exists
+        // @TODO refactor me!
+        var westPanel = this.getWestPanel(),
+            favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : null,
+            westPanelToolbar = Ext.getCmp('west').getTopToolbar();
+        
+        westPanelToolbar.removeAll();
+        if (favoritesPanel) {
+            westPanelToolbar.addButton({
+                xtype: 'button',
+                text: _('Save current view as favorite'),
+                iconCls: 'action_saveFilter',
+                scope: this,
+                handler: function() {
+                    favoritesPanel.saveFilter.call(favoritesPanel);
+                }
+            });
+            
+            westPanelToolbar.show();
+        } else {
+            westPanelToolbar.hide();
+        }
+        
+        westPanelToolbar.doLayout();
+        
         Tine.Tinebase.MainScreen.setActiveTreePanel(this.getWestPanel(), true);
     },
     
