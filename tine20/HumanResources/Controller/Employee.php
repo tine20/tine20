@@ -290,7 +290,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             )), 'AND');
             
             // if not already exists
-            if(($lastNumber == 0) || ($this->search($filter)->count() === 0)) {
+            if (($lastNumber == 0) || ($this->search($filter)->count() === 0)) {
                 
                 $employee = new HumanResources_Model_Employee(array(
                     'number'              => $nextNumber,
@@ -310,6 +310,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     'bday'                => $account->bday,
                     'bank_account_holder' => $account->n_fn,
                 ));
+                
                 if ($createContract) {
                     $contract = $this->createContractDataForEmployee(array(
                         'feastCalendarId' => $_feastCalendarId,
@@ -321,18 +322,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 
                 $countCreated++;
                 
-                if($cliCall) {
+                if ($cliCall) {
                     echo 'Creating Employee "'. $account->n_fn . '"' . chr(10);
                 }
+                
                 $this->create($employee);
                 $nextNumber++;
+                
             } else {
                 if($cliCall) {
                     echo 'Employee "'. $account->n_fn . '" already exists. Skipping...' . chr(10);
                 }
             }
             
-            if($_deletePrivateInfo) {
+            if ($_deletePrivateInfo) {
                 $account->adr_two_countryname = NULL;
                 $account->adr_two_locality = NULL;
                 $account->adr_two_postalcode = NULL;
@@ -345,7 +348,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 // do not remove contact image
                 $account->jpegphoto = NULL;
                 
-                if($cliCall) {
+                if ($cliCall) {
                     echo 'Removing private information of employee "'. $account->n_fn .'"' . chr(10);
                 }
                 Addressbook_Controller_Contact::getInstance()->update($account);

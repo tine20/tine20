@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -132,25 +132,27 @@ class Tinebase_Frontend_Cli_Abstract
         $createUsers = in_array('sharedonly', $args['other']) ? false : true;
         $createShared = in_array('noshared', $args['other']) ? false : true;
         
-        $locale     = isset($args['locale']) ? $args['locale'] : 'en';
+        // locale defaults to de
+        $locale     = isset($args['locale'])   ? $args['locale']   : 'de';
         
-        if(isset($args['users'])) {
+        // password defaults to empty password
+        $password   = isset($args['password']) ? $args['password'] : '';
+        
+        if (isset($args['users'])) {
             $users = is_array($args['users']) ? $args['users'] : array($args['users']);
         } else {
             $users = null;
         }
         
-        if(isset($args['models'])) {
+        if (isset($args['models'])) {
             $models = is_array($args['models']) ? $args['models'] : array($args['models']);
         } else {
             $models = null;
         }
         $className = $this->_applicationName . '_Setup_DemoData';
         
-        if(class_exists($className)) {
-//             echo chr(10);
-//             echo 'Creating Demo Data for Application ' . $this->_applicationName . ' ...' . chr(10);
-            if($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers)) {
+        if (class_exists($className)) {
+            if ($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers, $password)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
             } else {
                 echo 'No Demo Data has been created' . chr(10) . chr(10);

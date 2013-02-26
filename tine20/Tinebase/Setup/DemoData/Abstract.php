@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  *
  */
@@ -26,14 +26,21 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected $_models = NULL;
 
     /**
-     * the default personas' passwort
+     * the application name to work on
+     * 
      * @var string
      */
-    protected $_defaultPassword = 'tine20';
-
+    protected $_appName = NULL;
+    
+    /**
+     * the name of the model currently worked on
+     * 
+     * @var string
+     */
+    protected $_modelName = NULL;
     /**
      * default ip for the fake session
-     * @var unknown_type
+     * @var string
      */
     protected $_defaultCliIp = '127.0.0.1';
 
@@ -41,6 +48,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * the personas to create demodata for
      * http://www.tine20.org/wiki/index.php/Personas
      * will be resolved to array of accounts
+     * 
      * @var array
      */
     protected $_personas = array(
@@ -50,7 +58,258 @@ abstract class Tinebase_Setup_DemoData_Abstract
         'jmcblack' => 'James McBlack',
         'rwright'  => 'Roberta Wright',
     );
+    
+    /**
+     * the groups to create
+     */
+    protected $_groups = array(
+        array(
+            'groupData' => array(
+                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Managers', 'description' => 'Managers of the company'
+            ),
+            'groupMembers' => array('pwulf')
+        ),
+        array(
+            'groupData' => array(
+                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'HumanResources', 'description' => 'Human Resources Managment'
+            ),
+            'groupMembers' => 
+                array('sclever', 'pwulf')
+            ),
+        array(
+            'groupData' => array(
+                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Secretary', 'description' => 'Secretarys of the company'
+            ),
+            'groupMembers' => array('sclever', 'pwulf')
+        ),
+        array(
+            'groupData' => array(
+                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Controllers', 'description' => 'Controllers of the company'
+            ),
+            'groupMembers' => array('rwright', 'pwulf')
+        ),
+    );
 
+    /**
+     * the roles to create for each group
+     */
+    protected $_roles = array(
+        array(
+            'roleData'    => array('name' => 'manager role'),
+            'roleMembers' => array(
+                array('type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 'name' => 'Managers')
+            ),
+            'roleRights'  => array(
+                'Admin' => array(
+                    'view_accounts','run','view_apps','manage_shared_tags','view_access_log'
+                ),
+                'Addressbook' => array(
+                    'manage_shared_contact_favorites','manage_shared_folders','run'
+                ),
+                'Tasks' => array(
+                    'manage_shared_task_favorites','manage_shared_folders','run'
+                ),
+                'Crm' => array(
+                    'manage_shared_lead_favorites','manage_shared_folders','manage_leads','run'
+                ),
+                'Filemanager' => array(
+                    'manage_shared_folders','run'
+                ),
+                'Calendar' => array(
+                    'manage_shared_event_favorites','manage_shared_folders','manage_resources','run'
+                ),
+                'Courses' => array(
+                    'add_existing_user','add_new_user','run'
+                ),
+                'HumanResources' => array(
+                    'edit_private','run'
+                ),
+                'Projects' => array(
+                    'manage_shared_project_favorites','run'
+                ),
+                'Sales' => array(
+                    'manage_products','run'
+                ),
+                'Sipgate' => array(
+                    'manage_private_accounts','manage_shared_accounts','sync_lines','manage_accounts','run'
+                ),
+                'RequestTracker' => array(
+                    'run'
+                ),
+                'Inventory' => array(
+                    'run'
+                ),
+                'SimpleFAQ' => array(
+                    'run'
+                ),
+                'ExampleApplication' => array(
+                    'run'
+                ),
+                'Felamimail' => array(
+                    'run'
+                ),
+                'ActiveSync' => array(
+                    'run'
+                ),
+                'Tinebase' => array(
+                    'run','manage_own_profile','check_version'
+                ),
+                'Timetracker' => array(
+                    'manage_timeaccounts','add_timeaccounts','manage_shared_timeaccount_favorites','manage_shared_timesheet_favorites','run'
+                ),
+            )
+        ),
+        array(
+            'roleData'    => array('name' => 'administrative management role'),
+            'roleMembers' => array(
+                array('type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 'name' => 'HumanResources'),
+                array('type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 'name' => 'Controllers')
+            ),
+            'roleRights'  => array(
+                'Tasks' => array(
+                    'manage_shared_task_favorites','manage_shared_folders','run'
+                ),
+                'Crm' => array(
+                    'manage_shared_lead_favorites','manage_shared_folders','run','manage_leads'
+                ),
+                'Calendar' => array(
+                    'manage_shared_event_favorites','manage_shared_folders','run','manage_resources'
+                ),
+                'HumanResources' => array(
+                    'run','edit_private'
+                ),
+                'Sipgate' => array(
+                    'run','manage_private_accounts','manage_shared_accounts','manage_accounts','sync_lines'
+                ),
+                'Sales' => array(
+                    'run','manage_products'
+                ),
+                'RequestTracker' => array(
+                    'run'
+                ),
+                'Projects' => array(
+                    'run','manage_shared_project_favorites'
+                ),
+                'Courses' => array(
+                    'run','add_existing_user','add_new_user'
+                ),
+                'Inventory' => array(
+                    'run'
+                ),
+                'SimpleFAQ' => array(
+                    'run'
+                ),
+                'ExampleApplication' => array(
+                    'run'
+                ),
+                'Felamimail' => array(
+                    'run'
+                ),
+                'Filemanager' => array(
+                    'run','manage_shared_folders'
+                ),
+                'Addressbook' => array(
+                    'run','manage_shared_folders','manage_shared_contact_favorites'
+                ),
+                'ActiveSync' => array(
+                    'run'
+                ),
+                'Tinebase' => array(
+                    'run','report_bugs'
+                ),
+                'Timetracker' => array(
+                    'manage_shared_timeaccount_favorites','manage_shared_timesheet_favorites','run','add_timeaccounts','manage_timeaccounts'
+                ),
+                'Admin' => array(
+                    'manage_accounts','view_accounts','run'
+                ),
+            )
+        ),
+        array(
+            'roleData'    => array('name' => 'secretary role'),
+            'roleMembers' => array(
+                array('type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 'name' => 'Secretary'),
+            ),
+            'roleRights'  => array(
+                'Addressbook' => array(
+                    'manage_shared_contact_favorites','manage_shared_folders','run'
+                ),
+                'Tasks' => array(
+                    'manage_shared_task_favorites','manage_shared_folders','run'
+                ),
+                'Crm' => array(
+                    'manage_shared_lead_favorites','manage_shared_folders','run'
+                ),
+                'Calendar' => array(
+                    'manage_shared_event_favorites','manage_shared_folders','run','manage_resources'
+                ),
+                'HumanResources' => array(
+                    'run'
+                ),
+                'Sipgate' => array(
+                    'run'
+                ),
+                'Sales' => array(
+                    'run'
+                ),
+                'RequestTracker' => array(
+                    'run'
+                ),
+                'Projects' => array(
+                    'run'
+                ),
+                'Courses' => array(
+                    'run','add_existing_user','add_new_user'
+                ),
+                'Inventory' => array(
+                    'run'
+                ),
+                'SimpleFAQ' => array(
+                    'run'
+                ),
+                'ExampleApplication' => array(
+                    'run'
+                ),
+                'Felamimail' => array(
+                    'run'
+                ),
+                'Filemanager' => array(
+                    'run'
+                ),
+                'ActiveSync' => array(
+                    'run'
+                ),
+                'Tinebase' => array(
+                    'run'
+                ),
+                'Timetracker' => array(
+                    'manage_shared_timeaccount_favorites','manage_shared_timesheet_favorites','run'
+                ),
+            )
+        ),
+    );
+    // this week
+    protected $_monday       = NULL;
+    protected $_tuesday      = NULL;
+    protected $_wednesday    = NULL;
+    protected $_thursday     = NULL;
+    protected $_friday       = NULL;
+    protected $_saturday     = NULL;
+    protected $_sunday       = NULL;
+
+    // last week
+    protected $_lastMonday   = NULL;
+    protected $_lastFriday   = NULL;
+    protected $_lastSaturday = NULL;
+    protected $_lastSunday   = NULL;
+
+    // next week
+    protected $_nextMonday     = NULL;
+    protected $_nextWednesday  = NULL;
+    protected $_nextFriday     = NULL;
+        
+    protected $_wednesday2week = NULL;
+    protected $_friday2week    = NULL;
     /**
      * shall shared data be created?
      * @var boolean
@@ -98,7 +357,71 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * the locale, the demodata should created with
      * @var string
      */
-    protected $_locale = 'en';
+    protected static $_locale = 'en';
+    
+    /**
+     * shortcut for locale
+     */
+    protected static $_de = true;
+    
+    /**
+     * defaults to an empty password
+     */
+    protected static $_defaultPassword = '';
+    
+    /**
+     * shortcut for locale
+     */
+    protected static $_en = false;
+
+    protected function _getDays() {
+        // find out where we are
+        $now = new Tinebase_DateTime();
+        $weekday = $now->format('w');
+
+        $subdaysLastMonday = 6 + $weekday;    // Monday last Week
+        $subdaysLastFriday = 2 + $weekday;    // Friday last Week
+
+        // this week
+        $this->_monday = new Tinebase_DateTime();
+        $this->_monday->sub(date_interval_create_from_date_string(($weekday - 1) . ' days'));
+        $this->_tuesday = new Tinebase_DateTime();
+        $this->_tuesday->sub(date_interval_create_from_date_string(($weekday - 2) . ' days'));
+        $this->_wednesday = new Tinebase_DateTime();
+        $this->_wednesday->sub(date_interval_create_from_date_string(($weekday - 3) . ' days'));
+        $this->_thursday = new Tinebase_DateTime();
+        $this->_thursday->sub(date_interval_create_from_date_string(($weekday - 4) . ' days'));
+        $this->_friday = new Tinebase_DateTime();
+        $this->_friday->sub(date_interval_create_from_date_string(($weekday - 5) . ' days'));
+        $this->_saturday = clone $this->_friday;
+        $this->_saturday->add(date_interval_create_from_date_string('1 day'));
+        $this->_sunday = clone $this->_friday;
+        $this->_sunday->add(date_interval_create_from_date_string('2 days'));
+
+        // last week
+        $this->_lastMonday = new Tinebase_DateTime();
+        $this->_lastMonday->sub(date_interval_create_from_date_string($subdaysLastMonday . ' days'));
+        $this->_lastWednesday = clone $this->_wednesday;
+        $this->_lastWednesday->subWeek(1);
+        $this->_lastFriday = new Tinebase_DateTime();
+        $this->_lastFriday->sub(date_interval_create_from_date_string($subdaysLastFriday . ' days'));
+        $this->_lastSaturday = clone $this->_lastFriday;
+        $this->_lastSaturday = $this->_lastSaturday->add(date_interval_create_from_date_string('1 day'));
+        $this->_lastSunday = clone $this->_lastFriday;
+        $this->_lastSunday = $this->_lastSunday->add(date_interval_create_from_date_string('2 days'));
+        
+        $this->_nextMonday = clone $this->_monday;
+        $this->_nextMonday->addWeek(1);
+        $this->_nextWednesday = clone $this->_wednesday;
+        $this->_nextWednesday->addWeek(1);
+        $this->_nextFriday = clone $this->_friday;
+        $this->_nextFriday->addWeek(1);
+        
+        $this->_wednesday2week = clone $this->_nextWednesday;
+        $this->_wednesday2week->addWeek(1);
+        $this->_friday2week = clone $this->_nextFriday;
+        $this->_friday2week->addWeek(1);
+    }
 
     /**
      * creates the demo data and is called from the Frontend_Cli
@@ -108,18 +431,21 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * @param array $_users
      * @param boolean $this->_createShared
      * @param boolean $this->_createUsers
+     * @param string $_password
      * @return boolean
      */
-    public function createDemoData($_locale, $_models = NULL, $_users = NULL, $_createShared = TRUE, $_createUsers = TRUE) {
+    public function createDemoData($_locale, $_models = NULL, $_users = NULL, $_createShared = TRUE, $_createUsers = TRUE, $_password = '') {
 
         $this->_createShared = $_createShared;
-        $this->_createUsers = $_createUsers;
+        $this->_createUsers  = $_createUsers;
 
-        if($_locale) $this->_locale = $_locale;
+        if ($_locale) {
+            static::$_locale = $_locale;
+        }
         // just shortcuts
-        $this->de = ($this->_locale == 'de') ? true : false;
-        $this->en = ! $this->de;
-
+        static::$_de = (static::$_locale == 'de') ? true : false;
+        static::$_en = ! static::$_de;
+        static::$_defaultPassword = $_password;
         $this->_beforeCreate();
 
         // look for defined models
@@ -150,10 +476,12 @@ abstract class Tinebase_Setup_DemoData_Abstract
         $this->_personas = array();
 
         foreach($users as $loginName => $name) {
-            if($user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName)) {
-                $this->_personas[$loginName] = $user;
-            } else {
-                echo 'Persona with login name' . $loginName . ' does not exist or no demo data is defined!' . chr(10);
+            try {
+                $this->_personas[$loginName] = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+            } catch (Tinebase_Exception_NotFound $e) {
+                echo 'Persona with login name ' . $loginName . ' does not exist or no demo data is defined!' . chr(10);
+                echo 'Have you run Admin.createDemoDate already?' . PHP_EOL;
+                echo 'If not, do this!' . PHP_EOL;
                 return false;
             }
         }
@@ -169,33 +497,40 @@ abstract class Tinebase_Setup_DemoData_Abstract
 
         if(is_array($this->_models)) {
             foreach($this->_models as $model) {
-
+                $mname = ucfirst($model);
                 // shared records
                 if($this->_createShared) {
-                    $methodName = 'createShared' . ucfirst($model) . 's';
+                    $methodName = '_createShared' . $mname . 's';
                     if(method_exists($this, $methodName)) {
-                        $callQueueShared[] = $methodName;
+                        $callQueueShared[] = array('methodName' => $methodName, 'modelName' => $mname);
                     }
                 }
 
                 // user records
                 if($this->_createUsers) {
                     foreach($users as $userLogin => $userRecord) {
-                        $methodName = 'create' . ucfirst($model) . 'sFor' . ucfirst($userLogin);
+                        $uname = ucfirst($userLogin);
+                        $methodName = '_create' . $mname . 'sFor' . $uname;
                         if(method_exists($this, $methodName)) {
-                            $callQueue[$userLogin] = $methodName;
+                            $callQueue[$userLogin] = array('methodName' => $methodName, 'userName' => $uname, 'modelName' => $mname);
                         }
                     }
                 }
             }
         }
-        foreach($callQueueShared as $method) {
-            $this->{$method}();
+        
+        // call create shared method
+        foreach($callQueueShared as $info) {
+            echo 'Creating shared ' . $info['modelName'] . 's...' . PHP_EOL;
+            $this->_modelName = $info['modelName'];
+            $this->{$info['methodName']}();
         }
-
-        foreach($callQueue as $loginName => $method) {
+        
+        // call create methods as the user itself
+        foreach($callQueue as $loginName => $info) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_personas[$loginName]);
-            $this->{$method}();
+            echo 'Creating personal ' . $info['modelName'] . 's for ' . $info['userName'] . '...' . PHP_EOL;
+            $this->{$info['methodName']}();
         }
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_adminUser);
@@ -205,14 +540,119 @@ abstract class Tinebase_Setup_DemoData_Abstract
         return true;
     }
 
+    /**
+     * returns a relation array by records
+     * 
+     * @param Tinebase_Record_Abstract $ownRecord
+     * @param Tinebase_Record_Abstract $foreignRecord
+     * @param string $ownDegree
+     * @param string $type
+     * @return array
+     */
+    protected function _getRelationArray($ownRecord, $foreignRecord, $ownDegree = Tinebase_Model_Relation::DEGREE_SIBLING, $type = NULL)
+    {
+        $ownModel = get_class($ownRecord);
+        $foreignModel = get_class($foreignRecord);
+        
+        if (! $type) {
+            $split = explode('_Model_', $foreignModel);
+            $type = strtoupper($split[1]);
+        }
+         
+        return array(
+            'own_model'              => $ownModel,
+            'own_backend'            => 'Sql',
+            'own_id'                 => $ownRecord->getId(),
+            'own_degree'             => $ownDegree,
+            'related_model'          => $foreignModel,
+            'related_backend'        => 'Sql',
+            'related_id'             => $foreignRecord->getId(),
+            'type'                   => $type
+        );
+    }
+
+    protected function _createContainer()
+    {
+        
+    }
+    
+    /**
+     * creates a shared container by name and data, if given
+     */
+    protected function _createSharedContainer($containerName, $data = array(), $setAsThisSharedContainer = true)
+    {
+        // create shared calendar
+        $container = Tinebase_Container::getInstance()->addContainer(
+            new Tinebase_Model_Container(array_merge(
+                array(
+                    'name'           => $containerName,
+                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                    'owner_id'       => Tinebase_Core::getUser(),
+                    'backend'        => 'SQL',
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
+                    'model'          => $this->_appName . '_Model_' . $this->_modelName,
+                    'color'          => '#00FF00'
+                ),
+                $data
+            ), true)
+        );
+
+        $group = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Group::DEFAULT_USER_GROUP);
+        Tinebase_Container::getInstance()->addGrants($container->getId(), 'group', $group->getId(), $this->_userGrants, true);
+        Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['pwulf']->getId(),   $this->_adminGrants, true);
+        
+        if ($setAsThisSharedContainer) {
+            $this->_sharedContainer = $container;
+        }
+        
+        return $container;
+    }
+    
+    /**
+     * returns an existing contact by its full name or by an account login name
+     * usage:
+     * array('user' => 'pwulf') 
+     *      returns the contact of paul wulf 
+     * array('contact' => 'Carolynn Hinsdale')
+     *      returns the contact of Mrs. Hinsdale
+     * 
+     * @param array $_data
+     * 
+     */
+    protected function _getContact($_data)
+    {
+        // handle user
+        if ($_data['user']) {
+            $account = $this->_personas[$_data['user']];
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
+        } else { // handle contact
+            $filter  = new Addressbook_Model_ContactFilter(array(
+                array('field' => 'query', 'operator' => 'contains', 'value' => $_data['contact'])
+            ));
+            $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+        }
+        return $contact;
+    }
+    
+    /**
+     * is called on createDemoData before finding out which models and users to build
+     */
     protected function _beforeCreate() {
 
     }
-
+    
+    /**
+     * is called on createDemoData after finding out which models
+     * and users to build and before calling the demo data class methods
+     */
     protected function _onCreate() {
 
     }
-
+    
+    /**
+     * is called on createDemoData after all demo data has been created
+     */
     protected function _afterCreate() {
 
     }

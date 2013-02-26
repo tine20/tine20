@@ -96,7 +96,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         return $leads;
     }
     
-/**
+    /**
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
