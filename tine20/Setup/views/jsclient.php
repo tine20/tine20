@@ -16,8 +16,6 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" >
-    
     <title><?php echo $this->escape($this->title) ?></title>
 
     <!-- EXT JS -->
