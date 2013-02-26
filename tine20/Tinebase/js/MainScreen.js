@@ -151,7 +151,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                         doLayout: function(shallow, force) {
                             var el = this.getEl();
                             this.supr().doLayout.call(this, shallow, force);
-                            var wrap = Ext.get('west').select('div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct').getStyle('height'),
+                            var wrap = Ext.get('west').select('div.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct'),
                                 height = wrap.first().getHeight() - 27;
                             el.setStyle('height', height + 'px');
                             el.dom.firstChild.firstChild.style.overflow = 'hidden';
