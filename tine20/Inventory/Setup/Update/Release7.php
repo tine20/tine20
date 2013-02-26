@@ -105,4 +105,30 @@ class Inventory_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('inventory_item', '7');
         $this->setApplicationVersion('Inventory', '7.5');
     }
+    
+    /**
+     * update to 7.6
+     * - create default persistent filter
+     * 
+     * @return void
+     */
+    public function update_5()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+            
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
+            'model'             => 'Inventory_Model_InventoryItemFilter',
+        );
+        
+        // default persistent filter for all records
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All Inventory Items", // _("All Inventory Items")
+            'description'       => "All existing Inventory Items", // _("All existing Inventory Items")
+            'filters'           => array(),
+        ))));
+        
+        $this->setApplicationVersion('Inventory', '7.6');
+    }
 }

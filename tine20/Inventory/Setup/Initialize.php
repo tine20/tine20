@@ -46,4 +46,25 @@ class Inventory_Setup_Initialize extends Setup_Initialize
         )));
         
     }
+    
+    /**
+     * init the default persistentfilters
+     */
+    protected function _initializeFavorites()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+            
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
+            'model'             => 'Inventory_Model_InventoryItemFilter',
+        );
+        
+        // default persistent filter for all records
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All Inventory Items", // _("All Inventory Items")
+            'description'       => "All existing Inventory Items", // _("All existing Inventory Items")
+            'filters'           => array(),
+        ))));
+    }
 }
