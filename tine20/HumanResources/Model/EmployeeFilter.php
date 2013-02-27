@@ -42,6 +42,7 @@ class HumanResources_Model_EmployeeFilter extends Tinebase_Model_Filter_FilterGr
         'title'      => array('filter' => 'Tinebase_Model_Filter_Text'),
         'salutation' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'profession' => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'health_insurance' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'employment_begin'  => array('filter' => 'Tinebase_Model_Filter_Date'),
         'employment_end'    => array('filter' => 'Tinebase_Model_Filter_Date'),

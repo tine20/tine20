@@ -216,9 +216,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .5,
                                     ref: '../../../../../../../lastDayLengthPicker',
                                     validator: this.isDayLengthValid
-                                }],[{
-                                    fieldLabel: this.app.i18n._('Remark'),
-                                    name: 'remark'
                                 }]
                                 ]
                         }, {

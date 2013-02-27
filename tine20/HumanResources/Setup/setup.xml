@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>6.7</version>
+    <version>6.8</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -28,6 +28,12 @@
                     <name>countryname</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -291,7 +297,7 @@
         </table>
         <table>
             <name>humanresources_freetime</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -316,9 +322,10 @@
                     <default>vacation</default>
                 </field>
                 <field>
-                    <name>remark</name>
+                    <name>description</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>status</name>

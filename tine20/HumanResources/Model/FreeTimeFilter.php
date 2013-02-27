@@ -38,7 +38,7 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
         'firstday_date'  => array( 'filter' => 'Tinebase_Model_Filter_Date'),
         'type'           => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
-        'remark'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
+        'description'    => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'employee_id'    => array( 'filter' => 'Tinebase_Model_Filter_ForeignId',
             'options' => array(
                 'filtergroup'       => 'HumanResources_Model_EmployeeFilter',

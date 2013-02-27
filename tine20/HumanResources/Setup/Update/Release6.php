@@ -219,4 +219,31 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '7');
         $this->setApplicationVersion('HumanResources', '6.7');
     }
+        
+    /**
+     * update 7.4 -> 7.5
+     * https://forge.tine20.org/mantisbt/view.php?id=7924
+     * #7924: HR Modul - Description text not saved
+     * - rename field freetime.remark to freetime.description
+     * - add field employee.description
+     */
+    public function update_7()
+    {
+        $field = '<field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_freetime', $declaration, 'remark');
+        
+        // add column to employe
+        $this->_backend->addCol('humanresources_employee', $declaration);
+        
+        $this->setTableVersion('humanresources_freetime', '3');
+        $this->setTableVersion('humanresources_employee', '8');
+        $this->setApplicationVersion('HumanResources', '6.8');
+    }
 }
