@@ -268,7 +268,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: 0.5,
                                     fieldLabel: this.app.i18n._('Cost centre'),
                                     name: 'costcentre',
-                                    maxLength: 255
+                                    maxLength: 255,
+                                    allowBlank: true
                               })
                             : {
                                     xtype: 'textfield',
