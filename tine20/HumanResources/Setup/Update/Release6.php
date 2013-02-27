@@ -455,10 +455,12 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
     
     /**
      * update 6.8 -> 6.9
+     *
      * https://forge.tine20.org/mantisbt/view.php?id=7924
      * #7924: HR Modul - Description text not saved
      * - rename field freetime.remark to freetime.description
      * - add field employee.description
+     * - resize health_insurance field to 128
      */
     public function update_8()
     {
@@ -484,11 +486,34 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '8');
         $this->setApplicationVersion('HumanResources', '6.9');
     }
+    
+    /**
+     * update 6.8 -> 6.9
+     * 
+     * 0007922: can´t data save in HR modul
+     * https://forge.tine20.org/mantisbt/view.php?id=7922
+     * #7912: health_insurance needs maxLength configured in edit dialog
+     */
+    public function update_9()
+    {
+        $field = '<field>
+                    <name>health_insurance</name>
+                    <type>text</type>
+                    <length>128</length>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_employee', $declaration);
+        
+        $this->setTableVersion('humanresources_employee', '9');
+
+        $this->setApplicationVersion('HumanResources', '6.10');
+    }
 
     /**
      * update to 7.0
      */
-    public function update_9()
+    public function update_10()
     {
         $this->setApplicationVersion('HumanResources', '7.0');
     }

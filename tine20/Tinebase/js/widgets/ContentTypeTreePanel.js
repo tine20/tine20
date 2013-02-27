@@ -128,7 +128,9 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }
             
             // check requiredRight if any
-            if (ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) return true;
+            if (ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, modelName.toLowerCase() + 's'))) {
+                return true;
+            }
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + modelName,

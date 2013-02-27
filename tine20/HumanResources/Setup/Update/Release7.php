@@ -103,4 +103,19 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_freetime', '5');
         $this->setApplicationVersion('HumanResources', '7.5');
     }
+
+    /**
+     * update 7.5 -> 7.6
+     * 
+     * @see #7924: HR Modul - Description text not saved
+     * - rename field freetime.remark to freetime.description
+     * - add field employee.description
+     */
+    public function update_5()
+    {
+        $update6 = new HumanResources_Setup_Update_Release6($this->_backend);
+        $update6->update_9();
+        $this->setTableVersion('humanresources_employee', '10');
+        $this->setApplicationVersion('HumanResources', '7.6');
+    }
 }

@@ -184,7 +184,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         firstRow.push({
             name: 'health_insurance',
             fieldLabel: this.app.i18n._('Health Insurance'),
-            allowBlank: true
+            allowBlank: true,
+            maxLength: 128
         });
         
         this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
