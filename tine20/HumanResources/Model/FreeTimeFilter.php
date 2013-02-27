@@ -35,6 +35,7 @@ class HumanResources_Model_FreeTimeFilter extends Tinebase_Model_Filter_FilterGr
      */
     protected $_filterModel = array(
         'id'             => array( 'filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'HumanResources_Model_FreeTime')),
+        'query'          => array( 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('type', 'status', 'description'))),
         'firstday_date'  => array( 'filter' => 'Tinebase_Model_Filter_Date'),
         'type'           => array( 'filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array( 'filter' => 'Tinebase_Model_Filter_Text'),
