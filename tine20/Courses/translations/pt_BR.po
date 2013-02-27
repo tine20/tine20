@@ -64,43 +64,30 @@ msgstr "Prefixo do nome de entrada de estudantes"
 msgid "Samba user settings"
 msgstr "Configuração de usuário para o Samba"
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Curso"
-msgstr[1] "Cursos"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Cursos"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Professor"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Todos os cursos"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Conta de Professor"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Em"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Meu curso"
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Fora"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Prenome"
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtrado"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Sobrenome"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Adicionar novo membro ao curso"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Erros"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Favor fixar os erros anotados."
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "O favorito padrão que foi carregado na inicialização das Classes"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -109,6 +96,12 @@ msgstr "Importação de membros do curso"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Adicionar novo membro"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Curso"
+msgstr[1] "Cursos"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -142,6 +135,26 @@ msgstr "desconhecido"
 msgid "Reset Password"
 msgstr "Restabelecer a senha"
 
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Prenome"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Sobrenome"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Adicionar novo membro ao curso"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Erros"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Favor fixar os erros anotados."
+
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Nome"
@@ -174,27 +187,14 @@ msgid_plural "Course Types"
 msgstr[0] "Tipo de Curso"
 msgstr[1] "Tipos de Curso"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Todos os cursos"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Professor"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "O favorito padrão que foi carregado na inicialização das Classes"
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Conta de Professor"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Em"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Fora"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrado"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Cursos"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Meu curso"

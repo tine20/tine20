@@ -17,43 +17,16 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Позвонить"
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Изменить настройки телефона"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Рабочий"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Домашний"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Мобильный"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Мобильный личный"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Телефон"
 msgstr[1] "Телефоны"
 msgstr[2] "Телефоны"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "список телефонов"
-msgstr[1] "списки телефонов"
-msgstr[2] "списки телефонов"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Изменить настройки телефона"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -83,78 +56,105 @@ msgstr "Ошибка"
 msgid "Not possible to dial."
 msgstr "Не возможно набрать."
 
-#: js/Phone.js:480
+#: js/Phone.js:483
 msgid "Dial number"
 msgstr "Наберите номер"
 
-#: js/Phone.js:481
+#: js/Phone.js:484
 msgid "Initiate a new outgoing call"
 msgstr "Начните новый исходящий звонок"
 
-#: js/Phone.js:542
+#: js/Phone.js:550
 msgid "Incoming call"
 msgstr "Входящий звонок"
 
-#: js/Phone.js:546
+#: js/Phone.js:554
 msgid "Outgoing call"
 msgstr "Исходящий звонок"
 
-#: js/Phone.js:554
+#: js/Phone.js:562
 msgid "unknown number"
 msgstr "неизвестный номер"
 
-#: js/Phone.js:591
+#: js/Phone.js:599
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Phone.js:676
+#: js/Phone.js:684
 msgid "Source or Destination"
 msgstr "Источник или Назначение"
 
-#: js/Phone.js:692
+#: js/Phone.js:700
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Показаны звонки {0} - {1} из {2}"
 
-#: js/Phone.js:693 js/Phone.js:736
+#: js/Phone.js:701 js/Phone.js:744
 msgid "No calls to display"
 msgstr "Нет звонков"
 
-#: js/Phone.js:703
+#: js/Phone.js:711
 msgid "Direction"
 msgstr "Направление"
 
-#: js/Phone.js:704
+#: js/Phone.js:712
 msgid "Source"
 msgstr "Источник"
 
-#: js/Phone.js:705
+#: js/Phone.js:713
 msgid "Caller Id"
 msgstr "Id звонящего по телефону"
 
-#: js/Phone.js:706
+#: js/Phone.js:714
 msgid "Destination"
 msgstr "Назначение"
 
-#: js/Phone.js:707
+#: js/Phone.js:715
 msgid "Start"
 msgstr "Старт"
 
-#: js/Phone.js:708
+#: js/Phone.js:716
 msgid "Connected"
 msgstr "Соединение"
 
-#: js/Phone.js:709
+#: js/Phone.js:717
 msgid "Disconnected"
 msgstr "Разъединение"
 
-#: js/Phone.js:710
+#: js/Phone.js:718
 msgid "Duration"
 msgstr "Продолжительность"
 
-#: js/Phone.js:711
+#: js/Phone.js:719
 msgid "Ringing"
 msgstr "Звонок"
 
-#: js/Phone.js:712
+#: js/Phone.js:720
 msgid "Call ID"
 msgstr "ID звонка"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "список телефонов"
+msgstr[1] "списки телефонов"
+msgstr[2] "списки телефонов"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Позвонить"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Рабочий"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Домашний"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Мобильный"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Мобильный личный"

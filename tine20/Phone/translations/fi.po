@@ -17,41 +17,15 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Yhteyshenkilö"
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Muokkaa puhelin asetuksia"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Työ"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Koti"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Matkapuhelin"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Matkapuhelin koti"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Puhelin"
 msgstr[1] "Puhelimet"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "puhelin lista"
-msgstr[1] "puhelin listat"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Muokkaa puhelin asetuksia"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -81,78 +55,104 @@ msgstr "Virhe"
 msgid "Not possible to dial."
 msgstr "Valinta ei onnistu."
 
-#: js/Phone.js:480
+#: js/Phone.js:483
 msgid "Dial number"
 msgstr "Valitse numero"
 
-#: js/Phone.js:481
+#: js/Phone.js:484
 msgid "Initiate a new outgoing call"
 msgstr "Aloita uusi puhelu"
 
-#: js/Phone.js:542
+#: js/Phone.js:550
 msgid "Incoming call"
 msgstr "Tuleva puhelu"
 
-#: js/Phone.js:546
+#: js/Phone.js:554
 msgid "Outgoing call"
 msgstr "Lähtevä puhelu"
 
-#: js/Phone.js:554
+#: js/Phone.js:562
 msgid "unknown number"
 msgstr "Tuntematon numero"
 
-#: js/Phone.js:591
+#: js/Phone.js:599
 msgid "Search:"
 msgstr "Hae:"
 
-#: js/Phone.js:676
+#: js/Phone.js:684
 msgid "Source or Destination"
 msgstr "Lähde tai kohde:"
 
-#: js/Phone.js:692
+#: js/Phone.js:700
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Näytetään puhelut {0} - {1} - {2}"
 
-#: js/Phone.js:693 js/Phone.js:736
+#: js/Phone.js:701 js/Phone.js:744
 msgid "No calls to display"
 msgstr "Ei näytettäviä puheluita"
 
-#: js/Phone.js:703
+#: js/Phone.js:711
 msgid "Direction"
 msgstr "Suunta"
 
-#: js/Phone.js:704
+#: js/Phone.js:712
 msgid "Source"
 msgstr "Lähde"
 
-#: js/Phone.js:705
+#: js/Phone.js:713
 msgid "Caller Id"
 msgstr "Soittajan numero"
 
-#: js/Phone.js:706
+#: js/Phone.js:714
 msgid "Destination"
 msgstr "Kohde"
 
-#: js/Phone.js:707
+#: js/Phone.js:715
 msgid "Start"
 msgstr "Aloita"
 
-#: js/Phone.js:708
+#: js/Phone.js:716
 msgid "Connected"
 msgstr "Yhdistetty"
 
-#: js/Phone.js:709
+#: js/Phone.js:717
 msgid "Disconnected"
 msgstr "Katkaistu"
 
-#: js/Phone.js:710
+#: js/Phone.js:718
 msgid "Duration"
 msgstr "Kesto"
 
-#: js/Phone.js:711
+#: js/Phone.js:719
 msgid "Ringing"
 msgstr "Soi"
 
-#: js/Phone.js:712
+#: js/Phone.js:720
 msgid "Call ID"
 msgstr "Soittajan tunnus"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "puhelin lista"
+msgstr[1] "puhelin listat"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Yhteyshenkilö"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Työ"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Koti"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Matkapuhelin"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Matkapuhelin koti"

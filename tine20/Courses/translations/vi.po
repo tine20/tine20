@@ -65,42 +65,30 @@ msgstr "Tiền tố tên đăng nhập của sinh viên"
 msgid "Samba user settings"
 msgstr "Thiết lập người dùng Samba"
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "one:Khóa học\nother:Khóa học"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Khóa học"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Giáo viên"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Tất cả khóa học"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Tài khoản giáo viên"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Mở"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Khóa học của tôi"
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Tắt"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Họ và đệm"
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Đã lọc"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Tên"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Thêm mới thành viên cho khóa học"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Lỗi"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa lỗi đã được ghi chú"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Lối tắt mặc định được nạp khi lớp học bắt đầu"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -109,6 +97,11 @@ msgstr "Nhập học viên"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Thêm thành viên mới"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "one:Khóa học\nother:Khóa học"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -142,6 +135,26 @@ msgstr "không rõ"
 msgid "Reset Password"
 msgstr "Khởi tạo mật khẩu"
 
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Họ và đệm"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Tên"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Thêm mới thành viên cho khóa học"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Lỗi"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa lỗi đã được ghi chú"
+
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Tên"
@@ -172,27 +185,14 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "one:Loại khóa học\nothers:Loại khóa học"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Tất cả khóa học"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Giáo viên"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Lối tắt mặc định được nạp khi lớp học bắt đầu"
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Tài khoản giáo viên"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Mở"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Tắt"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Đã lọc"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Khóa học"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Khóa học của tôi"

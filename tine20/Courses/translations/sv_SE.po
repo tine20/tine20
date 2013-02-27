@@ -66,43 +66,30 @@ msgstr "Prefix för studenters inloggningsnamn"
 msgid "Samba user settings"
 msgstr "Samba användarinställningar"
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurser"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurser"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Lärare"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Alla Kurser"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Lärar Konto"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "På"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Min kurs"
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Av"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Förnamn"
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtrerad"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Efternamn"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Lägg till ny medlem till kurs"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fel"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Vänligen åtgärda de fel som noterats."
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Standard favoriten som laddas på lektionsstart"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -111,6 +98,12 @@ msgstr "Importera kurs medlemmar"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Lägg till ny medlem"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "Kurser"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -144,6 +137,26 @@ msgstr "Okänd"
 msgid "Reset Password"
 msgstr "Återställ lösenord"
 
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Förnamn"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Efternamn"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Lägg till ny medlem till kurs"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fel"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Vänligen åtgärda de fel som noterats."
+
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Namn"
@@ -176,27 +189,14 @@ msgid_plural "Course Types"
 msgstr[0] "Kurs Typ"
 msgstr[1] "Kurs Typer"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Alla Kurser"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Lärare"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Standard favoriten som laddas på lektionsstart"
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Lärar Konto"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "På"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Av"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrerad"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurser"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Min kurs"

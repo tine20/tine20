@@ -65,43 +65,30 @@ msgstr ""
 msgid "Samba user settings"
 msgstr ""
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurssi"
-msgstr[1] "Kurssit"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurssit"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Opettaja"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Kaikki kurssit"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Opettajan käyttäjätili"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Päällä"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Kurssini"
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Pois päältä"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Etunimi"
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Suodatettu"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Sukunimi"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Lisää uusi osallistuja kurssille"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Virheet"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Korjaa havaitut virheet"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -110,6 +97,12 @@ msgstr "Lisää kurssin osallistujat"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Lisää uusi jäsen"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurssi"
+msgstr[1] "Kurssit"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -143,6 +136,26 @@ msgstr "tuntematon"
 msgid "Reset Password"
 msgstr "Nollaa salasana"
 
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Etunimi"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Lisää uusi osallistuja kurssille"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Virheet"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Korjaa havaitut virheet"
+
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Nimi"
@@ -175,27 +188,14 @@ msgid_plural "Course Types"
 msgstr[0] "Kurssin tyyppi"
 msgstr[1] "Kurssin tyypit"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Kaikki kurssit"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Opettaja"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Opettajan käyttäjätili"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Päällä"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Pois päältä"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Suodatettu"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurssit"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Kurssini"

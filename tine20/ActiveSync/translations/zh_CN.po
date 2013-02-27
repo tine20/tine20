@@ -25,6 +25,47 @@ msgstr ""
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr ""
 
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "默认策略"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "缺省地址簿"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "使用默认通讯录创建新的联系人"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "缺省日历"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "使用缺省日历创建新的事件"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "任务列表"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "设备"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,44 +97,3 @@ msgstr "重新设置"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "设置同步过滤器"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "设备"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "缺省地址簿"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "使用默认通讯录创建新的联系人"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "缺省日历"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "使用缺省日历创建新的事件"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "任务列表"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "默认策略"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr ""

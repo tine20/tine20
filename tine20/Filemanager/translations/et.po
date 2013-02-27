@@ -25,56 +25,69 @@ msgstr "halda jagatud kaustasid"
 msgid "Create new shared folders"
 msgstr "Loo uus jagatud kaust"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Minu kaustad"
-
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Jagatud kaustad"
-
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Muud kasutajate kaustad"
-
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr ""
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Failihaldur"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "asukoht"
 
-#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr ""
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
 msgstr ""
 
-#: js/Filemanager.js:82
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Nimi"
+
+#: js/NodeEditDialog.js:121 js/Model.js:530
+msgid "Type"
+msgstr "Tüüp"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr ""
+
+#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Loomise aeg"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr ""
+
+#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeGridPanel.js:803
+msgid "Upload Failed"
+msgstr "Üleslaadimine ebaõnnestus"
+
+#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
 msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
 msgstr ""
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "Failid on juba olemas"
-
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
+#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+msgid "Putting files in this folder is not allowed!"
 msgstr ""
-
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr ""
-
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "Selle nimega kirje on juba olemas!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -120,45 +133,39 @@ msgstr "Palun oota"
 msgid "Quick search"
 msgstr "Kiirotsing"
 
-#: js/Model.js:530 js/NodeEditDialog.js:121
-msgid "Type"
-msgstr "Tüüp"
-
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "Sisutüüp"
 
-#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Loomise aeg"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Failihaldur"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
 msgstr ""
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Nimi"
-
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
+#: js/Filemanager.js:82
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
 msgstr ""
 
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "Failid on juba olemas"
+
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
 msgstr ""
 
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
 msgstr ""
 
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr ""
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "Selle nimega kirje on juba olemas!"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -216,21 +223,14 @@ msgstr ""
 msgid "No {0} added"
 msgstr ""
 
-#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
-#: js/NodeTreePanel.js:776
-msgid "Upload Failed"
-msgstr "Üleslaadimine ebaõnnestus"
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Minu kaustad"
 
-#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Jagatud kaustad"
 
-#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
-msgid "Putting files in this folder is not allowed!"
-msgstr ""
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "asukoht"
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Muud kasutajate kaustad"

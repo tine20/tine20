@@ -25,56 +25,69 @@ msgstr "upravljanje dijeljenim direktorija"
 msgid "Create new shared folders"
 msgstr "Kreiranje novog dijeljenoga direktorija"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Moj direktorij"
-
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Dijeljeni direktorij"
-
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Ostali korisnički direktoriji"
-
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "%s osobne datoteke"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Upravitelj datotekama"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "putanja"
 
-#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr "Spremi lokalno"
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
-msgstr "Usluga nedostupna"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Član"
 
-#: js/Filemanager.js:82
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Ime"
+
+#: js/NodeEditDialog.js:121 js/Model.js:530
+msgid "Type"
+msgstr "Vrsta"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Vrijeme kreiranja"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Izmijenio"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Zadnja promjena"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Opis"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Unesite opis"
+
+#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeGridPanel.js:803
+msgid "Upload Failed"
+msgstr "Neuspješan upload"
+
+#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
 msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Upravitelj datoteka nije ispravno konfiguriran. Molimo pogledajte {0} Tine 2,0 Admin FAQ {1} za savjet konfiguracije ili kontaktirajte svog administratora."
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Nije moguće prenijeti datoteku. Veličina datoteke mogla bi biti prevelika. Molimo obavijestite vašeg administratora. Maksimalni dopušteni upload  veličine je:"
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "Datoteka već postoji"
-
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
-msgstr "Želite li zamijeniti sljedeće datoteke (e)?"
-
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr "Neuspjelo kreiranje direktorija"
-
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "Stavka s ovim imenom već postoji!"
+#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+msgid "Putting files in this folder is not allowed!"
+msgstr "Stavljanje datoteka u ovom direktoriju nije dozvoljeno!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -122,45 +135,39 @@ msgstr "Molimo pričekajte"
 msgid "Quick search"
 msgstr "Brza pretraga"
 
-#: js/Model.js:530 js/NodeEditDialog.js:121
-msgid "Type"
-msgstr "Vrsta"
-
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "Vrsta sadržaja"
 
-#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Vrijeme kreiranja"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Upravitelj datotekama"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr "Član"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
+msgstr "Usluga nedostupna"
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Ime"
+#: js/Filemanager.js:82
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Upravitelj datoteka nije ispravno konfiguriran. Molimo pogledajte {0} Tine 2,0 Admin FAQ {1} za savjet konfiguracije ili kontaktirajte svog administratora."
 
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Kreirao"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "Datoteka već postoji"
 
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr "Izmijenio"
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
+msgstr "Želite li zamijeniti sljedeće datoteke (e)?"
 
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr "Zadnja promjena"
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
+msgstr "Neuspjelo kreiranje direktorija"
 
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr "Opis"
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr "Unesite opis"
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "Stavka s ovim imenom već postoji!"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -218,21 +225,14 @@ msgstr "Unesite naziv novog direktorija:"
 msgid "No {0} added"
 msgstr "Nije {0} dodao"
 
-#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
-#: js/NodeTreePanel.js:776
-msgid "Upload Failed"
-msgstr "Neuspješan upload"
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Moj direktorij"
 
-#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Nije moguće prenijeti datoteku. Veličina datoteke mogla bi biti prevelika. Molimo obavijestite vašeg administratora. Maksimalni dopušteni upload  veličine je:"
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Dijeljeni direktorij"
 
-#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
-msgid "Putting files in this folder is not allowed!"
-msgstr "Stavljanje datoteka u ovom direktoriju nije dozvoljeno!"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "putanja"
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Ostali korisnički direktoriji"

@@ -25,6 +25,11 @@ msgstr ""
 msgid "Create new shared project favorites"
 msgstr ""
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Dự án cá nhân của %s"
+
 #: Config.php:38
 msgid "Project Status Available"
 msgstr "Trạng thái dự án sẵn có"
@@ -46,116 +51,9 @@ msgid ""
 "syncronisation."
 msgstr "Vai trò người tham gia có thể. Xin nhớ rằng vai trò người tham gia dự án thêm vào có thể liên quan tới hệ thống dự án khác khi xuất hoặc đồng bộ dữ liệu"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Dự án cá nhân của %s"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Xin chọn dự án để thêm liên hệ vào"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Chọn vai trò người tham gia"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Chọn dự án"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
-msgid "Role"
-msgstr "Vai trò"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Chọn vai trò"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "Thêm {0} người tham gia vào dự án"
-
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "one: Dự án\nother: Dự án"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "one: Danh sách dự án\nother: Danh sách dự án"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Danh sách dự án"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Tìm nhanh"
-
-#: js/Model.js:73 js/ProjectEditDialog.js:129 js/ProjectGridPanel.js:95
-msgid "Title"
-msgstr "Tiêu đề"
-
-#: js/Model.js:74 js/ProjectEditDialog.js:134 js/ProjectGridPanel.js:88
-msgid "Number"
-msgstr "Số"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:170
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/Model.js:77 js/ProjectEditDialog.js:140 js/ProjectGridPanel.js:101
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr "Lần sửa cuối"
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
-msgid "Attendee"
-msgstr "Người tham gia"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Quyền người tham gia"
-
-#: js/ProjectEditDialog.js:184
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/Projects.js:24 Setup/setup.xml:4
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
 msgstr "Dự án"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Mọi dự án của tôi"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Lỗi tắt mặc định"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Lối tắt mặc định sẽ được nạp khi dự án khởi động"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -200,3 +98,105 @@ msgstr "Dự án đang chờ tôi"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Dự án tôi đang giữ"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Mọi dự án của tôi"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Lỗi tắt mặc định"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Lối tắt mặc định sẽ được nạp khi dự án khởi động"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Xin chọn dự án để thêm liên hệ vào"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Chọn vai trò người tham gia"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Chọn dự án"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+msgid "Role"
+msgstr "Vai trò"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Chọn vai trò"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "Thêm {0} người tham gia vào dự án"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+msgid "Number"
+msgstr "Số"
+
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "one: Dự án\nother: Dự án"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "one: Danh sách dự án\nother: Danh sách dự án"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Danh sách dự án"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Tìm nhanh"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:170
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Lần sửa cuối"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+msgid "Attendee"
+msgstr "Người tham gia"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Quyền người tham gia"
+
+#: js/ProjectEditDialog.js:184
+msgid "Enter description"
+msgstr "Nhập mô tả"

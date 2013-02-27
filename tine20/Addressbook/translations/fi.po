@@ -33,6 +33,45 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
+#: Controller.php:103
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr "CSV Outlook osoitekirjan tuonti"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Tuo yhteystiedot gmail osoitekirjasta"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "CSV Yhteystietojen tuonti"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "CSV Yhteystietojen tuonti macista"
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr "VCARD Yhteystietojen tuonti"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 tuonti"
+
 #: Config.php:45
 msgid "Contact duplicate check fields"
 msgstr ""
@@ -61,13 +100,71 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller/Contact.php:329
-msgid "Uploaded new contact image."
+#: Setup/setup.xml:654
+msgid "Internal Contacts"
+msgstr "Sisäiset kontaktit"
+
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+msgid "Mr"
+msgstr "Herra"
+
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+msgid "Ms"
+msgstr "Neiti"
+
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:27
+#: js/Model.js:141
+msgid "Company"
+msgstr "Yritys"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+msgid "All contacts I have read grants for"
 msgstr ""
 
-#: Controller.php:103
-#, python-format
-msgid "%s's personal addressbook"
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr "Yritykseni"
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr "Työkaverini"
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr "Kontaktini"
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr "Kaikki kontaktit osoitekirjassani"
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr "Viimeksi muokattu itseni toimesta"
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr "Kaikki kontaktit joita olen viimeksi muokannut"
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Kaikki yhteystiedot"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Oletus osoitekirja"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
 #: Export/Pdf.php:37
@@ -114,7 +211,7 @@ msgstr "Internetsivu"
 msgid "Role"
 msgstr "Asema"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:143 js/ContactGrid.js:116
+#: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:143
 #: js/Model.js:33
 msgid "Room"
 msgstr "Huone"
@@ -161,241 +258,15 @@ msgstr "Internetsivu koti"
 msgid "Other Data"
 msgstr "Lisätiedot"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:170 js/ContactGrid.js:142
+#: Export/Pdf.php:114 js/ContactGrid.js:142 js/ContactEditDialog.js:170
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "Syntymäpäivä"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:164 js/ContactGrid.js:114
+#: Export/Pdf.php:117 js/ContactGrid.js:114 js/ContactEditDialog.js:164
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "Työnimike"
-
-#: Import/definitions/adb_google_import_csv.xml:12
-msgid "Contact import from Google address book"
-msgstr "Tuo yhteystiedot gmail osoitekirjasta"
-
-#: Import/definitions/adb_import_vcard.xml:14
-msgid "Contact VCARD import"
-msgstr "VCARD Yhteystietojen tuonti"
-
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr "CSV Yhteystietojen tuonti macista"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 tuonti"
-
-#: Import/definitions/adb_outlook_import_csv.xml:13
-msgid "Contact CSV import from Outlook address book"
-msgstr "CSV Outlook osoitekirjan tuonti"
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "CSV Yhteystietojen tuonti"
-
-#: Import/definitions/adb_tine_import_csv.xml:18
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr ""
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr "Uusi yhteystieto"
-
-#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:205
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Osoitekirja"
-msgstr[1] "Osoitekirjat"
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr "CardDAV Osoite"
-
-#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
-msgid "Map"
-msgstr "Kartta"
-
-#: js/ContactEditDialog.js:76
-msgid "Personal Information"
-msgstr "Henkilökohtaiset tiedot"
-
-#: js/ContactEditDialog.js:88 js/ContactGrid.js:107 js/Model.js:29
-msgid "Salutation"
-msgstr "Tervehdys"
-
-#: js/ContactEditDialog.js:104 js/Model.js:22
-msgid "Title"
-msgstr "Titteli"
-
-#: js/ContactEditDialog.js:109 js/ContactGrid.js:109 js/Model.js:20
-#: js/Model.js:139
-msgid "First Name"
-msgstr "Etunimi"
-
-#: js/ContactEditDialog.js:114 js/Model.js:21
-msgid "Middle Name"
-msgstr "Keski nimi"
-
-#: js/ContactEditDialog.js:119 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:108 js/Model.js:19
-#: js/Model.js:140
-msgid "Last Name"
-msgstr "Sukunimi"
-
-#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:112
-#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
-msgid "Company"
-msgstr "Yritys"
-
-#: js/ContactEditDialog.js:130 js/ContactGrid.js:113 js/Model.js:28
-#: js/Model.js:142
-msgid "Unit"
-msgstr "Yksikkö"
-
-#: js/ContactEditDialog.js:135 js/Model.js:23
-msgid "Suffix"
-msgstr ""
-
-#: js/ContactEditDialog.js:139 js/ContactGrid.js:115 js/Model.js:31
-#: js/Model.js:145
-msgid "Job Role"
-msgstr "Työn kuvaus"
-
-#: js/ContactEditDialog.js:159 js/ContactGrid.js:111 js/Model.js:24
-msgid "Display Name"
-msgstr "Näyttönimi"
-
-#: js/ContactEditDialog.js:178
-msgid "Contact Information"
-msgstr ""
-
-#: js/ContactEditDialog.js:183 js/ContactGrid.js:128
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/Model.js:51 js/Model.js:143
-msgid "Phone"
-msgstr "Puhelin"
-
-#: js/ContactEditDialog.js:188 js/ContactGrid.js:129
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:52
-msgid "Mobile"
-msgstr "Matkapuhelin"
-
-#: js/ContactEditDialog.js:193 js/ContactGrid.js:130
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/Model.js:53
-msgid "Fax"
-msgstr "Faksi"
-
-#: js/ContactEditDialog.js:198 js/ContactGrid.js:133 js/Model.js:57
-msgid "Phone (private)"
-msgstr "Puhelin (yksityinen)"
-
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:135 js/Model.js:59
-msgid "Mobile (private)"
-msgstr "Matkapuhelin (yksityinen)"
-
-#: js/ContactEditDialog.js:208 js/ContactGrid.js:134 js/Model.js:58
-msgid "Fax (private)"
-msgstr "Faksi (Yksityinen)"
-
-#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/ContactEditDialog.js:219 js/Model.js:63
-msgid "E-Mail (private)"
-msgstr "E-Mail (yksityinen)"
-
-#: js/ContactEditDialog.js:226 js/ContactGrid.js:137
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/Model.js:64
-msgid "Web"
-msgstr "WWW"
-
-#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
-#: js/Model.js:152 js/Model.js:153 js/Model.js:154
-msgid "Company Address"
-msgstr "Yrityksen osoite"
-
-#: js/ContactEditDialog.js:262 js/ContactEditDialog.js:291
-#: js/ContactGrid.js:117 js/Model.js:150 js/Model.js:155
-msgid "Street"
-msgstr "Osoite"
-
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
-msgid "Street 2"
-msgstr "Osoite 2"
-
-#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
-#: js/ContactGrid.js:119 js/Model.js:151 js/Model.js:156
-msgid "Region"
-msgstr ""
-
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
-#: js/Model.js:157
-msgid "Postal Code"
-msgstr "Postinumero"
-
-#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
-#: js/ContactGrid.js:118 js/Model.js:153 js/Model.js:158
-msgid "City"
-msgstr "Toimipaikka"
-
-#: js/ContactEditDialog.js:283 js/ContactEditDialog.js:312
-#: js/ContactGrid.js:121 js/Model.js:154 js/Model.js:159
-msgid "Country"
-msgstr "Maa"
-
-#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
-msgid "Description"
-msgstr "Kuvaus"
-
-#: js/ContactEditDialog.js:347
-msgid "Enter description"
-msgstr "Syötä kuvaus"
-
-#: js/ContactEditDialog.js:391
-msgid "Export as pdf"
-msgstr "Vie PDF:nä"
-
-#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
-msgid "Parse address"
-msgstr "Parsi osoite"
-
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
-msgid "Either {0} or {1} must be given"
-msgstr ""
-
-#: js/ContactEditDialog.js:476
-msgid "Paste address"
-msgstr "Liitä osoite"
-
-#: js/ContactEditDialog.js:476
-msgid "Please paste an address that should be parsed:"
-msgstr ""
-
-#: js/ContactEditDialog.js:510
-msgid "End token mode"
-msgstr ""
-
-#: js/ContactFilterModel.js:35 js/ContactGrid.js:292 js/Model.js:94
-#: js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/ContactGrid.js:105 js/Model.js:160
 msgid "Type"
@@ -405,13 +276,62 @@ msgstr "Tyyppi"
 msgid "Tags"
 msgstr "Tagit"
 
+#: js/ContactGrid.js:107 js/ContactEditDialog.js:88 js/Model.js:29
+msgid "Salutation"
+msgstr "Tervehdys"
+
+#: js/ContactGrid.js:108 js/ContactEditDialog.js:119
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:19
+#: js/Model.js:140
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: js/ContactGrid.js:109 js/ContactEditDialog.js:109 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "Etunimi"
+
 #: js/ContactGrid.js:110
 msgid "Full Name"
 msgstr "Koko nimi"
 
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:159 js/Model.js:24
+msgid "Display Name"
+msgstr "Näyttönimi"
+
+#: js/ContactGrid.js:113 js/ContactEditDialog.js:130 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr "Yksikkö"
+
+#: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
+#: js/Model.js:145
+msgid "Job Role"
+msgstr "Työn kuvaus"
+
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:262
+#: js/ContactEditDialog.js:291 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "Osoite"
+
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "Toimipaikka"
+
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr ""
+
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "Postinumero"
+
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:283
+#: js/ContactEditDialog.js:312 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "Maa"
 
 #: js/ContactGrid.js:122
 msgid "Street (private)"
@@ -433,6 +353,24 @@ msgstr "Postinumero ( Koti)"
 msgid "Country (private)"
 msgstr "Maa (Koti)"
 
+#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:183
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "Puhelin"
+
+#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:188
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "Matkapuhelin"
+
+#: js/ContactGrid.js:130 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:193
+#: js/Model.js:53
+msgid "Fax"
+msgstr "Faksi"
+
 #: js/ContactGrid.js:131
 msgid "Car phone"
 msgstr "Autopuhelin"
@@ -441,9 +379,27 @@ msgstr "Autopuhelin"
 msgid "Pager"
 msgstr "Hakulaite"
 
+#: js/ContactGrid.js:133 js/ContactEditDialog.js:198 js/Model.js:57
+msgid "Phone (private)"
+msgstr "Puhelin (yksityinen)"
+
+#: js/ContactGrid.js:134 js/ContactEditDialog.js:208 js/Model.js:58
+msgid "Fax (private)"
+msgstr "Faksi (Yksityinen)"
+
+#: js/ContactGrid.js:135 js/ContactEditDialog.js:203 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "Matkapuhelin (yksityinen)"
+
 #: js/ContactGrid.js:136
 msgid "Email (private)"
 msgstr "Sähköpostiosoite (Koti)"
+
+#: js/ContactGrid.js:137 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:226
+#: js/Model.js:64
+msgid "Web"
+msgstr "WWW"
 
 #: js/ContactGrid.js:138
 msgid "URL (private)"
@@ -495,6 +451,13 @@ msgstr "Tuo yhteystiedot"
 msgid "Contact of a user account"
 msgstr ""
 
+#: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
+#: js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
 msgstr "Yhteystiedot"
@@ -502,6 +465,11 @@ msgstr "Yhteystiedot"
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
 msgstr "Valitse yhteystieto"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "E-Mail"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
@@ -519,8 +487,78 @@ msgstr ""
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Kartta"
+
+#: js/ContactEditDialog.js:76
+msgid "Personal Information"
+msgstr "Henkilökohtaiset tiedot"
+
+#: js/ContactEditDialog.js:104 js/Model.js:22
+msgid "Title"
+msgstr "Titteli"
+
+#: js/ContactEditDialog.js:114 js/Model.js:21
+msgid "Middle Name"
+msgstr "Keski nimi"
+
+#: js/ContactEditDialog.js:135 js/Model.js:23
+msgid "Suffix"
+msgstr ""
+
+#: js/ContactEditDialog.js:178
+msgid "Contact Information"
+msgstr ""
+
+#: js/ContactEditDialog.js:219 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "E-Mail (yksityinen)"
+
+#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "Yrityksen osoite"
+
+#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+msgid "Street 2"
+msgstr "Osoite 2"
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "Postinumero"
+
+#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/ContactEditDialog.js:347
+msgid "Enter description"
+msgstr "Syötä kuvaus"
+
+#: js/ContactEditDialog.js:391
+msgid "Export as pdf"
+msgstr "Vie PDF:nä"
+
+#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
+msgid "Parse address"
+msgstr "Parsi osoite"
+
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactEditDialog.js:476
+msgid "Paste address"
+msgstr "Liitä osoite"
+
+#: js/ContactEditDialog.js:476
+msgid "Please paste an address that should be parsed:"
+msgstr ""
+
+#: js/ContactEditDialog.js:510
+msgid "End token mode"
 msgstr ""
 
 #: js/MapPanel.js:58
@@ -530,6 +568,14 @@ msgstr "Yrityksen osoite"
 #: js/MapPanel.js:65
 msgid "Private address"
 msgstr "Kotiosoite"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CardDAV Osoite"
 
 #: js/Model.js:19
 msgid "Name"
@@ -595,6 +641,12 @@ msgstr ""
 msgid "Web (private)"
 msgstr "WWW (yksityinen)"
 
+#: js/Model.js:98 js/Model.js:205 js/Addressbook.js:32
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Osoitekirja"
+msgstr[1] "Osoitekirjat"
+
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
 msgstr "Osoitekirja"
@@ -633,62 +685,10 @@ msgstr[1] "Listat"
 msgid "Lists"
 msgstr "Listat"
 
-#: Preference.php:28
-msgid "All contacts"
-msgstr "Kaikki yhteystiedot"
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Uusi yhteystieto"
 
-#: Preference.php:65
-msgid "Default Addressbook"
-msgstr "Oletus osoitekirja"
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
 msgstr ""
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
-
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
-msgid "Mr"
-msgstr "Herra"
-
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
-msgid "Ms"
-msgstr "Neiti"
-
-#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr ""
-
-#: Setup/Initialize.php:140
-msgid "My company"
-msgstr "Yritykseni"
-
-#: Setup/Initialize.php:141
-msgid "All coworkers in my company"
-msgstr "Työkaverini"
-
-#: Setup/Initialize.php:154
-msgid "My contacts"
-msgstr "Kontaktini"
-
-#: Setup/Initialize.php:155
-msgid "All contacts in my Addressbooks"
-msgstr "Kaikki kontaktit osoitekirjassani"
-
-#: Setup/Initialize.php:167
-msgid "Last modified by me"
-msgstr "Viimeksi muokattu itseni toimesta"
-
-#: Setup/Initialize.php:168
-msgid "All contacts that I have last modified"
-msgstr "Kaikki kontaktit joita olen viimeksi muokannut"
-
-#: Setup/setup.xml:654
-msgid "Internal Contacts"
-msgstr "Sisäiset kontaktit"

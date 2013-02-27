@@ -25,6 +25,48 @@ msgstr "Standardrichtlinie für neue Geräte"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Geben Sie die ID der Richtlinie für neue Geräte an."
 
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Standard Policy"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Standard Policy aus dem Setup Prozess"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standard-Adressbuch"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standard-Kalender"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Gerät"
+msgstr[1] "Geräte"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Geräte"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,45 +98,3 @@ msgstr "zurückgesetzt"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Setze Sync Filter"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Gerät"
-msgstr[1] "Geräte"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Geräte"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standard-Adressbuch"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standard-Kalender"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Standard Policy"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Standard Policy aus dem Setup Prozess"

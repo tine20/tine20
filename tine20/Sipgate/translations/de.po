@@ -19,6 +19,26 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Exception/NoConnection.php:29
+msgid "Could not connect to sipgate."
+msgstr "Kann nicht zu Sipgate verbinden."
+
+#: Exception/Authorization.php:29
+msgid "Could not authenticate to sipgate."
+msgstr "Authentifizierung bei Sipgate fehlgeschlagen."
+
+#: Exception/ResolveCredentials.php:29
+msgid "Could not resolve account settings."
+msgstr "Kann Accounteinstellungen nicht auflösen"
+
+#: Exception/Backend.php:29
+msgid "General Backend Exception."
+msgstr "Allgemeiner Backend Ausnahmefehler."
+
+#: Exception/MissingConfig.php:29
+msgid "The configuration is missing."
+msgstr "Konfiguration fehlt."
+
 #: Acl/Rights.php:94
 msgid "manage accounts"
 msgstr "Konten verwalten"
@@ -51,6 +71,14 @@ msgstr "verwalte private Konten"
 msgid "add, edit and delete private accounts"
 msgstr "Hinzufügen, Ändern und Löschen privater Konten"
 
+#: Controller.php:95
+msgid "You do not have admin rights on Sales"
+msgstr "Du hast keine administrativen Berechtigungen für \"Sales\""
+
+#: Controller.php:117
+msgid "You do not have admin rights on Sipgate"
+msgstr "Du hast keine administrativen Berechtigungen für \"sipgate\""
+
 #: Config.php:48
 msgid "Connection Status"
 msgstr "Verbindungsstatus"
@@ -67,7 +95,7 @@ msgstr "Verbindungs AGB"
 msgid "Possible connection type of services"
 msgstr "Mögliche Verbindungstypen des Dienstes"
 
-#: Config.php:68 js/AccountEditDialog.js:261 js/AccountGridPanel.js:98
+#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
 msgid "Account Type"
 msgstr "Kontotyp"
 
@@ -85,531 +113,41 @@ msgstr "sipgate Kontotyp"
 msgid "The type of your account as defined in the contract"
 msgstr "Der Typ des Kontos, der in Ihrem Vertrag definiert wurde."
 
-#: Controller/Connection.php:242
-msgid "anonymous"
-msgstr "anonym"
-
-#: Controller.php:95
-msgid "You do not have admin rights on Sales"
-msgstr "Du hast keine administrativen Berechtigungen für \"Sales\""
-
-#: Controller.php:117
-msgid "You do not have admin rights on Sipgate"
-msgstr "Du hast keine administrativen Berechtigungen für \"sipgate\""
-
-#: Exception/Authorization.php:29
-msgid "Could not authenticate to sipgate."
-msgstr "Authentifizierung bei Sipgate fehlgeschlagen."
-
-#: Exception/Backend.php:29
-msgid "General Backend Exception."
-msgstr "Allgemeiner Backend Ausnahmefehler."
-
-#: Exception/MissingConfig.php:29
-msgid "The configuration is missing."
-msgstr "Konfiguration fehlt."
-
-#: Exception/NoConnection.php:29
-msgid "Could not connect to sipgate."
-msgstr "Kann nicht zu Sipgate verbinden."
-
-#: Exception/ResolveCredentials.php:29
-msgid "Could not resolve account settings."
-msgstr "Kann Accounteinstellungen nicht auflösen"
-
-#: js/AccountEditDialog.js:43
-msgid "Validating account..."
-msgstr "Verifiziere Account..."
-
-#: js/AccountEditDialog.js:44
-msgid "Synchronizing lines..."
-msgstr "Synchronisiere Zeilen..."
-
-#: js/AccountEditDialog.js:60
-msgid "Save Account"
-msgstr "Konto speichern"
-
-#: js/AccountEditDialog.js:62
-msgid "Saves the account (without closing window)"
-msgstr "Konto speichern (Fenster nicht schließen)"
-
-#: js/AccountEditDialog.js:68 js/LineGridPanel.js:189
-msgid "Synchronize Lines"
-msgstr "Leitungen synchronisieren"
-
-#: js/AccountEditDialog.js:70
-msgid ""
-"Synchronizes the selected account (creates or updates the associated lines)"
-msgstr "Synchronisiere Konto (erzeugt oder aktualisiert die zugehörigen Anschlüsse)"
-
-#: js/AccountEditDialog.js:76
-msgid "Validate Account"
-msgstr "Überprüfe Konto"
-
-#: js/AccountEditDialog.js:78
-msgid ""
-"Validates the selected account (creates or updates the associated lines)"
-msgstr "Überprüfe die gewählten Konten (erzeugt oder aktualisiert die zugehörigen Anschlüsse)"
-
-#: js/AccountEditDialog.js:95
-msgid "The account is not saved already!"
-msgstr "Dieses Konto wurde noch nicht gespeichert."
-
-#: js/AccountEditDialog.js:96
-msgid "Please save yout account before syncing!"
-msgstr "Bitte Konto vor dem synchronisieren speichern!"
-
-#: js/AccountEditDialog.js:109
-msgid "The lines have been synced sucessfully!"
-msgstr "Die Leitungen wurden erfolgreich synchronisiert!"
-
-#: js/AccountEditDialog.js:110
-msgid ""
-"The account has now {0} lines. Go on assigning user accounts to the new "
-"lines in the next tab."
-msgstr "Das Konto hat nun {0} Anschlüsse. Füge weitere Konten zu den Anschlüssen im nächsten Tab hinzu."
-
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
-msgid "Errors"
-msgstr "Fehler"
-
-#: js/AccountEditDialog.js:257
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/AccountEditDialog.js:278 js/AccountGridPanel.js:89
-#: js/AssignLinesGrid.js:100 js/LineGridPanel.js:82
-msgid "Type"
-msgstr "Typ"
-
-#: js/AccountEditDialog.js:285 js/AccountGridPanel.js:107
-msgid "Mobile Number"
-msgstr "Mobilnummer"
-
-#: js/AccountEditDialog.js:288
-msgid "Sipgate Username"
-msgstr "SipGate Benutzername"
-
-#: js/AccountEditDialog.js:290
-msgid "Hidden due to security reasons."
-msgstr "sicherheitshalber versteckt"
-
-#: js/AccountEditDialog.js:292
-msgid "Password"
-msgstr "Passwort"
-
-#: js/AccountEditDialog.js:296
-msgid "Passwort Repeat"
-msgstr "Passwortwiederholung"
-
-#: js/AccountEditDialog.js:302
-msgid "Is Validated"
-msgstr "Ist gepfüft"
-
-#: js/AccountEditDialog.js:340
-msgid "Please validate the account settings before saving!"
-msgstr "Konteneinstellungen vor speichern validieren!"
-
-#: js/AccountFilterModel.js:38 js/LineGridPanel.js:90
-msgid "Account"
-msgstr "Konto"
-
-#: js/AccountGridPanel.js:54
-msgid "Telephone"
-msgstr "Telefon"
-
-#: js/AccountGridPanel.js:55 js/SearchAddressDialog.js:134
-#: js/SearchAddressDialog.js:156
-msgid "Fax"
-msgstr "Faxnummer"
-
-#: js/AccountGridPanel.js:115 js/AssignLinesGrid.js:101
-#: js/LineGridPanel.js:105
-msgid "Uri Alias"
-msgstr "Alias"
-
-#: js/AccountGridPanel.js:124 js/ConnectionGridPanel.js:203
-#: js/LineGridPanel.js:180
-msgid "Dial number"
-msgstr "wähle Nummer"
-
-#: js/AccountGridPanel.js:125 js/ConnectionGridPanel.js:204
-#: js/LineGridPanel.js:181
-msgid "Initiates a new outgoing call"
-msgstr "Startet neuen, ausgehenden Anruf"
-
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Kontakt anrufen"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Verfasse SMS"
-
-#: js/AddressbookGridPanelHook.js:260
-msgid "Work"
-msgstr "Geschäftlich"
-
-#: js/AddressbookGridPanelHook.js:270
-msgid "Home"
-msgstr "Privat"
-
-#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
-msgid "Cell"
-msgstr "Handy"
-
-#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
-msgid "Cell private"
-msgstr "Handy privat"
-
-#: js/AssignLinesGrid.js:57
-msgid "Assign Lines"
-msgstr "Leitungen zuweisen"
-
-#: js/AssignLinesGrid.js:99
-msgid "Id"
-msgstr "Identifikation"
-
-#: js/AssignLinesGrid.js:102
-msgid "Sip Uri"
-msgstr "Sip URI"
-
-#: js/AssignLinesGrid.js:103 js/LineGridPanel.js:125
-msgid "Outgoing"
-msgstr "Abgehend"
-
-#: js/AssignLinesGrid.js:104 js/LineGridPanel.js:117
-msgid "Incoming"
-msgstr "Eingehend"
-
-#: js/AssignLinesGrid.js:107
-msgid "Assigned User"
-msgstr "Zugeordnete Benutzer"
-
-#: js/CallStateWindow.js:106 js/DialNumberDialog.js:89
-#: js/SearchAddressDialog.js:63 js/SmsEditDialog.js:74
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/CallStateWindow.js:138
-msgid "The call can't be observed anymore. Lost SessionID."
-msgstr "Der Anruf kann also nicht weiter verfolgt werden. Verlorene Session-ID."
-
-#: js/CallStateWindow.js:142
-msgid "The call can't be observed anymore due to an unknown error."
-msgstr "Der Anruf kann wegen eines unbekannten Fehlers nicht weiter verfolgt werden."
-
-#: js/CallStateWindow.js:151
-msgid "Please pick up your phone to get connected to {0}."
-msgstr "Bitte heben Sie Ihr Telefon ab, um mit {0} zu verbinden."
-
-#: js/CallStateWindow.js:155
-msgid "Connecting to {0}."
-msgstr "Verbinde zu {0}."
-
-#: js/CallStateWindow.js:162
-msgid "Connected to {0}."
-msgstr "Verbunden zu {0}."
-
-#: js/CallStateWindow.js:167
-msgid "call 1 busy"
-msgstr "Ihr Telefon ist belegt. Bitte überprüfen Sie, ob es aufgelegt ist"
-
-#: js/CallStateWindow.js:174
-msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
-msgstr "Verbindung zu {0} fehlgeschlagen. {0} ist besetzt oder hat den Anruf abgelehnt."
-
-#: js/CallStateWindow.js:180
-msgid "hungup before other called"
-msgstr "vor dem Anruf aufgelegt"
-
-#: js/CallStateWindow.js:183
-msgid "hungup"
-msgstr "aufgelegt"
-
-#: js/CallStateWindow.js:221
-msgid "Initializing call to {0}"
-msgstr "Initialisiere Aufruf zu {0}"
-
-#: js/CallStateWindow.js:244
-msgid "Connecting to: "
-msgstr "Verbinden mit: "
-
-#: js/ConnectionGridPanel.js:81 js/Models.js:332
-msgid "TOS"
-msgstr "AGB"
-
-#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
-msgid "Status"
-msgstr "Status"
-
-#: js/ConnectionGridPanel.js:97
-msgid "Remote Number"
-msgstr "Nummer des Gesprächspartners"
-
-#: js/ConnectionGridPanel.js:103
-msgid "Local Number"
-msgstr "Lokale Nummer"
-
-#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
-msgid "Line"
-msgstr "Anschluss"
-
-#: js/ConnectionGridPanel.js:116
-msgid "Call started"
-msgstr "Anruf begann"
-
-#: js/ConnectionGridPanel.js:123
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/ConnectionGridPanel.js:195
-msgid "Save number"
-msgstr "Speichere Nummer"
-
-#: js/ConnectionGridPanel.js:196
-msgid "Adds this number to the Addressbook"
-msgstr "Fügt diese Telefonnummer zum Adressbuch hinzu"
-
-#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
-msgid "Add Account"
-msgstr "Konto hinzufügen"
-
-#: js/DialNumberDialog.js:97
-msgid "Ok"
-msgstr "Ok"
-
-#: js/DialNumberDialog.js:161
-msgid "Select Line"
-msgstr "Leitung wählen"
-
-#: js/DialNumberDialog.js:166
-msgid "Number to call"
-msgstr "Anzurufende Nummer"
-
-#: js/DialNumberDialog.js:171
-msgid "Please use a valid telephone number!"
-msgstr "Bitte verwenden Sie eine gültige Telefonnummer!"
-
-#: js/DialNumberDialog.js:211
-msgid "Dial Number {0}"
-msgstr "Wähle Nummer {0}"
-
-#: js/ExceptionHandler.js:18
-msgid ""
-"A general backend error occurred. If this is a permanent error, please "
-"contact your administrator."
-msgstr "Ein allgemeiner Backend-Fehler ist aufgetreten. Wenn dies ein permanenter Fehler ist, so wenden Sie sich bitte an Ihren Administrator."
-
-#: js/ExceptionHandler.js:26
-msgid ""
-"The application could not connect to the sipgate server. If this is a "
-"permanent error, please contact your administrator."
-msgstr "Die Anwendung konnte keine Verbindung zum sipgate-Server herstellen. Wenn dies ein permanenter Fehler ist, wenden Sie sich bitte an Ihren Administrator."
-
-#: js/ExceptionHandler.js:34
-msgid ""
-"The authentication data provided are not valid. Please configure or contact "
-"your administrator."
-msgstr "Die angegebenen Zugangsdaten sind nicht gültig. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
-
-#: js/ExceptionHandler.js:42
-msgid ""
-"The saved credentials and config data could not be resolved properly. Please"
-" reconfigure or contact your administrator."
-msgstr "Der gespeicherten Zugangsdaten und die Konfiguration konnten nicht korrekt aufgelöst werden. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
-
-#: js/ExceptionHandler.js:50
-msgid ""
-"There are missing parameters to connect to sipgate. Please reconfigure or "
-"contact your administrator."
-msgstr "Es fehlen Parameter um eine Verbindung zu sipgate herzustellen. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
-
-#: js/ExceptionHandler.js:60
-msgid ""
-"The account you've configured is already in use. Please contact your "
-"administrator or activate the account again if it's yours."
-msgstr "Das Konto, das Sie konfiguriert haben wird bereits verwendet. Bitte wenden Sie sich an Ihren Administrator oder aktivieren Sie das Benutzerkonto wieder, wenn es Ihnen gehört."
-
-#: js/LineGridPanel.js:98
-msgid "User"
-msgstr "Benutzer"
-
-#: js/LineGridPanel.js:111
-msgid "SIP Uri"
-msgstr "SPI Uri"
-
-#: js/LineGridPanel.js:131
-msgid "Created"
-msgstr "Erstellt"
-
-#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
-msgid "Synchronize Line"
-msgstr "Leitung synchronisieren"
-
-#: js/LineGridPanel.js:191
-msgid "Synchronizes the selected line(s)"
-msgstr "Synchronisiere ausgewählte Leitung(en)"
-
-#: js/LineGridPanel.js:246
-msgid "Synchronizing..."
-msgstr "Synchronisiere ..."
-
-#: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-#: js/Models.js:98
-msgid "Created By"
-msgstr "Erstellt bei"
-
-#: js/Models.js:100
-msgid "Account-Type"
-msgstr "Kontotyp"
-
-#: js/Models.js:146
-msgid "Assigned to"
-msgstr "zugewiesen an"
-
-#: js/Models.js:303
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Eintragsliste"
-msgstr[1] "Eintragslisten"
-
-#: js/SearchAddressDialog.js:55
-msgid "Add Number"
-msgstr "Nummer hinzufügen"
-
-#: js/SearchAddressDialog.js:71 js/SmsEditDialog.js:81
-msgid "Close"
-msgstr "Schließen"
-
-#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
-msgid "Mobile"
-msgstr "Handy"
-
-#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
-msgid "Car phone"
-msgstr "Auto-Telefon"
-
-#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
-msgid "Pager"
-msgstr "Pager"
-
-#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
-msgid "Phone (private)"
-msgstr "Telefon (privat)"
-
-#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
-msgid "Fax (private)"
-msgstr "Fax (privat)"
-
-#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
-msgid "Mobile (private)"
-msgstr "Handy (privat)"
-
-#: js/SearchAddressDialog.js:144
-msgid "-- create new --"
-msgstr "-- neuen erstellen --"
-
-#: js/SearchAddressDialog.js:145
-msgid "Select existing contact or create a new one"
-msgstr "Wählen Sie einen Kontakt oder erstellen Sie einen neuen"
-
-#: js/SearchAddressDialog.js:180
-msgid "Choose Device"
-msgstr "Gerät auswählen"
-
-#: js/SearchAddressDialog.js:211
-msgid "Add number {0} to the addressbook"
-msgstr "Füge Nummer {0} zum Adressbuch hinzu"
-
-#: js/SmsEditDialog.js:67
-msgid "Send"
-msgstr "Senden"
-
-#: js/SmsEditDialog.js:112
-msgid "Loading contact..."
-msgstr "Lade Kontakt ..."
-
-#: js/SmsEditDialog.js:113
-msgid "Sending message..."
-msgstr "Sende Nachricht ..."
-
-#: js/SmsEditDialog.js:250
-msgid "Recipient"
-msgstr "Empfänger"
-
-#: js/SmsEditDialog.js:259
-msgid "Recipient's phone number"
-msgstr "Epmfängertelefonnummer"
-
-#: js/SmsEditDialog.js:263
-msgid "please choose the recipient's phone number..."
-msgstr "Bitte wählen Sie die Epmfängertelefonnummer ..."
-
-#: js/SmsEditDialog.js:267
-msgid "Your phone number"
-msgstr "Ihre Telefonnummer"
-
-#: js/SmsEditDialog.js:270
-msgid "please choose your phone number..."
-msgstr "Bitte wählen Sie Ihre Telefonnummer"
-
-#: js/SmsEditDialog.js:276
-msgid "The message"
-msgstr "Die Nachricht"
-
-#: js/SmsEditDialog.js:279
-msgid "enter the text..."
-msgstr "Geben Sie die Nachricht ein ..."
-
-#: js/SmsEditDialog.js:302
-msgid "Send message to \"{0}\""
-msgstr "Sende Nachricht an \"{0}\""
-
-#: js/SmsEditDialog.js:302
-msgid "Send message"
-msgstr "Sende Nachricht"
-
-#: Preference.php:78
-msgid "Your phone"
-msgstr "Ihr Telefon"
-
-#: Preference.php:79
-msgid "This is your phone"
-msgstr "Das ist Ihr Telefon"
-
-#: Preference.php:82
-msgid "Your fax"
-msgstr "Ihr Fax"
-
-#: Preference.php:83
-msgid "This is your fax"
-msgstr "Das ist Ihr Faxgerät"
-
-#: Preference.php:87
-msgid "Your mobile number"
-msgstr "Ihre Handynummer"
-
-#: Preference.php:88
-msgid "Used when sending SMS"
-msgstr "Wird benutzt beim Verschicken einer SMS"
-
-#: Preference.php:92
-msgid "International calling code"
-msgstr "Internationale Ländervorwahlen"
-
-#: Preference.php:93
-msgid ""
-"Your international calling code (e.g. +1 in the United States, +49 in "
-"Germany)"
-msgstr "Ihre internationale Ländervorwahl (z.B. +1 in den USA, +49 in Deutschland)"
+#: Setup/Update/Release1.php:50 Setup/Initialize.php:34
+msgid "accepted"
+msgstr "akzeptiert"
+
+#: Setup/Update/Release1.php:51 Setup/Initialize.php:35
+msgid "outgoing"
+msgstr "ausgehend"
+
+#: Setup/Update/Release1.php:52 Setup/Initialize.php:36
+msgid "missed"
+msgstr "verpasst"
+
+#: Setup/Update/Release1.php:66 Setup/Initialize.php:50
+msgid "Telephone Call"
+msgstr "Telefonanruf"
+
+#: Setup/Update/Release1.php:67 Setup/Initialize.php:51
+msgid "Facsimile"
+msgstr "Fax"
+
+#: Setup/Update/Release1.php:91 Setup/Initialize.php:65
+msgid "basic/plus"
+msgstr "basic/plus"
+
+#: Setup/Update/Release1.php:92 Setup/Initialize.php:66
+msgid "team"
+msgstr "Team"
+
+#: Setup/Update/Release1.php:106 Setup/Initialize.php:80
+msgid "private"
+msgstr "privat"
+
+#: Setup/Update/Release1.php:107 Setup/Initialize.php:81
+msgid "shared"
+msgstr "gemeinsam genutzt"
 
 #: Setup/calling-codes.xml:6
 msgid "+93 (Afghanistan)"
@@ -1579,38 +1117,500 @@ msgstr "+260 (Sambia (Republik))"
 msgid "+263 (Zimbabwe (Republic of))"
 msgstr "+263 (Simbabwe (Republik))"
 
-#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
-msgid "accepted"
-msgstr "akzeptiert"
+#: Preference.php:78
+msgid "Your phone"
+msgstr "Ihr Telefon"
 
-#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
-msgid "outgoing"
-msgstr "ausgehend"
+#: Preference.php:79
+msgid "This is your phone"
+msgstr "Das ist Ihr Telefon"
 
-#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
-msgid "missed"
-msgstr "verpasst"
+#: Preference.php:82
+msgid "Your fax"
+msgstr "Ihr Fax"
 
-#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
-msgid "Telephone Call"
-msgstr "Telefonanruf"
+#: Preference.php:83
+msgid "This is your fax"
+msgstr "Das ist Ihr Faxgerät"
 
-#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
-msgid "Facsimile"
-msgstr "Fax"
+#: Preference.php:87
+msgid "Your mobile number"
+msgstr "Ihre Handynummer"
 
-#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
-msgid "basic/plus"
-msgstr "basic/plus"
+#: Preference.php:88
+msgid "Used when sending SMS"
+msgstr "Wird benutzt beim Verschicken einer SMS"
 
-#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
-msgid "team"
-msgstr "Team"
+#: Preference.php:92
+msgid "International calling code"
+msgstr "Internationale Ländervorwahlen"
 
-#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
-msgid "private"
-msgstr "privat"
+#: Preference.php:93
+msgid ""
+"Your international calling code (e.g. +1 in the United States, +49 in "
+"Germany)"
+msgstr "Ihre internationale Ländervorwahl (z.B. +1 in den USA, +49 in Deutschland)"
 
-#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
-msgid "shared"
-msgstr "gemeinsam genutzt"
+#: js/ConnectionGridPanel.js:81 js/Models.js:332
+msgid "TOS"
+msgstr "AGB"
+
+#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
+msgid "Status"
+msgstr "Status"
+
+#: js/ConnectionGridPanel.js:97
+msgid "Remote Number"
+msgstr "Nummer des Gesprächspartners"
+
+#: js/ConnectionGridPanel.js:103
+msgid "Local Number"
+msgstr "Lokale Nummer"
+
+#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
+msgid "Line"
+msgstr "Anschluss"
+
+#: js/ConnectionGridPanel.js:116
+msgid "Call started"
+msgstr "Anruf begann"
+
+#: js/ConnectionGridPanel.js:123
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/ConnectionGridPanel.js:195
+msgid "Save number"
+msgstr "Speichere Nummer"
+
+#: js/ConnectionGridPanel.js:196
+msgid "Adds this number to the Addressbook"
+msgstr "Fügt diese Telefonnummer zum Adressbuch hinzu"
+
+#: js/ConnectionGridPanel.js:203 js/LineGridPanel.js:180
+#: js/AccountGridPanel.js:124
+msgid "Dial number"
+msgstr "wähle Nummer"
+
+#: js/ConnectionGridPanel.js:204 js/LineGridPanel.js:181
+#: js/AccountGridPanel.js:125
+msgid "Initiates a new outgoing call"
+msgstr "Startet neuen, ausgehenden Anruf"
+
+#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
+msgid "Add Account"
+msgstr "Konto hinzufügen"
+
+#: js/SmsEditDialog.js:67
+msgid "Send"
+msgstr "Senden"
+
+#: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
+#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
+msgid "Close"
+msgstr "Schließen"
+
+#: js/SmsEditDialog.js:112
+msgid "Loading contact..."
+msgstr "Lade Kontakt ..."
+
+#: js/SmsEditDialog.js:113
+msgid "Sending message..."
+msgstr "Sende Nachricht ..."
+
+#: js/SmsEditDialog.js:250
+msgid "Recipient"
+msgstr "Empfänger"
+
+#: js/SmsEditDialog.js:259
+msgid "Recipient's phone number"
+msgstr "Epmfängertelefonnummer"
+
+#: js/SmsEditDialog.js:263
+msgid "please choose the recipient's phone number..."
+msgstr "Bitte wählen Sie die Epmfängertelefonnummer ..."
+
+#: js/SmsEditDialog.js:267
+msgid "Your phone number"
+msgstr "Ihre Telefonnummer"
+
+#: js/SmsEditDialog.js:270
+msgid "please choose your phone number..."
+msgstr "Bitte wählen Sie Ihre Telefonnummer"
+
+#: js/SmsEditDialog.js:276
+msgid "The message"
+msgstr "Die Nachricht"
+
+#: js/SmsEditDialog.js:279
+msgid "enter the text..."
+msgstr "Geben Sie die Nachricht ein ..."
+
+#: js/SmsEditDialog.js:302
+msgid "Send message to \"{0}\""
+msgstr "Sende Nachricht an \"{0}\""
+
+#: js/SmsEditDialog.js:302
+msgid "Send message"
+msgstr "Sende Nachricht"
+
+#: js/SearchAddressDialog.js:55
+msgid "Add Number"
+msgstr "Nummer hinzufügen"
+
+#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+msgid "Mobile"
+msgstr "Handy"
+
+#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
+#: js/AccountGridPanel.js:55
+msgid "Fax"
+msgstr "Faxnummer"
+
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+msgid "Car phone"
+msgstr "Auto-Telefon"
+
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+msgid "Pager"
+msgstr "Pager"
+
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+msgid "Fax (private)"
+msgstr "Fax (privat)"
+
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+msgid "Mobile (private)"
+msgstr "Handy (privat)"
+
+#: js/SearchAddressDialog.js:144
+msgid "-- create new --"
+msgstr "-- neuen erstellen --"
+
+#: js/SearchAddressDialog.js:145
+msgid "Select existing contact or create a new one"
+msgstr "Wählen Sie einen Kontakt oder erstellen Sie einen neuen"
+
+#: js/SearchAddressDialog.js:180
+msgid "Choose Device"
+msgstr "Gerät auswählen"
+
+#: js/SearchAddressDialog.js:211
+msgid "Add number {0} to the addressbook"
+msgstr "Füge Nummer {0} zum Adressbuch hinzu"
+
+#: js/LineGridPanel.js:82 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
+#: js/AccountEditDialog.js:278
+msgid "Type"
+msgstr "Typ"
+
+#: js/LineGridPanel.js:90 js/AccountFilterModel.js:38
+msgid "Account"
+msgstr "Konto"
+
+#: js/LineGridPanel.js:98
+msgid "User"
+msgstr "Benutzer"
+
+#: js/LineGridPanel.js:105 js/AssignLinesGrid.js:101
+#: js/AccountGridPanel.js:115
+msgid "Uri Alias"
+msgstr "Alias"
+
+#: js/LineGridPanel.js:111
+msgid "SIP Uri"
+msgstr "SPI Uri"
+
+#: js/LineGridPanel.js:117 js/AssignLinesGrid.js:104
+msgid "Incoming"
+msgstr "Eingehend"
+
+#: js/LineGridPanel.js:125 js/AssignLinesGrid.js:103
+msgid "Outgoing"
+msgstr "Abgehend"
+
+#: js/LineGridPanel.js:131
+msgid "Created"
+msgstr "Erstellt"
+
+#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
+msgid "Synchronize Line"
+msgstr "Leitung synchronisieren"
+
+#: js/LineGridPanel.js:189 js/AccountEditDialog.js:68
+msgid "Synchronize Lines"
+msgstr "Leitungen synchronisieren"
+
+#: js/LineGridPanel.js:191
+msgid "Synchronizes the selected line(s)"
+msgstr "Synchronisiere ausgewählte Leitung(en)"
+
+#: js/LineGridPanel.js:246
+msgid "Synchronizing..."
+msgstr "Synchronisiere ..."
+
+#: js/AssignLinesGrid.js:57
+msgid "Assign Lines"
+msgstr "Leitungen zuweisen"
+
+#: js/AssignLinesGrid.js:99
+msgid "Id"
+msgstr "Identifikation"
+
+#: js/AssignLinesGrid.js:102
+msgid "Sip Uri"
+msgstr "Sip URI"
+
+#: js/AssignLinesGrid.js:107
+msgid "Assigned User"
+msgstr "Zugeordnete Benutzer"
+
+#: js/AccountGridPanel.js:54
+msgid "Telephone"
+msgstr "Telefon"
+
+#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
+msgid "Mobile Number"
+msgstr "Mobilnummer"
+
+#: js/DialNumberDialog.js:97
+msgid "Ok"
+msgstr "Ok"
+
+#: js/DialNumberDialog.js:161
+msgid "Select Line"
+msgstr "Leitung wählen"
+
+#: js/DialNumberDialog.js:166
+msgid "Number to call"
+msgstr "Anzurufende Nummer"
+
+#: js/DialNumberDialog.js:171
+msgid "Please use a valid telephone number!"
+msgstr "Bitte verwenden Sie eine gültige Telefonnummer!"
+
+#: js/DialNumberDialog.js:211
+msgid "Dial Number {0}"
+msgstr "Wähle Nummer {0}"
+
+#: js/ExceptionHandler.js:18
+msgid ""
+"A general backend error occurred. If this is a permanent error, please "
+"contact your administrator."
+msgstr "Ein allgemeiner Backend-Fehler ist aufgetreten. Wenn dies ein permanenter Fehler ist, so wenden Sie sich bitte an Ihren Administrator."
+
+#: js/ExceptionHandler.js:26
+msgid ""
+"The application could not connect to the sipgate server. If this is a "
+"permanent error, please contact your administrator."
+msgstr "Die Anwendung konnte keine Verbindung zum sipgate-Server herstellen. Wenn dies ein permanenter Fehler ist, wenden Sie sich bitte an Ihren Administrator."
+
+#: js/ExceptionHandler.js:34
+msgid ""
+"The authentication data provided are not valid. Please configure or contact "
+"your administrator."
+msgstr "Die angegebenen Zugangsdaten sind nicht gültig. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
+
+#: js/ExceptionHandler.js:42
+msgid ""
+"The saved credentials and config data could not be resolved properly. Please"
+" reconfigure or contact your administrator."
+msgstr "Der gespeicherten Zugangsdaten und die Konfiguration konnten nicht korrekt aufgelöst werden. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
+
+#: js/ExceptionHandler.js:50
+msgid ""
+"There are missing parameters to connect to sipgate. Please reconfigure or "
+"contact your administrator."
+msgstr "Es fehlen Parameter um eine Verbindung zu sipgate herzustellen. Bitte konfigurieren Sie das System oder wenden Sie sich an Ihren Administrator."
+
+#: js/ExceptionHandler.js:60
+msgid ""
+"The account you've configured is already in use. Please contact your "
+"administrator or activate the account again if it's yours."
+msgstr "Das Konto, das Sie konfiguriert haben wird bereits verwendet. Bitte wenden Sie sich an Ihren Administrator oder aktivieren Sie das Benutzerkonto wieder, wenn es Ihnen gehört."
+
+#: js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr "Der Anruf kann also nicht weiter verfolgt werden. Verlorene Session-ID."
+
+#: js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr "Der Anruf kann wegen eines unbekannten Fehlers nicht weiter verfolgt werden."
+
+#: js/CallStateWindow.js:151
+msgid "Please pick up your phone to get connected to {0}."
+msgstr "Bitte heben Sie Ihr Telefon ab, um mit {0} zu verbinden."
+
+#: js/CallStateWindow.js:155
+msgid "Connecting to {0}."
+msgstr "Verbinde zu {0}."
+
+#: js/CallStateWindow.js:162
+msgid "Connected to {0}."
+msgstr "Verbunden zu {0}."
+
+#: js/CallStateWindow.js:167
+msgid "call 1 busy"
+msgstr "Ihr Telefon ist belegt. Bitte überprüfen Sie, ob es aufgelegt ist"
+
+#: js/CallStateWindow.js:174
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr "Verbindung zu {0} fehlgeschlagen. {0} ist besetzt oder hat den Anruf abgelehnt."
+
+#: js/CallStateWindow.js:180
+msgid "hungup before other called"
+msgstr "vor dem Anruf aufgelegt"
+
+#: js/CallStateWindow.js:183
+msgid "hungup"
+msgstr "aufgelegt"
+
+#: js/CallStateWindow.js:221
+msgid "Initializing call to {0}"
+msgstr "Initialisiere Aufruf zu {0}"
+
+#: js/CallStateWindow.js:244
+msgid "Connecting to: "
+msgstr "Verbinden mit: "
+
+#: js/AccountEditDialog.js:43
+msgid "Validating account..."
+msgstr "Verifiziere Account..."
+
+#: js/AccountEditDialog.js:44
+msgid "Synchronizing lines..."
+msgstr "Synchronisiere Zeilen..."
+
+#: js/AccountEditDialog.js:60
+msgid "Save Account"
+msgstr "Konto speichern"
+
+#: js/AccountEditDialog.js:62
+msgid "Saves the account (without closing window)"
+msgstr "Konto speichern (Fenster nicht schließen)"
+
+#: js/AccountEditDialog.js:70
+msgid ""
+"Synchronizes the selected account (creates or updates the associated lines)"
+msgstr "Synchronisiere Konto (erzeugt oder aktualisiert die zugehörigen Anschlüsse)"
+
+#: js/AccountEditDialog.js:76
+msgid "Validate Account"
+msgstr "Überprüfe Konto"
+
+#: js/AccountEditDialog.js:78
+msgid ""
+"Validates the selected account (creates or updates the associated lines)"
+msgstr "Überprüfe die gewählten Konten (erzeugt oder aktualisiert die zugehörigen Anschlüsse)"
+
+#: js/AccountEditDialog.js:95
+msgid "The account is not saved already!"
+msgstr "Dieses Konto wurde noch nicht gespeichert."
+
+#: js/AccountEditDialog.js:96
+msgid "Please save yout account before syncing!"
+msgstr "Bitte Konto vor dem synchronisieren speichern!"
+
+#: js/AccountEditDialog.js:109
+msgid "The lines have been synced sucessfully!"
+msgstr "Die Leitungen wurden erfolgreich synchronisiert!"
+
+#: js/AccountEditDialog.js:110
+msgid ""
+"The account has now {0} lines. Go on assigning user accounts to the new "
+"lines in the next tab."
+msgstr "Das Konto hat nun {0} Anschlüsse. Füge weitere Konten zu den Anschlüssen im nächsten Tab hinzu."
+
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+msgid "Errors"
+msgstr "Fehler"
+
+#: js/AccountEditDialog.js:257
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/AccountEditDialog.js:288
+msgid "Sipgate Username"
+msgstr "SipGate Benutzername"
+
+#: js/AccountEditDialog.js:290
+msgid "Hidden due to security reasons."
+msgstr "sicherheitshalber versteckt"
+
+#: js/AccountEditDialog.js:292
+msgid "Password"
+msgstr "Passwort"
+
+#: js/AccountEditDialog.js:296
+msgid "Passwort Repeat"
+msgstr "Passwortwiederholung"
+
+#: js/AccountEditDialog.js:302
+msgid "Is Validated"
+msgstr "Ist gepfüft"
+
+#: js/AccountEditDialog.js:340
+msgid "Please validate the account settings before saving!"
+msgstr "Konteneinstellungen vor speichern validieren!"
+
+#: js/Models.js:97 js/Models.js:144 js/Models.js:321
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Models.js:98
+msgid "Created By"
+msgstr "Erstellt bei"
+
+#: js/Models.js:100
+msgid "Account-Type"
+msgstr "Kontotyp"
+
+#: js/Models.js:146
+msgid "Assigned to"
+msgstr "zugewiesen an"
+
+#: js/Models.js:303
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Eintragsliste"
+msgstr[1] "Eintragslisten"
+
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Kontakt anrufen"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Verfasse SMS"
+
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr "Geschäftlich"
+
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr "Privat"
+
+#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr "Handy"
+
+#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr "Handy privat"
+
+#: Controller/Connection.php:242
+msgid "anonymous"
+msgstr "anonym"

@@ -40,82 +40,20 @@ msgstr ""
 msgid "Create or update shared leads favorites"
 msgstr ""
 
-#: Controller/Lead.php:177
-msgid "State"
-msgstr "Статус"
-
-#: Controller/Lead.php:178 js/AddToLeadPanel.js:78 js/Contact.js:252
-msgid "Role"
-msgstr ""
-
-#: Controller/Lead.php:179
-msgid "Source"
-msgstr "Код"
-
-#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:396
-#: js/LeadGridDetailsPanel.js:445
-msgid "Start"
-msgstr "Старт"
-
-#: Controller/Lead.php:181
-msgid "Scheduled end"
-msgstr "Запланувана продължителност"
-
-#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:227
-msgid "End"
-msgstr "Крайна дата"
-
-#: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:129
-#: js/Model.js:108
-msgid "Turnover"
-msgstr "Оборот"
-
-#: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:220
-#: js/LeadGridPanel.js:128 js/Model.js:107
-msgid "Probability"
-msgstr "Вероятност"
-
-#: Controller/Lead.php:185
-msgid "Folder"
-msgstr "Папка"
-
-#: Controller/Lead.php:186
-msgid "Updated by"
-msgstr "Осъвременено от"
-
-#: Controller/Lead.php:187
-msgid "Updated Fields:"
-msgstr "Актуализирани полета:"
-
-#: Controller/Lead.php:188
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s променени от %s на %s."
-
-#: Controller/Lead.php:194
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Предложението е %s променено"
-
-#: Controller/Lead.php:196
-#, python-format
-msgid "Lead %s has been created"
-msgstr ""
-
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s's лични предложения"
 
-#: Controller.php:162 js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:488
-#: js/LeadGridPanel.js:126 Model/Lead.php:118
+#: Controller.php:162 Model/Lead.php:118 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
+#: js/Contact.js:396 js/LeadGridPanel.js:126
 msgid "Customer"
 msgstr "Клиент"
 
-#: Controller.php:163 js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
-#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:471
-#: js/LeadGridPanel.js:125
+#: Controller.php:163 js/LeadGridDetailsPanel.js:45
+#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
+#: js/Contact.js:400 js/LeadGridPanel.js:125
 msgid "Partner"
 msgstr "Партньор/Съдружник"
 
@@ -163,380 +101,34 @@ msgstr "Телефон"
 msgid "Website"
 msgstr ""
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Данни за предложението"
-
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:338
-#: js/LeadGridPanel.js:127 js/LeadStateFilterModel.js:32
-msgid "Leadstate"
-msgstr "Статус на предложение"
-
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:357
-#: js/LeadGridDetailsPanel.js:455
-msgid "Leadtype"
-msgstr "Тип на предложението"
-
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:364
-#: js/LeadGridDetailsPanel.js:460
-msgid "Leadsource"
-msgstr "Източник на предложението"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "Краен срок"
-
-#: Export/Pdf.php:184
-msgid "Contacts"
-msgstr "Контакти"
-
-#: Export/Pdf.php:211 js/Contact.js:231
-msgid "Address"
-msgstr "Адрес"
-
-#: Export/Pdf.php:232 js/LeadEditDialog.js:243 js/Task.js:83
-msgid "Tasks"
-msgstr "Задачи"
-
-#: Export/Pdf.php:252 js/Task.js:176
-msgid "Due Date"
-msgstr "Краен срок"
-
-#: Export/Pdf.php:259 js/Task.js:189
-msgid "Priority"
-msgstr "Приоритет"
-
-#: Export/Pdf.php:274 js/LeadEditDialog.js:254 js/Product.js:85
-msgid "Products"
-msgstr "Продукти"
-
-#: Export/Pdf.php:315
-msgid "low"
-msgstr "ниска"
-
-#: Export/Pdf.php:316
-msgid "normal"
-msgstr "нормална"
-
-#: Export/Pdf.php:317
-msgid "high"
-msgstr "висока"
-
-#: Export/Pdf.php:318
-msgid "urgent"
-msgstr "важност"
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr ""
-
-#: js/AddToLeadPanel.js:73 js/LeadEditDialog.js:269 js/Model.js:49
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr ""
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr ""
-
-#: js/AddToLeadPanel.js:93
-msgid "Adding {0} contacts to lead"
-msgstr ""
-
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
-msgid "Leadstates"
-msgstr ""
-
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
-msgid "Leadtypes"
-msgstr ""
-
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
-msgid "Leadsources"
-msgstr ""
-
-#: js/AdminPanel.js:138
-msgid "Defaults"
-msgstr ""
-
-#: js/Contact.js:162
-msgid "Change type to Customer"
-msgstr "Сменя типа контакт с Клиент"
-
-#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:124 Model/Lead.php:117
+#: Model/Lead.php:117 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
+#: js/LeadGridPanel.js:124
 msgid "Responsible"
 msgstr "Отговорник"
 
-#: js/Contact.js:172
-msgid "Change type to Responsible"
-msgstr "Сменя типа контакт с Отговорник"
-
-#: js/Contact.js:182
-msgid "Change type to Partner"
-msgstr "Сменя типа контакт с Партньор"
-
-#: js/Contact.js:193
-msgid "Change contact type"
-msgstr "Сменя контакт-тип"
-
-#: js/Contact.js:205
-msgid "Search for Contacts to add ..."
-msgstr "Търси да прибави контакти"
-
-#: js/Contact.js:222
-msgid "Name"
-msgstr "Име"
-
-#: js/Contact.js:242
-msgid "Data"
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
+msgid "All leads I have read grants for"
 msgstr ""
 
-#: js/Contact.js:245 js/LeadGridDetailsPanel.js:48
-msgid "Phone"
-msgstr "Телефон"
-
-#: js/Contact.js:246
-msgid "Cellphone"
-msgstr "Мобилен"
-
-#: js/Crm.js:24
-msgid "New Lead"
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
 msgstr ""
 
-#: js/LeadEditDialog.js:244
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
 msgstr ""
 
-#: js/LeadEditDialog.js:255
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
+#: Setup/Initialize.php:72
+msgid "My leads"
 msgstr ""
 
-#: js/LeadEditDialog.js:296
-msgid "Enter short name"
-msgstr "Задай съкратено име"
-
-#: js/LeadEditDialog.js:380
-msgid "Expected turnover"
-msgstr "Очакван оборот"
-
-#: js/LeadEditDialog.js:402 js/LeadGridDetailsPanel.js:450
-msgid "Estimated end"
-msgstr "Пресметната продължителност"
-
-#: js/LeadEditDialog.js:434 js/Product.js:139
-msgid "Description"
-msgstr "Описание"
-
-#: js/LeadEditDialog.js:448
-msgid "Enter description"
-msgstr "Напиши описание"
-
-#: js/LeadGridContactFilter.js:47
-msgid "Contact"
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
 msgstr ""
 
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
 msgstr ""
-
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:440 js/Task.js:218
-msgid "Status"
-msgstr "Статус"
-
-#: js/LeadGridPanel.js:121
-msgid "Lead id"
-msgstr "Иидентификатор на предложение (id)"
-
-#: js/LeadGridPanel.js:122
-msgid "Tags"
-msgstr ""
-
-#: js/LeadGridPanel.js:123 js/Model.js:105
-msgid "Lead name"
-msgstr "Име на предложение"
-
-#: js/LeadGridPanel.js:130
-msgid "Probable Turnover"
-msgstr ""
-
-#: js/LeadGridPanel.js:172
-msgid "Export Lead"
-msgstr ""
-
-#: js/LeadGridPanel.js:181
-msgid "Export as PDF"
-msgstr "Експортирай като PDF"
-
-#: js/LeadGridPanel.js:188
-msgid "Export as CSV"
-msgstr ""
-
-#: js/LeadGridPanel.js:195
-msgid "Export as ODS"
-msgstr ""
-
-#: js/LeadGridPanel.js:202
-msgid "Export as XLS"
-msgstr ""
-
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/LeadSource.js:136
-msgid "Add a Leadsource..."
-msgstr ""
-
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/LeadState.js:166
-msgid "Add a Leadstate..."
-msgstr ""
-
-#: js/LeadStateFilterModel.js:37
-msgid "Show closed"
-msgstr ""
-
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr ""
-
-#: js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:56 js/Product.js:185
-msgid "Unlink {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:57 js/Product.js:186
-msgid "Unlink selected {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr ""
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr ""
-
-#: js/Model.js:53
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:53
-msgid "lead lists"
-msgstr ""
-
-#: js/Model.js:103
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:110
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/Model.js:111
-msgid "Last Modified By"
-msgstr ""
-
-#: js/Model.js:112
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:113
-msgid "Created By"
-msgstr ""
-
-#: js/Model.js:152
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:155
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Product.js:134
-msgid "Product"
-msgstr "Продукт"
-
-#: js/Product.js:146
-msgid "Price"
-msgstr "Цена"
-
-#: js/Product.js:158
-msgid "Quantity"
-msgstr ""
-
-#: js/Product.js:216
-msgid "Search for Products to add ..."
-msgstr ""
-
-#: js/Task.js:109
-msgid "No Tasks to display"
-msgstr "Няма намерени задачи"
-
-#: js/Task.js:168
-msgid "Summary"
-msgstr "Заключение"
-
-#: js/Task.js:172
-msgid "Add a task..."
-msgstr "Добави задача"
-
-#: js/Task.js:205
-msgid "Percent"
-msgstr "Процент"
 
 #: Preference.php:37
 msgid "All leads"
@@ -574,26 +166,434 @@ msgstr ""
 msgid "The default favorite which is loaded on crm startup"
 msgstr ""
 
-#: Setup/Initialize.php:55 Setup/Update/Release3.php:37
-msgid "All leads I have read grants for"
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Данни за предложението"
+
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:338 js/LeadGridPanel.js:127
+msgid "Leadstate"
+msgstr "Статус на предложение"
+
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
+#: js/LeadEditDialog.js:357
+msgid "Leadtype"
+msgstr "Тип на предложението"
+
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
+#: js/LeadEditDialog.js:364
+msgid "Leadsource"
+msgstr "Източник на предложението"
+
+#: Export/Pdf.php:87 js/Model.js:108 js/LeadGridPanel.js:129
+#: Controller/Lead.php:183
+msgid "Turnover"
+msgstr "Оборот"
+
+#: Export/Pdf.php:90 js/Model.js:107 js/LeadEditDialog.js:220
+#: js/LeadGridPanel.js:128 Controller/Lead.php:184
+msgid "Probability"
+msgstr "Вероятност"
+
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:396
+#: Controller/Lead.php:180
+msgid "Start"
+msgstr "Старт"
+
+#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
+msgid "End"
+msgstr "Крайна дата"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "Краен срок"
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Контакти"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Адрес"
+
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:243
+msgid "Tasks"
+msgstr "Задачи"
+
+#: Export/Pdf.php:252 js/Task.js:176
+msgid "Due Date"
+msgstr "Краен срок"
+
+#: Export/Pdf.php:259 js/Task.js:189
+msgid "Priority"
+msgstr "Приоритет"
+
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:254
+msgid "Products"
+msgstr "Продукти"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "ниска"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "нормална"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "висока"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "важност"
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
 msgstr ""
 
-#: Setup/Initialize.php:62
-msgid "Last modified by me"
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
 msgstr ""
 
-#: Setup/Initialize.php:63
-msgid "All leads that I have last modified"
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
 msgstr ""
 
-#: Setup/Initialize.php:72
-msgid "My leads"
+#: js/AdminPanel.js:138
+msgid "Defaults"
 msgstr ""
 
-#: Setup/Initialize.php:73
-msgid "All leads that I am responsible for"
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
 msgstr ""
 
-#: Setup/Initialize.php:86
-msgid "Leads with overdue tasks"
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr ""
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:73 js/Model.js:49 js/LeadEditDialog.js:269
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr ""
+
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
+msgid "Role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr ""
+
+#: js/AddToLeadPanel.js:93
+msgid "Adding {0} contacts to lead"
+msgstr ""
+
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr "Няма намерени задачи"
+
+#: js/Task.js:168
+msgid "Summary"
+msgstr "Заключение"
+
+#: js/Task.js:172
+msgid "Add a task..."
+msgstr "Добави задача"
+
+#: js/Task.js:205
+msgid "Percent"
+msgstr "Процент"
+
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
+msgid "Status"
+msgstr "Статус"
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr ""
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr ""
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr ""
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr ""
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Продукт"
+
+#: js/Product.js:139 js/LeadEditDialog.js:434
+msgid "Description"
+msgstr "Описание"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Цена"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr ""
+
+#: js/Product.js:185 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr ""
+
+#: js/Product.js:186 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr ""
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:402
+msgid "Estimated end"
+msgstr "Пресметната продължителност"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr ""
+
+#: js/Model.js:53
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:53
+msgid "lead lists"
+msgstr ""
+
+#: js/Model.js:103
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:105 js/LeadGridPanel.js:123
+msgid "Lead name"
+msgstr "Име на предложение"
+
+#: js/Model.js:110
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Model.js:111
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Model.js:112
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:113
+msgid "Created By"
+msgstr ""
+
+#: js/Model.js:152
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:155
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadEditDialog.js:244
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:255
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:296
+msgid "Enter short name"
+msgstr "Задай съкратено име"
+
+#: js/LeadEditDialog.js:380
+msgid "Expected turnover"
+msgstr "Очакван оборот"
+
+#: js/LeadEditDialog.js:448
+msgid "Enter description"
+msgstr "Напиши описание"
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr "Сменя типа контакт с Клиент"
+
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr "Сменя типа контакт с Отговорник"
+
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr "Сменя типа контакт с Партньор"
+
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr "Сменя контакт-тип"
+
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr "Търси да прибави контакти"
+
+#: js/Contact.js:222
+msgid "Name"
+msgstr "Име"
+
+#: js/Contact.js:242
+msgid "Data"
+msgstr ""
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Мобилен"
+
+#: js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr ""
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr ""
+
+#: js/LeadGridPanel.js:121
+msgid "Lead id"
+msgstr "Иидентификатор на предложение (id)"
+
+#: js/LeadGridPanel.js:122
+msgid "Tags"
+msgstr ""
+
+#: js/LeadGridPanel.js:130
+msgid "Probable Turnover"
+msgstr ""
+
+#: js/LeadGridPanel.js:172
+msgid "Export Lead"
+msgstr ""
+
+#: js/LeadGridPanel.js:181
+msgid "Export as PDF"
+msgstr "Експортирай като PDF"
+
+#: js/LeadGridPanel.js:188
+msgid "Export as CSV"
+msgstr ""
+
+#: js/LeadGridPanel.js:195
+msgid "Export as ODS"
+msgstr ""
+
+#: js/LeadGridPanel.js:202
+msgid "Export as XLS"
+msgstr ""
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr ""
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr "Статус"
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "Код"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "Запланувана продължителност"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "Папка"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "Осъвременено от"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "Актуализирани полета:"
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s променени от %s на %s."
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Предложението е %s променено"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
 msgstr ""

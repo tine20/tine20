@@ -32,6 +32,45 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
+#: Controller.php:103
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%sの個人用アドレス帳"
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr ""
+
 #: Config.php:45
 msgid "Contact duplicate check fields"
 msgstr ""
@@ -60,14 +99,72 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller/Contact.php:329
-msgid "Uploaded new contact image."
+#: Setup/setup.xml:654
+msgid "Internal Contacts"
+msgstr "内部コンタクト"
+
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+msgid "Mr"
+msgstr "ミスター"
+
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+msgid "Ms"
+msgstr "ミス"
+
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:27
+#: js/Model.js:141
+msgid "Company"
+msgstr "会社"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+msgid "All contacts I have read grants for"
 msgstr ""
 
-#: Controller.php:103
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%sの個人用アドレス帳"
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr ""
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr ""
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr ""
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr ""
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr ""
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr ""
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr ""
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -113,7 +210,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "役割"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:143 js/ContactGrid.js:116
+#: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:143
 #: js/Model.js:33
 msgid "Room"
 msgstr "部屋"
@@ -160,239 +257,15 @@ msgstr "個人のURL"
 msgid "Other Data"
 msgstr "その他の情報"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:170 js/ContactGrid.js:142
+#: Export/Pdf.php:114 js/ContactGrid.js:142 js/ContactEditDialog.js:170
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "誕生日"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:164 js/ContactGrid.js:114
+#: Export/Pdf.php:117 js/ContactGrid.js:114 js/ContactEditDialog.js:164
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "役職"
-
-#: Import/definitions/adb_google_import_csv.xml:12
-msgid "Contact import from Google address book"
-msgstr ""
-
-#: Import/definitions/adb_import_vcard.xml:14
-msgid "Contact VCARD import"
-msgstr ""
-
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr ""
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
-msgid "CSV Outlook 2007 German"
-msgstr ""
-
-#: Import/definitions/adb_outlook_import_csv.xml:13
-msgid "Contact CSV import from Outlook address book"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:18
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr ""
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr ""
-
-#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:205
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] ""
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr ""
-
-#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
-msgid "Map"
-msgstr ""
-
-#: js/ContactEditDialog.js:76
-msgid "Personal Information"
-msgstr "個人情報"
-
-#: js/ContactEditDialog.js:88 js/ContactGrid.js:107 js/Model.js:29
-msgid "Salutation"
-msgstr "敬称"
-
-#: js/ContactEditDialog.js:104 js/Model.js:22
-msgid "Title"
-msgstr "タイトル"
-
-#: js/ContactEditDialog.js:109 js/ContactGrid.js:109 js/Model.js:20
-#: js/Model.js:139
-msgid "First Name"
-msgstr "姓"
-
-#: js/ContactEditDialog.js:114 js/Model.js:21
-msgid "Middle Name"
-msgstr "ミドルネーム"
-
-#: js/ContactEditDialog.js:119 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:108 js/Model.js:19
-#: js/Model.js:140
-msgid "Last Name"
-msgstr "名"
-
-#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:112
-#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
-msgid "Company"
-msgstr "会社"
-
-#: js/ContactEditDialog.js:130 js/ContactGrid.js:113 js/Model.js:28
-#: js/Model.js:142
-msgid "Unit"
-msgstr "ユニット"
-
-#: js/ContactEditDialog.js:135 js/Model.js:23
-msgid "Suffix"
-msgstr "サフィックス"
-
-#: js/ContactEditDialog.js:139 js/ContactGrid.js:115 js/Model.js:31
-#: js/Model.js:145
-msgid "Job Role"
-msgstr "仕事の役割"
-
-#: js/ContactEditDialog.js:159 js/ContactGrid.js:111 js/Model.js:24
-msgid "Display Name"
-msgstr "表示名"
-
-#: js/ContactEditDialog.js:178
-msgid "Contact Information"
-msgstr "コンタクト情報"
-
-#: js/ContactEditDialog.js:183 js/ContactGrid.js:128
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/Model.js:51 js/Model.js:143
-msgid "Phone"
-msgstr "電話"
-
-#: js/ContactEditDialog.js:188 js/ContactGrid.js:129
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:52
-msgid "Mobile"
-msgstr "携帯電話"
-
-#: js/ContactEditDialog.js:193 js/ContactGrid.js:130
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/Model.js:53
-msgid "Fax"
-msgstr "FAX"
-
-#: js/ContactEditDialog.js:198 js/ContactGrid.js:133 js/Model.js:57
-msgid "Phone (private)"
-msgstr "電話(プライベート)"
-
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:135 js/Model.js:59
-msgid "Mobile (private)"
-msgstr "携帯電話(プライベート)"
-
-#: js/ContactEditDialog.js:208 js/ContactGrid.js:134 js/Model.js:58
-msgid "Fax (private)"
-msgstr "FAX(プライベート)"
-
-#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
-msgid "E-Mail"
-msgstr "Eメール"
-
-#: js/ContactEditDialog.js:219 js/Model.js:63
-msgid "E-Mail (private)"
-msgstr "Eメール (プライベート)"
-
-#: js/ContactEditDialog.js:226 js/ContactGrid.js:137
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/Model.js:64
-msgid "Web"
-msgstr "Web"
-
-#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
-#: js/Model.js:152 js/Model.js:153 js/Model.js:154
-msgid "Company Address"
-msgstr "会社の住所"
-
-#: js/ContactEditDialog.js:262 js/ContactEditDialog.js:291
-#: js/ContactGrid.js:117 js/Model.js:150 js/Model.js:155
-msgid "Street"
-msgstr "通り"
-
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
-msgid "Street 2"
-msgstr "通り（２）"
-
-#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
-#: js/ContactGrid.js:119 js/Model.js:151 js/Model.js:156
-msgid "Region"
-msgstr "リージョン"
-
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
-#: js/Model.js:157
-msgid "Postal Code"
-msgstr "郵便番号"
-
-#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
-#: js/ContactGrid.js:118 js/Model.js:153 js/Model.js:158
-msgid "City"
-msgstr "市"
-
-#: js/ContactEditDialog.js:283 js/ContactEditDialog.js:312
-#: js/ContactGrid.js:121 js/Model.js:154 js/Model.js:159
-msgid "Country"
-msgstr "国"
-
-#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
-msgid "Description"
-msgstr "説明"
-
-#: js/ContactEditDialog.js:347
-msgid "Enter description"
-msgstr "説明を入力してください"
-
-#: js/ContactEditDialog.js:391
-msgid "Export as pdf"
-msgstr ""
-
-#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
-msgid "Parse address"
-msgstr ""
-
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
-msgid "Either {0} or {1} must be given"
-msgstr ""
-
-#: js/ContactEditDialog.js:476
-msgid "Paste address"
-msgstr ""
-
-#: js/ContactEditDialog.js:476
-msgid "Please paste an address that should be parsed:"
-msgstr ""
-
-#: js/ContactEditDialog.js:510
-msgid "End token mode"
-msgstr ""
-
-#: js/ContactFilterModel.js:35 js/ContactGrid.js:292 js/Model.js:94
-#: js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "コンタクト"
 
 #: js/ContactGrid.js:105 js/Model.js:160
 msgid "Type"
@@ -402,13 +275,62 @@ msgstr "タイプ"
 msgid "Tags"
 msgstr ""
 
+#: js/ContactGrid.js:107 js/ContactEditDialog.js:88 js/Model.js:29
+msgid "Salutation"
+msgstr "敬称"
+
+#: js/ContactGrid.js:108 js/ContactEditDialog.js:119
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:19
+#: js/Model.js:140
+msgid "Last Name"
+msgstr "名"
+
+#: js/ContactGrid.js:109 js/ContactEditDialog.js:109 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "姓"
+
 #: js/ContactGrid.js:110
 msgid "Full Name"
 msgstr "氏名"
 
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:159 js/Model.js:24
+msgid "Display Name"
+msgstr "表示名"
+
+#: js/ContactGrid.js:113 js/ContactEditDialog.js:130 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr "ユニット"
+
+#: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
+#: js/Model.js:145
+msgid "Job Role"
+msgstr "仕事の役割"
+
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:262
+#: js/ContactEditDialog.js:291 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "通り"
+
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "市"
+
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr "リージョン"
+
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "郵便番号"
+
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:283
+#: js/ContactEditDialog.js:312 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "国"
 
 #: js/ContactGrid.js:122
 msgid "Street (private)"
@@ -430,6 +352,24 @@ msgstr "郵便番号 (プライベート)"
 msgid "Country (private)"
 msgstr "国(プライベート)"
 
+#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:183
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "電話"
+
+#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:188
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "携帯電話"
+
+#: js/ContactGrid.js:130 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:193
+#: js/Model.js:53
+msgid "Fax"
+msgstr "FAX"
+
 #: js/ContactGrid.js:131
 msgid "Car phone"
 msgstr "自動車電話"
@@ -438,9 +378,27 @@ msgstr "自動車電話"
 msgid "Pager"
 msgstr "ポケットベル"
 
+#: js/ContactGrid.js:133 js/ContactEditDialog.js:198 js/Model.js:57
+msgid "Phone (private)"
+msgstr "電話(プライベート)"
+
+#: js/ContactGrid.js:134 js/ContactEditDialog.js:208 js/Model.js:58
+msgid "Fax (private)"
+msgstr "FAX(プライベート)"
+
+#: js/ContactGrid.js:135 js/ContactEditDialog.js:203 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "携帯電話(プライベート)"
+
 #: js/ContactGrid.js:136
 msgid "Email (private)"
 msgstr "Eメール(プライベート)"
+
+#: js/ContactGrid.js:137 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:226
+#: js/Model.js:64
+msgid "Web"
+msgstr "Web"
 
 #: js/ContactGrid.js:138
 msgid "URL (private)"
@@ -491,6 +449,12 @@ msgstr ""
 msgid "Contact of a user account"
 msgstr ""
 
+#: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
+#: js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "コンタクト"
+
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
 msgstr "コンタクト"
@@ -498,6 +462,11 @@ msgstr "コンタクト"
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
 msgstr "コンタクトの選択"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "Eメール"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
@@ -515,8 +484,78 @@ msgstr ""
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr ""
+
+#: js/ContactEditDialog.js:76
+msgid "Personal Information"
+msgstr "個人情報"
+
+#: js/ContactEditDialog.js:104 js/Model.js:22
+msgid "Title"
+msgstr "タイトル"
+
+#: js/ContactEditDialog.js:114 js/Model.js:21
+msgid "Middle Name"
+msgstr "ミドルネーム"
+
+#: js/ContactEditDialog.js:135 js/Model.js:23
+msgid "Suffix"
+msgstr "サフィックス"
+
+#: js/ContactEditDialog.js:178
+msgid "Contact Information"
+msgstr "コンタクト情報"
+
+#: js/ContactEditDialog.js:219 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "Eメール (プライベート)"
+
+#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "会社の住所"
+
+#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+msgid "Street 2"
+msgstr "通り（２）"
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "郵便番号"
+
+#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "説明"
+
+#: js/ContactEditDialog.js:347
+msgid "Enter description"
+msgstr "説明を入力してください"
+
+#: js/ContactEditDialog.js:391
+msgid "Export as pdf"
+msgstr ""
+
+#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
+msgid "Parse address"
+msgstr ""
+
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
+msgid "Either {0} or {1} must be given"
+msgstr ""
+
+#: js/ContactEditDialog.js:476
+msgid "Paste address"
+msgstr ""
+
+#: js/ContactEditDialog.js:476
+msgid "Please paste an address that should be parsed:"
+msgstr ""
+
+#: js/ContactEditDialog.js:510
+msgid "End token mode"
 msgstr ""
 
 #: js/MapPanel.js:58
@@ -525,6 +564,14 @@ msgstr ""
 
 #: js/MapPanel.js:65
 msgid "Private address"
+msgstr ""
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
 msgstr ""
 
 #: js/Model.js:19
@@ -591,6 +638,11 @@ msgstr ""
 msgid "Web (private)"
 msgstr ""
 
+#: js/Model.js:98 js/Model.js:205 js/Addressbook.js:32
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] ""
+
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
 msgstr ""
@@ -628,62 +680,10 @@ msgstr[0] ""
 msgid "Lists"
 msgstr ""
 
-#: Preference.php:28
-msgid "All contacts"
+#: js/Addressbook.js:22
+msgid "New Contact"
 msgstr ""
 
-#: Preference.php:65
-msgid "Default Addressbook"
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
 msgstr ""
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr ""
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
-
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
-msgid "Mr"
-msgstr "ミスター"
-
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
-msgid "Ms"
-msgstr "ミス"
-
-#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr ""
-
-#: Setup/Initialize.php:140
-msgid "My company"
-msgstr ""
-
-#: Setup/Initialize.php:141
-msgid "All coworkers in my company"
-msgstr ""
-
-#: Setup/Initialize.php:154
-msgid "My contacts"
-msgstr ""
-
-#: Setup/Initialize.php:155
-msgid "All contacts in my Addressbooks"
-msgstr ""
-
-#: Setup/Initialize.php:167
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:168
-msgid "All contacts that I have last modified"
-msgstr ""
-
-#: Setup/setup.xml:654
-msgid "Internal Contacts"
-msgstr "内部コンタクト"

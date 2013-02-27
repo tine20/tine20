@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 13:26+0000\n"
-"Last-Translator: mspahn <ms@ansta.lt>\n"
+"PO-Revision-Date: 2013-02-26 08:57+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,136 +18,10 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Inventar Status verfügbar"
-
-#: Config.php:33
-msgid "Possible status."
-msgstr "Möglicher Status"
-
 #: Controller.php:79
 #, python-format
 msgid "%s's personal inventory items"
 msgstr "%s's persönliche Inventar Gegenstände"
-
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Inventar CSV Import"
-
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Importierte Liste (###CURRENTDATE###)"
-
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
-
-#: js/InventoryItemEditDialog.js:52
-msgid "The active number must be less than or equal total number."
-msgstr "Die verwendbare Anzahl muss geringer oder gleich wie die Anzahl sein."
-
-#: js/InventoryItemEditDialog.js:76
-msgid "General"
-msgstr "Allgemein"
-
-#: js/InventoryItemEditDialog.js:100
-msgid "ID"
-msgstr "ID"
-
-#: js/InventoryItemEditDialog.js:109 Model/InventoryItem.php:71
-msgid "Name"
-msgstr "Name"
-
-#: js/InventoryItemEditDialog.js:129 Model/InventoryItem.php:89
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/InventoryItemEditDialog.js:133
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-#: js/InventoryItemEditDialog.js:163 Model/InventoryItem.php:93
-msgid "Location"
-msgstr "Standort"
-
-#: js/InventoryItemEditDialog.js:170
-msgid "Added"
-msgstr "Hinzugefügt"
-
-#: js/InventoryItemEditDialog.js:176 Model/InventoryItem.php:121
-msgid "Warranty"
-msgstr "Garantie"
-
-#: js/InventoryItemEditDialog.js:182
-msgid "Removed"
-msgstr "Entfernt"
-
-#: js/InventoryItemEditDialog.js:189
-msgid "Total number"
-msgstr "Totale Anzahl"
-
-#: js/InventoryItemEditDialog.js:197
-msgid "Available number"
-msgstr "Verfügbare Anzahl"
-
-#: js/InventoryItemEditDialog.js:205 Model/InventoryItem.php:75
-msgid "Status"
-msgstr "Status"
-
-#: js/InventoryItemEditDialog.js:229
-msgid "Additional Information"
-msgstr "Zusätzliche Informationen"
-
-#: js/InventoryItemEditDialog.js:243
-msgid "Enter Information"
-msgstr "Informationen eingeben"
-
-#: js/InventoryItemEditDialog.js:263
-msgid "Accounting"
-msgstr "Buchhaltung"
-
-#: js/InventoryItemEditDialog.js:284 Model/InventoryItem.php:111
-msgid "Price"
-msgstr "Preis"
-
-#: js/InventoryItemEditDialog.js:290 Model/InventoryItem.php:116
-msgid "Cost centre"
-msgstr "Kostenstelle"
-
-#: js/InventoryItemEditDialog.js:296 Model/InventoryItem.php:106
-msgid "Invoice"
-msgstr "Rechnung"
-
-#: js/InventoryItemEditDialog.js:302 Model/InventoryItem.php:97
-msgid "Invoice date"
-msgstr "Rechnungsdatum"
-
-#: js/InventoryItemEditDialog.js:308 Model/InventoryItem.php:144
-msgid "Depreciate"
-msgstr "Abschreibung"
-
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
-msgstr "Inventar exportieren"
-
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
-msgstr "Exportieren als ODS"
-
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
-msgstr "Exportieren als CSV"
-
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
-msgstr "Exportieren als ..."
-
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
-msgstr "Gegenstände importieren"
 
 #: Model/InventoryItem.php:48
 msgid "Inventory item"
@@ -167,9 +41,45 @@ msgstr "Inventarliste"
 msgid "Inventory items lists"
 msgstr "Inventar Listen"
 
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:108
+msgid "Name"
+msgstr "Name"
+
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:204
+msgid "Status"
+msgstr "Status"
+
 #: Model/InventoryItem.php:85
 msgid "Inventory ID"
 msgstr "Inventar ID"
+
+#: Model/InventoryItem.php:89 js/InventoryItemEditDialog.js:128
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:162
+msgid "Location"
+msgstr "Standort"
+
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:290
+msgid "Invoice date"
+msgstr "Rechnungsdatum"
+
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:284
+msgid "Invoice"
+msgstr "Rechnung"
+
+#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:264
+msgid "Price"
+msgstr "Preis"
+
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:269
+msgid "Cost centre"
+msgstr "Kostenstelle"
+
+#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:175
+msgid "Warranty"
+msgstr "Garantie"
 
 #: Model/InventoryItem.php:126
 msgid "Item added"
@@ -179,13 +89,35 @@ msgstr "Aufgenommen"
 msgid "Item removed"
 msgstr "Entfernt"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Standard Inventar Container"
+#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:296
+msgid "Depreciate"
+msgstr "Abschreibung"
 
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Der standard Container für neue Gegenstände"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Inventar CSV Import"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Importierte Liste (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
+
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Inventar Status verfügbar"
+
+#: Config.php:33
+msgid "Possible status."
+msgstr "Möglicher Status"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventarisierung"
 
 #: Setup/Initialize.php:33
 msgid "ordered"
@@ -211,6 +143,66 @@ msgstr "Entfernt"
 msgid "unknown"
 msgstr "Unbekannt"
 
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventarisierung"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Standard Inventar Container"
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Der standard Container für neue Gegenstände"
+
+#: js/InventoryItemEditDialog.js:52
+msgid "The active number must be less than or equal total number."
+msgstr "Die verwendbare Anzahl muss geringer oder gleich wie die Anzahl sein."
+
+#: js/InventoryItemEditDialog.js:75
+msgid "General"
+msgstr "Allgemein"
+
+#: js/InventoryItemEditDialog.js:99
+msgid "ID"
+msgstr "ID"
+
+#: js/InventoryItemEditDialog.js:132
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: js/InventoryItemEditDialog.js:169
+msgid "Added"
+msgstr "Hinzugefügt"
+
+#: js/InventoryItemEditDialog.js:181
+msgid "Removed"
+msgstr "Entfernt"
+
+#: js/InventoryItemEditDialog.js:188
+msgid "Total number"
+msgstr "Totale Anzahl"
+
+#: js/InventoryItemEditDialog.js:196
+msgid "Available number"
+msgstr "Verfügbare Anzahl"
+
+#: js/InventoryItemEditDialog.js:243
+msgid "Accounting"
+msgstr "Buchhaltung"
+
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr "Inventar exportieren"
+
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr "Exportieren als ODS"
+
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr "Exportieren als CSV"
+
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr "Exportieren als ..."
+
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
+msgstr "Gegenstände importieren"

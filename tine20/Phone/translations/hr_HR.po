@@ -17,43 +17,16 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Pozovi kontakt"
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Uredi postavke telefona"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "radni"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "kućni"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Mobitel"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Privatni mobitel"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefoni"
 msgstr[2] "Telefoni"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Lista telefona"
-msgstr[1] "Liste telefona"
-msgstr[2] "Liste telefona"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Uredi postavke telefona"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -83,78 +56,105 @@ msgstr "Greška"
 msgid "Not possible to dial."
 msgstr "Nije moguće birati."
 
-#: js/Phone.js:480
+#: js/Phone.js:483
 msgid "Dial number"
 msgstr "Birajte broj"
 
-#: js/Phone.js:481
+#: js/Phone.js:484
 msgid "Initiate a new outgoing call"
 msgstr "Pokrenite novi odlazni poziv"
 
-#: js/Phone.js:542
+#: js/Phone.js:550
 msgid "Incoming call"
 msgstr "Dolazni poziv"
 
-#: js/Phone.js:546
+#: js/Phone.js:554
 msgid "Outgoing call"
 msgstr "Odlazni poziv"
 
-#: js/Phone.js:554
+#: js/Phone.js:562
 msgid "unknown number"
 msgstr "nepoznati broj"
 
-#: js/Phone.js:591
+#: js/Phone.js:599
 msgid "Search:"
 msgstr "Traži:"
 
-#: js/Phone.js:676
+#: js/Phone.js:684
 msgid "Source or Destination"
 msgstr "Izvor ili odredište"
 
-#: js/Phone.js:692
+#: js/Phone.js:700
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Prikaz poziva {0} - {1} od {2}"
 
-#: js/Phone.js:693 js/Phone.js:736
+#: js/Phone.js:701 js/Phone.js:744
 msgid "No calls to display"
 msgstr "Nema poziva za prikaz"
 
-#: js/Phone.js:703
+#: js/Phone.js:711
 msgid "Direction"
 msgstr "Smjer"
 
-#: js/Phone.js:704
+#: js/Phone.js:712
 msgid "Source"
 msgstr "Izvor"
 
-#: js/Phone.js:705
+#: js/Phone.js:713
 msgid "Caller Id"
 msgstr "Id pozivatelja"
 
-#: js/Phone.js:706
+#: js/Phone.js:714
 msgid "Destination"
 msgstr "Odredište"
 
-#: js/Phone.js:707
+#: js/Phone.js:715
 msgid "Start"
 msgstr "Start"
 
-#: js/Phone.js:708
+#: js/Phone.js:716
 msgid "Connected"
 msgstr "Spojen"
 
-#: js/Phone.js:709
+#: js/Phone.js:717
 msgid "Disconnected"
 msgstr "Isključen"
 
-#: js/Phone.js:710
+#: js/Phone.js:718
 msgid "Duration"
 msgstr "Trajanje"
 
-#: js/Phone.js:711
+#: js/Phone.js:719
 msgid "Ringing"
 msgstr "Zvonjenje"
 
-#: js/Phone.js:712
+#: js/Phone.js:720
 msgid "Call ID"
 msgstr "ID poziva"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Lista telefona"
+msgstr[1] "Liste telefona"
+msgstr[2] "Liste telefona"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Pozovi kontakt"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "radni"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "kućni"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Mobitel"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Privatni mobitel"

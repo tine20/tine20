@@ -17,39 +17,14 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Liên lạc điện thoại"
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Sửa thiết lập điện thoại"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Cơ quan"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Nhà riêng"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Di động"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Di động riêng"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "one:Điện thoại\nother:Điện thoại"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "one:Danh sách điện thoại\nother:Danh sách điện thoại"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Sửa thiết lập điện thoại"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -79,78 +54,103 @@ msgstr "Lỗi"
 msgid "Not possible to dial."
 msgstr "Không thể quay số"
 
-#: js/Phone.js:480
+#: js/Phone.js:483
 msgid "Dial number"
 msgstr "Quay số"
 
-#: js/Phone.js:481
+#: js/Phone.js:484
 msgid "Initiate a new outgoing call"
 msgstr "Bắt đầu 1 cuộc gọi đi mới"
 
-#: js/Phone.js:542
+#: js/Phone.js:550
 msgid "Incoming call"
 msgstr "Cuộc gọi đến"
 
-#: js/Phone.js:546
+#: js/Phone.js:554
 msgid "Outgoing call"
 msgstr "Cuộc gọi đi"
 
-#: js/Phone.js:554
+#: js/Phone.js:562
 msgid "unknown number"
 msgstr "không rõ số"
 
-#: js/Phone.js:591
+#: js/Phone.js:599
 msgid "Search:"
 msgstr "Tìm kiếm"
 
-#: js/Phone.js:676
+#: js/Phone.js:684
 msgid "Source or Destination"
 msgstr "Nguồn hoặc đích"
 
-#: js/Phone.js:692
+#: js/Phone.js:700
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Hiển thị cuộc gọi {0} - {1} của {2}"
 
-#: js/Phone.js:693 js/Phone.js:736
+#: js/Phone.js:701 js/Phone.js:744
 msgid "No calls to display"
 msgstr "Chưa có cuộc gọi nào"
 
-#: js/Phone.js:703
+#: js/Phone.js:711
 msgid "Direction"
 msgstr "Trực tiếp"
 
-#: js/Phone.js:704
+#: js/Phone.js:712
 msgid "Source"
 msgstr "Nguồn"
 
-#: js/Phone.js:705
+#: js/Phone.js:713
 msgid "Caller Id"
 msgstr "Mã người gọi"
 
-#: js/Phone.js:706
+#: js/Phone.js:714
 msgid "Destination"
 msgstr "Đích đến"
 
-#: js/Phone.js:707
+#: js/Phone.js:715
 msgid "Start"
 msgstr "Bắt đầu"
 
-#: js/Phone.js:708
+#: js/Phone.js:716
 msgid "Connected"
 msgstr "Đã kết nối"
 
-#: js/Phone.js:709
+#: js/Phone.js:717
 msgid "Disconnected"
 msgstr "Đã ngắt kết nối"
 
-#: js/Phone.js:710
+#: js/Phone.js:718
 msgid "Duration"
 msgstr "Thời lượng"
 
-#: js/Phone.js:711
+#: js/Phone.js:719
 msgid "Ringing"
 msgstr "Đang reo"
 
-#: js/Phone.js:712
+#: js/Phone.js:720
 msgid "Call ID"
 msgstr "Mã cuộc gọi"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "one:Danh sách điện thoại\nother:Danh sách điện thoại"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Liên lạc điện thoại"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Cơ quan"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Nhà riêng"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Di động"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Di động riêng"

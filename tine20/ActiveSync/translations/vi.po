@@ -25,6 +25,47 @@ msgstr "Chính sách mặc định cho thiết bị mới"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Nhập vào mã chính sách muốn áp dụng mỗi khi thiết bị mới được tạo"
 
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Chính sách mặc định"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Sổ địa chỉ mặc định"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Sổ địa chỉ mặc định khi tạo liên lạc mới"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Lịch mặc định"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Lịch mặc định để tạo sự kiện mới trong đó"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Danh sách công việc mặc định"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Danh sách công việc mặc định để tạo việc mới trong đó"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "one:Thiết bị\nother:Thiết bị"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Thiết bị"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,44 +97,3 @@ msgstr "đã khởi tạo"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Đặt bộ lọc đồng bộ"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "one:Thiết bị\nother:Thiết bị"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Thiết bị"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Sổ địa chỉ mặc định"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Sổ địa chỉ mặc định khi tạo liên lạc mới"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Lịch mặc định"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Lịch mặc định để tạo sự kiện mới trong đó"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Danh sách công việc mặc định"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Danh sách công việc mặc định để tạo việc mới trong đó"
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Chính sách mặc định"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Chính sách mặc định đã được thiết lập quá trình cài đặt"

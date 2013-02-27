@@ -34,6 +34,45 @@ msgstr "Sık Kullanılan Ortak Adres Defterlerini Düzelt"
 msgid "Create or update shared addressbook favorites"
 msgstr "Sık Kullanılan Ortak Adres Defteri Kur veya Düzelt"
 
+#: Controller.php:103
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr "Outlook CSV İçe Aktar"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Kişileri Google den İçeriye Aktar"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "CSV İçe Aktar"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Kişiler ###CURRENTDATE### Saat ###CURRENTDATE###, ###USERFULLNAME### tarafından eklenmiştir"
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "Mac CSV İçe Aktar"
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr "VCARD İçe Aktar"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr "Outlook 2007 CSV İçe Aktar"
+
 #: Config.php:45
 msgid "Contact duplicate check fields"
 msgstr ""
@@ -62,13 +101,71 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Controller/Contact.php:329
-msgid "Uploaded new contact image."
-msgstr "Yeni Profil Resmi Yüklenmiştir"
+#: Setup/setup.xml:654
+msgid "Internal Contacts"
+msgstr "Sistem İçi Kişiler"
 
-#: Controller.php:103
-#, python-format
-msgid "%s's personal addressbook"
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+msgid "Mr"
+msgstr "Bey"
+
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+msgid "Ms"
+msgstr "Hanım"
+
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:27
+#: js/Model.js:141
+msgid "Company"
+msgstr "Şirket"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+msgid "All contacts I have read grants for"
+msgstr "Okuma Hakkına Sahip Olduğum Kişiler"
+
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr "Şirketim"
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr "Şirketimdeki İş Arkadaşlarım"
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr "Kişilerim"
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr "Rehberimdeki Kişiler"
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr "Son düzenlediğim"
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr "Son düzenlediğim Kişiler"
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Tüm Kişiler"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Standart Adres Defteri"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Yeni Kişiler İçin Standart Adres Defteri"
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
 #: Export/Pdf.php:37
@@ -115,7 +212,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Rol"
 
-#: Export/Pdf.php:76 js/ContactEditDialog.js:143 js/ContactGrid.js:116
+#: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:143
 #: js/Model.js:33
 msgid "Room"
 msgstr "Oda"
@@ -162,239 +259,15 @@ msgstr "URL"
 msgid "Other Data"
 msgstr "Diğer Bilgi"
 
-#: Export/Pdf.php:114 js/ContactEditDialog.js:170 js/ContactGrid.js:142
+#: Export/Pdf.php:114 js/ContactGrid.js:142 js/ContactEditDialog.js:170
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "Doğum Tarihi"
 
-#: Export/Pdf.php:117 js/ContactEditDialog.js:164 js/ContactGrid.js:114
+#: Export/Pdf.php:117 js/ContactGrid.js:114 js/ContactEditDialog.js:164
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "Meslek"
-
-#: Import/definitions/adb_google_import_csv.xml:12
-msgid "Contact import from Google address book"
-msgstr "Kişileri Google den İçeriye Aktar"
-
-#: Import/definitions/adb_import_vcard.xml:14
-msgid "Contact VCARD import"
-msgstr "VCARD İçe Aktar"
-
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr "Mac CSV İçe Aktar"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
-msgid "CSV Outlook 2007 German"
-msgstr "Outlook 2007 CSV İçe Aktar"
-
-#: Import/definitions/adb_outlook_import_csv.xml:13
-msgid "Contact CSV import from Outlook address book"
-msgstr "Outlook CSV İçe Aktar"
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "CSV İçe Aktar"
-
-#: Import/definitions/adb_tine_import_csv.xml:18
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-#: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "Kişiler ###CURRENTDATE### Saat ###CURRENTDATE###, ###USERFULLNAME### tarafından eklenmiştir"
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr "Yeni İsim"
-
-#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:205
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "one: Adres Defteri\n\nother: Adres Defterleri"
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr "CardDAV Adresi"
-
-#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
-msgid "Map"
-msgstr "Harita"
-
-#: js/ContactEditDialog.js:76
-msgid "Personal Information"
-msgstr "Şahsi Bilgiler"
-
-#: js/ContactEditDialog.js:88 js/ContactGrid.js:107 js/Model.js:29
-msgid "Salutation"
-msgstr "Hitap"
-
-#: js/ContactEditDialog.js:104 js/Model.js:22
-msgid "Title"
-msgstr "Ünvan"
-
-#: js/ContactEditDialog.js:109 js/ContactGrid.js:109 js/Model.js:20
-#: js/Model.js:139
-msgid "First Name"
-msgstr "İsim"
-
-#: js/ContactEditDialog.js:114 js/Model.js:21
-msgid "Middle Name"
-msgstr "İkincı İsim"
-
-#: js/ContactEditDialog.js:119 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:108 js/Model.js:19
-#: js/Model.js:140
-msgid "Last Name"
-msgstr "Soy İsim"
-
-#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:423
-#: js/ContactEditDialog.js:441 js/ContactGrid.js:112
-#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
-#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
-msgid "Company"
-msgstr "Şirket"
-
-#: js/ContactEditDialog.js:130 js/ContactGrid.js:113 js/Model.js:28
-#: js/Model.js:142
-msgid "Unit"
-msgstr "Bölümü"
-
-#: js/ContactEditDialog.js:135 js/Model.js:23
-msgid "Suffix"
-msgstr "Ünvan"
-
-#: js/ContactEditDialog.js:139 js/ContactGrid.js:115 js/Model.js:31
-#: js/Model.js:145
-msgid "Job Role"
-msgstr "Görev"
-
-#: js/ContactEditDialog.js:159 js/ContactGrid.js:111 js/Model.js:24
-msgid "Display Name"
-msgstr "Görüntülen İsim"
-
-#: js/ContactEditDialog.js:178
-msgid "Contact Information"
-msgstr "İletişim Bilgileri"
-
-#: js/ContactEditDialog.js:183 js/ContactGrid.js:128
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/Model.js:51 js/Model.js:143
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/ContactEditDialog.js:188 js/ContactGrid.js:129
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:52
-msgid "Mobile"
-msgstr "Cep Telefonu"
-
-#: js/ContactEditDialog.js:193 js/ContactGrid.js:130
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/Model.js:53
-msgid "Fax"
-msgstr "Faks"
-
-#: js/ContactEditDialog.js:198 js/ContactGrid.js:133 js/Model.js:57
-msgid "Phone (private)"
-msgstr "Evdeki Telefon"
-
-#: js/ContactEditDialog.js:203 js/ContactGrid.js:135 js/Model.js:59
-msgid "Mobile (private)"
-msgstr "Cep Telefonu (Özel)"
-
-#: js/ContactEditDialog.js:208 js/ContactGrid.js:134 js/Model.js:58
-msgid "Fax (private)"
-msgstr "Evdeki Faks"
-
-#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:147
-msgid "E-Mail"
-msgstr "E-Posta"
-
-#: js/ContactEditDialog.js:219 js/Model.js:63
-msgid "E-Mail (private)"
-msgstr "Evdeki E-Posta"
-
-#: js/ContactEditDialog.js:226 js/ContactGrid.js:137
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/Model.js:64
-msgid "Web"
-msgstr "Web Adresi"
-
-#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
-#: js/Model.js:152 js/Model.js:153 js/Model.js:154
-msgid "Company Address"
-msgstr "Şirket Adresı"
-
-#: js/ContactEditDialog.js:262 js/ContactEditDialog.js:291
-#: js/ContactGrid.js:117 js/Model.js:150 js/Model.js:155
-msgid "Street"
-msgstr "Cadde"
-
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
-msgid "Street 2"
-msgstr "Cadde2"
-
-#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
-#: js/ContactGrid.js:119 js/Model.js:151 js/Model.js:156
-msgid "Region"
-msgstr "İl"
-
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
-#: js/Model.js:157
-msgid "Postal Code"
-msgstr "Posta Kodu"
-
-#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
-#: js/ContactGrid.js:118 js/Model.js:153 js/Model.js:158
-msgid "City"
-msgstr "Şehir"
-
-#: js/ContactEditDialog.js:283 js/ContactEditDialog.js:312
-#: js/ContactGrid.js:121 js/Model.js:154 js/Model.js:159
-msgid "Country"
-msgstr "Ülke"
-
-#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
-msgid "Description"
-msgstr "Açıklama"
-
-#: js/ContactEditDialog.js:347
-msgid "Enter description"
-msgstr "Detaylı Bilgi Gir"
-
-#: js/ContactEditDialog.js:391
-msgid "Export as pdf"
-msgstr "PDF Olarak Dışa Aktar"
-
-#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
-msgid "Parse address"
-msgstr "Adresi oku"
-
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
-msgid "Either {0} or {1} must be given"
-msgstr "{0} Veya {1} Girilmesi Gerek"
-
-#: js/ContactEditDialog.js:476
-msgid "Paste address"
-msgstr "Adresi Yapıştır"
-
-#: js/ContactEditDialog.js:476
-msgid "Please paste an address that should be parsed:"
-msgstr ""
-
-#: js/ContactEditDialog.js:510
-msgid "End token mode"
-msgstr "Son Verilmiş Özellil Modu"
-
-#: js/ContactFilterModel.js:35 js/ContactGrid.js:292 js/Model.js:94
-#: js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "one: Kişi\n\nother: Kişiler"
 
 #: js/ContactGrid.js:105 js/Model.js:160
 msgid "Type"
@@ -404,13 +277,62 @@ msgstr "Tip"
 msgid "Tags"
 msgstr ""
 
+#: js/ContactGrid.js:107 js/ContactEditDialog.js:88 js/Model.js:29
+msgid "Salutation"
+msgstr "Hitap"
+
+#: js/ContactGrid.js:108 js/ContactEditDialog.js:119
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:19
+#: js/Model.js:140
+msgid "Last Name"
+msgstr "Soy İsim"
+
+#: js/ContactGrid.js:109 js/ContactEditDialog.js:109 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "İsim"
+
 #: js/ContactGrid.js:110
 msgid "Full Name"
 msgstr "İsim"
 
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:159 js/Model.js:24
+msgid "Display Name"
+msgstr "Görüntülen İsim"
+
+#: js/ContactGrid.js:113 js/ContactEditDialog.js:130 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr "Bölümü"
+
+#: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
+#: js/Model.js:145
+msgid "Job Role"
+msgstr "Görev"
+
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:262
+#: js/ContactEditDialog.js:291 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "Cadde"
+
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "Şehir"
+
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr "İl"
+
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "Posta Kodu"
+
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:283
+#: js/ContactEditDialog.js:312 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "Ülke"
 
 #: js/ContactGrid.js:122
 msgid "Street (private)"
@@ -432,6 +354,24 @@ msgstr "Posta Kodu"
 msgid "Country (private)"
 msgstr "Ülke"
 
+#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:183
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:188
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "Cep Telefonu"
+
+#: js/ContactGrid.js:130 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:193
+#: js/Model.js:53
+msgid "Fax"
+msgstr "Faks"
+
 #: js/ContactGrid.js:131
 msgid "Car phone"
 msgstr "Araç Telefonu"
@@ -440,9 +380,27 @@ msgstr "Araç Telefonu"
 msgid "Pager"
 msgstr "Çağrı Cihazı"
 
+#: js/ContactGrid.js:133 js/ContactEditDialog.js:198 js/Model.js:57
+msgid "Phone (private)"
+msgstr "Evdeki Telefon"
+
+#: js/ContactGrid.js:134 js/ContactEditDialog.js:208 js/Model.js:58
+msgid "Fax (private)"
+msgstr "Evdeki Faks"
+
+#: js/ContactGrid.js:135 js/ContactEditDialog.js:203 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "Cep Telefonu (Özel)"
+
 #: js/ContactGrid.js:136
 msgid "Email (private)"
 msgstr "Evdeki E-Posta"
+
+#: js/ContactGrid.js:137 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:226
+#: js/Model.js:64
+msgid "Web"
+msgstr "Web Adresi"
 
 #: js/ContactGrid.js:138
 msgid "URL (private)"
@@ -493,6 +451,12 @@ msgstr "İçe Aktar"
 msgid "Contact of a user account"
 msgstr ""
 
+#: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
+#: js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "one: Kişi\n\nother: Kişiler"
+
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
 msgstr "Kişiler"
@@ -500,6 +464,11 @@ msgstr "Kişiler"
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
 msgstr "Kişi Seç"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "E-Posta"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
@@ -517,9 +486,79 @@ msgstr "Güvensiz Adres"
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Harita"
+
+#: js/ContactEditDialog.js:76
+msgid "Personal Information"
+msgstr "Şahsi Bilgiler"
+
+#: js/ContactEditDialog.js:104 js/Model.js:22
+msgid "Title"
+msgstr "Ünvan"
+
+#: js/ContactEditDialog.js:114 js/Model.js:21
+msgid "Middle Name"
+msgstr "İkincı İsim"
+
+#: js/ContactEditDialog.js:135 js/Model.js:23
+msgid "Suffix"
+msgstr "Ünvan"
+
+#: js/ContactEditDialog.js:178
+msgid "Contact Information"
+msgstr "İletişim Bilgileri"
+
+#: js/ContactEditDialog.js:219 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "Evdeki E-Posta"
+
+#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "Şirket Adresı"
+
+#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+msgid "Street 2"
+msgstr "Cadde2"
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "Posta Kodu"
+
+#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "Açıklama"
+
+#: js/ContactEditDialog.js:347
+msgid "Enter description"
+msgstr "Detaylı Bilgi Gir"
+
+#: js/ContactEditDialog.js:391
+msgid "Export as pdf"
+msgstr "PDF Olarak Dışa Aktar"
+
+#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
+msgid "Parse address"
+msgstr "Adresi oku"
+
+#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
+msgid "Either {0} or {1} must be given"
+msgstr "{0} Veya {1} Girilmesi Gerek"
+
+#: js/ContactEditDialog.js:476
+msgid "Paste address"
+msgstr "Adresi Yapıştır"
+
+#: js/ContactEditDialog.js:476
+msgid "Please paste an address that should be parsed:"
 msgstr ""
+
+#: js/ContactEditDialog.js:510
+msgid "End token mode"
+msgstr "Son Verilmiş Özellil Modu"
 
 #: js/MapPanel.js:58
 msgid "Company address"
@@ -528,6 +567,14 @@ msgstr "Şirket Adresi"
 #: js/MapPanel.js:65
 msgid "Private address"
 msgstr "Ev Adresi"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CardDAV Adresi"
 
 #: js/Model.js:19
 msgid "Name"
@@ -593,6 +640,11 @@ msgstr "Şahıs İletişim"
 msgid "Web (private)"
 msgstr "Web"
 
+#: js/Model.js:98 js/Model.js:205 js/Addressbook.js:32
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "one: Adres Defteri\n\nother: Adres Defterleri"
+
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
 msgstr "Adres Defterleri"
@@ -630,62 +682,10 @@ msgstr[0] "one: Liste\n\nother: Listeler"
 msgid "Lists"
 msgstr "Listeler"
 
-#: Preference.php:28
-msgid "All contacts"
-msgstr "Tüm Kişiler"
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Yeni İsim"
 
-#: Preference.php:65
-msgid "Default Addressbook"
-msgstr "Standart Adres Defteri"
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr "Yeni Kişiler İçin Standart Adres Defteri"
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
-
-#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
-msgid "Mr"
-msgstr "Bey"
-
-#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
-msgid "Ms"
-msgstr "Hanım"
-
-#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr "Okuma Hakkına Sahip Olduğum Kişiler"
-
-#: Setup/Initialize.php:140
-msgid "My company"
-msgstr "Şirketim"
-
-#: Setup/Initialize.php:141
-msgid "All coworkers in my company"
-msgstr "Şirketimdeki İş Arkadaşlarım"
-
-#: Setup/Initialize.php:154
-msgid "My contacts"
-msgstr "Kişilerim"
-
-#: Setup/Initialize.php:155
-msgid "All contacts in my Addressbooks"
-msgstr "Rehberimdeki Kişiler"
-
-#: Setup/Initialize.php:167
-msgid "Last modified by me"
-msgstr "Son düzenlediğim"
-
-#: Setup/Initialize.php:168
-msgid "All contacts that I have last modified"
-msgstr "Son düzenlediğim Kişiler"
-
-#: Setup/setup.xml:654
-msgid "Internal Contacts"
-msgstr "Sistem İçi Kişiler"
+#: Controller/Contact.php:329
+msgid "Uploaded new contact image."
+msgstr "Yeni Profil Resmi Yüklenmiştir"

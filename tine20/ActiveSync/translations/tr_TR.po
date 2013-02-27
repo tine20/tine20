@@ -25,6 +25,47 @@ msgstr "Yeni Cihazlara Standart Kurallar"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr ""
 
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Program Kuruluşu anından Standart Kurallar"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standart Adres Defteri"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standart Takvim"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr ""
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standart Görev Listesi"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "one: Cihaz\n\nother: Cihazlar"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Cihazlar"
+
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -56,44 +97,3 @@ msgstr "Sıfırlandı"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Senkronize Filtresini Ayarla"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "one: Cihaz\n\nother: Cihazlar"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Cihazlar"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standart Adres Defteri"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr ""
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standart Takvim"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standart Görev Listesi"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Program Kuruluşu anından Standart Kurallar"

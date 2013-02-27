@@ -25,6 +25,22 @@ msgstr "hallitse tuotteita"
 msgid "add, edit and delete products"
 msgstr "lisää, muokkaa ja poista tuotteita"
 
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Sinulla ei ole ylläpitäjän oikeuksia myyntiin"
+
+#: Model/Contract.php:91
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:92
+msgid "Customer"
+msgstr ""
+
+#: Model/Contract.php:93
+msgid "Partner"
+msgstr ""
+
 #: Config.php:51
 msgid "Contract Number Creation"
 msgstr "Sopimusnumero"
@@ -49,7 +65,7 @@ msgstr "Sopimusnumeron vahvistaminen"
 msgid "The Number can be validated as text or number."
 msgstr "Numero voi olla tekstiä tai numeroita"
 
-#: Config.php:69 js/ContractEditDialog.js:136 js/Models.js:199
+#: Config.php:69 js/Models.js:199 js/ContractEditDialog.js:136
 msgid "Number"
 msgstr "Numero"
 
@@ -75,13 +91,21 @@ msgstr ""
 msgid "Possible Contract cleared states."
 msgstr ""
 
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr "Numero jota koitit lisätä on jo käytössä"
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
+msgstr "Omat tuotteet"
 
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr "Sinulla ei ole ylläpitäjän oikeuksia myyntiin"
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr "Omat tuotteet"
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr "Omat sopimukset"
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
+msgstr "Omat sopimukseni"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -95,50 +119,54 @@ msgstr "Ok"
 msgid "Loading..."
 msgstr "Ladataan..."
 
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr "Käytä desimaalinumeroita tässä!."
-
-#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:88 js/Models.js:236
-msgid "Title"
-msgstr "Otsikko"
-
-#: js/ContractEditDialog.js:149
-msgid "Contract Contact"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "Account Manager"
-msgstr ""
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Yritys"
-
-#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:94 js/Models.js:146
-msgid "Status"
-msgstr "Tila"
-
-#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:101 js/Models.js:153
-msgid "Cleared"
-msgstr ""
-
-#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:108 js/Models.js:159
-msgid "Cleared in"
-msgstr ""
-
-#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
-#: js/ProductGridPanel.js:124
-msgid "Description"
-msgstr "Kuvaus"
-
-#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
-msgid "Enter description..."
-msgstr "Lisää kuvaus..."
-
 #: js/ContractGridPanel.js:82
 msgid "Contract number"
 msgstr "Yhteysnumero"
+
+#: js/ContractGridPanel.js:88 js/Models.js:236 js/ContractEditDialog.js:143
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/ContractGridPanel.js:94 js/Models.js:146 js/ContractEditDialog.js:176
+msgid "Status"
+msgstr "Tila"
+
+#: js/ContractGridPanel.js:101 js/Models.js:153 js/ContractEditDialog.js:183
+msgid "Cleared"
+msgstr ""
+
+#: js/ContractGridPanel.js:108 js/Models.js:159 js/ContractEditDialog.js:187
+msgid "Cleared in"
+msgstr ""
+
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
+msgid "Name"
+msgstr "Nimi"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
+msgid "Price"
+msgstr "Hinta"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
+msgid "Category"
+msgstr "Kategoria"
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
+#: js/ContractEditDialog.js:193
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
+msgid "Enter description..."
+msgstr "Lisää kuvaus..."
+
+#: js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Tagit"
 
 #: js/Models.js:39
 msgid "Product"
@@ -202,50 +230,22 @@ msgid_plural "Divisions"
 msgstr[0] "Osasto"
 msgstr[1] "Osastot"
 
-#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
-msgid "Name"
-msgstr "Nimi"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Käytä desimaalinumeroita tässä!."
 
-#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
-msgid "Price"
-msgstr "Hinta"
-
-#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
-msgid "Manufacturer"
-msgstr "Valmistaja"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
-msgid "Category"
-msgstr "Kategoria"
-
-#: js/ProductGridPanel.js:120
-msgid "Tags"
-msgstr "Tagit"
-
-#: Model/Contract.php:91
-msgid "Responsible"
+#: js/ContractEditDialog.js:149
+msgid "Contract Contact"
 msgstr ""
 
-#: Model/Contract.php:92
-msgid "Customer"
+#: js/ContractEditDialog.js:161
+msgid "Account Manager"
 msgstr ""
 
-#: Model/Contract.php:93
-msgid "Partner"
-msgstr ""
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Yritys"
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
-msgid "My Products"
-msgstr "Omat tuotteet"
-
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
-msgid "Products created by myself"
-msgstr "Omat tuotteet"
-
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
-msgid "My Contracts"
-msgstr "Omat sopimukset"
-
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
-msgid "Contracts created by myself"
-msgstr "Omat sopimukseni"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "Numero jota koitit lisätä on jo käytössä"

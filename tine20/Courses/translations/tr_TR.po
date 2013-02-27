@@ -65,42 +65,30 @@ msgstr ""
 msgid "Samba user settings"
 msgstr "Samba Üye Ayarları"
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "one: Kurs\n\nother: Kurslar"
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurslar"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Öğretmen"
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr "Bütün Kurslar"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Öğretmen Hesabı"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Açık"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Benim Sınıfım"
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Kapalı"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "İsim"
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtrelendi"
 
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Soy İsim"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Kursa Yeni Bir Kullanıcı Ekle"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Hatalar"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Hataları Kontrol Edin"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -109,6 +97,11 @@ msgstr "Kurs Öğrencilerini İçeriye Aktar"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Yeni Kullanıcı Ekle"
+
+#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "one: Kurs\n\nother: Kurslar"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -142,6 +135,26 @@ msgstr "Bilinmiyor"
 msgid "Reset Password"
 msgstr "Şifreyi Sıfırla"
 
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "İsim"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Soy İsim"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Kursa Yeni Bir Kullanıcı Ekle"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Hatalar"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Hataları Kontrol Edin"
+
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "İsim"
@@ -172,27 +185,14 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "one: Kurs Türü\n\nother: Kurs Türleri"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Bütün Kurslar"
+#: Controller/Course.php:247 Controller/Course.php:291
+msgid "Teacher"
+msgstr "Öğretmen"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+#: Controller/Course.php:248
+msgid "Teacher Account"
+msgstr "Öğretmen Hesabı"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Açık"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Kapalı"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrelendi"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurslar"
+#: Controller/Course.php:308
+msgid "My course"
+msgstr "Benim Sınıfım"

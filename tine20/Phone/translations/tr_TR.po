@@ -18,39 +18,14 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Kişiyi ara"
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Telefon azarlarını düzelt"
 
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "İş"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Ev"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Cep"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Özel cep"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
+#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "one: Telefon\n\nother: Telefonlar"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "one: Telefon listesi\n\nother: Telefon listeleri"
-
-#: js/Phone.js:29 js/Phone.js:490 js/Phone.js:491
-msgid "Edit phone settings"
-msgstr "Telefon azarlarını düzelt"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -80,78 +55,103 @@ msgstr "Hata"
 msgid "Not possible to dial."
 msgstr "Arama mümkün değildir"
 
-#: js/Phone.js:480
+#: js/Phone.js:483
 msgid "Dial number"
 msgstr "Numarayı ara"
 
-#: js/Phone.js:481
+#: js/Phone.js:484
 msgid "Initiate a new outgoing call"
 msgstr "Yeni giden arama"
 
-#: js/Phone.js:542
+#: js/Phone.js:550
 msgid "Incoming call"
 msgstr "Gelen arama"
 
-#: js/Phone.js:546
+#: js/Phone.js:554
 msgid "Outgoing call"
 msgstr "Giden arama"
 
-#: js/Phone.js:554
+#: js/Phone.js:562
 msgid "unknown number"
 msgstr "Bilinmeyen numara"
 
-#: js/Phone.js:591
+#: js/Phone.js:599
 msgid "Search:"
 msgstr "Arama:"
 
-#: js/Phone.js:676
+#: js/Phone.js:684
 msgid "Source or Destination"
 msgstr "Kaynak veya hedef"
 
-#: js/Phone.js:692
+#: js/Phone.js:700
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "{2} aramadan {0} - {1} görüntüleniyor"
 
-#: js/Phone.js:693 js/Phone.js:736
+#: js/Phone.js:701 js/Phone.js:744
 msgid "No calls to display"
 msgstr "Aramalar boş"
 
-#: js/Phone.js:703
+#: js/Phone.js:711
 msgid "Direction"
 msgstr "Yön"
 
-#: js/Phone.js:704
+#: js/Phone.js:712
 msgid "Source"
 msgstr "Kaynak"
 
-#: js/Phone.js:705
+#: js/Phone.js:713
 msgid "Caller Id"
 msgstr "Numaram"
 
-#: js/Phone.js:706
+#: js/Phone.js:714
 msgid "Destination"
 msgstr "Muhatap"
 
-#: js/Phone.js:707
+#: js/Phone.js:715
 msgid "Start"
 msgstr "Start"
 
-#: js/Phone.js:708
+#: js/Phone.js:716
 msgid "Connected"
 msgstr "Bağlandı"
 
-#: js/Phone.js:709
+#: js/Phone.js:717
 msgid "Disconnected"
 msgstr "Bağlantı kesildi"
 
-#: js/Phone.js:710
+#: js/Phone.js:718
 msgid "Duration"
 msgstr "Süre"
 
-#: js/Phone.js:711
+#: js/Phone.js:719
 msgid "Ringing"
 msgstr "Çalıyor"
 
-#: js/Phone.js:712
+#: js/Phone.js:720
 msgid "Call ID"
 msgstr "Arama-ID"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "one: Telefon listesi\n\nother: Telefon listeleri"
+
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Kişiyi ara"
+
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "İş"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Ev"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Cep"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Özel cep"

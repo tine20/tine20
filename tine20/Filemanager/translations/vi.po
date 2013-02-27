@@ -25,56 +25,69 @@ msgstr "quản lý thư mục chung"
 msgid "Create new shared folders"
 msgstr "Tạo 1 thư mục chung"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Thư mục của tôi"
-
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Thư mục chung"
-
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Thư mục người dùng khác"
-
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "File cá nhân của %s"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Quản lý file"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "đường dẫn"
 
-#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr "Lưu tại máy"
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
-msgstr "Dịch vụ chưa sẵn sàng"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Node"
 
-#: js/Filemanager.js:82
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Tên"
+
+#: js/NodeEditDialog.js:121 js/Model.js:530
+msgid "Type"
+msgstr "Kiểu"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Sửa bởi"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Sửa lần cuối"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeGridPanel.js:803
+msgid "Upload Failed"
+msgstr "Lỗi upload"
+
+#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
 msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Quản lý file chưa được cấu hình chính xác. Xin hãy tham khảo phần {0} Hỏi đáp của Tine 2.0 {1} để cáu hình hoặc liên hệ với người quản lý hệ thống của bạn."
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Không thể upload file"
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "File này đã tồn tại"
-
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
-msgstr "Bạn có muốn thay thế các file sau?"
-
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr "Lỗi khi tạo thư mục"
-
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "Mục với tên này đã tồn tại!"
+#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+msgid "Putting files in this folder is not allowed!"
+msgstr "Đặt file vào thư mục này là không được phép!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -118,45 +131,39 @@ msgstr "Xin hãy đợi"
 msgid "Quick search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:530 js/NodeEditDialog.js:121
-msgid "Type"
-msgstr "Kiểu"
-
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "Contenttype"
 
-#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Thời gian tạo"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Quản lý file"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr "Node"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
+msgstr "Dịch vụ chưa sẵn sàng"
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Tên"
+#: js/Filemanager.js:82
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Quản lý file chưa được cấu hình chính xác. Xin hãy tham khảo phần {0} Hỏi đáp của Tine 2.0 {1} để cáu hình hoặc liên hệ với người quản lý hệ thống của bạn."
 
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Tạo bởi"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "File này đã tồn tại"
 
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr "Sửa bởi"
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
+msgstr "Bạn có muốn thay thế các file sau?"
 
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr "Sửa lần cuối"
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
+msgstr "Lỗi khi tạo thư mục"
 
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr "Nhập mô tả"
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "Mục với tên này đã tồn tại!"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -214,21 +221,14 @@ msgstr "Xin nhập vào tên của thư mục mới:"
 msgid "No {0} added"
 msgstr "Không thêm được {0}"
 
-#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:666
-#: js/NodeTreePanel.js:776
-msgid "Upload Failed"
-msgstr "Lỗi upload"
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Thư mục của tôi"
 
-#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:667
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Không thể upload file"
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Thư mục chung"
 
-#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:777
-msgid "Putting files in this folder is not allowed!"
-msgstr "Đặt file vào thư mục này là không được phép!"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "đường dẫn"
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Thư mục người dùng khác"
