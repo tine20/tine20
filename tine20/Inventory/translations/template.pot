@@ -114,6 +114,14 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
+msgid "All Inventory Items"
+msgstr ""
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
+msgid "All existing Inventory Items"
+msgstr ""
+
 #: Setup/Initialize.php:33
 msgid "ordered"
 msgstr ""
