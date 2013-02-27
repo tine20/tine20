@@ -122,7 +122,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        $this->doContainerACLChecks(! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
+        $this->doContainerACLChecks($this->_doContainerACLChecks && ! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
         
         return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
@@ -136,7 +136,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkRight($_action)
     {
-        $this->doContainerACLChecks(! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
+        $this->doContainerACLChecks($this->_doContainerACLChecks && ! Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES));
         
         switch ($_action) {
             case 'create':
