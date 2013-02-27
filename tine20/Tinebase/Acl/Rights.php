@@ -105,7 +105,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         }
         
         return self::$_instance;
-    }        
+    }
     
     /**
      * get all possible application rights

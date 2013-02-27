@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        extend/use sql abstract backend
@@ -299,7 +299,6 @@ class Tinebase_Acl_Roles
         return $result;
     }
     
-
     /**
      * Returns role identified by its name
      * 
@@ -600,13 +599,9 @@ class Tinebase_Acl_Roles
             'account_type'  => $_account['type'],
             'account_id'    => $_account['id'],
         );
-                
+        
         try {
             $this->_roleMembersTable->insert($data);
-            
-            // invalidate cache
-            Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('role'));
-                   
         } catch (Zend_Db_Statement_Exception $e) {
             // account is already member of this group
         }
@@ -632,9 +627,6 @@ class Tinebase_Acl_Roles
         );
          
         $this->_roleMembersTable->delete($where);
-        
-        // invalidate cache
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('role'));
     }
     
     /**
@@ -681,11 +673,13 @@ class Tinebase_Acl_Roles
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
+        $this->_invalidateRightsCache($roleId, $_roleRights);
+        
         // remove old rights
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $roleId);
         $this->_roleRightsTable->delete($where);
-                
-        foreach ( $_roleRights as $right ) {
+        
+        foreach ($_roleRights as $right) {
             $data = array(
                 'role_id'           => $roleId,
                 'application_id'    => $right['application_id'],
@@ -693,11 +687,47 @@ class Tinebase_Acl_Roles
             );
             $this->_roleRightsTable->insert($data);
         }
-        
-        // invalidate cache
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('rights'));
     }
-
+    
+    /**
+     * invalidate rights cache
+     * 
+     * @param int $roleId
+     * @param array $newRoleRights
+     * 
+     * @todo check if this is fast enough. if not: move rights caching to class cache.
+     */
+    protected function _invalidateRightsCache($roleId, $newRoleRights)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Invalidating rights cache for role id ' . $roleId);
+        
+        $currentRights = $this->getRoleRights($roleId);
+        $rightsInvalidateCache = array_merge($currentRights, $newRoleRights);
+        
+        $userIds = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
+        $appNames = array();
+        $cache = Tinebase_Core::getCache();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($rightsInvalidateCache, TRUE));
+        
+        foreach ($rightsInvalidateCache as $rightData) {
+            foreach ($userIds as $userId) {
+                if (! isset($appNames[$rightData['application_id']])) {
+                    $appNames[$rightData['application_id']] = Tinebase_Application::getInstance()->getApplicationById($rightData['application_id'])->name;
+                }
+                $appName = $appNames[$rightData['application_id']];
+                $cacheId = convertCacheId('checkRight' . $userId . strtoupper($rightData['right']) . $appName);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Removing cache id ' . $cacheId);
+                
+                $cache->remove($cacheId);
+            }
+        }
+    }
+    
     /**
      * add single role rights 
      *
@@ -762,5 +792,4 @@ class Tinebase_Acl_Roles
             )
         ));
     }
-    
 }
