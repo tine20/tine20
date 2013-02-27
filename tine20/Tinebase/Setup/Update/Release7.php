@@ -222,7 +222,7 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         $sql = "SELECT DISTINCT record_id,modification_time,seq "
             . "FROM $modlogTable WHERE record_type ='{$model}' "
             . "ORDER BY modification_time ASC ";
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' SQL for fetching modlogs: ' . $sql);
         
         $result = $db->fetchAll($sql);
