@@ -28,10 +28,9 @@
 %global vyear 2013
 %global vmonth 03
 %global vmin 1
-%global vpost ~rc1
 
 Name:           tine20
-Version:        %{vyear}.%{vmonth}.%{vmin}%{vpost}
+Version:        %{vyear}.%{vmonth}.%{vmin}
 Release:        1%{?dist}
 Summary:        Open Source Groupware and CRM
 
