@@ -62,6 +62,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * 
      * @todo move that to *_Acl_Rights
      * @todo include Tinebase admin? atm only the application admin right is checked
+     * @todo think about moving the caching to Tinebase_Acl_Roles and use only a class cache as it is difficult (and slow?) to invalidate
      */
     public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) 
     {
@@ -71,7 +72,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         
         $right = strtoupper($_right);
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
         $result = $cache->load($cacheId);
         
@@ -92,7 +93,8 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             
             $result = FALSE;
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Checking rights: ' . print_r($rightsToCheck, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Checking rights: ' . print_r($rightsToCheck, TRUE));
             
             foreach ($rightsToCheck as $rightToCheck) {
                 if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
@@ -100,14 +102,14 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
                     break;
                 }
             }
-
+            
             $cache->save($result, $cacheId, array('rights'), 120);
         }
         
         if (!$result && $_throwException) {
             throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
         }
-
+        
         return $result;
     }
     

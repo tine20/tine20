@@ -80,7 +80,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'division_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'health_insurance'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'profession'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-
+        'description'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
         // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

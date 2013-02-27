@@ -36,6 +36,7 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.modlogFields.conca
     {name: 'division_id',         type: 'Sales.Division', group: 'Internal Information', label: 'Division' },
     {name: 'health_insurance',    type: 'string', group: 'Internal Information', label: 'Health Insurance' },
     {name: 'profession',          type: 'string', group: 'Internal Information', label: 'Profession' },
+    {name: 'description',         type: 'string', label: 'Description', group: 'Employee'},
 
     {name: 'employment_begin',    type: 'date', group: 'Internal Information', label: 'Employment begin', dateFormat: Date.patterns.ISO8601Long },
     {name: 'employment_end',      type: 'date', group: 'Internal Information', label: 'Employment end', dateFormat: Date.patterns.ISO8601Long},
@@ -114,6 +115,7 @@ Tine.HumanResources.Model.Employee.getFilterModel = function() {
         { label: app.i18n._('Last Name'),           field: 'n_family'},
         { label: app.i18n._('Salutation'),          field: 'salutation'},
         { label: app.i18n._('Health Insurance'),    field: 'health_insurance'},
+        { label: app.i18n._('Description'),         field: 'description', type: 'text' },
         
         { label: _('Last Modified Time'),           field: 'last_modified_time', valueType: 'date'},
         { label: _('Last Modified By'),             field: 'last_modified_by',   valueType: 'user'},
@@ -314,14 +316,13 @@ Tine.HumanResources.contractBackend = new Tine.Tinebase.data.RecordProxy({
  * Vacation
  */
 Tine.HumanResources.Model.FreeTimeArray = Tine.Tinebase.Model.modlogFields.concat([
-    {name: 'id',          type: 'string'},
-    {name: 'employee_id', type: Tine.HumanResources.Model.Employee},
-    {name: 'type', type: 'string'},
-    {name: 'firstday_date', type: 'date'},
-    {name: 'remark', type: 'string' },
-    {name: 'freedays' },
-    {name: 'status', type: 'string' }
-    
+    {name: 'id',            type: 'string'},
+    {name: 'employee_id',   type: Tine.HumanResources.Model.Employee},
+    {name: 'type',          type: 'string'},
+    {name: 'firstday_date', type: 'date'  },
+    {name: 'description',   type: 'string'},
+    {name: 'freedays'},
+    {name: 'status',        type: 'string'}
 ]);
 
 Tine.HumanResources.Model.FreeTime = Tine.Tinebase.data.Record.create(Tine.HumanResources.Model.FreeTimeArray, {
@@ -377,7 +378,7 @@ Tine.HumanResources.Model.FreeTime.getFilterModel = function() {
             app: app, 
             keyfieldName: 'freetimeStatus'
         },
-        { field: 'remark', label: app.i18n._('Remark'), type: 'text' },
+        { field: 'description', label: app.i18n._('Description'), type: 'text' },
         {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
         {label: _('Last Modified By'),   field: 'last_modified_by',   valueType: 'user'},
         {label: _('Creation Time'),      field: 'creation_time',      valueType: 'date'},

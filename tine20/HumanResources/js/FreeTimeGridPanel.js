@@ -167,7 +167,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeType')},
             { id: 'status', header: this.app.i18n._('Status'), dataIndex: 'status', width: 100, sortable: true, renderer: this.renderStatus.createDelegate(this), scope: this },
             { id: 'firstday_date', header: this.app.i18n._('Date Start'), dataIndex: 'firstday_date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer, hidden: true},
-            { id: 'remark', header: this.app.i18n._('Remark'), dataIndex: 'remark', width: 200, sortable: true}
+            { id: 'description', header: _('Description'), dataIndex: 'description', width: 200, sortable: true}
             ].concat(this.getModlogColumns());
     },
     

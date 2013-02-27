@@ -104,6 +104,21 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         return this.attendeeTranspField;
     },
     
+    getAttendeeContainerField: function() {
+        if (! this.attendeeContainerField) {
+            this.attendeeContainerField = new Tine.widgets.container.selectionComboBox({
+                fieldLabel: this.app.i18n._('Displayed in'),
+                name: 'attendeeContainer',
+                recordClass: this.editDialog.recordClass,
+                appName: this.app.appName,
+                requiredGrant: this.editDialog.record.data.id ? ['editGrant'] : ['addGrant'],
+                disabled: true
+            });
+        }
+        
+        return this.attendeeContainerField;
+    },
+    
     initStore: function() {
         this.store = new Ext.data.Store({
             fields: Tine.Calendar.Model.Attender.getFieldDefinitions().concat([{name: 'displayText'}])
@@ -251,15 +266,19 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             isOriginPerspective = perspective == 'origin',
             attendeeStatusField = this.getAttendeeStatusField(),
             attendeeTranspField = this.getAttendeeTranspField(),
+            attendeeContainerField = this.getAttendeeContainerField(),
             transpField = this.editDialog.getForm().findField('transp'),
             containerField = this.editDialog.getForm().findField('container_id');
             
         attendeeTranspField.setValue(isOriginPerspective ? '' : perspectiveRecord.get('transp'));
         attendeeStatusField.setValue(isOriginPerspective ? '' : perspectiveRecord.get('status'));
-//        containerField.setValue(isOriginPerspective ? this.editDialog.record.get('container_id') : perspectiveRecord.get('displaycontainer_id'));
+        attendeeContainerField.setValue(isOriginPerspective ? this.editDialog.record.get('container_id') : perspectiveRecord.get('displaycontainer_id'));
+        attendeeContainerField.startPath = isOriginPerspective ? '/' : ('/personal/' + perspectiveRecord.getUserAccountId());
         attendeeStatusField.setVisible(!isOriginPerspective);
         attendeeTranspField.setVisible(!isOriginPerspective);
+        attendeeContainerField.setVisible(!isOriginPerspective);
         transpField.setVisible(isOriginPerspective);
+        containerField.setVisible(isOriginPerspective);
         
         // (de)activate fields 
         var fs = this.editDialog.record.fields;
@@ -272,6 +291,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         
         attendeeStatusField.setDisabled(isOriginPerspective || ! perspectiveRecord.get('status_authkey'));
         attendeeTranspField.setDisabled(isOriginPerspective || ! perspectiveRecord.get('status_authkey'));
+        attendeeContainerField.setDisabled(isOriginPerspective || !perspectiveRecord.get('displaycontainer_id').account_grants[containerField.requiredGrant]);
         this.editDialog.alarmPanel.setDisabled((! isOriginPerspective || ! this.editDialog.record.get('editGrant')) && ! perspectiveRecord.get('status_authkey'));
         this.editDialog.attendeeGridPanel.setDisabled(! isOriginPerspective || ! this.editDialog.record.get('editGrant'));
         this.editDialog.rrulePanel.setDisabled(! isOriginPerspective || ! this.editDialog.record.get('editGrant'));
@@ -288,13 +308,14 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             isOriginPerspective = perspective == 'origin',
             attendeeStatusField = this.getAttendeeStatusField(),
             attendeeTranspField = this.getAttendeeTranspField(),
+            attendeeContainerField = this.getAttendeeContainerField(),
             containerField = this.editDialog.getForm().findField('container_id');
             
         
         if (! isOriginPerspective) {
             perspectiveRecord.set('transp', attendeeTranspField.getValue());
             perspectiveRecord.set('status', attendeeStatusField.getValue());
-//            perspectiveRecord.set('displaycontainer_id', containerField.getValue());
+            perspectiveRecord.set('displaycontainer_id', attendeeContainerField.selectedContainer);
         }
     }
 });
