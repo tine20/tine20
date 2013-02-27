@@ -58,30 +58,25 @@ class Tinebase_Setup_Update_Release6 extends Setup_Update_Abstract
         }
         
         $modelsToSet = array(
-                'Calendar'    => 'Calendar_Model_Event',
-                'Addressbook' => 'Addressbook_Model_Contact',
-                'Courses'     => 'Courses_Model_Course',
-                'Crm'         => 'Crm_Model_Lead',
-                'Tasks'       => 'Tasks_Model_Task',
-                'Sales'       => 'Sales_Model_Contract',
-                'Projects'    => 'Projects_Model_Project',
-                'SimpleFAQ'   => 'SimpleFAQ_Model_FAQ'
-                );
+            'Calendar'    => 'Calendar_Model_Event',
+            'Addressbook' => 'Addressbook_Model_Contact',
+            'Courses'     => 'Courses_Model_Course',
+            'Crm'         => 'Crm_Model_Lead',
+            'Tasks'       => 'Tasks_Model_Task',
+            'Sales'       => 'Sales_Model_Contract',
+            'Projects'    => 'Projects_Model_Project',
+            'SimpleFAQ'   => 'SimpleFAQ_Model_FAQ',
+            'Filemanager' => 'Filemanager_Model_Node',
+            'Felamimail'  => 'Tinebase_Model_Tree_Node',
+        );
         
-        foreach($modelsToSet as $app => $model) {
-            if(Tinebase_Application::getInstance()->isInstalled($app)) {
-                $application = Tinebase_Application::getInstance()->getApplicationByName($app);
-                $filter = new Tinebase_Model_ContainerFilter(array(array(
-                        'field' => 'application_id',
-                        'operator' => 'equals',
-                        'value' => $application->getId()
-                        )), 'AND');
-                
-                $records = Tinebase_Container::getInstance()->search($filter);
-                foreach($records as $record) {
-                    $record->model = $model;
-                    Tinebase_Container::getInstance()->update($record);
-                }
+        foreach ($modelsToSet as $app => $model) {
+            if (Tinebase_Application::getInstance()->isInstalled($app)) {
+                $appId = Tinebase_Application::getInstance()->getApplicationByName($app)->getId();
+                $where = $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $appId);
+                $this->_db->update(SQL_TABLE_PREFIX . 'container', array(
+                    'model' => $model,
+                ), $where);
             }
         }
         $this->setTableVersion('container', 6);
