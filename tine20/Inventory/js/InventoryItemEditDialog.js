@@ -304,7 +304,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })
             ]
-        }
+        };
     },
     isMultipleValid: function() {
         return true;
