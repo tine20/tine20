@@ -2356,6 +2356,10 @@ msgstr "Suche nach Gruppen ..."
 msgid "setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Diese Ansicht als Favorit speichern"
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr "Kontainer"
@@ -2558,11 +2562,7 @@ msgstr "Ihr Bericht wurde gesendet. Vielen Dank für ihre Mithilfe!"
 msgid "Please restart your browser now!"
 msgstr "Bitte starten Sie Ihren Browser neu!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr "Diese Ansicht als Favorit speichern"
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
 

@@ -2354,6 +2354,10 @@ msgstr "Sök på grupper ..."
 msgid "setting new language..."
 msgstr "Ställer in nytt språk..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Spara nuvarande vy som favorit"
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr "Behållare"
@@ -2556,11 +2560,7 @@ msgstr "Din rapport har skickats. Tack för ditt bidrag"
 msgid "Please restart your browser now!"
 msgstr "Vänligen starta om din webbläsare!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr "Spara nuvarande vy som favorit"
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Ditt lösenord upphörde. Ange ett nytt lösenord:"
 

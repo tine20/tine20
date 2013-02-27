@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:56+0000\n"
+"PO-Revision-Date: 2013-02-27 14:14+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgid "Classification"
 msgstr "Catégorie"
 
 #: Model/Event.php:294 js/GridView.js:161 js/ResourceEditDialog.js:84
-#: js/Model.js:204 js/EventEditDialog.js:251
+#: js/Model.js:204 js/EventEditDialog.js:253
 msgid "Description"
 msgstr "Description"
 
@@ -82,8 +82,8 @@ msgstr "Description"
 msgid "Location"
 msgstr "Lieu"
 
-#: Model/Event.php:296 js/GridView.js:154 js/PerspectiveCombo.js:112
-#: js/EventDetailsPanel.js:276 js/Model.js:223 js/EventEditDialog.js:295
+#: Model/Event.php:296 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: js/EventDetailsPanel.js:276 js/Model.js:223 js/EventEditDialog.js:297
 msgid "Organizer"
 msgstr "Organisateur"
 
@@ -93,7 +93,7 @@ msgstr "Priorité"
 
 #: Model/Event.php:298 js/GridView.js:171 js/AddToEventPanel.js:88
 #: js/AttendeeGridPanel.js:198 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:173
+#: js/EventEditDialog.js:175
 msgid "Status"
 msgstr "Statut"
 
@@ -183,7 +183,7 @@ msgid "Declined"
 msgstr "Refusé"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:193
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:195
 msgid "Tentative"
 msgstr "Tentative"
 
@@ -307,7 +307,7 @@ msgstr "Nouvel évènement"
 msgid "Manage Resources"
 msgstr "Gérer les ressources"
 
-#: js/GridView.js:94 js/EventEditDialog.js:207
+#: js/GridView.js:94 js/EventEditDialog.js:209
 msgid "Private"
 msgstr "Privé"
 
@@ -345,9 +345,13 @@ msgstr "Saisissez une description..."
 msgid "Grants"
 msgstr ""
 
-#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:177
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:179
 msgid "non-blocking"
 msgstr "Non bloquant"
+
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
+msgstr ""
 
 #: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
@@ -840,23 +844,23 @@ msgstr "Détails"
 msgid "Saved in"
 msgstr "Sauvegardé"
 
-#: js/EventEditDialog.js:265
+#: js/EventEditDialog.js:267
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/EventEditDialog.js:496
+#: js/EventEditDialog.js:498
 msgid "End date is not valid"
 msgstr "Date de fin invalide"
 
-#: js/EventEditDialog.js:499
+#: js/EventEditDialog.js:501
 msgid "End date must be after start date"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/EventEditDialog.js:512
+#: js/EventEditDialog.js:514
 msgid "Start date is not valid"
 msgstr "Date de début non valide"
 
-#: js/EventEditDialog.js:532
+#: js/EventEditDialog.js:534
 msgid "Errors"
 msgstr "Erreurs"
 

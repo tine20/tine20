@@ -2,11 +2,12 @@
 # Translators:
 # Michael Spahn <ms@ansta.lt>, 2013.
 #   <ms@ansta.lt>, 2012.
+#  <p.schuele@metaways.de>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:57+0000\n"
+"PO-Revision-Date: 2013-02-27 14:19+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -27,11 +28,11 @@ msgstr "%s's persönliche Inventar Gegenstände"
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Inventar Gegenstand"
-msgstr[1] "Inventar Gegenstände"
+msgstr[1] "Inventargegenstände"
 
 #: Model/InventoryItem.php:49
 msgid "Inventory items"
-msgstr "Inventar Genstände"
+msgstr "Inventargegenstände"
 
 #: Model/InventoryItem.php:51
 msgid "Inventory item list"
@@ -39,7 +40,7 @@ msgstr "Inventarliste"
 
 #: Model/InventoryItem.php:52
 msgid "Inventory items lists"
-msgstr "Inventar Listen"
+msgstr "Inventarlisten"
 
 #: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:108
 msgid "Name"
@@ -119,6 +120,14 @@ msgstr "Möglicher Status"
 msgid "Inventory"
 msgstr "Inventarisierung"
 
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
+msgid "All Inventory Items"
+msgstr "Alle Inventargegenstände"
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
+msgid "All existing Inventory Items"
+msgstr "Alle existierenden Inventargegenstände"
+
 #: Setup/Initialize.php:33
 msgid "ordered"
 msgstr "Bestellt"
@@ -145,7 +154,7 @@ msgstr "Unbekannt"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
-msgstr "Standard Inventar Container"
+msgstr "Standardinventarliste"
 
 #: Preference.php:61
 msgid "The default container for new items"

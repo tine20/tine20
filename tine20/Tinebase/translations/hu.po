@@ -2352,6 +2352,10 @@ msgstr "Csoportok keresése..."
 msgid "setting new language..."
 msgstr "új nyelv beállítása..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Jelenlegi nézet mentése kedvencként"
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr "konténerek"
@@ -2554,11 +2558,7 @@ msgstr "Jelentésed elküldve. Köszönjük a részvételt"
 msgid "Please restart your browser now!"
 msgstr "Kérlek indítsd újra a böngésződet most!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr "Jelenlegi nézet mentése kedvencként"
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
 

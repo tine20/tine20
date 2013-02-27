@@ -2334,6 +2334,10 @@ msgstr "Tìm nhóm người dùng ..."
 msgid "setting new language..."
 msgstr "thiết lập ngôn ngữ mới ..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Lưu khung xem hiện tại thành lối tắt"
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr "bộ chứa"
@@ -2535,11 +2539,7 @@ msgstr "Báo cáo của bạn đã được gửi. Cảm ơn bạn đã đóng g
 msgid "Please restart your browser now!"
 msgstr "Xin khởi động lại trình duyệt của bạn ngay!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr "Lưu khung xem hiện tại thành lối tắt"
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Mật khẩu của bạn đã hết hạn. Xin nhập mật khẩu người dùng mới:"
 

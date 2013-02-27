@@ -2353,6 +2353,10 @@ msgstr "Rechercher un groupe..."
 msgid "setting new language..."
 msgstr "Application du choix de la langue..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Sauver la vue actuelle"
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr "contenants"
@@ -2555,11 +2559,7 @@ msgstr "Votre rapport a bien été envoyé. Merci de votre contribution."
 msgid "Please restart your browser now!"
 msgstr "Veuillez redémarrer votre navigateur!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr "Sauver la vue actuelle"
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Votre mot de passe est obsolète. Veuillez en indiquer un nouveau :"
 

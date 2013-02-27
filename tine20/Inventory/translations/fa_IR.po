@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:57+0000\n"
+"PO-Revision-Date: 2013-02-27 14:15+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
@@ -116,6 +116,14 @@ msgstr "وضعیت ممکن"
 #: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "موجودی"
+
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
+msgid "All Inventory Items"
+msgstr ""
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
+msgid "All existing Inventory Items"
+msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "ordered"

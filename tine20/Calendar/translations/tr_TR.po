@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:56+0000\n"
+"PO-Revision-Date: 2013-02-27 14:14+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/tine20/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgid "Classification"
 msgstr ""
 
 #: Model/Event.php:294 js/GridView.js:161 js/ResourceEditDialog.js:84
-#: js/Model.js:204 js/EventEditDialog.js:251
+#: js/Model.js:204 js/EventEditDialog.js:253
 msgid "Description"
 msgstr ""
 
@@ -80,8 +80,8 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: Model/Event.php:296 js/GridView.js:154 js/PerspectiveCombo.js:112
-#: js/EventDetailsPanel.js:276 js/Model.js:223 js/EventEditDialog.js:295
+#: Model/Event.php:296 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: js/EventDetailsPanel.js:276 js/Model.js:223 js/EventEditDialog.js:297
 msgid "Organizer"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 
 #: Model/Event.php:298 js/GridView.js:171 js/AddToEventPanel.js:88
 #: js/AttendeeGridPanel.js:198 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:173
+#: js/EventEditDialog.js:175
 msgid "Status"
 msgstr ""
 
@@ -180,7 +180,7 @@ msgid "Declined"
 msgstr ""
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:193
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:195
 msgid "Tentative"
 msgstr ""
 
@@ -304,7 +304,7 @@ msgstr ""
 msgid "Manage Resources"
 msgstr ""
 
-#: js/GridView.js:94 js/EventEditDialog.js:207
+#: js/GridView.js:94 js/EventEditDialog.js:209
 msgid "Private"
 msgstr ""
 
@@ -342,8 +342,12 @@ msgstr ""
 msgid "Grants"
 msgstr ""
 
-#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:177
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:179
 msgid "non-blocking"
+msgstr ""
+
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
 msgstr ""
 
 #: js/AddToEventPanel.js:35
@@ -833,23 +837,23 @@ msgstr ""
 msgid "Saved in"
 msgstr ""
 
-#: js/EventEditDialog.js:265
+#: js/EventEditDialog.js:267
 msgid "Enter description"
 msgstr ""
 
-#: js/EventEditDialog.js:496
+#: js/EventEditDialog.js:498
 msgid "End date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:499
+#: js/EventEditDialog.js:501
 msgid "End date must be after start date"
 msgstr ""
 
-#: js/EventEditDialog.js:512
+#: js/EventEditDialog.js:514
 msgid "Start date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:532
+#: js/EventEditDialog.js:534
 msgid "Errors"
 msgstr ""
 

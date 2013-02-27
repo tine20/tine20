@@ -2351,6 +2351,10 @@ msgstr ""
 msgid "setting new language..."
 msgstr "задава нов език..."
 
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr ""
+
 #: js/widgets/mainscreen/WestPanel.js:299
 msgid "containers"
 msgstr ""
@@ -2553,11 +2557,7 @@ msgstr "Вашият протокол е изпратен. Блегодарим 
 msgid "Please restart your browser now!"
 msgstr "Моля рестартирайте сега Вашия браузър!"
 
-#: js/MainScreen.js:243
-msgid "Save current view as favorite"
-msgstr ""
-
-#: js/MainScreen.js:279
+#: js/MainScreen.js:194
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
