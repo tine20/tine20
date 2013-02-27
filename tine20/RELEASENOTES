@@ -4,19 +4,32 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Kristina (2013.03)
-Last change: 2013-02-11
+Last change: 2013-02-27
+
+For a comprehensive list of user-related releasenotes with screenshots see
+the Tine 2.0 Wiki at http://www.tine20.org/wiki/index.php/Releases/Kristina
 
 Contents
 --
 1. New Queue management
+2. Calendar resources ACL
+3. Import Scripting interface
 
 1. New Queue management
 -----------------
-- Configuration for Redis queue backend in config.inc.php:
-    'actionqueue' => array(
-      'backend'       => 'Redis',
-      'host'          => 'localhost',
-      'port'          => 6379,
-      'timeout'       => 5,
-      'queueName'     => 'TinebaseQueue',
-    ),
+- Configuration options for the Redis queue backend have been added to the setup.php
+  config tool.
+
+2. Calendar resources ACL
+-----------------
+- ACL has been added to calendar resources. You might have to check the resources
+  in the Admin/Applications/Calendar/Settings dialog. You need READ grant to "invite"
+  resources to events and EDIT grant to change the status. An update script adds the
+  READ grant to all users if no other grants have been defined for the resource.
+  
+3. Import Scripting interface
+-----------------
+- With the new import scripting interface you can implement your imports in any 
+  given language.
+- This way you can use your existing infrastructure and knowledge to import any 
+  data from any given source into Tine 2.0.
