@@ -294,6 +294,12 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return this.appPanel;
             },
             show: function() {
+                // remove favorite toolbar for legacy modules
+                var westPanelToolbar = Ext.getCmp('west').getTopToolbar();
+                westPanelToolbar.removeAll();
+                westPanelToolbar.hide();
+                westPanelToolbar.doLayout();
+
                 Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
                 appPanel.fireEvent('beforeexpand', appPanel);
             }
