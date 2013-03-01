@@ -194,6 +194,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 blur: function(combo) {
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboBlur()');
                     this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
+                    // need to update record because it might not be updated otherwise (for example: delete value, click into next row or subject)
+                    if (this.activeEditor) {
+                        var value = combo.getRawValue();
+                        Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboBlur() -> current value: ' + value);
+                        if (value !== null && this.activeEditor.record.get('address') != value) {
+                            this.activeEditor.record.set('address', value);
+                        }
+                    }
                     this.stopEditing();
                 }
             }
