@@ -62,6 +62,7 @@ Architecture: all
 Depends: ${misc:Depends},
  tine20-libraries (= ${binary:Version}),
  makepasswd,
+ bsdutils,
  php5-cli
 Recommends: php5-ldap
 Description: webbased groupware and crm - core + addressbook module
