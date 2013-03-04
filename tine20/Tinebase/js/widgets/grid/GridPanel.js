@@ -580,12 +580,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
         
+        this.disableDeleteActionCheckServiceMap(services);
+    },
+    
+    /**
+     * disable delete action if no delete method was found in serviceMap
+     * 
+     * @param {Object} services the rpc service map from the registry
+     * 
+     * TODO this should be configurable as not all grids use remote delete
+     */
+    disableDeleteActionCheckServiceMap: function(services) {
         if (services) {
-            // disable delete action if no delete method was found in serviceMap
             var serviceKey = this.app.name + '.delete' + this.recordClass.getMeta('modelName') + 's';
             if (! services.hasOwnProperty(serviceKey)) {
                 this.action_deleteRecord.setDisabled(1);
                 this.action_deleteRecord.initialConfig.actionUpdater = function(action) {
+                    Tine.log.debug("disable delete action because no delete method was found in serviceMap");
                     action.setDisabled(1);
                 }
             }

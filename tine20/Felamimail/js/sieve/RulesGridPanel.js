@@ -37,6 +37,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     usePagingToolbar: false,
     splitAddButton: false,
     
+    // disable this check as records are only deleted locally
+    disableDeleteActionCheckServiceMap: Ext.emptyFn,
+    
     newRecordIcon: 'action_new_rule',
     editDialogClass: Tine.Felamimail.sieve.RuleEditDialog,
     

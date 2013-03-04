@@ -142,6 +142,7 @@
         
         // disable on filter selection if required
         if(action.disableOnFilterSelection && isFilterSelect) {
+            Tine.log.debug("disable on filter selection");
             action.setDisabled(true);
             return;
         }
