@@ -42,9 +42,8 @@ Depends: ${misc:Depends},
  php5-mysql | php5-mysqli | php5-pgsql,
  php5-mcrypt, 
  php5-gd,
- php-apc,
  makepasswd
-Recommends: mysql-client | postgresql-client (>= 9.1)
+Recommends: mysql-client | postgresql-client (>= 9.1), php-apc
 Description: Tine 2.0 webserver integration package
  This package integrates Tine 2.0 with the webserver, by installing all needed
  dependencies to make Tine 2.0 available via HTTP(S).
