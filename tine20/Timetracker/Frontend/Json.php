@@ -104,6 +104,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
+     * 
+     * @todo replace with Timetracker_Convert_*
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
@@ -293,5 +295,4 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, $this->_timeaccountController);
     }
-
 }

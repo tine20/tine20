@@ -4,7 +4,7 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo        add test for contract <-> timeaccount relations
@@ -88,7 +88,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
     /**
      * try to get a Timeaccount
-     *
      */
     public function testSearchTimeaccounts()
     {
@@ -108,8 +107,36 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
+     * try to get a Timeaccount with a TA filter
+     * 
+     * @see 0007946: error when searching for single timeaccount
+     */
+    public function testSearchTimeaccountsWithTAFilter()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        
+        $searchFilter = '[{
+            "field": "id",
+            "id": "ext-record-869",
+            "label": null,
+            "operator": "equals",
+            "value": "' . $timeaccountData['id'] . '"
+        }]';
+        $paging = '"paging": {
+            "sort": "number",
+            "dir": "DESC",
+            "start": 0,
+            "limit": 50
+        }';
+        $searchResult = $this->_json->searchTimeaccounts(Zend_Json::decode($searchFilter), Zend_Json::decode($paging));
+        $this->assertEquals(1, $searchResult['totalcount']);
+        $this->assertEquals(1, count($searchResult['filter']), 'did not get ta filter: ' . print_r($searchResult, TRUE));
+        $this->assertEquals($timeaccountData['id'], $searchResult['filter'][0]['value']['id']);
+    }
+    
+    /**
      * try to add a Timeaccount with grants
-     *
      */
     public function testAddTimeaccountWithGrants()
     {

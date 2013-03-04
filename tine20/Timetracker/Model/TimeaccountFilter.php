@@ -142,11 +142,14 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         $result = parent::toArray($_valueToJson);
         
         foreach ($result as &$filterData) {
-            if (isset($filterData['field']) && $filterData['field'] == 'id' && $_valueToJson == true && ! empty($filterData['value'])) {
+            if (isset($filterData['field']) && $filterData['field'] == 'id' && $_valueToJson == true 
+                && ! empty($filterData['value']) && ! is_array($filterData['value']))
+            {
                 try {
                     $filterData['value'] = Timetracker_Controller_Timeaccount::getInstance()->get($filterData['value'])->toArray();
                 } catch (Tinebase_Exception_NotFound $nfe) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " could not find and resolve timeaccount {$filterData['value']}");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                        . " could not find and resolve timeaccount {$filterData['value']}");
                 }
             }
         }
