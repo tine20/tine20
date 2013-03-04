@@ -5,18 +5,18 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * cli server for timetracker
+ * cli frontend for projects
  *
- * This class handles cli requests for the timetracker
+ * This class handles cli requests for projects
  *
  * @package     Projects
  * @subpackage  Frontend
  */
-class Projects_Frontend_Cli
+class Projects_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application

@@ -130,7 +130,8 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $lead->relations = $relations;
         $lead = $controller->update($lead);
-
+        $controller->sendNotifications(1);
+        
         return $lead;
     }
     

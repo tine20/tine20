@@ -58,72 +58,13 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         return self::$_instance;
     }
-    
-//    /**
-//     * create some costcenters
-//     * 
-//     * @see Tinebase_Setup_DemoData_Abstract
-//     */
-//    protected function _onCreate()
-//    {
-//    }
-    
+
+    /**
+     * creates the products - no containers, just "shared"
+     */
     protected function _createSharedProducts()
     {
-//        $controller = Sales_Controller_Contract::getInstance();
-//        
-//        $products = array(
-//            array(
-//                'name' => 'Abo 12/Jahr - "Haus und Tier"', 
-//                'description' => '12 Ausgaben der Zeitschrift "Haus und Tier"' . PHP_EOL . 'Erscheint vor dem ersten Dienstag des Monats.',
-//                'manufacturer' => '',
-//                'category' => 'Lifestyle Abo'
-//            ),
-//            array(
-//                'name' => 'Abo 4/Jahr - "Wald und Wiesen"',
-//                'description' => '',
-//                'manufacturer' => '-',
-//                'category' => 'Natur Abo'
-//            ),
-//            array(
-//                'name' => 'Jahresausgabe 2012 - "Jäger und Sammler"',
-//                'description' => '',
-//                'manufacturer' => '-',
-//                'category' => 'Natur'
-//            ),
-//            array(
-//                'name' => 'Abo Arbeitstag - "Eden - Medway - Merkur"',
-//                'description' => '',
-//                'manufacturer' => '-',
-//                'category' => 'Tageszeitung'
-//            ),
-//            array(
-//                'name' => 'Jubiläumsausgabe - "100 Jahre Eisenbahn"',
-//                'description' => '',
-//                'manufacturer' => '-',
-//                'category' => 'Technik'
-//            ),
-//            array(
-//                'name' => 'Zeitschrift "Eden - Medway - Merkur"',
-//                'description' => 'Tageszeitung für das Eden-Medway Gebiet.',
-//                'manufacturer' => '-',
-//                'category' => 'Tageszeitung Abo'
-//            ),
-//            array(
-//                'name' => 'Abo 12/Jahr - "Haus und Tier"',
-//                'description' => '12 Ausgaben der Zeitschrift "Haus und Tier"' . PHP_EOL . 'Erscheint jeden ersten Dienstag des Monats. ' . PHP_EOL . 'Abonnementen mit einem Jahresabo erhalten die Ausgabe bereits einen Tag zuvor.',
-//                'manufacturer' => '-',
-//                'category' => 'Lifestyle'
-//            ),
-//            array(
-//                'name' => 'Neue Ansichten',
-//                'description' => 'Politisches Magazin für optimistische Zeitgenossen. ' . PHP_EOL . 'Erscheint am 1. des Monats.',
-//                'manufacturer' => 'Politikatoriat',
-//                'category' => 'Politik'),
-//            );
-//        foreach ($products as $product) {
-//            $this->_createProduct($product);
-//        }
+        // TODO: create some products
     }
     
     /**
@@ -131,22 +72,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedContracts()
     {
-//        $controller = Sales_Controller_Contract::getInstance();
-//        
-//        $this->_createContract(
-//            array('manager' => array('user' => 'pwulf'), 'status' => 'CLOSED', 'cleared_in' => '2012-11 NKT-45')
-//        );
+        // TODO: create some contracts
     }
-    
-//    /**
-//     * returns a new contract
-//     * return Sales_Model_Contract
-//     */
-//    protected function _createContract($data)
-//    {
-//        $relations = array_key_exists('relations', $data) ? $data['relations'] : array();
-//        if (array_key_exists('relations', $data)
-//    }
     
     /**
      * returns a new product
@@ -154,7 +81,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createProduct($data)
     {
-        
         
     }
 }

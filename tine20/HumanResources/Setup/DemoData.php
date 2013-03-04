@@ -31,6 +31,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_appName         = 'HumanResources';
     protected $_costcenters     = NULL;
     protected $_feastCalendar   = NULL;
+    protected $_workingtimes    = NULL;
     /**
      * models to work on
      * @var unknown_type
@@ -57,7 +58,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         'jmcblack' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Barclays',
             'bank_code_number' => '15464684', 'bank_account_number' => '345160934'
-        ),  
+        ),
+        'unittest' => array()
     );
     
     /**

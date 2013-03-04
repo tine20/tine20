@@ -555,4 +555,43 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo 'Failcount: ' . $result['failcount'] . "\n";
         return 0;
     }
+    
+    /**
+     * creates demo data for all applications
+     * accepts same arguments as Tinebase_Frontend_Cli_Abstract::createDemoData
+     * and the additional argument "skipAdmin" to force no user/group/role creation
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function createAllDemoData($_opts)
+    {
+        // fetch all applications
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        
+        // remove Admin and Addressbook first, ensure, they get called at first
+        $applications = array_flip($applications);
+        unset($applications['Admin']);
+        unset($applications['Addressbook']);
+        $applications = array_flip($applications);
+        
+        // push Addressbook again
+        array_unshift($applications, 'Addressbook');
+        
+        // push Admin again
+        $otherArgs = $_opts->getRemainingArgs();
+        
+        if (! in_array('skipAdmin', $otherArgs)) {
+            array_unshift($applications, 'Admin');
+        }
+        
+        // call cli of each app
+        foreach ($applications as $app) {
+            $className = $app . '_Frontend_Cli';
+            if (@class_exists($className)) {
+                echo 'Searching for Demo Data in Application "' . $app . '"...' . PHP_EOL;
+                $class = new $className();
+                $class->createDemoData($_opts);
+            }
+        }
+    }
 }

@@ -399,16 +399,18 @@ abstract class Tinebase_Setup_DemoData_Abstract
         $this->_sunday->add(date_interval_create_from_date_string('2 days'));
 
         // last week
-        $this->_lastMonday = new Tinebase_DateTime();
-        $this->_lastMonday->sub(date_interval_create_from_date_string($subdaysLastMonday . ' days'));
+        $this->_lastMonday = clone $this->_monday;
+        $this->_lastMonday->subWeek(1);
         $this->_lastWednesday = clone $this->_wednesday;
         $this->_lastWednesday->subWeek(1);
-        $this->_lastFriday = new Tinebase_DateTime();
-        $this->_lastFriday->sub(date_interval_create_from_date_string($subdaysLastFriday . ' days'));
-        $this->_lastSaturday = clone $this->_lastFriday;
-        $this->_lastSaturday = $this->_lastSaturday->add(date_interval_create_from_date_string('1 day'));
-        $this->_lastSunday = clone $this->_lastFriday;
-        $this->_lastSunday = $this->_lastSunday->add(date_interval_create_from_date_string('2 days'));
+        $this->_lastFriday = clone $this->_friday;
+        $this->_lastFriday->subWeek(1);
+        $this->_lastThursday = clone $this->_thursday;
+        $this->_lastThursday->subWeek(1);
+        $this->_lastSaturday = clone $this->_saturday;
+        $this->_lastSaturday->subWeek(1);
+        $this->_lastSunday = clone $this->_sunday;
+        $this->_lastSunday->subWeek(1);
         
         $this->_nextMonday = clone $this->_monday;
         $this->_nextMonday->addWeek(1);
@@ -623,7 +625,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected function _getContact($_data)
     {
         // handle user
-        if ($_data['user']) {
+        if (array_key_exists('user', $_data)) {
             $account = $this->_personas[$_data['user']];
             $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
         } else { // handle contact
