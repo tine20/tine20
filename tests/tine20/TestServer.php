@@ -47,7 +47,6 @@ class TestServer
 
     /**
      * init the test framework
-     *
      */
     public function initFramework()
     {
@@ -81,11 +80,15 @@ class TestServer
 
     /**
      * inits (adds) some test users
-     *
      */
     public function initTestUsers()
     {
-        Admin_Setup_DemoData::getInstance()->createDemoData('en');
+        try {
+            // if sclever is already available, do not create demo data again
+            $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Admin_Setup_DemoData::getInstance()->createDemoData('en');
+        }
     }
 
     /**
