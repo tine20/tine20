@@ -191,7 +191,6 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             
             $this->_personas[$login] = $user;
         }
-        Zend_Registry::set('personas', $this->_personas);
         
         $this->_createGroups();
         $this->_createRoles();

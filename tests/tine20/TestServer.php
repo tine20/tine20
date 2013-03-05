@@ -83,12 +83,31 @@ class TestServer
      */
     public function initTestUsers()
     {
-        try {
-            // if sclever is already available, do not create demo data again
-            $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        $personas = $this->_getPersonas();
+        if (empty($personas)) {
             Admin_Setup_DemoData::getInstance()->createDemoData('en');
+            $personas = $this->_getPersonas();
         }
+        
+        Zend_Registry::set('personas', $personas);
+    }
+    
+    /**
+     * fetch persona user accounts
+     * 
+     * @return array loginname => useraccount
+     */
+    protected function _getPersonas()
+    {
+        $personas = array();
+        $personaLoginNames = array('sclever', 'rwright', 'pwulf', 'jmcblack', 'jsmith');
+        foreach ($personaLoginNames as $loginName) {
+            try {
+                $personas[$loginName] = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+        return $personas;
     }
 
     /**
