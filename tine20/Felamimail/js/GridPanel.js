@@ -864,13 +864,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.editBuffer = this.editBuffer.diff(ids);
         
         this.movingOrDeleting = false;
-
-        if (this.noDeleteRequestInProgress()) {
+        
+        // only load grid if no record is selected (as this would break onRowSelection) and no other delete requests are running
+        if (this.getGrid().getSelectionModel().getCount() === 0 && this.noDeleteRequestInProgress()) {
             Tine.log.debug('Loading grid data after delete.');
             this.loadGridData({
                 removeStrategy: 'keepBuffered',
                 autoRefresh: true
             });
+        } else {
+            this.pagingToolbar.refresh.enable();
         }
     },
     
@@ -944,12 +947,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {SelectionModel} sm
      * @param {Number} rowIndex
      * @param {Tine.Felamimail.Model.Message} record
-     * @param {Boolean} now
+     * @param {Number} retryCount
+     * 
+     * TODO find a better way to check if body is fetched, this does not work correctly if a message is removed
+     *       and the next one is selected automatically
      */
-    onRowSelection: function(sm, rowIndex, record, now) {
-        if (! now || ! record.bodyIsFetched()) {
+    onRowSelection: function(sm, rowIndex, record, retryCount) {
+        if (sm.getCount() > 0 && (! retryCount || retryCount < 5) && ! record.bodyIsFetched()) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Deferring onRowSelection');
-            return this.onRowSelection.defer(250, this, [sm, rowIndex, record, true]);
+            retryCount = (retryCount) ? retryCount++ : 1;
+            return this.onRowSelection.defer(250, this, [sm, rowIndex, record, retryCount+1]);
         }
         
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
