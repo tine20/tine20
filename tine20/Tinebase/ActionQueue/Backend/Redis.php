@@ -10,7 +10,7 @@
  */
 
 /**
- * @requires    PhpRedis https://github.com/nicolasff/phpredis
+ * @requires     PhpRedis https://github.com/nicolasff/phpredis
  * @package     Tinebase
  * @subpackage  ActionQueue
  */
@@ -81,6 +81,14 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $this->connect();
     }
 
+    /**
+     * connect to redis server
+     * 
+     * @param string $host
+     * @param integer $port
+     * @param integer $timeout
+     * @throws Tinebase_Exception_Backend
+     */
     public function connect($host = null, $port = null, $timeout = null)
     {
         if ($this->_redis instanceof Redis) {
@@ -92,7 +100,9 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $timeout = $timeout ? $timeout : $this->_options['timeout'];
         
         $this->_redis = new Redis;
-        $this->_redis->connect($host, $port, $timeout);
+        if (! $this->_redis->connect($host, $port, $timeout)) {
+            throw new Tinebase_Exception_Backend('Could not connect to redis server at ' . $host);
+        }
     }
     
     /**
