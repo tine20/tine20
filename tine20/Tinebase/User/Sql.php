@@ -436,8 +436,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             $result = ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
         } else if ($configKey === Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME) {
-            // $regex contains username in this case
-            $result = preg_match('/' . preg_quote($password) . '/i', $regex);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Testing if password is part of username "' . $regex . '"');
+            $result = ! preg_match('/' . preg_quote($password) . '/i', $regex);
         } else {
             // check min length restriction
             $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
