@@ -118,7 +118,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
     * show floatingLayer and start to check whether the mouse is in it
     */
     showLayer: function() {
-        if (! this.layerVisisble) {
+        if (! this.layerVisisble && ! this.isDragOver) {
             this.syncFloatingLayer();
             this.floatingLayer.show();
             
@@ -138,19 +138,22 @@ Ext.ux.file.BrowsePlugin.prototype = {
     onDragLeave: function(e) {
         e.stopPropagation();
         e.preventDefault();
+        this.isDragOver = false;
         this.component.el.applyStyles(' background-color: transparent');
-        this.hideLayer();
     },
     
     onDragOver: function(e) {
         e.stopPropagation();
         e.preventDefault();
+        this.isDragOver = true;
         this.component.el.applyStyles(' background-color: #ebf0f5');
+        this.hideLayer();
     },
     
     onDrop: function(e) {
         e.stopPropagation();
         e.preventDefault();
+        this.isDragOver = false;
         this.component.el.applyStyles(' background-color: transparent');
         this.onBrowseButtonClick();
         var dt = e.browserEvent.dataTransfer;
@@ -198,7 +201,10 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.createInputFile();
         }
         if (this.enableFileDrop && !Ext.isIE) {
-            this.dropEl = this.dropElSelector ? this.component.el.up(this.dropElSelector) : this.component.el;
+            this.dropEl = this.dropEl ? this.dropEl :
+                          (this.dropElSelector ? this.component.el.up(this.dropElSelector) : 
+                          this.component.el);
+            
             this.dropEl.on('dragleave', this.onDragLeave, this);
             this.dropEl.on('dragover', this.onDragOver, this);
             this.dropEl.on('drop', this.onDrop, this);
