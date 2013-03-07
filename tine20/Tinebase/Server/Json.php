@@ -32,6 +32,29 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
      */    
     public function handle()
     {
+        // handle CORS requests
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            $allowedOrigins = array_merge(
+                (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
+                array($_SERVER['SERVER_NAME'])
+            );
+            $origin = parse_url($_SERVER['HTTP_ORIGIN'], PHP_URL_HOST);
+            
+            if (in_array($origin, $allowedOrigins)) {
+                header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                
+                if ($_SERVER['REQUEST_METHOD'] == "OPTIONS" && isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                    header('Access-Control-Allow-Methods: POST, OPTIONS');
+                    header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type');
+                    exit;
+                }
+            } else {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                header("HTTP/1.1 403 Access Forbidden");
+                exit;
+            }
+        }
+        
         try {
             Tinebase_Core::initFramework();
             $exception = FALSE;

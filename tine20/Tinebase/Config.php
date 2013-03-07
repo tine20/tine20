@@ -112,6 +112,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const REDIRECTTOREFERRER = 'redirectToReferrer';
     
     /**
+     * Config key for configuring allowed origins of the json frontend
+     *  
+     * @var string
+     */
+    const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
+    
+    /**
      * Config key for acceptedTermsVersion
      * @var string
      */
@@ -373,6 +380,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::ALLOWEDJSONORIGINS => array(
+                                   //_('Allowed Origins')
+            'label'                 => 'Allowed Origins',
+                                   //_('Allowed Origins for the JSON API.')
+            'description'           => 'Allowed Origins for the JSON API.',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
         self::ACCEPTEDTERMSVERSION => array(
                                    //_('Accepted Terms Version')
