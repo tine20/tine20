@@ -143,7 +143,7 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
     },
     
     tokenizeField: function(field) {
-        if (! this.inTokenMode) {
+        if (! this.inTokenMode || ! field.itemCt) {
             // token mode might be stopped in the meantime
             return;
         }
