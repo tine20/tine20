@@ -432,6 +432,23 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.subjectField.focus.defer(50, this.subjectField);
             }
         }, this);
+        
+        this.initHtmlEditorDD();
+    },
+    
+    
+    initHtmlEditorDD: function() {
+        if (! this.htmlEditor.rendered) {
+            return this.initHtmlEditorDD.defer(500, this);
+        }
+        
+        this.htmlEditor.getDoc().addEventListener('dragover', function(e) {
+            this.action_addAttachment.plugins[0].onBrowseButtonClick();
+        }.createDelegate(this));
+        
+        this.htmlEditor.getDoc().addEventListener('drop', function(e) {
+            this.action_addAttachment.plugins[0].onDrop(Ext.EventObject.setEvent(e));
+        }.createDelegate(this));
     },
     
     /**
@@ -797,7 +814,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             // add file upload button to toolbar
             this.action_addAttachment = this.attachmentGrid.getAddAction();
-            this.action_addAttachment.plugins[0].dropElSelector = null;
+            this.action_addAttachment.plugins[0].dropElSelector = 'div[id=' + this.id + ']';
             this.action_addAttachment.plugins[0].onBrowseButtonClick = function() {
                 this.southPanel.expand();
             }.createDelegate(this);

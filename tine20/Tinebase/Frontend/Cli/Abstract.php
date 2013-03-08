@@ -129,8 +129,12 @@ class Tinebase_Frontend_Cli_Abstract
         }
         $args = $this->_parseArgs($_opts, array());
 
-        $createUsers = in_array('sharedonly', $args['other']) ? false : true;
-        $createShared = in_array('noshared', $args['other']) ? false : true;
+        if (array_key_exists('other', $args)) {
+            $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
+            $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+        } else {
+            $createUsers = $createShared = TRUE;
+        }
         
         // locale defaults to de
         $locale     = isset($args['locale'])   ? $args['locale']   : 'de';
@@ -151,7 +155,7 @@ class Tinebase_Frontend_Cli_Abstract
         }
         $className = $this->_applicationName . '_Setup_DemoData';
         
-        if (class_exists($className)) {
+        if (@class_exists($className)) {
             if ($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers, $password)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
             } else {

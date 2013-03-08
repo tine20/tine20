@@ -97,7 +97,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         cmp.on('destroy', this.onDestroy, this);
     },
     
-    /**
+   /**
     * hide floatingLayer when the mouse leaves the layer
     */
     hideLayerIf: function(e) {
@@ -108,15 +108,17 @@ Ext.ux.file.BrowsePlugin.prototype = {
     
     hideLayer: function() {
         Ext.getDoc().un('mousemove', this.hideLayerIf, this);
-        this.floatingLayer.hide();
+        if (this.floatingLayer) {
+            this.floatingLayer.hide();
+        }
         this.layerVisisble = false;
     },
     
-    /**
+   /**
     * show floatingLayer and start to check whether the mouse is in it
     */
     showLayer: function() {
-        if (! this.layerVisisble) {
+        if (! this.layerVisisble && ! this.isDragOver) {
             this.syncFloatingLayer();
             this.floatingLayer.show();
             
@@ -130,25 +132,28 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
     },
     
-    /**
+   /**
     * drag and drop
     */
-    imageDragleave: function(e) {
+    onDragLeave: function(e) {
         e.stopPropagation();
         e.preventDefault();
+        this.isDragOver = false;
         this.component.el.applyStyles(' background-color: transparent');
+    },
+    
+    onDragOver: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.isDragOver = true;
+        this.component.el.applyStyles(' background-color: #ebf0f5');
         this.hideLayer();
     },
     
-    imageDragover: function(e) {
+    onDrop: function(e) {
         e.stopPropagation();
         e.preventDefault();
-        this.component.el.applyStyles(' background-color: #ebf0f5');
-    },
-    
-    imageDrop: function(e) {
-        e.stopPropagation();
-        e.preventDefault();
+        this.isDragOver = false;
         this.component.el.applyStyles(' background-color: transparent');
         this.onBrowseButtonClick();
         var dt = e.browserEvent.dataTransfer;
@@ -196,10 +201,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.createInputFile();
         }
         if (this.enableFileDrop && !Ext.isIE) {
-            this.dropEl = this.component.el;
-            this.dropEl.on('dragleave', this.imageDragleave, this);
-            this.dropEl.on('dragover', this.imageDragover, this);
-            this.dropEl.on('drop', this.imageDrop, this);
+            this.dropEl = this.dropEl ? this.dropEl :
+                          (this.dropElSelector ? this.component.el.up(this.dropElSelector) : 
+                          this.component.el);
+            
+            this.dropEl.on('dragleave', this.onDragLeave, this);
+            this.dropEl.on('dragover', this.onDragOver, this);
+            this.dropEl.on('drop', this.onDrop, this);
         }
     },
     
@@ -210,9 +218,9 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.floatingLayer.remove();
         this.floatingLayer = null;
         this.input_file = null;
-        this.dropEl.un('dragleave', this.imageDragleave, this);
-        this.dropEl.un('dragover', this.imageDragover, this);
-        this.dropEl.un('drop', this.imageDrop, this);
+        this.dropEl.un('dragleave', this.onDragLeave, this);
+        this.dropEl.un('dragover', this.onDragOver, this);
+        this.dropEl.un('drop', this.onDrop, this);
         this.dropEl = null;
     },
     

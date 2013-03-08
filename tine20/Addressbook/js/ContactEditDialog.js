@@ -144,11 +144,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     name:'room'
                                 }]*/
                             ]},
-                                    new Ext.ux.form.ImageField({
-                                    name: 'jpegphoto',
-                                    width: 90,
-                                    height: 120
-                                    })
+                            new Ext.ux.form.ImageField({
+                                name: 'jpegphoto',
+                                width: 90,
+                                height: 120
+                            })
                         ]
                         }, {
                             xtype: 'columnform',

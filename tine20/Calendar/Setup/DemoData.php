@@ -25,12 +25,21 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     /**
      * models to work on
-     * @var unknown_type
+     * 
+     * @var array
      */
     protected $_models = array('event');
 
     /**
+     * the event controller
+     * 
+     * @var Calendar_Controller_Event
+     */
+    protected $_controller = NULL;
+    
+    /**
      * private calendars
+     * 
      * @var Array
      */
     protected $_calendars = array();
@@ -64,7 +73,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate() {
 
         $this->_getDays();
-
+        $this->_controller = Calendar_Controller_Event::getInstance();
         foreach($this->_personas as $loginName => $persona) {
             $this->_calendars[$loginName] = Tinebase_Container::getInstance()->getContainerById(Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $persona->getId()));
 
@@ -240,7 +249,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // create shared events
         foreach($this->sharedEventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
     }
 
@@ -356,7 +365,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -389,7 +398,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
     }
     
@@ -490,7 +499,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -529,7 +538,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
     }
 
@@ -650,7 +659,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -698,7 +707,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
     }
@@ -836,7 +845,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
     }
@@ -979,7 +988,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -1028,7 +1037,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         foreach($eventsData as $eData) {
             $event = new Calendar_Model_Event($eData);
-            Calendar_Controller_Event::getInstance()->create($event, false);
+            $this->_controller->create($event, false);
         }
     }
 }

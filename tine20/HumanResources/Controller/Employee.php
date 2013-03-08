@@ -311,7 +311,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     'bank_account_holder' => $account->n_fn,
                 ));
                 
-                if ($createContract) {
+                if ($_feastCalendarId && $_workingTimeModelId && $_vacationDays) {
                     $contract = $this->createContractDataForEmployee(array(
                         'feastCalendarId' => $_feastCalendarId,
                         'workingTimeModelId' => $_workingTimeModelId,
