@@ -131,12 +131,15 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         $collections = array();
         $isPartialRequest = isset($xml->Partial);
         
+        $lastSyncCollections = null;
+        if (!empty($this->_device->lastsynccollection)) {
+            $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
+        }
+        
         // try to restore collections from previous request
         if ($isPartialRequest) {
-            $decodedCollections = Zend_Json::decode($this->_device->lastsynccollection);
-            
-            if (is_array($decodedCollections)) {
-                foreach ($decodedCollections as $collection) {
+            if (is_array($lastSyncCollections)) {
+                foreach ($lastSyncCollections as $collection) {
                     $collections[$collection['collectionId']] = new Syncroton_Model_SyncCollection($collection);
                 }
             }
@@ -152,6 +155,11 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     $collections[$collectionId]->setFromSimpleXMLElement($xmlCollection);
                 } else {
                     $collections[$collectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
+                }
+                
+                // do we have to reuse the options from the previous request?
+                if (!isset($xmlCollection->Options) && is_array($lastSyncCollections) && array_key_exists($collectionId, $lastSyncCollections)) {
+                    $collections[$collectionId]->options = $lastSyncCollections[$collectionId]['options'];
                 }
             }
             
