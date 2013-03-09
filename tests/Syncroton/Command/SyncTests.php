@@ -234,7 +234,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         // validate sticky options
         $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
         #var_dump($lastSyncCollections);
-        $this->assertEquals('5120', $lastSyncCollections["anotherAddressbookFolderId"]["options"]["bodyPreferences"][1]["truncationSize"], 'sticky options failure');
+        $this->assertEquals('5120', $lastSyncCollections['collections']["anotherAddressbookFolderId"]["options"]["bodyPreferences"][1]["truncationSize"], 'sticky options failure');
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');

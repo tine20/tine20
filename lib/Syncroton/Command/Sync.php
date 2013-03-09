@@ -132,8 +132,13 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
         $isPartialRequest = isset($xml->Partial);
         
         $lastSyncCollections = null;
+        $lastSyncOptions     = null;
         if (!empty($this->_device->lastsynccollection)) {
             $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
+            if (isset($lastSyncCollections['options'])) {
+                $lastSyncOptions     = $lastSyncCollections['options'];
+                $lastSyncCollections = $lastSyncCollections['collections'];
+            }
         }
         
         // try to restore collections from previous request
@@ -158,16 +163,22 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
                 
                 // do we have to reuse the options from the previous request?
-                if (!isset($xmlCollection->Options) && is_array($lastSyncCollections) && array_key_exists($collectionId, $lastSyncCollections)) {
-                    $collections[$collectionId]->options = $lastSyncCollections[$collectionId]['options'];
+                if (!isset($xmlCollection->Options) && is_array($lastSyncOptions) && array_key_exists($collectionId, $lastSyncOptions)) {
+                    $collections[$collectionId]->options = $lastSyncOptions[$collectionId];
+                    if ($this->_logger instanceof Zend_Log)
+                        $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " restored options to " . print_r($collections[$collectionId]->options, TRUE));
                 }
             }
             
             // store current value of $collections for next Sync command request
-            $collectionsToSave = array();
-        
+            $collectionsToSave = array(
+                'collections' => array(),
+                'options'     => is_array($lastSyncOptions) ? $lastSyncOptions : array()
+            );
+            
             foreach ($collections as $collection) {
-                $collectionsToSave[$collection->collectionId] = $collection->toArray();
+                $collectionsToSave['collections'][$collection->collectionId] = $collection->toArray();
+                $collectionsToSave['options']    [$collection->collectionId] = $collectionsToSave['collections'][$collection->collectionId]['options'];
             }
         
             $this->_device->lastsynccollection = Zend_Json::encode($collectionsToSave);
