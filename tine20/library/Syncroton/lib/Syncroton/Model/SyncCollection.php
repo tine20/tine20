@@ -274,6 +274,11 @@ class Syncroton_Model_SyncCollection extends Syncroton_Model_AXMLEntry
                     if (isset($bodyPreference->TruncationSize)) {
                         $this->_elements['options']['bodyPreferences'][$type]['truncationSize'] = (int) $bodyPreference->TruncationSize;
                     }
+                    
+                    // optional
+                    if (isset($bodyPreference->Preview)) {
+                        $this->_elements['options']['bodyPreferences'][$type]['preview'] = (int) $bodyPreference->Preview;
+                    }
                 }
             }
             

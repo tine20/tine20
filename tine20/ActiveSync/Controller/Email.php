@@ -564,7 +564,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         //var_dump($options);
         
         // get truncation
-        $truncateAt = null;
+        $truncateAt  = null;
+        $previewSize = null;
         
         if ($options['mimeSupport'] == Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME) {
             $airSyncBaseType = Syncroton_Command_Sync::BODY_TYPE_MIME;
@@ -606,12 +607,18 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['truncationSize'])) {
                 $truncateAt = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['truncationSize'];
             }
+            if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['preview'])) {
+                $previewSize = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_HTML]['preview'];
+            }
             
         } else {
             $airSyncBaseType = Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT;
             
             if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['truncationSize'])) {
                 $truncateAt = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['truncationSize'];
+            }
+            if (isset($options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['preview'])) {
+                $previewSize = $options['bodyPreferences'][Syncroton_Command_Sync::BODY_TYPE_PLAIN_TEXT]['preview'];
             }
         }
         
@@ -624,6 +631,12 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $messageBody = $this->_contentController->getMessageBody($entry, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
         }
         
+        if($previewSize !== null) {
+            $preview = substr($this->_contentController->getMessageBody($entry, null, Zend_Mime::TYPE_TEXT, NULL, true), 0, $previewSize);
+            
+            // strip out any non utf-8 characters
+            $preview = @iconv('utf-8', 'utf-8//IGNORE', $preview);
+        }
         
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
@@ -642,6 +655,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         
         if (strlen($messageBody) > 0) {
             $synrotonBody->data = $messageBody;
+        }
+        
+        if (isset($preview) && strlen($preview) > 0) {
+            $synrotonBody->preview = $preview;
         }
         
         if ($isTruncacted === 1) {
