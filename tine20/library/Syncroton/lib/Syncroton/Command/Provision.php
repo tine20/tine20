@@ -194,6 +194,6 @@ class Syncroton_Command_Provision extends Syncroton_Command_Wbxml
      */
     public static function generatePolicyKey()
     {
-        return sha1(mt_rand(). microtime());
+        return mt_rand(1, 2147483647);
     }
 }
