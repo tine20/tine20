@@ -197,6 +197,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         
         // now do the first sync windowsize of collection = 2
+        // also left out the Options element to test sticky options
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -209,7 +210,6 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
                         <DeletesAsMoves/>
                         <GetChanges/>
                         <WindowSize>2</WindowSize>
-                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     </Collection>
                     <Collection>
                         <Class>Contacts</Class>
@@ -218,7 +218,6 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
                         <DeletesAsMoves/>
                         <GetChanges/>
                         <WindowSize>2</WindowSize>
-                        <Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options>
                     </Collection>
                 </Collections>
                 <WindowSize>2</WindowSize>
@@ -231,6 +230,11 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        // validate sticky options
+        $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
+        #var_dump($lastSyncCollections);
+        $this->assertEquals('5120', $lastSyncCollections['collections']["anotherAddressbookFolderId"]["options"]["bodyPreferences"][1]["truncationSize"], 'sticky options failure');
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
