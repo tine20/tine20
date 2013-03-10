@@ -180,7 +180,7 @@ abstract class Syncroton_Command_Wbxml implements Syncroton_Command_ICommand
             if (!empty($this->_device->policyId)) {
                 $policy = $this->_policyBackend->get($this->_device->policyId);
                 
-                if($policy->policyKey != $this->_policyKey) {
+                if((int)$policy->policyKey != (int)$this->_policyKey) {
                     $this->_outputDom->documentElement->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', 142));
                     
                     $sepn = new Syncroton_Exception_ProvisioningNeeded();
