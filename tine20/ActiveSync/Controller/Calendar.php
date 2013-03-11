@@ -340,10 +340,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     
                         foreach ($entry->exdate as $exdate) {
                             $exception = new Syncroton_Model_EventException();
-                    
-                            $exception->deleted            = (int)$exdate->is_deleted;
+                            
+                            // send the Deleted element only, when needed
+                            // HTC devices ignore the value(0 or 1) of the Deleted element
+                            if ((int)$exdate->is_deleted === 1) { 
+                                $exception->deleted        = 1;
+                            }
                             $exception->exceptionStartTime = $exdate->getOriginalDtStart();
-                    
+                            
                             if ((int)$exdate->is_deleted === 0) {
                                 $exceptionSyncrotonEvent = $this->toSyncrotonModel($exdate);
                                 foreach ($exception->getProperties() as $property) {

@@ -370,7 +370,7 @@ Zeile 3</AirSyncBase:Data>
         // Exceptions
         $this->assertEquals(2, count($syncrotonEvent->exceptions));
         $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
-        $this->assertEquals(0, $syncrotonEvent->exceptions[0]->deleted, 'exception deleted');
+        $this->assertFalse(isset($syncrotonEvent->exceptions[0]->deleted), 'exception deleted with value of 0 should not be set');
         $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
         $this->assertEquals('20121125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
         $this->assertEquals('20121125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
