@@ -55,16 +55,21 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
      */
     protected function _checkExternalUrl($uri, $token)
     {
-        $result = FALSE;
+        if ($token->name === 'a') {
+            $result = TRUE;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Remove  URI: ' . $uri->toString());
+            
+            $result = FALSE;
+        }
+        
 //         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
 //             . ' Moving uri to another namespace and replace current uri with blank.gif: ' . $uri->toString());
         
 //         //$scheme, $userinfo, $host, $port, $path, $query, $fragment
 //         $uri = new HTMLPurifier_URI('http', null, $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], null,
 //             '/index.php', 'Felamimail.getResource&uri=' . base64_encode($uri->toString()) . '&type=' . $token->name, null);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Remove  URI: ' . $uri->toString());
         
         return $result;
     }
