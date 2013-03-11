@@ -393,6 +393,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " email data " . print_r($entry->toArray(), true));
         
+        if (! $this->_isMemoryLeft($entry->size)) {
+            throw new Syncroton_Exception_MemoryExhausted('not enough memory left for: ' . $entry->getId() . ' Needed: ' . $entry->size);
+        }
+        
         $syncrotonEmail = new Syncroton_Model_Email();
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
