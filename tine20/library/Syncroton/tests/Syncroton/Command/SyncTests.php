@@ -831,9 +831,9 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
             
     public function testFetchingContactFromServer()
     {
-        $serverId = $this->testAddingContactToServer();
-        
         // lets add one contact
+        $serverId = $this->testAddingContactToServer();
+
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
