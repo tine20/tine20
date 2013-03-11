@@ -102,4 +102,19 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             . '<blockquote class="felamimail-body-blockquote"><blockquote class="felamimail-body-blockquote">lala<br />'
             . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br /><blockquote class="felamimail-body-blockquote">jojo<br /></blockquote>jojo<br />', $result);
     }
+    
+    /**
+     * testReplaceUris
+     * 
+     * @see 0008020: link did not get an anchor in html mail
+     */
+    public function testReplaceUris()
+    {
+        $message = new Felamimail_Model_Message(array(
+            'body'  =>  'http://www.facebook.com/media/set/?set=a.164136103742229.1073741825.100004375207149&type=1&l=692e495b17'
+        ));
+        
+        $result = Felamimail_Message::replaceUris($message->body);
+        $this->assertContains('a href=', $result);
+    }
 }
