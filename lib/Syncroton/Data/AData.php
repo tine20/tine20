@@ -24,6 +24,11 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
     public static $changedEntries = array();
     
     /**
+     * used by unit tests only to simulated exhausted memory
+     */
+    public static $exhaustedEntries = array();
+    
+    /**
      * the constructor
      * 
      * @param Syncroton_Model_IDevice $_device
@@ -276,6 +281,9 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
      */
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
+        if (isset(self::$exhaustedEntries[get_class($this)]) && is_array(self::$exhaustedEntries[get_class($this)]) && in_array($serverId, self::$exhaustedEntries[get_class($this)])) {
+            throw new Syncroton_Exception_MemoryExhausted('memory exchausted for ' . $serverId);
+        } 
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'data', array('data'))
             ->where('id = ?', $serverId);
