@@ -507,7 +507,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         
                         // safe battery time by skipping folders which got synchronied less than Syncroton_Command_Ping::$quietTime seconds ago
-                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
+                        if ( ! $collectionData->syncState instanceof Syncroton_Model_SyncState ||
+                             ($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
                             continue;
                         }
                         
