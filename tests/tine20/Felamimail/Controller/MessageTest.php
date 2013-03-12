@@ -1287,6 +1287,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testNewsletterMultipartRelated()
     {
         $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
+        $this->assertEquals(1, $cachedMessage->has_attachment);
         $bodyParts = $cachedMessage->getBodyParts();
         $this->assertEquals(Zend_Mime::TYPE_HTML, $bodyParts['2.1']['contentType'], 'multipart/related html part missing: ' . print_r($bodyParts, TRUE));
         
@@ -1307,6 +1308,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_alternative_related.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertContains('some body contentsome body contentsome body content', $message->body);
+    }
+
+    /**
+     * testNoAttachement
+     * 
+     * @see 0008014: js client shows wrong attachment icon in grid
+     */
+    public function testNoAttachement()
+    {
+        $cachedMessage = $this->messageTestHelper('noattachment.eml');
+        $this->assertEquals(0, $cachedMessage->has_attachment);
     }
     
     /**

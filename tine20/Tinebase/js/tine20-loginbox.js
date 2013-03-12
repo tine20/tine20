@@ -128,10 +128,13 @@ Tine20.login = {
      * @return void
      */
     checkAuth: function(config, username, password, cb) {
-        var conn = new Ext.ux.data.windowNameConnection({
-            proxyUrl: config.tine20ProxyUrl
-        });
-                
+        var ua = navigator.userAgent.toLowerCase(),
+            isIE = ua.match(/msie (\d+)/)
+            useCOSR = !isIE || isIE[1] > 9,
+            conn = useCOSR ? Ext.Ajax : new Ext.ux.data.windowNameConnection({
+                proxyUrl: config.tine20ProxyUrl
+            });
+        
         conn.request({
             url: config.tine20Url,
             headers: {
@@ -167,6 +170,14 @@ Tine20.login = {
         
         var config = this.getConfig();
         if (data.status == 'success') {
+            // redirect?
+            if (data.loginUrl) {
+                config.tine20BkpUrl = config.tine20BkpUrl ? config.tine20BkpUrl : config.tine20Url;
+                
+                config.tine20Url = data.loginUrl;
+                return this.onLoginPress();
+            }
+            
             // show success message
             this.messageBoxEl.update(this.translations[config.userLanguage].authsuccess);
             this.setCssClass('loginSuccess');
@@ -178,6 +189,8 @@ Tine20.login = {
             // show fail message
             this.messageBoxEl.update(this.translations[config.userLanguage].authfailed);
             this.setCssClass('loginFaild');
+            
+            config.tine20Url = config.tine20BkpUrl ? config.tine20BkpUrl : config.tine20Url;
             
             this.passwordEl.focus(100);
             this.passwordEl.dom.select();

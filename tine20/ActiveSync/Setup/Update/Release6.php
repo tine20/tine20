@@ -488,12 +488,25 @@ class ActiveSync_Setup_Update_Release6 extends Setup_Update_Abstract
         return preg_replace_callback('/_([a-z])/', function ($string) {return strtoupper($string[1]);}, $string);
     }
     
-    /**
-    * update to 7.0
-    *
-    * @return void
+   /**
+    * update to 6.5
+    * 
+    * @see 0007942: reset device pingfolder in update script
+    * 
     */
     public function update_4()
+    {
+        $sql = "update " . SQL_TABLE_PREFIX . "acsync_device set pingfolder = null where pingfolder like '%Syncope%'";
+        $this->_db->query($sql);
+        $this->setApplicationVersion('ActiveSync', '6.5');
+    }
+    
+    /**
+     * update to 7.0
+     *
+     * @return void
+     */
+    public function update_5()
     {
         $this->setApplicationVersion('ActiveSync', '7.0');
     }

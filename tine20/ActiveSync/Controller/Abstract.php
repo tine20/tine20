@@ -619,6 +619,28 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     }
     
     /**
+     * return true there is memory $needed left
+     *  
+     * @param int $needed
+     * @return boolean
+     */
+    protected function _isMemoryLeft($needed)
+    {
+        if (ini_get('memory_limit') == -1) {
+            return true;
+        }
+        
+        // calculate with an overhead of 1.2
+        if (convertToBytes(ini_get('memory_limit')) > memory_get_usage(TRUE) + ($needed * 1.2)) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    
+    /**
      * convert contact from xml to Tinebase_Record_Interface
      *
      * @param SimpleXMLElement $_data
