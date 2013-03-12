@@ -684,6 +684,35 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue(in_array('test tag', $syncrotonEvent->categories), 'tag not found in categories: ' . print_r($syncrotonEvent->categories, TRUE));
     }
     
+    public function testEventWithAlarmToSyncrotonModel()
+    {
+        $event = ActiveSync_TestCase::getTestEvent();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(array(
+            'minutes_before' => 15,
+            'alarm_time'     => $event->dtstart->getClone()->subMinute(15),
+            'model'          => 'Calendar_Model_Event'
+        )));
+        
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $syncrotonEvent = $controller->toSyncrotonModel($event);
+        
+        $this->assertEquals(15, $syncrotonEvent->reminder);
+    }
+    
+    /**
+     * @see 0007346 - organizer perspective for alarms
+     */
+    public function testEventWithAlarmToTine20Model()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        
+        $alarm = Calendar_Controller_Event::getInstance()->get($serverId)->alarms->getFirstRecord();
+        $this->assertFalse(!!$alarm->getOption('attendee'));
+    }
+    
     /**
      * calendar has different grant handling
      * @see 0007450: shared calendars of other users (iOS)
