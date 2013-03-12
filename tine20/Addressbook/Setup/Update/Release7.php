@@ -31,4 +31,27 @@ class Addressbook_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '7.1');
     }
+
+    /**
+     * update to 7.2
+     * - make name in address_book_lists non-unique
+     * 
+     */
+    public function update_1()
+    {        
+        $this->_backend->dropIndex('addressbook_lists', 'name');
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>name</name>
+                <unique>false</unique>
+                <field>
+                    <name>name</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('addressbook_lists', $declaration);
+
+        $this->setTableVersion('addressbook_lists', 3);
+        $this->setApplicationVersion('Addressbook', '7.2');
+    }
 }

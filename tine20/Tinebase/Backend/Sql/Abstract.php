@@ -109,6 +109,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_foreignTables = array();
     
     /**
+     * Additional columns _getSelect()
+     */
+    protected $_additionalColumns = array();
+
+    /**
      * additional search count columns
      * 
      * @var array
@@ -153,14 +158,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_tablePrefix          = array_key_exists('tablePrefix', $_options)          ? $_options['tablePrefix']  : $this->_db->table_prefix;
         $this->_modlogActive         = array_key_exists('modlogActive', $_options)         ? $_options['modlogActive'] : $this->_modlogActive;
         $this->_useSubselectForCount = array_key_exists('useSubselectForCount', $_options) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
-        
+    
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend_Database('modelName and tableName must be configured or given.');
         }
         if (! $this->_db) {
             throw new Tinebase_Exception_Backend_Database('Database adapter must be configured or given.');
         }
-        
+    
+        foreach ($this->_additionalColumns as $name => $query) {
+            $this->_additionalColumns[$name] = str_replace("{prefix}", $this->_tablePrefix, $query);
+        }
+
         try {
             $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
         } catch (Zend_Db_Adapter_Exception $zdae) {
@@ -696,9 +705,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
         } else {
-            $cols = '*';
+            $cols = array('*');
         }
-        
+        foreach ($this->_additionalColumns as $name => $column) {
+            $cols[$name] = $column;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, TRUE));
         
         $select = $this->getAdapter()->select();

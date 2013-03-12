@@ -173,37 +173,3 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Contact',
     recordClass: Tine.Addressbook.Model.Contact
 });
-
-/**
- * list model
- */
-Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
-   {name: 'id'},
-   {name: 'container_id'},
-   {name: 'created_by'},
-   {name: 'creation_time'},
-   {name: 'last_modified_by'},
-   {name: 'last_modified_time'},
-   {name: 'is_deleted'},
-   {name: 'deleted_time'},
-   {name: 'deleted_by'},
-   {name: 'name'},
-   {name: 'description'},
-   {name: 'members'},
-   {name: 'email'},
-   {name: 'type'},
-   {name: 'group_id'}
-], {
-    appName: 'Addressbook',
-    modelName: 'List',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('List', 'Lists', n); gettext('Lists');
-    recordName: 'List',
-    recordsName: 'Lists',
-    containerProperty: 'container_id',
-    // ngettext('Addressbook', 'Addressbooks', n); gettext('Addressbooks');
-    containerName: 'Addressbook',
-    containersName: 'Addressbooks',
-    copyOmitFields: ['group_id']
-});

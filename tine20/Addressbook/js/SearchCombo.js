@@ -46,6 +46,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      * @type Array
      */
     additionalFilters: null,
+
+    /**
+     * @cfg {Boolean} onlyContacts
+     */
+    onlyContacts: true,
     
     /**
      * use account objects/records in get/setValue
@@ -63,8 +68,13 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     
     //private
     initComponent: function(){
-        this.recordClass = Tine.Addressbook.Model.Contact;
-        this.recordProxy = Tine.Addressbook.contactBackend;
+        if (this.onlyContacts) {
+            this.recordClass = Tine.Addressbook.Model.Contact;
+            this.recordProxy = Tine.Addressbook.contactBackend;
+        } else {
+            this.recordClass = Tine.Addressbook.Model.EmailAddress;
+            this.recordProxy = Tine.Addressbook.emailaddressBackend;
+        }
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);

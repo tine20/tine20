@@ -54,8 +54,8 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
     }),
 
 
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.callContactAction, 130);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu', this.callContactAction, 130);
      
     this.composeSmsAction = new Ext.Action({
         text: this.app.i18n._('Compose SMS'),
@@ -77,8 +77,8 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
     }),    
     
     // register in toolbar + contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.composeSmsBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.composeSmsAction, 140);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ActionToolbar-leftbtngrp', this.composeSmsBtn, 30);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu', this.composeSmsAction, 140);
     
 };
 

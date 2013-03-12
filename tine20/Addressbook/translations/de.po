@@ -468,6 +468,10 @@ msgstr "Kontakte"
 msgid "Select contact"
 msgstr "Kontakt auswählen"
 
+#: js/ListGridDetailsPanel.js
+msgid "Select list"
+msgstr "Liste auswählen"
+
 #: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
 #: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
@@ -694,3 +698,19 @@ msgstr "Neuer Kontakt"
 #: Controller/Contact.php:329
 msgid "Uploaded new contact image."
 msgstr "Ein neues Kontaktbild wurde hochgeladen."
+
+#: js/ListMemberGridPanel.js
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: js/ListMemberGridPanel.js
+msgid "Remove"
+msgstr "Entfernen"
+
+#: js/ListEditDialog.js
+msgid "Members"
+msgstr "Mitglieder"
+
+#: js/ListEditDialog.js
+msgid "List Information"
+msgstr "Listen Information"

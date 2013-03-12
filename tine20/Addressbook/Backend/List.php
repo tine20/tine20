@@ -85,6 +85,13 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+    * List of additional Columns to be selected
+    */
+    protected $_additionalColumns = array(
+         "emails" => "(SELECT GROUP_CONCAT(email SEPARATOR ';') FROM {prefix}addressbook WHERE id in (SELECT contact_id FROM {prefix}addressbook_list_members WHERE list_id = addressbook_lists.id))"
+    );
+
+    /**
      * add new members to list
      * 
      * @param  mixed  $_listId

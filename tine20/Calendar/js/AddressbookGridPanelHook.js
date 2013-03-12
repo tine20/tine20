@@ -57,8 +57,8 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
         }
     });
     
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addEventAction, 100);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newEventAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-Add', this.addEventAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-New', this.newEventAction, 100);
     
 };
 

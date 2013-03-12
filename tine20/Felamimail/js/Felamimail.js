@@ -106,14 +106,21 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            var adbHook = new Tine.Felamimail.GridPanelHook({
+            var adbHook1 = new Tine.Felamimail.GridPanelHook({
                 app: this,
-                foreignAppName: 'Addressbook'
+                foreignAppName: 'Addressbook',
+                recordTypeName: 'Contact'
+            });
+            var adbHook2 = new Tine.Felamimail.GridPanelHook({
+                app: this,
+                foreignAppName: 'Addressbook',
+                recordTypeName: 'List'
             });
             var crmHook = new Tine.Felamimail.GridPanelHook({
                 app: this,
                 foreignAppName: 'Crm',
                 contactInRelation: true,
+                recordTypeName: 'Lead',
                 relationType: 'CUSTOMER'
             });
         }
