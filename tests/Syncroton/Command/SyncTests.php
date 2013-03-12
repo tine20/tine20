@@ -769,7 +769,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         
         $syncDoc = $sync->getResponse();
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-
+        
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
@@ -1150,18 +1150,8 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-
-        $xpath = new DomXPath($syncDoc);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(null, $syncDoc);
     }
     
     /**
@@ -1192,18 +1182,8 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
-        $xpath = new DomXPath($syncDoc);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(null, $syncDoc);
         
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -1218,18 +1198,8 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-
-        $xpath = new DomXPath($syncDoc);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(4, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        $this->assertEquals(null, $syncDoc);
     }
     
     /**

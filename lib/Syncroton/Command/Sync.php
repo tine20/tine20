@@ -437,7 +437,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             return $this->_outputDom;
         }
         
-        $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
+        $collections = $this->_outputDom->createElementNS('uri:AirSync', 'Collections');
 
         $totalChanges = 0;
         
@@ -674,7 +674,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
 
                 // collection header
-                $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
+                $collection = $this->_outputDom->createElementNS('uri:AirSync', 'Collection');
                 if (!empty($collectionData->folder->class)) {
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData->folder->class));
                 }
@@ -893,25 +893,29 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 
                 // increase SyncKey if needed
                 if ((
-                        // sent the clients updates?
+                        // sent the clients updates... ?
                         !empty($clientModifications['added']) ||
                         !empty($clientModifications['changed']) ||
                         !empty($clientModifications['deleted'])
                     ) || (
-                        // sends the server updates to the client?
+                        // is the server sending updates to the client... ?
                         $commands->hasChildNodes() === true
                     ) || (
-                        // changed the pending data?
+                        // changed the pending data... ?
                         $collectionData->syncState->pendingdata != $serverModifications
                     )
                 ) {
-                    // then increase SyncKey
+                    // ...then increase SyncKey
                     $collectionData->syncState->counter++;
                 }
                 $syncKeyElement->appendChild($this->_outputDom->createTextNode($collectionData->syncState->counter));
                 
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData->syncState->counter);
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " current synckey is ". $collectionData->syncState->counter);
+                
+                if ($collection->childNodes->length > 4 || $collectionData->syncState->counter != $collectionData->syncKey) {
+                     $collections->appendChild($collection);
+                }
             }
             
             if (isset($collectionData->syncState) && $collectionData->syncState instanceof Syncroton_Model_ISyncState && 
@@ -993,6 +997,14 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
             }
         }
         
-        return $this->_outputDom;
+        if ($collections->hasChildNodes() === true) {
+            $sync->appendChild($collections);
+        }
+        
+        if ($sync->hasChildNodes()) {
+            return $this->_outputDom;
+        }
+        
+        return null;
     }
 }
