@@ -216,9 +216,15 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Fetching modlog records for ' . $model);
         
-        // fetch modlog records for model
-        $modlogTable = SQL_TABLE_PREFIX . 'timemachine_modlog';
+        // check if modlog table already has seq col
         $db = Tinebase_Core::getDb();
+        $modlogTable = SQL_TABLE_PREFIX . 'timemachine_modlog';
+        $modlogTableColumns = Tinebase_Db_Table::getTableDescriptionFromCache($modlogTable, $db);
+        if (!  array_key_exists('seq', $modlogTableColumns)) {
+            throw new Tinebase_Exception_SystemGeneric('You need to update Tinebase before updating any other application');
+        }
+        
+        // fetch modlog records for model
         $sql = "SELECT DISTINCT record_id,modification_time,seq "
             . "FROM $modlogTable WHERE record_type ='{$model}' "
             . "ORDER BY modification_time ASC ";

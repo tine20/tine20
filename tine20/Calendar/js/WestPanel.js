@@ -62,6 +62,14 @@ Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
                         }
                     }
                 })],
+                selectToday: function() {
+                    var contentPanel = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel(),
+                        pagingBar = contentPanel.getCalendarPanel(contentPanel.activeView).getTopToolbar();
+                        
+                        pagingBar.onClick('today');
+                        
+                        this.update(new Date().clearTime());
+                },
                 listeners: {
                     scope: this, 
                     select: function(picker, value, weekNumber) {

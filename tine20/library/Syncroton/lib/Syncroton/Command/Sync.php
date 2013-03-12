@@ -711,6 +711,17 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 
                 // send response for to be fetched entries
                 if(!empty($collectionData->toBeFetched)) {
+                    // unset all truncation settings as entries are not allowed to be truncated during fetch
+                    $fetchCollectionData = clone $collectionData;
+                    
+                    // unset truncationSize
+                    if (isset($fetchCollectionData->options['bodyPreferences']) && is_array($fetchCollectionData->options['bodyPreferences'])) {
+                        foreach($fetchCollectionData->options['bodyPreferences'] as $key => $bodyPreference) {
+                            unset($fetchCollectionData->options['bodyPreferences'][$key]['truncationSize']);
+                        }
+                    }
+                    $fetchCollectionData->options['mimeTruncation'] = Syncroton_Command_Sync::TRUNCATE_NOTHING;
+                    
                     foreach($collectionData->toBeFetched as $serverId) {
                         $fetch = $responses->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Fetch'));
                         $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
@@ -719,7 +730,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                             $applicationData = $this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData');
                             
                             $dataController
-                                ->getEntry($collectionData, $serverId)
+                                ->getEntry($fetchCollectionData, $serverId)
                                 ->appendXML($applicationData, $this->_device);
                             
                             $fetch->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_SUCCESS));
@@ -771,7 +782,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                         
                         $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-
+                        
                         $dataController
                             ->getEntry($collectionData, $serverId)
                             ->appendXML($applicationData, $this->_device);
@@ -779,8 +790,16 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $commands->appendChild($add);
                         
                         $collectionChanges++;
+                    } catch (Syncroton_Exception_MemoryExhausted $seme) {
+                        // continue to next entry, as there is not enough memory left for the current entry
+                        // this will lead to MoreAvailable at the end and the entry will be synced during the next Sync command
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " memory exhausted for entry: " . $serverId);
+                        
+                        continue;
+                        
                     } catch (Exception $e) {
-                        if ($this->_logger instanceof Zend_Log) 
+                        if ($this->_logger instanceof Zend_Log)
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                     }
                     
@@ -817,6 +836,14 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         $commands->appendChild($change);
                         
                         $collectionChanges++;
+                    } catch (Syncroton_Exception_MemoryExhausted $seme) {
+                        // continue to next entry, as there is not enough memory left for the current entry
+                        // this will lead to MoreAvailable at the end and the entry will be synced during the next Sync command
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " memory exhausted for entry: " . $serverId);
+                        
+                        continue;
+                        
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log) 
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());

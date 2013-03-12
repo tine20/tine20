@@ -647,6 +647,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
+        // assert organizer
+        $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: Tinebase_Core::getUser()->contact_id);
+        
         // re add attendee w.o. email
         if ($_currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
             $attendeeClone = clone $_currentEvent->attendee;

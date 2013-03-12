@@ -55,7 +55,7 @@ class Tinebase_ImageHelper
         
         file_put_contents($tmpPath, $_blob);
         
-        $imgInfo = getimagesize($tmpPath);
+        $imgInfo = @getimagesize($tmpPath);
         unlink($tmpPath);
         if (! in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');

@@ -32,6 +32,14 @@
           "path": "js/"
         },
         {
+          "text": "CostCenterGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "EmployeeEditDialog.js",
           "path": "js/"
         },
@@ -49,14 +57,6 @@
         },
         {
           "text": "FreeTimeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ContractGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "CostCenterGridPanel.js",
           "path": "js/"
         },
         {
