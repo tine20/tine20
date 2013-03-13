@@ -223,12 +223,17 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
         } else {
             $rec = $_record;
         }
+
+        // if we are owner of persistent filter we don't need to check right
+        if ($_record->account_id == Tinebase_Core::getUser()->getId()) {
+            return TRUE;
+        }
         
         $right = Tinebase_Core::getUser()->hasRight($_record->application_id, $this->_getManageSharedRight($rec));
-        
-        if (!$right && $_throwException) {
+        if (! $right && $_throwException) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to manage shared favorites!'); 
         }
+
         return $right;
     }
     
