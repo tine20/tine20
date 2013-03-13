@@ -45,12 +45,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     }
     
     /**
-     * convert Calendar_Model_Event to Sabre_VObject_Component
+     * convert Tinebase_Record_RecordSet to Sabre_VObject_Component
      *
-     * @param  Calendar_Model_Event  $_record
+     * @param  Tinebase_Record_RecordSet  $_records
      * @return Sabre_VObject_Component
      */
-    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' event ' . print_r($_record->toArray(), true));
@@ -66,20 +66,22 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $vcalendar->VERSION  = '2.0';
         $vcalendar->CALSCALE = 'GREGORIAN';
         
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($_record->originator_tz));
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($_records->getFirstRecord()->originator_tz));
         
-        $vevent = $this->_convertCalendarModelEvent($_record);
-        $vcalendar->add($vevent);
-        
-        if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
-            $_record->exdate->addIndices(array('is_deleted'));
-            $eventExceptions = $_record->exdate->filter('is_deleted', false);
+        foreach ($_records as $_record) {
+            $vevent = $this->_convertCalendarModelEvent($_record);
+            $vcalendar->add($vevent);
             
-            foreach ($eventExceptions as $eventException) {
-                $vevent = $this->_convertCalendarModelEvent($eventException, $_record);
-                $vcalendar->add($vevent);
+            if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
+                $_record->exdate->addIndices(array('is_deleted'));
+                $eventExceptions = $_record->exdate->filter('is_deleted', false);
+                
+                foreach ($eventExceptions as $eventException) {
+                    $vevent = $this->_convertCalendarModelEvent($eventException, $_record);
+                    $vcalendar->add($vevent);
+                }
+                
             }
-            
         }
         
         $this->_afterFromTine20Model($vcalendar);
@@ -87,6 +89,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
         
         return $vcalendar;
+    }
+
+    /**
+     * convert Calendar_Model_Event to Sabre_VObject_Component
+     *
+     * @param  Calendar_Model_Event  $_record
+     * @return Sabre_VObject_Component
+     */
+    public function fromTine20Model(Tinebase_Record_Abstract $_record)
+    {
+        $_records = new Tinebase_Record_RecordSet(get_class($_record), array($_record), true, false);
+        return $this->fromTine20RecordSet($_records);
     }
     
     /**

@@ -38,6 +38,10 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'dbname'   => 'dbname'
             )
         ),
+        'exportICS' => array(  
+            'description' => "export calendar as ics", 
+            'params' => array('container_id') 
+        ),
     );
     
     /**
@@ -50,4 +54,27 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         parent::_import($_opts);
     }
     
+    /**
+     * exports calendars as ICS
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function exportICS($_opts)
+    {
+        $opts = $_opts->getRemainingArgs();
+        $container_id = $opts[0];
+        $filter = new Calendar_Model_EventFilter(array(
+            array(
+                'field'     => 'container_id',
+                'operator'  => 'equals',
+                'value'     => $container_id
+            )
+
+        ));
+        $result = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'get');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory("generic");
+        $result = $converter->fromTine20RecordSet($result);
+        print $result->serialize();
+    }
+
 }
