@@ -234,7 +234,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         // validate sticky options
         $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
         #var_dump($lastSyncCollections);
-        $this->assertEquals('5120', $lastSyncCollections['collections']["anotherAddressbookFolderId"]["options"]["bodyPreferences"][1]["truncationSize"], 'sticky options failure');
+        $this->assertEquals('5120', $lastSyncCollections['options']["anotherAddressbookFolderId"]["bodyPreferences"][1]["truncationSize"], 'sticky options failure');
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
@@ -562,6 +562,7 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
                     </Collection>
                 </Collections>
                 <HeartbeatInterval>10</HeartbeatInterval>
+                <WindowSize>100</WindowSize>
                 <Partial/>
             </Sync>'
         );
@@ -1146,6 +1147,26 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         );
         
         $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        
+        $this->assertEquals(null, $syncDoc);
+        
+        return $serverId;
+    }
+    
+    /**
+     * test sync with no body
+     * 
+     * the last sync should be repeated
+     */
+    public function testSyncWithNoBody()
+    {
+        $serverId = $this->testSyncWithNoChanges();
+        
+        $sync = new Syncroton_Command_Sync(null, $this->_device, $this->_device->policykey);
         
         $sync->handle();
         
