@@ -11,7 +11,6 @@ Ext.ns('Tine.Calendar');
 /**
  * @namespace Tine.Calendar
  * @class Tine.Calendar.ColorManager
- * @extends Ext.util.Observable
  * Colormanager for Coloring Calendar Events <br>
  * 
  * @constructor
@@ -23,84 +22,13 @@ Ext.ns('Tine.Calendar');
  */
 Tine.Calendar.ColorManager = function(config) {
     Ext.apply(this, config);
-    
-    this.colorMap = {};
-    
-    // allthough we don't extend component as we have nothing to render, we borrow quite some stuff from it
-    this.id = this.stateId;
-    Ext.ComponentMgr.register(this);
-    
-    this.addEvents(
-        /**
-         * @event beforestaterestore
-         * Fires before the state of this colormanager is restored. Return false to stop the restore.
-         * @param {Tine.Calendar.ColorManager} this
-         * @param {Object} state The hash of state values
-         */
-        'beforestaterestore',
-        /**
-         * @event staterestore
-         * Fires after the state of tthis colormanager is restored.
-         * @param {Tine.Calendar.ColorManager} this
-         * @param {Object} state The hash of state values
-         */
-        'staterestore',
-        /**
-         * @event beforestatesave
-         * Fires before the state of this colormanager is saved to the configured state provider. Return false to stop the save.
-         * @param {Tine.Calendar.ColorManager} this
-         * @param {Object} state The hash of state values
-         */
-        'beforestatesave',
-        /**
-         * @event statesave
-         * Fires after the state of this colormanager is saved to the configured state provider.
-         * @param {Tine.Calendar.ColorManager} this
-         * @param {Object} state The hash of state values
-         */
-        'statesave'
-    );
-    
-    if (this.stateful) {
-        this.initState();
-    }
-   
 };
 
-Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
+Ext.apply(Tine.Calendar.ColorManager.prototype, {
     /**
-     * @cfg {String} schemaName
-     * Name of color schema to use
+     * @type String
      */
-    schemaName: 'standard',
-    
-    /**
-     * @cfg {String} stateId
-     * State id to use
-     */
-    stateId: 'cal-color-mgr-containers',
-    
-    /**
-     * @cfg {Boolean} stateful
-     * Is this component statefull?
-     */
-    stateful: false,
-    
-    /**
-     * current color map 
-     * 
-     * @type Object 
-     * @propertycolorMap
-     */
-    colorMap: null,
-    
-    /**
-     * pointer to current color set in color schema 
-     * 
-     * @type Number 
-     * @property colorSchemataPointer
-     */
-    colorSchemataPointer: 0,
+    strategy: 'container',
     
     /**
      * gray color set
@@ -109,14 +37,6 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
      * @property gray
      */
     gray: {color: '#808080', light: '#EDEDED', text: '#FFFFFF', lightText: '#FFFFFF'},
-    
-    /**
-     * color palette from Ext.ColorPalette
-     * 
-     * @type Array
-     * @property colorPalette
-     */
-    colorPalette: Ext.ColorPalette.prototype.colors,
     
     /**
      * color sets for colors from colorPalette
@@ -168,6 +88,10 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
         "FFFFFF" : {color: '#DFDFDF', light: '#F8F8F8', text: '#000000', lightText: '#000000'}
     },
     
+    getStrategy: function() {
+        return Tine.Calendar.colorStrategies[this.strategy];
+    },
+    
     /**
      * hack for container only support
      * 
@@ -175,29 +99,14 @@ Ext.extend(Tine.Calendar.ColorManager, Ext.util.Observable, {
      * @return {Object} colorset
      */
     getColor: function(event) {
-        var container = null,
-            color = null,
-            schema = null;
+        var color = this.getStrategy().getColor(event);
         
-        if (! Ext.isFunction(event.get)) {
-            // tree comes with containers only
-            container = event;
-        } else {
-            
-            container = event.get('container_id');
-            
-            // take displayContainer if user has no access to origin
-            if (Ext.isPrimitive(container)) {
-                container = event.getDisplayContainer();
-            }
-        }
-        
-        color = String(container.color).replace('#', '');
+        color = String(color).replace('#', '');
         if (! color.match(/[0-9a-fA-F]{6}/)) {
             return this.gray;
         }
         
-        schema = this.colorSchemata[container.color.replace('#', '')];
+        var schema = this.colorSchemata[color];
         return schema ? schema : this.getCustomSchema(color);
     },
     
@@ -238,3 +147,34 @@ Tine.Calendar.ColorManager.compare = function(color1, color2, abs) {
     
     return abs ? (Math.abs(diff[0]) + Math.abs(diff[1]) + Math.abs(diff[2])) : diff;
 };
+
+/**
+ * Color Strategies Registry
+ * 
+ * @type Object
+ */
+Tine.Calendar.colorStrategies = {};
+Tine.Calendar.colorStrategies['container'] = {
+    getColor: function(event) {
+        var container = null,
+            color = null,
+            schema = null;
+        
+        if (! Ext.isFunction(event.get)) {
+            // tree comes with containers only
+            container = event;
+        } else {
+            
+            container = event.get('container_id');
+            
+            // take displayContainer if user has no access to origin
+            if (Ext.isPrimitive(container)) {
+                container = event.getDisplayContainer();
+            }
+        }
+        
+        return String(container.color).replace('#', '');
+    }
+};
+
+
