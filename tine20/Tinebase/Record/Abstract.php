@@ -1057,6 +1057,27 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+     * returns TRUE if given record obsoletes this one
+     * 
+     * @param  Tinebase_Record_Interface $_record
+     * @return bool
+     */
+    public function isObsoletedBy($_record)
+    {
+        if (get_class($_record) !== get_class($this)) {
+            throw new Tinebase_Exception_InvalidArgument('Records could not be compared');
+        } else if ($this->getId() && $_record->getId() !== $this->getId()) {
+            throw new Tinebase_Exception_InvalidArgument('Record id mismatch');
+        }
+        
+        if ($this->has('seq') && $_record->seq != $this->seq) {
+            return $_record->seq > $this->seq;
+        }
+        
+        return ($this->has('last_modified_time')) ? $_record->last_modified_time > $this->last_modified_time : TRUE;
+    }
+    
+    /**
      * check if two records are equal
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism

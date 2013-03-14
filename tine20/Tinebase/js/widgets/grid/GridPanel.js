@@ -878,31 +878,37 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         var records = [],
             recordsIds = [],
-            newRecordCollection = new Ext.util.MixedCollection();
+            recordToLoadCollection = new Ext.util.MixedCollection();
 
         // fill new collection
         Ext.each(o.records, function(record) {
-            newRecordCollection.add(record.id, record);
+            recordToLoadCollection.add(record.id, record);
         });
 
         // assemble update & keep
-        this.store.each(function(record) {
-            var newRecord = newRecordCollection.get(record.id);
-            if (newRecord) {
-                records.push(newRecord);
-                recordsIds.push(newRecord.id);
-            } else if (options.removeStrategy === 'keepAll' || (options.removeStrategy === 'keepBuffered' && this.editBuffer.indexOf(record.id) >= 0)) {
-                var copiedRecord = record.copy();
+        this.store.each(function(currentRecord) {
+            var recordToLoad = recordToLoadCollection.get(currentRecord.id);
+            if (recordToLoad) {
+                // we replace records that are the same, because otherwise this would not work for local changes
+                if (recordToLoad.isObsoletedBy(currentRecord)) {
+                    records.push(currentRecord);
+                    recordsIds.push(currentRecord.id);
+                } else {
+                    records.push(recordToLoad);
+                    recordsIds.push(recordToLoad.id);
+                }
+            } else if (options.removeStrategy === 'keepAll' || (options.removeStrategy === 'keepBuffered' && this.editBuffer.indexOf(currentRecord.id) >= 0)) {
+                var copiedRecord = currentRecord.copy();
                 copiedRecord.not_in_filter = true;
                 records.push(copiedRecord);
-                recordsIds.push(record.id);
+                recordsIds.push(currentRecord.id);
             }
         }, this);
 
         // assemble adds
-        newRecordCollection.each(function(record, idx) {
+        recordToLoadCollection.each(function(record, idx) {
             if (recordsIds.indexOf(record.id) == -1 && this.deleteQueue.indexOf(record.id) == -1) {
-                var lastRecord = newRecordCollection.itemAt(idx-1);
+                var lastRecord = recordToLoadCollection.itemAt(idx-1);
                 var lastRecordIdx = lastRecord ? recordsIds.indexOf(lastRecord.id) : -1;
                 records.splice(lastRecordIdx+1, 0, record);
                 recordsIds.splice(lastRecordIdx+1, 0, record.id);

@@ -110,6 +110,18 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         }
         
         return false;
+    },
+    
+    /**
+     * returns true if given record obsoletes this one
+     * 
+     * NOTE: this does only work for Tine.widgets.grid.GridPanel::onStoreBeforeLoadRecords record comparison
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {Boolean}
+     */
+    isObsoletedBy: function(record) {
+        return record.mtime || record.ctime > this.ctime;
     }
 });
 
