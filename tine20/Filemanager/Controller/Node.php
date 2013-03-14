@@ -529,10 +529,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Adding node info to exception.');
             $_parentNodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
+        } else {
+            return $_fene;
         }
         
         return $_parentNodeExistsException;
-    }    
+    }
     
     /**
      * create new node
@@ -554,7 +556,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
         
-        // we need to check the parent record existance before continuing with node creation
+        // we need to check the parent record existance before commencing node creation
         $parentPathRecord->validateExistance();
         
         try {
@@ -581,6 +583,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     }
                 }
             } else if (! $_forceOverwrite) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ' . $fene);
                 throw $fene;
             }
         }
@@ -661,6 +665,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkIfExists(Tinebase_Model_Tree_Node_Path $_path, $_node = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Check existance of ' . $_path->statpath);
+        
         if ($this->_backend->fileExists($_path->statpath)) {
             $existsException = new Filemanager_Exception_NodeExists();
             $existsException->addExistingNodeInfo(($_node !== NULL) ? $_node : $this->_backend->stat($_path->statpath));
@@ -715,17 +722,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _createContainer($_name, $_type)
     {
-        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        
-        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
-            'application_id' => $app->getId(),
-            'name'           => $_name,
-            'type'           => $_type,
-        )));
-        if (count($search) > 0) {
+        $ownerId = ($_type === Tinebase_Model_Container::TYPE_PERSONAL) ? Tinebase_Core::getUser()->getId() : NULL;
+        try {
+            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
+                $this->_applicationName, $_name, $_type, $ownerId);
             throw new Filemanager_Exception_NodeExists('Container ' . $_name . ' of type ' . $_type . ' already exists.');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // go on
         }
         
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => $_name,
             'type'           => $_type,

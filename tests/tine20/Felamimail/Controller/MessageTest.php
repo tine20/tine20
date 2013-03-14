@@ -1362,6 +1362,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
     }
     
+    /**
+     * testFacebookNotification
+     * 
+     * @see 0008016: links in facebook/twitter emails are removed
+     */
+    public function testFacebookNotification()
+    {
+        $cachedMessage = $this->messageTestHelper('facebook_notification.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('http://www.facebook.com/n/?notifications&amp;id=295475095891&amp;'
+            . 'mid=7a0ffadG5af33a8a9c98Ga61c449Gdd&amp;bcode=1.1362559617.Abl6w95TdWQc0VVS&amp;n_m=tine20%40metaways.de', $message->body);
+    }
     
     /********************************* protected helper funcs *************************************/
     

@@ -69,6 +69,13 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_otherUserContainer;
     
     /**
+     * the test user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -93,6 +100,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
+        $this->_originalTestUser = Tinebase_Core::getUser();
         
         $this->_setupTestContainers();
     }
@@ -168,6 +176,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
                 try {
@@ -393,16 +403,16 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      * 
      * @return array created node
      */
-    public function testCreateContainerNodeInPersonalFolder()
+    public function testCreateContainerNodeInPersonalFolder($containerName = 'testcontainer')
     {
-        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $containerName;
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
         
         $this->_objects['containerids'][] = $createdNode['name']['id'];
         
         $this->assertTrue(is_array($createdNode['name']));
-        $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        $this->assertEquals($containerName, $createdNode['name']['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
         
         return $createdNode;
@@ -586,7 +596,45 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         return $dirpaths;
     }
+    
+    /**
+     * testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir
+     * 
+     * @see 0008044: could not create a personal folder with the name of a folder of another user
+     */
+    public function testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
         
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+    }
+    
+    /**
+     * testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir
+     * 
+     * @see 0008046: Rename personal folder to personal folder of another user
+     */
+    public function testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder('testcontainer2');
+        
+        $this->assertEquals('/personal/sclever/testcontainer2', $personalContainerNodeOfsclever['path']);
+        
+        // rename
+        $newPath = '/personal/sclever/testcontainer';
+        $result = $this->_json->moveNodes(array($personalContainerNodeOfsclever['path']), array($newPath), FALSE);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($newPath, $result[0]['path']);
+    }
+    
     /**
      * testCopyFolderNodes
      */

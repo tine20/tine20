@@ -290,49 +290,29 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         $container = NULL;
         
-        switch ($this->containerType) {
-            case Tinebase_Model_Container::TYPE_SHARED:
-                if (!empty($_pathParts[3])) {
-                    $container = $this->_searchContainerByName($_pathParts[3], Tinebase_Model_Container::TYPE_SHARED);
-                }
-                break;
-                
-            case Tinebase_Model_Container::TYPE_PERSONAL:
-                if (count($_pathParts) > 4) {
-                    $subPathParts = explode('/', $_pathParts[4], 2);
-                    $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
-                }
-                break;
+        try {
+            switch ($this->containerType) {
+                case Tinebase_Model_Container::TYPE_SHARED:
+                    if (!empty($_pathParts[3])) {
+                        $container = Tinebase_Container::getInstance()->getContainerByName(
+                            $this->application->name, $_pathParts[3], Tinebase_Model_Container::TYPE_SHARED);
+                    }
+                    break;
+                    
+                case Tinebase_Model_Container::TYPE_PERSONAL:
+                    if (count($_pathParts) > 4) {
+                        $subPathParts = explode('/', $_pathParts[4], 2);
+                        $owner = ($this->containerOwner) ? Tinebase_User::getInstance()->getUserByLoginName($this->containerOwner) : Tinebase_Core::getUser();
+                        $container = Tinebase_Container::getInstance()->getContainerByName(
+                            $this->application->name, $subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL, $owner->getId());
+                    }
+                    break;
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // container not found
         }
         
         return $container;
-    }
-    
-    /**
-     * search container by name and type
-     * 
-     * @param string $_name
-     * @param string $_type
-     * @return Tinebase_Model_Container
-     * @throws Tinebase_Exception_NotFound|NULL
-     */
-    protected function _searchContainerByName($_name, $_type)
-    {
-        $result = NULL;
-        
-        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
-            'application_id' => $this->application->getId(),
-            'name'           => $_name,
-            'type'           => $_type,
-        )));
-        
-        if (count($search) > 1) {
-            throw new Tinebase_Exception_NotFound('Duplicate container found: ' . $_name);
-        } else if (count($search) === 1) {
-            $result = $search->getFirstRecord();
-        }
-        
-        return $result;
     }
     
     /**
@@ -464,6 +444,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (! $this->containerType || ! $this->statpath) {
             $this->_parsePath();
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Validate statpath: ' . $this->statpath);
         
         $pathParts = $this->_getPathParts();
         if (! $this->container) {
