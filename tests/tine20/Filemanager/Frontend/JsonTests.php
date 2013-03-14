@@ -69,6 +69,13 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_otherUserContainer;
     
     /**
+     * the test user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -93,6 +100,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
+        $this->_originalTestUser = Tinebase_Core::getUser();
         
         $this->_setupTestContainers();
     }
@@ -168,6 +176,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
                 try {
@@ -586,7 +596,23 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         return $dirpaths;
     }
+    
+    /**
+     * testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir
+     * 
+     * @see 0008044: could not create a personal folder with the name of a folder of another user
+     */
+    public function testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
         
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+    }
+    
     /**
      * testCopyFolderNodes
      */

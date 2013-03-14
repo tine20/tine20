@@ -147,8 +147,9 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * getPathNodes
      * 
-     * @param unknown_type $_path
+     * @param string $_path
      * @return Tinebase_Record_RecordSet
      */
     public function getPathNodes($_path)
@@ -228,7 +229,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-                
+        
         if (!$queryResult) {
             throw new Tinebase_Exception_NotFound('path: ' . $_path . ' not found!');
         }
@@ -260,6 +261,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * pathExists
+     * 
      * @param  string  $_path
      * @return bool
      */
@@ -267,9 +270,15 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     {
         try {
             $this->getLastPathNode($_path);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Found path: ' . $_path);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . $teia);
             return false;
         } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf);
             return false;
         }
         
