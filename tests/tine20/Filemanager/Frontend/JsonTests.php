@@ -403,16 +403,16 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      * 
      * @return array created node
      */
-    public function testCreateContainerNodeInPersonalFolder()
+    public function testCreateContainerNodeInPersonalFolder($containerName = 'testcontainer')
     {
-        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $containerName;
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
         
         $this->_objects['containerids'][] = $createdNode['name']['id'];
         
         $this->assertTrue(is_array($createdNode['name']));
-        $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        $this->assertEquals($containerName, $createdNode['name']['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
         
         return $createdNode;
@@ -611,6 +611,28 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
         
         $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+    }
+    
+    /**
+     * testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir
+     * 
+     * @see 0008046: Rename personal folder to personal folder of another user
+     */
+    public function testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder('testcontainer2');
+        
+        $this->assertEquals('/personal/sclever/testcontainer2', $personalContainerNodeOfsclever['path']);
+        
+        // rename
+        $newPath = '/personal/sclever/testcontainer';
+        $result = $this->_json->moveNodes(array($personalContainerNodeOfsclever['path']), array($newPath), FALSE);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($newPath, $result[0]['path']);
     }
     
     /**
