@@ -49,13 +49,15 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testCreateEvent
+     * 
+     * @param $now should the current date be used
      */
-    public function testCreateEvent()
+    public function testCreateEvent($now = FALSE)
     {
         $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
         $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
-        $eventData = $this->_getEvent()->toArray();
+        $eventData = $this->_getEvent($now)->toArray();
         
         $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
             'name' => 'phpunit-' . substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
@@ -84,7 +86,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     public function testStripWindowsLinebreaks()
     {
-        $e = $this->_getEvent();
+        $e = $this->_getEvent(TRUE);
         $e->description = 'Hello my friend,' . chr(13) . chr(10) .'bla bla bla.'  . chr(13) . chr(10) .'good bye.';
         $persistentEventData = $this->_uit->saveEvent($e->toArray());
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
@@ -97,7 +99,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testCreateEventWithNonExistantAttender()
     {
         $testEmail = 'unittestnotexists@example.org';
-        $eventData = $this->_getEvent()->toArray();
+        $eventData = $this->_getEvent(TRUE)->toArray();
         $eventData['attendee'][] = $this->_getUserTypeAttender($testEmail);
         
         $persistentEventData = $this->_uit->saveEvent($eventData);
@@ -133,7 +135,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateEventWithAlarm()
     {
-        $eventData = $this->_getEventWithAlarm()->toArray();
+        $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
@@ -216,7 +218,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEvents()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE); 
         
         $filter = array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
@@ -252,6 +254,24 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
     }
+    
+    /**
+     * #7688: Internal Server Error on calendar search
+     * 
+     * add period filter if none is given
+     * 
+     * https://forge.tine20.org/mantisbt/view.php?id=7688
+     */
+    public function testSearchEventsWithOutPeriodFilter()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()));
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $returnedFilter = $searchResultData['filter'];
+        $this->assertEquals(2, count($returnedFilter), 'Two filters shoud have been returned!');
+        $this->assertTrue($returnedFilter[1]['field'] == 'period' || $returnedFilter[0]['field'] == 'period', 'One returned filter shoud be a period filter');
+    }
 
     /**
      * testSearchEvents with organizer = me filter
@@ -260,7 +280,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEventsWithOrganizerMeFilter()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE);
         
         $filter = array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
@@ -282,7 +302,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEventsWithAlarm()
     {
-        $eventData = $this->_getEventWithAlarm()->toArray();
+        $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         
         $filter = array(
@@ -547,7 +567,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testMeAsAttenderFilter()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE);
         
         $filter = array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
@@ -586,7 +606,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE);
         $eventData['container_id'] = $this->_personasDefaultCals['sclever']->getId();
         $eventData['attendee'] = array(array(
             'user_id' => $this->_personasContacts['sclever']->getId()
@@ -866,7 +886,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $editableResoureData = $this->testSaveResource();
         $nonEditableResoureData = $this->testSaveResource(array('readGrant'));
         
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
