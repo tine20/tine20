@@ -61,6 +61,11 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         
         this.calPanel.on('show', this.onCalPanelShow, this);
         this.calPanel.on('hide', this.onCalPanelHide, this);
+        
+        this.calPanel.on('afterrender', function() {
+            this.attendeeFilterGrid = this.app.getMainScreen().getWestPanel().getAttendeeFilter();
+            this.attendeeFilterGrid.on('sortchange', this.onAttendeeFilterSortChange, this);
+        }, this);
     },
     
     onCalPanelShow: function() {
@@ -88,10 +93,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         this.app.getMainScreen().getCenterPanel().onStoreLoad(this.getActiveView().store, options);
         
         // create view for each attendee
-        var filteredAttendee = this.app.getMainScreen().getWestPanel().getAttendeeFilter().getValue(),
+        var filteredAttendee = this.attendeeFilterGrid.getValue(),
             attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(filteredAttendee),
             useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
-        
+            
         // remove views not longer in filter
         this.calPanel.items.each(function(view) {
             if (view.attendee && (! useSplit || ! Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, view.attendee))) {
@@ -99,20 +104,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             }
             
         }, this);
-
-        if (useSplit) {
-            // add subviews new to filter
-            attendeeStore.each(function(attendee, idx) {
-                var attendeeView = this.attendeeViews.get(this.getAttendeeViewId(attendee));
-                if (! attendeeView) {
-                    this.addAttendeeView(attendee, idx);
-                } else {
-                    var filterFn = attendeeView.store.filterFn;
-                    attendeeView.initData(this.cloneStore(filterFn));
-                    attendeeView.onLoad();
-                }
-            }, this);
-        }
+        
+        this.manageSplitViews(filteredAttendee);
         
         // manage main (main is shown if no split criteria is present)
         if (! filteredAttendee.length || ! useSplit) {
@@ -174,6 +167,38 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 }
             }
         });
+    },
+    
+    onAttendeeFilterSortChange: function() {
+        var filteredAttendee = this.attendeeFilterGrid.getValue();
+        
+        this.manageSplitViews(filteredAttendee);
+        this.calPanel.doLayout();
+    },
+    
+    manageSplitViews: function(filteredAttendee) {
+        // create view for each attendee
+        var useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed;
+        
+        if (useSplit) {
+            // add subviews new to filter
+            // NOTE: we don't iterate the attendeeStore as we would loose attendee order than
+            Ext.each(filteredAttendee, function(attendeeData, idx) {
+                var attendee = new Tine.Calendar.Model.Attender(attendeeData, attendeeData.id)
+                var attendeeView = this.attendeeViews.get(this.getAttendeeViewId(attendee));
+                if (! attendeeView) {
+                    this.addAttendeeView(attendee, idx);
+                } else {
+                    //assert position
+                    this.calPanel.items.remove(attendeeView.ownerCt);
+                    this.calPanel.items.insert(idx, attendeeView.ownerCt);
+                    
+                    var filterFn = attendeeView.store.filterFn;
+                    attendeeView.initData(this.cloneStore(filterFn));
+                    attendeeView.onLoad();
+                }
+            }, this);
+        }
     },
     
     getAttendeeViewId: function(attendee) {
