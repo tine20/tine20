@@ -48,6 +48,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     messageRecord: null,
     
     /**
+     * felamimail app, needed for translations
+     * @type Tine.Felamimail.Application
+     */
+    felamimailApp: null,
+    
+    /**
      * inits this cmp
      * @private
      */
@@ -61,6 +67,8 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         );
         
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
+        this.felamimailApp = Tine.Tinebase.appMgr.get('Felamimail');
+        
         this.initFilterToolbar();
         
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
@@ -109,7 +117,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // _('None')
             columns.push({
-                header: this.app.i18n._(type),
+                header: this.felamimailApp.i18n._(type),
                 dataIndex: Ext.util.Format.lowercase(type),
                 width: 50,
                 hidden: false,
@@ -251,7 +259,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     initActions: function() {
         this.actions_addAsTo = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.app.i18n._('Add as "To"'),
+            text: this.felamimailApp.i18n._('Add as "To"'),
             disabled: true,
             iconCls: 'action_add',
             actionUpdater: this.updateRecipientActions,
@@ -262,7 +270,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
         this.actions_addAsCc = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.app.i18n._('Add as "Cc"'),
+            text: this.felamimailApp.i18n._('Add as "Cc"'),
             disabled: true,
             iconCls: 'action_add',
             actionUpdater: this.updateRecipientActions,
@@ -273,7 +281,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
         this.actions_addAsBcc = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.app.i18n._('Add as "Bcc"'),
+            text: this.felamimailApp.i18n._('Add as "Bcc"'),
             disabled: true,
             iconCls: 'action_add',
             actionUpdater: this.updateRecipientActions,
@@ -284,7 +292,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         this.actions_setToNone = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.app.i18n._('Remove from recipients'),
+            text: this.felamimailApp.i18n._('Remove from recipients'),
             disabled: true,
             iconCls: 'action_delete',
             actionUpdater: this.updateRecipientActions,
@@ -338,7 +346,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
         // search contacts if all pages are selected (filter select)
         if (sm.isFilterSelect) {
-            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.felamimailApp.i18n._('Loading Mail Addresses')});
             this['AddressLoadMask'].show();
             
             var contact = null;
