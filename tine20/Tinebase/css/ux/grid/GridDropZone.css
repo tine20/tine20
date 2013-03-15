@@ -1,0 +1,10 @@
+.x-grid3-drag-insert-above {
+    border-top: 2px solid black;
+}
+.x-grid3-drag-insert-below {
+    border-bottom: 2px solid black;
+}
+
+.x-grid3-drag-append {
+    
+}

@@ -154,6 +154,10 @@
           "path": "js/ux/grid/"
         },
         {
+          "text": "GridDropZone.js",
+          "path": "js/ux/grid/"
+        },
+        {
           "text": "GridViewMenuPlugin.js",
           "path": "js/ux/grid/"
         },
@@ -830,6 +834,10 @@
         },
         {
           "text": "PagingToolbar.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "GridDropZone.css",
           "path": "css/ux/grid/"
         },
         {

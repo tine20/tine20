@@ -86,8 +86,24 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         this.store = new Ext.data.SimpleStore({
-            fields: Tine.Calendar.Model.Attender.getFieldDefinitions(),
-            sortInfo: {field: 'user_id', direction: 'ASC'}
+            fields: Tine.Calendar.Model.Attender.getFieldDefinitions().concat('sort'),
+            sortInfo: {field: 'user_id', direction: 'ASC'},
+            sortData : function(f, direction){
+                direction = direction || 'ASC';
+                var st = this.fields.get(f).sortType;
+                var fn = function(r1, r2){
+                    // make sure new-attendee line is on the bottom
+                    if (!r1.data.user_id) return direction == 'ASC';
+                    if (!r2.data.user_id) return direction != 'ASC';
+                    
+                    var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
+                    return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+                };
+                this.data.sort(direction, fn);
+                if(this.snapshot && this.snapshot != this.data){
+                    this.snapshot.sort(direction, fn);
+                }
+            }
         });
         
         this.on('beforeedit', this.onBeforeAttenderEdit, this);

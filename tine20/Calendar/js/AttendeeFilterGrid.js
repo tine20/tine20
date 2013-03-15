@@ -27,23 +27,25 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     cls: 'x-cal-attendee-filter-grid',
     addNewAttendeeText: 'Add attendee', // _('Add attendee')
     
+    enableDragDrop: true,
+    ddGroup: 'Tine.Calendar.AttendeeFilterGrid.Sort',
+    
     initComponent: function() {
         this.record = new Tine.Calendar.Model.Event({
             editGrant: true
         });
         
-        this.selModel = new Ext.grid.RowSelectionModel();
+        this.selModel = new Ext.grid.RowSelectionModel({singleSelect: true});
         this.selModel.on('beforerowselect', this.onBeforeRowSelect, this);
         
         Tine.Calendar.AttendeeFilterGrid.superclass.initComponent.call(this);
         
-        // apply  initial state
-        var explicitAttendee = Ext.state.Manager.get(this.stateId);
-        this.applyState(explicitAttendee);
-        
         this.store.on('add', this.onStoreAdd, this);
         this.store.on('remove', this.onStoreRemove, this);
         this.store.on('update', this.onStoreUpdate, this /*, {buffer: 1000}*/);
+        
+        this.ddText = this.app.i18n._('Sort Attendee');
+        
     },
     
     initColumns: function() {
@@ -63,6 +65,45 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         this.plugins.push(this.columns[0]);
     },
     
+    afterRender: function() {
+        Tine.Calendar.AttendeeFilterGrid.superclass.afterRender.apply(this, arguments);
+        this.dropZone = new Ext.ux.grid.GridDropZone(this, {
+            ddGroup: this.ddGroup,
+            isValidDropPoint: function(target, pt, dd, e, data) {
+                var addIdx = this.grid.store.getCount() -1;
+                return this.view.findRowIndex(target) != addIdx && data.rowIndex != addIdx;
+            },
+            onNodeDrop : function(target, dd, e, data){
+                var pt = this.getDropPoint(e, target, dd),
+                    targetRowIndex = this.view.findRowIndex(target),
+                    targetPos = pt == 'above' ? targetRowIndex : targetRowIndex + 1;
+                
+                if (this.isValidDropPoint(target, pt, dd, e, data)) {
+                    var store = this.grid.getStore();
+                    
+                    store.suspendEvents();
+                    
+                    Ext.each(data.selections, function(r) {
+                        var currentIdx = store.indexOf(r);
+                        if (currentIdx >= 0) {
+                            targetPos = targetPos > currentIdx ? targetPos -1 : targetPos;
+                            store.remove(r);
+                        }
+                        store.insert(targetPos, data.selections);
+                    }, this);
+                    
+                    store.each(function(r,idx) {r.set('sort', idx)});
+                    store.sort('sort', 'ASC');
+                    store.resumeEvents();
+                    
+                    this.grid.getView().refresh();
+                    this.grid.getView().updateSortIcon('sort', 'ASC');
+                    this.grid.fireEvent('sortchange', this.grid, this.grid.getState());
+                }
+            }
+        });
+    },
+    
     onBeforeRowSelect: function(sm, idx, keep, attendee) {
         if (! attendee.get('user_id')) {
             return false;
@@ -72,13 +113,13 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     onStoreAdd: function() {
         // don't save initial 'add attendee' record
         if (this.store.getCount() > 1) {
-            Ext.state.Manager.set(this.stateId, this.getState());
+            this.saveState();
             this.onStoreChange();
         }
     },
     
     onStoreRemove: function() {
-        Ext.state.Manager.set(this.stateId, this.getState());
+        this.saveState();
         this.onStoreChange();
     },
     
@@ -108,7 +149,10 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         } catch (e) {}
     },
     
-    applyState: function(explicitAttendee) {
+    applyState: function(state) {
+        this.stateful = false;
+        var explicitAttendee = (!state || Ext.isArray(state)) ? state : state.explicitAttendee;
+        
         var rs = [];
         Ext.each(explicitAttendee, function(attendeeData) {
             var attendee = new Tine.Calendar.Model.Attender(attendeeData, 'new-' + Ext.id());
@@ -118,18 +162,41 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.store.removeAll();
         this.store.add(rs);
+        
+        if(state && state.sort){
+            if (state.sort.field == 'sort') {
+                this.store.each(function(attendee) {
+                    var idx = state.sort.order.indexOf(attendee.get('user_type') + '-' + attendee.getUserId());
+                    attendee.data.sort = idx >= 0 ? idx : 1000;
+                }, this);
+            }
+            this.store.sort(state.sort.field, state.sort.direction);
+            this.getView().sortState = state.sort;
+        }
+        this.stateful = true;
     },
     
     getState: function() {
-        var explicitAttendee = [];
+        var explicitAttendee = [],
+            sort = this.store.getSortState(),
+            order = [];
         
         this.store.each(function(attendee) {
-            if (attendee.get('user_id') && attendee.explicitlyAdded) {
-                explicitAttendee.push(attendee.data)
+            if (attendee.get('user_id')){
+                order.push(attendee.get('user_type') + '-' + attendee.getUserId());
+                if (attendee.explicitlyAdded) {
+                    explicitAttendee.push(attendee.data);
+                }
             }
         }, this);
         
-        return explicitAttendee;
+        if (sort.field == 'sort') {
+            sort.order = order;
+        }
+        return {
+            explicitAttendee: explicitAttendee,
+            sort: sort
+        }
     },
     
     /**
@@ -187,10 +254,11 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value),
             selections = this.getSelectionModel().getSelections(),
             explicitAttendee = Ext.state.Manager.get(this.stateId),
-            activeEditor = this.activeEditor;
+            activeEditor = this.activeEditor,
+            state = Ext.state.Manager.get(this.stateId);
         
         this.store.suspendEvents();
-        this.applyState(explicitAttendee);
+        this.applyState(state);
         
         this.store.each(function(attendee) {
             attendee.set('checked', false);
@@ -199,6 +267,11 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         attendeeStore.each(function(attendee) {
             var currentAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.store, attendee);
             if (! currentAttendee) {
+                if (state && state.sort && state.sort.order) {
+                    var idx = state.sort.order.indexOf(attendee.get('user_type') + '-' + attendee.getUserId());
+                    attendee.data.sort = idx >= 0 ? idx : 1000;
+                }
+                
                 this.store.add(attendee);
                 attendee.set('checked', true);
             } else {
