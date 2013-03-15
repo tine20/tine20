@@ -865,16 +865,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.movingOrDeleting = false;
         
-        // only load grid if no record is selected (as this would break onRowSelection) and no other delete requests are running
-        if (this.getGrid().getSelectionModel().getCount() === 0 && this.noDeleteRequestInProgress()) {
-            Tine.log.debug('Loading grid data after delete.');
-            this.loadGridData({
-                removeStrategy: 'keepBuffered',
-                autoRefresh: true
-            });
-        } else {
-            this.pagingToolbar.refresh.enable();
-        }
+        Tine.log.debug('Tine.Felamimail.GridPanel::onAfterDelete() -> Loading grid data after delete.');
+        this.loadGridData({
+            removeStrategy: 'keepBuffered',
+            autoRefresh: true
+        });
     },
     
     /**
@@ -953,7 +948,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *       and the next one is selected automatically
      */
     onRowSelection: function(sm, rowIndex, record, retryCount) {
-        if (sm.getCount() > 0 && (! retryCount || retryCount < 5) && ! record.bodyIsFetched()) {
+        if (sm.getCount() == 1 && (! retryCount || retryCount < 5) && ! record.bodyIsFetched()) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Deferring onRowSelection');
             retryCount = (retryCount) ? retryCount++ : 1;
             return this.onRowSelection.defer(250, this, [sm, rowIndex, record, retryCount+1]);
@@ -964,6 +959,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug(record);
             
             record.addFlag('\\Seen');
+            record.mtime = new Date().getTime();
             Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
             this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
             

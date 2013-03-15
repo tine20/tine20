@@ -448,7 +448,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     * nagios monitoring for tine 2.0 async cronjob run
     *
     * @return integer
+    * 
     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+    * @see 0008038: monitoringCheckCron -> check if cron did run in the last hour
     */
     public function monitoringCheckCron()
     {
@@ -475,6 +477,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $result = 1;
                 } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
                     $message .= ': LAST JOB FAILED';
+                    $result = 1;
+                } else if (Tinebase_DateTime::now()->isLater($lastJob->start_time->addHour(1))) {
+                    $message .= ': NO JOB IN THE LAST HOUR';
                     $result = 1;
                 } else {
                     $message = 'CRON OK';

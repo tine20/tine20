@@ -19,6 +19,7 @@ Tine.Tinebase.data.Record = function(data, id) {
         this.id = ++Ext.data.Record.AUTO_ID;
     }
     this.data = data;
+    this.ctime = new Date().getTime();
 };
 
 /**
@@ -151,6 +152,24 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     toString: function() {
         return Ext.encode(this.data);
+    },
+    
+    /**
+     * returns true if given record obsoletes this one
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {Boolean}
+     */
+    isObsoletedBy: function(record) {
+        if (record.modelName !== this.modelName || record.getId() !== this.getId()) {
+            throw new Ext.Error('Records could not be compared');
+        }
+        
+        if (this.constructor.hasField('seq') && record.get('seq') != this.get('seq')) {
+            return record.get('seq') > this.get('seq');
+        }
+        
+        return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : true;
     }
 });
 
