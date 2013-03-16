@@ -76,7 +76,6 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         $this->_backend = new Calendar_Backend_Sql();
         
         $this->_personas = Zend_Registry::get('personas');
@@ -130,10 +129,11 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     
     /**
      * returns a simple event
-     *
+     * 
+     * @param bool $now
      * @return Calendar_Model_Event
      */
-    protected function _getEvent($_now=FALSE)
+    protected function _getEvent($now = FALSE)
     {
         $event = new Calendar_Model_Event(array(
             'summary'     => 'Wakeup',
@@ -151,7 +151,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_DELETE  => true,
         ));
         
-        if ($_now) {
+        if ($now) {
             $event->dtstart = Tinebase_DateTime::now();
             $event->dtend = Tinebase_DateTime::now()->addMinute(15);
         }
@@ -162,13 +162,12 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     /**
      * returns a simple event
      *
+     * @param bool $now use date of now
      * @return Calendar_Model_Event
-     * 
-     * @todo add options?
      */
-    protected function _getEventWithAlarm()
+    protected function _getEventWithAlarm($now = FALSE)
     {
-        $event = $this->_getEvent();
+        $event = $this->_getEvent($now);
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
             array(
                 'minutes_before'    => 0
