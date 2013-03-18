@@ -240,6 +240,14 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                             field.setValue(null);
                                             field.validate();
                                         }
+                                        if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
+                                            field.setValue(field.getValue().substr(7));
+                                            field.validate();
+                                        }
+                                        if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
+                                            field.setValue(field.getValue().substr(11));
+                                            field.validate();
+                                        }
                                     }
                                 }
                             }]]
