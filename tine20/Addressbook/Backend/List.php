@@ -68,6 +68,34 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     );
 
     /**
+     * the constructor
+     * 
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *  - useSubselectForCount
+     *  
+     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param array $_options (optional)
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function __construct($_dbAdapter = NULL, $_options = array())
+    {
+        parent::__construct($_dbAdapter, $_options);
+        
+        $this->_additionalColumns['emails'] = new Zend_Db_Expr('(' . 
+            $this->_db->select()
+                ->from($this->_tablePrefix . 'addressbook', array($this->_dbCommand->getAggregate('email')))
+                ->where($this->_db->quoteIdentifier('id') . ' IN ?', $this->_db->select()
+                    ->from(array('addressbook_list_members' => $this->_tablePrefix . 'addressbook_list_members'), array('contact_id'))
+                    ->where($this->_db->quoteIdentifier('addressbook_list_members.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'))
+            ) . 
+        ')');
+    }
+
+    /**
      * converts record into raw data for adapter
      *
      * @param  Tinebase_Record_Abstract $_record
@@ -84,13 +112,6 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         return $result;
     }
     
-    /**
-    * List of additional Columns to be selected
-    */
-    protected $_additionalColumns = array(
-         "emails" => "(SELECT GROUP_CONCAT(email SEPARATOR ';') FROM {prefix}addressbook WHERE id in (SELECT contact_id FROM {prefix}addressbook_list_members WHERE list_id = addressbook_lists.id))"
-    );
-
     /**
      * add new members to list
      * 
