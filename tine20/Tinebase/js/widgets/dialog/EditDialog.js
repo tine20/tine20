@@ -397,7 +397,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {}
      */
     isContainerSelectorDisabled: function() {
-        if(this.record) {
+        if (this.record) {
             var cp = this.recordClass.getMeta('containerProperty'),
                 container = this.record.data[cp],
                 grants = (container && container.hasOwnProperty('account_grants')) ? container.account_grants : null,
