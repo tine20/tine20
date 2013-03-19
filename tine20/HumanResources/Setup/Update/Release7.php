@@ -118,4 +118,25 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_employee', '10');
         $this->setApplicationVersion('HumanResources', '7.6');
     }
+    
+    /**
+     * update 7.6 -> 7.7
+     * 
+     * - change description field varchar 255 -> clob
+     * 
+     * @see https://forge.tine20.org/mantisbt/view.php?id=7994
+     */
+    public function update_6()
+    {
+        $field = '<field>
+                    <name>description</name>
+                    <type>clob</type>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_employee', $declaration);
+        $this->setTableVersion('humanresources_employee', '11');
+        $this->setApplicationVersion('HumanResources', '7.7');
+    }
+    
 }
