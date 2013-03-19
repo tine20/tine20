@@ -284,7 +284,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $pref = $coursesPrefs['results'][0];
         
         $this->assertEquals(Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER, $pref['name']);
-        $this->assertEquals(2, count($pref['options']));
+        $this->assertGreaterThanOrEqual(2, count($pref['options']));
     }
 
     /**

@@ -970,7 +970,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * perform the initial load of grid data
      */
     initialLoad: function() {
-        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName);
         var favoritesPanel  = this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' && this.hasFavoritesPanel 
             ? this.app.getMainScreen().getWestPanel().getFavoritesPanel() 
             : null;

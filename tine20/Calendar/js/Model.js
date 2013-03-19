@@ -502,7 +502,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     
     Ext.each(attendeeData, function(attender) {
         if (attender) {
-            var record = new Tine.Calendar.Model.Attender(attender, attender.id);
+            var record = new Tine.Calendar.Model.Attender(attender, attender.id && Ext.isString(attender.id) ? attender.id : Ext.id());
             attendeeStore.addSorted(record);
         }
     });

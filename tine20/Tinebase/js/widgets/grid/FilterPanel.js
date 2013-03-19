@@ -465,6 +465,15 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
     
     setValue: function(value) {
+        // save last filter ?
+        if (this.filterToolbarConfig.app.getRegistry().get('preferences').get('defaultpersistentfilter') == '_lastusedfilter_') {
+            var lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-lastusedfilter';
+            
+            if (Ext.encode(Ext.state.Manager.get(lastFilterStateName)) != Ext.encode(value)) {
+                Tine.log.debug('Tine.widgets.grid.FilterPanel::setValue save last used filter');
+                Ext.state.Manager.set(lastFilterStateName, value);
+            }
+        }
         
         // NOTE: value is always an array representing a filterGroup with condition AND (server limitation)!
         //       so we need to route "alternate criterias" (OR on root level) through this filterGroup for transport

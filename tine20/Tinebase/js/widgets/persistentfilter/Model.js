@@ -74,11 +74,20 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
  * @param       {String} appName
  * @return      {model.PersistentFilter} or null
  */
-Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = function(appName) {
+Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = function(appName, modelName) {
     var app = Tine.Tinebase.appMgr.get(appName),
         appPrefs = app.getRegistry().get('preferences'),
         defaultFavoriteId = appPrefs ? appPrefs.get('defaultpersistentfilter') : null;
    
+    if (defaultFavoriteId === '_lastusedfilter_') {
+        var filterData = Ext.state.Manager.get(appName + '-' + modelName + '-lastusedfilter');
+        
+        return filterData ? new Tine.widgets.persistentfilter.model.PersistentFilter({
+            'filters': filterData,
+            'name': '_lastusedfilter_'
+        }) : null;
+        
+    }
     return defaultFavoriteId ? Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId) : null
 };
 

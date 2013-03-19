@@ -36,6 +36,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
     
     /**
+     * name of the filter representing the last used filter
+     */
+    const LASTUSEDFILTER = '_lastusedfilter_';
+    
+    /**
      * default container options
      *
      * @staticvar string

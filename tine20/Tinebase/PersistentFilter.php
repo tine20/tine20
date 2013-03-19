@@ -132,6 +132,12 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
             foreach ($pfilters as $pfilter) {
                 $result[] = array($pfilter->getId(), $i18n->translate($pfilter->name));
             }
+            
+            $result[] = array(
+                Tinebase_Preference_Abstract::LASTUSEDFILTER,
+                //_('- The last filter I used -')
+                $i18n->translate('- The last filter I used -')
+            );
             return $result;
         } else {
             $filter = $pfilters->filter('name', $_returnDefaultId)->getFirstRecord();

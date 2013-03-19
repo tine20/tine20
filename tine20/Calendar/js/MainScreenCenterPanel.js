@@ -303,12 +303,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onRender: function(ct, position) {
         Tine.Calendar.MainScreenCenterPanel.superclass.onRender.apply(this, arguments);
         
-        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName),
+        var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName, this.recordClass.prototype.modelName),
             favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
         
         this.loadMask = new Ext.LoadMask(this.body, {msg: this.loadMaskText});
         
-        favoritesPanel.selectFilter(defaultFavorite);
+        if (defaultFavorite) {
+            favoritesPanel.selectFilter(defaultFavorite);
+        } else {
+            this.refresh();
+        }
     },
     
     getViewParts: function (view) {
