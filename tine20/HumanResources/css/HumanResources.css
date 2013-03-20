@@ -19,6 +19,19 @@
     background-image:url(../../images/oxygen/32x32/apps/system-users.png) !important;
 }
 
+.HumanResourcesAccount {
+    background-image:url(../../images/oxygen/16x16/apps/ksudoku.png) !important;
+}
+
+.x-btn-medium .HumanResourcesAccount {
+    background-image:url(../../images/oxygen/22x22/apps/ksudoku.png) !important;
+}
+
+.x-btn-large .HumanResourcesAccount {
+    background-image:url(../../images/oxygen/32x32/apps/ksudoku.png) !important;
+}
+
+
 .applyContactData {
         height:14px!important;
         width: 14px!important;

@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
@@ -157,5 +157,233 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setTableVersion('humanresources_contract', '2');
         $this->setApplicationVersion('HumanResources', '7.7');
+    }
+    
+    /**
+     * update 7.7 -> 7.8
+     *
+     * - add account module with the corresponding tables
+     */
+    public function update_7()
+    {
+        $tableDeclaration = new Setup_Backend_Schema_Table_Xml('
+            <table>
+            <name>humanresources_account</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>employee_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>year</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <length>4</length>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account::employee_id--employee::id</name>
+                    <field>
+                        <name>employee_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>humanresources_employee</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        ');
+        $this->_backend->createTable($tableDeclaration, 'HumanResources');
+        $tableDeclaration = new Setup_Backend_Schema_Table_Xml('
+            <table>
+                <name>humanresources_extra_freetime</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                        <type>text</type>
+                        <length>40</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>days</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <length>4</length>
+                    </field>
+                    <field>
+                        <name>type</name>
+                        <type>text</type>
+                        <length>64</length>
+                        <default>vacation</default>
+                    </field>
+                    <field>
+                        <name>description</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
+                    </field>
+                    <field>
+                        <name>created_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                    </field> 
+                    <field>
+                        <name>last_modified_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>last_modified_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>is_deleted</name>
+                        <type>boolean</type>
+                        <default>false</default>
+                    </field>
+                    <field>
+                        <name>deleted_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>seq</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <default>0</default>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>exfreetime::account_id--account::id</name>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>humanresources_account</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>
+        ');
+        
+        $this->_backend->createTable($tableDeclaration, 'HumanResources');
+        
+        // extra free time type
+        $freeTimeTypeConfig = array(
+            'name'    => HumanResources_Config::EXTRA_FREETIME_TYPE,
+            'records' => array(
+                array('id' => 'PAYED',     'value' => 'Payed',     'icon' => NULL, 'system' => TRUE),  //_('Payed')
+                array('id' => 'NOT_PAYED', 'value' => 'Not payed', 'icon' => NULL, 'system' => TRUE),  //_('Not payed')
+            ),
+        );
+        
+        // create type config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId();
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => HumanResources_Config::EXTRA_FREETIME_TYPE,
+            'value'             => json_encode($freeTimeTypeConfig),
+        )));
+        
+        // remove unused stati
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array('field' => 'name', 'operator' => 'equals', 'value' => HumanResources_Config::FREETIME_TYPE)
+        ));
+        $record = $cb->search($filter)->getFirstRecord();
+        $result = json_decode($record->value);
+        $newResult = array('name' => HumanResources_Config::FREETIME_TYPE);
+        foreach($result->records as $field) {
+            if ($field->id == 'VACATION_EXTRA' || $field->id == 'VACATION_REMAINING') {
+                continue;
+            }
+            $newResult['records'][] = $field;
+        }
+        $record->value = json_encode($newResult);
+        $cb->update($record);
+        
+        $this->setApplicationVersion('HumanResources', '7.8');
     }
 }

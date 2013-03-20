@@ -352,6 +352,13 @@ Tine.Tinebase.ApplicationStarter = {
                         
                     }, this);
                     
+                    // iterate virtual record fields
+                    if (modelConfig.virtualFields && modelConfig.virtualFields.length) {
+                        Ext.each(modelConfig.virtualFields, function(field) {
+                            modelArray.push(this.getField(field, field.key));
+                        }, this);
+                    }
+                    
                     // collect the filterModel
                     Ext.iterate(modelConfig.filterModel, function(key, filter) {
                         var f = this.getFilter(key, filter, modelConfig);
@@ -466,7 +473,7 @@ Tine.Tinebase.ApplicationStarter = {
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {
                         Tine[appName][gridPanelName] = Ext.extend(Tine.widgets.grid.GridPanel, gpConfig);
                     } else {
-                         Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
+                        Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
                     }
                 }, this);
             }

@@ -109,9 +109,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 
                 if ($foreignRecords->count()) {
                     foreach ($_records as $record) {
-                        foreach($fields as $field) {
+                        foreach ($fields as $field) {
                             $idx = $foreignRecords->getIndexById($record->{$field});
-                            if(isset($idx) && $idx !== FALSE) {
+                            if (isset($idx) && $idx !== FALSE) {
                                 $record->{$field} = $foreignRecords[$idx];
                             }
                         }
@@ -196,8 +196,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $filterArray = $config['addFilters'];
             }
             
-            $filterArray[] = array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds);
             $filter = new $filterName($filterArray);
+            $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
             $paging = NULL;
             if (array_key_exists('paging', $config) && is_array($config['paging'])) {

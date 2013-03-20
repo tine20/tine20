@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -35,19 +35,22 @@ class HumanResources_Model_EmployeeEmployedFilter extends Tinebase_Model_Filter_
     {
         $now = new Tinebase_DateTime();
         $now->setHour(0)->setMinute(0)->setSecond(0);
+        $db = Tinebase_Core::getDb();
         
-        // find any uncleared
-        $filter = new HumanResources_Model_EmployeeFilter(array(
-            array('field' => 'start_date', 'operator' => 'before', 'value' => $now),
-            array('field' => 'end_date',   'operator' => 'after',  'value' => $now),
-        ), 'AND');
-
-        if($this->_value == 1) {
+        if ($this->_value == 1) {
             $_select->where(
-                '(employment_end >= "' . $now . '" OR (employment_end IS NULL)) AND ( employment_begin <= "' . $now . '" OR ( employment_begin IS NULL ))'
+                $db->quoteInto('(' . $db->quoteIdentifier('employment_end') . ' >= ? ', $now, 'datetime') . ' OR ' .  $db->quoteIdentifier('employment_end') . ' IS NULL )'
+            );
+            $_select->where(
+                $db->quoteInto('( ' . $db->quoteIdentifier('employment_begin') .' <= ? ', $now, 'datetime') .' OR ( ' . $db->quoteIdentifier('employment_begin') .' IS NULL ))'
             );
         } else {
-            $_select->where('( employment_end < "' . $now . '" OR employment_end IS NULL ) AND ( employment_begin > "' . $now . '" OR employment_begin IS NULL ) ');
+            $_select->where(
+                $db->quoteInto($db->quoteIdentifier('employment_end') .' < ? ', $now, 'datetime')
+            );
+            $_select->orWhere(
+                $db->quoteInto($db->quoteIdentifier('employment_begin') .' > ? ', $now, 'datetime')
+            );
         }
     }
 }

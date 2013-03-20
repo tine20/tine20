@@ -218,7 +218,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         // doing this manually, this won't be the last assertion, and more assertions are needed
         // $this->setExpectedException('Tinebase_Exception_Data');
         
-        $exception = new Exception('no exception was thrown');
+        $exception = new Exception('no exception has been thrown');
         
         try {
             $this->_json->saveEmployee($employee);
@@ -260,5 +260,80 @@ class HumanResources_JsonTests extends HumanResources_TestCase
          // test duplicate exception
          $this->setExpectedException('Tinebase_Exception_Duplicate');
          $this->_json->saveWorkingTime($recordData);
+    }
+
+    
+    /**
+     * tests account summary
+     */
+    public function testAccount()
+    {
+        $employmentBegin  = new Tinebase_DateTime('2012-12-15');
+        $employmentChange = new Tinebase_DateTime('2014-01-01');
+        $employmentEnd    = new Tinebase_DateTime('2014-06-30');
+    
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $contractBackend = new HumanResources_Backend_Contract();
+    
+        $employee = $this->_getEmployee('unittest');
+        $employee->employment_begin = $employmentBegin;
+        $employee->employment_end = $employmentEnd;
+        
+        $contract1 = $this->_getContract();
+        $contract1->start_date = $employmentBegin;
+        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract1->vacation_days = 25;
+        
+        $contract2 = $this->_getContract();
+        $contract2->start_date = $employmentChange;
+        $contract2->end_date = $employmentEnd;
+        $contract2->workingtime_json = '{"days": [4,4,4,4,4,4,4]}';
+    
+        $employee->contracts = array($contract1->toArray(), $contract2->toArray());
+    
+        $employee = $employeeController->create($employee);
+    
+        $accountController = HumanResources_Controller_Account::getInstance();
+        $accountController->createMissingAccounts(2013, $employee);
+        $accountController->createMissingAccounts(2014, $employee);
+        
+        $filter = array(array('field' => "employee_id", 'operator' => "AND", 'value' => array(
+            array('field' => ':id', 'operator' => 'equals', 'value' => $employee->getId())
+        )));
+        
+        // create feast days
+        $feastDays2013 = array(
+            '2013-01-01', '2013-03-29', '2013-04-01', '2013-05-01', '2013-05-09',
+            '2013-05-20', '2013-10-03', '2013-12-25', '2013-12-26', '2013-12-31'
+        );
+        
+        foreach($feastDays2013 as $day) {
+            $date = new Tinebase_DateTime($day . ' 12:00:00');
+            $this->_createFeastDay($date);
+        }
+        
+        $json = new HumanResources_Frontend_Json();
+        
+        $result = $json->searchAccounts($filter, array());
+        $this->assertEquals(2, $result['totalcount']);
+        
+        $accountId2013 = $result['results'][0]['year'] == 2013 ? $result['results'][0]['id'] : $result['results'][1]['id'];
+        $account2013 = $json->getAccount($accountId2013);
+        
+        $this->assertEquals(25, $account2013['possible_vacation_days']);
+        $this->assertEquals(226, $account2013['working_days']);
+        
+        // add 5 extra free days to the account
+        $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013));
+        $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013));
+        
+        $eftController = HumanResources_Controller_ExtraFreeTime::getInstance();
+        $eftController->create($eft1);
+        $eftController->create($eft2);
+        
+        $account2013 = $json->getAccount($accountId2013);
+        $this->assertEquals(30, $account2013['possible_vacation_days']);
+        $this->assertEquals(221, $account2013['working_days']);
     }
 }

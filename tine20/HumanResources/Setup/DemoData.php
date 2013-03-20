@@ -188,6 +188,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $controller->update($employee);
             $i++;
         }
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts();
     }
     
     /**

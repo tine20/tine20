@@ -41,6 +41,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     showPrivateInformation: null,
     
+    type: null,
+    
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
@@ -54,6 +56,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.app = Tine.Tinebase.appMgr.get('HumanResources')
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.initDatePicker();
+        
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -84,15 +87,13 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
         
-        var type = this.fixedFields.get('type') == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
+        var typeString = this.type == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
         
         if (this.record.id) {
-            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), type, this.record.get('employee_id').n_fn));
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
         } else {
-            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), type, this.record.get('employee_id').n_fn));
+            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
         }
-        
-        this.initStatusBox();
     },
 
     /**
@@ -104,8 +105,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('freedays', this.datePicker.getData());
         this.record.set('type', this.fixedFields.get('type').toLowerCase());
         this.record.set('firstday_date', new Date(this.datePicker.store.getFirstDay().get('date')));
-        var fieldName = (this.record.get('type') == 'SICKNESS') ? 'sicknessStatus' : 'vacationStatus';
-        this.record.set('status', this.getForm().findField(fieldName).getValue());
     },
     
     /**
@@ -141,6 +140,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        this.type = this.fixedFields.get('type');
+        
         this.employeePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
             fieldLabel: this.app.i18n._('Employee'),
             name: 'employee_id',
@@ -151,7 +152,23 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
         }, this);
         
-        var that = this;
+        var statusBoxDefaults = {
+            fieldLabel: this.app.i18n._('Status'),
+            xtype: 'widget-keyfieldcombo',
+            app: 'HumanResources',
+            name: 'status',
+            columnWidth: .5
+        };
+        
+        this.statusBox = this.type == 'SICKNESS' ? 
+                Ext.apply({
+                    keyFieldName: 'sicknessStatus',
+                    value: 'EXCUSED'
+                }, statusBoxDefaults)
+            :   Ext.apply({
+                    keyFieldName: 'vacationStatus',
+                    value: 'REQUESTED'
+                }, statusBoxDefaults);
         
         return {
             xtype: 'tabpanel',
@@ -193,35 +210,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     app: 'HumanResources',
                                     keyFieldName: 'freetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
-                                    value: this.fixedFields.get('type').toLowerCase,
+                                    value: this.type.toLowerCase,
                                     name: 'type',
                                     columnWidth: .5
-//                                    ref: '../../../../../../../typePicker',
-//                                    listeners: {
-//                                        scope: this,
-//                                        select: this.updateStatusBox.createDelegate(this)
-//                                    }
-                                }, {
-                                    xtype: 'panel',
-                                    layout: 'card',
-                                    activeItem: 1,
-                                    ref: '../../../../../../../statusBoxWrap',
-                                    columnWidth: .5,
-                                    fieldLabel: this.app.i18n._('Status'),
-                                    items: [{
-                                        xtype: 'widget-keyfieldcombo',
-                                        app: 'HumanResources',
-                                        keyFieldName: 'sicknessStatus',
-                                        value: 'EXCUSED',
-                                        name: 'sicknessStatus'
-                                    }, {
-                                        xtype: 'widget-keyfieldcombo',
-                                        app: 'HumanResources',
-                                        keyFieldName: 'vacationStatus',
-                                        value: 'REQUESTED',
-                                        name: 'vacationStatus'
-                                    }]
-                                }], [{
+                                }, this.statusBox],
+                                [{
                                         xtype: 'panel',
                                         cls: 'HumanResources x-form-item',
                                         width: 220,
@@ -232,16 +225,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                                     }]
                                 ]
-                        } /*,{
-                            xtype: 'panel',
-                            cls: 'HumanResources x-form-item',
-                            width: 220,
-                            style: {
-                                'float': 'right',
-                                margin: '0 5px 10px 0'
-                            },
-                            items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
-                        }*/]
+                        }]
                     }]
                 }, {
                     // activities and tags
@@ -296,26 +280,5 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 }) 
             ]
         };
-    },
-    
-    /**
-     * updates the statusbox wrap
-     * 
-     * @param {Tine.Tinebase.widgets.keyfield.ComboBox} the calling combo
-     * @param {Tine.Tinebase.data.Record} the selected record
-     * @param {Integer} the index of the selected value of the typecombo store
-     */
-    updateStatusBox: function(typeCombo, keyfieldRecord, index) {
-        this.statusBoxWrap.layout.setActiveItem(index);
-    },
-    
-    /**
-     * initializes the status box
-     */
-    initStatusBox: function() {
-        var isSickness = this.fixedFields.get('type') == 'SICKNESS';
-        this.updateStatusBox(null, null, isSickness ? 0 : 1);
-        var fieldName = isSickness ? 'sicknessStatus' : 'vacationStatus';
-        this.getForm().findField(fieldName).setValue(this.record.get('status'));
     }
 });

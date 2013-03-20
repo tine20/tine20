@@ -9,13 +9,13 @@
 Ext.ns('Tine.HumanResources');
 
 /**
- * @class     Tine.HumanResources.ContractDetailsPanel
+ * @class     Tine.HumanResources.ExtraFreeTimeDetailsPanel
  * @namespace HumanResources
  * @extends   Tine.widgets.grid.DetailsPanel
  * @author    Alexander Stintzing <a.stintzing@metaways.de>
  */
 
-Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
+Tine.HumanResources.ExtraFreeTimeDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     app: null,
     
@@ -32,7 +32,18 @@ Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
     defaultHeight: 105,
     
     initComponent: function() {
-        Tine.HumanResources.ContractDetailsPanel.superclass.initComponent.call(this);
+        Tine.HumanResources.ExtraFreeTimeDetailsPanel.superclass.initComponent.call(this);
+        
+    },
+    
+    /**
+     * will be called in Edit Dialog Mode
+     */
+    fillBottomToolbar: function() {
+        var tbar = this.getBottomToolbar();
+        tbar.addButton(new Ext.Button(this.action_editInNewWindow));
+        tbar.addButton(new Ext.Button(this.action_addInNewWindow));
+        tbar.addButton(new Ext.Button(this.action_deleteRecord));
     },
     
     /**
@@ -50,14 +61,13 @@ Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         xtype: 'ux.displayfield',
                         name: fieldConfig.key,
                         fieldLabel: fieldConfig.hasOwnProperty('useGlobalTranslation') ? _(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
-                        renderer: Tine.widgets.grid.RendererManager.get(mc.appName, mc.modelName, fieldConfig.key),
-                        htmlEncode: false
+                        renderer: Tine.widgets.grid.RendererManager.get(mc.appName, mc.modelName, fieldConfig.key)
                     });
                 }
             }
             
             this.singleRecordPanel = new Ext.ux.display.DisplayPanel(
-                this.wrapPanel(items, 105)
+                this.wrapPanel(items, 100)
             );
         }
         return this.singleRecordPanel;

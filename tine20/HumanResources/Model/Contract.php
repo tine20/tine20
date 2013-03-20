@@ -90,4 +90,40 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             )
         )
     );
+    
+    /**
+     * resolves workingtime json
+     * 
+     * @return mixed
+     */
+    public function getWorkingTimeJson()
+    {
+        return json_decode($this->__get('workingtime_json'));
+    }
+    
+    /**
+     * sets workingtime_json as json
+     * 
+     * @param mixed $workingTimeJson
+     */
+    public function setWorkingTimeJson($workingTimeJson)
+    {
+        $this->workingtime_json = json_encode($workingTimeJson);
+    }
+    
+    /**
+     * returns the weekly working hours of this record as an integer
+     * 
+     * @return integer
+     */
+    public function getWeeklyWorkingHours()
+    {
+        $json = $this->getWorkingTimeJson();
+        $whours = 0;
+        foreach($json->days as $index => $hours) {
+            $whours += $hours;
+        }
+        
+        return $whours;
+    }
 }

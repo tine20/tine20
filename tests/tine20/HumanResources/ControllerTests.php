@@ -86,6 +86,59 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
     }
     
     /**
+     * some contract tests (more in jsontests)
+     */
+    public function testContract()
+    {
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $contract = $this->_getContract();
+        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        
+        // create feast days
+        $feastDays2013 = array(
+            '2013-01-01', '2013-03-29', '2013-04-01', '2013-05-01', '2013-05-09',
+            '2013-05-20', '2013-10-03', '2013-12-25', '2013-12-26', '2013-12-31'
+        );
+        
+        $feastCalendar = $this->_getFeastCalendar();
+        $contract->feast_calendar_id = $feastCalendar->getId();
+        
+        foreach($feastDays2013 as $day) {
+            $date = new Tinebase_DateTime($day . ' 12:00:00');
+            $this->_createFeastDay($date);
+        }
+        
+        // test "calculateVacationDays"
+        
+        $start  = new Tinebase_DateTime('2013-01-01');
+        $stop   = new Tinebase_DateTime('2013-12-31');
+        
+        $contract->start_date = $start;
+        $contract->end_date   = $stop;
+        
+        $this->assertEquals(30, $contractController->calculateVacationDays($contract, $start, $stop));
+
+        $newStartDate = new Tinebase_DateTime('2013-07-01');
+        $contract->start_date = $newStartDate;
+        
+        $this->assertEquals(15, $contractController->calculateVacationDays($contract, $start, $stop));
+        
+        // test "getDatesToWorkOn"
+        $contract->start_date = $start;
+        
+        // 2013 has 365 days, 52 Saturdays and 52 Sundays, all of the 10 feast days are at working days (a good year for an employee!)
+        // so we expect 365-52-52-10 = 251 days
+        $workingDates = $contractController->getDatesToWorkOn($contract, $start, $stop);
+        $this->assertEquals(251, count($workingDates['results']));
+        
+        // test "getFeastDays"
+        $feastDays = $contractController->getFeastDays($contract, $start, $stop);
+        
+        // we expect 10 here
+        $this->assertEquals(10, count($feastDays));
+    }
+    
+    /**
      * tests if a special property exists in the record set
      */
     public function testRecordSet()
@@ -101,12 +154,25 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
      */
     public function testFilters()
     {
+        
+        // prepare dates
+        $today = new Tinebase_DateTime();
+        $oneMonthAgo = clone $today;
+        $oneMonthAgo->subMonth(1);
+        $oneMonthAhead = clone $today;
+        $oneMonthAhead->addMonth(1);
+        $twoMonthsAgo = clone $oneMonthAgo;
+        $twoMonthsAgo->subMonth(1);
+        
         $employeeController = HumanResources_Controller_Employee::getInstance();
         
         $employee1 = $this->_getEmployee('pwulf');
+        $employee1->employment_begin = $oneMonthAgo;
+        $employee1->employment_end = $oneMonthAhead;
         $employee1 = $employeeController->create($employee1);
         
         $employee2 = $this->_getEmployee('rwright');
+        $employee2->employment_begin = $oneMonthAgo;
         $employee2 = $employeeController->create($employee2);
         
         $filter = new HumanResources_Model_EmployeeFilter(array(
@@ -116,5 +182,45 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         
         $this->assertEquals(1, $result->count());
         $this->assertEquals('Paul', $result->getFirstRecord()->n_given);
+        
+        // test employed filter
+        
+        // employee3 is not yet employed
+        $employee3 = $this->_getEmployee('jmcblack');
+        $employee3->employment_begin = $oneMonthAhead;
+        $employee3 = $employeeController->create($employee3);
+        
+        // employee4 has been employed
+        $employee4 = $this->_getEmployee('jsmith');
+        $employee4->employment_begin = $twoMonthsAgo;
+        $employee4->employment_end = $oneMonthAgo;
+        $employee4 = $employeeController->create($employee4);
+        
+        $filter = new HumanResources_Model_EmployeeFilter(array(
+            array('field' => 'is_employed', 'operator' => 'equals', 'value' => TRUE)
+        ));
+        $result = $employeeController->search($filter);
+        $msg = 'rwright and pwulf should have been found';
+        $this->assertEquals(2, $result->count(), $msg);
+        
+        $names = $result->n_fn;
+        
+        // just rwright and pwulf should have been found
+        $this->assertContains('Roberta Wright', $names, $msg);
+        $this->assertContains('Paul Wulf', $names, $msg);
+        
+        $filter = new HumanResources_Model_EmployeeFilter(array(
+            array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)
+        ));
+        $result = $employeeController->search($filter);
+        
+        $msg = 'jsmith and jmcblack should have been found';
+        $this->assertEquals(2, $result->count(), $msg);
+        
+        $names = $result->n_fn;
+        
+        // just jsmith and jmcblack should have been found
+        $this->assertContains('John Smith', $names, $msg);
+        $this->assertContains('James McBlack', $names, $msg);
     }
 }

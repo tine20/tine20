@@ -310,6 +310,14 @@ class Tinebase_ModelConfiguration {
     protected $_recordFields  = NULL;
 
     /**
+     * holds virtual field definitions used for non-persistent fields getting calculated on each call of the record
+     * no backend property will be build, no filters etc. will exist. they must be filled in frontend json
+     * 
+     * @var array
+     */
+    protected $_virtualFields = NULL;
+    
+    /**
      * maps fieldgroup keys to their names
      * Add translation information in comments like: // _('Banking Information')
      * 
@@ -489,7 +497,7 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'recordName', 'recordsName', 'appName', 'modelName', 'createModule'
+        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields'
     );
 
     /**
@@ -530,7 +538,7 @@ class Tinebase_ModelConfiguration {
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
         'float'    => 'Tinebase_Model_Filter_Int',
-        'record'   => 'Tinebase_Model_Filter_Id',
+        'record'   => 'Tinebase_Model_Filter_ForeignId',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
         'keyfield'  => 'Tinebase_Model_Filter_Text',
@@ -654,6 +662,13 @@ class Tinebase_ModelConfiguration {
                 $this->_useGroups = TRUE;
             }
 
+            if ($fieldDef['type'] == 'virtual') {
+                $fieldDef['type'] = $fieldDef['config']['type'];
+                unset($fieldDef['config']['type']);
+                $this->_virtualFields[] = $fieldDef;
+                continue;
+            }
+            
             // set default value
             // TODO: implement complex default values
             if (array_key_exists('default', $fieldDef)) {
