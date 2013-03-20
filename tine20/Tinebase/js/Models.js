@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Tinebase.Model');
 
@@ -14,14 +14,13 @@ Ext.ns('Tine.Tinebase.Model');
  */
 
 Tine.Tinebase.Model.modlogFields = [
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
-    { name: 'created_by',                                                              isMetaField: true },
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
-    { name: 'last_modified_by',                                                        isMetaField: true },
-    { name: 'is_deleted',         type: 'boolean',                                     isMetaField: true },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, isMetaField: true },
-    { name: 'deleted_by',                                                              isMetaField: true },
-    { name: 'seq',                                                                     isMetaField: true }
+    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
+    { name: 'created_by',                                                              omitDuplicateResolving: true },
+    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
+    { name: 'last_modified_by',                                                        omitDuplicateResolving: true },
+    { name: 'is_deleted',         type: 'boolean',                                     omitDuplicateResolving: true },
+    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
+    { name: 'deleted_by',                                                              omitDuplicateResolving: true }
 ];
 
 /**
@@ -29,7 +28,7 @@ Tine.Tinebase.Model.modlogFields = [
  * generic Record fields
  */
 Tine.Tinebase.Model.genericFields = Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'container_id', header: 'Container',                                       isMetaField: false}
+    { name: 'container_id', header: 'Container',                                       omitDuplicateResolving: false}
 ]);
     
 /**

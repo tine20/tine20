@@ -1,7 +1,7 @@
 {
   "projectName": "Tine 2.0 - Human Resources",
   "deployDir": "HumanResources",
-  "licenseText": "Tine 2.0 - HumanResources \nCopyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)http://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "licenseText": "Tine 2.0 - HumanResources \nCopyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)http://www.gnu.org/licenses/agpl.html AGPL Version 3",
   "resources": [
     
   ],
@@ -11,6 +11,10 @@
       "file": "js/HumanResources-FAT.js",
       "isDebug": true,
       "fileIncludes": [
+        {
+          "text": "EmployeeGridPanel.js",
+          "path": "js/"
+        },
         {
           "text": "Models.js",
           "path": "js/"
@@ -24,27 +28,11 @@
           "path": "js/"
         },
         {
-          "text": "ContractRecordPicker.js",
-          "path": "js/"
-        },
-        {
-          "text": "EmployeeGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "CostCenterGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "ContractGridPanel.js",
+          "text": "ContractEditDialog.js",
           "path": "js/"
         },
         {
           "text": "EmployeeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "WorkingTimeEditDialog.js",
           "path": "js/"
         },
         {
@@ -60,6 +48,18 @@
           "path": "js/"
         },
         {
+          "text": "ContractDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CostCenterGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "FreeTimeEmployeeFilter.js",
           "path": "js/"
         },
@@ -67,6 +67,7 @@
           "text": "FreeTimeGridPanel.js",
           "path": "js/"
         },
+        
         {
           "text": "AdminPanel.js",
           "path": "js/"

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -34,6 +34,7 @@ class Tinebase_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
+        $suite->addTestSuite('Tinebase_ModelConfigurationTest');
         $suite->addTestSuite('Tinebase_DateTimeTest');
         $suite->addTestSuite('Tinebase_Record_RecordTest');
         $suite->addTestSuite('Tinebase_Record_RecordSetTest');

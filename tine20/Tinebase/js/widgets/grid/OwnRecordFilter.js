@@ -16,7 +16,6 @@ Tine.widgets.grid.OwnRecordFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFi
         this.label = this.ftb.generateTitle();
         this.field = this.ownRecordClass.getMeta('idProperty');
         this.defaultOperator = 'definedBy';
-        
         this.foreignRecordClass = this.ownRecordClass;
         
         Tine.widgets.grid.OwnRecordFilter.superclass.initComponent.call(this);

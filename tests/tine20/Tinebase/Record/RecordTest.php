@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -337,43 +337,5 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         
         $recordToTest->inarray = 'value1';
         $this->assertTrue($recordToTest->isValid());
-    }
-    
-    /**
-     * test auto modeling of record
-     */
-    public function testAutoRecord()
-    {
-        $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
-        $pref = new Tinebase_Model_Preference(array(
-            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type' => Tinebase_Model_Preference::TYPE_USER,
-            'name' => 'autotest',
-            'application_id' => $addressbook->getId(),
-            'value' => 'BLABLUB'
-        ));
-        // must be null
-        $this->assertNull($pref::getResolveForeignIdFields());
-        
-        $date = new Tinebase_DateTime();
-        $date->setDate(2010, 11, 12);
-        $date->setTime(0,0);
-        
-        $auto = new Tinebase_Record_AutoRecord();
-        $auto->text = 'Hello World';
-        $auto->date = $date;
-        $crtime = clone $date;
-        $crtime->addYear(2);
-        $auto->creation_time = $crtime; 
-        
-        $this->assertEquals(15, count($auto->getFields()));
-        
-        $autoArray = $auto->toArray();
-        
-        $this->assertEquals('2010-11-12 00:00:00', $autoArray['date']);
-        $this->assertEquals('2012-11-12 00:00:00', $autoArray['creation_time']);
-        
-        // must still be null
-        $this->assertNull($pref::getResolveForeignIdFields());
     }
 }

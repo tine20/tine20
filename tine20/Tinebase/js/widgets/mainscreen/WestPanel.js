@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.mainscreen');
 
@@ -98,9 +98,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         
         if (this.hasContainerTreePanel === null) {
             this.hasContainerTreePanel = true;
-            if(this.contentTypes) {
+            if (this.contentTypes) {
                 Ext.each(this.contentTypes, function(ct) {
-                    if (((ct.hasOwnProperty('model') && ct.model == this.contentType) || (ct.hasOwnProperty('meta') && ct.meta.modelName == this.contentType)) && (ct.singularContainerMode)) {
+                    if ((ct.hasOwnProperty('modelName') && ct.modelName == this.contentType) && (ct.singularContainerMode)) {
                         this.hasContainerTreePanel = false;
                         return false;
                     }
@@ -110,7 +110,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         
         this.items = this.getPortalColumn();
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
-    },    
+    },
     
     /**
      * called after rendering process
@@ -269,7 +269,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.widgets.grid.FilterPlugin}
      */
     getFilterPlugin: function(contentType) {
-        if(this.hasContainerTreePanel) {
+        if (this.hasContainerTreePanel) {
             return this.getContainerTreePanel().getFilterPlugin();
         } else {
             return new Tine.widgets.grid.FilterPlugin({

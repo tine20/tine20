@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -29,6 +29,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      */
     protected $_json = array();
 
+    protected $_lastEmployeeNumber = 0;
+    
     /**
      * test department
      *
@@ -79,9 +81,10 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getAccount($loginName = NULL)
     {
-        if($loginName) {
+        if ($loginName) {
             return Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
         }
+        
         return Tinebase_Core::getUser();
     }
 
@@ -98,11 +101,24 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 
     /**
      * returns the default feast calendar
+     * 
+     * @param boolean $anotherone if another than the default one should be returned
      * @return Tinebase_Model_Container
      */
-    protected function _getFeastCalendar()
+    protected function _getFeastCalendar($anotherone = false)
     {
-        if(!$this->_feast_calendar) {
+        if ($anotherone) {
+            return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                'name'           => Tinebase_Record_Abstract::generateUID(),
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'       => Tinebase_Core::getUser(),
+                'backend'        => 'SQL',
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'color'          => '#00FF00'
+            ), true));
+        }
+        
+        if(! $this->_feast_calendar) {
             $this->_feast_calendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'           => 'Feast Calendar',
                 'type'           => Tinebase_Model_Container::TYPE_SHARED,
@@ -120,18 +136,24 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      * returns the contact of the current user
      * @return Addressbook_Model_Contact
      */
-    protected function _getContact()
+    protected function _getContact($loginName = NULL)
     {
-        return Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        if ($loginName) {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+        } else {
+            $user = Tinebase_Core::getUser();
+        }
+        
+        return Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
     }
 
     /**
-     * get cost center
+     * get sales cost center
      * 
      * @param string
      * @return Sales_Model_CostCenter
      */
-    protected function _getCostCenter($number = NULL)
+    protected function _getSalesCostCenter($number = NULL)
     {
         if ($number !== NULL) {
             $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
@@ -139,6 +161,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
                 'operator' => 'equals',
                 'value'    => $number,
             ))))->getFirstRecord();
+            
             if ($c) {
                 return $c;
             }
@@ -149,12 +172,27 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         ));
         
         $c = Sales_Controller_CostCenter::getInstance()->create($c);
-        $startDate = new Tinebase_DateTime('2012-12-12');
-        $hrc = array('cost_center_id' => $c->getId(), 'start_date' => $startDate);
         
-        return $hrc;
+        return $c;
     }
 
+    /**
+     * get hr cost center 
+     * @param Tinebase_DateTime $startDate
+     */
+    protected function _getCostCenter($startDate = NULL)
+    {
+        if (! $startDate) {
+            $startDate = new Tinebase_DateTime();
+        }
+        
+        $scs = $this->_getSalesCostCenter();
+        return new HumanResources_Model_CostCenter(array(
+            'start_date' => $startDate->toString(), 
+            'cost_center_id' => $scs->getId()
+        ));
+    }
+    
     /**
      * returns a new contract
      * return HumanResources_Model_Contract
@@ -170,7 +208,6 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             'employee_id' => null,
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_getFeastCalendar(),
-            'workingtime_id' => $this->_getWorkingTime()
         ), true);
 
         return $c;
@@ -183,17 +220,18 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     protected function _getEmployee($loginName = NULL) 
     {
         $a = $this->_getAccount($loginName);
-        $c = $this->_getContact();
+        $c = $this->_getContact($loginName);
 
-        $e = new HumanResources_Model_Employee(
-            array(
-                'number' => 1,
-                'n_fn' => $c->n_fn,
-                'account_id' => $a->getId(),
-                'costcenters' => array($this->_getCostCenter())
-            )
+        $this->_lastEmployeeNumber++;
+        
+        $ea = array(
+            'number'     => $this->_lastEmployeeNumber,
+            'n_fn'       => $c->n_fn,
+            'n_given'    => $c->n_given,
+            'n_family'   => $c->n_family,
+            'account_id' => $a->getId()
         );
 
-        return $e;
+        return new HumanResources_Model_Employee($ea);
     }
 }

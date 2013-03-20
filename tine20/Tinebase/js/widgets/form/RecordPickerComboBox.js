@@ -105,7 +105,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
-        
         this.initTemplate();
         
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);

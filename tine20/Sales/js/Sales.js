@@ -27,8 +27,8 @@ Ext.namespace('Tine.Sales');
 Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Product',
     contentTypes: [
-        {model: 'Product',  requiredRight: null, singularContainerMode: true},
-        {model: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']}]
+        {modelName: 'Product',  requiredRight: null, singularContainerMode: true},
+        {modelName: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']}]
 });
 
 /**

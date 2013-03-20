@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -47,11 +47,11 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Inventory_Controller_InventoryItem();
+        if (static::$_instance === NULL) {
+            static::$_instance = new self();
         }
         
-        return self::$_instance;
+        return static::$_instance;
     }
 
     /**

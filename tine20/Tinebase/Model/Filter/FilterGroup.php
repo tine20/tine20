@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        finish implementation of to/from json functions
@@ -115,9 +115,18 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     const CONDITION_AND = 'AND';
     
     /**
+     * if this is set, the filtergroup will be created using the configurationObject for this model
+     *
+     * @var string
+     */
+    protected $_configuredModel = NULL;
+    
+    /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
+     *      
+     * @todo: remove all these properties from any place it's used like that and replace the calls with static
      */
     protected $_className = '';
     
@@ -185,13 +194,30 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
-        $this->_autoModeling();
+        $this->_createFromModelConfiguration();
         
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
         
         $this->setFromArray($_data);
+    }
+    
+    /**
+     * create filter from modelconfiguration if a configured model is assigned
+     */
+    protected function _createFromModelConfiguration()
+    {
+        if ($this->_configuredModel) {
+            $m = $this->_configuredModel;
+            $filterConfig = $m::getConfiguration()->getFilterModel();
+            foreach($filterConfig as $prop => $val) {
+                $this->{$prop} = $val;
+            }
+            // modelname is here the full name if the php model
+            $this->_modelName = $this->_applicationName . '_Model_' . $this->_modelName;
+        }
+        
     }
     
     /**
@@ -294,43 +320,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
         
         $this->addFilter($filter);
-    }
-    /**
-     * creates generic filters from the model definition
-     */
-    protected function _autoModeling()
-    {
-        // add modlog and other generic filters by model config
-        $mn = $this->_modelName;
-        if($mn) {
-            $metaInfo = $mn::getMeta();
-            if($metaInfo) {
-                if(array_key_exists('useModlog', $metaInfo) && $metaInfo['useModlog']) {
-                    $this->_filterModel = array_merge($this->_filterModel, array(
-                            'deleted_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-                            'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-                            'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
-                            'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-                            'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-                            'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-                            'is_deleted'           => array('filter' => 'Tinebase_Model_Filter_Bool')
-                    ));
-                }
-
-                if(array_key_exists('containerProperty', $metaInfo) && $metaInfo['containerProperty']) {
-                    $this->_filterModel = array_merge($this->_filterModel, array(
-                            $metaInfo['containerProperty'] => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => $this->_applicationName)),
-                    ));
-                }
-
-                if(array_key_exists('hasTags', $metaInfo) && $metaInfo['hasTags']) {
-                    $this->_filterModel = array_merge($this->_filterModel, array(
-                            'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-                                    'applicationName' => $this->_applicationName,
-                            ))));
-                }
-            }
-        }
     }
     
     /**

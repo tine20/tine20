@@ -17,3 +17,7 @@
 .x-ux-pagingtb-toggle {
     background-image: url(../../../../images/oxygen/16x16/actions/system-switch-user.png) !important;
 }
+
+.x-ux-pagingtb-refresh-disabled .x-btn-text.x-tbar-loading {
+    background-image: url(../../../../library/ExtJS/resources/images/gray/grid/refresh.gif) !important;
+}

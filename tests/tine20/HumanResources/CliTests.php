@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -47,7 +47,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
     protected function tearDown()
     {
         HumanResources_Controller_Employee::getInstance()->delete($this->_idsToDelete);
-        //HumanResources_Controller_Employee::getInstance()->delete(HumanResources_Controller_Employee::getInstance()->getAll()->getArrayOfIds());
     }
         
     /**
@@ -55,9 +54,9 @@ class HumanResources_CliTests extends HumanResources_TestCase
      */
     public function testImportEmployee()
     {
-        $cc = $this->_getCostCenter(7);
+        $cc = $this->_getSalesCostCenter(7);
         
-        $this->_doImport();
+        $this->_doImport(true);
         
         $susan = $this->_getSusan();
         
@@ -95,7 +94,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
         ob_start();
         $result = $this->_cli->importEmployee($opts);
         $out = ob_get_clean();
-        
         $this->assertEquals(0, $result, 'import failed: ' . $out);
         
         if ($checkOutput) {
@@ -110,11 +108,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
      */
     protected function _getSusan()
     {
-        $employees = HumanResources_Controller_Employee::getInstance()->search(new HumanResources_Model_EmployeeFilter(array(array(
-            'field'     => 'creation_time',
-            'operator'  => 'after',
-            'value'     => Tinebase_DateTime::now()->subMinute(10)
-        ))));
+        $employees = HumanResources_Controller_Employee::getInstance()->search(new HumanResources_Model_EmployeeFilter(array()));
         $this->_idsToDelete = $employees->getArrayOfIds();
         
         $this->assertEquals(2, count($employees), 'should import 2 employees: ' . print_r($employees->toArray(), TRUE));
@@ -154,7 +148,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals('Hypo Real Estate', $susan->bank_name, print_r($susan->toArray(), TRUE));
         
         // cost center check
-        $cc = $this->_getCostCenter(7);
+        $cc = $this->_getSalesCostCenter(7);
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, count($susan->contracts), 'no contracts found');
     }

@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -29,7 +29,7 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * the models handled by this frontend
      * @var array
      */
-    protected $_models = array('InventoryItem');
+    protected $_configuredModels = array('InventoryItem');
     
     /**
      * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson

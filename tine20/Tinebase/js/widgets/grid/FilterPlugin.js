@@ -93,7 +93,6 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
      * fires our change event
      */
     onFilterChange: function() {
-        
         if (this.getGridPanel() && typeof this.getGridPanel().getView === 'function') {
             this.getGridPanel().getView().isPagingRefresh = true;
         }

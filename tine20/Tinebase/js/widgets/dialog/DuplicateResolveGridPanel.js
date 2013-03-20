@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -332,7 +332,10 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
 
         var recordsToAdd = [];
         Ext.each(fieldDefinitions.concat(cfDefinitions), function(field) {
-            if (field.isMetaField || field.omitDuplicateResolving) return;
+            
+            if (field.omitDuplicateResolving) {
+                return;
+            }
 
             var fieldName = field.name,
                 fieldGroup = field.uiconfig ? field.uiconfig.group : field.group,

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -36,18 +36,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     tbarItems: false,
     /**
-     * @cfg {String} appName
      * internal/untranslated app name (required)
+     * 
+     * @cfg {String} appName
      */
     appName: null,
     /**
      * the modelName (filled by application starter)
-     * @type 
+     * 
+     * @type {String} modelName
      */
     modelName: null,
+    
     /**
-     * @cfg {Ext.data.Record} recordClass
      * record definition class  (required)
+     * 
+     * @cfg {Ext.data.Record} recordClass
      */
     recordClass: null,
     /**
@@ -69,7 +73,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * record in edit process.
      */
     record: null,
-
+    
+    /**
+     * holds the modelConfig for the handled record (json-encoded object)
+     * will be decoded in initComponent
+     * 
+     * @type 
+     */
+    modelConfig: null,
+    
     /**
      * @cfg {String} saveAndCloseButtonText
      * text of save and close button
@@ -144,8 +156,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
     /**
      * If set, these fields are readOnly (when called dependent to related record)
-     * json-encoded Array of Object
-     * @type String
+     * 
+     * @type {Ext.util.MixedCollection}
      */
     fixedFields: null,
 
@@ -206,7 +218,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'save'
         );
         
-        if(! this.recordClass && this.modelName) {
+        if (Ext.isString(this.modelConfig)) {
+            this.modelConfig = Ext.decode(this.modelConfig);
+        }
+        
+        if (Ext.isString(this.fixedFields)) {
+            var decoded = Ext.decode(this.fixedFields);
+            this.fixedFields = new Ext.util.MixedCollection();
+            this.fixedFields.addAll(decoded);
+        }
+        
+        if (! this.recordClass && this.modelName) {
             this.recordClass = Tine[this.appName].Model[this.modelName];
         }
         
@@ -219,7 +241,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
         
-        if(! this.windowNamePrefix) {
+        if (! this.windowNamePrefix) {
             this.windowNamePrefix = this.modelName + 'EditWindow_';
         }
         
@@ -268,21 +290,24 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {Boolean}
      */
     fixFields: function() {
-        if(this.fixedFields) {
-            if(!this.rendered) {
+        if (this.fixedFields && this.fixedFields.getCount() > 0) {
+            if (! this.rendered) {
                 this.fixFields.defer(100, this);
                 return false;
             }
-            Ext.each(Ext.decode(this.fixedFields), function(prefill) {
-                var field = this.getForm().findField(prefill.key);
-                if(Ext.isFunction(this.recordClass.getField(prefill.key).type)) {
-                    var foreignRecordClass = this.recordClass.getField(prefill.key).type;
-                    var record = new foreignRecordClass(prefill.value);
+            
+            this.fixedFields.each(function(value, index) {
+                var key = this.fixedFields.keys[index]; 
+                
+                var field = this.getForm().findField(key);
+                if (Ext.isFunction(this.recordClass.getField(key).type)) {
+                    var foreignRecordClass = this.recordClass.getField(key).type;
+                    var record = new foreignRecordClass(value);
                     field.selectedRecord = record;
-                    field.setValue(prefill.value);
+                    field.setValue(value);
                     field.fireEvent('select');
                 } else {
-                    field.setValue(prefill.value);
+                    field.setValue(value);
                 }
                 field.disable();
             }, this);
@@ -397,7 +422,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {}
      */
     isContainerSelectorDisabled: function() {
-        if(this.record) {
+        if (this.record) {
             var cp = this.recordClass.getMeta('containerProperty'),
                 container = this.record.data[cp],
                 grants = (container && container.hasOwnProperty('account_grants')) ? container.account_grants : null,
@@ -432,7 +457,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         } else {
             // note: in local mode we expect a valid record
-            if (!Ext.isFunction(this.record.beginEdit)) {
+            if (! Ext.isFunction(this.record.beginEdit)) {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad();
@@ -501,12 +526,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onAfterRecordLoad: function() {
         var form = this.getForm();
         
-        if(form) {
+        if (form) {
             form.loadRecord(this.record);
             form.clearInvalid();
         }
         
-        if(this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
+        if (this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
             this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         }
         if(this.loadMask) {
@@ -551,7 +576,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         ]);
         
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
-        if(this.loadRecord !== false) {
+        if (this.loadRecord !== false) {
             this.loadMask.show();
         }
     },
@@ -630,7 +655,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // current data of other panels
         this.onRecordUpdate();
 
-        if(this.isValid()) {
+        if (this.isValid()) {
             if (this.mode !== 'local') {
                 this.recordProxy.saveRecord(this.record, {
                     scope: this,
@@ -672,6 +697,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onAfterApplyChanges: function(closeWindow) {
         this.window.rename(this.windowNamePrefix + this.record.id);
         this.loadMask.hide();
+        
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
             this.purgeListeners();
@@ -783,9 +809,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * creates the relations panel, if relations are defined
      */
     initRelationsPanel: function() {
-        if(!this.relationsPanel && !this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
-            this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this }); 
-            this.items.items.push(this.relationsPanel);
+        if (! this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
+            // init relations panel before onRecordLoad
+            if (! this.relationsPanel) {
+                this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this });
+            }
+            // interrupt process flow until dialog is rendered
+            if (! this.rendered) {
+                this.initRelationsPanel.defer(250, this);
+                return;
+            }
+            // add relations panel if this is rendered
+            if (this.items.items[0]) {
+                this.items.items[0].add(this.relationsPanel);
+            }
         }
     }
 });

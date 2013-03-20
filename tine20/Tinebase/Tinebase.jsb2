@@ -342,6 +342,10 @@
           "path": "js/"
         },
         {
+          "text": "AppManager.js",
+          "path": "js/"
+        },
+        {
           "text": "ExceptionHandler.js",
           "path": "js/"
         },
@@ -735,10 +739,6 @@
         },
         {
           "text": "AboutDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "AppManager.js",
           "path": "js/"
         },
         {

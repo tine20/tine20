@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -19,66 +19,47 @@
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
+    protected static $_configurationObject = NULL;
     
     /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Inventory';
-
-    /**
-     * list of zend validator
-     *
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected static $_meta = array(
-        'id'                => 'id',
-        'name'              => 'name',
-        'titleProperty'     => 'name',
-        'container_id'      => 'container_id',
+    protected static $_modelConfiguration = array(
         'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
         'recordsName'       => 'Inventory items', // _('Inventory items')
         'containerProperty' => 'container_id',
+        'titleProperty'     => 'name',
         'containerName'     => 'Inventory item list', // _('Inventory item list')
         'containersName'    => 'Inventory items lists', // _('Inventory items lists')
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
-        'useModlog'         => true
-    );
-    
-    /**
-     * fields for auto start
-     * @var array
-     */
-    protected static $_fields = array(
-            'id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            ),
+        'useModlog'         => true,
+
+        'createModule'    => true,
+
+        'appName'         => 'Inventory',
+        'modelName'       => 'InventoryItem',
+        
+        'fields'          => array(
             'name' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-                'label'      => 'Name', // _('Name')
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'label'       => 'Name', // _('Name')
+                'queryFilter' => true
             ),
             'status' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label' => 'Status', // _('Status')
                 'type' => 'keyfield',
-                'name' => 'inventoryStatus'
-            ),
-            'container_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-                'label'      => NULL
+                'name' => 'inventoryStatus',
+                'default' => 'UNKNOWN'
             ),
             'inventory_id' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -86,20 +67,23 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'description' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Description' // _('Description')
+                'label'      =>'Description' // _('Description')
             ),
             'location' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Location' // _('Location')
+                'label'      => 'Location', // _('Location')
             ),
             'invoice_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Invoice date', // _('Invoice date')
-                'hidden'     => true
+                'hidden'     => TRUE,
+                'default'    => NULL
             ),
             'total_number' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-                'label'      => NULL
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'label'      => NULL,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'default'    => 1,
             ),
             'invoice' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -109,76 +93,52 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'price' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Price', // _('Price')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'costcentre' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Cost centre', // _('Cost centre')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'type'  => 'record',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'CostCenter',
+                    'idProperty'  => 'id'
+                )
             ),
             'warranty' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Warranty', // _('Warranty')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'added_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item added', // _('Item added')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'removed_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item removed', // _('Item removed')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'active_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Available number' // _(Available number)
-            ),
-            'total_number' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => 'Quantity' // _(Quantity)
+                'label'      => 'Available number', // _(Available number)
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'default'    => 1,
             ),
             'depreciate_status' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 //'label' => 'Depreciate', // _('Depreciate')
                 'label'      => NULL,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
-            'created_by' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL,
-                'hidden'     => TRUE
-            ),
-            'creation_time' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL,
-                'hidden'     => TRUE
-            ),
-            'last_modified_by' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            ),
-            'last_modified_time'=> array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            ),
-            'is_deleted'        => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL,
-                'hidden'     => true
-            ),
-            'deleted_time'      => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            ),
-            'customfields'      => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            ),
-            'deleted_by'        => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'      => NULL
-            )
+        )
      );
     
     /**
@@ -191,9 +151,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected static $_resolveForeignIdFields = array(
-            'Sales_Model_CostCenter' => array('costcentre')
-    );
+//     protected static $_resolveForeignIdFields = array(
+//             'Sales_Model_CostCenter' => array('costcentre')
+//     );
     
     /**
      * Returns every valid key to manage in Frontend/Json.php
@@ -202,30 +162,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @param void
      * @return array
      */
-    public static function getValidFields ()
+    public static function getValidFields()
     {
-        return array_keys(self::$_fields);
+        return static::$_configurationObject->fieldKeys;
     }
-    
-    /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        foreach (array("total_number", "active_number", "invoice_date",
-                    "price", "added_date", "warranty",
-                    "removed_date", "description", "location")
-                as $val)
-        {
-            $this->_filters[$val] = new Zend_Filter_Empty(NULL);
-        }
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-    
 }

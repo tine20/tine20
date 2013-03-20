@@ -5,7 +5,7 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         allow to add user defined part to Tine.title
  * TODO         move locale/timezone registry values to preferences MixedCollection?
@@ -500,7 +500,7 @@ Tine.Tinebase.tineInit = {
                     if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
                         var windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
                         // init ApplicationStarter on Ext window once
-                        if(windowType == 'Ext') {
+                        if (windowType == 'Ext') {
                             Tine.Tinebase.ApplicationStarter.init();
                         }
                         if (Tine.WindowFactory && Tine.WindowFactory.windowType !== windowType) {

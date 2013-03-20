@@ -4,7 +4,7 @@
  * 
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -25,6 +25,7 @@ class HumanResources_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 HumanResources All Tests');
         $suite->addTestSuite('HumanResources_JsonTests');
         $suite->addTestSuite('HumanResources_CliTests');
+        $suite->addTestSuite('HumanResources_ControllerTests');
         return $suite;
     }
 }

@@ -90,7 +90,7 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
 
     /**
      * update 7.4 -> 7.5
-     * 
+     *
      * @see #7924: HR Modul - Description text not saved
      * - rename field freetime.remark to freetime.description
      * - add field employee.description
@@ -103,10 +103,10 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_freetime', '5');
         $this->setApplicationVersion('HumanResources', '7.5');
     }
-
+    
     /**
      * update 7.5 -> 7.6
-     * 
+     *
      * @see #7924: HR Modul - Description text not saved
      * - rename field freetime.remark to freetime.description
      * - add field employee.description
@@ -117,5 +117,45 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $update6->update_9();
         $this->setTableVersion('humanresources_employee', '10');
         $this->setApplicationVersion('HumanResources', '7.6');
+    }
+    
+    /**
+     * update 7.6 -> 7.7
+     *
+     * - remove foreign key for contract.feast calendar
+     * - add "all employees" persistentfilter
+     * - update "employed employees filter"
+     */
+    public function update_6()
+    {
+        try {
+            $this->_backend->dropForeignKey('humanresources_contract', 'contract::feast_calendar_id--container::id');
+        } catch (Zend_Db_Statement_Exception $e) {
+        
+        }
+        
+        // add persistentfilter all employees
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
+            'model'             => 'HumanResources_Model_EmployeeFilter',
+            'name'              => "All employees", // _("All employees")
+            'description'       => "All available employees", // _("All available employees")
+            'filters'           => array(),
+        )));
+
+        $filter = new Tinebase_Model_PersistentFilterFilter(array(array('field' => 'name', 'operator' => 'equals', 'value' => 'Currently employed employee')));
+        $result = $pfe->search($filter);
+        $record = $result->getFirstRecord();
+        
+        if ($record) {
+            $record->name = 'Currently employed employees';
+            $record->description = 'Employees which are currently employed';
+            $pfe->update($record);
+        }
+        
+        $this->setTableVersion('humanresources_contract', '2');
+        $this->setApplicationVersion('HumanResources', '7.7');
     }
 }

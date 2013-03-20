@@ -52,9 +52,4 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
 
         return self::$_instance;
     }
-
-    protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL) {
-    }
-
-
 }

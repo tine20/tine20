@@ -584,7 +584,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! empty($recordId)) {
             $filterData[] = array('field' => 'id', 'operator' => 'notin', 'value' => array($recordId));
         }
-
+        
         $filter = new $filterClass($filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), TRUE));
@@ -640,8 +640,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
-            
             $currentRecord = $this->get($_record->getId());
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
 

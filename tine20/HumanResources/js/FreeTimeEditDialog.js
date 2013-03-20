@@ -31,8 +31,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     showContainerSelector: false,
-    
-    dayLengths: null,
+    mode: 'local',
+    loadRecord: false,
+    windowWidth: 550,
+    windowHeight: 450,
     /**
      * show private Information (autoset due to rights)
      * @type 
@@ -43,23 +45,15 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
      */
-    updateToolbars: function() {
-
-    },
+    updateToolbars: Ext.emptyFn,
+    
     /**
      * inits the component
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('HumanResources')
-        this.dayLengths = [
-            [0.25, 0.25],
-            [0.5, 0.5],
-            [0.75, 0.75],
-            [1, 1]
-            ];
-
-        this.initDatePicker();
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
+        this.initDatePicker();
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -75,15 +69,28 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return;
         }
         
-        this.datePicker.onRecordLoad(this.record);
-        
-        if(this.record.get('employee_id')) {
-            this.employeePicker.selectedRecord = new Tine.HumanResources.Model.Employee(this.record.get('employee_id'));
+        if (Ext.isString(this.record)) {
+            this.record = this.recordProxy.recordReader({responseText: this.record});
         }
-        this.firstDayLengthPicker.setValue(this.datePicker.store.getFirstDay() ? this.datePicker.store.getFirstDay().get('duration') : 1);
-        this.lastDayLengthPicker.setValue(this.datePicker.store.getLastDay() ? this.datePicker.store.getLastDay().get('duration') : 1);
+        this.record.set('employee_id', this.fixedFields.get('employee_id'));
+        
+        this.datePicker.onRecordLoad(this.record, this.fixedFields.get('employee_id').id);
+        
+        if (this.record.get('employee_id')) {
+            this.employeePicker.selectedRecord = new Tine.HumanResources.Model.Employee(this.record.get('employee_id'));
+            this.employeePicker.fireEvent('select');
+            this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
+        }
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
+        
+        var type = this.fixedFields.get('type') == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
+        
+        if (this.record.id) {
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), type, this.record.get('employee_id').n_fn));
+        } else {
+            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), type, this.record.get('employee_id').n_fn));
+        }
         
         this.initStatusBox();
     },
@@ -95,6 +102,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onRecordUpdate: function() {
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
         this.record.set('freedays', this.datePicker.getData());
+        this.record.set('type', this.fixedFields.get('type').toLowerCase());
+        this.record.set('firstday_date', new Date(this.datePicker.store.getFirstDay().get('date')));
         var fieldName = (this.record.get('type') == 'SICKNESS') ? 'sicknessStatus' : 'vacationStatus';
         this.record.set('status', this.getForm().findField(fieldName).getValue());
     },
@@ -103,7 +112,14 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * creates the date picker
      */
     initDatePicker: function() {
-        this.datePicker = new Tine.HumanResources.DatePicker({disabled: true, initDate: this.record.get('firstday_date'), app: this.app, record: this.record, recordClass: this.recordClass, editDialog: this, dateProperty: 'date', recordsProperty: 'freedays', foreignIdProperty: 'freeday_id'});
+        this.datePicker = new Tine.HumanResources.DatePicker({
+            recordClass: Tine.HumanResources.Model.FreeDay,
+            app: this.app,
+            editDialog: this,
+            dateProperty: 'date',
+            recordsProperty: 'freedays',
+            foreignIdProperty: 'freeday_id'
+        });
     },
     
     /**
@@ -125,7 +141,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        
         this.employeePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
             fieldLabel: this.app.i18n._('Employee'),
             name: 'employee_id',
@@ -133,29 +148,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         });
         
         this.employeePicker.on('select', function(){
-            this.contractPicker.enable();
             this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
         }, this);
         
         var that = this;
-        
-        this.contractPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Contract', {
-            fieldLabel: this.app.i18n.ngettext('Contract', 'Contracts', 1),
-            app: this,
-            disabled: true,
-            onBeforeQuery: function(qevent) {
-                this.store.baseParams.filter = [
-                    {field: 'query', operator: 'contains', value: qevent.query }
-                ];
-                this.store.removeAll();
-                this.store.baseParams.filter.push({field: 'employee_id', operator: 'equals', value: that.employeePicker.selectedRecord.get('id')})
-            }
-        });
-        
-        this.contractPicker.on('select', function() {
-            that.datePicker.loadFeastDays(that.employeePicker.selectedRecord, this.selectedRecord);
-            return true;
-        });
         
         return {
             xtype: 'tabpanel',
@@ -192,19 +188,19 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 columnWidth: 1
                             },
                             items: [
-                                [this.employeePicker],[this.contractPicker],[
+                                [this.employeePicker],[
                                 {   xtype: 'widget-keyfieldcombo',
                                     app: 'HumanResources',
                                     keyFieldName: 'freetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
-                                    value: 'VACATION',
+                                    value: this.fixedFields.get('type').toLowerCase,
                                     name: 'type',
-                                    columnWidth: .5,
-                                    ref: '../../../../../../../typePicker',
-                                    listeners: {
-                                        scope: this,
-                                        select: this.updateStatusBox.createDelegate(this)
-                                    }
+                                    columnWidth: .5
+//                                    ref: '../../../../../../../typePicker',
+//                                    listeners: {
+//                                        scope: this,
+//                                        select: this.updateStatusBox.createDelegate(this)
+//                                    }
                                 }, {
                                     xtype: 'panel',
                                     layout: 'card',
@@ -224,28 +220,19 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         keyFieldName: 'vacationStatus',
                                         value: 'REQUESTED',
                                         name: 'vacationStatus'
-                                    }
-                                    ]
-                                }],
-                                [{
-                                    fieldLabel: this.app.i18n._('First Day Length'),
-                                    xtype: 'combo',
-                                    store: this.dayLengths,
-                                    value: 1,
-                                    columnWidth: .5,
-                                    ref: '../../../../../../../firstDayLengthPicker',
-                                    validator: this.isDayLengthValid
-                                },{
-                                    fieldLabel: this.app.i18n._('Last Day Length'),
-                                    xtype: 'combo',
-                                    store: this.dayLengths,
-                                    value: 1,
-                                    columnWidth: .5,
-                                    ref: '../../../../../../../lastDayLengthPicker',
-                                    validator: this.isDayLengthValid
-                                }]
+                                    }]
+                                }], [{
+                                        xtype: 'panel',
+                                        cls: 'HumanResources x-form-item',
+                                        width: 220,
+                                        style: {
+                                            'float': 'right',
+                                            margin: '0 5px 10px 0'
+                                        },
+                                        items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
+                                    }]
                                 ]
-                        }, {
+                        } /*,{
                             xtype: 'panel',
                             cls: 'HumanResources x-form-item',
                             width: 220,
@@ -254,7 +241,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 margin: '0 5px 10px 0'
                             },
                             items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
-                        }]
+                        }*/]
                     }]
                 }, {
                     // activities and tags
@@ -284,7 +271,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 grow: false,
                                 preventScrollbars: false,
                                 anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
+                                emptyText: _('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
                         }),
@@ -326,27 +313,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * initializes the status box
      */
     initStatusBox: function() {
-        var isSickness = this.typePicker.value == 'SICKNESS';
+        var isSickness = this.fixedFields.get('type') == 'SICKNESS';
         this.updateStatusBox(null, null, isSickness ? 0 : 1);
         var fieldName = isSickness ? 'sicknessStatus' : 'vacationStatus';
         this.getForm().findField(fieldName).setValue(this.record.get('status'));
     }
 });
-
-/**
- * HumanResources Edit Popup
- * 
- * @param   {Object} config
- * @return  {Ext.ux.Window}
- */
-Tine.HumanResources.FreeTimeEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 570,
-        name: Tine.HumanResources.FreeTimeEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.HumanResources.FreeTimeEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};

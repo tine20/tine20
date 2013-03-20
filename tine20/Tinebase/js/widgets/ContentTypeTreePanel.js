@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets');
 
@@ -19,7 +19,7 @@ Ext.ns('Tine.widgets');
 <pre><code>
 var modulePanel =  new Tine.widgets.ContentTypeTreePanel({
     app: Tine.Tinebase.appMgr.get('Timetracker'),
-    contentTypes: [{model: 'Timesheet', requiredRight: null}, {model: 'Timeaccount', requiredRight: 'manage'}],
+    contentTypes: [{modelName: 'Timesheet', requiredRight: null}, {modelName: 'Timeaccount', requiredRight: 'manage'}],
     contentType: 'Timeaccount'
 });
 </code></pre>
@@ -107,7 +107,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.on('click', this.saveClickedNodeState, this);
         
         Ext.each(this.contentTypes, function(ct) {
-            var modelName = ct.meta ? ct.meta.modelName : ct.model; 
+            var modelName = ct.modelName; 
             var recordClass = Tine[this.app.appName].Model[modelName];
             var group = recordClass.getMeta('group');
             
@@ -128,9 +128,10 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }
             
             // check requiredRight if any
-            if (ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, modelName.toLowerCase() + 's'))) {
+            if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) {
                 return true;
             }
+            
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: this.app.appName + modelName,

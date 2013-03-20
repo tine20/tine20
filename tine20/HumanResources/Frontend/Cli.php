@@ -59,7 +59,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $workingTimeModelId = array_key_exists('working_time_model_id', $args) ? $args['working_time_model_id'] : NULL;
         $feastCalendarId = array_key_exists('feast_calendar_id', $args) ? $args['feast_calendar_id'] : NULL;
         $vacationDays = array_key_exists('vacation_days', $args) ? $args['vacation_days'] : NULL;
-        HumanResources_Controller_Employee::getInstance()->transferUserAccounts($deletePrivateInfo, $feastCalendarId, $workingTimeModelId, $vacationDays, true);
+        HumanResources_Controller_Employee::getInstance()->transferUserAccounts($deletePrivateInfo, $feastCalendarId, $workingTimeModelId, $vacationDays, TRUE);
         
         return 0;
     }
@@ -166,19 +166,30 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 . 'Trying to add contract with cost center number ' . $employee->countryname);
             
             $args = $this->_parseArgs($opts);
+            
             // expecting cost center number here, creating contract from data
             $costCenter = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
                 'field'    => 'number',
                 'operator' => 'equals',
                 'value'    => $employee->countryname,
             ))))->getFirstRecord();
+            
             $contract = HumanResources_Controller_Employee::getInstance()->createContractDataForEmployee(array(
                 'feastCalendarId'     => isset($args['feast_calendar_id']) ? $args['feast_calendar_id'] : NULL,
                 'workingTimeModelId'  => isset($args['working_time_model_id']) ? $args['working_time_model_id'] : NULL,
                 'vacationDays'        => isset($args['vacation_days']) ? $args['vacation_days'] : NULL,
-                'costCenterId'        => $costCenter ? $costCenter->getId() : NULL,
+                
             ), TRUE);
+            
             $employee->contracts = array($contract);
+            
+            if ($costCenter) {
+                $employee->costcenters = array(array(
+                    'cost_center_id' => $costCenter->getId(),
+                    'start_date'     => $employee->employment_begin
+                    ));
+            }
+            
             unset($employee->countryname);
         }
     }

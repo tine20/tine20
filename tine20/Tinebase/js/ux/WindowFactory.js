@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -39,8 +39,6 @@ Ext.ux.WindowFactory = function (config) {
         console.error('No such windowType: ' + this.windowType);
         break;
     }
-    
-    //Ext.ux.WindowFactory.superclass.constructor.call(this);
 };
 
 /**
@@ -101,8 +99,8 @@ Ext.ux.WindowFactory.prototype = {
         
         // if initShow property is present and it is set to false don't show window, just return reference
         if (c.hasOwnProperty('initShow') && c.initShow === false) {
-    return win;
-    }
+            return win;
+        }
         
         win.show();
         return win;
@@ -113,6 +111,12 @@ Ext.ux.WindowFactory.prototype = {
      */
     getCenterPanel: function (config) {
         var items;
+        
+        // (re-) create applicationstarter apps on BrowserWindows
+        if (this.windowType == 'Browser') {
+            Tine.Tinebase.ApplicationStarter.init();
+        }
+        
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
@@ -136,13 +140,13 @@ Ext.ux.WindowFactory.prototype = {
                     if (ls.hasOwnProperty(p) && p !== 'scope') {
                         // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
                         if (ls[p].fn) {
-lsProxy[p] = function () {
-ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
-};
+                            lsProxy[p] = function () {
+                                ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+                            };
                         } else {
-lsProxy[p] = function () {
-ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
-};
+                            lsProxy[p] = function () {
+                                ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+                            };
                         }
                     }
                 }
@@ -153,10 +157,6 @@ ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arg
             // this may be overwritten depending on concrete window implementation
             config.contentPanelConstructorConfig.window = config;
             
-            // (re-) create auto apps on BrowserWindows
-            if(this.windowType == 'Browser') {
-                Tine.Tinebase.ApplicationStarter.init();
-            }
             // find the constructor in this context
             var parts = config.contentPanelConstructor.split('.'),
             ref = window;

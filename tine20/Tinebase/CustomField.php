@@ -92,11 +92,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_CustomField;
+        if (static::$_instance === NULL) {
+            static::$_instance = new Tinebase_CustomField();
         }
         
-        return self::$_instance;
+        return static::$_instance;
     }
     
     /**

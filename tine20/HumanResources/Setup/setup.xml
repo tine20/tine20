@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>7.6</version>
+    <version>7.7</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -19,6 +19,12 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>account_id</name>
                     <type>text</type>
                     <length>40</length>
@@ -28,12 +34,6 @@
                     <name>countryname</name>
                     <type>text</type>
                     <length>64</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -451,7 +451,7 @@
         </table>
         <table>
             <name>humanresources_contract</name>
-            <version></version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -565,17 +565,6 @@
                     <foreign>true</foreign>
                     <reference>
                         <table>humanresources_workingtime</table>
-                        <field>id</field>
-                    </reference>
-                </index>
-                <index>
-                    <name>contract::feast_calendar_id--container::id</name>
-                    <field>
-                        <name>feast_calendar_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>container</table>
                         <field>id</field>
                     </reference>
                 </index>

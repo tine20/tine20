@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -215,7 +215,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // render static table
         this.renderTable();
         
-        
         // render each filter row into table
         this.filterStore.each(function(filter) {
             this.renderFilterRow(filter);
@@ -337,7 +336,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     renderFilterRow: function(filter) {
         filter.formFields = {};
         var filterModel = this.getFilterModel(filter);
-        
         if (! filterModel) {
             Tine.log.warn('Tine.widgets.grid.FilterToolbar::renderFilterRow no filterModel found');
             Tine.log.warn(filter);
@@ -418,6 +416,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     arrangeButtons: function() {
 
         var numFilters = this.filterStore.getCount();
+        
+        if (numFilters == 0) {
+            Tine.log.info('Tine.widgets.grid.FilterToolbar::arrangeButtons no filters found!');
+            return;
+        }
+        
         var firstId = this.filterStore.getAt(0).id;
         var lastId = this.filterStore.getAt(numFilters-1).id;
         
@@ -588,15 +592,16 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterModelMap = {};
         var filtersFields = [];
         
-        if (this.recordClass && !this.filterModels) {
-            this.filterModels = this.recordClass.getFilterModel();
+        if (this.recordClass && ! this.filterModels) {
+            // TODO: getFilterModel should not be used anymore. This should completely done by the registry.
+            this.filterModels = Ext.isFunction(this.recordClass.getFilterModel) ? this.recordClass.getFilterModel() : [];
         }
         
         
         if (this.recordClass) {
             // concat registered filters
             this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
-            
+
             // auto add foreign record filter on demand
             var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});
             if (foreignRecordFilter.operatorStore.getCount() > 0) {
@@ -606,7 +611,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // auto add self id filter
             this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
             this.filterModels.push(this.ownRecordFilterModel);
-//            filtersFields.push(this.ownRecordFilterModel);
         }
         
         
@@ -634,12 +638,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
         }
         
-//        // auto add self id filter
-//        if (this.recordClass) {
-//            this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
-//            filtersFields.push(this.ownRecordFilterModel);
-//        }
-            
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
             fields: ['field', 'label'],
@@ -670,7 +668,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // push this filtertoolbar in config
         config.ftb = this;
-        
+
         if (config.filtertype) {
             // filter from reg
             return new Tine.widgets.grid.FilterToolbar.FILTERS[config.filtertype](config);

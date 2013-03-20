@@ -70,8 +70,15 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Filter
         
         if (! $this->_isResolved) {
             
+            $user = Tinebase_Core::getUser();
+            
+            // if this is called from setup, no user instance exists
+            if (is_string($user)) {
+                return;
+            }
+            
             $accountIdFilter = $this->_findFilter('account_id');
-            $userId = Tinebase_Core::getUser()->getId();
+            $userId = $user->getId();
             
             // set user account id as filter
             if ($accountIdFilter === NULL) {

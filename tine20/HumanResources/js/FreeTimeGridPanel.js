@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
@@ -27,52 +27,13 @@ Ext.ns('Tine.HumanResources');
  */
 Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
-    /**
-     * record class
-     * 
-     * @cfg {Tine.Tinebase.Model.Record} recordClass
-     */
-    recordClass: Tine.HumanResources.Model.FreeTime,
-    recordProxy: Tine.HumanResources.freetimeBackend,
-    
-    /**
-     * eval grants
-     * 
-     * @cfg {Boolean} evalGrants
-     */
-    evalGrants: null,
-    
-    /**
-     * the calling editDialog
-     * 
-     * @type Tine.HumanResources.EmployeeEditDialog
-     */
+    editDialogRecordProperty: null,
     editDialog: null,
-    
     /**
-     * optional additional filterToolbar configs
-     * 
-     * @cfg {Object} ftbConfig
+     * set type before to diff vacation/sickness
+     * @type 
      */
-    ftbConfig: null,
-    
-    recordProxy: null,
-    
-    /**
-     * grid specific
-     * 
-     * @private
-     */
-    defaultSortInfo: null,
-    
-    gridConfig: null,
-    
-    /**
-     * cache for statusRenderers
-     * 
-     * @type {Array}
-     */
-    statusRenderers: null,
+    freetimeType: null,
     
     /**
      * inits this cmp
@@ -80,27 +41,24 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @private
      */
     initComponent: function() {
-        this.defaultSortInfo = {field: 'number', direction: 'DESC'};
-        this.statusRenderers = [];
-        this.gridConfig = { autoExpandColumn: 'n_fn' };
-        this.gridConfig.columns = this.getColumns();
-        if(!this.initFilterToolbar()) {
-            this.getActionToolbar = Ext.emptyFn;
-            
-        } else {
-            this.plugins = [];
-            this.plugins.push(this.filterToolbar);
-        }
-        
-        if(this.editDialog) {
-            this.bbar = [];
-        }
+        this.bbar = [];
         
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
-        if(this.editDialog) {
-            this.fillBottomToolbar();
-        }
         
+        this.fillBottomToolbar();
+        
+        if (this.freetimeType) {
+            if (this.freetimeType == 'SICKNESS') {
+                this.setTitle(this.app.i18n._('Sickness'));
+                this.i18nRecordName = this.app.i18n._('Sickness Day'),
+                this.i18nRecordsName = this.app.i18n._('Sickness Days')
+            } else {
+                this.setTitle(this.app.i18n._('Vacation'));
+                this.i18nRecordName = this.app.i18n._('Vacation Day');
+                this.i18nRecordsName = this.app.i18n._('Vacation Days');
+            }
+            this.action_addInNewWindow.setText(String.format(_('Add {0}'), this.freetimeType == 'SICKNESS' ? this.app.i18n._('Sickness Days') : this.app.i18n._('Vacation Days')));
+        }
     },
     
     /**
@@ -121,84 +79,48 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @param {Array} addRelations
      */
     onEditInNewWindow: function(button, record, addRelations) {
-        if(this.editDialog) {
-            button.fixedFields = [{key: 'employee_id', value: this.editDialog.record.data}];
-        }
+        // the name 'button' should be changed as this can be called in other ways also
+        button.fixedFields = {
+            'employee_id': this.editDialog.record.data,
+            'type':        this.freetimeType
+        };
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, addRelations);
     },
     
     /**
-     * initialises filter toolbar
+     * renders the different status keyfields
+     * @param {String} value
+     * @param {Object} b
+     * @param {Tine.HumanResources.Model.FreeTime} record
      */
-    initFilterToolbar: function() {
-        var plugins = [],
-            filters = [],
-            hidden = false;
-        if(!this.editDialog) {
-            plugins.push(new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()); 
-        } else {
-            if(this.editDialog.record && this.editDialog.record.data.id) {
-                filters = [{field: 'employee_id', operator: 'equals', 'value': this.editDialog.record.data}];
-            } else {
-                return false;
+    renderStatus: function(value, row, record) {
+        if (record.get('type') == 'sickness') {
+            if (! this.sicknessStatusRenderer) {
+                this.sicknessStatusRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'sicknessStatus');
             }
+            return this.sicknessStatusRenderer(value, row, record);
+        } else {
+            if (! this.vacationStatusRenderer) {
+                this.vacationStatusRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'vacationStatus');
+            }
+            return this.vacationStatusRenderer(value, row, record);
         }
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: this.recordClass.getFilterModel(),
-            defaultFilter: 'query',
-            recordClass: this.recordClass,
-            filters: filters,
-            plugins: plugins,
-            hidden: hidden
-        });
-        
-        return true;
     },
     
     /**
-     * returns ColumnModel
+     * called when the store gets updated, e.g. from editgrid
      * 
-     * @return Ext.grid.ColumnModel
-     * @private
-     */
-    getColumns: function(){
-        return [
-            { id: 'employee_id', header: this.app.i18n._('Employee'), dataIndex: 'employee_id', width: 200, sortable: true, hidden: (this.editDialog) ? true : false, renderer: this.renderEmployee, scope: this},
-            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 100, sortable: true, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freetimeType')},
-            { id: 'status', header: this.app.i18n._('Status'), dataIndex: 'status', width: 100, sortable: true, renderer: this.renderStatus.createDelegate(this), scope: this },
-            { id: 'firstday_date', header: this.app.i18n._('Date Start'), dataIndex: 'firstday_date', width: 100, sortable: true, renderer: Tine.Tinebase.common.dateRenderer, hidden: true},
-            { id: 'description', header: _('Description'), dataIndex: 'description', width: 200, sortable: true}
-            ].concat(this.getModlogColumns());
-    },
-    
-    /**
-     * renders the employee
-     * 
-     * @param {Object} value
-     * @param {Object} row
+     * @param {Ext.data.store} store
      * @param {Tine.Tinebase.data.Record} record
-     * @return {String}
+     * @param {String} operation
      */
-    renderEmployee: function(value, row, record) {
-        return record.get('employee_id') ? record.get('employee_id').n_fn : '';
-    },
-    
-    /**
-     * renders the status
-     * 
-     * @param {Object} value
-     * @param {Object} row
-     * @param {Tine.Tinebase.data.Record} record
-     * @return {String}
-     */
-    renderStatus:function(value, row, record) {
-        var prefix = record.get('type').split('_')[0],
-            configName = prefix.toLowerCase() + 'Status';
-        
-        if (! this.statusRenderers[configName]) {
-            this.statusRenderers[configName] = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', configName);
+    onStoreUpdate: function(store, record, operation) {
+        if (Ext.isObject(record.get('employee_id'))) {
+            record.set('employee_id', record.get('employee_id').id)
         }
-        
-        return this.statusRenderers[configName](value, row, record);
+        Tine.HumanResources.FreeTimeGridPanel.superclass.onStoreUpdate.call(this, store, record, operation);
     }
 });
+
+Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'status', Tine.HumanResources.FreeTimeGridPanel.prototype.renderStatus);

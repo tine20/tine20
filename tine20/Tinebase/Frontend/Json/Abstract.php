@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -30,16 +30,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     const TOTALCOUNT_COUNTRESULT = 'countresult';
 
     /**
-     * All models of this application (needed for application starter)
-     * @var array
-     */
-    protected $_models = NULL;
-    
-    /**
      * default model (needed for application starter -> defaultContentType)
      * @var string
      */
     protected $_defaultModel = NULL;
+    
+    /**
+     * All configured models
+     * @var array
+     */
+    protected $_configuredModels = NULL;
     
     /**
      * Returns registry data of the application.
@@ -64,6 +64,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     public function getRelatableModels()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' This method is deprecated and will be removed. Please use Tinebase_ModelFactory with Tinebase_ModelConfiguration!');
         $ret = array();
         
         if (property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
@@ -107,27 +109,20 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-     * returns models for this application
-     */
-    public function getModels()
-    {
-        return $this->_models;
-    }
-    
-    /**
      * returns model configurations for application starter
      * @return array
      */
     public function getModelsConfiguration()
     {
-        if($this->_models) {
-            foreach($this->_models as $model) {
-                $mn = $this->_applicationName . '_Model_' . $model;
-                $ret[$model] = $mn::getConfiguration();
+        $ret = NULL;
+        if ($this->_configuredModels) {
+            foreach ($this->_configuredModels as $modelName) {
+                $recordClass = $this->_applicationName . '_Model_' . $modelName;
+                $ret[$modelName] = $recordClass::getConfiguration()->getFrontendConfiguration();
             }
-            return $ret;
         }
-        return NULL;
+        
+        return $ret;
     }
     
     /**
@@ -136,11 +131,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     public function getDefaultModel()
     {
-        if($this->_defaultModel) {
+        if ($this->_defaultModel) {
             return $this->_defaultModel;
         }
-        if($this->_models) {
-            return $this->_models[0];
+        if ($this->_configuredModels) {
+            return $this->_configuredModels[0];
         }
         return NULL;
     }
