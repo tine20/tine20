@@ -104,8 +104,8 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         if (! (file_exists($csvFile) && file_exists($imageFile))) {
             die('File does not exist!');
         }
-        $fhcsv = fopen($csvFile, 'r+');
-        $fhimages = fopen($imageFile, 'r+');
+        $fhcsv = fopen($csvFile, 'r');
+        $fhimages = fopen($imageFile, 'r');
         $i=0;
         
         $femalePhotoIndex = 0;
@@ -170,8 +170,8 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             if ($imageData) {
                 $be->_saveImage($record->getId(), $imageData);
             }
-        } catch (Tinebase_Exception_Duplicate $e) {
-            echo 'Duplicate won\'t be imported. Skipping: ' . $data['n_given'] .' ' . $data['n_family'] . ($data['org_name'] ? ' ('.$data['org_name'].') ' : '') . PHP_EOL;
+        } catch (Exception $e) {
+            echo 'Skipping: ' . $data['n_given'] .' ' . $data['n_family'] . ($data['org_name'] ? ' ('.$data['org_name'].') ' : '') . $e->getMessage() . PHP_EOL;
         }
     }
     
