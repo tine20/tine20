@@ -861,7 +861,12 @@ function getPluralForm($_languageName)
         case 'Slovenian' :
             $pluralForm = 'nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;';
             break;
-            
+        
+        // Mixed
+        case 'Persian' :
+                $pluralForm = 'nplurals=1; plural=0;';
+                break;
+        
         default :
             die ("Error: Plural form of $_languageName is not defined! \n");
             

@@ -345,7 +345,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 this.portalColumn.items.each(function(item) {
                     item.setWidth(width);
                 }, this);
-            }, this)
+            }, this);
         }
         
         return this.portalColumn;

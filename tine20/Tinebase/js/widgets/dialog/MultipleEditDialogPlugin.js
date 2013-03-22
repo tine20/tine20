@@ -100,7 +100,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.interRecord = ed.interRecord;
         
         if (ed.action_saveAndClose) {
-            ed.action_saveAndClose.disable();
+            ed.action_saveAndClose.enable();
         }
         ed.on('fieldchange', this.findChangedFields, this);
         
@@ -592,10 +592,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 this.changedFields.push(field);
             }
         }, this);
-        
-        if (this.editDialog.action_saveAndClose) {
-            this.editDialog.action_saveAndClose.setDisabled(! this.changedFields.length);
-        }
     },
     
     /**

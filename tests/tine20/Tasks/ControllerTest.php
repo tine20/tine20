@@ -227,7 +227,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      * @see 0007108: inspect and solve concurrency conflicts when setting lead relations
      * @see 0000996: add changes in relations/linked objects to modlog/history
      */
-    public function testConcurrencyDateTime()
+    public function testConcurrencyDateTimeSameValues()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " 1. Update");
         $utask = $this->testUpdateTask();
@@ -248,6 +248,25 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         try {
             $updatedTask = $this->_controller->update($resolvableConcurrencyTask2);
             $this->assertEquals($resolvableConcurrencyTask2->due, $updatedTask->due);
+        } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
+            $this->fail($ttecc);
+        }
+    }
+    
+    public function testConcurrencyDateTimeResolveable()
+    {
+        $utask = $this->testUpdateTask();
+        
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->due = $utask->due->addMonth(1);
+        $this->_controller->update($resolvableConcurrencyTask);
+        
+        $resolvableConcurrencyTask2 = clone $utask;
+        $resolvableConcurrencyTask2->summary = 'Update of test task 1';
+        
+        try {
+            $updatedTask = $this->_controller->update($resolvableConcurrencyTask2);
+            $this->assertEquals($resolvableConcurrencyTask->due, $updatedTask->due);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             $this->fail($ttecc);
         }
