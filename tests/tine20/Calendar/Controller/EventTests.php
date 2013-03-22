@@ -82,6 +82,24 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
+    public function testConcurrentUpdate()
+    {
+        $event = $this->testCreateEvent();
+        
+        sleep(1);
+        $resolvableConcurrentEvent1 = clone $event;
+        $resolvableConcurrentEvent1->dtstart = $resolvableConcurrentEvent1->dtstart->addMonth(1);
+        $resolvableConcurrentEvent1->dtend = $resolvableConcurrentEvent1->dtend->addMonth(1);
+        $resolvableConcurrentEvent1Update = $this->_controller->update($resolvableConcurrentEvent1);
+        
+        sleep(1);
+        $resolvableConcurrentEvent2 = clone $event;
+        $resolvableConcurrentEvent2->summary = 'Updated Event';
+        $resolvableConcurrentEvent2Update = $this->_controller->update($resolvableConcurrentEvent2);
+        
+        $this->assertEquals($resolvableConcurrentEvent1Update->dtstart, $resolvableConcurrentEvent2Update->dtstart);
+    }
+    
     public function testUpdateAttendeeStatus()
     {
         $event = $this->_getEvent();
