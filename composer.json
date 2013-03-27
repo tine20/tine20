@@ -4,6 +4,6 @@
     "description": "Library to sync mobile phones",
     "homepage": "http://www.syncroton.org",
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.3.0"
     }
 }
