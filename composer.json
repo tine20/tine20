@@ -3,6 +3,7 @@
     "type": "library",
     "description": "Library to sync mobile phones",
     "homepage": "http://www.syncroton.org",
+    "license": "LGPL-3",
     "require": {
         "php": ">=5.3.0"
     }
