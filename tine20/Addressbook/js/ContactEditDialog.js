@@ -508,7 +508,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             
             // only set the fields that could be detected
             Ext.iterate(result.contact, function(key, value) {
-                this.record.set(key, value);
+                if (value && ! this.record.get(key)) {
+                    this.record.set(key, value);
+                }
             }, this);
             
             var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
