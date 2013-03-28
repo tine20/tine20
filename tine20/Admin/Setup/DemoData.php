@@ -83,7 +83,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $members[] = $this->_personas[$member]->getId();
             }
             
-            $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData'], $members);
+            try {
+                $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData'], $members);
+            } catch (Exception $e) {
+                echo 'Group "' . $groupArray['groupData']['name'] . '" already exists. Skipping...' . PHP_EOL;
+                $gr = Tinebase_Group::getInstance()->getGroupByName($groupArray['groupData']['name']);
+                $this->_groups[$groupArray['groupData']['name']] = $fe->getGroup($gr->getId());
+            }
         }
     }
     
@@ -105,9 +111,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             // resolve rights
             $roleRights = array();
             foreach($roleArray['roleRights'] as $application => $rights) {
-                $appId = Tinebase_Application::getInstance()->getApplicationByName($application)->getId();
-                foreach($rights as $rightName) { 
-                    $roleRights[] = array('application_id' => $appId, 'right' => $rightName);
+                try {
+                    $appId = Tinebase_Application::getInstance()->getApplicationByName($application)->getId();
+                    foreach($rights as $rightName) {
+                        $roleRights[] = array('application_id' => $appId, 'right' => $rightName);
+                    }
+                } catch (Exception $e) {
+                    echo 'Application "' . $application . '" not installed. Skipping...' . PHP_EOL;
                 }
             }
             
