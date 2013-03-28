@@ -493,7 +493,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'zzing' => 'zzang'
         );
         
-        Tinebase_State::getInstance()->saveStateInfo($testData);
+        foreach ($testData as $key => $value) {
+            Tinebase_State::getInstance()->setState($key, $value);
+        }
         
         $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
         

@@ -321,4 +321,62 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Finished modlog sequence update for ' . $model);
     }
+    
+    /**
+     * update to 7.4
+     * 
+     * - save each state_id in an own field
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>state_id</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        
+        $this->_backend->addCol('state', $declaration);
+        
+        $this->_backend->dropIndex('state', 'user_id');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>user_id--state_id</name>
+                <unique>true</unique>
+                <field>
+                    <name>user_id</name>
+                </field>
+                <field>
+                    <name>state_id</name>
+                </field>
+            </index>
+        ');
+        
+        $this->_backend->addIndex('state', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '7.4');
+        $this->setTableVersion('state', 2);
+        
+        $be = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_State', 
+            'tableName' => 'state',
+        ));
+        
+        $allStates = $be->getAll();
+        foreach ($allStates as $oldState) {
+            $oldData = Zend_Json::decode($oldState->data);
+            foreach ($oldData as $stateId => $data) {
+                $record = new Tinebase_Model_State(array(
+                    'user_id'   => $oldState->user_id,
+                    'state_id'  => $stateId,
+                    'data'      => $data
+                ));
+                $be->create($record);
+            }
+            $be->delete($oldState->getId());
+        }
+    }
 }
