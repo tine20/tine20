@@ -11,7 +11,7 @@
 Ext.namespace('Tine.HumanResources');
 
 /**
- * register special renderer for workingtime_json
+ * register special renderer for contract workingtime_json
  */
 Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workingtime_json', function(v) {
     var object = Ext.decode(v);
@@ -21,3 +21,4 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workin
     }
     return sum;
 });
+

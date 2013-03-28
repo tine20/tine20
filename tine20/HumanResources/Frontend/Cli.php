@@ -44,8 +44,19 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )
         ),
-        );
+        'create_missing_accounts' => array(
+            'description'   => 'Creates missing accounts for this and next year, if a valid contract has been found.',
+        ),
+    );
 
+    /**
+     * creates missing accounts
+     */
+    public function create_missing_accounts()
+    {
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts(NULL);
+    }
+    
     /**
      * transfers the account data to employee data
      * 

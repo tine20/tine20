@@ -42,7 +42,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         if (this.editDialog) {
             this.bbar = [];
         }
-        // don't initialize it, we'll get nested forms and an error
+
         this.initDetailsPanel();
         
         Tine.HumanResources.ContractGridPanel.superclass.initComponent.call(this);

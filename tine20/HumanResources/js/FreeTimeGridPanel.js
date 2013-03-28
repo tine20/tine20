@@ -29,6 +29,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     
     editDialogRecordProperty: null,
     editDialog: null,
+    
     /**
      * set type before to diff vacation/sickness
      * @type 
@@ -42,6 +43,16 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     initComponent: function() {
         this.bbar = [];
+        
+        this.action_bookSicknessAsVacation = new Ext.Action({
+            text: this.app.i18n._('Book as vacation'),
+            hidden: true,
+            handler: this.onBookSicknessAsVacation,
+            scope: this,
+            allowMultiple: false
+        });
+        
+        this.contextMenuItems = [this.action_bookSicknessAsVacation];
         
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
         
@@ -59,6 +70,54 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
             this.action_addInNewWindow.setText(String.format(_('Add {0}'), this.freetimeType == 'SICKNESS' ? this.app.i18n._('Sickness Days') : this.app.i18n._('Vacation Days')));
         }
+    },
+    
+    /**
+     * book sickness as vacation
+     * 
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Ext.EventObject} e
+     */
+    onBookSicknessAsVacation: function(grid, e) {
+        var record = this.getGrid().getSelectionModel().getSelections()[0];
+        
+        this.store.remove(record);
+        record.set('type', 'vacation');
+        record.set('status', 'ACCEPTED');
+        this.editDialog.vacationGridPanel.store.add(record);
+        
+        // set sickness of record
+        var sickness = [];
+        this.getGrid().getStore().each(function(item) {
+            sickness.push(item.data);
+        });
+        this.editDialog.record.set('sickness', sickness);
+        
+        var vacation = [];
+        
+        this.editDialog.vacationGridPanel.getStore().each(function(item) {
+            vacation.push(item.data);
+        });
+        this.editDialog.record.set('vacation', vacation);
+    },
+    
+    /**
+     * returns rows context menu
+     * 
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Number} row
+     * @param {Ext.EventObject} e
+     */
+    getContextMenu: function(grid, row, e) {
+        var selModel = grid.getSelectionModel();
+        this.action_bookSicknessAsVacation.setHidden(true);
+        if (selModel.getSelections().length == 1) {
+            if (selModel.getSelections()[0].data.status == 'UNEXCUSED') {
+                this.action_bookSicknessAsVacation.setHidden(false);
+            }
+        }
+        
+        return Tine.HumanResources.FreeTimeGridPanel.superclass.getContextMenu.call(this, grid, row, e);
     },
     
     /**

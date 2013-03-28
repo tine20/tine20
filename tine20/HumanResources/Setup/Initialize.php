@@ -40,6 +40,19 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'description'       => "All available employees", // _("All available employees")
             'filters'           => array(),
         ))));
+        
+        // Accounts
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
+            'model'             => 'HumanResources_Model_AccountFilter',
+        );
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All accounts", // _("All accounts")
+            'description'       => "All available accounts", // _("All available accounts")
+            'filters'           => array(),
+        ))));
     }
     
     /**
@@ -59,8 +72,6 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'records' => array(
                 array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/oxygen/16x16/actions/book.png',  'system' => TRUE),  //_('Sickness')
                 array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Vacation')
-                array('id' => 'VACATION_REMAINING',   'value' => 'Remaining Vacation', 'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Remaining Vacation')
-                array('id' => 'VACATION_EXTRA',       'value' => 'Extra Vacation',     'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Extra Vacation')
             ),
         );
 
@@ -69,7 +80,22 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'name'              => HumanResources_Config::FREETIME_TYPE,
             'value'             => json_encode($freeTimeTypeConfig),
         )));
-
+        
+        // extra free time type
+        $freeTimeTypeConfig = array(
+            'name'    => HumanResources_Config::EXTRA_FREETIME_TYPE,
+            'records' => array(
+                array('id' => 'PAYED',     'value' => 'Payed',     'icon' => NULL, 'system' => TRUE),  //_('Payed')
+                array('id' => 'NOT_PAYED', 'value' => 'Not payed', 'icon' => NULL, 'system' => TRUE),  //_('Not payed')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => HumanResources_Config::EXTRA_FREETIME_TYPE,
+            'value'             => json_encode($freeTimeTypeConfig),
+        )));
+        
         // create vacation status config
         $vacationStatusConfig = array(
             'name'    => HumanResources_Config::VACATION_STATUS,

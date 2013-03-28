@@ -38,7 +38,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_FEAST_CALENDAR = 'defaultFeastCalendar';
-
+    
+    /**
+     * types for extra free times
+     * 
+     * @var string
+     */
+    const EXTRA_FREETIME_TYPE = 'extraFreetimeType';
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -83,6 +89,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
         ),
+        self::EXTRA_FREETIME_TYPE => array(
+            //_('Extra freetime type')
+            'label'                 => 'Extra freetime type',
+            //_('Possible extra free time definitions')
+            'description'           => 'Possible extra free time definitions',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'HumanResources_Model_ExtraFreeTimeType'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'PAYED'
+        )
     );
 
     /**

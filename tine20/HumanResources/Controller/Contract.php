@@ -176,11 +176,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     {
         $this->_checkDates($_record);
         $this->_containerToId($_record);
-
+        
         if (empty($_record->feast_calendar_id)) {
             $_record->feast_calendar_id = null;
         }
-
+        
         // show if a contract before this exists
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
@@ -203,21 +203,165 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     }
     
     /**
+     * calculates the vacation days count of a contract for a period given by firstDate and lastDate. 
+     * if the period exceeds the contracts' period, the contracts' period will be used
+     * 
+     * @param HumanResources_Model_Contract $contract
+     * @param Tinebase_DateTime $firstDate
+     * @param Tinebase_DateTime $lastDate
+     * @return integer
+     */
+    public function calculateVacationDays(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    {
+        $firstDate = $this->_getFirstDate($contract, $firstDate);
+        $lastDate = $this->_getLastDate($contract, $lastDate);
+        
+        // find out how many days the year does have
+        $januaryFirst = new Tinebase_DateTime($firstDate->format('Y') . '-01-01 00:00:00');
+        $decemberLast = new Tinebase_DateTime($firstDate->format('Y') . '-12-31 23:59:59');
+        
+        $daysOfTheYear = ceil(($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60);
+        
+        // find out how many days the contract does have
+        $daysOfTheContract = ceil(($lastDate->getTimestamp() - $firstDate->getTimestamp()) / 24 / 60 / 60);
+        
+        return (int) round(($daysOfTheContract / $daysOfTheYear) * $contract->vacation_days);
+    }
+    
+    /**
+     * returns feast days as array containing Tinebase_DateTime objects
+     * if the period exceeds the contracts' period, the contracts' period will be used
+     * 
+     * @param HumanResources_Model_Contract $contract
+     * @param Tinebase_DateTime $firstDate
+     * @param Tinebase_DateTime $lastDate
+     * @return array
+     */
+    public function getFeastDays(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    {
+        $firstDate = $this->_getFirstDate($contract, $firstDate);
+        $lastDate  = $this->_getLastDate($contract, $lastDate);
+        
+        // on calendar search we have to do this to get the right interval:
+        $firstDate->subSecond(1);
+        $lastDate->addSecond(1);
+        
+        $filter = new Calendar_Model_EventFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $firstDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $lastDate)));
+        
+        $dates = Calendar_Controller_Event::getInstance()->search($filter);
+        
+        $dates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        // TODO: allow whole days and dates with more days
+        return $dates->dtstart;
+    }
+    
+    /**
+     * calculates the first date by date and contract. the contract date is used if the start date is earlier
+     * 
+     * @param HumanResources_Model_Contract $contract
+     * @param Tinebase_DateTime $firstDate
+     * @return Tinebase_DateTime
+     */
+    protected function _getFirstDate(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate)
+    {
+        $date = $contract->start_date ? $firstDate < $contract->start_date ? $contract->start_date : $firstDate : $firstDate;
+        return clone $date;
+    }
+    
+    /**
+     * calculates the last date by date and contract. the contract date is used if the end date is later
+     * 
+     * @param HumanResources_Model_Contract $contract
+     * @param Tinebase_DateTime $lastDate
+     * @return Tinebase_DateTime
+     */
+    protected function _getLastDate(HumanResources_Model_Contract $contract, Tinebase_DateTime $lastDate)
+    {
+        $date = $contract->end_date ? $lastDate > $contract->end_date ? $contract->end_date : $lastDate : $lastDate;
+        $date->setTime(23, 59, 59);
+        return clone $date;
+    }
+    
+    
+    /**
+     * returns all dates the employee have to work on by contract. the feast days are removed already
+     * if the period exceeds the contracts' period, the contracts' period will be used. freetimes are not respected here
+     * 
+     * @param HumanResources_Model_Contract $contract
+     * @param Tinebase_DateTime $firstDate
+     * @param Tinebase_DateTime $lastDate
+     * 
+     * @return array
+     */
+    public function getDatesToWorkOn(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    {
+        $firstDate = $this->_getFirstDate($contract, $firstDate);
+        $lastDate = $this->_getLastDate($contract, $lastDate);
+        
+        $date = clone $firstDate;
+        $json = $contract->getWorkingTimeJson();
+        $weekdays = $json->days;
+
+        // find out feast days
+        $feastDays = $this->getFeastDays($contract, $firstDate, $lastDate);
+        $feastDayStrings = array();
+        
+        foreach($feastDays as $feastDay) {
+            $feastDayStrings[] = $feastDay->format('Y-m-d');
+        }
+        
+        // datetime format w uses day 0 as sunday
+        $monday = array_pop($weekdays);
+        array_unshift($weekdays, $monday);
+
+        $hoursToWorkOn = 0;
+        $daysToWorkOn = array();
+        $sumHours = 0;
+        
+        while ($date->isEarlier($lastDate)) {
+            // if calculated working day is not a feast day, add to days to work on
+            $ds = $date->format('Y-m-d');
+            $weekday = $date->format('w');
+            $hrs = $weekdays[$weekday];
+            
+            if (! in_array($ds, $feastDayStrings) && $hrs > 0) {
+                $daysToWorkOn['results'][] = clone $date;
+                $sumHours += $hrs;
+            }
+            
+            $date->addDay(1);
+        }
+        $daysToWorkOn['hours'] = $sumHours;
+        return $daysToWorkOn;
+    }
+    
+    /**
      * Get valid contracts for the period specified
      * 
-     * @param string $employeeId
+     * @param mixed $employeeId
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
      */
-    public function getValidContracts($employeeId, $firstDate = NULL, $lastDate = NULL)
+    public function getValidContracts($firstDate = NULL, $lastDate = NULL, $employeeId = NULL)
     {
-        if (! ($employeeId && $firstDate && $lastDate)) {
+        if (! ($firstDate && $lastDate)) {
             throw new Tinebase_Exception_InvalidArgument('All params are needed!');
         }
         
-        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
+        if (is_array($employeeId)) {
+            $employeeId = $employeeId['id'];
+        } elseif (is_object($employeeId) && get_class($employeeId) == 'HumanResources_Model_Employee') {
+            $employeeId = $employeeId->getId();
+        }
         
+        
+        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
+        if ($employeeId) {
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
+        }
         $subFilter2 = new HumanResources_Model_ContractFilter(array(), 'OR');
         $subFilter21 = new HumanResources_Model_ContractFilter(array(), 'AND');
         $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $lastDate)));
@@ -228,6 +372,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $subFilter2->addFilterGroup($subFilter21);
         $subFilter2->addFilterGroup($subFilter22);
         $filter->addFilterGroup($subFilter2);
+        
         return $this->search($filter);
     }
     
@@ -239,10 +384,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * @throws Tinebase_Exception_InvalidArgument
      * @throws HumanResources_Exception_NoCurrentContract
      * @throws Tinebase_Exception_Duplicate
+     * @return HumanResources_Model_Contract
      */
     public function getValidContract($_employeeId, $_firstDayDate = NULL)
     {
-        if (!$_employeeId) {
+        if (! $_employeeId) {
             throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
         }
         $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();

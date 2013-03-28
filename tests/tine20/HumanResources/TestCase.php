@@ -234,4 +234,42 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
 
         return new HumanResources_Model_Employee($ea);
     }
+    
+
+    /**
+     * adds feast days to feast calendar
+     *
+     * @param Tinebase_DateTime $date
+     */
+    protected function _createFeastDay(Tinebase_DateTime $date)
+    {
+        if (! $this->_feast_calendar) {
+            $this->_getFeastCalendar();
+        }
+        $organizer = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+    
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'Wakeup',
+            'dtstart'     => $date->format('Y-m-d') .' 06:00:00',
+            'dtend'       => $date->format('Y-m-d') .' 06:15:00',
+            'description' => Tinebase_Record_Abstract::generateUID(10),
+    
+            'container_id' => $this->_feast_calendar->getId(),
+            'organizer'    => $organizer->getId(),
+            'uid'          => Calendar_Model_Event::generateUID(),
+    
+            'attendee' => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(array(
+                'user_id'        => $organizer->getId(),
+                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            ))),
+    
+            Tinebase_Model_Grants::GRANT_READ    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            Tinebase_Model_Grants::GRANT_DELETE  => true,
+        ));
+    
+        Calendar_Controller_Event::getInstance()->create($event)->toArray();
+    }
 }

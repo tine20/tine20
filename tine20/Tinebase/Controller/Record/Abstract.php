@@ -1549,4 +1549,90 @@ abstract class Tinebase_Controller_Record_Abstract
 
         return $result;
     }
+    
+
+    /**
+     * creates dependent records after creating the parent record
+     *
+     * @param Tinebase_Record_Interface $_createdRecord
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_property
+     * @param array $_fieldConfig
+     */
+    protected function _createDependentRecords(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
+    {
+        if (! array_key_exists('dependentRecords', $_fieldConfig) || ! $_fieldConfig['dependentRecords']) {
+            return;
+        }
+        
+        if ($_record->has($_property) && is_array($_record->{$_property})) {
+            $recordClassName = $_fieldConfig['recordClassName'];
+            $new = new Tinebase_Record_RecordSet($recordClassName);
+            $ccn = $_fieldConfig['controllerClassName'];
+            $controller = $ccn::getInstance();
+    
+            foreach ($_record->{$_property} as $recordArray) {
+                $recordArray[$_fieldConfig['refIdField']] = $_createdRecord->getId();
+                $r = $controller->create(new $recordClassName($recordArray));
+                $new->addRecord($r);
+            }
+    
+            $_createdRecord->{$_property} = $new->toArray();
+        }
+    }
+    
+    /**
+     * updates dependent records on update the parent record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @param string $_property
+     * @param array $_fieldConfig
+     */
+    protected function _updateDependentRecords(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
+    {
+        if (! array_key_exists('dependentRecords', $_fieldConfig) || ! $_fieldConfig['dependentRecords']) {
+            return;
+        }
+    
+        if ($_record->has($_property) && is_array($_record->{$_property})) {
+    
+            $ccn = $_fieldConfig['controllerClassName'];
+            $controller = $ccn::getInstance();
+            $recordClassName = $_fieldConfig['recordClassName'];
+            $filterClassName = $_fieldConfig['filterClassName'];
+            $existing = new Tinebase_Record_RecordSet($recordClassName);
+    
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->{$_property}, TRUE));
+            }
+    
+            if (! empty($_record->{$_property}) && is_array($_record->{$_property})) {
+                foreach ($_record->{$_property} as $recordArray) {
+                    $recordArray[$_fieldConfig['refIdField']] = $_oldRecord->getId();
+                    $record = new $recordClassName($recordArray);
+                    // update record if ID exists
+                    if ($record->id) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating contract ' . $record->id);
+                        }
+                        $updatedRecord = $controller->update($record);
+                        $existing->addRecord($updatedRecord);
+                        // create if ID does not exist
+                    } else {
+                        $existing->addRecord($controller->create($record));
+                    }
+                }
+            }
+    
+            $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record['id']));
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->id));
+    
+            $deleteContracts = $controller->search($filter);
+    
+            $controller->delete($deleteContracts->id);
+            $_record->{$_property} = $existing->toArray();
+        }
+    }
 }

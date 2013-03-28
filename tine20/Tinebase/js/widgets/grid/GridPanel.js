@@ -980,11 +980,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (! this.editDialog) {
                 this.store.load.defer(10, this.store, [ typeof this.autoLoad == 'object' ? this.autoLoad : undefined]);
             } else {
-                // editDialog exists, so get the records from there, using recordReader is not needed in grid
+                // editDialog exists, so get the records from there.
                 var items = this.editDialog.record.get(this.editDialogRecordProperty);
                 if (Ext.isArray(items)) {
                     Ext.each(items, function(item) {
-                        var record = new this.recordClass(item);
+                        var record = this.recordProxy.recordReader({responseText: Ext.encode(item)});
                         this.store.addSorted(record);
                     }, this);
                 }
@@ -1228,9 +1228,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * returns rows context menu
      * 
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Number} row
+     * @param {Ext.EventObject} e
      * @return {Ext.menu.Menu}
      */
-    getContextMenu: function() {
+    getContextMenu: function(grid, row, e) {
 
         if (! this.contextMenu) {
             var items = [];
@@ -1501,20 +1504,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             sm.selectRow(row, false);
             grid.view.focusRow(row);
         }
-    },
-    
-    onRowContextMenu: function(grid, row, e) {
-        e.stopEvent();
-        var selModel = grid.getSelectionModel();
-        if (!selModel.isSelected(row)) {
-            // disable preview update if config option is set to false
-            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
-            selModel.selectRow(row);
-        }
-
-        this.getContextMenu().showAt(e.getXY());
-        // reset preview update
-        this.updateOnSelectionChange = true;
     },
     
     /**
