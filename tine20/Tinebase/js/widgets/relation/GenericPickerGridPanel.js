@@ -144,15 +144,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.constrainsConfig = {};
         
         Ext.each(this.app.getRegistry().get('relatableModels'), function(rel) {
-            if(rel.ownModel == this.ownRecordClass.getMeta('modelName')) {
-                if(rel.keyfieldConfig) {
-                    if(rel.keyfieldConfig.from == 'foreign') {
+            if (rel.ownModel == this.ownRecordClass.getMeta('modelName')) {
+                if (rel.keyfieldConfig) {
+                    if (rel.keyfieldConfig.from == 'foreign') {
                         this.keyFieldConfigs[rel.relatedApp + rel.relatedModel] = {app: rel.relatedApp, name: rel.keyfieldConfig.name};
                     } else {
                         this.keyFieldConfigs[this.app.name + rel.ownModel] = {app: this.app.name, name: rel.keyfieldConfig.name};
                     }
                 }
-                if(rel.config) {
+                if (rel.config) {
                     this.constrainsConfig[rel.relatedApp + rel.relatedModel] = rel.config;
                 }
             }
@@ -207,6 +207,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             record.set('relations', relations);
         } else {
             Ext.Msg.alert(_('Relations failure'), _('There are invalid relations. Please check before saving.'));
+            this.editDialog.loadMask.hide();
             return false;
         }
         interceptor();
@@ -234,7 +235,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     },
 
     /**
-     * adds invlid row class to a invalid row and adds the error qtip
+     * adds invalid row class to a invalid row and adds the error qtip
+     * 
      * @param {Tine.Tinebase.data.Record} record
      * @param {Integer} index
      * @param {Object} rowParams
@@ -307,7 +309,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {Ext.form.ComboBox}
      */
     getModelCombo: function() {
-        if(!this.modelCombo) {
+        if (!this.modelCombo) {
             var data = [];
             var id = 0;
 
@@ -414,7 +416,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             mode: 'local'
         });
 
-        if(!this.colModel) {
+        if (! this.colModel) {
             this.colModel = new Ext.grid.ColumnModel({
                 defaults: {
                     sortable: true,
@@ -445,7 +447,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         switch (o.field) {
             case 'type':
                 var editor = null;
-                if(this.constrainsConfig[app+model]) {
+                if (this.constrainsConfig[app+model]) {
                     editor = this.getTypeEditor(this.constrainsConfig[app+model]);
                 } else if (this.keyFieldConfigs[app+model]) {
                     editor = new Tine.Tinebase.widgets.keyfield.ComboBox({
@@ -453,8 +455,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                         keyFieldName: this.keyFieldConfigs[app+model].name
                     });
                 }
-                if (editor) colModel.config[o.column].setEditor(editor);
-                else colModel.config[o.column].setEditor(null);
+                if (editor) {
+                    colModel.config[o.column].setEditor(editor);
+                } else {
+                    colModel.config[o.column].setEditor(null);
+                }
                 break;
             default: return;
         }
@@ -512,10 +517,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {String}
      */
     remarkRenderer: function(value, row, record) {
-        if(record && record.get('related_model')) {
+        if (record && record.get('related_model')) {
             var app = Tine.Tinebase.appMgr.get(record.get('related_model').split('_Model_')[0]);
         }
-        if(! value) {
+        if (! value) {
             value = '';
         } else if (Ext.isObject(value)) {
             var str = '';
@@ -624,22 +629,59 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Object} relconf
      */
     onAddRecord: function(record, relconf) {
-        if(record) {
-            if(!relconf) {
+        if (record) {
+            if (! relconf) {
                 relconf = {};
             }
-            if(record.data.hasOwnProperty('relations')) {
+            if (record.data.hasOwnProperty('relations')) {
                 delete record.data.relations;
+            }
+            var rc = this.getActiveSearchCombo().recordClass;
+            var relatedPhpModel = rc.getPhpClassName();
+            
+            var app = rc.getMeta('appName'), model = rc.getMeta('modelName'), f = app + model;
+            var type = '';
+            
+            if (this.constrainsConfig[f] && this.constrainsConfig[f].length) {
+                // per default the first defined type is used
+                var type = this.constrainsConfig[f][0].type;
             }
             
             var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), Ext.apply({
                 related_record: record.data,
                 related_id: record.id,
-                related_model: this.getActiveSearchCombo().recordClass.getMeta('appName') + '_Model_' + this.getActiveSearchCombo().recordClass.getMeta('modelName'),
-                type: '',
+                related_model: relatedPhpModel,
+                type: type,
                 own_degree: 'sibling'
             }, relconf)), record.id);
 
+            if (this.constrainsConfig[app + model]) {
+                Ext.each(this.constrainsConfig[app + model], function(conf) {
+                    // check new value
+                    if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
+                        var resNew = this.store.queryBy(function(existingRecord, id) {
+                            if ((relationRecord.get('type') == existingRecord.get('type')) && (existingRecord.get('related_model') == relationRecord.get('related_model'))) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }, this);
+                        
+                        if (resNew.getCount() >= conf.max) {
+                            if (! this.view) {
+                                this.view = {};
+                            }
+                            if (! this.view.invalidRowRecords) {
+                                this.view.invalidRowRecords = [];
+                            }
+                            this.view.invalidRowRecords.push(relationRecord.get('id'));
+                        }
+                    } 
+                }, this);
+            }
+            
+            
+            
             // add if not already in
             if (this.store.findExact('related_id', record.id) === -1) {
                 Tine.log.debug('Adding new relation:');
@@ -660,7 +702,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     relationCheck: function(recordToAdd, relatedModel) {
         var add = true;
         this.store.each(function(relation) {
-            if(relation.get('related_model') == relatedModel && relation.get('related_id') == recordToAdd.getId()) {
+            if (relation.get('related_model') == relatedModel && relation.get('related_id') == recordToAdd.getId()) {
                 Ext.MessageBox.show({
                     title: _('Failure'),
                     msg: _('The record you tried to link is already linked. Please edit the existing link.'),
