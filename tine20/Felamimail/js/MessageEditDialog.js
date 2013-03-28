@@ -187,7 +187,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
-            iconCls: 'notes_noteIcon',
+            iconCls: 'felamimail-action-reading-confirmation',
             disabled: false,
             scope: this,
             enableToggle: true
@@ -788,13 +788,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO add exception dialog on critical errors?
      */
     onRequestFailed: function(response, request) {
-        Ext.MessageBox.alert(
-            this.app.i18n._('Failed'), 
-            String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
-                + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
-        );
         this.saving = false;
         this.loadMask.hide();
+        
+        Tine.Tinebase.ExceptionHandler.handleRequestException(response);
     },
 
     /**
