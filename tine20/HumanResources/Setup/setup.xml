@@ -19,12 +19,6 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
                     <name>account_id</name>
                     <type>text</type>
                     <length>40</length>
