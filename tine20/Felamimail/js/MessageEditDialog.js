@@ -187,7 +187,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
-            iconCls: 'notes_noteIcon',
+            iconCls: 'felamimail-action-reading-confirmation',
             disabled: false,
             scope: this,
             enableToggle: true
