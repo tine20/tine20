@@ -54,8 +54,8 @@ class Syncroton_Wbxml_Dtd_ActiveSync_CodePage9 extends Syncroton_Wbxml_Dtd_Activ
         'Rtf'                     => 0x21,
         'OrdinalDate'             => 0x22,
         'SubOrdinalDate'          => 0x23,
-        'CalendarType'            => 0x23,
-        'IsLeapMonth'             => 0x23,
-        'FirstDayOfWeek'          => 0x23
+        'CalendarType'            => 0x24,
+        'IsLeapMonth'             => 0x25,
+        'FirstDayOfWeek'          => 0x26,
     );
 }
