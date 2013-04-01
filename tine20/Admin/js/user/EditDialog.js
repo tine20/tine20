@@ -765,7 +765,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         this.passwordConfirmWindow.render(document.body);
         
-        return {
+        var config = {
             xtype: 'tabpanel',
             deferredRender: false,
             border: false,
@@ -1015,6 +1015,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: this.initSmtp()
             }]
         };
+        return config;
     }
 });
 

@@ -69,6 +69,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CONTAINERS = 'manage_containers';
     
     /**
+     * the right to manage customfields
+     * @staticvar string
+     */
+    const MANAGE_CUSTOMFIELDS = 'manage_customfields';
+    
+    /**
      * the right to view roles
      * @staticvar string
      */
@@ -104,6 +110,20 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     const VIEW_CONTAINERS = 'view_containers';
     
+    /**
+     * the right to customfields
+     * @staticvar string
+     */
+    const VIEW_CUSTOMFIELDS = 'view_customfields';
+        
+    /**
+     * MOD: added right
+     * 
+     * the right to manage serverinfo
+     * @staticvar string
+     */
+    const VIEW_SERVERINFO = 'view_serverinfo';
+        
     /**
      * holds the instance of the singleton
      *
@@ -159,12 +179,15 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_ROLES,
             self::MANAGE_COMPUTERS,
             self::MANAGE_CONTAINERS,
+            self::MANAGE_CUSTOMFIELDS,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
             self::VIEW_APPS, 
             self::VIEW_ROLES,
             self::VIEW_COMPUTERS,
             self::VIEW_CONTAINERS,
+            self::VIEW_CUSTOMFIELDS,
+            self::VIEW_SERVERINFO,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -209,6 +232,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage containers'),
                 'description'   => $translate->_('add, delete and edit containers and manage container grants'),
             ),
+            self::MANAGE_CUSTOMFIELDS   => array(
+                'text'          => $translate->_('manage customfields'),
+                'description'   => $translate->_('add and edit customfields'),
+            ),            
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('view access log'),
                 'description'   => $translate->_('view access log list'),
@@ -233,11 +260,17 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view containers'),
                 'description'   => $translate->_('view personal and shared containers'),
             ),
+            self::VIEW_CUSTOMFIELDS   => array(
+                'text'          => $translate->_('view customfields'),
+                'description'   => $translate->_('view customfields list'),
+            ),
+            self::VIEW_SERVERINFO   => array(
+                'text'          => $translate->_('view serverinfo'),
+                'description'   => $translate->_('view serverinfo list'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
-
-    
 }

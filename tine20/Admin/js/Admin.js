@@ -143,7 +143,8 @@ Tine.Admin = function () {
             children: [],
             leaf: null,
             expanded: true,
-            dataPanelType: "serverinfo"
+            dataPanelType: "serverinfo",
+            viewRight: 'serverinfo'
         }];
     };
 

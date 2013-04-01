@@ -38,9 +38,11 @@ Tine.Admin.Applications.Main = function() {
     };
     
     var _openSettingsWindow = function(appName) {
+        var translation = new Locale.Gettext();
+        translation.textdomain('Admin');
         Tine[appName].AdminPanel.openWindow({
             record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
-            title: String.format(_('{0} Settings'), translateAppTitle(appName)),
+            title: String.format(translation.gettext('{0} Settings'), translateAppTitle(appName)),
             listeners: {
                 scope: this,
                 'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
