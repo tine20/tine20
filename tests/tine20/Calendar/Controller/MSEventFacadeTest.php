@@ -53,19 +53,23 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         ), TRUE);
         $event->alarms[0]->setOption('skip', array(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_testUserContact->getId()
+            'user_id'   => $this->_testUserContact->getId(),
+            'organizer' => Tinebase_Core::getUser()->contact_id
         )));
         $event->alarms[1]->setOption('attendee', array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_testUserContact->getId()
+            'user_id'   => $this->_testUserContact->getId(),
+            'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         $event->alarms[2]->setOption('skip', array(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId()
+            'user_id'   => $this->_personasContacts['sclever']->getId(),
+            'organizer' => Tinebase_Core::getUser()->contact_id
         )));
         $event->alarms[3]->setOption('attendee', array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId()
+            'user_id'   => $this->_personasContacts['sclever']->getId(),
+            'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         
         $persistentException = clone $event;
@@ -286,6 +290,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $event->dtend->addHour(2);
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;COUNT=3';
         $event->alarms = clone $alarm30;
+        $event->organizer = Tinebase_Core::getUser()->contact_id;
         $event = Calendar_Controller_Event::getInstance()->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -315,6 +320,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $testAttendee = new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'   => Tinebase_Core::getUser()->contact_id,
+            'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         
         // update base events status
@@ -399,7 +405,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         
         $noMailAttendee = new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $noMailContact->getId()
+            'user_id'   => $noMailContact->getId(),
+            'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         
         $event = $this->_getEvent();

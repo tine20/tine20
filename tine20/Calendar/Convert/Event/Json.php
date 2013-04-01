@@ -68,7 +68,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
     */
     static public function resolveOrganizer($_events)
     {
-        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
+        $events = $_events instanceof Tinebase_Record_RecordSet || is_array($_events) ? $_events : array($_events);
     
         $organizerIds = array();
         foreach ($events as $event) {

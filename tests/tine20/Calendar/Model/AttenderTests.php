@@ -169,7 +169,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $event->attendee->addRecord(new Calendar_Model_Attender(array(
             'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'      => $persistentContact->getId(),
-            'role'         => Calendar_Model_Attender::ROLE_REQUIRED,
+            'role'         => Calendar_Model_Attender::ROLE_REQUIRED
         )));
         
         $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);

@@ -96,7 +96,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'description'          => array('allowEmpty' => true          ),
         'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array('allowEmpty' => true          ),
-        'organizer'            => array('allowEmpty' => true,         ),
+        'organizer'            => array('allowEmpty' => false,         ),
         'priority'             => array('allowEmpty' => true, 'Int'   ),
         'status'            => array(
             'allowEmpty' => true,
@@ -111,6 +111,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'alarms'                => array('allowEmpty' => true         ), // RecordSet of Tinebase_Model_Alarm
         'tags'                  => array('allowEmpty' => true         ), // originally categories handled by Tinebase_Tags
         'notes'                 => array('allowEmpty' => true         ), // originally comment handled by Tinebase_Notes
+        'relations'             => array('allowEmpty' => true         ),
         //'contact'               => array('allowEmpty' => true         ),
         //'related'               => array('allowEmpty' => true         ),
         //'resources'             => array('allowEmpty' => true         ),
@@ -549,8 +550,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function resolveOrganizer()
     {
-        if (! $this->organizer instanceof Addressbook_Model_Contact) {
-            $this->organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE)->getFirstRecord();
+        if (! empty($this->organizer) && ! $this->organizer instanceof Addressbook_Model_Contact) {
+            $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE);
+            if (count($contacts)) {
+                $this->organizer = $contacts->getFirstRecord();
+            }
         }
         
         return $this->organizer;

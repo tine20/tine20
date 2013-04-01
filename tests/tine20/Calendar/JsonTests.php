@@ -719,7 +719,8 @@ class Calendar_JsonTests extends Calendar_TestCase
             'summary' => 'bla bla',
             'class'    => 'PUBLIC',
             'transp'    => 'OPAQUE',
-            'container_id' => $container['id']
+            'container_id' => $container['id'],
+            'organizer' => Tinebase_Core::getUser()->contact_id
             ));
         $event = Calendar_Controller_Event::getInstance()->create($event);
         $this->assertEquals($container['id'], $event->container_id);
