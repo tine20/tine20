@@ -80,7 +80,9 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 $this->createPersonalFolder($_eventObject->account);
                 break;
             case 'Admin_Event_DeleteAccount':
-                $this->deletePersonalFolder($_eventObject->account);
+                foreach ($_eventObject->accountIds as $accountId) {
+                    $this->deletePersonalFolder($accountId);
+                }
                 break;
         }
     }

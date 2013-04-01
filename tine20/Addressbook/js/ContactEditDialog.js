@@ -435,6 +435,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             
             isValid = false;
         }
+        else {
+            form.findField('n_family').clearInvalid();
+            form.findField('org_name').clearInvalid();
+        }
         
         return isValid && Tine.Addressbook.ContactEditDialog.superclass.isValid.apply(this, arguments);
     },

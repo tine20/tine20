@@ -40,7 +40,7 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
                 /* select */ array()
             );
             $_select->where($db->quoteIdentifier('groupvisibility.visibility').' = ?', 'displayed');
-            $_select->orWhere($db->quoteIdentifier('addressbook_lists.type'). ' = ?', Addressbook_Model_List::LISTTYPE_LIST);
+            $_select->orWhere($db->quoteInto($db->quoteIdentifier('addressbook_lists.type'). ' = ?', Addressbook_Model_List::LISTTYPE_LIST));
         }
     }
 }
