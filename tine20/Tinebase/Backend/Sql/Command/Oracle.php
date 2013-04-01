@@ -117,4 +117,14 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return 'LIKE';
     }
+    
+    /**
+     * escape special char 
+     * 
+     * @return string
+     */ 
+     public function escapeSpecialChar($value)
+     {
+         return $value;
+     }    
 }

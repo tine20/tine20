@@ -117,4 +117,14 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     {
         return 'LIKE';
     }
+    
+    /**
+     * escape special char
+     *  
+     * @return string
+     */ 
+     public function escapeSpecialChar($value)
+     {
+         return $value;
+     }
 }

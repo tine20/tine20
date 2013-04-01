@@ -60,7 +60,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                 array('cache_totalcount' => new Zend_Db_Expr('COUNT(DISTINCT(felamimail_cache_msg_flag.message_id))'))
             )
             ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.folder_id') . ' = ?', $folderId)
-            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.flag') . ' = ?', '\\Seen');
+            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.flag') . ' = ?', $dbCommand->escapeSpecialChar(Zend_Mail_Storage::FLAG_SEEN));
         
         $stmt = $this->_db->query($select);
         $seenCount = $stmt->fetchColumn(0);
@@ -157,7 +157,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                 $intValue = (int) substr($value, 1);
                 $quotedIdentifier = $this->_db->quoteIdentifier($counter);
                 if ($value{0} == '-') {
-                    $data[$counter] = $this->_dbCommand->getIfElse($quotedIdentifier . ' >= ' . $intValue, $quotedIdentifier . ' - ' . $intValue, '0');
+                    $data[$counter] = new Zend_Db_Expr('( CASE WHEN' . $quotedIdentifier . ' >= ' . $intValue . ' THEN ' . $quotedIdentifier . ' - ' . $intValue . ' ELSE 0 END)');
                     $folder->{$counter} = ($folder->{$counter} >= $intValue) ? $folder->{$counter} - $intValue : 0;
                 } else {
                     $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' + ' . $intValue);

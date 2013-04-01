@@ -73,4 +73,11 @@ interface Tinebase_Backend_Sql_Command_Interface
      * @return string
      */
     public function getLike();
+    
+    /**
+     * escape special char
+     *  
+     * @ return string
+     */
+     public function escapeSpecialChar($value);
 }

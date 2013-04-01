@@ -123,4 +123,14 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return 'iLIKE';
     }
+    
+    /**
+     * escape special char 
+     * 
+     * @return string
+     */ 
+     public function escapeSpecialChar($value)
+     {
+         return str_replace('\\', '\\\\', $value);
+     }     
 }
