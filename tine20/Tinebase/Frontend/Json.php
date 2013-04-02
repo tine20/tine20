@@ -439,7 +439,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function login($username, $password)
     {
         Tinebase_Core::startSession('tinebase');
-        
+
         // try to login user
         $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson') === TRUE);
 
@@ -450,7 +450,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'jsonKey'        => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
             );
-            
+             
+            if(Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)){
+                // save in cookie (expires in 2 weeks)
+                setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
+            } else {
+                setcookie('TINE20LASTUSERID', '', 0);
+            }
+
             $this->_setCredentialCacheCookie();
             
         } else {

@@ -168,6 +168,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const APPDEFAULTS = 'appdefaults';
     
     /**
+    * REUSEUSERNAME_SAVEUSERNAME
+    *
+    * @var string
+    */
+    const REUSEUSERNAME_SAVEUSERNAME = 'saveusername';
+        
+    /**
     * PASSWORD_CHANGE
     *
     * @var string
@@ -444,6 +451,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Directory with web server write access for user files.')
             'description'           => 'Directory with web server write access for user files.',
             'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::REUSEUSERNAME_SAVEUSERNAME => array(
+            //_('Reuse last username logged')
+            'label'                 => 'Reuse last username logged',
+            //_('Reuse last username logged')            
+            'description'           => 'Reuse last username logged',
+            'type'                  => 'bool',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

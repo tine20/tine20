@@ -553,6 +553,30 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             xtype: 'fieldset',
             collapsible: false,
             autoHeight: true,
+            title: this.app.i18n._('Login panel'),
+            defaults: {
+                width: 300,
+                xtype: 'uxspinner',
+                tabIndex: this.getTabIndex,
+                strategy: {
+                    xtype: 'number',
+                    minValue: 0,
+                    maxValue: 64
+                },
+                value: 0
+            },
+            items: [
+            Ext.applyIf({
+                name: 'saveusername_saveusername',
+                fieldLabel: this.app.i18n._('Reuse last username logged'),
+                store: [[1, this.app.i18n._('Yes')], [0, this.app.i18n._('No')]],
+                value: 0
+            }, commonComboConfig)
+            ]
+        }, {
+            xtype: 'fieldset',
+            collapsible: false,
+            autoHeight: true,
             title: this.app.i18n._('Password Settings'),
             defaults: {
                 width: 300,

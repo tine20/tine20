@@ -109,7 +109,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     name: 'password',
                     //allowBlank: false,
                     selectOnFocus: true,
-                    value: this.defaultPassword
+                    value: this.defaultPassword,
+                    listeners: {
+                        render: this.setLastLoginUser.createDelegate(this) 
+                    }                     
                 }],
                 buttonAlign: 'right',
                 buttons: [{
@@ -124,7 +127,16 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         return this.loginPanel;
     },
-    
+
+    setLastLoginUser: function (field) {
+        var lastUser;
+        lastUser = Ext.util.Cookies.get('TINE20LASTUSERID');
+        if (lastUser) {
+            this.loginPanel.getForm().findField('username').setValue(lastUser);
+            field.focus(false,250);
+        }
+    },
+     
     getTinePanel: function () {
         if (! this.tinePanel) {
             this.tinePanel = new Ext.Container({

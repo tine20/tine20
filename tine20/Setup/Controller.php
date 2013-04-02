@@ -892,6 +892,7 @@ class Setup_Controller
             'accounts'          => $this->_getAccountsStorageData(),
             'redirectSettings'  => $this->_getRedirectSettings(),
             'password'          => $this->_getPasswordSettings(),
+            'saveusername'      => $this->_getReuseUsernameSettings()
         );
     }
     
@@ -943,6 +944,10 @@ class Setup_Controller
         
         if (isset($_authenticationData['password'])) {
             $this->_updatePasswordSettings($_authenticationData['password']);
+        }
+        
+        if (isset($_authenticationData['saveusername'])) {
+            $this->_updateReuseUsername($_authenticationData['saveusername']);
         }
         
         if (isset($_authenticationData['acceptedTermsVersion'])) {
@@ -1077,13 +1082,25 @@ class Setup_Controller
             }
         }
     }
+
+        /**
+     * update pw settings
+     * 
+     * @param array $data
+     */
+    protected function _updatePasswordSettings($data)
+    {
+        foreach ($data as $config => $value) {
+            Tinebase_Config::getInstance()->set($config, $value);
+        }
+    }
     
     /**
      * update pw settings
      * 
      * @param array $data
      */
-    protected function _updatePasswordSettings($data)
+    protected function _updateReuseUsername($data)
     {
         foreach ($data as $config => $value) {
             Tinebase_Config::getInstance()->set($config, $value);
@@ -1156,6 +1173,28 @@ class Setup_Controller
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
+        );
+
+        $result = array();
+        $tinebaseInstalled = $this->isInstalled('Tinebase');
+        foreach ($configs as $config => $default) {
+            $result[$config] = ($tinebaseInstalled) ? Tinebase_Config::getInstance()->get($config, $default) : $default;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get Reuse Username to login textbox
+     * 
+     * @return array
+     * 
+     * @todo should use generic mechanism to fetch setup related configs
+     */
+    protected function _getReuseUsernameSettings()
+    {
+        $configs = array(
+            Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME         => 0,
         );
 
         $result = array();
