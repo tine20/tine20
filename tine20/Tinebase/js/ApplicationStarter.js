@@ -378,7 +378,7 @@ Tine.Tinebase.ApplicationStarter = {
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
                             Ext.copyTo({}, modelConfig, 
-                               'defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName')
+                               'defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group')
                         );
                     }
                     

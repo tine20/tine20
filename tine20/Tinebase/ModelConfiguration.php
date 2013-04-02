@@ -497,9 +497,16 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields'
+        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group'
     );
 
+    /**
+     * the module group (will be on the same leaf of the content type tree panel)
+     * 
+     * @var string
+     */
+    protected $_group = NULL;
+    
     /**
      * the backend properties holding the collected properties
      *
