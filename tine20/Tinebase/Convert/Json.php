@@ -107,6 +107,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $foreignRecords = $controller->getMultiple($foreignIds);
                 }
                 
+                $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                $foreignRecords->convertDates = true;
+                Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($foreignRecords);
+                $fr = $foreignRecords->getFirstRecord();
+                if ($fr && $fr->has('notes')) {
+                    Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+                }
+                
                 if ($foreignRecords->count()) {
                     foreach ($_records as $record) {
                         foreach ($fields as $field) {
@@ -130,15 +138,15 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveMultipleIdFields(Tinebase_Record_RecordSet $_records)
     {
         $ownRecordClass = $_records->getRecordClassName();
-        if(! $resolveFields = $ownRecordClass::getResolveForeignIdFields()) {
+        if (! $resolveFields = $ownRecordClass::getResolveForeignIdFields()) {
             return;
         }
         
-        foreach($resolveFields as $foreignRecordClassName => $fields) {
+        foreach ($resolveFields as $foreignRecordClassName => $fields) {
             $foreignIds = array();
             $fields = (array) $fields;
     
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $foreignIds = array_unique(array_merge($foreignIds, $_records->{$field}));
             }
     
@@ -148,11 +156,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
     
             $foreignRecords = $controller->getMultiple($foreignIds);
-            if($foreignRecords->count()) {
+            $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $foreignRecords->convertDates = true;
+            
+            if ($foreignRecords->count()) {
                 foreach ($_records as $record) {
-                    foreach($fields as $field) {
+                    foreach ($fields as $field) {
                         $idx = $foreignRecords->getIndexById($record->{$field});
-                        if(isset($idx) && $idx !== FALSE) {
+                        if (isset($idx) && $idx !== FALSE) {
                             $record->{$field} = $foreignRecords[$idx];
                         }
                     }
@@ -182,7 +193,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $ownIds = $_records->{$config->idProperty};
         
         // iterate fields to resolve
-        foreach($resolveFields as $fieldKey => $c) {
+        foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
             // fetch the fields by the refIfField
             $controller = array_key_exists('controllerClassName', $config) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
@@ -205,7 +216,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             
             $foreignRecords = $controller->search($filter, $paging);
-            
+            $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $foreignRecords->convertDates = true;
+            Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($foreignRecords);
+            $fr = $foreignRecords->getFirstRecord();
+            if ($fr && $fr->has('notes')) {
+                Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+            }
             if ($foreignRecords->count() > 0) {
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());

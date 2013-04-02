@@ -215,7 +215,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @param {Function} ticket function for async defer
              * Fired when remote record is saving
              */
-            'save'
+            'save',
+            /**
+             * @event updateDependent
+             * Fired when a subpanel updates the record locally
+             */
+            'updateDependent'
         );
         
         if (Ext.isString(this.modelConfig)) {
@@ -300,16 +305,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 var key = this.fixedFields.keys[index]; 
                 
                 var field = this.getForm().findField(key);
-                if (Ext.isFunction(this.recordClass.getField(key).type)) {
-                    var foreignRecordClass = this.recordClass.getField(key).type;
-                    var record = new foreignRecordClass(value);
-                    field.selectedRecord = record;
-                    field.setValue(value);
-                    field.fireEvent('select');
-                } else {
-                    field.setValue(value);
+                
+                if (field) {
+                    if (Ext.isFunction(this.recordClass.getField(key).type)) {
+                        var foreignRecordClass = this.recordClass.getField(key).type;
+                        var record = new foreignRecordClass(value);
+                        field.selectedRecord = record;
+                        field.setValue(value);
+                        field.fireEvent('select');
+                    } else {
+                        field.setValue(value);
+                    }
+                    field.disable();
                 }
-                field.disable();
             }, this);
         }
     },

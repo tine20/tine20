@@ -30,6 +30,8 @@ class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('deleted_time', $fields);
         // test supervisor_id field
         $this->assertArrayHasKey('supervisor_id', $fields);
+        $this->assertArrayHasKey('notes', $fields);
+        $this->assertArrayHasKey('tags', $fields);
 
         $contractCObj = HumanResources_Model_Contract::getConfiguration();
         $fields = $contractCObj->getFields();
@@ -54,7 +56,9 @@ class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         ));
         
         // test record fields
-        $resolveFields = $employee::getConfiguration()->recordFields;
+        $modelConfig = $employee::getConfiguration();
+        
+        $resolveFields = $modelConfig->recordFields;
         $this->assertArrayHasKey('account_id',       $resolveFields);
         $this->assertArrayHasKey('division_id',      $resolveFields);
         $this->assertArrayHasKey('created_by',       $resolveFields);

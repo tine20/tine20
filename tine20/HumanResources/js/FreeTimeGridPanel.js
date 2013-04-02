@@ -54,22 +54,22 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         
         this.contextMenuItems = [this.action_bookSicknessAsVacation];
         
-        Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
-        
-        this.fillBottomToolbar();
-        
         if (this.freetimeType) {
             if (this.freetimeType == 'SICKNESS') {
                 this.setTitle(this.app.i18n._('Sickness'));
-                this.i18nRecordName = this.app.i18n._('Sickness Day'),
-                this.i18nRecordsName = this.app.i18n._('Sickness Days')
+                this.i18nRecordName = this.app.i18n._('Sickness Day');
+                this.i18nRecordsName = this.app.i18n._('Sickness Days');
             } else {
                 this.setTitle(this.app.i18n._('Vacation'));
                 this.i18nRecordName = this.app.i18n._('Vacation Day');
                 this.i18nRecordsName = this.app.i18n._('Vacation Days');
             }
-            this.action_addInNewWindow.setText(String.format(_('Add {0}'), this.freetimeType == 'SICKNESS' ? this.app.i18n._('Sickness Days') : this.app.i18n._('Vacation Days')));
         }
+        this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
+        
+        Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
+        
+        this.fillBottomToolbar();
     },
     
     /**
@@ -166,6 +166,23 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             return this.vacationStatusRenderer(value, row, record);
         }
     },
+    /**
+     * renders the type
+     * @param {String} value
+     * @param {Object} b
+     * @param {Tine.HumanResources.Model.FreeTime} record
+     */
+    renderType: function(value, row, record) {
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get('HumanResources');
+        }
+        
+        if (record.get('type') == 'sickness') {
+            return this.app.i18n._('Sickness');
+        } else {
+            return this.app.i18n._('Vacation');
+        }
+    },
     
     /**
      * called when the store gets updated, e.g. from editgrid
@@ -183,3 +200,4 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
 });
 
 Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'status', Tine.HumanResources.FreeTimeGridPanel.prototype.renderStatus);
+Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'type', Tine.HumanResources.FreeTimeGridPanel.prototype.renderType);

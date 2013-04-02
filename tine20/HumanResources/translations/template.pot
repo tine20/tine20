@@ -625,3 +625,24 @@ msgid "Cost Centers"
 
 msgid "Currently employed employees"
 msgid "All employees"
+
+msgid 'Edit {0} for "{1}" - {2}'
+msgid "Extra free time"
+msgid_plural "Extra free times"
+
+msgid "Personal account"
+msgid_plural "Personal accounts"
+
+msgid "Possible vaction days"
+msgid "Remaining vaction days"
+msgid "Taken vaction days 2013"
+msgid "Excused sickness days"
+msgid "Unexcused sickness days 2013"
+msgid "Days to work"
+msgid "Hours to work"
+
+msgid "HumanResources"
+
+msgid "Days"
+msgid "Payed"
+msgid "Not payed"

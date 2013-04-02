@@ -24,16 +24,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    windowNamePrefix: 'FreeTimeEditWindow_',
-    appName: 'HumanResources',
-    recordClass: Tine.HumanResources.Model.FreeTime,
-    recordProxy: Tine.HumanResources.freetimeBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: false,
-    showContainerSelector: false,
     mode: 'local',
     loadRecord: false,
-    windowWidth: 550,
+    windowWidth: 440,
     windowHeight: 450,
     /**
      * show private Information (autoset due to rights)
@@ -56,7 +49,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.app = Tine.Tinebase.appMgr.get('HumanResources')
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.initDatePicker();
-        
+        this.mode = 'local';
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -80,8 +73,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.datePicker.onRecordLoad(this.record, this.fixedFields.get('employee_id').id);
         
         if (this.record.get('employee_id')) {
-            this.employeePicker.selectedRecord = new Tine.HumanResources.Model.Employee(this.record.get('employee_id'));
-            this.employeePicker.fireEvent('select');
             this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
         }
         
@@ -141,23 +132,12 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     getFormItems: function() {
         this.type = this.fixedFields.get('type');
-        
-        this.employeePicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Employee', {
-            fieldLabel: this.app.i18n._('Employee'),
-            name: 'employee_id',
-            app: this
-        });
-        
-        this.employeePicker.on('select', function(){
-            this.datePicker.loadFeastDays(this.employeePicker.selectedRecord);
-        }, this);
-        
         var statusBoxDefaults = {
             fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
             app: 'HumanResources',
             name: 'status',
-            columnWidth: .5
+            columnWidth: 1
         };
         
         this.statusBox = this.type == 'SICKNESS' ? 
@@ -195,7 +175,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         title: this.app.i18n._('FreeTime'),
                         items: [{
                             xtype: 'columnform',
-                            style: { 'float': 'left', width: '50%', 'min-width': '250px' },
+                            style: { 'float': 'left', width: '50%', 'min-width': '178px' },
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'textfield',
@@ -205,15 +185,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 columnWidth: 1
                             },
                             items: [
-                                [this.employeePicker],[
-                                {   xtype: 'widget-keyfieldcombo',
-                                    app: 'HumanResources',
-                                    keyFieldName: 'freetimeType',
-                                    fieldLabel: this.app.i18n._('Type'),
-                                    value: this.type.toLowerCase,
-                                    name: 'type',
-                                    columnWidth: .5
-                                }, this.statusBox],
+                                [this.statusBox],
                                 [{
                                         xtype: 'panel',
                                         cls: 'HumanResources x-form-item',

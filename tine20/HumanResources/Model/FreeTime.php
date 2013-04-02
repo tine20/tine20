@@ -35,8 +35,8 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'recordsName'     => 'Free Times', // _('Free Times')
         'hasRelations'    => FALSE,
         'hasCustomFields' => FALSE,
-        'hasNotes'        => FALSE,
-        'hasTags'         => FALSE,
+        'hasNotes'        => TRUE,
+        'hasTags'         => TRUE,
         'modlogActive'    => TRUE,
         'isDependent'     => TRUE,
         'createModule'    => FALSE,

@@ -147,7 +147,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             return;
         }
         // find contract before, set end_date one day before the new contracts' start_date, if needed
-        $filter = new HumanResources_Model_ContractFilter(array(array('field' => 'start_date', 'operator' => 'before', 'value' => $_createdRecord->start_date)));
+        $filter = new HumanResources_Model_ContractFilter(array(
+            array('field' => 'start_date', 'operator' => 'before', 'value' => $_createdRecord->start_date)
+        ));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date' , 'operator' => 'equals', 'value' => NULL)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id' , 'operator' => 'not', 'value' => $_createdRecord->getId())));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id' , 'operator' => 'equals', 'value' => $_createdRecord->employee_id)));

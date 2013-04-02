@@ -105,10 +105,9 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                     items: [{
                         xtype: 'fieldset',
                         autoHeight: true,
-                        title: this.app.i18n._('ExtraFreeTime'),
+                        title: this.app.i18n._('Extra free time'),
                         items: [{
                             xtype: 'columnform',
-//                            style: { 'float': 'left', width: '50%', 'min-width': '250px' },
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'numberfield',
@@ -118,11 +117,6 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                                 columnWidth: 1
                             },
                             items: [[
-                                this.accountPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
-                                    fieldLabel: this.app.i18n._('Account'),
-                                    name: 'account_id',
-                                    app: this
-                                })],[
                                 {name: 'days', fieldLabel: this.app.i18n._('Days')}],[
                                 {   xtype: 'widget-keyfieldcombo',
                                     app: 'HumanResources',
