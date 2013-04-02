@@ -656,7 +656,7 @@ class Tinebase_ModelConfiguration {
             }
             
             // don't handle field if app is not available
-            if (($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
+            if (array_key_exists('config', $fieldDef) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
                 continue;
