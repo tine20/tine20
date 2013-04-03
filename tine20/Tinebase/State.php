@@ -58,6 +58,25 @@ class Tinebase_State
     /**************************** public functions *********************************/
     
     /**
+     * returns a filter for searching in backend by stateId and the current user
+     * 
+     * @param string $stateId
+     * @param string $userId
+     * @return Tinebase_Model_StateFilter
+     */
+    protected function _getFilter($stateId, $userId = NULL)
+    {
+        if (! $userId) {
+            $userId = Tinebase_Core::getUser()->getId();
+        }
+        
+        return new Tinebase_Model_StateFilter(array(
+            array('field' => 'state_id', 'operator' => 'equals', 'value' => $stateId),
+            array('field' => 'user_id',  'operator' => 'equals', 'value' => $userId)
+        ));
+    }
+    
+    /**
      * clears a single state entry
      * 
      * @param string $_name
@@ -69,11 +88,10 @@ class Tinebase_State
             throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
         }
         
-        $stateInfo = $this->loadStateInfo();
+        $recordToDelete = $this->_backend->search($this->_getFilter($_name))->getFirstRecord();
         
-        if (array_key_exists($_name, $stateInfo)) {
-            unset($stateInfo[$_name]);
-            $this->saveStateInfo($stateInfo);
+        if ($recordToDelete) {
+            $this->_backend->delete($recordToDelete->getId());
         }
     }
     
@@ -90,38 +108,22 @@ class Tinebase_State
             throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
         }
         
-        $stateInfo = $this->loadStateInfo();
-        
-        $stateInfo[$_name] = $_value;
-        $this->saveStateInfo($stateInfo);
-    }
-    
-    /**
-     * save state data
-     *
-     * @param JSONstring $_stateData
-     */
-    public function saveStateInfo($_stateData)
-    {
-        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_STATE)) {
-            throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
-        }
-        
-        
         $userId = Tinebase_Core::getUser()->getId();
         
-        try {
-            $stateRecord = $this->_backend->getByProperty($userId, 'user_id');
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $stateRecord = new Tinebase_Model_State(array(
-                'user_id'   => $userId,
-                'data'      => Zend_Json::encode($_stateData)
-            ));
-            $this->_backend->create($stateRecord);
-        }
+        $results = $this->_backend->search($this->_getFilter($_name, $userId));
         
-        $stateRecord->data = Zend_Json::encode($_stateData);
-        $this->_backend->update($stateRecord);
+        if ($results->count() == 0) {
+            $record = new Tinebase_Model_State(array(
+                'user_id'   => $userId,
+                'state_id'  => $_name,
+                'data'      => $_value
+            ));
+            $this->_backend->create($record);
+        } else {
+            $record = $results->getFirstRecord();
+            $record->data = $_value;
+            $this->_backend->update($record);
+        }
     }
 
     /**
@@ -135,11 +137,11 @@ class Tinebase_State
         
         if (Tinebase_Core::getUser()) {
             $userId = Tinebase_Core::getUser()->getId();
-            try {
-                $state = $this->_backend->getByProperty($userId, 'user_id');
-                $result = Zend_Json::decode($state->data);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // no state found
+            $states = $this->_backend->search(new Tinebase_Model_StateFilter(array(
+                array('field' => 'user_id', 'operator' => 'equals', 'value' => $userId)
+            )));
+            foreach ($states as $stateRecord) {
+                $result[$stateRecord->state_id] = $stateRecord->data;
             }
         }
         
