@@ -59,6 +59,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      * if a year is given, missing accounts for this year will be built, otherwise the current and following year will be used
      *
      * @param integer $year
+     * @param HumanResources_Model_Employee
      */
     public function createMissingAccounts($year = NULL, $employee = NULL)
     {
@@ -66,7 +67,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         if (! $year) {
             $date = new Tinebase_DateTime();
             $year = (int) $date->format('Y');
-            $this->createMissingAccounts($year);
+            $this->createMissingAccounts($year, $employee);
             $date->addYear(1);
             $year = (int) $date->format('Y');
         }
@@ -82,6 +83,14 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         
         $validEmployeeIds = array_unique(HumanResources_Controller_Contract::getInstance()->getValidContracts($year_starts, $year_ends, $employee)->employee_id);
         
+        $existingFilter = new HumanResources_Model_AccountFilter(array(
+            array('field' => 'year', 'operator' => 'equals', 'value' => $year)
+        ));
+        $existingFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'in', 'value' => $validEmployeeIds)));
+        
+        $result = $this->search($existingFilter)->employee_id;
+        
+        $validEmployeeIds = array_diff($validEmployeeIds, $result);
         foreach($validEmployeeIds as $id) {
             $this->create(new HumanResources_Model_Account(array('employee_id' => $id, 'year' => $year)));
         }

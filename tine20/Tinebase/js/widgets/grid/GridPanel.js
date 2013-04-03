@@ -788,6 +788,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         items.push(item.data);
                     });
                     this.editDialog.record.set(this.editDialogRecordProperty, items);
+                    this.editDialog.fireEvent('updateDependent');
                 } else {
                     this.recordProxy.saveRecord(record, {
                         scope: this,
@@ -1742,6 +1743,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     items.push(item.data);
                 });
                 this.editDialog.record.set(this.editDialogRecordProperty, items);
+                this.editDialog.fireEvent('updateDependent');
                 return;
             }
         }

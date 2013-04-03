@@ -103,6 +103,26 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         foreach (array_keys($config) as $property) {
             $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
         }
+        
+        $firstDate = $_createdRecord->employment_begin ? $_createdRecord->employment_begin : Tinebase_DateTime::now();
+        
+        $accountController = HumanResources_Controller_Account::getInstance();
+        $account = new HumanResources_Model_Account(array(
+            'employee_id' => $_createdRecord->getId(),
+            'year'        => $firstDate->format('Y')
+        ));
+        
+        $firstDate = Tinebase_DateTime::now();
+        
+        $accountController->create($account);
+        $firstDate->setDate($firstDate->format('Y'), 1, 1)->addYear(1);
+        
+        if (! $_createdRecord->employment_end || $firstDate->isEarlier($_createdRecord->employment_end)) {
+            $account->year = $firstDate->format('Y');
+            $account->id = NULL;
+            $accountController->create($account);
+        }
+        
     }
     
     /**

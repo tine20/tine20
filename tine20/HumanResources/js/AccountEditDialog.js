@@ -24,7 +24,6 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     /*
      * @private
      */
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
 
     windowWidth: 550,
@@ -53,14 +52,6 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
         this.window.setTitle(String.format(this.app.i18n._('Edit {0} for "{1}" - {2}'), this.i18nRecordName, Ext.util.Format.htmlEncode(this.record.get('employee_id').n_fn), this.record.get('year')));
     },
 
-//    /**
-//     * executed when record gets updated from form
-//     * @private
-//     */
-//    onRecordUpdate: function() {
-//        Tine.HumanResources.AccountEditDialog.superclass.onRecordUpdate.call(this);
-//    },
-    
     /**
      * returns dialog
      * 
@@ -113,9 +104,9 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: String.format(this.app.i18n._('Possible vaction days {0}'), this.record.get('year')), name: 'possible_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: String.format(this.app.i18n._('Remaining vaction days {0}'), this.record.get('year')), name: 'remaining_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: String.format(this.app.i18n._('Taken vaction days {0}'), this.record.get('year')), name: 'taken_vacation_days', columnWidth: 1/3 }
+                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/3 },
+                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'remaining_vacation_days', columnWidth: 1/3 },
+                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'taken_vacation_days', columnWidth: 1/3 }
                             ]]
                         }]
                     }, {
@@ -128,8 +119,8 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: String.format(this.app.i18n._('Excused sickness days {0}'), this.record.get('year')), name: 'excused_sickness' },
-                                {fieldLabel: String.format(this.app.i18n._('Unexcused sickness days {0}'), this.record.get('year')), name: 'unexcused_sickness' }
+                                {fieldLabel: this.app.i18n._('Excused sickness days'), name: 'excused_sickness' },
+                                {fieldLabel: this.app.i18n._('Unexcused sickness days'), name: 'unexcused_sickness' }
                             ]]
                         }]
                     }, {

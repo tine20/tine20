@@ -21,13 +21,13 @@ msgstr ""
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr "Private Daten des Angestellten bearbeiten"
+msgstr "Private Daten des Mitarbeiters bearbeiten"
 
 #: Acl/Rights.php:94
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Angestellten."
+msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters."
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
@@ -453,16 +453,12 @@ msgstr "Der Titel, den Sie gewählt haben, wird bereits benutzt. Bitte wählen S
 #: js/Models.js:72
 msgid "Employees"
 msgid_plural "Employees"
-msgstr[0] "Angestellte"
-msgstr[1] "Angestellte"
-
-#: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick search"
-msgstr "Schnellsuche"
+msgstr[0] "Mitarbeiter"
+msgstr[1] "Mitarbeiter"
 
 #: js/Models.js:107
 msgid "Employee name"
-msgstr "Name des Angestellten"
+msgstr "Name des Mitarbeiters"
 
 #: js/Models.js:120 js/Models.js:382
 msgid "Last Modified Time"
@@ -698,3 +694,60 @@ msgstr "Zur Zeit angestellt"
 
 msgid "All employees"
 msgstr "Alle Angestellten"
+
+msgid 'Edit {0} for "{1}" - {2}'
+msgstr '{0} von "{1}" des Jahres {2} bearbeiten'
+
+
+msgid "Working Times"
+msgid_plural "Working Times"
+msgstr[0] "Arbeitszeitmodelle"
+msgstr[1] "Arbeitszeitmodelle"
+
+msgid "Personal account"
+msgid_plural "Personal accounts"
+msgstr[0] "Personalkonto"
+msgstr[1] "Personalkonten"
+
+msgid "Extra free time"
+msgid_plural "Extra free times"
+msgstr[0] "Sonderurlaub"
+msgstr[1] "Sonderurlaube"
+
+msgid "Extra free times"
+msgstr "Sonderurlaub"
+
+
+msgid "Possible vaction days"
+msgstr "Mögliche Urlaubstage"
+
+msgid "Remaining vaction days"
+msgstr "Übrige Urlaubstage"
+
+msgid "Taken vaction days"
+msgstr "Verbrauchte Urlaubstage"
+
+msgid "Excused sickness days"
+msgstr "Entschuldigte Krankheitstage"
+
+msgid "Unexcused sickness days"
+msgstr "Unentschuldigte Krankheitstage"
+
+msgid "Days to work"
+msgstr "Anzahl Arbeitstage"
+
+msgid "Hours to work"
+msgstr "Anzahl der zu leistenden Stunden"
+
+msgid "HumanResources"
+msgstr "Personal"
+
+msgid "Days"
+msgstr "Tage"
+
+
+msgid "Payed"
+msgstr "Bezahlt"
+
+msgid "Not payed"
+msgstr "Unbezahlt"

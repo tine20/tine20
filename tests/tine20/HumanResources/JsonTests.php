@@ -61,6 +61,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(1, count($savedEmployee['contracts']));
         $this->assertEquals(1, count($savedEmployee['costcenters']));
 
+        // check if accounts has been created properly on aftercreate
+        $filter = new HumanResources_Model_AccountFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id'])));
+        $result = HumanResources_Controller_Account::getInstance()->search($filter);
+        $this->assertEquals(2, $result->count());
+       
         
         $date->addMonth(2);
         $costCenter2 = $this->_getCostCenter($date);
@@ -316,7 +322,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $json = new HumanResources_Frontend_Json();
         
         $result = $json->searchAccounts($filter, array());
-        $this->assertEquals(2, $result['totalcount']);
+        $this->assertEquals('3', $result['totalcount']);
         
         $accountId2013 = $result['results'][0]['year'] == 2013 ? $result['results'][0]['id'] : $result['results'][1]['id'];
         $account2013 = $json->getAccount($accountId2013);

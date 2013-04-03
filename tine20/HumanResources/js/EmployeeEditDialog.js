@@ -46,6 +46,9 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.useSales = Tine.Tinebase.appMgr.get('Sales') ? true : false;
         Tine.HumanResources.EmployeeEditDialog.superclass.initComponent.call(this);
+        this.on('updateDependent', function() {
+            this.disableFreetimes();
+        }, this);
     },
 
     /**
@@ -55,6 +58,51 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var nfn = this.getForm().findField('n_given').getValue() + (this.getForm().findField('n_family').getValue() ? ' ' + this.getForm().findField('n_family').getValue() : '');
         this.getForm().findField('n_fn').setValue(nfn);
     },
+    
+    /**
+     * checks if the freetime grids should be disabled
+     * 
+     * @return {Boolean}
+     */
+    checkDisableFreetimes: function() {
+        // if user is not allowed to see private information, disable the grids
+        if (! this.showPrivateInformation) {
+            return true;
+        }
+        
+        if (! this.record) {
+            return true;
+        }
+        var c = this.record.get('contracts');
+        
+        if (Ext.isArray(c) && c.length > 0) {
+            // any of the contracts has an id
+            for (var index = 0; index < c.length; index++) {
+                if (c[index].id) return false;
+            }
+        }
+        
+        return true;
+    },
+    
+    /**
+     * disable freetime gridpanels if neccessary
+     */
+    disableFreetimes: function() {
+        if (this.checkDisableFreetimes()) {
+            this.vacationGridPanel.disable();
+            this.sicknessGridPanel.disable();
+        } else {
+            this.vacationGridPanel.enable();
+            this.sicknessGridPanel.enable();
+        }
+    },
+    
+    onAfterRecordLoad: function() {
+        Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
+        this.disableFreetimes();
+    },
+    
     /**
      * returns dialog
      * 
@@ -105,12 +153,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             layout: 'border'
         });
         
-        var disableFreetimeGrids = (! this.showPrivateInformation) ? true : (! (this.record && (this.record.id  && Ext.isArray(this.record.get('contracts')))));
-        
         this.vacationGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
             app: this.app,
             editDialog: this,
-            disabled: disableFreetimeGrids,
+            disabled: this.checkDisableFreetimes(),
             frame: false,
             border: true,
             autoScroll: true,
@@ -121,7 +167,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.sicknessGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
             app: this.app,
             editDialog: this,
-            disabled: disableFreetimeGrids,
+            disabled: this.checkDisableFreetimes(),
             frame: false,
             border: true,
             autoScroll: true,
