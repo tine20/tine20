@@ -109,7 +109,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $result = new Felamimail_Model_Sieve_Vacation(array(
             'id'    => ($_accountId instanceOf Felamimail_Model_Account) ? $_accountId->getId() : $_accountId
         ));
-            
+        
         if ($vacation !== NULL) {
             $result->setFromFSV($vacation);
         }
@@ -306,6 +306,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected function _checkCapabilities(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $capabilities = $this->_backend->capability();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got capabilitites: ' . print_r($capabilities, TRUE));
         
         if (! in_array('mime', $capabilities['SIEVE'])) {
             unset($_vacation->mime);

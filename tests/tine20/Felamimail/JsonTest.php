@@ -948,6 +948,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * set and get vacation sieve script
+     * 
+     * @see 0007768: Sieve - Vacation notify frequency not being set (Cyrus)
      */
     public function testGetSetVacation()
     {
@@ -986,7 +988,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'id'                    => $this->_account->getId(),
             'subject'               => 'unittest vacation subject',
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
-            'days'                  => 7,
+            'days'                  => 3,
             'enabled'               => TRUE,
             'reason'                => 'unittest vacation message<br /><br />signature',
             'mime'                  => NULL,

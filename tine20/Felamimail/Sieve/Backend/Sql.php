@@ -106,6 +106,10 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         try {
             $vacationRecord = $this->_vacationBackend->getByProperty($this->_accountId, 'account_id');
             $vacationRecord->addresses = Zend_Json::decode($vacationRecord->addresses);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Got vacation from DB: ' . print_r($vacationRecord->toArray(), TRUE));
+            
             $this->_vacation = $vacationRecord->getFSV();
             
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -180,6 +184,9 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $vacationRecord->setId($this->_accountId);
         $vacationRecord->addresses = Zend_Json::encode($vacationRecord->addresses);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Saving vacation in DB: ' . print_r($vacationRecord->toArray(), TRUE));
+        
         try {
             $oldVac = $this->_vacationBackend->get($vacationRecord->getId());
             $this->_vacationBackend->update($vacationRecord);
@@ -202,6 +209,6 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw Exception;
-        }         
+        }
     }
 }
