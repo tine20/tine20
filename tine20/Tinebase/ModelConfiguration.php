@@ -497,9 +497,16 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields'
+        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group'
     );
 
+    /**
+     * the module group (will be on the same leaf of the content type tree panel)
+     * 
+     * @var string
+     */
+    protected $_group = NULL;
+    
     /**
      * the backend properties holding the collected properties
      *
@@ -649,7 +656,7 @@ class Tinebase_ModelConfiguration {
             }
             
             // don't handle field if app is not available
-            if (($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
+            if (array_key_exists('config', $fieldDef) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
                 continue;
