@@ -751,7 +751,9 @@ class Tinebase_ModelConfiguration {
                 case 'integer':
                 case 'float':
                 case 'boolean':
+                    break;
                 case 'container':
+                    $fieldDef['label'] = $this->_containerName;
                     break;
                 case 'date':
                 case 'datetime':

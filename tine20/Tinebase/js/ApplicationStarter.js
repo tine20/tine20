@@ -200,10 +200,12 @@ Tine.Tinebase.ApplicationStarter = {
             return {filtertype: 'tinebase.tag', app: appName};
         },
         container: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
+            var applicationName = filterconfig.appName ? filterconfig.appName : appName;
+            var modelName = filterconfig.modelName ? filterconfig.modelName : modelName;
             return {
                 filtertype: 'tine.widget.container.filtermodel', 
-                app: fieldconfig.config.appName, 
-                recordClass: fieldconfig.config.appName + '.' + fieldconfig.config.modelName,
+                app: applicationName, 
+                recordClass: applicationName + '.' + modelName,
                 field: fieldconfig.key,
                 label: fieldconfig.label,
                 callingApp: appName
@@ -284,7 +286,6 @@ Tine.Tinebase.ApplicationStarter = {
             
             try {
                 filter = this.filterMap[fieldTypeKey](fieldconfig, filter, filterconfig, appName, modelName, modelConfig);
-                
             } catch (e) {
                 var keys = filterconfig.filter.split('_'),
                     filterkey = keys[0].toLowerCase() + '.' + keys[2].toLowerCase();
