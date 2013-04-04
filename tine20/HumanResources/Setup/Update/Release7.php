@@ -176,6 +176,7 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
         $this->_backend->alterCol('humanresources_employee', $declaration);
         $this->setTableVersion('humanresources_employee', '12');
+        $this->setApplicationVersion('HumanResources', '7.8');
     }
     
     /**
