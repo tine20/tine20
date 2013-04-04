@@ -1611,15 +1611,16 @@ abstract class Tinebase_Controller_Record_Abstract
                 foreach ($_record->{$_property} as $recordArray) {
                     $recordArray[$_fieldConfig['refIdField']] = $_oldRecord->getId();
                     $record = new $recordClassName($recordArray);
-                    // update record if ID exists
-                    if ($record->id) {
+                    // update record if ID exists and has a length of 40
+                    if ($record->id && strlen($record->id) == 40) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating contract ' . $record->id);
                         }
                         $updatedRecord = $controller->update($record);
                         $existing->addRecord($updatedRecord);
-                        // create if ID does not exist
+                        // create if ID does not exist or has not a length of 40
                     } else {
+                        $record->id = NULL;
                         $existing->addRecord($controller->create($record));
                     }
                 }

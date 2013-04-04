@@ -84,7 +84,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(null, $savedEmployee['contracts'][1]['end_date'], 'The end_date should have a null value.');
         
-        $this->assertEquals($firstDate, substr($savedEmployee['costcenters'][0]['start_date'], 0, 10));
+        $this->assertEquals($firstDate, substr($savedEmployee['costcenters'][0]['start_date'], 0, 10), 'The start_date of the first costcenter should begin with the first date of the employee!');
         
         $date1 = new Tinebase_DateTime($savedEmployee['contracts'][0]['end_date']);
         $date2 = new Tinebase_DateTime($savedEmployee['contracts'][1]['start_date']);
@@ -299,13 +299,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
         $employee = $employeeController->create($employee);
     
+        $json = new HumanResources_Frontend_Json();
         $accountController = HumanResources_Controller_Account::getInstance();
+        $accountsFilter = array(array('field' => "employee_id", 'operator' => "AND", 'value' => array(
+            array('field' => ':id', 'operator' => 'equals', 'value' => $employee->getId())
+        )));
+
+        // should not be created, exist already
         $accountController->createMissingAccounts(2013, $employee);
         $accountController->createMissingAccounts(2014, $employee);
         
-        $filter = array(array('field' => "employee_id", 'operator' => "AND", 'value' => array(
-            array('field' => ':id', 'operator' => 'equals', 'value' => $employee->getId())
-        )));
         
         // create feast days
         $feastDays2013 = array(
@@ -318,28 +321,25 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->_createFeastDay($date);
         }
         
-        $json = new HumanResources_Frontend_Json();
+        $result = $json->searchAccounts($accountsFilter, array('sort' => 'year', 'dir' => 'DESC'));
+        $this->assertEquals('3', $result['totalcount'], 'Three accounts should have been found!');
         
-        $result = $json->searchAccounts($filter, array());
-        $this->assertEquals('3', $result['totalcount']);
+        $accountId2013 = $result['results'][1]['id'];
+        $account2013 = $json->getAccount($accountId2013);
         
-        // FIXME this fails randomly (see 0008150: HumanResources_JsonTests::testAccount fails sometimes)
-//         $accountId2013 = $result['results'][0]['year'] == 2013 ? $result['results'][0]['id'] : $result['results'][1]['id'];
-//         $account2013 = $json->getAccount($accountId2013);
+        $this->assertEquals(25, $account2013['possible_vacation_days']);
+        $this->assertEquals(226, $account2013['working_days']);
         
-//         $this->assertEquals(25, $account2013['possible_vacation_days']);
-//         $this->assertEquals(226, $account2013['working_days']);
+        // add 5 extra free days to the account
+        $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013));
+        $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013));
         
-//         // add 5 extra free days to the account
-//         $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013));
-//         $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013));
+        $eftController = HumanResources_Controller_ExtraFreeTime::getInstance();
+        $eftController->create($eft1);
+        $eftController->create($eft2);
         
-//         $eftController = HumanResources_Controller_ExtraFreeTime::getInstance();
-//         $eftController->create($eft1);
-//         $eftController->create($eft2);
-        
-//         $account2013 = $json->getAccount($accountId2013);
-//         $this->assertEquals(30, $account2013['possible_vacation_days']);
-//         $this->assertEquals(221, $account2013['working_days']);
+        $account2013 = $json->getAccount($accountId2013);
+        $this->assertEquals(30, $account2013['possible_vacation_days']);
+        $this->assertEquals(221, $account2013['working_days']);
     }
 }

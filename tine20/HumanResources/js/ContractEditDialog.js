@@ -31,6 +31,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
+    windowHeight: 300,
+    
     /**
      * just update the contract grid panel, no persisten
      * 
@@ -85,7 +87,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(String.format(_('Edit {0}'), this.i18nRecordName));
         }
         
-        // disable fields if the record was created 2 hours before and the start_date is in the past
+        // disable fields if the record was created 2 hours before and the start_date is in the past,
+        // but allow setting end_date
         var now = new Date(),
             modified = this.record.get('creation_time');
         
@@ -96,9 +99,10 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             
             if (setDisabled) {
                 this.getForm().items.each(function(formField) {
-                    formField.disable();
+                    if (formField.name != 'end_date') {
+                        formField.disable();
+                    }
                 }, this);
-                this.action_saveAndClose.disable();
             }
         }
     },
@@ -147,13 +151,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onCancel: function() {
         Tine.HumanResources.ContractEditDialog.superclass.onCancel.call(this);
-    },
-    
-    /**
-     * show message if there are some subpanels
-     */
-    onSaveAndClose: function() {
-        Tine.HumanResources.ContractEditDialog.superclass.onSaveAndClose.call(this);
     },
     
     /**
@@ -218,7 +215,10 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype: 'columnform',
                         labelAlign: 'top',
                         items: [[
-                            {name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation Days')},
+                            {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false },
+                            {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date')},
+                        
+                            
                             Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                                 containerName: this.app.i18n._('Calendar'),
                                 containersName: this.app.i18n._('Calendars'),
@@ -230,9 +230,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 fieldLabel: this.app.i18n._('Feast Calendar'),
                                 name: 'feast_calendar_id'
                             })
-                        ], [
-                            {xtype: 'extuxclearabledatefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date') },
-                            {xtype: 'extuxclearabledatefield', name: 'end_date', fieldLabel: this.app.i18n._('End Date')}
                         ]]
                     }]
                 }, {
@@ -250,7 +247,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     fieldLabel: this.app.i18n._('Choose the template'),
                                     selectedRecord: this.record,
                                     ref: '../../../../../../../templateChooser',
-                                    columnWidth: .5,
+                                    columnWidth: 1/3,
                                     listeners: {
                                         scope:  this,
                                         select: this.updateTemplate.createDelegate(this)
@@ -258,24 +255,13 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 }), {
                                     fieldLabel: this.app.i18n._('Working Hours per week'),
                                     xtype: 'numberfield',
+                                    minValue: 1,
                                     decimalPrecision: 2,
                                     decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                                     name: 'working_hours',
                                     readOnly: true,
-                                    columnWidth: .5
-                                }
-//                                , {
-//                                   columnWidth: .1,
-//                                   xtype:'button',
-//                                   iconCls: 'HumanResourcesWorkingTimeFormButton',
-//                                   tooltip: Tine.Tinebase.common.doubleEncode(this.app.i18n._('Save working time as template')),
-//                                   fieldLabel: '&nbsp;'
-//                                   ,
-//                                   listeners: {
-//                                        scope: this,
-//                                        click: this.onTemplateCreate
-//                                   }
-//                                }
+                                    columnWidth: 1/3
+                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation Days'), columnWidth: 1/3}
                             ],
                             
                             [Ext.apply({
@@ -300,9 +286,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 fieldLabel: _('Sun.'),
                                 name: 'weekdays_6'
                             }, weekdayFieldDefaults)]
-                            ]
-                    }
-                    ]
+                        ]
+                    }]
                 }]
             }]
         }]
@@ -313,21 +298,3 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.applyJsonData(Ext.decode(record.get('json')));
     }
 });
-
-/**
- * HumanResources Edit Popup
- * 
- * @param   {Object} config
- * @return  {Ext.ux.Window}
- */
-Tine.HumanResources.ContractEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 620,
-        name: Tine.HumanResources.ContractEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.HumanResources.ContractEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};

@@ -211,7 +211,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     fieldLabel: this.app.i18n._('Account'),
                                     columnWidth: .380,
                                     ref: '../../../../../../../contactPicker',
-                                    allowBlank: true,
+                                    allowBlank: false,
                                     listeners: {
                                         scope: this,
                                         blur: function() { 
@@ -240,7 +240,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                                 this.form.findField(f).setValue(sr.get(f));
                                             }, this);
                                             
-                                            if(this.showPrivateInformation) {
+                                            if (this.showPrivateInformation) {
                                                 this.form.findField('bank_account_holder').setValue(sr.get('n_fn'));
                                                 Ext.each(['countryname', 'locality', 'postalcode', 'region', 'street', 'street2'], function(f){
                                                     this.form.findField(f).setValue(sr.get('adr_two_' + f));
@@ -349,9 +349,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {}),
                         items: [ firstRow
                             , [{
-                                xtype: 'extuxclearabledatefield',
+                                xtype: 'datefield',
                                 name: 'employment_begin',
-                                fieldLabel: this.app.i18n._('Employment begin')
+                                fieldLabel: this.app.i18n._('Employment begin'),
+                                allowBlank: false
                             }, {
                                 xtype: 'extuxclearabledatefield',
                                 name: 'employment_end',
