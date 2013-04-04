@@ -64,6 +64,7 @@ Ext.apply = function(o, c, defaults){
         isIE7 = isIE && ((check(/msie 7/) && docMode != 8 && docMode != 9) || docMode == 7),
         isIE8 = isIE && ((check(/msie 8/) && docMode != 7 && docMode != 9) || docMode == 8),
         isIE9 = isIE && ((check(/msie 9/) && docMode != 7 && docMode != 8) || docMode == 9),
+        isIE10 = isIE && ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE6 = isIE && check(/msie 6/),
         isGecko = !isWebKit && check(/gecko/),
         isGecko2 = isGecko && check(/rv:1\.8/),
@@ -75,6 +76,11 @@ Ext.apply = function(o, c, defaults){
         isLinux = check(/linux/),
         isSecure = /^https/i.test(window.location.protocol);
 
+    // IE 9 & 10 behave like a real browser
+    if (isIE && (isIE9 || isIE10)) {
+        isIE = false;
+    }
+    
     // remove css image flicker
     if(isIE6){
         try{
