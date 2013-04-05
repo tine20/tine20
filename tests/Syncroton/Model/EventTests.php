@@ -101,6 +101,7 @@ class Syncroton_Model_EventTests extends Syncroton_Model_ATestCase
     {
         $xml = new SimpleXMLElement($this->_testXMLInput);
         $event = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change->ApplicationData);
+        $event->copyFieldsFromParent();
         
         #foreach ($event as $key => $value) {echo "$key: "; var_dump($value);} 
         
@@ -161,6 +162,12 @@ class Syncroton_Model_EventTests extends Syncroton_Model_ATestCase
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception/Calendar:ExceptionStartTime');
         $this->assertEquals(2, $nodes->length, $testDoc->saveXML());
         $this->assertEquals('20101125T130000Z', $nodes->item(0)->nodeValue, $testDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception/Calendar:AllDayEvent');
+        $this->assertEquals(0, $nodes->length, $testDoc->saveXML());
+
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception/Calendar:BusyStatus');
+        $this->assertEquals(0, $nodes->length, $testDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/AirSyncBase:Body');
         $this->assertEquals(1, $nodes->length, $testDoc->saveXML());
