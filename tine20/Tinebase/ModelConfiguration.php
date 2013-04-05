@@ -466,11 +466,6 @@ class Tinebase_ModelConfiguration {
     */
     protected $_duplicateCheckFields = NULL;
 
-    /*
-     * properties to collect for the configurable classes (preset)
-    */
-
-
     /**
      * properties to collect for the filters (_appName and _modelName are set in the filter)
      *

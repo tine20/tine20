@@ -211,13 +211,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         if ($this->_configuredModel) {
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
-            foreach($filterConfig as $prop => $val) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+                . ' Filter config: ' . print_r($filterConfig, TRUE));
+            
+            foreach ($filterConfig as $prop => $val) {
                 $this->{$prop} = $val;
             }
             // modelname is here the full name if the php model
             $this->_modelName = $this->_applicationName . '_Model_' . $this->_modelName;
         }
-        
     }
     
     /**
