@@ -73,28 +73,22 @@ class Syncroton_Model_Event extends Syncroton_Model_AXMLEntry
     public function appendXML(DOMElement $domParrent, Syncroton_Model_IDevice $device)
     {
         parent::appendXML($domParrent, $device);
-        
-        // remove all elements from event exceptions which have the same value as in the main event
-        $xpath = new DomXPath($domParrent->ownerDocument);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
-        $xpath->registerNamespace('Calendar', 'uri:Calendar');
-        
-        $exceptionElements = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception');
-        
+
+        $exceptionElements = $domParrent->getElementsByTagName('Exception');
+        $parentFields      = array('AllDayEvent'/*, 'Attendees'*/, 'Body', 'BusyStatus'/*, 'Categories'*/, 'DtStamp', 'EndTime', 'Location', 'MeetingStatus', 'Reminder', 'ResponseType', 'Sensitivity', 'StartTime', 'Subject');
+
         if ($exceptionElements->length > 0) {
             $mainEventElement = $exceptionElements->item(0)->parentNode->parentNode;
-            
-            foreach ($mainEventElement->childNodes as $childNode) {
 
-                $parentFields = array('AllDayEvent'/*, 'Attendees'*/, 'Body', 'BusyStatus'/*, 'Categories'*/, 'DtStamp', 'EndTime', 'Location', 'MeetingStatus', 'Reminder', 'ResponseType', 'Sensitivity', 'StartTime', 'Subject');
-                
+            foreach ($mainEventElement->childNodes as $childNode) {
                 if (in_array($childNode->localName, $parentFields)) {
-                    
-                    $elementsToLeftOut = $xpath->query('//AirSync:Sync/AirSync:ApplicationData/Calendar:Exceptions/Calendar:Exception/' . $childNode->nodeName);
-                    
-                    foreach ($elementsToLeftOut as $elementToLeftOut) {
-                        if ($elementToLeftOut->nodeValue == $childNode->nodeValue) {
-                            $elementToLeftOut->parentNode->removeChild($elementToLeftOut);
+                    foreach ($exceptionElements as $exception) {
+                        $elementsToLeftOut = $exception->getElementsByTagName($childNode->localName);
+
+                        foreach ($elementsToLeftOut as $elementToLeftOut) {
+                            if ($elementToLeftOut->nodeValue == $childNode->nodeValue) {
+                                $exception->removeChild($elementToLeftOut);
+                            }
                         }
                     }
                 }
