@@ -66,6 +66,26 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             this.attendeeFilterGrid = this.app.getMainScreen().getWestPanel().getAttendeeFilter();
             this.attendeeFilterGrid.on('sortchange', this.onAttendeeFilterSortChange, this);
         }, this);
+        
+        // hook into getDefaultData 
+        this.originalGetDefaultData = Tine.Calendar.Model.Event.getDefaultData;
+        Tine.Calendar.Model.Event.getDefaultData = this.getDefaultData.createDelegate(this);
+    },
+    
+    getDefaultData: function() {
+        var defaultData = this.originalGetDefaultData(),
+            useSplit = Tine.Calendar.CalendarPanelSplitPlugin.splitBtn.pressed,
+            centerPanel = this.app.getMainScreen().getCenterPanel(),
+            activeCalPanel = centerPanel.getCalendarPanel(centerPanel.activeView),
+            activeView = this.getActiveView(),
+            attendee = activeView && activeView.ownerCt ? activeView.ownerCt.attendee : null;
+        
+        if (useSplit && attendee && this.calPanel == activeCalPanel) {
+            console.log(activeView);
+            defaultData.attendee = [attendee.data];
+        }
+        
+        return defaultData;
     },
     
     onCalPanelShow: function() {
@@ -149,6 +169,11 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             print: this.onPrint.createDelegate(this)
         });
         
+        // manage active views
+        view.on('render', function(v){
+            v.mon(v.getEl(), 'mousedown', this.setActiveAttendeeView.createDelegate(this, [attendeeViewId]), this);
+        }, this);
+        
         this.attendeeViews.add(attendeeViewId, view);
         this.calPanel.insert(pos, {
             xtype: 'tabpanel',
@@ -158,14 +183,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             plain: true,
             flex: 1,
             activeItem: 0,
-            items: view,
-            listeners: {
-                scope: this,
-                render: function(cmp) {
-                    // NOTE: mousedown is normaly eaten by the views, so this only works on tab headers
-                    cmp.mon(cmp.getEl(), 'mousedown', this.setActiveAttendeeView.createDelegate(this, [cmp.id]), this);
-                }
-            }
+            items: view
         });
     },
     
