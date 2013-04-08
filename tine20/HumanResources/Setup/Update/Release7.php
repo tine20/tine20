@@ -158,13 +158,33 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_contract', '2');
         $this->setApplicationVersion('HumanResources', '7.7');
     }
+
+    /**
+     * update 7.7 -> 7.8
+     * 
+     * - change description field varchar 255 -> clob
+     * 
+     * @see https://forge.tine20.org/mantisbt/view.php?id=7994
+     */
+    public function update_7()
+    {
+        $field = '<field>
+                    <name>description</name>
+                    <type>clob</type>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_employee', $declaration);
+        $this->setTableVersion('humanresources_employee', '12');
+        $this->setApplicationVersion('HumanResources', '7.8');
+    }
     
     /**
      * update 7.7 -> 7.8
      *
      * - add account module with the corresponding tables
      */
-    public function update_7()
+    public function update_8()
     {
         $tableDeclaration = new Setup_Backend_Schema_Table_Xml('
             <table>
@@ -384,6 +404,6 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $record->value = json_encode($newResult);
         $cb->update($record);
         
-        $this->setApplicationVersion('HumanResources', '7.8');
+        $this->setApplicationVersion('HumanResources', '7.9');
     }
 }

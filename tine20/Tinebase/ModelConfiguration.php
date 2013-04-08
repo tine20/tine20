@@ -466,11 +466,6 @@ class Tinebase_ModelConfiguration {
     */
     protected $_duplicateCheckFields = NULL;
 
-    /*
-     * properties to collect for the configurable classes (preset)
-    */
-
-
     /**
      * properties to collect for the filters (_appName and _modelName are set in the filter)
      *
@@ -656,7 +651,7 @@ class Tinebase_ModelConfiguration {
             }
             
             // don't handle field if app is not available
-            if (($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
+            if (array_key_exists('config', $fieldDef) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
                 continue;
@@ -751,7 +746,9 @@ class Tinebase_ModelConfiguration {
                 case 'integer':
                 case 'float':
                 case 'boolean':
+                    break;
                 case 'container':
+                    $fieldDef['label'] = $this->_containerName;
                     break;
                 case 'date':
                 case 'datetime':
@@ -801,7 +798,7 @@ class Tinebase_ModelConfiguration {
         
         // set some default filters
         if (count($queryFilters)) {
-            $this->_filterModel['query'] = array('label' => 'Quick Search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);  // _('Quick Search'))
+            $this->_filterModel['query'] = array('label' => 'Quick search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
         }
         $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);

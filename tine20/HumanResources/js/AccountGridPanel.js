@@ -26,4 +26,9 @@ Ext.ns('Tine.HumanResources');
  * Create a new Tine.HumanResources.AccountGridPanel
  */
 Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    initComponent: function() {
+        Tine.HumanResources.AccountGridPanel.superclass.initComponent.call(this);
+        this.action_addInNewWindow.hide();
+        this.action_deleteRecord.hide();
+    }
 });

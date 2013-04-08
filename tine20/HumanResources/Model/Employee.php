@@ -71,7 +71,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'label' => 'Number', //_('Number')
                 'duplicateCheckGroup' => 'number',
                 'group' => 'employee',
-                'queryFilter' => TRUE,
+                'type'    => 'integer'
             ),
             'account_id' => array(
                 'label' => 'Account', //_('Account')

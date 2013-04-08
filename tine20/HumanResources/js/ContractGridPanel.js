@@ -66,10 +66,42 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * will be called in Edit Dialog Mode
      */
     fillBottomToolbar: function() {
+        this.action_deleteRecord.initialConfig.actionUpdater = function(action) {
+            var selection = this.getGrid().getSelectionModel().getSelections();
+            if (selection.length != 1) {
+                action.disable();
+                return;
+            } else {
+                var record = selection[0];
+            }
+            if (! record) {
+                action.disable();
+                return;
+            }
+            var now = new Date(),
+                modified = record.get('creation_time');
+            
+            if (modified) {
+                var mod = modified.add(Date.HOUR, 2);
+                var setDisabled = (record.get('start_date') < now && mod < now);
+                action.setDisabled(setDisabled);
+            }
+        }
+        
         var tbar = this.getBottomToolbar();
         tbar.addButton(new Ext.Button(this.action_editInNewWindow));
         tbar.addButton(new Ext.Button(this.action_addInNewWindow));
         tbar.addButton(new Ext.Button(this.action_deleteRecord));
+    },
+    /**
+     * Opens the required EditDialog
+     * @param {Object} actionButton the button the action was called from
+     * @param {Tine.Tinebase.data.Record} record the record to display/edit in the dialog
+     * @param {Array} plugins the plugins used for the edit dialog
+     * @return {Boolean}
+     */
+    onEditInNewWindow: function(button, record, plugins) {
+        Tine.HumanResources.ContractGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins);
     }
 });
 

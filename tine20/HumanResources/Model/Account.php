@@ -31,8 +31,8 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Account', // _('Account')
-        'recordsName'       => 'Accounts', // _('Accounts')
+        'recordName'        => 'Personal account', // _('Personal account')
+        'recordsName'       => 'Personal accounts', // _('Personal accounts')
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,

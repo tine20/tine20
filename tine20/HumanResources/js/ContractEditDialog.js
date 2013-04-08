@@ -81,6 +81,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         if (! this.record.id) {
             this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
+        } else {
+            this.window.setTitle(String.format(_('Edit {0}'), this.i18nRecordName));
         }
         
         // disable fields if the record was created 2 hours before and the start_date is in the past
@@ -89,6 +91,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         if (modified) {
             var mod = modified.add(Date.HOUR, 2);
+            
             var setDisabled = (this.record.get('start_date') < now && mod < now);
             
             if (setDisabled) {

@@ -134,21 +134,31 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {Object} result
      */
     onFeastDaysLoad: function(result, freetime) {
+        
         if (result.totalcount > 0) {
             this.disabledDates = [];
-            Ext.each(result.results.excludeDates, function(date){
-                var date = new Date(date.date);
+            Ext.each(result.results.excludeDates, function(date) {
+                var split = date.date.split(' '), dateSplit = split[0].split('-');
+                var date = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
                 this.disabledDates.push(date);
             }, this);
             this.setDisabledDates(this.disabledDates);
         }
-        var firstDay = new Date(result.results.firstDay.date);
+        
+        var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');
+        var firstDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
         this.setMinDate(firstDay);
-        this.setMaxDate(new Date(result.results.lastDay.date));
+        
+        var split = result.results.lastDay.date.split(' '), dateSplit = split[0].split('-');
+        var lastDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
+        this.setMaxDate(lastDay);
+        
         var iterate = result.results.ownFreeDays ? result.results.ownFreeDays : freetime.get('freedays');
+        
         if (Ext.isArray(iterate)) {
             Ext.each(iterate, function(fd) {
-                fd.date = new Date(fd.date);
+                var split = fd.date.split(' '), dateSplit = split[0].split('-');
+                fd.date = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
                 fd.date.clearTime();
                 this.store.add(new this.recordClass(fd));
             }, this);
@@ -169,8 +179,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     onFeastDaysLoadFailureCallback: function() {
         this.loadMask.hide();
         this.editDialog.disable();
-        
-        this.editDialog.employeePicker.reset();
     },
 
     /**
