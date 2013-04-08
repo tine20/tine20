@@ -50,6 +50,10 @@
         {
           "text": "FaqTypeFilterModel.js",
           "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "js/"
         }
       ]
     },

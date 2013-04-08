@@ -70,6 +70,43 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * @private
+     */
+    initActions: function() {
+        if (Tine.Tinebase.appMgr.get('SimpleFAQ')) {
+            this.actions_searchFAQ = new Ext.Action({
+                requiredGrant: 'readGrant',
+                text: this.app.i18n._('Search FAQ'),
+                disabled: false,
+                handler: Tine.Tinebase.appMgr.get('SimpleFAQ').findQuestion,
+                iconCls: '.x-btn-large SimpleFAQIconCls',
+                scope: this
+            });
+            this.actionUpdater.addActions(this.actions_searchFAQ);
+        }
+        this.supr().initActions.call(this);
+    },
+    
+     /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     */
+    getActionToolbarItems: function() {
+        if (Tine.Tinebase.appMgr.get('SimpleFAQ')) {
+            return [
+                Ext.apply(new Ext.Button(this.actions_searchFAQ), {
+                    scale: 'medium',
+                    rowspan: 2,
+                    iconAlign: 'top'
+                })
+            ];
+        }
+        return [];
+    },
+    
+
+    /**
      * returns cm
      * 
      * @return Ext.grid.ColumnModel
