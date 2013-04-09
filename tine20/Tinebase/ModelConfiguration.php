@@ -709,7 +709,7 @@ class Tinebase_ModelConfiguration {
                     // set id filter controller
                     if ($fieldDef['type'] == 'record') {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] = $fieldDef['config']['appName'] . '_Model_' . $fieldDef['config']['modelName'] . 'Filter';
-                        $this->_filterModel[$fieldKey]['options']['controller'] = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
+                        $this->_filterModel[$fieldKey]['options']['controller']  = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
                     }
                     
                 }
@@ -755,7 +755,6 @@ class Tinebase_ModelConfiguration {
                 case 'boolean':
                     break;
                 case 'container':
-                    $fieldDef['label'] = $this->_containerName;
                     break;
                 case 'date':
                 case 'datetime':

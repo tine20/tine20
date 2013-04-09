@@ -71,12 +71,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if (! $_record->start_date) {
+        if (! $_record->start_date || ! $_record->start_date instanceof Tinebase_DateTime) {
             return;
         }
         // do not update if the start_date is in the past and the creation time is older than 2 hours
         // disable fields in edit dialog if the record was created 2 hours before and the start_date is in the past
         $now = new Tinebase_DateTime();
+        
         $created = clone $_record->creation_time;
         $crP2h = $created->addHour(2);
 
@@ -91,6 +92,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         if ($match === 2) {
             foreach (array('start_date', 'employee_id', 'feast_calendar_id', 'workingtime_json') as $key) {
                 if ($_record->{$key} != $_oldRecord->{$key}) {
+                    
                     throw new HumanResources_Exception_ContractTooOld();
                 }
             }
@@ -180,10 +182,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $_record->feast_calendar_id = null;
         }
         
-        // show if a contract before this exists
+        // if a contract before this exists without having an end_date, this is set here
         $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_record->start_date)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
+        
         $lastRecord = $this->search($filter, $paging)->getFirstRecord();
         
         // if there is a contract already

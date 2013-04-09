@@ -190,14 +190,15 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     {
         $exceptionMessage = 'The contracts must not overlap!';
         
-        if (is_array($record->contracts)) {
+        if ($record->contracts) {
+            
             // get intervals
             $intervals = array();
             foreach ($record->contracts as $contract) {
-                if (array_key_exists('start_date', $contract)) {
+                if ($contract->start_date) {
                     $intervals[] = array(
-                        'start' => $contract['start_date'],
-                        'stop' => array_key_exists('end_date', $contract) ? $contract['end_date'] : NULL
+                        'start' => $contract->start_date,
+                        'stop' => $contract->end_date ? $contract->end_date : NULL
                     );
                 }
             }
