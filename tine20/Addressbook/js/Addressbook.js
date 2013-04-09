@@ -44,8 +44,8 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Contact',
     contentTypes: [
-        {model: 'Contact',  requiredRight: null, singularContainerMode: false},
-        {model: 'List',  requiredRight: null, singularContainerMode: false}
+        {modelName: 'Contact', requiredRight: null, singularContainerMode: false},
+        {modelName: 'List',    requiredRight: null, singularContainerMode: false}
         ]
 });
 
