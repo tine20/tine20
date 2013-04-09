@@ -287,3 +287,121 @@ Ext.ButtonToggleMgr = function(){
 Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
     return this.fireEvent('beforeloadrecords', o, options, success, this);
 });
+
+/**
+ * state encoding converts null to empty object
+ * 
+ * -> take encoder/decoder from Ext 4.1 where this is fixed
+ */
+Ext.override(Ext.state.Provider, {
+    /**
+     * Decodes a string previously encoded with {@link #encodeValue}.
+     * @param {String} value The value to decode
+     * @return {Object} The decoded value
+     */
+    decodeValue : function(value){
+
+        // a -> Array
+        // n -> Number
+        // d -> Date
+        // b -> Boolean
+        // s -> String
+        // o -> Object
+        // -> Empty (null)
+
+        var me = this,
+            re = /^(a|n|d|b|s|o|e)\:(.*)$/,
+            matches = re.exec(unescape(value)),
+            all,
+            type,
+            keyValue,
+            values,
+            vLen,
+            v;
+            
+        if(!matches || !matches[1]){
+            return; // non state
+        }
+        
+        type = matches[1];
+        value = matches[2];
+        switch (type) {
+            case 'e':
+                return null;
+            case 'n':
+                return parseFloat(value);
+            case 'd':
+                return new Date(Date.parse(value));
+            case 'b':
+                return (value == '1');
+            case 'a':
+                all = [];
+                if(value != ''){
+                    values = value.split('^');
+                    vLen   = values.length;
+
+                    for (v = 0; v < vLen; v++) {
+                        value = values[v];
+                        all.push(me.decodeValue(value));
+                    }
+                }
+                return all;
+           case 'o':
+                all = {};
+                if(value != ''){
+                    values = value.split('^');
+                    vLen   = values.length;
+
+                    for (v = 0; v < vLen; v++) {
+                        value = values[v];
+                        keyValue         = value.split('=');
+                        all[keyValue[0]] = me.decodeValue(keyValue[1]);
+                    }
+                }
+                return all;
+           default:
+                return value;
+        }
+    },
+
+    /**
+     * Encodes a value including type information.  Decode with {@link #decodeValue}.
+     * @param {Object} value The value to encode
+     * @return {String} The encoded value
+     */
+    encodeValue : function(value){
+        var flat = '',
+            i = 0,
+            enc,
+            len,
+            key;
+            
+        if (value == null) {
+            return 'e:1';    
+        } else if(typeof value == 'number') {
+            enc = 'n:' + value;
+        } else if(typeof value == 'boolean') {
+            enc = 'b:' + (value ? '1' : '0');
+        } else if(Ext.isDate(value)) {
+            enc = 'd:' + value.toGMTString();
+        } else if(Ext.isArray(value)) {
+            for (len = value.length; i < len; i++) {
+                flat += this.encodeValue(value[i]);
+                if (i != len - 1) {
+                    flat += '^';
+                }
+            }
+            enc = 'a:' + flat;
+        } else if (typeof value == 'object') {
+            for (key in value) {
+                if (typeof value[key] != 'function' && value[key] !== undefined) {
+                    flat += key + '=' + this.encodeValue(value[key]) + '^';
+                }
+            }
+            enc = 'o:' + flat.substring(0, flat.length-1);
+        } else {
+            enc = 's:' + value;
+        }
+        return escape(enc);
+    }
+});
