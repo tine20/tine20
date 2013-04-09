@@ -91,6 +91,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $result = $this->search($existingFilter)->employee_id;
         
         $validEmployeeIds = array_diff($validEmployeeIds, $result);
+        
         foreach($validEmployeeIds as $id) {
             $this->create(new HumanResources_Model_Account(array('employee_id' => $id, 'year' => $year)));
         }
