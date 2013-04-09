@@ -646,3 +646,8 @@ msgid "HumanResources"
 msgid "Days"
 msgid "Payed"
 msgid "Not payed"
+
+msgid "Remaining"
+msgid "Book as vacation"
+
+msgid "Summary"

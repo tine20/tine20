@@ -125,7 +125,7 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
             {id: 'cost_center_id', dataIndex: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Center'),
                  quickaddField: this.costcenterQuickadd, renderer: this.renderCostCenter,
                  editor: this.costCenterEditor, scope: this
-            }, {id: 'start_date',renderer: Tine.Tinebase.common.dateRenderer, editor: this.startdateEditor, quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: _('Startdate'),  scope: this, width: 120}
+            }, {id: 'start_date',renderer: Tine.Tinebase.common.dateRenderer, editor: this.startdateEditor, quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: this.app.i18n._('Startdate'),  scope: this, width: 120}
         ];
         
         
@@ -161,7 +161,7 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
      * return {String}
      */
     renderCostCenter: function(value, row, record) {
-        return '<span class="tine-recordclass-gridicon SalesCostCenter">&nbsp;</span>' + (record ? record.getTitle() : '');
+        return '<span class="tine-recordclass-gridicon SalesCostCenter">&nbsp;</span>' + (record ? record.get('cost_center_id').number + ' - ' + record.getTitle() : '');
     }
 });
 

@@ -89,12 +89,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         
         // both matches
         if ($match === 2) {
-            foreach(array('start_date', 'end_date', 'employee_id', 'feast_calendar_id', 'workingtime_json') as $key) {
+            foreach (array('start_date', 'employee_id', 'feast_calendar_id', 'workingtime_json') as $key) {
                 if ($_record->{$key} != $_oldRecord->{$key}) {
-                    // but allow if change is just the end_date which must be in the future
-                    if (! ($key == 'end_date' && ($now->compare($_record->end_date) > -1))) {
-                        throw new Tinebase_Exception_Data("You are not allowed to change the record if it's older than 2 hours and the start_date is in the past!");
-                    }
+                    throw new HumanResources_Exception_ContractTooOld();
                 }
             }
         }
@@ -150,7 +147,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $filter = new HumanResources_Model_ContractFilter(array(
             array('field' => 'start_date', 'operator' => 'before', 'value' => $_createdRecord->start_date)
         ));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date' , 'operator' => 'equals', 'value' => NULL)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date' , 'operator' => 'isnull', 'value' => TRUE)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id' , 'operator' => 'not', 'value' => $_createdRecord->getId())));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id' , 'operator' => 'equals', 'value' => $_createdRecord->employee_id)));
         $contracts = $this->search($filter);
@@ -365,12 +362,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
         }
         $subFilter2 = new HumanResources_Model_ContractFilter(array(), 'OR');
+        
         $subFilter21 = new HumanResources_Model_ContractFilter(array(), 'AND');
         $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $lastDate)));
         $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $firstDate)));
         $subFilter22 = new HumanResources_Model_ContractFilter(array(), 'AND');
         $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $lastDate)));
-        $subFilter22->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'equals', 'value' => NULL)));
+        $subFilter22->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
         $subFilter2->addFilterGroup($subFilter21);
         $subFilter2->addFilterGroup($subFilter22);
         $filter->addFilterGroup($subFilter2);

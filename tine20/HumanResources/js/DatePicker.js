@@ -32,7 +32,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @type {Tine.HumanResources.Model.Employee}
      */
     employee: null,
-    
+    freetimeType: null,
+    editDialog: null,
     dateProperty: 'date',
     recordsProperty: 'freedays',
     foreignIdProperty: 'freetime_id',
@@ -144,6 +145,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
             this.setDisabledDates(this.disabledDates);
         }
+        if (this.freetimeType == 'VACATION') {
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation);
+        }
         
         var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');
         var firstDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
@@ -201,10 +205,32 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             existing;
             
         date.clearTime();
+        
+        if (this.freetimeType == 'VACATION') {
+            var remaining = this.editDialog.getForm().findField('remaining_vacation_days').getValue();
+            
+            if (remaining == 0) {
+                Ext.MessageBox.show({
+                    title: this.app.i18n._('No more vacation days'), 
+                    msg: this.app.i18n._('The Employee has no more possible vacation days left for this year. Add some extra free days to the account, if the employee should have more vacation this year.'),
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.Msg.OK
+                });
+                return;
+            }
+        } else {
+            var remaining = 0;
+        }
+        
         if (existing = this.store.getByDate(date)) {
             this.store.remove(existing);
+            remaining++;
         } else {
             this.store.addSorted(new this.recordClass({date: date, duration: 1}));
+            remaining--;
+        }
+        if (this.freetimeType == 'VACATION') {
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(remaining);
         }
         Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
     },

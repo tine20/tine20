@@ -520,51 +520,8 @@ msgstr "Kostenstelle"
 msgid "Startdate"
 msgstr "Anfangsdatum"
 
-
-msgid "edit private employee data"
-msgstr "Private Daten des Angestellten bearbeiten"
-
-
-msgid "Edit birthday, account data and other private information of employee records"
-msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Angestellten."
-
-msgid "You do not have admin rights on HumanResources"
-msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
-
-msgid "Freetime Type"
-msgstr "Freizeitanspruch Typ"
-
-msgid "Possible free time definitions"
-msgstr "Mögliche Definitionen für Freie Zeit"
-
-msgid "Vacation Status"
-msgstr "Urlaubsstatus"
-
-msgid "Possible vacation status definitions"
-msgstr "Mögliche Definitionen des Urlaubsstatus"
-
-msgid "Sickness Status"
-msgstr "Krankheitsstatus"
-
-msgid "Possible sickness status definitions"
-msgstr "Mögliche Definitionen von Krankheiten"
-
 msgid "Default Feast Calendar"
 msgstr "Standard Feiertagskalender"
-
-msgid "Here you can define the default feast calendar used to set feast days and other free days in datepicker"
-msgstr "Hier können Sie den Standard Feiertagskalender festlegen, der benutzt wird um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
-
-msgid "No contract could be found."
-msgstr "Es  konnte kein Vertrag gefunden werden."
-
-msgid "Please create a contract for this employee!"
-msgstr "Bitte erstellen Sie einen Vertrag für diesen Mitarbeiter!"
-
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
 
 msgid "Sickness Day"
 msgstr "Krankheitstag"
@@ -575,95 +532,14 @@ msgstr "Krankheitstage"
 msgid "Vacation Day"
 msgstr "Urlaubstag"
 
-msgid "Vacation Days"
-msgstr "Urlaubstage"
-
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
-
-msgid "Cost Center"
-msgstr "Kostenstelle"
-
-msgid "Startdate"
-msgstr "Anfangsdatum"
-
-msgid "WK"
-msgstr "KW"
-
-msgid "Loading calendar data..."
-msgstr "Lade Kalender.."
-
-msgid "Supervisor"
-msgstr "Vorgesetzter"
-
-msgid "Division"
-msgstr "Abteilung"
-
-msgid "Health Insurance"
-msgstr "Krankenkasse"
-
-msgid "Employee"
-msgstr "Mitarbeiter"
-
-msgid "Number"
-msgstr "Pers.-Nr."
-
-msgid "Full Name"
-msgstr "Name"
-
-msgid "Salutation"
-msgstr "Anrede"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "First Name"
-msgstr "Vorname"
-
-msgid "Last Name"
-msgstr "Nachname"
-
-msgid "Employment begin"
-msgstr "Angestellt von"
-
-msgid "Employment end"
-msgstr "Angestellt bis"
-
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodell"
-msgstr[1] "Arbeitszeitmodelle"
-
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodelle"
-msgstr[1] "Arbeitszeitmodelle"
-
 msgid "Quick search"
 msgstr "Schnellsuche"
-
-msgid "Feast Calendar"
-msgstr "Feiertagskalender"
-
-msgid "Start Date"
-msgstr "Anfang"
-
-msgid "End Date"
-msgstr "Ende"
-
-msgid "Free Time"
-msgstr "Freizeitanspruch"
 
 msgid "Free Times"
 msgstr "Freie Tage"
 
 msgid "First Day"
 msgstr "Erster Tag"
-
-msgid "Free Days"
-msgstr "freie Tage"
 
 msgid "Private Information"
 msgstr "Private Informationen"
@@ -680,9 +556,6 @@ msgstr "Straße 2"
 msgid "Costcenters"
 msgstr "Kostenstellen"
 
-msgid "Free Day"
-msgstr "freier Tag"
-
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
@@ -695,14 +568,8 @@ msgstr "Zur Zeit angestellt"
 msgid "All employees"
 msgstr "Alle Angestellten"
 
-msgid 'Edit {0} for "{1}" - {2}'
-msgstr '{0} von "{1}" des Jahres {2} bearbeiten'
-
-
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodelle"
-msgstr[1] "Arbeitszeitmodelle"
+msgid "Edit {0} for {1} - {2}"
+msgstr "{0} von {1} des Jahres {2} bearbeiten"
 
 msgid "Personal account"
 msgid_plural "Personal accounts"
@@ -751,3 +618,12 @@ msgstr "Bezahlt"
 
 msgid "Not payed"
 msgstr "Unbezahlt"
+
+msgid "Remaining"
+msgstr "Übrig"
+
+msgid "Book as vacation"
+msgstr "Als Urlaub buchen"
+
+msgid "Summary"
+msgstr "Zusammenfassung"

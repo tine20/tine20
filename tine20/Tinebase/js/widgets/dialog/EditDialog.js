@@ -542,6 +542,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
             this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         }
+        
+        // add current timestamp as id, if this is a dependent record 
+        if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
+            this.record.set('id', (new Date()).getTime());
+        }
+        
         if(this.loadMask) {
             this.loadMask.hide();
         }

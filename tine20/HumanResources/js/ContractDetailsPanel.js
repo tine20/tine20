@@ -29,7 +29,7 @@ Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
      * @cfg {Number} defaultHeight
      * default Heights
      */
-    defaultHeight: 105,
+    defaultHeight: 110,
     
     initComponent: function() {
         Tine.HumanResources.ContractDetailsPanel.superclass.initComponent.call(this);
@@ -57,7 +57,7 @@ Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
             }
             
             this.singleRecordPanel = new Ext.ux.display.DisplayPanel(
-                this.wrapPanel(items, 105)
+                this.wrapPanel(items, 110)
             );
         }
         return this.singleRecordPanel;
