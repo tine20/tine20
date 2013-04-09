@@ -147,6 +147,30 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * Tests if import of the example file works
+     */
+    public function testImportOfExampleFile ()
+    {
+        $filename = dirname(__FILE__) . '/files/inv_tine_import_csv_nohook.xml';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        $this->_filename = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/tine20/Inventory/Import/examples/inv_tine_import.csv'; 
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalInventoryItems = TRUE;
+        
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
+        
+        $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
+        $this->assertEquals($result['results'][0]['added_date'], '2013-12-06 00:00:00');
+        $this->assertEquals($result['results'][0]['inventory_id'], '133331666');
+        $this->assertContains($translatedString, $result['results'][0]['description']);
+    }
+    
+    /**
      * import helper
      *
      * @param array $_options
