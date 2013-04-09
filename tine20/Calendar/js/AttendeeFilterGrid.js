@@ -251,7 +251,6 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     setValue: function(value) {
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value),
             selections = this.getSelectionModel().getSelections(),
-            explicitAttendee = Ext.state.Manager.get(this.stateId),
             activeEditor = this.activeEditor,
             state = Ext.state.Manager.get(this.stateId);
         
