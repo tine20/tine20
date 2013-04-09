@@ -291,6 +291,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // find contracts
         $contracts = $cController->getValidContracts($minDate, $maxDate, $_employeeId);
+        $contracts->sort('start_date', 'ASC');
         $excludeDates = array();
         
         if ($contracts->count() < 1) {

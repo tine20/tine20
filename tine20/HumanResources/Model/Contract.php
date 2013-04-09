@@ -40,8 +40,10 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'containerProperty' => NULL,
         'createModule'    => FALSE,
         'isDependent'     => TRUE,
+        
         'appName'         => 'HumanResources',
         'modelName'       => 'Contract',
+        
         'fields'          => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')

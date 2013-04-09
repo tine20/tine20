@@ -295,7 +295,11 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $contract2->end_date = $employmentEnd;
         $contract2->workingtime_json = '{"days": [4,4,4,4,4,4,4]}';
     
-        $employee->contracts = array($contract1->toArray(), $contract2->toArray());
+        $rs = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
+        $rs->addRecord($contract1);
+        $rs->addRecord($contract2);
+        
+        $employee->contracts = $rs;
     
         $employee = $employeeController->create($employee);
     
@@ -309,14 +313,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountController->createMissingAccounts(2013, $employee);
         $accountController->createMissingAccounts(2014, $employee);
         
-        
         // create feast days
         $feastDays2013 = array(
             '2013-01-01', '2013-03-29', '2013-04-01', '2013-05-01', '2013-05-09',
             '2013-05-20', '2013-10-03', '2013-12-25', '2013-12-26', '2013-12-31'
         );
         
-        foreach($feastDays2013 as $day) {
+        foreach ($feastDays2013 as $day) {
             $date = new Tinebase_DateTime($day . ' 12:00:00');
             $this->_createFeastDay($date);
         }
@@ -341,5 +344,30 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(30, $account2013['possible_vacation_days']);
         $this->assertEquals(221, $account2013['working_days']);
+    }
+    
+    /**
+     * tests datetime conversion of dependent records
+     */
+    public function testDateTimeConversion()
+    {
+        $employmentBegin  = new Tinebase_DateTime('2012-12-15');
+        $employmentEnd    = new Tinebase_DateTime('2014-06-30');
+        $employmentBegin->setTime(12,0,0);
+        
+        $employee = $this->_getEmployee('unittest');
+        $employee->employment_begin = $employmentBegin;
+        $employee->employment_end = $employmentEnd;
+        
+        $contract = $this->_getContract();
+        $contract->start_date = $employmentBegin;
+        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract->vacation_days = 25;
+        
+        $employee->contracts = array($contract->toArray());
+        $json = new HumanResources_Frontend_Json();
+        $savedEmployee = $json->saveEmployee($json->saveEmployee($employee->toArray()));
+        $this->assertStringEndsWith('12:00:00', $savedEmployee['employment_begin']);
+        $this->assertStringEndsWith('12:00:00', $savedEmployee['contracts'][0]['start_date']);
     }
 }

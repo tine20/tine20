@@ -1565,16 +1565,27 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
-        if ($_record->has($_property) && is_array($_record->{$_property})) {
+        if ($_record->has($_property) && $_record->{$_property}) {
             $recordClassName = $_fieldConfig['recordClassName'];
             $new = new Tinebase_Record_RecordSet($recordClassName);
             $ccn = $_fieldConfig['controllerClassName'];
             $controller = $ccn::getInstance();
     
-            foreach ($_record->{$_property} as $recordArray) {
-                $recordArray[$_fieldConfig['refIdField']] = $_createdRecord->getId();
-                $r = $controller->create(new $recordClassName($recordArray));
-                $new->addRecord($r);
+            // legacy - should be already done in frontent json - remove if all record properties are record sets before getting to controller
+            if (is_array($_record->{$_property})) {
+                $rs = new Tinebase_Record_RecordSet($recordClassName);
+                foreach ($_record->{$_property} as $recordArray) {
+                    $rec = new $recordClassName(array(),true);
+                    $rec->setFromJsonInUsersTimezone($recordArray);
+                    $rs->addRecord($rec);
+                }
+                $_record->{$_property} = $rs;
+            }
+            // legacy end
+            
+            foreach ($_record->{$_property} as $record) {
+                $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
+                $new->add($controller->create($record));
             }
     
             $_createdRecord->{$_property} = $new->toArray();
@@ -1595,7 +1606,7 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
     
-        if ($_record->has($_property) && is_array($_record->{$_property})) {
+        if ($_record->has($_property)) {
     
             $ccn = $_fieldConfig['controllerClassName'];
             $controller = $ccn::getInstance();
@@ -1606,11 +1617,23 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->{$_property}, TRUE));
             }
-    
-            if (! empty($_record->{$_property}) && is_array($_record->{$_property})) {
-                foreach ($_record->{$_property} as $recordArray) {
-                    $recordArray[$_fieldConfig['refIdField']] = $_oldRecord->getId();
-                    $record = new $recordClassName($recordArray);
+            
+            if (! empty($_record->{$_property}) && $_record->{$_property}) {
+                
+                // legacy - should be already done in frontent json - remove if all record properties are record sets before getting to controller
+                if (is_array($_record->{$_property})) {
+                    $rs = new Tinebase_Record_RecordSet($recordClassName);
+                    foreach ($_record->{$_property} as $recordArray) {
+                        $rec = new $recordClassName(array(),true);
+                        $rec->setFromJsonInUsersTimezone($recordArray);
+                        $rs->addRecord($rec);
+                    }
+                    $_record->{$_property} = $rs;
+                }
+                // legacy end
+                
+                foreach ($_record->{$_property} as $record) {
+                    $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
                     // update record if ID exists and has a length of 40
                     if ($record->id && strlen($record->id) == 40) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -1627,7 +1650,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
     
             $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record['id']));
+            $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
             $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->id));
     
             $deleteContracts = $controller->search($filter);

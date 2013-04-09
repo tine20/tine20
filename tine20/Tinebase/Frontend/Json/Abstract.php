@@ -266,7 +266,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $modelClass = (preg_match('/_Model_/', $_modelName)) ? $_modelName : $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
-
+        
+        // if there are dependent records, set the timezone of them and add them to a recordSet
+        $this->_dependentRecordsFromJson($record);
+        
         $method = (empty($record->$_identifier)) ? 'create' : 'update';
         $args = array_merge(array($record), $_additionalArguments);
         $savedRecord = call_user_func_array(array($_controller, $method), $args);
@@ -274,6 +277,36 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return $this->_recordToJson($savedRecord);
     }
 
+    /**
+     * creates recordsets for depedent records or records instead of arrays for records on record fields
+     * and sets timezone of these records to utc
+     * 
+     * @param Tinebase_Record_Abstract $record
+     */
+    protected function _dependentRecordsFromJson(&$record)
+    {
+        $config = $record::getConfiguration();
+        if ($config) {
+            
+            $recordsFields = $config->recordsFields;
+            
+            if ($recordsFields) {
+                foreach (array_keys($recordsFields) as $property) {
+                    $rcn = $recordsFields[$property]['config']['recordClassName'];
+                    if ($record->has($property) && $record->{$property}) {
+                        $recordSet = new Tinebase_Record_RecordSet($rcn);
+                        foreach ($record->{$property} as $recordArray) {
+                            $srecord = new $rcn(array(), true);
+                            $srecord->setFromJsonInUsersTimezone($recordArray);
+                            $recordSet->addRecord($srecord);
+                        }
+                        $record->{$property} = $recordSet;
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * update multiple records
      *

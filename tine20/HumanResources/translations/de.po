@@ -520,9 +520,6 @@ msgstr "Kostenstelle"
 msgid "Startdate"
 msgstr "Anfangsdatum"
 
-msgid "Default Feast Calendar"
-msgstr "Standard Feiertagskalender"
-
 msgid "Sickness Day"
 msgstr "Krankheitstag"
 
@@ -566,7 +563,7 @@ msgid "Currently employed employees"
 msgstr "Zur Zeit angestellt"
 
 msgid "All employees"
-msgstr "Alle Angestellten"
+msgstr "Alle Mitarbeiter"
 
 msgid "Edit {0} for {1} - {2}"
 msgstr "{0} von {1} des Jahres {2} bearbeiten"

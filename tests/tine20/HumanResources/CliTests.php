@@ -67,7 +67,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals('1973-12-11 23:00:00', $susan->bday->__toString(), print_r($susan->toArray(), TRUE));
         
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
-        $this->assertEquals(1, count($susan->contracts), 'no contracts found');
+        $this->assertEquals(1, $susan->contracts->count(), 'no contracts found');
         
         return $susan;
     }
@@ -139,7 +139,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $susan = $this->_getSusan();
         $susan->bank_name = 'xyz';
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
-        $susan->contracts = $susan->contracts->toArray();
         HumanResources_Controller_Employee::getInstance()->update($susan);
         
         sleep(1);
@@ -150,6 +149,6 @@ class HumanResources_CliTests extends HumanResources_TestCase
         // cost center check
         $cc = $this->_getSalesCostCenter(7);
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
-        $this->assertEquals(1, count($susan->contracts), 'no contracts found');
+        $this->assertEquals(1, $susan->contracts->count(), 'no contracts found');
     }
 }
