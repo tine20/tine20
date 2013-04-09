@@ -105,24 +105,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         }
         
         $firstDate = $_createdRecord->employment_begin ? $_createdRecord->employment_begin : Tinebase_DateTime::now();
+        $lastDate = $_createdRecord->employment_end ? $_createdRecord->employment_end : Tinebase_DateTime::now()->addYear(1);
         
+        $firstYear = (int) $firstDate->format('Y');
+        $lastYear  = (int) $lastDate->format('Y');
         $accountController = HumanResources_Controller_Account::getInstance();
-        $account = new HumanResources_Model_Account(array(
-            'employee_id' => $_createdRecord->getId(),
-            'year'        => $firstDate->format('Y')
-        ));
         
-        $firstDate = Tinebase_DateTime::now();
-        
-        $accountController->create($account);
-        $firstDate->setDate($firstDate->format('Y'), 1, 1)->addYear(1);
-        
-        if (! $_createdRecord->employment_end || $firstDate->isEarlier($_createdRecord->employment_end)) {
-            $account->year = $firstDate->format('Y');
-            $account->id = NULL;
+        while ($firstYear <= $lastYear) {
+            $account = new HumanResources_Model_Account(array(
+                'employee_id' => $_createdRecord->getId(),
+                'year'        => $firstYear
+            ));
             $accountController->create($account);
+            $firstYear++;
         }
-        
     }
     
     /**
@@ -289,6 +285,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $filter->addFilter($eFilter);
             HumanResources_Controller_CostCenter::getInstance()->deleteByFilter($filter);
         }
+        
+        // delete accounts
+        $filter = new HumanResources_Model_AccountFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId())));
+        HumanResources_Controller_Account::getInstance()->deleteByFilter($filter);
         
         parent::_deleteLinkedObjects($_record);
     }

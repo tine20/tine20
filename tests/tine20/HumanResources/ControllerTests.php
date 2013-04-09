@@ -77,11 +77,11 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
 
         // LAST ASSERTION, do not add assertions after a expected Exception, they won't be executed
 
-        $this->setExpectedException('Tinebase_Exception_Data');
+        $this->setExpectedException('HumanResources_Exception_ContractTooOld');
 
         $contract2->feast_calendar_id = $newCalendar->getId();
         $contract2 = $contractController->update($contract2);
-
+    
         // no more assertions here!
     }
     

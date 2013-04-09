@@ -63,6 +63,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             ),
             'end_date'          => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'label'   => 'End Date',    // _('End Date')
                 'type'    => 'date',
                 'showInDetailsPanel' => TRUE

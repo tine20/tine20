@@ -63,6 +63,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                 'duplicateCheckGroup' => 'year-employee',
                 'group' => 'Account',
                 'queryFilter' => TRUE,
+                'type'    => 'integer'
             ),
             'extra_free_times' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

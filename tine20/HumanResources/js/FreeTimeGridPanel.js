@@ -57,11 +57,11 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         if (this.freetimeType) {
             if (this.freetimeType == 'SICKNESS') {
                 this.setTitle(this.app.i18n._('Sickness'));
-                this.i18nRecordName = this.app.i18n._('Sickness Day');
+                this.i18nRecordName = this.app.i18n._('Sickness Days');
                 this.i18nRecordsName = this.app.i18n._('Sickness Days');
             } else {
                 this.setTitle(this.app.i18n._('Vacation'));
-                this.i18nRecordName = this.app.i18n._('Vacation Day');
+                this.i18nRecordName = this.app.i18n._('Vacation Days');
                 this.i18nRecordsName = this.app.i18n._('Vacation Days');
             }
         }
@@ -143,7 +143,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             'employee_id': this.editDialog.record.data,
             'type':        this.freetimeType
         };
-        
+        this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
+            
         Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, addRelations);
     },
     

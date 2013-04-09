@@ -284,10 +284,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $employee = $eController->get($_employeeId);
         
         // set period to search for
-        $maxDate = new Tinebase_DateTime();
-        $maxDate->addYear(2);
         $minDate = new Tinebase_DateTime();
-        $minDate->subYear(1);
+        $minDate->setDate($minDate->format('Y'), 1, 1)->setTime(0,0,0);
+        $maxDate = clone $minDate;
+        $maxDate->addYear(1)->subSecond(1);
         
         // find contracts
         $contracts = $cController->getValidContracts($minDate, $maxDate, $_employeeId);
@@ -299,15 +299,21 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $first = TRUE;
         
+        $remainingVacation = 0;
+        
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
             $json = $contract->getWorkingTimeJson();
-            $startDay = $contract->start_date ? $contract->start_date : $minDate;
-            $stopDay  = $contract->end_date   ? $contract->end_date   : $maxDate;
-            
+            $startDay = ($contract->start_date == NULL) ? $minDate : ($contract->start_date < $minDate) ? $minDate : $contract->start_date;
+            $stopDay  = ($contract->end_date == NULL) ? $maxDate : ($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date;
+
             if ($first) {
                 $firstDay = clone $startDay;
+                $first = FALSE;
             }
+            
+            $remainingVacation += HumanResources_Controller_Contract::getInstance()->calculateVacationDays($contract, $minDate, $maxDate);
+            
             if (is_object($json)) {
                 foreach($json->days as $index => $hours) {
                     if ($hours === 0) {
@@ -321,12 +327,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-            $first = FALSE;
-        }
-        
-        // search feast days
-        foreach ($contracts as $contract) {
-            $excludeDates = array_merge($cController->getFeastDays($contract, $minDate, $maxDate), $excludeDates);
+            // search feast days
+            $excludeDates = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $excludeDates);
         }
         
         // search free times for this interval
@@ -345,6 +347,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $otherFreeDays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
         
+        $remainingVacation += $otherFreeDays->count();
+        
         if ($_freeTimeId) {
             $ownFreeDays   = $otherFreeDays->filter('freetime_id', $_freeTimeId);
             $otherFreeDays->removeRecords($ownFreeDays);
@@ -359,14 +363,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array(
             'results' => array(
                 // @todo: CALCULATE BY ACCOUNT
-                'remainingFreeDays' => array(2013 => 26, 2014 => 29),
+                'remainingVacation' => $remainingVacation,
                 'otherFreeDays' => $otherFreeDays, 
                 'ownFreeDays'   => $ownFreeDays,
                 'excludeDates'  => $excludeDates,
                 'contracts'     => $contracts->toArray(),
                 'employee'      => $employee->toArray(),
                 'firstDay'      => $firstDay,
-                'lastDay'       => $stopDay
+                'lastDay'       => $stopDay,
              ), 
             'totalcount' => count($excludeDates), 
         );

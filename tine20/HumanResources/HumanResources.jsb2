@@ -48,6 +48,14 @@
           "path": "js/"
         },
         {
+          "text": "VacationEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SicknessEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractDetailsPanel.js",
           "path": "js/"
         },

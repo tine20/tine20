@@ -448,6 +448,13 @@ class Tinebase_ModelConfiguration {
     protected $_ownValidators = array();
     
     /**
+     * if a record is dependent to another, this is true
+     * 
+     * @var boolean
+     */
+    protected $_isDependent = FALSE;
+    
+    /**
      * input filters (will be set by field configuration)
      * 
      * @var array
@@ -492,7 +499,7 @@ class Tinebase_ModelConfiguration {
         'containerProperty', 'containersName', 'containerName', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
-        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group'
+        'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent'
     );
 
     /**

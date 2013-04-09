@@ -26,15 +26,13 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     mode: 'local',
     loadRecord: false,
-    windowWidth: 440,
-    windowHeight: 450,
     /**
      * show private Information (autoset due to rights)
      * @type 
      */
     showPrivateInformation: null,
     
-    type: null,
+    freetimeType: null,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -78,7 +76,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
         
-        var typeString = this.type == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
+        var typeString = this.freetimeType == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
         
         if (this.record.id) {
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
@@ -108,7 +106,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             editDialog: this,
             dateProperty: 'date',
             recordsProperty: 'freedays',
-            foreignIdProperty: 'freeday_id'
+            foreignIdProperty: 'freeday_id',
+            freetimeType: this.freetimeType
         });
     },
     
@@ -131,25 +130,33 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        this.type = this.fixedFields.get('type');
+        this.freetimeType = this.fixedFields.get('type');
         var statusBoxDefaults = {
             fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
             app: 'HumanResources',
-            name: 'status',
-            columnWidth: 1
+            name: 'status'
         };
         
-        this.statusBox = this.type == 'SICKNESS' ? 
+        this.statusBox = this.freetimeType == 'SICKNESS' ? 
                 Ext.apply({
                     keyFieldName: 'sicknessStatus',
-                    value: 'EXCUSED'
+                    value: 'EXCUSED',
+                    columnWidth: 1
                 }, statusBoxDefaults)
             :   Ext.apply({
                     keyFieldName: 'vacationStatus',
-                    value: 'REQUESTED'
+                    value: 'REQUESTED',
+                    columnWidth: 2/3
                 }, statusBoxDefaults);
         
+        var firstRow = [this.statusBox];
+        var freeTimeTypeName = 'Sickness Days';
+        if (this.freetimeType == 'VACATION') {
+            firstRow.push({columnWidth: 1/3, name: 'remaining_vacation_days', readOnly: true, fieldLabel: this.app.i18n._('Remaining')});
+            freeTimeTypeName = 'Vacation Days';
+        }
+                
         return {
             xtype: 'tabpanel',
             border: false,
@@ -160,7 +167,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._('FreeTime'),
+                title: this.app.i18n._(freeTimeTypeName),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -172,7 +179,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     items: [{
                         xtype: 'fieldset',
                         autoHeight: true,
-                        title: this.app.i18n._('FreeTime'),
+                        title: this.app.i18n._(freeTimeTypeName),
                         items: [{
                             xtype: 'columnform',
                             style: { 'float': 'left', width: '50%', 'min-width': '178px' },
@@ -185,7 +192,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 columnWidth: 1
                             },
                             items: [
-                                [this.statusBox],
+                                firstRow,
                                 [{
                                         xtype: 'panel',
                                         cls: 'HumanResources x-form-item',
