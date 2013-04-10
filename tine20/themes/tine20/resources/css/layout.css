@@ -282,7 +282,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     position: absolute;
     left: 0;
     top: 0;
-    background-image:url(../library/ExtJS/resources/images/default/s.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/s.gif);
     z-index: 20000;
 }
 
@@ -4666,72 +4666,72 @@ body.ext-ie6.x-body-masked .x-window select {
 
 .x-html-editor-tb .x-edit-bold, .x-menu-item img.x-edit-bold {
     background-position:0 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);    
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);    
 }
 
 .x-html-editor-tb .x-edit-italic, .x-menu-item img.x-edit-italic {
     background-position:-16px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-underline, .x-menu-item img.x-edit-underline {
     background-position:-32px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-forecolor, .x-menu-item img.x-edit-forecolor {
     background-position:-160px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-backcolor, .x-menu-item img.x-edit-backcolor {
     background-position:-176px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-justifyleft, .x-menu-item img.x-edit-justifyleft {
     background-position:-112px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-justifycenter, .x-menu-item img.x-edit-justifycenter {
     background-position:-128px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-justifyright, .x-menu-item img.x-edit-justifyright {
     background-position:-144px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-insertorderedlist, .x-menu-item img.x-edit-insertorderedlist {
     background-position:-80px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-insertunorderedlist, .x-menu-item img.x-edit-insertunorderedlist {
     background-position:-96px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-increasefontsize, .x-menu-item img.x-edit-increasefontsize {
     background-position:-48px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-decreasefontsize, .x-menu-item img.x-edit-decreasefontsize {
     background-position:-64px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-sourceedit, .x-menu-item img.x-edit-sourceedit {
     background-position:-192px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tb .x-edit-createlink, .x-menu-item img.x-edit-createlink {
     background-position:-208px 0;
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 
 .x-html-editor-tip .x-tip-bd .x-tip-bd-inner {
@@ -4941,12 +4941,12 @@ body.ext-ie6.x-body-masked .x-window select {
 }
 
 .x-layout-split-h{
-    background-image:url(../library/ExtJS/resources/images/default/s.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/s.gif);
     background-position: left;
 }
 
 .x-layout-split-v{
-    background-image:url(../library/ExtJS/resources/images/default/s.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/s.gif);
     background-position: top;
 }
 
@@ -5565,7 +5565,7 @@ td.x-grid3-hd-over, td.sort-desc, td.sort-asc, td.x-grid3-hd-menu-open {
 }
 
 .x-tree-lines .x-tree-elbow{
-	background-image:url(../library/ExtJS/resources/images/default/tree/elbow.gif);
+	background-image:url(../../../../library/ExtJS/resources/images/default/tree/elbow.gif);
 }
 .x-tree-node{
 	color:#000;
@@ -5761,7 +5761,7 @@ a.x-menu-item {
     background-color:#fff;
 }
 .x-html-editor-tb .x-btn-text {
-    background-image:url(../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
+    background-image:url(../../../../library/ExtJS/resources/images/default/editor/tb-sprite.gif);
 }
 .x-panel-noborder .x-panel-bbar-noborder .x-toolbar {
     border-top-color:#99bbe8;
@@ -5816,17 +5816,17 @@ a.x-menu-item {
 }	
 
 .bordercorner_gray_1 {
-	background-image:url(images/tine20/preview/bordercorner_gray_1.gif);
+	background-image:url(../images/tine20/preview/bordercorner_gray_1.gif);
 }
 
 .bordercorner_gray_2 {
-	background-image:url(images/tine20/preview/bordercorner_gray_2.gif);
+	background-image:url(../images/tine20/preview/bordercorner_gray_2.gif);
 }
 
 .bordercorner_gray_3 {
-	background-image:url(images/tine20/preview/bordercorner_gray_3.gif);
+	background-image:url(../images/tine20/preview/bordercorner_gray_3.gif);
 }
 .bordercorner_gray_4 {
-	background-image:url(images/tine20/preview/bordercorner_gray_4.gif);
+	background-image:url(../images/tine20/preview/bordercorner_gray_4.gif);
 }
 
