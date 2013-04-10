@@ -159,8 +159,9 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         
         var filter = function(r) {
             var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(r.get('attendee'));
-            return !! Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, attendee);
+            return Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, attendee);
         };
+        
         var store = this.cloneStore(filter);
         
         var view = this.createView({
