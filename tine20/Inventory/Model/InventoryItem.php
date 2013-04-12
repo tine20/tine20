@@ -77,7 +77,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Invoice date', // _('Invoice date')
                 'hidden'     => TRUE,
-                'default'    => NULL
+                'default'    => NULL,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'total_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
