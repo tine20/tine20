@@ -369,12 +369,32 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         foreach ($allStates as $oldState) {
             $oldData = Zend_Json::decode($oldState->data);
             foreach ($oldData as $stateId => $data) {
-                $record = new Tinebase_Model_State(array(
-                    'user_id'   => $oldState->user_id,
-                    'state_id'  => $stateId,
-                    'data'      => $data
+                
+                $filter = new Tinebase_Model_StateFilter(array(
+                    array('field' => 'state_id', 'operator' => 'equals', 'value' => $stateId),
+                    array('field' => 'user_id', 'operator' => 'equals', 'value' => $oldState->user_id)
                 ));
-                $be->create($record);
+                $result = $be->search($filter);
+                
+                try {
+                    if ($result->count()) {
+                        $record = $result->getFirstRecord();
+                        $record->data = $data;
+                        $be->update($record);
+                    } else {
+                        $record = new Tinebase_Model_State(array(
+                            'user_id'   => $oldState->user_id,
+                            'state_id'  => $stateId,
+                            'data'      => $data
+                        ));
+                        $be->create($record);
+                    }
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Could not transfer old state: ' . $stateId . ': ' . print_r($data, 1));
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Exception Message: ' . $e->getMessage()) ;
+                    }
+                }
             }
             $be->delete($oldState->getId());
         }

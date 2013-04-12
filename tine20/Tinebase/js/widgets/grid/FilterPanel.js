@@ -527,7 +527,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 
                 // create new filterPanel
                 else {
-                    filterPanel = this.addFilterPanel({id: filterData.id});
+                    // NOTE: don't use filterData.id here, it's a ext-comp-* which comes from a different session
+                    // and might be a totally different element yet.
+                    filterPanel = this.addFilterPanel();
                     this.setActiveFilterPanel(filterPanel);
                 }
                 

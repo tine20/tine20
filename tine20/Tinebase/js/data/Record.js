@@ -89,8 +89,9 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {Object} The value of the field.
      */
     get: function(name) {
+        var cfName = String(name).match(this.cfExp);
         
-        if (cfName = String(name).match(this.cfExp)) {
+        if (cfName) {
             return this.data.customfields ? this.data.customfields[cfName[1]] : null;
         }
         
@@ -104,7 +105,8 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     set : function(name, value) {
         var encode = Ext.isPrimitive(value) ? String : Ext.encode,
-            current = this.get(name);
+            current = this.get(name),
+            cfName;
             
         if (encode(current) == encode(value)) {
             return;
@@ -242,25 +244,25 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         return p.fields.indexOfKey(n) >= 0;
     };
     f.getRecordName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.recordName, p.recordsName, 1);
     };
     f.getRecordsName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getContainerName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.containerName, p.containersName, 50);
