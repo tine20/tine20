@@ -6,7 +6,7 @@
  * @subpackage  Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        make this a real controller + singleton (create extra sql backend)
  * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request
@@ -284,8 +284,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
 
         $result = $pref->value;
-        
-        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_preferenceName . ' ' . $_accountId . ':' . $result);
 
         return $result;
     }
@@ -413,8 +411,16 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         // check if already there -> update
         $queryResult = $this->_getPrefs($_preferenceName, $_accountId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
-
-        if (empty($queryResult)) {
+        $prefArray = NULL;
+        // need to fetch preference for user account as _getPrefs() returns prefs for ANYONE, too
+        foreach ($queryResult as $row) {
+            if ($row['account_type'] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                $prefArray = $row;
+                break;
+            }
+        }
+        
+        if ($prefArray === NULL) {
             if ($_value !== Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // no preference yet -> create
                 $preference = new Tinebase_Model_Preference(array(
@@ -432,7 +438,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
 
         } else {
-            $preference = $this->_rawDataToRecord($queryResult[0]);
+            $preference = $this->_rawDataToRecord($prefArray);
             if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // delete if new value = use default
                 $this->delete($preference->getId());
@@ -444,7 +450,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> ' . $_value);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> ' . $_value);
     }
 
     /**
