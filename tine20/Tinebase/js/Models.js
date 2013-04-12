@@ -20,7 +20,8 @@ Tine.Tinebase.Model.modlogFields = [
     { name: 'last_modified_by',                                                        omitDuplicateResolving: true },
     { name: 'is_deleted',         type: 'boolean',                                     omitDuplicateResolving: true },
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
-    { name: 'deleted_by',                                                              omitDuplicateResolving: true }
+    { name: 'deleted_by',                                                              omitDuplicateResolving: true },
+    { name: 'seq',                                                                     omitDuplicateResolving: true }
 ];
 
 /**

@@ -175,7 +175,7 @@ Tine.Tinebase.ApplicationStarter = {
      * @type 
      */
     filterMap: {
-        bool: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
+        'boolean': function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
             filter.valueType = 'bool'
             filter.defaultValue = false;
             return filter;
@@ -218,9 +218,6 @@ Tine.Tinebase.ApplicationStarter = {
             return filter;
         },
         'string' :  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
-        },
-        'boolean':  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
             return filter;
         },
         'user':     function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {

@@ -42,16 +42,16 @@ Ext.ux.display.DisplayPanel = Ext.extend(Ext.Panel, {
         this.fields.addAll(this.findByType('ux.displayfield'));
         this.fields.addAll(this.findByType('ux.displaytextarea'));
     },
+    
     /**
      * fills this fields with the corresponding record data
      * 
-     * @param {} record
+     * @param {Tine.Tinebase.data.Record} record
      */
     loadRecord: function(record) {
         this.fields.each(function(field) {
-            if (data = record.get(field.name)) {
-                field.setValue(data);
-            }
+            var data = record.get(field.name) ? record.get(field.name) : '';
+            field.setValue(data);
         });
     }
 });

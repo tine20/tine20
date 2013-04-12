@@ -189,7 +189,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'feastCalendarId'     => isset($args['feast_calendar_id']) ? $args['feast_calendar_id'] : NULL,
                 'workingTimeModelId'  => isset($args['working_time_model_id']) ? $args['working_time_model_id'] : NULL,
                 'vacationDays'        => isset($args['vacation_days']) ? $args['vacation_days'] : NULL,
-                
+                'startDate'           => $employee->employment_begin ? $employee->employment_begin : NULL
             ), TRUE);
             
             $employee->contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');

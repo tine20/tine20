@@ -406,4 +406,25 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('HumanResources', '7.9');
     }
+    
+    /**
+     * update 7.9 -> 7.10
+     *
+     * - fix account-year field
+     *   https://forge.tine20.org/mantisbt/view.php?id=8140
+     */
+    public function update_9()
+    {
+        $field = '<field>
+            <name>year</name>
+            <type>integer</type>
+            <notnull>true</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_account', $declaration);
+        $this->setTableVersion('humanresources_account', '2');
+        $this->setApplicationVersion('HumanResources', '7.10');
+    }
+    
 }
