@@ -95,7 +95,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'invoice_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Invoice date', // _('Invoice date')
-                'hidden'     => true
+                'hidden'     => true,
+                'type'       => 'datetime'
             ),
             'total_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
@@ -119,17 +120,20 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'warranty' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Warranty', // _('Warranty')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'type'       => 'datetime'
             ),
             'added_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item added', // _('Item added')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'type'       => 'datetime'
             ),
             'removed_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item removed', // _('Item removed')
-                'hidden'     => TRUE
+                'hidden'     => TRUE,
+                'type'       => 'datetime'
             ),
             'active_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
