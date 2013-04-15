@@ -158,6 +158,13 @@ class Sipgate_Controller_Line extends Tinebase_Controller_Record_Abstract
     public function dialNumber($lineId = NULL, $number = NULL) {
         $line = $this->_getLineToOperateOn($lineId);
 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " contact number: ".$number);
+
+        $number = preg_replace("/[^0-9+()]+/","", $number);
+        $number = preg_replace("/\(.*\)/" ,"",$number); 
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " number to dail: ".$number);
+
         if(!$number) {
             throw new Sipgate_Exception('Please use a number!');
         } elseif(strpos($number,'+') == 0) { // number has already the international format
@@ -170,6 +177,8 @@ class Sipgate_Controller_Line extends Tinebase_Controller_Record_Abstract
         } else {
             throw new Sipgate_Exception('The number yout tried to call can not be resolved properly!');
         }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " SIP Number: ".$number);
 
         return array(
             'result' => Sipgate_Backend_Api::getInstance()->connect($line->account_id)->dialNumber($line->sip_uri, $number),
