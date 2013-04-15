@@ -80,7 +80,13 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         
         //@todo remove cli session path
         
-        return $result;
+        // convert function result to shell return code
+        if ($result === NULL || $result === TRUE || ! is_int($result)) {
+            $result = 0;
+        } else if ($result === FALSE) {
+            $result = 1;
+        }
+        exit($result);
     }
     
     /**

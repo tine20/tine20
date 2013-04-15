@@ -115,7 +115,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($responses, TRUE));
         
         $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
-        echo "\nTine 2.0 scheduler run (" . $responseString . ') complete.';
+        echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
         
         return TRUE;
     }
@@ -401,10 +401,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if ($dbcheck) {
             echo "DB CONNECTION OK | connecttime={$time}ms;;;;\n";
             return 0;
-        } else {
-            echo $message . "\n";
-            return 2;
-        }
+        } 
+        
+        echo $message . "\n";
+        return 2;
     }
     
     /**
