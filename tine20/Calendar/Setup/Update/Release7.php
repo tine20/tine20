@@ -35,4 +35,16 @@ class Calendar_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '7.1');
     }
+    
+    /**
+     * update to 6.2
+     * 
+     * @see 0008196: Preferences values contains translated value
+     */
+    public function update_1()
+    {
+        $release6 = new Calendar_Setup_Update_Release6($this->_backend);
+        $release6->update_1();
+        $this->setApplicationVersion('Calendar', '7.2');
+    }
 }
