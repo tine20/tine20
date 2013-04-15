@@ -109,8 +109,12 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     },
     
     onMainStoreLoad: function(store, options) {
-        Tine.log.debug('Tine.Calendar.CalendarPanelSplitPlugin::onMainStoreLoad try again with active subview');
-        this.app.getMainScreen().getCenterPanel().onStoreLoad(this.getActiveView().store, options);
+        var cp = this.app.getMainScreen().getCenterPanel();
+        
+        if (store !== cp.getCalendarPanel(cp.activeView).getStore()) {
+            Tine.log.debug('Tine.Calendar.CalendarPanelSplitPlugin::onMainStoreLoad try again with active subview');
+            cp.onStoreLoad(this.getActiveView().store, options);
+        }
         
         // create view for each attendee
         var filteredAttendee = this.attendeeFilterGrid.getValue(),
