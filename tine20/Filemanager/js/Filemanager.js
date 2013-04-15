@@ -15,8 +15,18 @@ Ext.ns('Tine.Filemanager');
  * @extends Tine.Tinebase.Application
  */
 Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
-    hasMainScreen : true,
-
+    /**
+     * @return {Boolean}
+     */
+    init: function () {
+        Tine.log.info('Initialize Filemanager');
+        
+        if (! Tine.Tinebase.common.hasRight('manage', 'Filemanager', 'main_screen')) {
+            Tine.log.debug('No mainscreen right for Filemanager');
+            this.hasMainScreen = false;
+        }
+    },
+    
     /**
      * Get translated application title of this application
      * 

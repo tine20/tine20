@@ -27,6 +27,13 @@
 class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
     /**
+     * 
+     * the right to manage filemanager module
+     * @staticvar string
+     */
+    const MANAGE_MAIN_SCREEN = 'manage_main_screen';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Filemanager_Acl_Rights
@@ -76,7 +83,8 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            self::MANAGE_MAIN_SCREEN,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -97,6 +105,10 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage shared folders'),
                 'description'   => $translate->_('Create new shared folders'),
             ),
+            self::MANAGE_MAIN_SCREEN   => array(
+                'text'          => $translate->_('manage module'),
+                'description'   => $translate->_('show module main screen'),
+               ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
