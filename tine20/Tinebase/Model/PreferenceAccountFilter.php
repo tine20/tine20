@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        generalize this
@@ -73,12 +73,6 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
                    array('field' => 'account_type', 'operator' => 'equals',  'value' => $this->_accountType)
                 )),
                 array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
-                /*
-                array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_AND, 'filters' => array(
-                   //array('field' => 'account_id',   'operator' => 'equals',  'value' => '0'),
-                   array('field' => 'account_type', 'operator' => 'equals',  'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE),
-                )),
-                */            
             );
             
             // add groups if accountType is user
