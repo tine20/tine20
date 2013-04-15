@@ -127,7 +127,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  * we can work with the data synced during previous login
                  */ 
                 try {
-                    Tinebase_User::syncUser($_username);
+                    Tinebase_User::syncUser($_username,array('syncContactData' => TRUE));
                 } catch (Exception $e) {
                     Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Failed to sync user data for: ' . $_username . ' reason: ' . $e->getMessage());
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
