@@ -904,7 +904,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 
                 // add non existing filters only if they where not created implicitly by server
                 else if (! filterData.implicit) {
-                    filterRecord = new this.record(filterData, filterData.id);
+                    // NOTE: don't use filterData.id here, it's a ext-comp-* which comes from a different session
+                    // and might be a totally different element yet.
+                    filterRecord = new this.record(filterData);
                     this.addFilter(filterRecord);
                 }
             }

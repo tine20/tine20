@@ -733,10 +733,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // get ids for toUpdate
         $idxIdMap = $this->_filterEventsByDTStarts($_currentPersistentExceptions, $toUpdateDtSTart)->getId();
-        $migration['toUpdate']->setByIndices('id', $idxIdMap);
+        try {
+            $migration['toUpdate']->setByIndices('id', $idxIdMap);
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            // some debugging for 0008182: event with lots of exceptions breaks calendar sync
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($idxIdMap, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($migration['toUpdate']->toArray(), TRUE));
+            throw $ternd;
+        }
         
         // filter exceptions marked as don't touch 
-        foreach($migration['toUpdate'] as $toUpdate) {
+        foreach ($migration['toUpdate'] as $toUpdate) {
             if ($toUpdate->seq === -1) {
                 $migration['toUpdate']->removeRecord($toUpdate);
             }
@@ -753,7 +760,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _prepareException($_baseEvent, $_exception)
+    protected function _prepareException(Calendar_Model_Event $_baseEvent, Calendar_Model_Event $_exception)
     {
         if (! $_baseEvent->uid) {
             throw new Tinebase_Exception_InvalidArgument('base event has no uid');
