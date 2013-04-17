@@ -103,4 +103,19 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $dryrun = TRUE;
         $be->deleteDuplicateEvents($filter, $dryrun);
     }
+    
+    /**
+     * repair dangling attendee records (no displaycontainer_id)
+     * 
+     * @see https://forge.tine20.org/mantisbt/view.php?id=8172
+     */
+    public function repairDanglingDisplaycontainerEvents()
+    {
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(5));
+        Tinebase_Core::getLogger()->addWriter($writer);
+        
+        $be = new Calendar_Backend_Sql();
+        $be->repairDanglingDisplaycontainerEvents();
+    }
 }

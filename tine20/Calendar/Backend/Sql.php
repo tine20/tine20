@@ -757,4 +757,64 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
+    
+    /**
+     * repair dangling attendee records (no displaycontainer_id)
+     *
+     * @see https://forge.tine20.org/mantisbt/view.php?id=8172
+     */
+    public function repairDanglingDisplaycontainerEvents()
+    {
+        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array(
+            'field'     => 'user_type',
+            'operator'  => 'in', 
+            'value'     => array(
+                Calendar_Model_Attender::USERTYPE_USER,
+                Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                Calendar_Model_Attender::USERTYPE_RESOURCE
+            )
+        )));
+        
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array(
+                'field'     => 'displaycontainer_id',
+                'operator'  => 'isnull',
+                'value'     => null
+        )));
+        
+        $danglingAttendee = $this->_attendeeBackend->search($filter);
+        $danglingContactAttendee = $danglingAttendee->filter('user_type', '/'. Calendar_Model_Attender::USERTYPE_USER . '|'. Calendar_Model_Attender::USERTYPE_GROUPMEMBER .'/', TRUE);
+        $danglingContactIds = array_unique($danglingContactAttendee->user_id);
+        $danglingContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($danglingContactIds, TRUE);
+        $danglingResourceAttendee = $danglingAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
+        $danglingResourceIds =  array_unique($danglingResourceAttendee->user_id);
+        $danglingResources = Calendar_Controller_Resource::getInstance()->getMultiple($danglingResourceIds, TRUE);
+        
+        // repair contacts
+        foreach($danglingContactIds as $danglingContactId) {
+            // get account_id
+            $danglingContact = $danglingContacts->getById($danglingContactId);
+            if ($danglingContact && $danglingContact->account_id) {
+                // get display calendar
+                $displayCalId = Calendar_Controller_Event::getDefaultDisplayContainerId($danglingContact->account_id);
+                if ($displayCalId) {
+                    // finaly repair attendee records
+                    $attendeeRecords = $danglingContactAttendee->filter('user_id', $danglingContactId);
+                    $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                    Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following contact attendee " . print_r($attendeeRecords->toArray(), TRUE));
+                }
+            }
+        }
+        
+        // repair resources
+        foreach($danglingResourceIds as $danglingResourceId) {
+            $resource = $danglingResources->getById($danglingResourceId);
+            if ($resource && $resource->container_id) {
+                $displayCalId = $resource->container_id;
+                $attendeeRecords = $danglingResourceAttendee->filter('user_id', $danglingResourceId);
+                $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following resource attendee " . print_r($attendeeRecords->toArray(), TRUE));
+            }
+        }
+    }
 }
