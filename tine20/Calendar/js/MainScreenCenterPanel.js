@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /* global Ext, Tine */
@@ -39,6 +39,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @type Ext.util.DelayedTask
      */
     autoRefreshTask: null,
+    
+    /**
+     * add records from other applications using the split add button
+     * - activated by default
+     * 
+     * @type Bool
+     * @property splitAddButton
+     */
+    splitAddButton: true,
     
     periodRe: /^(day|week|month)/i,
     presentationRe: /(sheet|grid)$/i,
