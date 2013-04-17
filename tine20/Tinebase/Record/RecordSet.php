@@ -285,10 +285,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_name property name
      * @param array  $_values index => property value
+     * @throws Tinebase_Exception_Record_NotDefined
      */
     public function setByIndices($_name, array $_values)
     {
         foreach ($_values as $index => $value) {
+            if (! array_key_exists($index, $this->_listOfRecords)) {
+                throw new Tinebase_Exception_Record_NotDefined('Could not find record with index ' . $index);
+            }
             $this->_listOfRecords[$index]->$_name = $value;
         }
     }

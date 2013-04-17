@@ -62,9 +62,9 @@
         <reflexive>
             <filterchain>
                 <replaceregexp>
-                    <regexp pattern="Tine\.clientVersion\.buildType[^;]*" replace='Tine.clientVersion.buildType="RELEASE"' modifiers="i" />
-                    <regexp pattern="Tine\.clientVersion\.buildDate[^;]*" replace='Tine.clientVersion.buildDate="${buildDate}"' modifiers="i"/>
-                    <regexp pattern="Tine\.clientVersion\.buildRevision[^;]*" replace='Tine.clientVersion.codeName="${buildRevision}"' modifiers="i"/>
+                    <regexp pattern="Tine\.clientVersion\.buildType\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.buildType="RELEASE"' modifiers="i" />
+                    <regexp pattern="Tine\.clientVersion\.buildDate\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.buildDate="${buildDate}"' modifiers="i"/>
+                    <regexp pattern="Tine\.clientVersion\.buildRevision\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.codeName="${buildRevision}"' modifiers="i"/>
                 </replaceregexp>
             </filterchain>
             
@@ -77,7 +77,7 @@
         <reflexive>
             <filterchain>
                 <replaceregexp>
-                    <regexp pattern="Tine\.clientVersion\.buildType[^;]*" replace="Tine.clientVersion.buildType = 'DEBUG'"/>
+                    <regexp pattern="Tine\.clientVersion\.buildType\s*=[^=]{1}[^;]*" replace="Tine.clientVersion.buildType = 'DEBUG'"/>
                 </replaceregexp>
             </filterchain>
             
