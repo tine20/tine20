@@ -108,7 +108,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             ),
             self::UPDATEINTERVAL  => array(
                 'label'         => $translate->_('Email Update Interval'),
-                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes). "0" means never.'),
+                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes).'),
             ),
             self::USEINADB  => array(
                 'label'         => $translate->_('Use in Addressbook'),
