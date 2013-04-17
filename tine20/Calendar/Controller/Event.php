@@ -666,13 +666,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $updatedBaseEvent = $this->update($baseEvent, FALSE);
             
             if ($_deleteInstance == FALSE) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Creating persistent exception for: '{$_event->recurid}'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Recur exception: " . print_r($_event->toArray(), TRUE));
                 
                 $_event->setId(NULL);
                 unset($_event->rrule);
                 unset($_event->exdate);
             
-                foreach(array('attendee', 'notes', 'alarms') as $prop) {
+                foreach (array('attendee', 'notes', 'alarms') as $prop) {
                     if ($_event->{$prop} instanceof Tinebase_Record_RecordSet) {
                         $_event->{$prop}->setId(NULL);
                     }
@@ -685,20 +686,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $attendees = $_event->attendee;
                     unset($_event->attendee);
                 }
-                $note = $_event->notes; unset($_event->notes);
+                $note = $_event->notes;
+                unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts);
                 
                 if (! $dtStartHasDiff) {
                     // we save attendee seperatly to preserve their attributes
                     if ($attendees instanceof Tinebase_Record_RecordSet) {
                         $attendees->cal_event_id = $persistentExceptionEvent->getId();
-                        
-                        foreach($attendees as $attendee) {
-                            if (! $attendee->status_authkey) {
-                                // new invitations
-                                $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
-                            }
-                            $this->_backend->createAttendee($attendee);
+                        $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
+                        foreach ($attendees as $attendee) {
+                            $this->_createAttender($attendee, $calendar, TRUE);
                             $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent, Tinebase_Model_ContainerContent::ACTION_CREATE);
                         }
                     }
@@ -721,7 +719,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $persistentExceptionEvents = $this->getRecurExceptions($_event);
             $pastPersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             $futurePersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-            foreach($persistentExceptionEvents as $persistentExceptionEvent) {
+            foreach ($persistentExceptionEvents as $persistentExceptionEvent) {
                 $persistentExceptionEvent->dtstart->isLater($_event->dtstart) ? $futurePersistentExceptionEvents->addRecord($persistentExceptionEvent) : $pastPersistentExceptionEvents->addRecord($persistentExceptionEvent);
             }
             
@@ -1534,30 +1532,32 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     /**
      * creates a new attender
-     * @todo add support for resources
      * 
      * @param Calendar_Model_Attender  $_attender
      * @param Tinebase_Model_Container $_calendar
+     * @param boolean $preserveStatus
      */
-    protected function _createAttender($_attender, $_calendar) {
-        
+    protected function _createAttender($_attender, $_calendar, $preserveStatus = FALSE)
+    {
         // apply defaults
         $_attender->user_type         = isset($_attender->user_type) ? $_attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
         
         $userAccountId = $_attender->getUserAccountId();
         
         // reset status if not a contact or my account
-        if ($_attender->user_type != Calendar_Model_Attender::USERTYPE_USER || ($userAccountId && $userAccountId != Tinebase_Core::getUser()->getId())) {
+        if (! $preserveStatus && ($_attender->user_type != Calendar_Model_Attender::USERTYPE_USER || $userAccountId && $userAccountId != Tinebase_Core::getUser()->getId())) {
             $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
         }
         
         // generate auth key
-        $_attender->status_authkey = Tinebase_Record_Abstract::generateUID();
+        if (! $_attender->status_authkey) {
+            $_attender->status_authkey = Tinebase_Record_Abstract::generateUID();
+        }
         
         // attach to display calendar if attender has/is a useraccount
         if ($userAccountId) {
             if ($_calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $_calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                // if attender has admin grant to personal phisycal container, this phys. cal also gets displ. cal
+                // if attender has admin grant to personal physical container, this phys. cal also gets displ. cal
                 $_attender->displaycontainer_id = $_calendar->getId();
             } else if ($_attender->displaycontainer_id && $userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $_attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // allow user to set his own displ. cal
@@ -1575,6 +1575,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $resource = Calendar_Controller_Resource::getInstance()->get($_attender->user_id);
             $_attender->displaycontainer_id = $resource->container_id;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " New attender: " . print_r($_attender->toArray(), TRUE));
+        
         $this->_backend->createAttendee($_attender);
     }
     
@@ -1605,8 +1608,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _updateAttender($_attender, $_currentAttender, $_calendar, $_isRescheduled)
     {
-        //echo  "save: ". (int) $_isRescheduled . "\n";
-            
         $userAccountId = $_currentAttender->getUserAccountId();
         
         // reset status if attender != currentuser and wrong authkey
@@ -1633,7 +1634,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // preserv old authkey
         $_attender->status_authkey = $_currentAttender->status_authkey;
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attender: " . print_r($_attender->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Updating attender: " . print_r($_attender->toArray(), TRUE));
         
         // update display calendar if attender has/is a useraccount
         if ($userAccountId) {

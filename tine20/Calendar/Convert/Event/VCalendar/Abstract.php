@@ -350,7 +350,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // find the main event - the main event has no RECURRENCE-ID
-        foreach($vcalendar->VEVENT as $vevent) {
+        foreach ($vcalendar->VEVENT as $vevent) {
             if(!isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
                 
@@ -364,9 +364,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // parse the event exceptions
-        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Events');
+        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         foreach ($vcalendar->VEVENT as $vevent) {
-            if(isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
+            if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
                 // initialize attendee with attendee from base events for new exceptions
@@ -385,7 +385,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 }
                 
                 $this->_convertVevent($vevent, $recurException);
-                    
+                
                 if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 }
@@ -529,6 +529,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' attendee ' . $_attendee->serialize());
+        
         if (isset($_attendee['CUTYPE']) && in_array($_attendee['CUTYPE']->value, array('INDIVIDUAL', Calendar_Model_Attender::USERTYPE_GROUP, Calendar_Model_Attender::USERTYPE_RESOURCE))) {
             $type = $_attendee['CUTYPE']->value == 'INDIVIDUAL' ? Calendar_Model_Attender::USERTYPE_USER : $_attendee['CUTYPE']->value;
         } else {
@@ -590,6 +592,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _convertVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $_vevent->serialize());
+        
         $event = $_event;
         $newAttendees = array();
         
@@ -602,8 +606,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
-        foreach($_vevent->children() as $property) {
-            switch($property->name) {
+        foreach ($_vevent->children() as $property) {
+            switch ($property->name) {
                 case 'CREATED':
                 case 'DTSTAMP':
                     // do nothing

@@ -430,6 +430,61 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
+     * testCreateRecurExceptionWithOtherUser
+     * 
+     * @see 0008172: displaycontainer_id not set when recur exception is created
+     */
+    public function testCreateRecurExceptionWithOtherUser()
+    {
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        
+        // create persistent exception (just status update)
+        $persistentException = $recurSet[1];
+        $scleverAttender = $this->_findAttender($persistentException['attendee'], 'sclever');
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $status_authkey = $attendeeBackend->get($scleverAttender['id'])->status_authkey;
+        $scleverAttender['status'] = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $scleverAttender['status_authkey'] = $status_authkey;
+        foreach ($persistentException['attendee'] as $key => $attender) {
+            if ($attender['id'] === $scleverAttender['id']) {
+                $persistentException['attendee'][$key] = $scleverAttender;
+                break;
+            }
+        }
+        
+        // sclever has only READ grant
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_testUser->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ), array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ))), TRUE);
+        
+        $unittestUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        
+        // create persistent exception
+        $createdException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
+        Tinebase_Core::set(Tinebase_Core::USER, $unittestUser);
+        
+        $sclever = $this->_findAttender($createdException['attendee'], 'sclever');
+        $this->assertEquals('Susan Clever', $sclever['user_id']['n_fn']);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $sclever['status'], 'status mismatch: ' . print_r($sclever, TRUE));
+        $this->assertTrue(is_array($sclever['displaycontainer_id']));
+        $this->assertEquals($this->_personasDefaultCals['sclever']['id'], $sclever['displaycontainer_id']['id']);
+    }
+    
+    /**
      * testUpdateRecurSeries
      */
     public function testUpdateRecurSeries()

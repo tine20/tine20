@@ -128,9 +128,14 @@
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
+
+        if ($_event->dtend === NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($_event->toArray(), TRUE));
+            throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
+        }
         
         // skip notifications to past events
-        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend )) {
+        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
             if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
                 return;
             }

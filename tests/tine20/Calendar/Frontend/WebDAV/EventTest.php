@@ -153,13 +153,54 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
+        $this->_checkExdate($event);
     
-        $record = $event->getRecord();
-//         print_r($record->exdate->is_deleted);
-        $this->assertEquals('New Event', $record->summary);
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->organizer);
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $record->exdate[0]->attendee[0]->user_id);
         return $event;
+    }
+    
+    /**
+     * check event exdate
+     * 
+     * @param Calendar_Frontend_WebDAV_Event $event
+     */
+    protected function _checkExdate(Calendar_Frontend_WebDAV_Event $event)
+    {
+        $record = $event->getRecord();
+        $exdate = $record->exdate[0];
+        $this->assertEquals('New Event', $record->summary);
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $exdate->organizer,
+            'organizer mismatch, expected :' . print_r(Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id)->toArray(), TRUE) .
+            'got: ' . print_r(Addressbook_Controller_Contact::getInstance()->get($exdate->organizer)->toArray(), TRUE));
+        $this->assertTrue(in_array(Tinebase_Core::getUser()->contact_id, $exdate->attendee->user_id), 'user contact id not found in exdate attendee: ' . print_r($exdate->attendee->toArray(), TRUE));
+        foreach ($exdate->attendee as $attender) {
+            $this->assertTrue(! empty($attender->displaycontainer_id), 'displaycontainer_id not set for attender: ' . print_r($attender->toArray(), TRUE));
+        }
+    }
+    
+    /**
+     * testCreateRepeatingEventAndPutExdate
+     * 
+     * @see 0008172: displaycontainer_id not set when recur exception is created
+     */
+    public function testCreateRepeatingEventAndPutExdate()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+        
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly.ics');
+        $id = '353de608-4b50-41e6-9f6c-35889584fe8d';
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
+        $existingEvent = $event->getRecord();
+        
+        // put exception
+        $vcalendarStreamException = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly_exception.ics');
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $existingEvent);
+        $event->put($vcalendarStreamException);
+        
+        $this->_checkExdate($event);
     }
     
     /**
@@ -604,14 +645,23 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $vcalendar = file_get_contents($_filename);
         
+        $unittestUserEmail = Tinebase_Core::getUser()->accountEmailAddress;
         $vcalendar = preg_replace(
             array(
                 '/l.kneschke@metaway\n s.de/', 
-                '/pwulf\n @tine20.org/'
+                '/unittest@\n tine20.org/',
+                '/un\n ittest@tine20.org/',
+                '/unittest@tine20.org/',
+                '/unittest@ti\n ne20.org/',
+                '/pwulf\n @tine20.org/',
             ), 
             array(
-                Tinebase_Core::getUser()->accountEmailAddress, 
-                array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress
+                $unittestUserEmail,
+                $unittestUserEmail,
+                $unittestUserEmail,
+                $unittestUserEmail,
+                $unittestUserEmail,
+                array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
             ), 
             $vcalendar
         );
