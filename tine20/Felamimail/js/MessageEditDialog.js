@@ -592,7 +592,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     setReplySubject: function() {
         var replyPrefix = 'Re: ',
             replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '',
-            replySubject = replySubject.replace(/^((re|aw|antw|fwd|odp|sv|wg|tr):\s*)*/i, replyPrefix);
+            replySubject = replySubject.replace(/^((re|aw|antw|fwd|odp|sv|wg|tr|rép):\s*)*/i, replyPrefix);
             
         this.subject = replySubject;
     },
