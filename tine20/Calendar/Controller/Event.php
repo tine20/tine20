@@ -1563,11 +1563,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // allow user to set his own displ. cal
                 $_attender->displaycontainer_id = $_attender->displaycontainer_id;
             } else {
-                $displayCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $userAccountId);
-                if ($displayCalId) {
-                    $_attender->displaycontainer_id = $displayCalId;
-                }
-                // else -> attach to first container of user?
+                $displayCalId = self::getDefaultDisplayContainerId($userAccountId);
+                $_attender->displaycontainer_id = $displayCalId;
             }
         }
         
@@ -1579,6 +1576,37 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " New attender: " . print_r($_attender->toArray(), TRUE));
         
         $this->_backend->createAttendee($_attender);
+    }
+    
+    
+    /**
+     * returns default displayContainer id of given attendee
+     *
+     * @param string $userAccountId
+     */
+    public static function getDefaultDisplayContainerId($userAccountId)
+    {
+        $userAccountId = Tinebase_Model_User::convertUserIdToInt($userAccountId);
+        $displayCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $userAccountId);
+        
+        try {
+            // assert that displaycal is of type personal
+            $container = Tinebase_Container::getInstance()->getContainerById($displayCalId);
+            if ($container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
+                $displayCalId = NULL;
+            }
+        } catch (Exception $e) {
+            $displayCalId = NULL;
+        }
+        
+        if (! isset($displayCalId)) {
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer($userAccountId, 'Calendar_Model_Event', $userAccountId, 0, true);
+            if ($containers->count() > 0) {
+                $displayCalId = $containers->getFirstRecord()->getId();
+            }
+        }
+        
+        return $displayCalId;
     }
     
     /**
