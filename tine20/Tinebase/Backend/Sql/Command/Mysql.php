@@ -119,6 +119,16 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * returns field without accents (diacritic signs) - for Pgsql;
+     * 
+     * @return string
+     */
+    public function getUnaccent($field)
+    {
+        return $field;
+    }
+    
+    /**
      * escape special char
      *  
      * @return string
