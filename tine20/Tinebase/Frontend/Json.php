@@ -654,16 +654,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     try {
                         $applicationJson = new $jsonAppName();
+                        $registryData[$application->name] = (array_key_exists($application->name, $registryData))
+                            ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
+                            : $applicationJson->getRegistryData();
+                    
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e->getMessage());
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
                         Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
                         unset($registryData[$application->name]);
                         continue;
                     }
-                    
-                    $registryData[$application->name] = (array_key_exists($application->name, $registryData))
-                        ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
-                        : $applicationJson->getRegistryData();
                     
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();

@@ -881,8 +881,10 @@ class Tinebase_Core
 
             switch($dbBackend) {
                 case self::PDO_MYSQL:
-                    if (! defined('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY')) {
-                        throw new Tinebase_Exception_Backend_Database('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY is not defined. Please check PDO extension.');
+                    foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
+                        if (! defined($pdoConstant)) {
+                            throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
+                        }
                     }
                     
                     // force some driver options

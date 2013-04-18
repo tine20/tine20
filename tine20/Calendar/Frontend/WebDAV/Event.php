@@ -175,7 +175,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
             }
         }
-        
         // implicitly DECLINE event 
         else {
             $attendee = $event->attendee instanceof Tinebase_Record_RecordSet ? 
@@ -183,7 +182,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 NULL;
             
             // NOTE: don't allow organizer to instantly delete after update, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
-            if ($attendee && $attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(10) > $event->last_modified_time) {
+            if ($attendee && ($attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(10) > $event->last_modified_time)) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
                 $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
