@@ -1716,7 +1716,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // reset status if not a contact or my account
         if (! $preserveStatus 
-            && ($_attender->user_type != Calendar_Model_Attender::USERTYPE_GROUP 
+            && ($_attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP 
                 || $userAccountId && $userAccountId != Tinebase_Core::getUser()->getId()
             )) {
             $_attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
