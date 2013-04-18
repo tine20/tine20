@@ -567,16 +567,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        // filter out attendee w.o. email
-        $attendeeClone = clone $_event->attendee;
-        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
-        foreach($_event->attendee->getEmail() as $idx => $email) {
-            if ($email) {
-                $filteredAttendee->addRecord($_event->attendee[$idx]);
-            }
-        }
-        $_event->attendee = $filteredAttendee;
+        $this->_filterAttendeeWithoutEmail($_event);
         
         // get alarms for baseEvents w.o. exdate
         if (! $_event->isRecurException() && ! $_event->exdate) {
@@ -600,6 +591,58 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         return $_event;
+    }
+    
+    /**
+     * filter out attendee w.o. email
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _filterAttendeeWithoutEmail($event)
+    {
+        $this->_fillResolvedAttendeeCache($event);
+        
+        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        foreach ($event->attendee->getEmail() as $idx => $email) {
+            if ($email) {
+                $filteredAttendee->addRecord($event->attendee[$idx]);
+            }
+        }
+        $event->attendee = $filteredAttendee;
+    }
+
+    /**
+     * re add attendee w.o. email
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _addAttendeeWithoutEmail($event, $currentEvent)
+    {
+        if (! $currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+        
+        $this->_fillResolvedAttendeeCache($currentEvent);
+        
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        foreach ($currentEvent->attendee->getEmail() as $idx => $email) {
+            if (! $email) {
+                $event->attendee->addRecord($currentEvent->attendee[$idx]);
+            }
+        }
+    }
+    
+    /**
+     * this fills the resolved attendee cache without changing the event attendee recordset
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _fillResolvedAttendeeCache($event)
+    {
+        $attendeeClone = clone $event->attendee;
+        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
     }
     
     /**
@@ -650,17 +693,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // assert organizer
         $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: Tinebase_Core::getUser()->contact_id);
         
-        // re add attendee w.o. email
-        if ($_currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
-            $attendeeClone = clone $_currentEvent->attendee;
-            $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
-            foreach($_currentEvent->attendee->getEmail() as $idx => $email) {
-                if (! $email) {
-                    $_event->attendee->addRecord($_currentEvent->attendee[$idx]);
-                }
-            }
-        }
+        $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
         
         $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
         $currentCUAttendee  = Calendar_Model_Attender::getAttendee($_currentEvent->attendee, $this->_calendarUser);
