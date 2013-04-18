@@ -119,5 +119,25 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         }
         
         return $id;
-    }    
+    }
+
+    /**
+     * returns real filesystem path
+     * 
+     * @param string $baseDir
+     * @throws Tinebase_Exception_NotFound
+     * @return string
+     */
+    public function getFilesystemPath($baseDir = NULL)
+    {
+        if (empty($this->hash)) {
+            throw new Tinebase_Exception_NotFound('file object hash is missing');
+        }
+        
+        if ($baseDir === NULL) {
+            $baseDir = Tinebase_Core::getConfig()->filesdir;
+        }
+        
+        return $baseDir . DIRECTORY_SEPARATOR . substr($this->hash, 0, 3) . DIRECTORY_SEPARATOR . substr($this->hash, 3);
+    }
 }

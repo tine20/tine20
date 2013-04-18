@@ -570,6 +570,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function createAllDemoData($_opts)
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
         // fetch all applications
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         
@@ -598,5 +602,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $class->createDemoData($_opts);
             }
         }
+    }
+    
+    /**
+     * clears deleted files from filesystem + database
+     * @return boolean
+     */
+    public function clearDeletedFiles()
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(6));
+        Tinebase_Core::getLogger()->addWriter($writer);
+        
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
     }
 }

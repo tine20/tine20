@@ -992,9 +992,9 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test cleanup of deleted files
+     * test cleanup of deleted files (filesystem)
      */
-    public function testDeletedFileCleanup()
+    public function testDeletedFileCleanupFromFilesystem()
     {
         // remove all files with size 0 first
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
@@ -1005,15 +1005,44 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         }
         
         $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
         $this->tearDown();
         
         $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
     }
 
+    /**
+     * test cleanup of deleted files (database)
+     * 
+     * @see 0008062: add cleanup script for deleted files
+     */
+    public function testDeletedFileCleanupFromDatabase()
+    {
+        $fileNode = $this->testCreateFileNodeWithTempfile();
+        
+        // get "real" filesystem path + unlink
+        $fileObjectBackend = new Tinebase_Tree_FileObject();
+        $fileObject = $fileObjectBackend->get($fileNode['object_id']);
+        unlink($fileObject->getFilesystemPath());
+        
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        $this->assertEquals(1, $result, 'should cleanup one file');
+
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        $this->assertEquals(0, $result, 'should cleanup no file');
+        
+        // node should no longer be found
+        try {
+            $this->_json->getNode($fileNode['id']);
+            $this->fail('tree node still exists: ' . print_r($fileNode, TRUE));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!', $tenf->getMessage());
+        }
+    }
+    
     /**
      * testDeleteDirectoryNodes
      */
