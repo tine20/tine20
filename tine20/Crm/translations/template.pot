@@ -103,6 +103,10 @@ msgstr ""
 msgid "Responsible"
 msgstr ""
 
+#: Model/Lead.php:123
+msgid "Task"
+msgstr ""
+
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:55
 msgid "All leads I have read grants for"
 msgstr ""
