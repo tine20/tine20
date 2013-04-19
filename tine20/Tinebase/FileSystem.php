@@ -873,7 +873,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * 
      * @return integer number of deleted files
      */
-    public function clearDeletedFiles()
+    public function clearDeletedFilesFromFilesystem()
     {
         try {
             $dirIterator = new DirectoryIterator($this->_basePath);
@@ -882,7 +882,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Scanning ' . $this->_basePath . ' for deleted files.');
+            . ' Scanning ' . $this->_basePath . ' for deleted files ...');
         
         $deleteCount = 0;
         foreach ($dirIterator as $item) {
@@ -913,6 +913,38 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Deleted ' . $deleteCount . ' obsolete file(s).');
+        
+        return $deleteCount;
+    }
+    
+    /**
+     * removes deleted files that no longer exist in the filesystem from the database
+     * 
+     * @return integer number of deleted files
+     */
+    public function clearDeletedFilesFromDatabase()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Scanning database for deleted files ...');
+        
+        // get all file objects from db and check filesystem existance
+        $toDeleteIds = array();
+        $fileObjects = $this->_fileObjectBackend->getAll();
+        foreach ($fileObjects as $fileObject) {
+            if ($fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
+                $toDeleteIds[] = $fileObject->getId();
+            }
+        }
+        
+        $nodeIdsToDelete = $this->_treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field'     => 'object_id',
+            'operator'  => 'in',
+            'value'     => $toDeleteIds
+        ))), NULL, Tinebase_Backend_Sql_Abstract::IDCOL);
+        
+        $deleteCount = $this->_treeNodeBackend->delete($nodeIdsToDelete);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
         
         return $deleteCount;
     }
