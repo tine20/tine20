@@ -582,13 +582,15 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     public function saveAdminPreferences($_data)
     {
         // only admins are allowed to update app pref defaults/forced prefs
-        if (!Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+        if (! Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
         }
         
         // create prefs that don't exist in the db
-        foreach($_data as $id => $prefData) {
+        foreach ($_data as $id => $prefData) {
             if (preg_match('/^default/', $id) && array_key_exists('name', $prefData) && $prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Create admin pref: ' . $prefData['name'] . ' = ' . $prefData['value']);
                 $newPref = $this->getApplicationPreferenceDefaults($prefData['name']);
                 $newPref->value = $prefData['value'];
                 $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
@@ -601,6 +603,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // update default/forced preferences
         $records = $this->getMultiple(array_keys($_data));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Saving admin prefs: ' . print_r($records->name, TRUE));
         foreach ($records as $preference) {
             if ($_data[$preference->getId()]['value'] == Tinebase_Model_Preference::DEFAULT_VALUE) {
                 $this->delete($preference->getId());

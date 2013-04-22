@@ -35,6 +35,13 @@ abstract class Tinebase_Config_Abstract
     const TYPE_INT = 'int';
     
     /**
+     * boolean config type
+     * 
+     * @var string
+     */
+    const TYPE_BOOL = 'bool';
+    
+    /**
      * string config type
      * 
      * @var string
@@ -149,6 +156,14 @@ abstract class Tinebase_Config_Abstract
             // @todo JSON encode all config data via update script!
             return $this->_rawToConfig(($decodedConfigData || is_array($decodedConfigData)) ? $decodedConfigData : $config->value, $name);
         }
+        
+       // get default from definition if needed
+       if ($default === NULL) {
+           $definition = self::getDefinition($name);
+           if ($definition && array_key_exists('default', $definition)) {
+               return $definition['default'];
+           }
+       }
         
         return $default;
     }
@@ -380,7 +395,6 @@ abstract class Tinebase_Config_Abstract
      * 
      * @TODO support array contents conversion
      * @TODO support interceptors
-     * @TODO find a place for defaults of definition
      * 
      * @param   mixed     $_rawData
      * @param   string    $_name
@@ -390,22 +404,9 @@ abstract class Tinebase_Config_Abstract
     {
         $definition = self::getDefinition($_name);
         
-//        // config.inc.php overwrites all other rawData
-//        $configFileSection = $this->_getConfigFileSection($_name);
-//        if ($configFileSection) {
-//            $_rawData = $configFileSection[$_name];
-//        }
-        
         if (! $definition) {
             return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
-        
-//        // get default from definition if needed
-//        if (is_string($_rawData) && $_rawData == Tinebase_Model_Config::NOTSET) {
-//            if (array_key_exists('default', $definition)) {
-//                $_rawData = $definition['default'];
-//            }
-//        }
         
         if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
             return new $definition['class']($_rawData);
@@ -413,6 +414,7 @@ abstract class Tinebase_Config_Abstract
         
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
+            case self::TYPE_BOOL:       return (bool) (int) $_rawData;
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);

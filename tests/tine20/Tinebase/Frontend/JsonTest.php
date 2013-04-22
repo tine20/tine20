@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_Frontend_JsonTest::main();
-}
 
 /**
  * Test class for Tinebase_Group
@@ -36,13 +32,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     protected $_objects = array();
     
     /**
-     * clear preferences after test?
-     * 
-     * @var boolean
-     */
-    protected $_clearPrefs = FALSE;
-    
-    /**
      * Runs the test methods of this class.
      */
     public static function main()
@@ -57,6 +46,8 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_instance = new Tinebase_Frontend_Json();
         
         $this->_objects['record'] = array(
@@ -77,25 +68,19 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->_objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => 1,
-            'note'              => 'phpunit test note',    
+            'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
-            'record_backend'    => $this->_objects['record']['backend'],       
+            'record_backend'    => $this->_objects['record']['backend'],
             'record_id'         => $this->_objects['record']['id']
         ));
     }
     
     /**
-     * tear down prefs
+     * tear down
      */
     public function tearDown()
     {
-        if ($this->_clearPrefs) {
-            $query = Tinebase_Core::getDb()->quoteInto(
-                'DELETE FROM ' . Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX . 'preferences') .' WHERE ' .Tinebase_Core::getDb()->quoteIdentifier('application_id') .' = ?', 
-                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
-            );
-            Tinebase_Core::getDb()->query($query);
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
         
         // reset tz in core
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE));
@@ -289,8 +274,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchPreferencesWithOptions()
     {
-        $this->_clearPrefs = TRUE;
-        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);
@@ -323,8 +306,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchPreferencesOfOtherUsers()
     {
-        $this->_clearPrefs = TRUE;
-        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref->account_id   = '2';
@@ -346,8 +327,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSavePreferences()
     {
-        $this->_clearPrefs = TRUE;
-        
         $prefData = $this->_getUserPreferenceData();
         $this->_instance->savePreferences($prefData, false);
 
@@ -365,7 +344,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             
                 $this->assertTrue(is_array($result['options']), 'options missing');
                 $this->assertGreaterThan(100, count($result['options']));
-            }            
+            }
         }
         $this->assertEquals($prefData, $savedPrefData);
     }
@@ -375,8 +354,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetChangeDefaultPref()
     {
-        $this->_clearPrefs = TRUE;
-        
         $locale = $this->_getLocalePref();
         foreach ($locale['options'] as $option) {
             if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
@@ -394,7 +371,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('auto', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
         
         // set new default locale
-        $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
+        $prefData['Tinebase']['default' . $locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
         $this->_instance->savePreferences($prefData, true);
         
         $updatedLocale = $this->_getLocalePref();
@@ -431,7 +408,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAdminPreferences()
     {
-        $this->_clearPrefs = TRUE;
+        $this->testGetSetChangeDefaultPref();
         
         // set new default locale
         $locale = $this->_getLocalePref();
@@ -445,14 +422,14 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $pref['value']);
             } else {
                 $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $pref['type']);
-                $this->assertEquals('de', $pref['value']);
+                $this->assertEquals('de', $pref['value'], print_r($pref, TRUE));
             }
         }
 
         // check as user
         $locale = $this->_getLocalePref();
-        $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $locale['type']);
-        $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $locale['value']);
+        $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $locale['type'], 'pref should be of type admin: ' . print_r($locale, TRUE));
+        $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $locale['value'], 'pref should be default value: ' . print_r($locale, TRUE));
     }
     
     /**
@@ -461,8 +438,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveAdminPreferences()
     {
-        $this->_clearPrefs = TRUE;
-        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);
@@ -483,8 +458,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * save state and load it with registry data
-     *
-     * @todo save old state and recover it after the test
      */
     public function testSaveAndGetState()
     {
@@ -500,8 +473,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
         
         $this->assertEquals($testData, $stateInfo);
-        
-        //$registryData = $this->_instance->getAllRegistryData();
     }
     
     /**
@@ -509,7 +480,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @return void
      * 
-     * @todo add more assertions
+     * @see 0007934: change pw button active even if it is not allowed
      */
     public function testGetAllRegistryData()
     {
@@ -521,6 +492,13 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(), 
             $registryData['Tinebase']['userContact']
         );
+        $this->assertEquals(TRUE, $registryData['Tinebase']['config']['changepw']['value'], 'changepw should be TRUE');
+        
+        Tinebase_Config::getInstance()->set('changepw', 0);
+        $registryData = $this->_instance->getAllRegistryData();
+        $changepwValue = $registryData['Tinebase']['config']['changepw']['value'];
+        $this->assertEquals(FALSE, $changepwValue, 'changepw should be (bool) false');
+        $this->assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
     }
     
     /**
