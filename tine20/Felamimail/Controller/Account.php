@@ -119,7 +119,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if ($this->_useSystemAccount && ! $_onlyIds) {
             $systemAccountFound = FALSE;
             // check if resultset contains system account and add config values
-            foreach($result as $account) {
+            foreach ($result as $account) {
                 if ($account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
                     $this->_addSystemAccountConfigValues($account);
                     $systemAccountFound = TRUE;

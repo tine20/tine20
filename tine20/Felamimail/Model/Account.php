@@ -455,9 +455,20 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
                 
                 $credentials = $userCredentialCache;
+                
+                // allow to set credentials in config
                 if (array_key_exists('user', $imapConfig) && array_key_exists('password', $imapConfig) && ! empty($imapConfig['user'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Using credentials from config for system account.');
                     $credentials->username = $imapConfig['user'];
                     $credentials->password = $imapConfig['password'];
+                }
+                
+                // allow to set pw suffix in config
+                if (array_key_exists('pwsuffix', $imapConfig)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Appending configured pwsuffix to system account password.');
+                    $credentials->password .= $imapConfig['pwsuffix'];
                 }
             }
             
