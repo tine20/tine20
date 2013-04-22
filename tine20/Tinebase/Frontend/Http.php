@@ -320,7 +320,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function loginFromPost($username, $password)
     {
-        Tinebase_Core::startSession('tinebase');
+        Tinebase_Core::startSession();
         
         if (!empty($username)) {
             

@@ -361,7 +361,7 @@ class Tinebase_Core
         Tinebase_Core::setupSession();
         
         if (Zend_Session::sessionExists()) {
-            Tinebase_Core::startSession('tinebase');
+            Tinebase_Core::startSession();
         }
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
@@ -1007,7 +1007,9 @@ class Tinebase_Core
             && ($session->userLocale->toString() === $localeString || $localeString === 'auto')
         ) {
             $locale = $session->userLocale;
-            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
+
+            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Got locale from session : " . (string)$locale);
             
         // ... create new locale object
         } else {
@@ -1022,6 +1024,9 @@ class Tinebase_Core
                     $localeString = self::getPreference()->getValue(Tinebase_Preference::LOCALE, 'auto');
                     if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . " Got locale from preference: '$localeString'");
+                } else {
+                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . " Try to detect the locale of the user (browser, environment, default)");
                 }
             }
             

@@ -474,6 +474,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+            'default'               => TRUE
         ),
         self::PASSWORD_POLICY_ACTIVE => array(
         //_('Enable password policy')
@@ -663,12 +664,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             if ($config) {
                 $clientProperties[$application->name] = new Tinebase_Config_Struct(array());
                 $properties = $config->getProperties();
-                foreach( (array) $properties as $name => $definition) {
+                foreach ((array) $properties as $name => $definition) {
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                        . ' ' . print_r($definition, TRUE));
+                    
                     if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
-                        // might not be too bad as we have a cache
+                        // add definition here till we have a better place
                         $configRegistryItem = new Tinebase_Config_Struct(array(
                             'value'         => $config->{$name},
-                            // add definition here till we have a better palce
                             'definition'    => new Tinebase_Config_Struct($definition),
                         ));
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -680,30 +684,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     . ' Got ' . count($clientProperties[$application->name]) . ' config items for ' . $application->name . '.');
             }
         }
-        
-        
-//        // get all configs at once
-//        $clientRecords = $this->_getBackend()->search(new Tinebase_Model_ConfigFilter(array(array('condition' => 'OR', 'filters' => $filters))));
-//        $clientRecords->addIndices(array('application_id', 'name'));
-//        
-//        // data to config
-//        foreach($clientProperties as $appName => $properties) {
-//            $config = $this->{$appName};
-//            $appClientRecords = $clientRecords->filter('application_id', Tinebase_Model_Application::convertApplicationIdToInt($appName));
-//            foreach($properties as $name => $definition) {
-//                $configRecord = $appClientRecords->filter('name', $name)->getFirstRecord();
-//                $configData = Tinebase_Model_Config::NOTSET;
-//                
-//                if ($configRecord) {
-//                    // @todo JSON encode all config data via update script!
-//                    $configData = json_decode($configRecord->value, TRUE);
-//                    $configData = $configData ? $configData : $configRecord->value;
-//                }
-//                
-//                // CRAP we need to have a public method in $config!!!
-//                $clientProperties[$appName][$name] = $config->_rawToConfig($configData, $name);
-//            }
-//        }
         
         return $clientProperties;
     }
