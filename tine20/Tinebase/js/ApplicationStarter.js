@@ -113,7 +113,7 @@ Tine.Tinebase.ApplicationStarter = {
                         switch (config.specialType) {
                             case 'bytes1000':
                                 gridRenderer = function(a,b,c) {
-                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, false);
+                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, true);
                                 };
                                 break;
                             case 'bytes':
