@@ -31,6 +31,18 @@ class Inventory_JsonTest extends Inventory_TestCase
     }
     
     /**
+     * tests if model gets created properly
+     */
+    public function testModelCreation()
+    {
+        $fields = Inventory_Model_InventoryItem::getConfiguration()->getFields();
+        $this->assertArrayHasKey('container_id', $fields);
+        
+        $filters = Inventory_Model_InventoryItem::getConfiguration()->getFilterModel();
+        $this->assertArrayHasKey('container_id', $filters['_filterModel']);
+    }
+    
+    /**
      * test creation of an InventoryItem
      */
     public function testCreateInventoryItem()
