@@ -112,7 +112,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     value: this.defaultPassword,
                     listeners: {
                         render: this.setLastLoginUser.createDelegate(this) 
-                    }                     
+                    }
                 }],
                 buttonAlign: 'right',
                 buttons: [{
@@ -137,9 +137,15 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         }
     },
      
-    getTinePanel: function () {
-        if (! this.tinePanel) {
-            this.tinePanel = new Ext.Container({
+    getCommunityPanel: function () {
+        if (! this.communityPanel) {
+            var translationPanel = [],
+                stats = Locale.translationStats,
+                version = Tine.clientVersion.packageString.match(/\d+\.\d+\.\d+/),
+                language = Tine.Tinebase.registry.get('locale').language,
+                percentageCompleted = stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
+                
+            this.communityPanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-tinepanel',
                 border: false,
@@ -161,16 +167,19 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label',
                     html: _('Translations')
                 }, {
-                    html: '<p>' + _('If you miss a language, or your language is not supported completely, you can help our translation teams at transifex.') + '</p>'
+                    html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(_('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
+                }, {
+                    html: '<p>' + _('If the state of your language is not satisfying, or if you miss a language, please consider becoming a Tine 2.0 translator.') + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + _('Tine 2.0 Translation Portal') + '</a></li>'
+                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + _('Tine 2.0 Translation Howto') + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/langStats/"' + (Ext.isArray(version) ? '?v=' + version[0] : '') +' border="0">' + _('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
             });
         }
         
-        return this.tinePanel;
+        return this.communityPanel;
     },
     
     getSurveyData: function (cb) {
@@ -324,7 +333,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
             this.getBrowserIncompatiblePanel(),
-            this.getTinePanel(),
+            this.getCommunityPanel(),
             this.getSurveyPanel()
         ] : [];
         
