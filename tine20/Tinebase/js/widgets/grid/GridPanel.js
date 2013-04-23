@@ -417,7 +417,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         id: key,
                         dataIndex: key,
                         header: this.app.i18n._(fieldConfig.label),
-                        hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false
+                        hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
+                        sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
                     }
                     var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
                     if (renderer) {
@@ -429,7 +430,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             this.gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
-                    sortable: true,
                     resizable: true
                 },
                 columns: columns
