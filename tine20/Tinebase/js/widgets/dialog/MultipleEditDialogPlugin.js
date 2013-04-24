@@ -403,8 +403,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
             // Set field
             this.edited = true;
-            this.setReadOnly(false);
-            
             this.removeClass('tinebase-editmultipledialog-noneedit');
             
             // Set button
@@ -420,7 +418,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             // Set field
             this.edited = false;
             if (this.multi) {
-                this.setReadOnly(true);
                 this.addClass('tinebase-editmultipledialog-noneedit');
             }
             
@@ -525,7 +522,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         ff.removeClass('x-form-empty-field');
         
         if (! samevalue) {  // The records does not have the same value on this field
-            ff.setReadOnly(true);
             ff.addClass('tinebase-editmultipledialog-noneedit');
             ff.origAllowBlank = ff.allowBlank;
             ff.allowBlank = true;
@@ -634,44 +630,47 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }, this);
         this.changedHuman += '</ul>';
         var filter = this.selectionFilter;
-        
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
-            function(_btn) {
-            if (_btn == 'yes') {
-                Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
-                Ext.Ajax.request({
-                    url: 'index.php',
-                    timeout: 3600000, // 1 hour
-                    params: {
-                        method: 'Tinebase.updateMultipleRecords',
-                        appName: this.editDialog.recordClass.getMeta('appName'),
-                        modelName: this.editDialog.recordClass.getMeta('modelName'),
-                        changes: changes,
-                        filter: filter
-                    },
-                    success: function(_result, _request) {
-                        Ext.MessageBox.hide();
-                        var resp = Ext.decode(_result.responseText);
-                        if (resp.failcount > 0) {
-                            var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
-                                response: _result.responseText,
-                                appName: this.app.appName,
-                                recordClass: this.editDialog.recordClass
-                            });
-                            window.on('close', function() {
+        if (changes.length > 0) {
+            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
+                function(_btn) {
+                if (_btn == 'yes') {
+                    Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
+                    Ext.Ajax.request({
+                        url: 'index.php',
+                        timeout: 3600000, // 1 hour
+                        params: {
+                            method: 'Tinebase.updateMultipleRecords',
+                            appName: this.editDialog.recordClass.getMeta('appName'),
+                            modelName: this.editDialog.recordClass.getMeta('modelName'),
+                            changes: changes,
+                            filter: filter
+                        },
+                        success: function(_result, _request) {
+                            Ext.MessageBox.hide();
+                            var resp = Ext.decode(_result.responseText);
+                            if (resp.failcount > 0) {
+                                var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
+                                    response: _result.responseText,
+                                    appName: this.app.appName,
+                                    recordClass: this.editDialog.recordClass
+                                });
+                                window.on('close', function() {
+                                    this.editDialog.fireEvent('update');
+                                    this.editDialog.onCancel();
+                                }, this);
+                            } else {
                                 this.editDialog.fireEvent('update');
                                 this.editDialog.onCancel();
-                            }, this);
-                        } else {
-                            this.editDialog.fireEvent('update');
-                            this.editDialog.onCancel();
-                        }
-                    },
-                    scope: this
-                });
-            }
-        }, this);
-         return false;
+                            }
+                        },
+                        scope: this
+                    });
+                }
+            }, this);
+        } else {
+            this.editDialog.onCancel();
+        }
+        return false;
     },
     
     /**
