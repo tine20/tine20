@@ -348,6 +348,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $jsonDecodedData = null;
         
         $script = $this->_options['postMappingHook']['path'];
+        //The path given in the xml is not dynamic. Therefore it must be absolute or relative to the tine20 directory.
+        if ($script[0] !== DIRECTORY_SEPARATOR) {
+            $script = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $script;
+        }
         if (! is_executable($script)) {
             throw new Tinebase_Exception_UnexpectedValue("Script does not exists or isn't executable. Path: " . $script);
         }
