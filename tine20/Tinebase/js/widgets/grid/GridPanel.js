@@ -859,7 +859,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onStoreBeforeLoadRecords: function(o, options, success, store) {
 
         if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
-            Tine.log.debug('cancelling old transaction request.');
+            Tine.log.debug('onStoreBeforeLoadRecords - cancelling old transaction request.');
             return false;
         }
 
@@ -904,7 +904,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 recordsIds.push(currentRecord.id);
             }
         }, this);
-
+        
         // assemble adds
         recordToLoadCollection.each(function(record, idx) {
             if (recordsIds.indexOf(record.id) == -1 && this.deleteQueue.indexOf(record.id) == -1) {
@@ -916,6 +916,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }, this);
 
         o.records = records;
+        
+        // hide current records from store.loadRecords()
+        // @see 0008210: email grid: set flag does not work sometimes
+        this.store.clearData();
     },
 
     /**
