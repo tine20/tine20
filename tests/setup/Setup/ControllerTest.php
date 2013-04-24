@@ -126,12 +126,12 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $originalRedirectSettings = array(
             Tinebase_Config::REDIRECTURL => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, ''),
-            Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTTOREFERRER, '')
+            Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTTOREFERRER, FALSE)
         );
          
         $newRedirectSettings = array(
             Tinebase_Config::REDIRECTURL => 'http://tine20.org',
-            Tinebase_Config::REDIRECTTOREFERRER => 1
+            Tinebase_Config::REDIRECTTOREFERRER => TRUE
         );
         
         $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
@@ -141,13 +141,16 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTTOREFERRER)
         );
         
-        $this->assertEquals($storedRedirectSettings, $newRedirectSettings,
-            'new settings should match stored settings: ' . print_r($newRedirectSettings, TRUE));
+        $configNames = array(Tinebase_Config::REDIRECTURL, Tinebase_Config::REDIRECTTOREFERRER);
+        foreach ($configNames as $configName) {
+            $this->assertEquals($storedRedirectSettings[$configName], $newRedirectSettings[$configName],
+                'new setting should match stored settings: ' . print_r($newRedirectSettings, TRUE));
+        }
         
         // test empty redirectUrl
         $newRedirectSettings = array(
             Tinebase_Config::REDIRECTURL => '',
-            Tinebase_Config::REDIRECTTOREFERRER => 0
+            Tinebase_Config::REDIRECTTOREFERRER => FALSE
         );
         
         $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
@@ -157,8 +160,10 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTTOREFERRER)
         );
         
-        $this->assertEquals($storedRedirectSettings, $newRedirectSettings,
-            'new settings should match stored settings (empty redirect URL): ' . print_r($newRedirectSettings, TRUE));
+        foreach ($configNames as $configName) {
+            $this->assertEquals($storedRedirectSettings[$configName], $newRedirectSettings[$configName],
+                'new setting should match stored settings (with empty redirect URL): ' . print_r($newRedirectSettings, TRUE));
+        }
         
         $this->_uit->saveAuthentication($originalRedirectSettings);
     }
