@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <mrp59@yahoo.com>, 2013.
+# mrp59 <mrp59@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

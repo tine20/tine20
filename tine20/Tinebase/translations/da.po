@@ -1,12 +1,13 @@
 # 
 # Translators:
-#   <sn@cbox.dk>, 2012.
+# cboxdk <sn@cbox.dk>, 2012
+# cboxdk <sn@cbox.dk>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:50+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-04-19 06:24+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/tine20/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +20,11 @@ msgstr ""
 
 #: Exception/PasswordPolicyViolation.php:22
 msgid "Password Policy Violation"
-msgstr ""
+msgstr "Password politik ikke overholdt"
 
 #: Exception/SystemGeneric.php:27
 msgid "Generic System Exception"
-msgstr ""
+msgstr "Generel system fejl"
 
 #: Exception/Record/SystemContainer.php:22
 msgid "System Container"
@@ -31,7 +32,7 @@ msgstr "System container"
 
 #: Exception/Record/SystemContainer.php:28
 msgid "This is a system container which could not be deleted!"
-msgstr ""
+msgstr "Dette er en system container som ikke kunne slettes!"
 
 #: Acl/Rights.php:147
 msgid "Report bugs"
@@ -81,7 +82,7 @@ msgstr "kør"
 msgid "run right description"
 msgstr "kør rettigheds beskrivelse"
 
-#: Preference/Abstract.php:495
+#: Preference/Abstract.php:502
 msgid "default"
 msgstr "standard"
 
@@ -118,282 +119,290 @@ msgstr "ukendt"
 #: Import/Csv/Abstract.php:197
 #, python-format
 msgid "The following fields weren't imported: %s"
-msgstr ""
+msgstr "Det følgende fejl blev ikke importeret: %s"
 
 #: Import/Csv/Abstract.php:198
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
-#: Config.php:260
+#: Config.php:267
 msgid "System IMAP"
 msgstr "System IMAP"
 
-#: Config.php:262
+#: Config.php:269
 msgid "System IMAP server configuration."
 msgstr "System IMAP server konfiguration."
 
-#: Config.php:271
+#: Config.php:278
 msgid "System SMTP"
 msgstr "System SMTP"
 
-#: Config.php:273
+#: Config.php:280
 msgid "System SMTP server configuration."
 msgstr "System SMTP server konfiguration."
 
-#: Config.php:282
+#: Config.php:289
 msgid "System SIEVE"
 msgstr "System SIEVE"
 
-#: Config.php:284
+#: Config.php:291
 msgid "System SIEVE server configuration."
 msgstr "System SIEVE server konfiguration"
 
-#: Config.php:293
+#: Config.php:300
 msgid "Authentication Backend"
 msgstr "Authentication Backend"
 
-#: Config.php:295
+#: Config.php:302
 msgid "Backend adapter for user authentication."
 msgstr "Backend adapter for bruger autentifikation"
 
-#: Config.php:303
+#: Config.php:310
 msgid "Authentication Configuration"
 msgstr "Autentifikation Konfiguration"
 
-#: Config.php:305
+#: Config.php:312
 msgid "Authentication backend configuration."
 msgstr "Autentifikation Backend Konfiguration"
 
-#: Config.php:314
+#: Config.php:321
 msgid "User Backend"
 msgstr "Bruger Backend"
 
-#: Config.php:316
+#: Config.php:323
 msgid "Backend adapter for user data."
 msgstr "Backend adapter for bruger data."
 
-#: Config.php:324
+#: Config.php:331
 msgid "User Configuration"
 msgstr "Bruger Konfiguration"
 
-#: Config.php:326
+#: Config.php:333
 msgid "User backend configuration."
 msgstr "Bruger Backend konfiguration."
 
-#: Config.php:335
+#: Config.php:342
 msgid "Cronuser ID"
 msgstr "Cron bruger ID"
 
-#: Config.php:337
+#: Config.php:344
 msgid "User ID of the cron user."
 msgstr "Bruger ID for Cron bruger."
 
-#: Config.php:345
+#: Config.php:352
 msgid "Title Postfix"
 msgstr "Titel Postfix"
 
-#: Config.php:347
+#: Config.php:354
 msgid "Postfix string appended to the title of this installation."
 msgstr "Foranstillet streng for titlen på denne installation."
 
-#: Config.php:355
+#: Config.php:362
 msgid "Redirect URL"
 msgstr "Redirect URL"
 
-#: Config.php:357
+#: Config.php:364
 msgid "Redirect to this URL after logout."
 msgstr "Redirect til denne URL efter log ud."
 
-#: Config.php:365
+#: Config.php:372
 msgid "Redirect to Referrer"
 msgstr "Redirect til Henvisningssiden"
 
-#: Config.php:367
+#: Config.php:374
 msgid "Redirect to referrer after logout."
 msgstr "Redirect til Henvisningssiden efter log ud."
 
-#: Config.php:375
+#: Config.php:382
 msgid "Redirect Always"
 msgstr "Redirect altid"
 
-#: Config.php:377
+#: Config.php:384
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Redirect også ved login til konfigureret redirect URL."
 
-#: Config.php:385
+#: Config.php:392
+msgid "Allowed Origins"
+msgstr ""
+
+#: Config.php:394
+msgid "Allowed Origins for the JSON API."
+msgstr ""
+
+#: Config.php:402
 msgid "Accepted Terms Version"
 msgstr "Accepter betingelser Version"
 
-#: Config.php:387
+#: Config.php:404
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Accepteret versions nummer af Betingelser dokumentet"
 
-#: Config.php:395
+#: Config.php:412
 msgid "Use Geolocation Services"
 msgstr "Brug geolokations tjenester."
 
-#: Config.php:397
+#: Config.php:414
 msgid "Use of external Geolocation services is allowed."
 msgstr "Brug af eksterne geolokations tjenester er tilladt."
 
-#: Config.php:405
+#: Config.php:422
 msgid "IP Session Validator"
 msgstr "IP Session Validator"
 
-#: Config.php:407
+#: Config.php:424
 msgid "Destroy session if the users IP changes."
 msgstr "Slet session hvis brugeres IP ændres."
 
-#: Config.php:415
+#: Config.php:432
 msgid "UA Session Validator"
 msgstr "UA session Validator"
 
-#: Config.php:417
+#: Config.php:434
 msgid "Destroy session if the users user agent string changes."
 msgstr "Slet bruger session hvis brugerens browser agent streng ændres."
 
-#: Config.php:425
+#: Config.php:442
 msgid "Files Directory"
 msgstr "Fil bibliotek"
 
-#: Config.php:427
+#: Config.php:444
 msgid "Directory with web server write access for user files."
 msgstr "Mappe på webserveren med skriveadgang for bruger filer."
 
-#: Config.php:435 Config.php:437
+#: Config.php:452 Config.php:454
 msgid "User may change password"
-msgstr ""
+msgstr "Bruger må ændre password"
 
-#: Config.php:445 Config.php:447
+#: Config.php:462 Config.php:464
 msgid "Enable password policy"
-msgstr ""
+msgstr "Aktiver password politik"
 
-#: Config.php:455
+#: Config.php:472
 msgid "Only ASCII"
-msgstr ""
+msgstr "Kun ASCII"
 
-#: Config.php:457
+#: Config.php:474
 msgid "Only ASCII characters are allowed in passwords."
-msgstr ""
+msgstr "Kun ASCII tegn er tilladt i passwords."
 
-#: Config.php:465
+#: Config.php:482
 msgid "Minimum length"
-msgstr ""
+msgstr "Minimum længde"
 
-#: Config.php:467
+#: Config.php:484
 msgid "Minimum password length"
-msgstr ""
+msgstr "Minimum password længde"
 
-#: Config.php:475
+#: Config.php:492
 msgid "Minimum word chars"
-msgstr ""
+msgstr "Minimum antal bogstaver"
 
-#: Config.php:477
+#: Config.php:494
 msgid "Minimum word chars in password"
-msgstr ""
+msgstr "Minimum antal bogstaver i password"
 
-#: Config.php:485
+#: Config.php:502
 msgid "Minimum uppercase chars"
-msgstr ""
+msgstr "Minimum antal store bogstaver"
 
-#: Config.php:487
+#: Config.php:504
 msgid "Minimum uppercase chars in password"
-msgstr ""
+msgstr "Minimum antal store bogstaver i password"
 
-#: Config.php:495
+#: Config.php:512
 msgid "Minimum special chars"
-msgstr ""
+msgstr "Minimum antal specialekarakter "
 
-#: Config.php:497
+#: Config.php:514
 msgid "Minimum special chars in password"
-msgstr ""
+msgstr "Minimum antal specialekarakter i password"
 
-#: Config.php:505
+#: Config.php:522
 msgid "Minimum numbers"
-msgstr ""
+msgstr "Minimum antal tal"
 
-#: Config.php:507
+#: Config.php:524
 msgid "Minimum numbers in password"
-msgstr ""
+msgstr "Minimum antal tal i password"
 
-#: Config.php:515
+#: Config.php:532
 msgid "Forbid part of username"
-msgstr ""
+msgstr "Forbyd dele af brugernavnet"
 
-#: Config.php:517
+#: Config.php:534
 msgid "Forbid part of username in password"
-msgstr ""
+msgstr "Forbyd dele af brugernavnet i passwordet"
 
-#: Config.php:525
+#: Config.php:542
 msgid "Automatic bugreports"
-msgstr ""
+msgstr "Automatiske fejlrapporter"
 
-#: Config.php:527
+#: Config.php:544
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
-msgstr ""
+msgstr "Send altid fejlrapporter, selv ved timeouts og andre undtagelser / fejl."
 
-#: Config.php:535
+#: Config.php:552
 msgid "Last sessions cleanup run"
-msgstr ""
+msgstr "Sidste kørsel for session oprydning"
 
-#: Config.php:537
+#: Config.php:554
 msgid "Stores the timestamp of the last sessions cleanup task run."
-msgstr ""
+msgstr "Gemmer tidsstemplet på den sidste session ved oprydning."
 
-#: Config.php:545
+#: Config.php:562
 msgid "Maximum login failures"
-msgstr ""
+msgstr "Maximum antal login fejl"
 
-#: Config.php:547
+#: Config.php:564
 msgid "Maximum allowed login failures before blocking account"
-msgstr ""
+msgstr "Maximum antal login fejl før blokering"
 
-#: Config.php:555
+#: Config.php:572
 msgid "Disable Anyone Account"
-msgstr ""
+msgstr "Deaktiver All kontoen"
 
-#: Config.php:557
+#: Config.php:574
 msgid "Disallow anyone account in grant configurations"
-msgstr ""
+msgstr "Forbyd alle kontoen i at tildele konfigurationer"
 
-#: Setup/setup.xml:3194
+#: Setup/setup.xml:3203
 msgid "note"
 msgstr "note"
 
-#: Setup/setup.xml:3199
+#: Setup/setup.xml:3208
 msgid "default note type"
 msgstr "standard note type"
 
-#: Setup/setup.xml:3225
+#: Setup/setup.xml:3234
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3230
+#: Setup/setup.xml:3239
 msgid "telephone call"
 msgstr "telefon opkald"
 
-#: Setup/setup.xml:3256
+#: Setup/setup.xml:3265
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3261
+#: Setup/setup.xml:3270
 msgid "email contact"
 msgstr "email kontakt"
 
-#: Setup/setup.xml:3287
+#: Setup/setup.xml:3296
 msgid "created"
 msgstr "oprettet"
 
-#: Setup/setup.xml:3292
+#: Setup/setup.xml:3301
 msgid "record created"
 msgstr "emne oprettet"
 
-#: Setup/setup.xml:3318
+#: Setup/setup.xml:3327
 msgid "changed"
 msgstr "ændret"
 
-#: Setup/setup.xml:3323
+#: Setup/setup.xml:3332
 msgid "record changed"
 msgstr "emne ændret"
 
@@ -427,7 +436,7 @@ msgstr "Vindues type"
 
 #: Preference.php:100
 msgid "You can choose between modal windows or normal browser popup windows."
-msgstr ""
+msgstr "Du kan vælge mellem ExtJs stilen eller normal browser popup vinduer."
 
 #: Preference.php:103
 msgid "Confirm Logout"
@@ -504,19 +513,19 @@ msgstr "Ok"
 
 #: js/AboutDialog.js:70
 msgid "Released under different"
-msgstr ""
+msgstr "Udgivet under forskellige"
 
 #: js/AboutDialog.js:71
 msgid "Open Source Licenses"
-msgstr ""
+msgstr "Open Source licenser"
 
 #: js/AboutDialog.js:78
 msgid "with the help of our"
-msgstr ""
+msgstr "med hjælp fra vores"
 
 #: js/AboutDialog.js:79
 msgid "Contributors"
-msgstr ""
+msgstr "Bidragere"
 
 #: js/tineInit.js:603
 msgid ""
@@ -536,7 +545,7 @@ msgstr "Der er ingen applikationer aktiveret for dig. Kontakt din administrator.
 
 #: js/CreditsScreen.js:36
 msgid "Credits"
-msgstr ""
+msgstr "Credits"
 
 #: js/common.js:235
 msgid "Usage:&#160;"
@@ -609,17 +618,17 @@ msgstr "Tine 2.0 Forum"
 
 #: js/LoginPanel.js:150
 msgid "Translations"
-msgstr ""
+msgstr "Oversættelser"
 
 #: js/LoginPanel.js:152
 msgid ""
 "If you miss a language, or your language is not supported completely, you "
 "can help our translation teams at transifex."
-msgstr ""
+msgstr "Hvis du mangler et sprog, eller dit sprog ikke er fuld ud supporteret kan du hjælpe vores oversættelses team på transifex."
 
 #: js/LoginPanel.js:155
 msgid "Tine 2.0 Translation Portal"
-msgstr ""
+msgstr "Tine 2.0 oversættelses portal"
 
 #: js/LoginPanel.js:200
 msgid "about {0} minutes"
@@ -674,7 +683,7 @@ msgid "Logging you in..."
 msgstr "Logger dig ind..."
 
 #: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 #: js/widgets/persistentfilter/PickerPanel.js:317
 #: js/widgets/persistentfilter/PickerPanel.js:355
 #: js/widgets/persistentfilter/PickerPanel.js:407
@@ -705,14 +714,14 @@ msgstr "Dit brugernavn og/eller password er forkert!!"
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:668 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Errors"
 msgstr "Fejl"
 
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:688 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Please fix the errors noted."
 msgstr "Løs venligst fejlene."
 
@@ -722,7 +731,7 @@ msgstr "Indtast dine login data"
 
 #: js/LicenseScreen.js:35
 msgid "License"
-msgstr ""
+msgstr "Licens"
 
 #: js/PasswordChangeDialog.js:32
 msgid "Change Password For \"{0}\""
@@ -772,8 +781,8 @@ msgid "Your password has been changed."
 msgstr "Dit password er blevet ændret."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:665
-#: js/widgets/relation/GenericPickerGridPanel.js:678
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:267
@@ -828,9 +837,9 @@ msgstr "Installer web app"
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Installer Tine 2.0 som webb app i din browser."
 
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1650
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:695
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
+#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 #: js/widgets/persistentfilter/PickerPanel.js:315
 msgid "Confirm"
 msgstr "Bekræft"
@@ -843,13 +852,13 @@ msgstr "Er du sikker på at du vil logge ud?"
 msgid "Logging you out..."
 msgstr "Logger dig ud..."
 
-#: js/data/Record.js:174
+#: js/data/Record.js:195
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Opgave"
 msgstr[1] "Opgaver"
 
-#: js/data/Record.js:178
+#: js/data/Record.js:199
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "todo liste"
@@ -1079,7 +1088,7 @@ msgstr[0] "Slet tag"
 msgstr[1] "Slet tags"
 
 #: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:707
+#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
 msgid "Failed"
 msgstr "Fejlet"
 
@@ -1104,7 +1113,7 @@ msgid "Could not update tag."
 msgstr "Kunne ikke opdatere tag."
 
 #: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:425
+#: js/widgets/relation/GenericPickerGridPanel.js:427
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
 #: js/ExceptionDialog.js:142
 msgid "Description"
@@ -1431,7 +1440,7 @@ msgid "Name"
 msgstr "Navn"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:428
+#: js/widgets/relation/GenericPickerGridPanel.js:430
 #: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
 msgid "Type"
 msgstr "Type"
@@ -1458,7 +1467,7 @@ msgstr "Fjern filter"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr ""
+msgstr "Der blev ikke fundet nogen {0}. Prøv at ændre dine filter kritere, visning eller {1} du søger i."
 
 #: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
 #: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
@@ -1491,58 +1500,58 @@ msgid_plural "Delete {0}"
 msgstr[0] "Slet {0}"
 msgstr[1] "Slet {0}"
 
-#: js/widgets/grid/GridPanel.js:950
+#: js/widgets/grid/GridPanel.js:967
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Vis emner {0} - {1} af {2}"
 
-#: js/widgets/grid/GridPanel.js:951
+#: js/widgets/grid/GridPanel.js:968
 msgid "No {0} to display"
 msgstr "Ingen {0} at vise"
 
-#: js/widgets/grid/GridPanel.js:1189
+#: js/widgets/grid/GridPanel.js:1206
 msgid "New..."
 msgstr "Ny..."
 
-#: js/widgets/grid/GridPanel.js:1208
+#: js/widgets/grid/GridPanel.js:1225
 msgid "Add to..."
 msgstr "Tilføj til..."
 
-#: js/widgets/grid/GridPanel.js:1252
-#: js/widgets/relation/GenericPickerGridPanel.js:429
+#: js/widgets/grid/GridPanel.js:1269
+#: js/widgets/relation/GenericPickerGridPanel.js:431
 msgid "Creation Time"
 msgstr "Oprettelsestid"
 
-#: js/widgets/grid/GridPanel.js:1253 js/widgets/ActivitiesPanel.js:464
+#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
 msgid "Created By"
 msgstr "Oprettet af"
 
-#: js/widgets/grid/GridPanel.js:1254
+#: js/widgets/grid/GridPanel.js:1271
 msgid "Last Modified Time"
 msgstr "Sidst ændret den"
 
-#: js/widgets/grid/GridPanel.js:1255
+#: js/widgets/grid/GridPanel.js:1272
 msgid "Last Modified By"
 msgstr "Sidst ændret af"
 
-#: js/widgets/grid/GridPanel.js:1624
+#: js/widgets/grid/GridPanel.js:1641
 msgid "Not Allowed"
 msgstr "Ikke tilladt"
 
-#: js/widgets/grid/GridPanel.js:1625
+#: js/widgets/grid/GridPanel.js:1642
 msgid "You are not allowed to delete all pages at once"
 msgstr "Du har ikke tilladelse til at slette alle sider samtidigt"
 
-#: js/widgets/grid/GridPanel.js:1648
+#: js/widgets/grid/GridPanel.js:1665
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Vil du virkeligt slette det valgte emne ({0})?"
 msgstr[1] "Vil du virkeligt slette de valgte emner ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1683 js/widgets/dialog/EditDialog.js:697
+#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
 msgid "Deleting {0}"
 msgstr "Sletter {0}"
 
-#: js/widgets/grid/GridPanel.js:1683
+#: js/widgets/grid/GridPanel.js:1700
 msgid " ... This may take a long time!"
 msgstr "... Dette kan tage lang tid!"
 
@@ -1552,7 +1561,7 @@ msgstr "Rediger definition"
 
 #: js/widgets/grid/ForeignRecordFilter.js:71
 msgid "Start definition"
-msgstr ""
+msgstr "Start definition"
 
 #: js/widgets/grid/ForeignRecordFilter.js:111
 msgid "Related to"
@@ -1575,62 +1584,62 @@ msgstr "Definer"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:126
 msgid "Edit record"
-msgstr ""
+msgstr "Rediger emne"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:162
 msgid "Sibling"
-msgstr ""
+msgstr "Søskende"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:163
 msgid "Parent"
-msgstr ""
+msgstr "Forældre"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:164
 msgid "Child"
-msgstr ""
+msgstr "Barn"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:209
 msgid "Relations failure"
-msgstr ""
+msgstr "Relations fejl"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:209
 msgid "There are invalid relations. Please check before saving."
-msgstr ""
+msgstr "Der er ugyldige relationer. Check venligst før du gemmer."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:250
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
-msgstr ""
-
-#: js/widgets/relation/GenericPickerGridPanel.js:424
-msgid "Record"
-msgstr ""
+msgstr "Det maksimale antal af {0} med type {1} er nået. Ændre venligst typen for denne relation"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:426
+msgid "Record"
+msgstr "Emne"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:428
 msgid "Remark"
-msgstr ""
+msgstr "Bemærkning"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/relation/GenericPickerGridPanel.js:429
 msgid "Dependency"
-msgstr ""
+msgstr "Afhængighed"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:666
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
-msgstr ""
+msgstr "Det emne, som du forsøgte at linke er allerede tilknyttet. Rediger den nuværende forbindelse."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:679
+#: js/widgets/relation/GenericPickerGridPanel.js:721
 #: js/widgets/form/RecordPickerComboBox.js:268
 msgid "You tried to link a record with itself. This is not allowed!"
-msgstr ""
+msgstr "Du prøvede at link et emne med sig selv. Det er ikke tilladt!"
 
 #: js/widgets/relation/PickerCombo.js:93
 msgid ""
 "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
 "once!"
-msgstr ""
+msgstr "{1} \"{2}\" er allerede brugt i feltet \"{0}\" og kan ikke linkes igen!"
 
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
 msgid "Rename {0}"
@@ -1654,7 +1663,7 @@ msgstr "Genindlæs {0}"
 
 #: js/widgets/tree/ContextMenu.js:109
 msgid "Edit Properties"
-msgstr ""
+msgstr "Rediger egenskaber"
 
 #: js/widgets/tree/ContextMenu.js:124
 msgid "Download"
@@ -1914,11 +1923,11 @@ msgstr "Brugerdefineret Dato/Tid"
 
 #: js/widgets/dialog/AlarmPanel.js:58
 msgid "Alarm Time"
-msgstr ""
+msgstr "Alarm tid"
 
 #: js/widgets/dialog/AlarmPanel.js:170
 msgid "{0} minutes before"
-msgstr ""
+msgstr "{0} minutter før"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:87
 #: js/widgets/dialog/MultipleEditResultSummary.js:86
@@ -2023,15 +2032,15 @@ msgstr "Rediger {0} \"{1}\""
 msgid "Transferring {0}..."
 msgstr "Overfører {0}..."
 
-#: js/widgets/dialog/EditDialog.js:695
+#: js/widgets/dialog/EditDialog.js:698
 msgid "Do you really want to delete this {0}?"
 msgstr "Vil du virkeligt slette denne {0}?"
 
-#: js/widgets/dialog/EditDialog.js:707
+#: js/widgets/dialog/EditDialog.js:710
 msgid "Could not delete {0}."
 msgstr "Kunne ikke slette {0}."
 
-#: js/widgets/dialog/EditDialog.js:759
+#: js/widgets/dialog/EditDialog.js:762
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Løs duplikat {0} mistanke"
 
@@ -2099,11 +2108,11 @@ msgid ""
 "values."
 msgstr "Feltet har forskellige værdier. Redigering af dette felt overskriver gamle værdier."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 msgid "Do you really want to change these {0} records?"
 msgstr "Vil du virkeligt ændre disse {0} emner?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 msgid "Applying changes"
 msgstr "Anvend ændringer"
 
@@ -2558,7 +2567,7 @@ msgstr "Din rapport blev sendt. Tak for dit bidrag."
 msgid "Please restart your browser now!"
 msgstr "Genstart venligst din browser nu!"
 
-#: js/MainScreen.js:194
+#: js/MainScreen.js:202
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Dit password er udløbet. Indtast et nyt bruger password:"
 
@@ -2695,8 +2704,8 @@ msgstr "Vis originalt billede"
 #: js/Models.js:272
 msgid "Alarm"
 msgid_plural "Alarms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Alarm"
+msgstr[1] "Alarmer"
 
 #: js/Models.js:310
 msgid "Import"

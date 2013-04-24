@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sao sang <saosangmo@yahoo.com>, 2013.
+# saosangm <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

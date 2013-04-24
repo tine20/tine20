@@ -1,11 +1,12 @@
 # 
 # Translators:
+# yinxiaodong <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:50+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-04-19 06:23+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +39,7 @@ msgstr "报告错误"
 
 #: Acl/Rights.php:148
 msgid "Report bugs to the software vendor directly when they occur."
-msgstr ""
+msgstr "发生错误时报告给软件供应商"
 
 #: Acl/Rights.php:151
 msgid "Check version"
@@ -46,23 +47,23 @@ msgstr "检查版本"
 
 #: Acl/Rights.php:152
 msgid "Check for new versions of this software."
-msgstr ""
+msgstr "检查该软件的新版本。"
 
 #: Acl/Rights.php:155
 msgid "Manage own profile"
-msgstr ""
+msgstr "管理自己的资料"
 
 #: Acl/Rights.php:156
 msgid "The right to manage the own profile (selected contact data)."
-msgstr ""
+msgstr "管理个人资料的权利(选定的联系人数据)"
 
 #: Acl/Rights.php:159
 msgid "Manage own client state"
-msgstr ""
+msgstr "管理自己客户的状态"
 
 #: Acl/Rights.php:160
 msgid "The right to manage the own client state."
-msgstr ""
+msgstr "管理自己客户状态的权利。"
 
 #: Acl/Rights/Abstract.php:72
 msgid "admin"
@@ -80,7 +81,7 @@ msgstr "运行"
 msgid "run right description"
 msgstr "运行权限描述"
 
-#: Preference/Abstract.php:495
+#: Preference/Abstract.php:502
 msgid "default"
 msgstr ""
 
@@ -123,276 +124,284 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: Config.php:260
+#: Config.php:267
 msgid "System IMAP"
-msgstr ""
+msgstr "系统 IMAP"
 
-#: Config.php:262
+#: Config.php:269
 msgid "System IMAP server configuration."
-msgstr ""
+msgstr "系统 IMAP 服务器配置"
 
-#: Config.php:271
+#: Config.php:278
 msgid "System SMTP"
-msgstr ""
+msgstr "系统 SMTP"
 
-#: Config.php:273
+#: Config.php:280
 msgid "System SMTP server configuration."
-msgstr ""
+msgstr "系统 SMTP 服务器配置"
 
-#: Config.php:282
+#: Config.php:289
 msgid "System SIEVE"
-msgstr ""
+msgstr "系统 SIEVE"
 
-#: Config.php:284
+#: Config.php:291
 msgid "System SIEVE server configuration."
-msgstr ""
+msgstr "系统 SIEVE 服务器配置"
 
-#: Config.php:293
+#: Config.php:300
 msgid "Authentication Backend"
-msgstr ""
+msgstr "后台认证"
 
-#: Config.php:295
+#: Config.php:302
 msgid "Backend adapter for user authentication."
-msgstr ""
+msgstr "用户认证的后端适配器。"
 
-#: Config.php:303
+#: Config.php:310
 msgid "Authentication Configuration"
-msgstr ""
+msgstr "验证配置"
 
-#: Config.php:305
+#: Config.php:312
 msgid "Authentication backend configuration."
-msgstr ""
+msgstr "认证的后端配置。"
 
-#: Config.php:314
+#: Config.php:321
 msgid "User Backend"
-msgstr ""
+msgstr "用户后端"
 
-#: Config.php:316
+#: Config.php:323
 msgid "Backend adapter for user data."
-msgstr ""
+msgstr "用户数据的后端适配器。"
 
-#: Config.php:324
+#: Config.php:331
 msgid "User Configuration"
-msgstr ""
+msgstr "用户配置"
 
-#: Config.php:326
+#: Config.php:333
 msgid "User backend configuration."
-msgstr ""
+msgstr "用户后端配置"
 
-#: Config.php:335
+#: Config.php:342
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:337
+#: Config.php:344
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:345
+#: Config.php:352
 msgid "Title Postfix"
-msgstr ""
+msgstr "标题后缀"
 
-#: Config.php:347
+#: Config.php:354
 msgid "Postfix string appended to the title of this installation."
-msgstr ""
+msgstr "后缀字符串附加到这个安装的标题。"
 
-#: Config.php:355
+#: Config.php:362
 msgid "Redirect URL"
-msgstr ""
+msgstr "重定向 URL"
 
-#: Config.php:357
+#: Config.php:364
 msgid "Redirect to this URL after logout."
-msgstr ""
+msgstr "注销后，重定向到这个URL 。"
 
-#: Config.php:365
+#: Config.php:372
 msgid "Redirect to Referrer"
-msgstr ""
+msgstr "重定向到Referrer"
 
-#: Config.php:367
+#: Config.php:374
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:375
+#: Config.php:382
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:377
+#: Config.php:384
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:385
-msgid "Accepted Terms Version"
+#: Config.php:392
+msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:387
+#: Config.php:394
+msgid "Allowed Origins for the JSON API."
+msgstr ""
+
+#: Config.php:402
+msgid "Accepted Terms Version"
+msgstr "接受的合同条款"
+
+#: Config.php:404
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:395
+#: Config.php:412
 msgid "Use Geolocation Services"
-msgstr ""
+msgstr "使用地理定位服务"
 
-#: Config.php:397
+#: Config.php:414
 msgid "Use of external Geolocation services is allowed."
-msgstr ""
+msgstr "允许使用外部地理定位服务。"
 
-#: Config.php:405
+#: Config.php:422
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:407
+#: Config.php:424
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:415
+#: Config.php:432
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:417
+#: Config.php:434
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:425
+#: Config.php:442
 msgid "Files Directory"
-msgstr ""
+msgstr "文件目录"
 
-#: Config.php:427
+#: Config.php:444
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:435 Config.php:437
+#: Config.php:452 Config.php:454
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:445 Config.php:447
+#: Config.php:462 Config.php:464
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:455
+#: Config.php:472
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:457
+#: Config.php:474
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:465
+#: Config.php:482
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:467
+#: Config.php:484
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:475
+#: Config.php:492
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:477
+#: Config.php:494
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:485
+#: Config.php:502
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:487
+#: Config.php:504
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:495
+#: Config.php:512
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:497
+#: Config.php:514
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:505
+#: Config.php:522
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:507
+#: Config.php:524
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:515
+#: Config.php:532
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:517
+#: Config.php:534
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:525
+#: Config.php:542
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:527
+#: Config.php:544
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:535
+#: Config.php:552
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:537
+#: Config.php:554
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:545
+#: Config.php:562
 msgid "Maximum login failures"
 msgstr ""
 
-#: Config.php:547
+#: Config.php:564
 msgid "Maximum allowed login failures before blocking account"
 msgstr ""
 
-#: Config.php:555
+#: Config.php:572
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:557
+#: Config.php:574
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Setup/setup.xml:3194
+#: Setup/setup.xml:3203
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:3199
+#: Setup/setup.xml:3208
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:3225
+#: Setup/setup.xml:3234
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:3230
+#: Setup/setup.xml:3239
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:3256
+#: Setup/setup.xml:3265
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:3261
+#: Setup/setup.xml:3270
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:3287
+#: Setup/setup.xml:3296
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:3292
+#: Setup/setup.xml:3301
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:3318
+#: Setup/setup.xml:3327
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:3323
+#: Setup/setup.xml:3332
 msgid "record changed"
 msgstr "记录已修改"
 
@@ -402,7 +411,7 @@ msgstr "时区"
 
 #: Preference.php:88
 msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr ""
+msgstr "在所示日期时区 Tine 2.0."
 
 #: Preference.php:91 js/widgets/LangChooser.js:35
 msgid "Language"
@@ -438,7 +447,7 @@ msgstr ""
 
 #: Export/Spreadsheet/Ods.php:278
 msgid "Data"
-msgstr ""
+msgstr "资料"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -454,7 +463,7 @@ msgstr "活动"
 
 #: js/AdminPanel.js:75
 msgid "Profile Information"
-msgstr ""
+msgstr "简历信息"
 
 #: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
 #: js/widgets/dialog/EditDialog.js:309
@@ -488,7 +497,7 @@ msgstr ""
 
 #: js/AboutDialog.js:41 js/MainMenu.js:112
 msgid "About {0}"
-msgstr ""
+msgstr "关于{0}"
 
 #: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
@@ -549,7 +558,7 @@ msgstr "个人的"
 
 #: js/common.js:273 js/common.js:311
 msgid "No Information"
-msgstr ""
+msgstr "没有信息"
 
 #: js/common.js:360
 msgid "{0} minute"
@@ -569,7 +578,7 @@ msgstr[0] "{0}工作日"
 #: js/common.js:389
 msgid "{0} second"
 msgid_plural "{0} seconds"
-msgstr[0] ""
+msgstr[0] "{0} 秒"
 
 #: js/LoginPanel.js:80 js/LoginPanel.js:118
 msgid "Login"
@@ -585,22 +594,22 @@ msgstr "密码"
 
 #: js/LoginPanel.js:137
 msgid "Tine 2.0 is made for you"
-msgstr ""
+msgstr "Tine 2.0 为你而制作"
 
 #: js/LoginPanel.js:139
 msgid ""
 "Tine 2.0 wants to make business collaboration easier and more enjoyable - "
 "for your needs! So you are warmly welcome to discuss with us, bring in ideas"
 " and get help."
-msgstr ""
+msgstr "Tine 2.0 希望业务协作更容易，更愉快 - 满足您的需求！那么，你是热烈欢迎与我们进行洽谈，引进想法，并获得帮助。"
 
 #: js/LoginPanel.js:145
 msgid "Tine 2.0 Homepage"
-msgstr ""
+msgstr "Tine 2.0 主页"
 
 #: js/LoginPanel.js:146
 msgid "Tine 2.0 Forum"
-msgstr ""
+msgstr "Tine 2.0 论坛"
 
 #: js/LoginPanel.js:150
 msgid "Translations"
@@ -614,7 +623,7 @@ msgstr ""
 
 #: js/LoginPanel.js:155
 msgid "Tine 2.0 Translation Portal"
-msgstr ""
+msgstr "Tine 2.0 Translation Portal"
 
 #: js/LoginPanel.js:200
 msgid "about {0} minutes"
@@ -622,13 +631,13 @@ msgstr ""
 
 #: js/LoginPanel.js:205 js/LoginPanel.js:430
 msgid "Tine 2.0 needs your help"
-msgstr ""
+msgstr "Tine 2.0 需要你的帮助"
 
 #: js/LoginPanel.js:207 js/LoginPanel.js:432
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
-msgstr ""
+msgstr "我们经常需要您的意见，使未来的Tine 2.0版本更好的满足您的需求。帮助我们自己的参与："
 
 #: js/LoginPanel.js:213
 msgid "participate!"
@@ -636,29 +645,29 @@ msgstr ""
 
 #: js/LoginPanel.js:235
 msgid "Languages"
-msgstr ""
+msgstr "语言"
 
 #: js/LoginPanel.js:236
 msgid "Duration"
-msgstr ""
+msgstr "持续时间"
 
 #: js/LoginPanel.js:277
 msgid "Browser incompatible"
-msgstr ""
+msgstr "浏览器不兼容"
 
 #: js/LoginPanel.js:279
 msgid "Your browser is not supported by Tine 2.0."
-msgstr ""
+msgstr "您的浏览器不支持 Tine 2.0."
 
 #: js/LoginPanel.js:284
 msgid "Browser incompatible?"
-msgstr ""
+msgstr "浏览器不兼容?"
 
 #: js/LoginPanel.js:286
 msgid ""
 "You are using an unrecognized browser. This could result in unexpected "
 "behaviour."
-msgstr ""
+msgstr "您正在使用的浏览器无法识别的。这可能会导致意外的行为。"
 
 #: js/LoginPanel.js:292
 msgid "You might try one of these browsers:"
@@ -669,7 +678,7 @@ msgid "Logging you in..."
 msgstr "正在登录 ..."
 
 #: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 #: js/widgets/persistentfilter/PickerPanel.js:317
 #: js/widgets/persistentfilter/PickerPanel.js:355
 #: js/widgets/persistentfilter/PickerPanel.js:407
@@ -679,7 +688,7 @@ msgstr "请等待"
 
 #: js/LoginPanel.js:363
 msgid "Login successful. Loading {0}..."
-msgstr ""
+msgstr "登录成功。载入中 {0}..."
 
 #: js/LoginPanel.js:363 js/MainMenu.js:227
 msgid "Please wait!"
@@ -700,14 +709,14 @@ msgstr "你的用户名或者密码有误！！！"
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:668 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Errors"
 msgstr "错误"
 
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:688 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Please fix the errors noted."
 msgstr "请修改注释的错误。"
 
@@ -767,8 +776,8 @@ msgid "Your password has been changed."
 msgstr "你的密码已经被修改"
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:665
-#: js/widgets/relation/GenericPickerGridPanel.js:678
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:267
@@ -785,7 +794,7 @@ msgstr "用户：{0}"
 
 #: js/MainMenu.js:118
 msgid "Debug Console (Ctrl + F11)"
-msgstr ""
+msgstr "调试控制台 (Ctrl + F11)"
 
 #: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
@@ -823,9 +832,9 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1650
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:695
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
+#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 #: js/widgets/persistentfilter/PickerPanel.js:315
 msgid "Confirm"
 msgstr "确认"
@@ -838,12 +847,12 @@ msgstr "确实想登出？"
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
-#: js/data/Record.js:174
+#: js/data/Record.js:195
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "任务"
 
-#: js/data/Record.js:178
+#: js/data/Record.js:199
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "要做的事项列表"
@@ -906,7 +915,7 @@ msgstr ""
 
 #: js/ExceptionHandler.js:220
 msgid "Timeout"
-msgstr ""
+msgstr "超时"
 
 #: js/ExceptionHandler.js:221
 msgid ""
@@ -1067,7 +1076,7 @@ msgid_plural "Deleting Tags"
 msgstr[0] "正删除标签"
 
 #: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:707
+#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
 msgid "Failed"
 msgstr "失败"
 
@@ -1092,7 +1101,7 @@ msgid "Could not update tag."
 msgstr "不能更新标签"
 
 #: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:425
+#: js/widgets/relation/GenericPickerGridPanel.js:427
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
 #: js/ExceptionDialog.js:142
 msgid "Description"
@@ -1417,7 +1426,7 @@ msgid "Name"
 msgstr "名子"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:428
+#: js/widgets/relation/GenericPickerGridPanel.js:430
 #: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
 msgid "Type"
 msgstr "类型"
@@ -1475,57 +1484,57 @@ msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/grid/GridPanel.js:950
+#: js/widgets/grid/GridPanel.js:967
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:951
+#: js/widgets/grid/GridPanel.js:968
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/grid/GridPanel.js:1189
+#: js/widgets/grid/GridPanel.js:1206
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1208
+#: js/widgets/grid/GridPanel.js:1225
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1252
-#: js/widgets/relation/GenericPickerGridPanel.js:429
+#: js/widgets/grid/GridPanel.js:1269
+#: js/widgets/relation/GenericPickerGridPanel.js:431
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1253 js/widgets/ActivitiesPanel.js:464
+#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
 msgid "Created By"
 msgstr "创建者"
 
-#: js/widgets/grid/GridPanel.js:1254
+#: js/widgets/grid/GridPanel.js:1271
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1255
+#: js/widgets/grid/GridPanel.js:1272
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1624
+#: js/widgets/grid/GridPanel.js:1641
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/grid/GridPanel.js:1625
+#: js/widgets/grid/GridPanel.js:1642
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/grid/GridPanel.js:1648
+#: js/widgets/grid/GridPanel.js:1665
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 
-#: js/widgets/grid/GridPanel.js:1683 js/widgets/dialog/EditDialog.js:697
+#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/grid/GridPanel.js:1683
+#: js/widgets/grid/GridPanel.js:1700
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -1579,31 +1588,31 @@ msgstr ""
 msgid "There are invalid relations. Please check before saving."
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:250
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:424
+#: js/widgets/relation/GenericPickerGridPanel.js:426
 msgid "Record"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
+#: js/widgets/relation/GenericPickerGridPanel.js:428
 msgid "Remark"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/relation/GenericPickerGridPanel.js:429
 msgid "Dependency"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:666
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:679
+#: js/widgets/relation/GenericPickerGridPanel.js:721
 #: js/widgets/form/RecordPickerComboBox.js:268
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
@@ -1693,7 +1702,7 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:236
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
+msgstr "请选择文件，其中包含你想要的记录添加到 Tine 2.0"
 
 #: js/widgets/dialog/ImportDialog.js:240
 msgid "Select file containing your {0}"
@@ -2005,15 +2014,15 @@ msgstr "编辑{0} \"{1}\""
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:695
+#: js/widgets/dialog/EditDialog.js:698
 msgid "Do you really want to delete this {0}?"
 msgstr "真的想删除这个{0}？"
 
-#: js/widgets/dialog/EditDialog.js:707
+#: js/widgets/dialog/EditDialog.js:710
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
-#: js/widgets/dialog/EditDialog.js:759
+#: js/widgets/dialog/EditDialog.js:762
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
 
@@ -2080,11 +2089,11 @@ msgid ""
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 msgid "Applying changes"
 msgstr ""
 
@@ -2508,11 +2517,11 @@ msgstr "最后的动作可能没有正确执行"
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
-msgstr ""
+msgstr "请帮助改进这个软件，并通知供应商。包括你在那里做什么时，发生错误的简要说明。"
 
 #: js/ExceptionDialog.js:150
 msgid "Send Contact Information"
-msgstr ""
+msgstr "发送联系人信息"
 
 #: js/ExceptionDialog.js:167
 msgid "Details:"
@@ -2538,7 +2547,7 @@ msgstr "报告已经发送，谢谢你的贡献"
 msgid "Please restart your browser now!"
 msgstr ""
 
-#: js/MainScreen.js:194
+#: js/MainScreen.js:202
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
@@ -2703,7 +2712,7 @@ msgstr ""
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr ""
+msgstr "Tine 2.0 需要被更新，或尚未安装。"
 
 #: views/update.php:25
 msgid "Please wait or contact your administrator"

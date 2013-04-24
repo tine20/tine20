@@ -1,7 +1,7 @@
 # 
 # Translators:
-# Markus  <markus.henriksson@marinex.se>, 2012.
-#   <tulken_hultan@hotmail.com>, 2012.
+# Markus Henriksson <markus.henriksson@marinex.se>, 2012
+# BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

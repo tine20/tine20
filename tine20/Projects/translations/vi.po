@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sao sang <saosangmo@yahoo.com>, 2013.
+# saosangm <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -123,7 +123,7 @@ msgstr "Chọn vai trò người tham gia"
 msgid "Select Project"
 msgstr "Chọn dự án"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Vai trò"
 
@@ -139,19 +139,19 @@ msgstr "Thêm {0} người tham gia vào dự án"
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "Số"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "one: Dự án\nother: Dự án"
@@ -169,7 +169,7 @@ msgstr "Danh sách dự án"
 msgid "Quick search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Mô tả"
 
@@ -189,7 +189,7 @@ msgstr "Thời gian tạo"
 msgid "Created By"
 msgstr "Tạo bởi"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Người tham gia"
 
@@ -197,6 +197,6 @@ msgstr "Người tham gia"
 msgid "Attendee Role"
 msgstr "Quyền người tham gia"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Nhập mô tả"

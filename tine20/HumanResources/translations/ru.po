@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Nikolay Parukhin <parukhin@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -117,35 +117,35 @@ msgstr ""
 msgid "Tags"
 msgstr "Теги"
 
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:227
+#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
 msgid "Number"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:287
+#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
 msgid "Full Name"
 msgstr "Полное имя"
 
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:292 js/Models.js:116
+#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
 msgid "Salutation"
 msgstr "Приветствие"
 
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:300 js/Models.js:113
+#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
 msgid "Title"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:304 js/Models.js:112
+#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
 msgid "First Name"
 msgstr "Имя"
 
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:313 js/Models.js:115
+#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:382 js/Models.js:108
+#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
 msgid "Employment begin"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:387 js/Models.js:109
+#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
 msgid "Employment end"
 msgstr ""
 
@@ -187,14 +187,14 @@ msgid ""
 "cancel them before closing this one!"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:200 js/Models.js:333
+#: js/EmployeeEditDialog.js:201 js/Models.js:333
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/EmployeeEditDialog.js:208 js/EmployeeEditDialog.js:221
+#: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
 #: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
 msgid "Employee"
@@ -203,92 +203,92 @@ msgstr[0] "Сотрудник"
 msgstr[1] "Сотрудника"
 msgstr[2] "Сотрудников"
 
-#: js/EmployeeEditDialog.js:239 js/Models.js:110
+#: js/EmployeeEditDialog.js:240 js/Models.js:110
 msgid "Account"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:258
+#: js/EmployeeEditDialog.js:259
 msgid "Apply contact data on form"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:327
+#: js/EmployeeEditDialog.js:328
 msgid "Personal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:337
+#: js/EmployeeEditDialog.js:338
 msgid "Country"
 msgstr "Страна"
 
-#: js/EmployeeEditDialog.js:340
+#: js/EmployeeEditDialog.js:341
 msgid "Locality"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:343
+#: js/EmployeeEditDialog.js:344
 msgid "Postalcode"
 msgstr "Почтовый индекс"
 
-#: js/EmployeeEditDialog.js:346
+#: js/EmployeeEditDialog.js:347
 msgid "Region"
 msgstr "Область"
 
-#: js/EmployeeEditDialog.js:349
+#: js/EmployeeEditDialog.js:350
 msgid "Street"
 msgstr "Улица"
 
-#: js/EmployeeEditDialog.js:352
+#: js/EmployeeEditDialog.js:353
 msgid "Street2"
 msgstr "Улица2"
 
-#: js/EmployeeEditDialog.js:355
+#: js/EmployeeEditDialog.js:356
 msgid "E-Mail"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:358
+#: js/EmployeeEditDialog.js:359
 msgid "Telephone Number"
 msgstr "Телефон"
 
-#: js/EmployeeEditDialog.js:361
+#: js/EmployeeEditDialog.js:362
 msgid "Cell Phone Number"
 msgstr "Мобильный телефон"
 
-#: js/EmployeeEditDialog.js:365
+#: js/EmployeeEditDialog.js:366
 msgid "Birthday"
 msgstr "Дата рождения"
 
-#: js/EmployeeEditDialog.js:373
+#: js/EmployeeEditDialog.js:374
 msgid "Internal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:390 js/Models.js:114
+#: js/EmployeeEditDialog.js:391 js/Models.js:114
 msgid "Profession"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:398
+#: js/EmployeeEditDialog.js:399
 msgid "Banking Information"
 msgstr "Банковская информация"
 
-#: js/EmployeeEditDialog.js:407
+#: js/EmployeeEditDialog.js:408
 msgid "Account Holder"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:410
+#: js/EmployeeEditDialog.js:411
 msgid "Account Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:413
+#: js/EmployeeEditDialog.js:414
 msgid "Bank Name"
 msgstr "Название банка"
 
-#: js/EmployeeEditDialog.js:416
+#: js/EmployeeEditDialog.js:417
 msgid "Code Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:437 js/FreeTimeEditDialog.js:273
+#: js/EmployeeEditDialog.js:438 js/FreeTimeEditDialog.js:273
 #: js/FreeTimeGridPanel.js:170 js/Models.js:118 js/Models.js:381
 msgid "Description"
 msgstr "Описание"
 
-#: js/EmployeeEditDialog.js:451 js/FreeTimeEditDialog.js:287
+#: js/EmployeeEditDialog.js:452 js/FreeTimeEditDialog.js:287
 msgid "Enter description"
 msgstr "Введите описание"
 

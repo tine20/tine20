@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Nikolay Parukhin <parukhin@gmail.com>, 2013.
-#   <parukhin@gmail.com>, 2012.
+# Nikolay Parukhin <parukhin@gmail.com>, 2013
+# Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-01 15:52+0000\n"
+"PO-Revision-Date: 2013-04-01 20:01+0000\n"
 "Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1534,11 +1534,11 @@ msgstr ""
 
 #: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
 msgid "Errors"
-msgstr ""
+msgstr "Ошибки"
 
 #: js/AccountEditDialog.js:257
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: js/AccountEditDialog.js:288
 msgid "Sipgate Username"
@@ -1550,11 +1550,11 @@ msgstr ""
 
 #: js/AccountEditDialog.js:292
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: js/AccountEditDialog.js:296
 msgid "Passwort Repeat"
-msgstr ""
+msgstr "Повтор пароля"
 
 #: js/AccountEditDialog.js:302
 msgid "Is Validated"
