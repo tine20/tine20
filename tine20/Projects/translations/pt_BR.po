@@ -1,11 +1,12 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-12 22:11+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:91
 msgid "Manage shared project favorites"
-msgstr ""
+msgstr "Gerenciar favoritos em projetos compartilhados"
 
 #: Acl/Rights.php:92
 msgid "Create new shared project favorites"
-msgstr ""
+msgstr "Criar um novo favorito no projeto"
 
 #: Controller.php:79
 #, python-format
@@ -122,7 +123,7 @@ msgstr "Selecione o perfil do participante"
 msgid "Select Project"
 msgstr "Selecione o Projeto"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Perfil"
 
@@ -138,19 +139,19 @@ msgstr "Adicionando {0} Participantes ao projeto"
 msgid "Tags"
 msgstr "Identificação"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "Número"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "Título"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "Situação"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projeto"
@@ -170,7 +171,7 @@ msgstr "Listas de Projetos"
 msgid "Quick search"
 msgstr "Pesquisa rápida"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Descrição"
 
@@ -190,7 +191,7 @@ msgstr "Data de Criação"
 msgid "Created By"
 msgstr "Criado por"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Participante"
 
@@ -198,6 +199,6 @@ msgstr "Participante"
 msgid "Attendee Role"
 msgstr "Perfil do participante"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Digitar a Descrição"

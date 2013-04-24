@@ -247,7 +247,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
                     break;
                 case 'temp_files':
-                    Tinebase_TempFile::getInstance()->clearTable($dateString);
+                    Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";

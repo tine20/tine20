@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

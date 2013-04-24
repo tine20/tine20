@@ -216,8 +216,17 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        if (array_key_exists('pwsuffix', $imapConfig)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Appending configured pwsuffix to new email account password.');
+            $password = $_password . $imapConfig['pwsuffix'];
+        } else {
+            $password = $_password;
+        }
+        
         $values = array(
-            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $_password) : $_password
+            $this->_propertyMapping['emailPassword'] => ($_encrypt) ? Hash_Password::generate($this->_config['emailScheme'], $password) : $password
         );
         
         $where = array(

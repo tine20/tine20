@@ -342,7 +342,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 $parent = $this->stat($dirName);
                 $node = $this->createFileTreeNode($parent, $fileName);
                 
-                $handle = tmpfile();
+                $handle = Tinebase_TempFile::getInstance()->openTempFile();
                 
                 break;
                 
@@ -375,7 +375,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                     $node = $this->stat($_path);
                 }
                 
-                $handle = tmpfile();
+                $handle = Tinebase_TempFile::getInstance()->openTempFile();
                 
                 break;
                 
@@ -383,9 +383,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 return false;
         }
         
-        stream_context_set_option ($handle, 'tine20', 'path', $_path);
-        stream_context_set_option ($handle, 'tine20', 'mode', $_mode);
-        stream_context_set_option ($handle, 'tine20', 'node', $node);
+        $contextOptions = array('tine20' => array(
+            'path' => $_path,
+            'mode' => $_mode,
+            'node' => $node
+        ));
+        stream_context_set_option($handle, $contextOptions);
         
         return $handle;
     }

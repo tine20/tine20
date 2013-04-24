@@ -1,12 +1,13 @@
 # 
 # Translators:
-#   <spacen_zj@hotmail.com>, 2012.
+# vehery <spacen_zj@hotmail.com>, 2012
+# yinxiaodong <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-06-23 23:47+0000\n"
-"Last-Translator: vehery <spacen_zj@hotmail.com>\n"
+"PO-Revision-Date: 2013-03-10 07:38+0000\n"
+"Last-Translator: yinxiaodong <xindev@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,7 +195,7 @@ msgstr "重置电话 HTTP 授权"
 
 #: js/Snom/PhoneGridPanel.js:48
 msgid "Open phones web gui"
-msgstr ""
+msgstr "打开手机的Web GUI"
 
 #: js/Snom/PhoneGridPanel.js:65 js/Snom/SoftwareGridPanel.js:49
 #: js/Snom/SettingGridPanel.js:49 js/Snom/TemplateGridPanel.js:49
@@ -254,7 +255,7 @@ msgstr "重定向时间"
 
 #: js/Snom/PhoneGridPanel.js:159
 msgid "settings loaded at"
-msgstr ""
+msgstr "设置加载"
 
 #: js/Snom/PhoneGridPanel.js:167
 msgid "last modified"
@@ -318,7 +319,7 @@ msgstr "当前软件版本"
 
 #: js/Snom/PhoneEditDialog.js:366
 msgid "Settings Loaded at"
-msgstr ""
+msgstr "设置时加载"
 
 #: js/Snom/PhoneEditDialog.js:553
 msgid "Users"
@@ -430,7 +431,7 @@ msgstr "管理模式"
 
 #: js/Snom/LocationGridPanel.js:141
 msgid "Filter Registrar"
-msgstr ""
+msgstr "过滤器注册"
 
 #: js/Snom/LocationGridPanel.js:148
 msgid "CP Dialoginfo"
@@ -442,7 +443,7 @@ msgstr ""
 
 #: js/CallForwardPanel.js:84
 msgid "Forward immediately"
-msgstr ""
+msgstr "立刻发送"
 
 #: js/CallForwardPanel.js:94 js/CallForwardPanel.js:137
 #: js/CallForwardPanel.js:179
@@ -452,7 +453,7 @@ msgstr "模式"
 #: js/CallForwardPanel.js:118 js/CallForwardPanel.js:160
 #: js/CallForwardPanel.js:203
 msgid "Number"
-msgstr ""
+msgstr "号码"
 
 #: js/CallForwardPanel.js:127
 msgid "Forward busy"
@@ -460,11 +461,11 @@ msgstr "遇忙转移"
 
 #: js/CallForwardPanel.js:169
 msgid "Forward delayed"
-msgstr ""
+msgstr "转发延迟"
 
 #: js/CallForwardPanel.js:212
 msgid "Delay time"
-msgstr ""
+msgstr "延迟时间"
 
 #: js/Asterisk/SipPeerEditDialog.js:49
 msgid "Call Forwards"
@@ -650,7 +651,7 @@ msgstr "来电号码"
 
 #: js/Asterisk/SipPeerGridPanel.js:108
 msgid "can reinvite"
-msgstr ""
+msgstr "可以邀请"
 
 #: js/Asterisk/SipPeerGridPanel.js:121
 msgid "default ip"
@@ -750,7 +751,7 @@ msgstr "等待音乐"
 
 #: js/Asterisk/SipPeerGridPanel.js:300
 msgid "reg seconds"
-msgstr ""
+msgstr "reg 秒"
 
 #: js/Asterisk/SipPeerGridPanel.js:307
 msgid "ip address"
@@ -798,7 +799,7 @@ msgstr "附加的"
 
 #: js/Asterisk/MeetmeGridPanel.js:74 js/Asterisk/MeetmeEditDialog.js:40
 msgid "confno"
-msgstr ""
+msgstr "CONFNO"
 
 #: js/Asterisk/MeetmeGridPanel.js:83 js/Asterisk/MeetmeEditDialog.js:48
 msgid "pin"
@@ -810,7 +811,7 @@ msgstr "管理员身份号码"
 
 #: js/Voipmanager.js:22
 msgid "Asterisk"
-msgstr ""
+msgstr "星号"
 
 #: js/Voipmanager.js:29 js/Models.js:430
 msgid "SipPeer"
@@ -833,7 +834,7 @@ msgstr[0] ""
 
 #: js/Voipmanager.js:80
 msgid "Queues"
-msgstr ""
+msgstr "队列"
 
 #: js/Voipmanager.js:96
 msgid "Snom"

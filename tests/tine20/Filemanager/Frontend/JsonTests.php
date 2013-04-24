@@ -524,6 +524,24 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         return $result;
     }
+    
+    /**
+     * testCreateFileCountTempDir
+     * 
+     * @see 0007370: Unable to upload files
+     */
+    public function testCreateFileCountTempDir()
+    {
+        $tmp = Tinebase_Core::getTempDir();
+        $filecountInTmpBefore = count(scandir($tmp));
+        
+        $this->testCreateFileNodeWithTempfile();
+        
+        // check if tempfile has been created in tine20 tempdir
+        $filecountInTmpAfter = count(scandir($tmp));
+        
+        $this->assertEquals($filecountInTmpBefore + 2, $filecountInTmpAfter, '2 tempfiles should have been created');
+    }
 
     /**
      * testCreateDirectoryNodesInShared

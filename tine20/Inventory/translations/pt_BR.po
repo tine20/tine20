@@ -1,11 +1,12 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-27 14:15+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-03-12 21:29+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,19 +26,19 @@ msgstr "%s's ítens de inventário pessoais"
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Item de inventário"
-msgstr[1] "Ítens de inventário"
+msgstr[1] "itens de inventário"
 
 #: Model/InventoryItem.php:49
 msgid "Inventory items"
-msgstr "Ítens de inventário"
+msgstr "Itens de inventário"
 
 #: Model/InventoryItem.php:51
 msgid "Inventory item list"
-msgstr "Lista de ítem de inventário"
+msgstr "Lista de item do inventário"
 
 #: Model/InventoryItem.php:52
 msgid "Inventory items lists"
-msgstr "Listas de ítens de inventário"
+msgstr "Listas de itens do inventário"
 
 #: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:108
 msgid "Name"
@@ -59,51 +60,51 @@ msgstr "Descrição"
 msgid "Location"
 msgstr "Posição"
 
-#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:290
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:291
 msgid "Invoice date"
-msgstr ""
+msgstr "Data da fatura"
 
-#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:284
+#: Model/InventoryItem.php:107 js/InventoryItemEditDialog.js:285
 msgid "Invoice"
 msgstr "Fatura"
 
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:112 js/InventoryItemEditDialog.js:264
 msgid "Price"
 msgstr "Preço"
 
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:269
+#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:269
 msgid "Cost centre"
 msgstr "Centro de custo"
 
-#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:175
+#: Model/InventoryItem.php:122 js/InventoryItemEditDialog.js:175
 msgid "Warranty"
 msgstr "Garantia"
 
-#: Model/InventoryItem.php:126
+#: Model/InventoryItem.php:128
 msgid "Item added"
 msgstr "Item adicionado"
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:134
 msgid "Item removed"
 msgstr "Item removido"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:296
+#: Model/InventoryItem.php:148 js/InventoryItemEditDialog.js:297
 msgid "Depreciate"
-msgstr ""
+msgstr "Depreciar"
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
-msgstr ""
+msgstr "Importar arquivo CVS de Inventário"
 
 #: Import/definitions/inv_tine_import_csv.xml:20
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "Lista de Importação (###CURRENTDATE###)"
 
 #: Import/definitions/inv_tine_import_csv.xml:22
 msgid ""
 "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "Ítens importados  em ###CURRENTDATE### às ###CURRENTTIME### por ###USERFULLNAME###"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -119,11 +120,11 @@ msgstr "Inventário"
 
 #: Setup/Update/Release7.php:127 Setup/Initialize.php:65
 msgid "All Inventory Items"
-msgstr ""
+msgstr "Todos os ítens do inventário"
 
 #: Setup/Update/Release7.php:128 Setup/Initialize.php:66
 msgid "All existing Inventory Items"
-msgstr ""
+msgstr "Todos os ítens de inventário existentes"
 
 #: Setup/Initialize.php:33
 msgid "ordered"
@@ -147,7 +148,7 @@ msgstr "removido"
 
 #: Setup/Initialize.php:38
 msgid "unknown"
-msgstr ""
+msgstr "desconhecido"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
@@ -187,7 +188,7 @@ msgstr "Número total"
 
 #: js/InventoryItemEditDialog.js:196
 msgid "Available number"
-msgstr ""
+msgstr "Número disponível"
 
 #: js/InventoryItemEditDialog.js:243
 msgid "Accounting"
@@ -195,20 +196,20 @@ msgstr "Contabilidade"
 
 #: js/InventoryItemGridPanel.js:36
 msgid "Export Inventory"
-msgstr ""
+msgstr "Exportar Inventário"
 
 #: js/InventoryItemGridPanel.js:45
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exportar como ODS"
 
 #: js/InventoryItemGridPanel.js:52
 msgid "Export as CSV"
-msgstr ""
+msgstr "Exportar como CSV"
 
 #: js/InventoryItemGridPanel.js:59
 msgid "Export as ..."
-msgstr ""
+msgstr "Exportar como ..."
 
 #: js/InventoryItemGridPanel.js:71
 msgid "Import items"
-msgstr ""
+msgstr "Importar ítens"

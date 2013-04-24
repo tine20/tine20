@@ -1,11 +1,12 @@
 # 
 # Translators:
+# sambar <samuel.barbera@email.it>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:52+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-20 10:52+0000\n"
+"Last-Translator: sambar <samuel.barbera@email.it>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,35 +19,35 @@ msgstr ""
 
 #: Acl/Rights.php:120
 msgid "Manage timeaccounts"
-msgstr "Gestisci account tempo"
+msgstr "Gestisci rendiconto ore"
 
 #: Acl/Rights.php:121
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr ""
+msgstr "Aggiungere, modificare ed eliminare i rendiconto ore (include tutte i permessi della scheda attività)"
 
 #: Acl/Rights.php:124 Acl/Rights.php:125
 msgid "Add timeaccounts"
-msgstr ""
+msgstr "Aggiungi rendiconto ore"
 
 #: Acl/Rights.php:128
 msgid "Manage shared timeaccount favorites"
-msgstr ""
+msgstr "Gestisci i rendiconto ore condivisi preferiti"
 
 #: Acl/Rights.php:129
 msgid "Create or update shared timeaccount favorites"
-msgstr ""
+msgstr "Crea o aggiorna i rendiconto ore condivisi preferiti"
 
 #: Acl/Rights.php:132
 msgid "Manage shared timesheet favorites"
-msgstr ""
+msgstr "gestisci le schede attività condivise preferite"
 
 #: Acl/Rights.php:133
 msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgstr "Crea o aggiorna le schede attività condivise preferite"
 
 #: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:117
 msgid "Cost Center"
-msgstr ""
+msgstr "Centro di costo"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
@@ -69,43 +70,43 @@ msgstr "fatturata"
 
 #: Setup/Update/Release5.php:81 Setup/Initialize.php:112
 msgid "Timeaccounts to bill"
-msgstr ""
+msgstr "Rendiconto ore da fatturare"
 
 #: Setup/Update/Release5.php:95 Setup/Initialize.php:126
 msgid "Timeaccounts not yet billed"
-msgstr ""
+msgstr "Rendiconto ore non ancora fatturati"
 
 #: Setup/Update/Release5.php:109 Setup/Initialize.php:141
 msgid "Timeaccounts already billed"
-msgstr ""
+msgstr "Rendiconto ore già fatturati"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr ""
+msgstr "La mia schede attività di oggi"
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr ""
+msgstr "La mia scheda attività di questa settimana"
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr ""
+msgstr "La mia scheda attività della scorsa settimana"
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr ""
+msgstr "La mia scheda attività di questo mese"
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr ""
+msgstr "La mia scheda attività dello scorso mese"
 
 #: Preference.php:64
 msgid "Timesheets ODS export configuration"
-msgstr "Configurazione esportazione Tabelle di tempo ODS"
+msgstr "Configurazione esportazione schede attività ODS"
 
 #: Preference.php:65
 msgid "Use this configuration for the timesheet ODS export."
-msgstr "Usa questa configurazione per l'esportazione delle Tabelle di tempo ODS"
+msgstr "Usa questa configurazione per l'esportazione delle schede attività ODS"
 
 #: Preference.php:116
 msgid "default"
@@ -166,14 +167,14 @@ msgstr "la scorsa settimana"
 
 #: js/TimeaccountEditDialog.js:130
 msgid "Timesheets are billable"
-msgstr "Le tabelle di tempo sono fatturabili"
+msgstr "Le schede attività sono fatturabili"
 
 #: js/TimeaccountEditDialog.js:145 js/TimesheetEditDialog.js:144
 #: js/Models.js:141
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Account di Tempo"
-msgstr[1] "Account di Tempo"
+msgstr[1] "Rendiconti Ore"
 
 #: js/TimeaccountEditDialog.js:161 js/TimeaccountGridPanel.js:96
 #: js/Models.js:167
@@ -205,7 +206,7 @@ msgstr "Prenota il proprio"
 
 #: js/TimeaccountEditDialog.js:245
 msgid "The grant to add Timesheets to this Timeaccount"
-msgstr "Il diritto di aggiungere Tabelle di tempo a questo Account di tempo"
+msgstr "Il permesso di aggiungere delle Schede attività a questo Rendiconto ore"
 
 #: js/TimeaccountEditDialog.js:249
 msgid "View All"
@@ -213,7 +214,7 @@ msgstr "Visualizza Tutti"
 
 #: js/TimeaccountEditDialog.js:250
 msgid "The grant to view Timesheets of other users"
-msgstr ""
+msgstr "Il permesso di visualizzare le schede attività degli altri utenti"
 
 #: js/TimeaccountEditDialog.js:255
 msgid "Book All"
@@ -221,7 +222,7 @@ msgstr "Prenota Tutti"
 
 #: js/TimeaccountEditDialog.js:256
 msgid "The grant to add Timesheets for other users"
-msgstr "Il diritto di aggiungere Tabelle di tempo per altri utenti"
+msgstr "Il permesso di aggiungere delle schede attività per altri utenti"
 
 #: js/TimeaccountEditDialog.js:261
 msgid "Manage Clearing"
@@ -229,7 +230,7 @@ msgstr "Gestisci approvazioni"
 
 #: js/TimeaccountEditDialog.js:262
 msgid "The grant to manage clearing of Timesheets"
-msgstr "Il diritto di gestire le approvazioni di Tabelle di tempo"
+msgstr "Il permesso di gestire le approvazioni delle schede attività"
 
 #: js/TimeaccountEditDialog.js:267 js/TimeaccountGridPanel.js:156
 msgid "Export"
@@ -237,7 +238,7 @@ msgstr "Esporta"
 
 #: js/TimeaccountEditDialog.js:268
 msgid "The grant to export Timesheets of Timeaccount"
-msgstr "Il diritto di esportare Tabelle di tempo di Account di tempo"
+msgstr "Il permesso di esportare le schede attività dei rendiconto ore"
 
 #: js/TimeaccountEditDialog.js:273
 msgid "Manage All"
@@ -255,11 +256,11 @@ msgstr "Permessi"
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Tabella del tempo"
-msgstr[1] "Tabelle del tempo"
+msgstr[1] "Schede attività"
 
 #: js/TimesheetEditDialog.js:145
 msgid "Select Time Account..."
-msgstr "Scegli Account di tempo..."
+msgstr "Scegli Rendiconto Ore..."
 
 #: js/TimesheetEditDialog.js:159 js/TimesheetGridPanel.js:112
 msgid "Duration"
@@ -305,7 +306,7 @@ msgstr "Impossibile salvare {0}."
 
 #: js/TimesheetEditDialog.js:260
 msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "La scadenza di prenotazione per questo Account di tempo è stata superata"
+msgstr "La scadenza di prenotazione per questo rendiconto ore è stata superata"
 
 #: js/DurationSpinner.js:69 js/DurationSpinner.js:79
 msgid "Not a valid time"
@@ -317,11 +318,11 @@ msgstr "Mostra completati"
 
 #: js/Timetracker.js:25
 msgid "New Timesheet"
-msgstr ""
+msgstr "Nuova Scheda attività"
 
 #: js/TimeAccountStatusFilterModel.js:24
 msgid "Time Account - Status"
-msgstr "Account di tempo - Stato"
+msgstr "Rendiconto Ore - Stato"
 
 #: js/TimesheetGridPanel.js:94 js/TimeaccountGridPanel.js:93
 msgid "Tags"
@@ -333,11 +334,11 @@ msgstr "Data inizio"
 
 #: js/TimesheetGridPanel.js:100
 msgid "Time Account (Number - Title)"
-msgstr ""
+msgstr "Rendiconto Ore (Numero - Titolo)"
 
 #: js/TimesheetGridPanel.js:102
 msgid "Time Account closed"
-msgstr "Account di tempo chiuso"
+msgstr "Rendiconto Ore chiuso"
 
 #: js/TimesheetGridPanel.js:109 js/TimesheetGridPanel.js:403
 #: js/TimeaccountGridPanel.js:118
@@ -354,11 +355,11 @@ msgstr "sommario"
 
 #: js/TimesheetGridPanel.js:192
 msgid "Total Timesheets"
-msgstr "Totale Tabelle dei tempi"
+msgstr "Totale Schede attività"
 
 #: js/TimesheetGridPanel.js:193
 msgid "Billable Timesheets"
-msgstr "Tabelle dei tempi fatturabili"
+msgstr "Schede attività fatturabili"
 
 #: js/TimesheetGridPanel.js:194
 msgid "Total Time"
@@ -366,7 +367,7 @@ msgstr "Tempo Totale"
 
 #: js/TimesheetGridPanel.js:195
 msgid "Time of Billable Timesheets"
-msgstr "Tempo di Tabelle dei tempi fatturabili"
+msgstr "Tempo delle schede attività fatturabili"
 
 #: js/TimesheetGridPanel.js:266
 msgid "Detail"
@@ -374,7 +375,7 @@ msgstr "Dettaglio"
 
 #: js/TimesheetGridPanel.js:319
 msgid "Export Timesheets"
-msgstr ""
+msgstr "Esporta Schede attività"
 
 #: js/TimesheetGridPanel.js:328 js/TimeaccountGridPanel.js:165
 msgid "Export as ODS"
@@ -386,7 +387,7 @@ msgstr "Esporta come CSV"
 
 #: js/TimesheetGridPanel.js:342
 msgid "Export as ..."
-msgstr ""
+msgstr "Esporta come ..."
 
 #: js/TimesheetGridPanel.js:385
 msgid "Mass Update"
@@ -398,7 +399,7 @@ msgstr "Campo di aggiornamento:"
 
 #: js/TimeAccountBilledFilterModel.js:24
 msgid "Time Account - Billed"
-msgstr ""
+msgstr "Rendiconto Ore - Fatturato"
 
 #: js/DurationSlider.js:94
 msgid "{0}"
@@ -406,17 +407,17 @@ msgstr "{0}"
 
 #: js/TimeAccountContractFilterModel.js:30
 msgid "Contract"
-msgstr ""
+msgstr "Contratto"
 
 #: js/TimeAccountContractFilterModel.js:32
 msgid "without contract"
-msgstr ""
+msgstr "senza contratto"
 
 #: js/Models.js:52
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "lista tabelle del tempo"
-msgstr[1] "liste tabelle del tempo"
+msgstr[1] "liste schede attività"
 
 #: js/Models.js:87 js/Models.js:166
 msgid "Quick search"
@@ -424,15 +425,15 @@ msgstr "Ricerca veloce"
 
 #: js/Models.js:93 js/Models.js:172
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Ultima modifica"
 
 #: js/Models.js:94 js/Models.js:173
 msgid "Last Modified By"
-msgstr ""
+msgstr "Ultima modifica di"
 
 #: js/Models.js:95 js/Models.js:174
 msgid "Creation Time"
-msgstr ""
+msgstr "Data di creazione"
 
 #: js/Models.js:96 js/Models.js:175
 msgid "Created By"
@@ -441,5 +442,5 @@ msgstr "Creato da"
 #: js/Models.js:145
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
-msgstr[0] "lista account tempo"
-msgstr[1] "liste account tempo"
+msgstr[0] "lista rendiconto ore"
+msgstr[1] "liste rendiconto ore"

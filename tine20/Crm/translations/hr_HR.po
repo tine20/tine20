@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 16:13+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-04-19 06:24+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,6 +104,10 @@ msgstr ""
 #: Model/Lead.php:117 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
 #: js/LeadGridPanel.js:124
 msgid "Responsible"
+msgstr ""
+
+#: Model/Lead.php:123
+msgid "Task"
 msgstr ""
 
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:55

@@ -185,14 +185,14 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     {
         $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
             'controller'    => 'Tinebase_TempFile',
-            'action'        => 'clearTable',
+            'action'        => 'clearTableAndTempdir',
         ));
         
         $_scheduler->addTask('Tinebase_TempFileCleanup', $task);
         $_scheduler->saveTask();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_TempFile::clearTable in scheduler.');
+            . ' Saved task Tinebase_TempFile::clearTableAndTempdir in scheduler.');
     }
     
     /**

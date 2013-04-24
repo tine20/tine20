@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <inscription@arrakeen.net>, 2012.
+# Gurney <inscription@arrakeen.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

@@ -300,7 +300,7 @@ class Tinebase_Translation
             
         // store translation in cache
         $cache->save($translate, $cacheId, array('Zend_Translate'));
-            
+        
         return $translate;
     }
     
@@ -313,25 +313,34 @@ class Tinebase_Translation
      * NOTE: This function is called from release.php cli script. In this case no 
      *       tine 2.0 core initialisation took place beforehand
      *       
-     * @param  Zend_Locale $_locale
+     * @param  Zend_Locale|string $_locale
      * @return string      javascript
      */
     public static function getJsTranslations($_locale, $_appName = 'all')
     {
+        $locale = ($_locale instanceof Zend_Locale) ? $_locale : new Zend_Locale($_locale);
+        $localeString = (string) $_locale;
+        
         $availableTranslations = self::getAvailableTranslations();
-        $info = array_key_exists((string) $_locale, $availableTranslations) ? $availableTranslations[(string) $_locale] : array('locale' => (string) $_locale);
+        $info = array_key_exists($localeString, $availableTranslations) ? $availableTranslations[$localeString] : array('locale' => $localeString);
         $baseDir = (array_key_exists('path', $info) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
         
         $defaultDir = dirname(__FILE__) . "/..";
-        $localeString = (string) $_locale;
         
         $genericTranslationFile = "$baseDir/Tinebase/js/Locale/static/generic-$localeString.js";
         $genericTranslationFile = is_readable($genericTranslationFile) ? $genericTranslationFile : "$defaultDir/Tinebase/js/Locale/static/generic-$localeString.js";
-        $extjsTranslationFile   = "$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js";
-        $extjsTranslationFile   = is_readable($extjsTranslationFile) ? $extjsTranslationFile : "$defaultDir/library/ExtJS/src/locale/ext-lang-$localeString.js";;
-        $tine20TranslationFiels = self::getPoTranslationFiles($info);
         
-        $allTranslationFiles    = array_merge(array($genericTranslationFile, $extjsTranslationFile), $tine20TranslationFiels);
+        $extjsTranslationFile   = "$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js";
+        $extjsTranslationFile   = is_readable($extjsTranslationFile) ? $extjsTranslationFile : "$defaultDir/library/ExtJS/src/locale/ext-lang-$localeString.js";
+        if (! is_readable($extjsTranslationFile)) {
+            // trying language as fallback if lang_region file can not be found, @see 0008242: Turkish does not work / throws an error
+            $language = $locale->getLanguage();
+            $extjsTranslationFile   = "$baseDir/library/ExtJS/src/locale/ext-lang-$language.js";
+            $extjsTranslationFile   = is_readable($extjsTranslationFile) ? $extjsTranslationFile : "$defaultDir/library/ExtJS/src/locale/ext-lang-$language.js";
+        }
+        $tine20TranslationFiles = self::getPoTranslationFiles($info);
+        
+        $allTranslationFiles    = array_merge(array($genericTranslationFile, $extjsTranslationFile), $tine20TranslationFiles);
         
         $jsTranslations = NULL;
         

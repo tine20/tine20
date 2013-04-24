@@ -101,10 +101,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function uploadTempFile()
     {
-        $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
-        if (! $path) {
-            throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
-        }
+        $path = $this->_getTempPath();
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
@@ -153,6 +150,21 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     }
     
     /**
+     * creates temp filename
+     * 
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return string
+     */
+    protected function _getTempPath()
+    {
+        $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
+        if (! $path) {
+            throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
+        }
+        return $path;
+    }
+    
+    /**
      * create new temp file
      * 
      * @param string $_path
@@ -179,7 +191,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
            'size'        => !empty($_size) ? $_size : filesize($_path),
         ));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
         
         $this->create($tempFile);
         
@@ -221,12 +234,57 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @param Tinebase_DateTime|string $_date
      * @return integer number of deleted records
      */
-    public function clearTable($_date = NULL)
+    public function clearTableAndTempdir($_date = NULL)
     {
         $date = ($_date === NULL) ? Tinebase_DateTime::now()->subDay(1) : $_date;
-        $dateString = ($date instanceof Tinebase_DateTime) ? $date->format(Tinebase_Record_Abstract::ISO8601LONG) : $date;
-        $dateWhere = $this->_db->quoteInto('time < ?', $dateString);
+        if (! $date instanceof Tinebase_DateTime) {
+            $date = new Tinebase_DateTime($date);
+        }
         
-        $result = $this->_db->delete($this->getTablePrefix() . $this->getTableName(), $dateWhere);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removing all temp files prior ' . $date->toString());
+        
+        $tempfiles = $this->search(new Tinebase_Model_TempFileFilter(array(array(
+            'field'     => 'time',
+            'operator'  => 'before',
+            'value'     => $date
+        ))));
+        
+        foreach ($tempfiles as $file) {
+            if (file_exists($file->path)) {
+                unlink($file->path);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' File no longer found: ' . $file->path);
+            }
+        }
+
+        $result = $this->delete($tempfiles->getArrayOfIds());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $result . ' files.');
+        return $result;
+    }
+    
+    /**
+     * open a temp file
+     * 
+     * @throws Tinebase_Exception
+     * @return resource
+     */
+    public function openTempFile()
+    {
+        $path = $this->_getTempPath();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Opening temp file ' . $path);
+        
+        $handle = fopen($path, 'w+');
+        if (! $handle) {
+            throw new Tinebase_Exception('Could not create temp file in ' . $tempdir);
+        }
+        
+        $this->createTempFile($path);
+        
+        return $handle;
     }
 }

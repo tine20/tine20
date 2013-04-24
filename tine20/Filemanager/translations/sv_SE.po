@@ -1,7 +1,7 @@
 # 
 # Translators:
-# Niklas Ye <niklas@idontgetlaid.com>, 2013.
-#   <tulken_hultan@hotmail.com>, 2012.
+# niklasye <niklas@idontgetlaid.com>, 2013
+# BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -75,18 +75,18 @@ msgstr "Beskrivning"
 msgid "Enter description"
 msgstr "Fyll i beskrivning"
 
-#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
 #: js/NodeGridPanel.js:803
 msgid "Upload Failed"
 msgstr "Uppladdning Misslyckades"
 
-#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr "Kan inte ladda upp filen. Filstorleken kan vara för stor. Var vänlig meddela din Administratör.\nMax uppladdningsstorlek: "
 
-#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
 msgid "Putting files in this folder is not allowed!"
 msgstr "Skapa filer i denna mappen är inte tillåtet!"
 

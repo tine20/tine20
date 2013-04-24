@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013.
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-23 20:12+0000\n"
-"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"PO-Revision-Date: 2013-04-19 06:23+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -81,7 +81,7 @@ msgstr "uruchamianie"
 msgid "run right description"
 msgstr "Aby uzyskać dostęp do aplikacji, trzeba mieć uprawnienia do wykonywania"
 
-#: Preference/Abstract.php:495
+#: Preference/Abstract.php:502
 msgid "default"
 msgstr "domyślnie"
 
@@ -124,276 +124,284 @@ msgstr "Następujące pola nie zostały zaimportowane: %s"
 msgid "N/A"
 msgstr "Niedostępne"
 
-#: Config.php:260
+#: Config.php:267
 msgid "System IMAP"
 msgstr "Systemowy IMAP"
 
-#: Config.php:262
+#: Config.php:269
 msgid "System IMAP server configuration."
 msgstr "Konfiguracja systemowego IMAPa."
 
-#: Config.php:271
+#: Config.php:278
 msgid "System SMTP"
 msgstr "Systemowy SMTP"
 
-#: Config.php:273
+#: Config.php:280
 msgid "System SMTP server configuration."
 msgstr "Konfiguracja systemowego SMTP."
 
-#: Config.php:282
+#: Config.php:289
 msgid "System SIEVE"
 msgstr "Systemowy filtr SIEVE"
 
-#: Config.php:284
+#: Config.php:291
 msgid "System SIEVE server configuration."
 msgstr "Konfiguracja systemowego filtra SIEVE."
 
-#: Config.php:293
+#: Config.php:300
 msgid "Authentication Backend"
 msgstr "Silnik uwierzytelnienia"
 
-#: Config.php:295
+#: Config.php:302
 msgid "Backend adapter for user authentication."
 msgstr "Adapter dla uwierzytelnienia użytkownika."
 
-#: Config.php:303
+#: Config.php:310
 msgid "Authentication Configuration"
 msgstr "Konfiguracja uwierzytelnienia"
 
-#: Config.php:305
+#: Config.php:312
 msgid "Authentication backend configuration."
 msgstr "Konfiguracja silnika uwierzytelnienia."
 
-#: Config.php:314
+#: Config.php:321
 msgid "User Backend"
 msgstr "Backend użytkownika"
 
-#: Config.php:316
+#: Config.php:323
 msgid "Backend adapter for user data."
 msgstr "Adapter backendu dla danych użytkownika."
 
-#: Config.php:324
+#: Config.php:331
 msgid "User Configuration"
 msgstr "Konfiguracja użytkownika"
 
-#: Config.php:326
+#: Config.php:333
 msgid "User backend configuration."
 msgstr "Konfiguracja backendu użytkownika."
 
-#: Config.php:335
+#: Config.php:342
 msgid "Cronuser ID"
 msgstr "ID użytkownika cron"
 
-#: Config.php:337
+#: Config.php:344
 msgid "User ID of the cron user."
 msgstr "ID użytkownika dla użytkownika cron."
 
-#: Config.php:345
+#: Config.php:352
 msgid "Title Postfix"
 msgstr "Tytuł Postfix"
 
-#: Config.php:347
+#: Config.php:354
 msgid "Postfix string appended to the title of this installation."
 msgstr "Ciąg znaków Postfiksa dołączony do tytułu niniejszej instalacji."
 
-#: Config.php:355
+#: Config.php:362
 msgid "Redirect URL"
 msgstr "Przekieruj URL"
 
-#: Config.php:357
+#: Config.php:364
 msgid "Redirect to this URL after logout."
 msgstr "Po wylogowaniu przekieruj do niniejszego URLa."
 
-#: Config.php:365
+#: Config.php:372
 msgid "Redirect to Referrer"
 msgstr "Przekieruj do odsyłacza"
 
-#: Config.php:367
+#: Config.php:374
 msgid "Redirect to referrer after logout."
 msgstr "Po wylogowaniu przekieruj do niniejszego odsyłacza."
 
-#: Config.php:375
+#: Config.php:382
 msgid "Redirect Always"
 msgstr "Zawsze przekieruj"
 
-#: Config.php:377
+#: Config.php:384
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Przekieruj do skonfigurowanego URLa także dla logowania."
 
-#: Config.php:385
+#: Config.php:392
+msgid "Allowed Origins"
+msgstr ""
+
+#: Config.php:394
+msgid "Allowed Origins for the JSON API."
+msgstr ""
+
+#: Config.php:402
 msgid "Accepted Terms Version"
 msgstr "Zaakceptowana wersja warunków"
 
-#: Config.php:387
+#: Config.php:404
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Numer zaakceptowanej wersji warunków i dokumentu z warunkami."
 
-#: Config.php:395
+#: Config.php:412
 msgid "Use Geolocation Services"
 msgstr "Użyj usług lokalizacji geograficznej"
 
-#: Config.php:397
+#: Config.php:414
 msgid "Use of external Geolocation services is allowed."
 msgstr "Korzystanie z zewnętrznej lokalizacji geograficznej jest włączone."
 
-#: Config.php:405
+#: Config.php:422
 msgid "IP Session Validator"
 msgstr "Walidator sesji IP"
 
-#: Config.php:407
+#: Config.php:424
 msgid "Destroy session if the users IP changes."
 msgstr "Zakończ sesję, jeśli użytkownicy zmienią IP."
 
-#: Config.php:415
+#: Config.php:432
 msgid "UA Session Validator"
 msgstr "Walidator klienta użytkownika"
 
-#: Config.php:417
+#: Config.php:434
 msgid "Destroy session if the users user agent string changes."
 msgstr "Zakończ sesję, jeśli użytkownicy zmienią klienta."
 
-#: Config.php:425
+#: Config.php:442
 msgid "Files Directory"
 msgstr "Katalog plików"
 
-#: Config.php:427
+#: Config.php:444
 msgid "Directory with web server write access for user files."
 msgstr "Katalog serwera WWW umożliwiający zapisywanie plików przez użytkowników."
 
-#: Config.php:435 Config.php:437
+#: Config.php:452 Config.php:454
 msgid "User may change password"
 msgstr "Użytkownik może zmienić hasło"
 
-#: Config.php:445 Config.php:447
+#: Config.php:462 Config.php:464
 msgid "Enable password policy"
 msgstr "Włącz politykę haseł"
 
-#: Config.php:455
+#: Config.php:472
 msgid "Only ASCII"
 msgstr "Tylko ASCII"
 
-#: Config.php:457
+#: Config.php:474
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "W hasłach dozwolone są tylko znaki ASCII"
 
-#: Config.php:465
+#: Config.php:482
 msgid "Minimum length"
 msgstr "Minimalna długość"
 
-#: Config.php:467
+#: Config.php:484
 msgid "Minimum password length"
 msgstr "Minimalna długość hasła"
 
-#: Config.php:475
+#: Config.php:492
 msgid "Minimum word chars"
 msgstr "Minimalna ilość znaków w słowie"
 
-#: Config.php:477
+#: Config.php:494
 msgid "Minimum word chars in password"
 msgstr "Minimalna ilość znaków w słowie haśle"
 
-#: Config.php:485
+#: Config.php:502
 msgid "Minimum uppercase chars"
 msgstr "Minimalna ilość wielkich liter"
 
-#: Config.php:487
+#: Config.php:504
 msgid "Minimum uppercase chars in password"
 msgstr "Minimalna ilość wielkich liter w haśle"
 
-#: Config.php:495
+#: Config.php:512
 msgid "Minimum special chars"
 msgstr "Minimalna ilość znaków specjalnych"
 
-#: Config.php:497
+#: Config.php:514
 msgid "Minimum special chars in password"
 msgstr "Minimalna ilość znaków specjalnych w haśle"
 
-#: Config.php:505
+#: Config.php:522
 msgid "Minimum numbers"
 msgstr "Minimalna ilość cyfr"
 
-#: Config.php:507
+#: Config.php:524
 msgid "Minimum numbers in password"
 msgstr "Minimalna ilość cyfr w haśle"
 
-#: Config.php:515
+#: Config.php:532
 msgid "Forbid part of username"
 msgstr "Zabroń używania części nazwy użytkownika"
 
-#: Config.php:517
+#: Config.php:534
 msgid "Forbid part of username in password"
 msgstr "Zabroń używania części nazwy użytkownika w haśle"
 
-#: Config.php:525
+#: Config.php:542
 msgid "Automatic bugreports"
 msgstr "Automatyczne raportowanie błędów"
 
-#: Config.php:527
+#: Config.php:544
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Zawsze wysyłaj raporty o błędach, nawet w przypadku timeoutów i innych wyjątków / usterek."
 
-#: Config.php:535
+#: Config.php:552
 msgid "Last sessions cleanup run"
 msgstr "Czyść ostatnią sesję"
 
-#: Config.php:537
+#: Config.php:554
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Usuń znaczniki czasu należące do ostatniej sesji"
 
-#: Config.php:545
+#: Config.php:562
 msgid "Maximum login failures"
 msgstr "Maksymalna ilość błędów logowania"
 
-#: Config.php:547
+#: Config.php:564
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Maksymalna, dozwolona ilość błędów logowania przed zablokowaniem konta"
 
-#: Config.php:555
+#: Config.php:572
 msgid "Disable Anyone Account"
 msgstr "Wyłącz czyjeś konto"
 
-#: Config.php:557
+#: Config.php:574
 msgid "Disallow anyone account in grant configurations"
 msgstr "Wyłącz czyjeś konto w konfiguracji dotacji"
 
-#: Setup/setup.xml:3194
+#: Setup/setup.xml:3203
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:3199
+#: Setup/setup.xml:3208
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:3225
+#: Setup/setup.xml:3234
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3230
+#: Setup/setup.xml:3239
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:3256
+#: Setup/setup.xml:3265
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3261
+#: Setup/setup.xml:3270
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:3287
+#: Setup/setup.xml:3296
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:3292
+#: Setup/setup.xml:3301
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:3318
+#: Setup/setup.xml:3327
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:3323
+#: Setup/setup.xml:3332
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
@@ -678,7 +686,7 @@ msgid "Logging you in..."
 msgstr "Trwa logowanie …"
 
 #: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 #: js/widgets/persistentfilter/PickerPanel.js:317
 #: js/widgets/persistentfilter/PickerPanel.js:355
 #: js/widgets/persistentfilter/PickerPanel.js:407
@@ -709,14 +717,14 @@ msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:668 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Errors"
 msgstr "Błędy"
 
 #: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:688 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:607
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -776,8 +784,8 @@ msgid "Your password has been changed."
 msgstr "Twoje hasło zostało zmienione."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:665
-#: js/widgets/relation/GenericPickerGridPanel.js:678
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:267
@@ -832,9 +840,9 @@ msgstr "Zainstaluj aplikację WWW"
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Zainstaluj Tine 2.0 w swojej przeglądarce jako aplikację WWW"
 
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1650
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:695
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
+#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 #: js/widgets/persistentfilter/PickerPanel.js:315
 msgid "Confirm"
 msgstr "Proszę o odpowiedź"
@@ -847,14 +855,14 @@ msgstr "Czy na pewno chcesz się wylogować?"
 msgid "Logging you out..."
 msgstr "Wylogowanie..."
 
-#: js/data/Record.js:174
+#: js/data/Record.js:195
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Zadanie"
 msgstr[1] "zadania"
 msgstr[2] "zadania"
 
-#: js/data/Record.js:178
+#: js/data/Record.js:199
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Lista zadań"
@@ -1090,7 +1098,7 @@ msgstr[1] "Usuwanie znaczników"
 msgstr[2] "Usuwanie znaczników"
 
 #: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:707
+#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
 msgid "Failed"
 msgstr "Próba nieudana"
 
@@ -1115,7 +1123,7 @@ msgid "Could not update tag."
 msgstr "Aktualizacja znacznika była niemożliwa."
 
 #: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:425
+#: js/widgets/relation/GenericPickerGridPanel.js:427
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
 #: js/ExceptionDialog.js:142
 msgid "Description"
@@ -1444,7 +1452,7 @@ msgid "Name"
 msgstr "Nazwa"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:428
+#: js/widgets/relation/GenericPickerGridPanel.js:430
 #: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
 msgid "Type"
 msgstr "Ikona"
@@ -1506,59 +1514,59 @@ msgstr[0] "Usuń"
 msgstr[1] "Usuń"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:950
+#: js/widgets/grid/GridPanel.js:967
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:951
+#: js/widgets/grid/GridPanel.js:968
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:1189
+#: js/widgets/grid/GridPanel.js:1206
 msgid "New..."
 msgstr "Nowy..."
 
-#: js/widgets/grid/GridPanel.js:1208
+#: js/widgets/grid/GridPanel.js:1225
 msgid "Add to..."
 msgstr "Dodaj do..."
 
-#: js/widgets/grid/GridPanel.js:1252
-#: js/widgets/relation/GenericPickerGridPanel.js:429
+#: js/widgets/grid/GridPanel.js:1269
+#: js/widgets/relation/GenericPickerGridPanel.js:431
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:1253 js/widgets/ActivitiesPanel.js:464
+#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/widgets/grid/GridPanel.js:1254
+#: js/widgets/grid/GridPanel.js:1271
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:1255
+#: js/widgets/grid/GridPanel.js:1272
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:1624
+#: js/widgets/grid/GridPanel.js:1641
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:1625
+#: js/widgets/grid/GridPanel.js:1642
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1648
+#: js/widgets/grid/GridPanel.js:1665
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony ({0}) wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone ({0}) wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczonych ({0}) wierszy?"
 
-#: js/widgets/grid/GridPanel.js:1683 js/widgets/dialog/EditDialog.js:697
+#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/grid/GridPanel.js:1683
+#: js/widgets/grid/GridPanel.js:1700
 msgid " ... This may take a long time!"
 msgstr " ... To może długo potrwać!"
 
@@ -1614,31 +1622,31 @@ msgstr "Niespełniona zależność"
 msgid "There are invalid relations. Please check before saving."
 msgstr "Niespełnione zależności. Proszę sprawdzić przed zapisem."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:250
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr "Osiągnięto maksymalną ilość cyfr {0} typu {1}. Proszę zmienić typ zależności."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:424
+#: js/widgets/relation/GenericPickerGridPanel.js:426
 msgid "Record"
 msgstr "Wiersz"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
+#: js/widgets/relation/GenericPickerGridPanel.js:428
 msgid "Remark"
 msgstr "Uwaga"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/relation/GenericPickerGridPanel.js:429
 msgid "Dependency"
 msgstr "Zależność"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:666
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "Wiersz, który próbowano połączyć jest już zlinkowany. Proszę wyedytować istniejący link."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:679
+#: js/widgets/relation/GenericPickerGridPanel.js:721
 #: js/widgets/form/RecordPickerComboBox.js:268
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Wykonano próbę połączenia wiersza z nim samym. To niedozwolone."
@@ -2040,15 +2048,15 @@ msgstr "Edytuj {0} \"{1}\""
 msgid "Transferring {0}..."
 msgstr "Przesyłanie {0}..."
 
-#: js/widgets/dialog/EditDialog.js:695
+#: js/widgets/dialog/EditDialog.js:698
 msgid "Do you really want to delete this {0}?"
 msgstr "Czy na pewno chcesz usunąć ten {0}?"
 
-#: js/widgets/dialog/EditDialog.js:707
+#: js/widgets/dialog/EditDialog.js:710
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
 
-#: js/widgets/dialog/EditDialog.js:759
+#: js/widgets/dialog/EditDialog.js:762
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Rozwiąż {0} powtórzeń"
 
@@ -2117,11 +2125,11 @@ msgid ""
 "values."
 msgstr "To pole zawiera różne wartości. Edycja nadpisze stare wartości."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:642
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
 msgid "Do you really want to change these {0} records?"
 msgstr "Czy na pewno chcesz zmienić tych {0} wierszy?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
 msgid "Applying changes"
 msgstr "Zmieniam"
 
@@ -2577,7 +2585,7 @@ msgstr "Twój raport został wysłany. Dziękujemy za pomoc w ulepszaniu oprogra
 msgid "Please restart your browser now!"
 msgstr "Proszę ponownie uruchomić przeglądarkę!"
 
-#: js/MainScreen.js:194
+#: js/MainScreen.js:202
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Twoje hasło wygasło. Proszę wprowadzić nowe hasło użytkownika:"
 

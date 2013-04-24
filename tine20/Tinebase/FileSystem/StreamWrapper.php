@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Filesystem
  */
-class Tinebase_Filesystem_StreamWrapper
+class Tinebase_FileSystem_StreamWrapper
 {
     /**
      * the context

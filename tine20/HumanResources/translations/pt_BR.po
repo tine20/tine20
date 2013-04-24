@@ -1,11 +1,12 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:52+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-12 21:16+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,49 +37,49 @@ msgstr "Tipos de Afastamento"
 
 #: Config.php:50
 msgid "Possible free time definitions"
-msgstr ""
+msgstr "Definições de tempo livre possíveis"
 
 #: Config.php:58
 msgid "Vacation Status"
-msgstr ""
+msgstr "Situação das férias"
 
 #: Config.php:60
 msgid "Possible vacation status definitions"
-msgstr ""
+msgstr "Definições de situações de férias possíveis"
 
 #: Config.php:68
 msgid "Sickness Status"
-msgstr ""
+msgstr "Situação da doença"
 
 #: Config.php:70
 msgid "Possible sickness status definitions"
-msgstr ""
+msgstr "Definições de doenças possíveis"
 
 #: Config.php:78
 msgid "Default Feast Calendar"
-msgstr ""
+msgstr "Calendário de Festas Padrão"
 
 #: Config.php:80
 msgid ""
 "Here you can define the default feast calendar used to set feast days and "
 "other free days in datepicker"
-msgstr ""
+msgstr "Aqui você pode definir o calendário de festas padrão usado para cadastrar os dias de festa e outros dias livre no selecionador de datas"
 
 #: Setup/Update/Release6.php:299 Setup/Initialize.php:89
 msgid "Excused"
-msgstr ""
+msgstr "Desculpado"
 
 #: Setup/Update/Release6.php:300 Setup/Initialize.php:90
 msgid "Unexcused"
-msgstr ""
+msgstr "Não justificada"
 
 #: Setup/Update/Release6.php:330 Setup/Initialize.php:33 js/Models.js:111
 msgid "Currently employed"
-msgstr ""
+msgstr "Empregado atual"
 
 #: Setup/Update/Release6.php:331 Setup/Initialize.php:34
 msgid "Employees which are currently employed"
-msgstr ""
+msgstr "Funcionários que estão empregados atualmente"
 
 #: Setup/Initialize.php:54
 msgid "Sickness"
@@ -90,11 +91,11 @@ msgstr "Férias"
 
 #: Setup/Initialize.php:56
 msgid "Remaining Vacation"
-msgstr ""
+msgstr "Férias Pendentes"
 
 #: Setup/Initialize.php:57
 msgid "Extra Vacation"
-msgstr ""
+msgstr "Férias Extras"
 
 #: Setup/Initialize.php:71
 msgid "Requested"
@@ -116,35 +117,35 @@ msgstr "Recusado"
 msgid "Tags"
 msgstr "Identificações"
 
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:227
+#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
 msgid "Number"
 msgstr "Número"
 
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:287
+#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
 msgid "Full Name"
 msgstr "Nome Completo"
 
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:292 js/Models.js:116
+#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
 msgid "Salutation"
 msgstr "Saudação"
 
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:300 js/Models.js:113
+#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
 msgid "Title"
 msgstr "Título"
 
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:304 js/Models.js:112
+#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
 msgid "First Name"
 msgstr "Nome"
 
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:313 js/Models.js:115
+#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
 msgid "Last Name"
 msgstr "Sobrenome"
 
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:382 js/Models.js:108
+#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
 msgid "Employment begin"
 msgstr "Início do emprego"
 
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:387 js/Models.js:109
+#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
 msgid "Employment end"
 msgstr "Fim do emprego"
 
@@ -178,21 +179,21 @@ msgstr "Calendários"
 
 #: js/EmployeeEditDialog.js:118
 msgid "Dependent Windows"
-msgstr ""
+msgstr "Janela de Dependente"
 
 #: js/EmployeeEditDialog.js:119
 msgid ""
 "There are still some windows active dependent to this one. Please save or "
 "cancel them before closing this one!"
-msgstr ""
+msgstr "Existem, ainda, algumas janelas  ativas dependentes desta. Por favor, salve ou cancele as janelas antes de fechar esta."
 
-#: js/EmployeeEditDialog.js:200 js/Models.js:333
+#: js/EmployeeEditDialog.js:201 js/Models.js:333
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] "Afastamento"
 msgstr[1] "Afastamentos"
 
-#: js/EmployeeEditDialog.js:208 js/EmployeeEditDialog.js:221
+#: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
 #: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
 msgid "Employee"
@@ -200,92 +201,92 @@ msgid_plural "Employees"
 msgstr[0] "Funcionário"
 msgstr[1] "Funcionários"
 
-#: js/EmployeeEditDialog.js:239 js/Models.js:110
+#: js/EmployeeEditDialog.js:240 js/Models.js:110
 msgid "Account"
 msgstr "Conta"
 
-#: js/EmployeeEditDialog.js:258
+#: js/EmployeeEditDialog.js:259
 msgid "Apply contact data on form"
 msgstr "Informar dados do contato no formulário"
 
-#: js/EmployeeEditDialog.js:327
+#: js/EmployeeEditDialog.js:328
 msgid "Personal Information"
 msgstr "Dados Pessoais"
 
-#: js/EmployeeEditDialog.js:337
+#: js/EmployeeEditDialog.js:338
 msgid "Country"
 msgstr "País"
 
-#: js/EmployeeEditDialog.js:340
+#: js/EmployeeEditDialog.js:341
 msgid "Locality"
 msgstr "Cidade"
 
-#: js/EmployeeEditDialog.js:343
+#: js/EmployeeEditDialog.js:344
 msgid "Postalcode"
 msgstr "CEP"
 
-#: js/EmployeeEditDialog.js:346
+#: js/EmployeeEditDialog.js:347
 msgid "Region"
 msgstr "Municipio"
 
-#: js/EmployeeEditDialog.js:349
+#: js/EmployeeEditDialog.js:350
 msgid "Street"
 msgstr "Endereço"
 
-#: js/EmployeeEditDialog.js:352
+#: js/EmployeeEditDialog.js:353
 msgid "Street2"
 msgstr "Endereço2"
 
-#: js/EmployeeEditDialog.js:355
+#: js/EmployeeEditDialog.js:356
 msgid "E-Mail"
 msgstr "eMail"
 
-#: js/EmployeeEditDialog.js:358
+#: js/EmployeeEditDialog.js:359
 msgid "Telephone Number"
 msgstr "Telefone"
 
-#: js/EmployeeEditDialog.js:361
+#: js/EmployeeEditDialog.js:362
 msgid "Cell Phone Number"
 msgstr "Celular"
 
-#: js/EmployeeEditDialog.js:365
+#: js/EmployeeEditDialog.js:366
 msgid "Birthday"
 msgstr "Aniversário"
 
-#: js/EmployeeEditDialog.js:373
+#: js/EmployeeEditDialog.js:374
 msgid "Internal Information"
 msgstr "Informaçãok Interna"
 
-#: js/EmployeeEditDialog.js:390 js/Models.js:114
+#: js/EmployeeEditDialog.js:391 js/Models.js:114
 msgid "Profession"
-msgstr ""
+msgstr "Profissão"
 
-#: js/EmployeeEditDialog.js:398
+#: js/EmployeeEditDialog.js:399
 msgid "Banking Information"
 msgstr "Informação sobre o Banco"
 
-#: js/EmployeeEditDialog.js:407
+#: js/EmployeeEditDialog.js:408
 msgid "Account Holder"
 msgstr "Proprietário da Conta"
 
-#: js/EmployeeEditDialog.js:410
+#: js/EmployeeEditDialog.js:411
 msgid "Account Number"
 msgstr "Número da Conta"
 
-#: js/EmployeeEditDialog.js:413
+#: js/EmployeeEditDialog.js:414
 msgid "Bank Name"
 msgstr "Nome do Banco"
 
-#: js/EmployeeEditDialog.js:416
+#: js/EmployeeEditDialog.js:417
 msgid "Code Number"
 msgstr "Número do Código"
 
-#: js/EmployeeEditDialog.js:437 js/FreeTimeEditDialog.js:273
+#: js/EmployeeEditDialog.js:438 js/FreeTimeEditDialog.js:273
 #: js/FreeTimeGridPanel.js:170 js/Models.js:118 js/Models.js:381
 msgid "Description"
 msgstr "Descrição"
 
-#: js/EmployeeEditDialog.js:451 js/FreeTimeEditDialog.js:287
+#: js/EmployeeEditDialog.js:452 js/FreeTimeEditDialog.js:287
 msgid "Enter description"
 msgstr "Descrição"
 
@@ -321,7 +322,7 @@ msgstr "Calendário Festivo"
 
 #: js/ContractGridPanel.js:177
 msgid "Edit Working Time"
-msgstr ""
+msgstr "Editar Hora de Trabalho"
 
 #: js/FreeTimeEditDialog.js:170 js/FreeTimeEditDialog.js:182
 msgid "FreeTime"
@@ -374,7 +375,7 @@ msgstr "Carregando dados do calendário..."
 
 #: js/WorkingTimeEditDialog.js:74
 msgid "Edit working time for {0} ({1} - {2})"
-msgstr ""
+msgstr "Editar hora de trabalho para {0} ({1}-{2})"
 
 #: js/WorkingTimeEditDialog.js:108 js/WorkingTimeEditDialog.js:120
 #: js/Models.js:162
@@ -385,67 +386,67 @@ msgstr[1] "Tempos de Operação"
 
 #: js/WorkingTimeEditDialog.js:135
 msgid "Choose the template"
-msgstr ""
+msgstr "Escolha o modelo"
 
 #: js/WorkingTimeEditDialog.js:143
 msgid "Working Hours per week"
-msgstr ""
+msgstr "Horas de Trabalho por Semana"
 
 #: js/WorkingTimeEditDialog.js:153 js/WorkingTimeEditDialog.js:229
 msgid "Save working time as template"
-msgstr ""
+msgstr "Salvar hora de trabalho como modelo"
 
 #: js/WorkingTimeEditDialog.js:165
 msgid "Working Hours per weekday"
-msgstr ""
+msgstr "Horas de trabalho por dia da semana"
 
 #: js/WorkingTimeEditDialog.js:184
 msgid "Mon."
-msgstr ""
+msgstr "Segunda-feira"
 
 #: js/WorkingTimeEditDialog.js:187
 msgid "Tue."
-msgstr ""
+msgstr "Terça-feira"
 
 #: js/WorkingTimeEditDialog.js:190
 msgid "Wed."
-msgstr ""
+msgstr "Quarta-feira"
 
 #: js/WorkingTimeEditDialog.js:193
 msgid "Thu."
-msgstr ""
+msgstr "Quinta-feira"
 
 #: js/WorkingTimeEditDialog.js:196
 msgid "Fri."
-msgstr ""
+msgstr "Sexta-feira"
 
 #: js/WorkingTimeEditDialog.js:199
 msgid "Sat."
-msgstr ""
+msgstr "Sábado"
 
 #: js/WorkingTimeEditDialog.js:202
 msgid "Sun."
-msgstr ""
+msgstr "Domingo"
 
 #: js/WorkingTimeEditDialog.js:229
 msgid "Please enter the title of the template"
-msgstr ""
+msgstr "Favor informar o título do modelo"
 
 #: js/WorkingTimeEditDialog.js:234
 msgid "Empty Title"
-msgstr ""
+msgstr "Título Vazio"
 
 #: js/WorkingTimeEditDialog.js:235
 msgid "The title can't be empty!"
-msgstr ""
+msgstr "Título não pode estar vazio!"
 
 #: js/WorkingTimeEditDialog.js:301
 msgid "Duplicate Title"
-msgstr ""
+msgstr "Título Duplicado"
 
 #: js/WorkingTimeEditDialog.js:302
 msgid "The title you have chosen is already in use. Please try another one!"
-msgstr ""
+msgstr "O título que você escolheu já está em uso. Favor tentar outro!"
 
 #: js/Models.js:72
 msgid "Employees"
@@ -515,8 +516,8 @@ msgstr[1] "Afastamentos"
 
 #: js/CostCenterGridPanel.js:104
 msgid "Cost Center"
-msgstr ""
+msgstr "Centro de Custo"
 
 #: js/CostCenterGridPanel.js:107
 msgid "Startdate"
-msgstr ""
+msgstr "Hora de início"

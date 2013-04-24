@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <p.schuele@metaways.de>, 2012.
+# pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

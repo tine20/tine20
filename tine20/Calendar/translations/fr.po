@@ -1,7 +1,7 @@
 # 
 # Translators:
-#   <c.blin@decalog.net>, 2012.
-#   <inscription@arrakeen.net>, 2012.
+# cblin_decalog <c.blin@decalog.net>, 2012
+# Gurney <inscription@arrakeen.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -526,7 +526,7 @@ msgstr "Un participant a répondu à l'invitation"
 msgid "Unsupported method"
 msgstr "Méthode non supportée"
 
-#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:196
+#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:205
 msgid "Week"
 msgstr "Semaine"
 
@@ -534,139 +534,139 @@ msgstr "Semaine"
 msgid "Loading events, please wait..."
 msgstr "Chargement, veuillez patienter..."
 
-#: js/MainScreenCenterPanel.js:149
+#: js/MainScreenCenterPanel.js:158
 msgid "Print Page"
 msgstr "Imprimer la page"
 
-#: js/MainScreenCenterPanel.js:162
+#: js/MainScreenCenterPanel.js:171
 msgid "Sheet"
 msgstr "Feuille"
 
-#: js/MainScreenCenterPanel.js:177
+#: js/MainScreenCenterPanel.js:186
 msgid "Grid"
 msgstr "Grille"
 
-#: js/MainScreenCenterPanel.js:187
+#: js/MainScreenCenterPanel.js:196
 msgid "Day"
 msgstr "Jour"
 
-#: js/MainScreenCenterPanel.js:205
+#: js/MainScreenCenterPanel.js:214
 msgid "Month"
 msgstr "Mois"
 
-#: js/MainScreenCenterPanel.js:484
+#: js/MainScreenCenterPanel.js:493
 msgid "Set my response"
 msgstr "Définir ma présence"
 
-#: js/MainScreenCenterPanel.js:513
+#: js/MainScreenCenterPanel.js:522
 msgid "Copy {0}"
 msgstr "Copier {0}"
 
-#: js/MainScreenCenterPanel.js:527
+#: js/MainScreenCenterPanel.js:536
 msgid "Updating event in the past"
 msgstr "Mettre  à jour un évènement ayant déjà eu lieu"
 
-#: js/MainScreenCenterPanel.js:528
+#: js/MainScreenCenterPanel.js:537
 msgid "Update this event"
 msgstr "Mettre à jour cet évènement"
 
-#: js/MainScreenCenterPanel.js:529
+#: js/MainScreenCenterPanel.js:538
 msgid "Do not update this event"
 msgstr "Ne pas mettre à jour cet évènement"
 
-#: js/MainScreenCenterPanel.js:533
+#: js/MainScreenCenterPanel.js:542
 msgid "Creating event in the past"
 msgstr "Créer un évènement dans le passé"
 
-#: js/MainScreenCenterPanel.js:534
+#: js/MainScreenCenterPanel.js:543
 msgid "Create this event"
 msgstr "Créer cet évènement"
 
-#: js/MainScreenCenterPanel.js:535
+#: js/MainScreenCenterPanel.js:544
 msgid "Do not create this event"
 msgstr "Ne pas créer cet évènement"
 
-#: js/MainScreenCenterPanel.js:656
+#: js/MainScreenCenterPanel.js:665
 msgid "Update Event"
 msgstr "Mettre à jour un évènement"
 
-#: js/MainScreenCenterPanel.js:660
+#: js/MainScreenCenterPanel.js:669
 msgid "Update this event only"
 msgstr "Mettre à jour cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:661
+#: js/MainScreenCenterPanel.js:670
 msgid "Update this and all future events"
 msgstr "Mettre à jour cet évènement et tous les prochains"
 
-#: js/MainScreenCenterPanel.js:662
+#: js/MainScreenCenterPanel.js:671
 msgid "Update whole series"
 msgstr "Mettre à jour toute la série"
 
-#: js/MainScreenCenterPanel.js:663
+#: js/MainScreenCenterPanel.js:672
 msgid "Update nothing"
 msgstr "Ne rien mettre à jour"
 
-#: js/MainScreenCenterPanel.js:796
+#: js/MainScreenCenterPanel.js:805
 msgid "Please Change Selection"
 msgstr "Veuillez Changer la sélection"
 
-#: js/MainScreenCenterPanel.js:797
+#: js/MainScreenCenterPanel.js:806
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr "La sélection contient des évènements récurrents. Les évènements récurrents doivent être supprimés séparément!"
 
-#: js/MainScreenCenterPanel.js:810
+#: js/MainScreenCenterPanel.js:819
 msgid "Delete Event"
 msgstr "Supprimer"
 
-#: js/MainScreenCenterPanel.js:814
+#: js/MainScreenCenterPanel.js:823
 msgid "Delete this event only"
 msgstr "Supprimer cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:815
+#: js/MainScreenCenterPanel.js:824
 msgid "Delete this and all future events"
 msgstr "Supprimer cet évènement et tous les suivants"
 
-#: js/MainScreenCenterPanel.js:816
+#: js/MainScreenCenterPanel.js:825
 msgid "Delete whole series"
 msgstr "Supprimer toute la série"
 
-#: js/MainScreenCenterPanel.js:817
+#: js/MainScreenCenterPanel.js:826
 msgid "Delete nothing"
 msgstr "Ne rien supprimer"
 
-#: js/MainScreenCenterPanel.js:868
+#: js/MainScreenCenterPanel.js:877
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenCenterPanel.js:1012
+#: js/MainScreenCenterPanel.js:1021
 msgid "Could not Print"
 msgstr "L'impression a échoué"
 
-#: js/MainScreenCenterPanel.js:1012
+#: js/MainScreenCenterPanel.js:1021
 msgid "Sorry, your current view does not support printing."
 msgstr "Désolé, cette vue n'est pas imprimable."
 
-#: js/MainScreenCenterPanel.js:1165
+#: js/MainScreenCenterPanel.js:1174
 msgid "Scheduling Conflict"
 msgstr "Conflit de planification"
 
-#: js/MainScreenCenterPanel.js:1167
+#: js/MainScreenCenterPanel.js:1176
 msgid "The following attendee are busy at the requested time:"
 msgstr "Le participant suivant est déjà occupé à l'heure demandée :"
 
-#: js/MainScreenCenterPanel.js:1171
+#: js/MainScreenCenterPanel.js:1180
 msgid "Ignore Conflict"
 msgstr "Ignorer le conflit"
 
-#: js/MainScreenCenterPanel.js:1172
+#: js/MainScreenCenterPanel.js:1181
 msgid "Edit Event"
 msgstr "Modifier l'évènement"
 
-#: js/MainScreenCenterPanel.js:1173
+#: js/MainScreenCenterPanel.js:1182
 msgid "Cancel this action"
 msgstr "Annuler"
 
@@ -702,7 +702,7 @@ msgid "recurring event exception"
 msgstr "Erreur dans la récurrence de l'évènement"
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:82 js/WestPanel.js:82 js/Model.js:373
+#: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:373
 msgid "Attendee"
 msgstr "Participant"
 
@@ -948,42 +948,42 @@ msgstr "\"%2$s\" réponse de %1$s"
 msgid "Event details"
 msgstr "Détails de l'événement"
 
-#: Controller/EventNotifications.php:256
+#: Controller/EventNotifications.php:261
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Rappel pour l'évènement \"%1$s\" à %2$s"
 
-#: Controller/EventNotifications.php:259
+#: Controller/EventNotifications.php:264
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Invitation pour \"%1$s\" à %2$s"
 
-#: Controller/EventNotifications.php:263
+#: Controller/EventNotifications.php:268
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "L'évènement \"%1$s\" à %2$s a été annulé"
 
-#: Controller/EventNotifications.php:271
+#: Controller/EventNotifications.php:276
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Evènenement\"%1$s\" a été replanifié de %2$s à %3$s"
 
-#: Controller/EventNotifications.php:278
+#: Controller/EventNotifications.php:283
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "L'évènement \"%1$s\" à %2$s a été mis à jour"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:294
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s a accepté \"%2$s\" à %3$s"
 
-#: Controller/EventNotifications.php:293
+#: Controller/EventNotifications.php:298
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s a refusé \"%2$s\" à %3$s"
 
-#: Controller/EventNotifications.php:297
+#: Controller/EventNotifications.php:302
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "%1$s tentera de participer à l'évènement \"%2$s\" à %3$s"
 
-#: Controller/EventNotifications.php:301
+#: Controller/EventNotifications.php:306
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Pas de réponse de %1$s pour l'évènement \"%2$s\" à %3$s"
 
-#: Controller/EventNotifications.php:305
+#: Controller/EventNotifications.php:310
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Changement de participants pour l'évènement \"%1$s\" à %2$s"

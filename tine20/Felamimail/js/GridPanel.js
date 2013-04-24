@@ -1093,6 +1093,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
         
+        Tine.log.info('Tine.Felamimail.GridPanel::onToggleFlag - Toggle flag for ' + msgs.getCount() + ' message(s): ' + flag);
+        
         // mark messages in UI and add to edit buffer
         msgs.each(function(msg) {
             // update unreadcount
@@ -1105,7 +1107,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if (folder) {
                     folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
                     if (sm.isFilterSelect && sm.getCount() > 50 && folder.get('cache_status') !== 'pending') {
-                        Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for folder ' + folder.get('globalname'));
+                        Tine.log.debug('Tine.Felamimail.GridPanel::onToggleFlag - Set cache status to pending for folder ' + folder.get('globalname'));
                         folder.set('cache_status', 'pending');
                     }
                     folder.commit();
