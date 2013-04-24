@@ -15,7 +15,7 @@
     <example>Inventory/Import/examples/inv_tine_import.csv</example>
     <extension>csv</extension>
     <postMappingHook>
-        <path>Inventory/Import/files/testScript.php</path>
+        <path>../tests/tine20/Inventory/Import/files/testScript.php</path>
     </postMappingHook>
     <autotags>
         <tag>
