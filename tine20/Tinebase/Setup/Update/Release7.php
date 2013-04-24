@@ -399,4 +399,16 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
             $be->delete($oldState->getId());
         }
     }
+    
+    /**
+     * update to 7.5
+     * 
+     * - rename scheduler task (just add again for param / function name change)
+     */
+    public function update_4()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '7.5');
+    }
 }
