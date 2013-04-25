@@ -109,7 +109,11 @@ class Tinebase_ModelConfigurationTest extends PHPUnit_Framework_TestCase
         $fields = $employeeCObj->getFields();
         $this->assertArrayHasKey('deleted_time', $fields);
         $this->assertArrayHasKey('supervisor_id', $fields);
-
+        
+        // test if sortable is set to false on tags-field
+        $this->assertArrayHasKey('sortable', $fields['tags']);
+        $this->assertFalse($fields['tags']['sortable']);
+        
         $this->assertEquals($account->accountLastName, $employee->n_family);
         $this->assertEquals($account->accountFirstName, $employee->n_given);
     }

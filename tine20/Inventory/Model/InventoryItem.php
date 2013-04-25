@@ -79,7 +79,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'hidden'     => TRUE,
                 'default'    => NULL,
-                'type'       => 'datetime'
+                'type'       => 'datetime',
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'total_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

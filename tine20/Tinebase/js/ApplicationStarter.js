@@ -394,8 +394,23 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // overwrite function
                     Tine[appName].Model[modelName].getDefaultData = function() {
-                        if (!dd) {
+                        if (! dd) {
                             var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
+                        }
+                        
+                        // find container by selection or use defaultContainer by registry
+                        if (modelConfig.containerProperty) {
+                            if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
+                                var app = Tine.Tinebase.appMgr.get(appName),
+                                    registry = app.getRegistry(),
+                                    ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
+                                    
+                                var container = (ctp ? ctp.getDefaultContainer() : null) || (registry ? registry.get("default" + modelName + "Container") : null);
+                                
+                                if (container) {
+                                    dd[modelConfig.containerProperty] = container;
+                                }
+                            }
                         }
                         return dd;
                     };
