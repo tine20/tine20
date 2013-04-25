@@ -776,23 +776,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // need to sync once again to make sure we have the correct recipients
         this.recipientGrid.syncRecipientsToRecord();
     },
-    
-    /**
-     * show error if request fails
-     * 
-     * @param {} response
-     * @param {} request
-     * @private
-     * 
-     * TODO mark field(s) invalid if for example email is incorrect
-     * TODO add exception dialog on critical errors?
-     */
-    onRequestFailed: function(response, request) {
-        this.saving = false;
-        this.loadMask.hide();
-        
-        Tine.Tinebase.ExceptionHandler.handleRequestException(response);
-    },
 
     /**
      * init attachment grid + add button to toolbar

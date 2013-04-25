@@ -645,6 +645,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         foreach ($recipientType as $field) {
             if (!empty($recordData[$field])) {
                 $recipients = array();
+                if (! is_array($recordData[$field])) {
+                    throw new Tinebase_Exception_Record_Validation($field . ' property should be an array');
+                }
                 foreach ($recordData[$field] as $addresses) {
                     if (substr_count($addresses, '@') > 1) {
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));

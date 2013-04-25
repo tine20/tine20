@@ -27,7 +27,7 @@
 
 %global vyear 2013
 %global vmonth 03
-%global vmin 1
+%global vmin 3
 
 Name:           tine20
 Version:        %{vyear}.%{vmonth}.%{vmin}
@@ -301,6 +301,9 @@ fi
 %files webstack
 
 %changelog
+* Thu Apr 25 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.3-1
+- New upstream release Kristina Service Release 2
+
 * Thu Feb 07 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.1~alpha1-1
 - New upstream release Kristina Alpha 1
 
