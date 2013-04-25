@@ -519,6 +519,23 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $contact->email = $originalEmail;
         Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
     }
+
+    /**
+     * test send message to invalid recipient
+     */
+    public function testSendMessageToInvalidRecipient()
+    {
+        $messageToSend = $this->_getMessageData($this->_account->email);
+        $invalidEmail = 'invaliduser@' . $this->_mailDomain;
+        $messageToSend['to'] = array($invalidEmail);
+        
+        try {
+            $returned = $this->_json->saveMessage($messageToSend);
+            $this->fail('Tinebase_Exception_SystemGeneric expected');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $this->assertContains('550 5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage());
+        }
+    }
     
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
