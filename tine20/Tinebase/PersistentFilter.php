@@ -16,7 +16,7 @@
  * @subpackage  PersistentFilter
  * 
  * @todo rework account_id to container_id to let Persistent_Filters be organised
- *       in standard contaienr / grants way. This depends on container class to cope
+ *       in standard container / grants way. This depends on container class to cope
  *       with multiple models per app which is not yet implementet (2010-05-05)
  */
 class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
@@ -212,6 +212,11 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkManageRightForCurrentUser($_record, $_throwException = false)
     {
+        if ($_record->account_id === Tinebase_Core::getUser()->getId()) {
+            // you always have the right to manage your own filters
+            return;
+        }
+        
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
             'account_id'        => $_record->account_id,
             'application_id'    => $_record->application_id,
