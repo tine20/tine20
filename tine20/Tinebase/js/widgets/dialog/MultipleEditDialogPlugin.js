@@ -199,6 +199,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             } else if (ff.isXType('tinerecordpickercombobox')) {
                 ff.startEvents = ['focus', 'expand'];
                 ff.triggerEvents = ['select', 'blur'];
+            } else if (ff.isXType('checkbox')) {
+                ff.startEvents = ['check'];
+                ff.triggerEvents = ['check', 'blur'];
             }
             // add field to handlefields array
             this.handleFields.push(field);
@@ -256,7 +259,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     
             ff.multipleInitialized = true;
 
-            if (ff.isXType('tinedurationspinner')) {
+            if (ff.isXType('tinedurationspinner') || ff.isXType('checkbox')) {
                 ff.fireEvent(ff.triggerEvents[1]);
             }
             
@@ -375,7 +378,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         // scope on formField
         Tine.log.info('Trigger handler called for field "' + this.name + '".');
         var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
-        var originalValue = this.hasOwnProperty('startingValue') ? String(this.startingValue) : String(this.originalValue),
+        var originalValue = this.hasOwnProperty('startingValue') ? this.startingValue : this.originalValue,
             currentValue;
         
         if (this.isXType('datefield')) {
@@ -383,7 +386,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         } else if (this.isXType('timefield')) {
             currentValue = this.fullDateTime;
         } else {
-            currentValue = String(this.getValue());
+            currentValue = this.getValue();
         }
         
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
@@ -406,10 +409,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.removeClass('tinebase-editmultipledialog-noneedit');
             
             // Set button
-            this.multiButton.addClass('undo');
-            this.multiButton.removeClass('hidden');
-            this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Undo change for all selected records'))});
-            
+            if (this.multiButton) {
+                this.multiButton.addClass('undo');
+                this.multiButton.removeClass('hidden');
+                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Undo change for all selected records'))});
+            }
         } else {    // If set back
             // Set arrow
             if (ar.elements.length > 0) {
@@ -422,9 +426,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
             
             // Set button
-            this.multiButton.removeClass('undo');
-            this.multiButton.addClass('hidden');
-            this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records'))});
+            if (this.multiButton) {
+                this.multiButton.removeClass('undo');
+                this.multiButton.addClass('hidden');
+                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records'))});
+            }
         }
         this.fireEvent('fieldchange');
     },
