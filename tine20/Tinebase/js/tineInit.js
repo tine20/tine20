@@ -54,6 +54,7 @@ Tine.clientVersion.releaseTime      = 'none';
  */
 Tine.title = 'Tine 2.0';
 Tine.weburl = 'http://www.tine20.com/';
+Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
 
 /**
  * quiet logging in release mode
@@ -757,6 +758,7 @@ Ext.onReady(function () {
             //Tine.Tinebase.tineInit.onLangFilesLoad();
             //Tine.Tinebase.tineInit.checkSelfUpdate();
             Tine.Tinebase.tineInit.renderWindow();
+            Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
         }
     };
     waitForInits();

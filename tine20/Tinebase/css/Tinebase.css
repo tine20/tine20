@@ -221,6 +221,9 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/view-refresh.png) !important;
 }
 
+.action_loadTutorial { 
+    background-image: url(../../images/help-icon.png) !important;
+}
 
 .action_tag {
     background-image:url(../../images/oxygen/16x16/actions/rss-tag.png) !important;

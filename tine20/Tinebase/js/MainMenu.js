@@ -76,6 +76,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         if (! this.mainActions) {
             this.mainActions = [
                 this.action_aboutTine,
+                this.action_loadTutorial,
                 '-',
                 this.getUserActions(),
                 '-',
@@ -83,7 +84,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             ];
             
             if (Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)) {
-                this.mainActions.splice(1, 0, '-', this.action_showDebugConsole);
+                this.mainActions.splice(2, 0, '-', this.action_showDebugConsole);
             }
         }
         
@@ -114,6 +115,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_about'
         });
         
+        this.action_loadTutorial = new Ext.Action({
+            text: String.format(_('Help')),
+            iconCls: 'action_loadTutorial',
+            handler: this.onLoadTutorial,
+            scope: this
+        });
+
         this.action_showDebugConsole = new Ext.Action({
             text: _('Debug Console (Ctrl + F11)'),
             handler: Tine.Tinebase.common.showDebugConsole,
@@ -170,6 +178,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
+    },
+    
+    /**
+     * open new window/tab to show help and tutorial
+     */
+    onLoadTutorial: function() {
+        window.open(Tine.helpUrl,'_blank');
     },
     
     /**
