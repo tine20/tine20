@@ -426,8 +426,8 @@ class Sipgate_Backend_Api {
         }
         $structAr['RemoteUri'] = new Zend_XmlRpc_Value_String('sip:'.$_callee.'@sipgate.net');
         $structAr['TOS'] = new Zend_XmlRpc_Value_String('text');
-        $structAr['Content'] = new Zend_XmlRpc_Value_String($_content);
-        
+        $structAr['Content'] = new Zend_XmlRpc_Value_String(str_replace("\n","\\n",$_content));
+
         $struct = new Zend_XmlRpc_Value_Struct($structAr);
 
         return $this->_rpc->call('samurai.SessionInitiate', array(0 => $struct));
