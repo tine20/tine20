@@ -225,6 +225,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        
+        $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
@@ -288,6 +290,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         
@@ -310,6 +313,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
@@ -633,6 +637,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to filter for me as attender');
@@ -679,6 +684,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']));
         $eventData = $searchResultData['results'][0];
         
         $this->assertFalse(array_key_exists('summary', $eventData), 'summary not empty');
