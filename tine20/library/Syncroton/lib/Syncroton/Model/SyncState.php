@@ -15,18 +15,7 @@
  * @package     Model
  */
 
-class Syncroton_Model_SyncState implements Syncroton_Model_ISyncState
+class Syncroton_Model_SyncState extends Syncroton_Model_AEntry implements Syncroton_Model_ISyncState
 {
-    public function __construct(array $_data = array())
-    {
-        $this->setFromArray($_data);
-    }
-    
-    public function setFromArray(array $_data)
-    {
-        foreach($_data as $key => $value) {
-            $this->$key = $value;
-        }
-    }
 }
 

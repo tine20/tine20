@@ -893,8 +893,10 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
             }
             
-            if (isset($collectionData->syncState) && $collectionData->syncState instanceof Syncroton_Model_ISyncState && 
-                $collectionData->syncState->counter != $collectionData->syncKey) {
+            if (isset($collectionData->syncState) && 
+                $collectionData->syncState instanceof Syncroton_Model_ISyncState &&
+                $collectionData->syncState->counter != $collectionData->syncKey 
+            ) {
                 
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " update syncState for collection: " . $collectionData->collectionId);
@@ -955,20 +957,19 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     
                     throw $zdse;
                 }
-                    
-                
-                // store current filter type
-                try {
-                    $folderState = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
-                    $folderState->lastfiltertype = $collectionData->options['filterType'];
-                    if ($folderState->isDirty()) {
-                        $this->_folderBackend->update($folderState);
-                    }
-                } catch (Syncroton_Exception_NotFound $senf) {
-                    // failed to get folderstate => should not happen but is also no problem in this state
-                    if ($this->_logger instanceof Zend_Log) 
-                        $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData->collectionId);
+            }
+            
+            // store current filter type
+            try {
+                $folderState = $this->_folderBackend->get($collectionData->folder);
+                $folderState->lastfiltertype = $collectionData->options['filterType'];
+                if ($folderState->isDirty()) {
+                    $this->_folderBackend->update($folderState);
                 }
+            } catch (Syncroton_Exception_NotFound $senf) {
+                // failed to get folderstate => should not happen but is also no problem in this state
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . ' failed to get folder state for: ' . $collectionData->collectionId);
             }
         }
         

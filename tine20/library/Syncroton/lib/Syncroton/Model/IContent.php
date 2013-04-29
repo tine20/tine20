@@ -24,6 +24,5 @@
 
 interface Syncroton_Model_IContent
 {
-    
 }
 

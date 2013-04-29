@@ -1295,4 +1295,50 @@ class Syncroton_Command_SyncTests extends Syncroton_Command_ATestCase
         $this->assertTrue($catchedException);
         $this->assertGreaterThan(count($dataController->getServerEntries('addressbookFolderId', null)), $count);
     }
+    
+    /**
+     * test that the last filterType got updated, even no changed entries were found
+     */
+    public function testUpdateOfLastFilterType()
+    {
+        $this->testSyncOfContacts();
+        
+        $dataController = Syncroton_Data_Factory::factory(Syncroton_Data_Factory::CLASS_CONTACTS, $this->_device, new DateTime(null, new DateTimeZone('UTC')));
+        
+        $entries = $dataController->getServerEntries('addressbookFolderId', null);
+        
+        // lets add one contact
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections>
+                <Collection>
+                    <Class>Contacts</Class>
+                    <SyncKey>4</SyncKey>
+                    <CollectionId>addressbookFolderId</CollectionId>
+                    <DeletesAsMoves/>
+                    <GetChanges/>
+                    <WindowSize>100</WindowSize>
+                    <Options>
+                        <FilterType>2</FilterType>
+                        <AirSyncBase:BodyPreference>
+                            <AirSyncBase:Type>1</AirSyncBase:Type>
+                            <AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize>
+                        </AirSyncBase:BodyPreference>
+                        <Conflict>1</Conflict>
+                    </Options>
+                </Collection>
+            </Collections></Sync>'
+        );
+        
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        $syncDoc = $sync->getResponse();
+        
+        $folder = Syncroton_Registry::getFolderBackend()->getFolder($this->_device, 'addressbookFolderId');
+        
+        $this->assertEquals(2, $folder->lastfiltertype);
+    }
 }
