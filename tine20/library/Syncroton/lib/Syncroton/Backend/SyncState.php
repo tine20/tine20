@@ -184,25 +184,24 @@ class Syncroton_Backend_SyncState extends Syncroton_Backend_ABackend implements 
                 'is_deleted = ?'       => 1
             ));
             
-            // remove entries added during latest sync in Syncroton_content table
-            $this->_db->delete($this->_tablePrefix . 'content', array(
-                'device_id = ?'        => $deviceId,
-                'folder_id = ?'        => $folderId,
-                'creation_synckey > ?' => $state->counter,
-            ));
-            
         } else {
-            // finaly delete all entries marked for removal in Syncroton_content table    
+            // finally delete all entries marked for removal in Syncroton_content table    
             $this->_db->delete($this->_tablePrefix . 'content', array(
                 'device_id = ?'  => $deviceId,
                 'folder_id = ?'  => $folderId,
                 'is_deleted = ?' => 1
             ));
-            
         }
         
         // remove all other synckeys
         $this->_deleteOtherStates($state);
+        
+        // remove entries from Syncroton_content table with an creation_synckey bigger than current one
+        $this->_db->delete($this->_tablePrefix . 'content', array(
+            'device_id = ?'        => $deviceId,
+            'folder_id = ?'        => $folderId,
+            'creation_synckey > ?' => $state->counter,
+        ));
         
         return $state;
     }
