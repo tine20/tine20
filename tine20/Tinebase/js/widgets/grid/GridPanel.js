@@ -382,7 +382,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 defaultFilter: this.recordClass.getMeta('defaultFilter'),
                 recordClass: this.recordClass,
                 plugins: plugins,
-                filterModels: this.modelConfig.filterModels
+                filterModels: []
             });
             
             // add the filter toolbar to the gridpanel plugins

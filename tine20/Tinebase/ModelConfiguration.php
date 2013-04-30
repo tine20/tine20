@@ -603,7 +603,8 @@ class Tinebase_ModelConfiguration {
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
-
+        
+        $this->_filters = array();
         $this->_fields[$this->_idProperty] = array('label' => NULL, 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
 
         if ($this->_hasCustomFields) {
