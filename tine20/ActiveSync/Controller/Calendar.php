@@ -516,6 +516,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $event = new Calendar_Model_Event(array(), true);
         }
         
+        if($data instanceof Syncroton_Model_Event) {
+            $data->copyFieldsFromParent();
+        }
+        
         foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
             if (!isset($data->$syncrotonProperty)) {
                 $event->$tine20Property = null;

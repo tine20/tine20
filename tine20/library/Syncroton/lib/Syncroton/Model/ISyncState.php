@@ -21,6 +21,5 @@
 
 interface Syncroton_Model_ISyncState
 {
-    
 }
 

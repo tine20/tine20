@@ -329,12 +329,14 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
      */
     public function update_3()
     {
+        // add a default value of "false", as PGSQL does allow notnull columns with default value null
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>state_id</name>
                 <type>text</type>
                 <length>128</length>
                 <notnull>true</notnull>
+                <default>false</default>
             </field>
         ');
         
@@ -357,8 +359,6 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->_backend->addIndex('state', $declaration);
         
-        $this->setApplicationVersion('Tinebase', '7.4');
-        $this->setTableVersion('state', 2);
         
         $be = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_State', 
@@ -398,6 +398,21 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
             }
             $be->delete($oldState->getId());
         }
+        
+        // remove the default value "false" again
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>state_id</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        
+        $this->_backend->alterCol('state', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '7.4');
+        $this->setTableVersion('state', 2);
     }
     
     /**

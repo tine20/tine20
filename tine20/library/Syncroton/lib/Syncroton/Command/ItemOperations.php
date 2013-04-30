@@ -150,16 +150,24 @@ class Syncroton_Command_ItemOperations extends Syncroton_Command_Wbxml
         
         foreach ($this->_emptyFolderContents as $emptyFolderContents) {
             
-            $folder = $this->_folderBackend->getFolder($this->_device, $emptyFolderContents['collectionId']);
-            
-            $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
-            
-            $dataController->emptyFolderContents($emptyFolderContents['collectionId']);
-            
+            try {
+                $folder = $this->_folderBackend->getFolder($this->_device, $emptyFolderContents['collectionId']);
+
+                $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                $dataController->emptyFolderContents($emptyFolderContents['collectionId'], $emptyFolderContents['options']);
+
+                $status = Syncroton_Command_ItemOperations::STATUS_SUCCESS;
+            }
+            catch (Syncroton_Exception_Status_ItemOperations $e) {
+                $status = $e->getCode();
+            }
+            catch (Exception $e) {
+                $status = Syncroton_Exception_Status_ItemOperations::ITEM_SERVER_ERROR;
+            }
+
             $emptyFolderContentsTag = $this->_outputDom->createElementNS('uri:ItemOperations', 'EmptyFolderContents');
             
-            $emptyFolderContentsTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', Syncroton_Command_ItemOperations::STATUS_SUCCESS));
-            
+            $emptyFolderContentsTag->appendChild($this->_outputDom->createElementNS('uri:ItemOperations', 'Status', $status));
             $emptyFolderContentsTag->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'CollectionId', $emptyFolderContents['collectionId']));
             
             $response->appendChild($emptyFolderContentsTag);
