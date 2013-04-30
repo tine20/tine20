@@ -201,7 +201,10 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     applyState: function(state) {
         var root = this.getRootNode();
         Ext.each(state.expanded, function(isExpanded, index) {
-            root.childNodes[index].expanded = isExpanded;
+            // check if node exists, as user might have lost permissions for modules
+            if (root.childNodes[index]) {
+                root.childNodes[index].expanded = isExpanded;
+            }
         }, this);
 
         (function() {
