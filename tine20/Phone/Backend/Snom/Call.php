@@ -16,7 +16,7 @@
  * @subpackage  Snom
  * 
  */
-class Phone_Backend_Snom_Callhistory extends Tinebase_Backend_Sql_Abstract
+class Phone_Backend_Snom_Call extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

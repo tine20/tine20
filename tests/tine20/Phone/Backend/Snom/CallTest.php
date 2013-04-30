@@ -16,20 +16,20 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Phone_Backend_Snom_CallhistoryTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Phone_Backend_Snom_CallTest::main');
 }
 
 /**
- * Test class for Phone_Backend_Snom_CallhistoryTest
+ * Test class for Phone_Backend_Snom_CallTest
  */
-class Phone_Backend_Snom_CallhistoryTest extends PHPUnit_Framework_TestCase
+class Phone_Backend_Snom_CallTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Runs the test methods of this class.
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Snom Callhistory Backend Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone Snom Call Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 

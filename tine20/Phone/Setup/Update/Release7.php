@@ -1,25 +1,22 @@
 <?php
 /**
  * Tine 2.0
- * 
- * @package     Phone
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * @package     Phone
+ * @subpackage  Setup
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-
-/**
- * class for Phone initialization
- * 
- * @package     Setup
- */
-class Phone_Setup_Initialize extends Setup_Initialize
+class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
 {
     /**
-     * init favorites
+     * update to 7.1
+     *  - add default favorites
+     *  
+     * @return void
      */
-    protected function _initializeFavorites()
+    public function update_0()
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         
@@ -31,7 +28,7 @@ class Phone_Setup_Initialize extends Setup_Initialize
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls this week", // _("Calls this week")
-            'description'       => "Incoming and outgoing calls of this week", // _("Incoming and outgoing calls of this week")
+            'description'       => "Incoming and outgoing calls from this week",
             'filters'           => array(array(
                 'field'     => 'start',
                 'operator'  => 'within',
@@ -41,7 +38,7 @@ class Phone_Setup_Initialize extends Setup_Initialize
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls last week", // _("Calls last week")
-            'description'       => "Incoming and outgoing calls of last week", // _("Incoming and outgoing calls of last week")
+            'description'       => "Incoming and outgoing calls from last week",
             'filters'           => array(array(
                 'field'     => 'start',
                 'operator'  => 'within',
@@ -51,7 +48,7 @@ class Phone_Setup_Initialize extends Setup_Initialize
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls this month", // _("Calls this month")
-            'description'       => "Incoming and outgoing calls of this month", // _("Incoming and outgoing calls of this month")
+            'description'       => "Incoming and outgoing calls from this month",
             'filters'           => array(array(
                 'field'     => 'start',
                 'operator'  => 'within',
@@ -61,12 +58,14 @@ class Phone_Setup_Initialize extends Setup_Initialize
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls last month", // _("Calls last month")
-            'description'       => "Incoming and outgoing calls of last month", // _("Incoming and outgoing calls of last month")
+            'description'       => "Incoming and outgoing calls from last month",
             'filters'           => array(array(
                 'field'     => 'start',
                 'operator'  => 'within',
                 'value'     => 'monthLast',
             )),
         ))));
+        
+        $this->setApplicationVersion('Phone', '7.1');
     }
 }

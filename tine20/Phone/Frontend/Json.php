@@ -18,6 +18,13 @@
 class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
+     * All full configured models
+     * 
+     * @var array
+     */
+    protected $_configuredModels = array('Call', 'MyPhone');
+    protected $_defaultModel = 'Call';
+    /**
      * app name
      * 
      * @var string
@@ -50,20 +57,21 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $paging
      * @return array
      */
+    public function searchMyPhones($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Phone_Controller_MyPhone::getInstance(), 'Phone_Model_MyPhoneFilter');
+    }
+    
+    /**
+     * Search for calls matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
     public function searchCalls($filter, $paging)
     {
-        $filter = new Phone_Model_CallFilter($filter);
-        $pagination = new Tinebase_Model_Pagination($paging);
-        
-        $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
-        
-        // set timezone
-        $calls->setTimezone(Tinebase_Core::get('userTimeZone'));
-                
-        return array(
-            'results'       => $calls->toArray(),
-            'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)
-        );
+        return $this->_search($filter, $paging, Phone_Controller_Call::getInstance(), 'Phone_Model_CallFilter');
     }
     
 
@@ -88,7 +96,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveMyPhone($recordData)
     {
         $voipController = Phone_Controller_MyPhone::getInstance();
-        
+        $recordData['template_id'] = $recordData['template_id']['id'];
         $phone = new Phone_Model_MyPhone();
         $phone->setFromArray($recordData);
         

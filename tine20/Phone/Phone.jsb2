@@ -12,7 +12,11 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Models.js",
+          "text": "Phone.js",
+          "path": "js/"
+        },
+        {
+          "text": "PhoneTreePanel.js",
           "path": "js/"
         },
         {
@@ -20,7 +24,11 @@
           "path": "js/"
         },
         {
-          "text": "Phone.js",
+          "text": "CallGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DialerPanel.js",
           "path": "js/"
         }
       ]
