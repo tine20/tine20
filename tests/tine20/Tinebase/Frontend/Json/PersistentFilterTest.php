@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -25,12 +25,20 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     protected $_uit;
     
     /**
+     * the test user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
+    /**
      * setUp
      */
     public function setUp()
     {
-        $this->tearDown();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_uit = new Tinebase_Frontend_Json_PersistentFilter();
+        $this->_originalTestUser = Tinebase_Core::getUser();
     }
     
     /**
@@ -38,14 +46,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function tearDown()
     {
-        // purge
-        $backend = new Tinebase_PersistentFilter_Backend_Sql();
-        
-        $toDeleteIds = $backend->search(new Tinebase_Model_PersistentFilterFilter(array(
-            array('field' => 'name',   'operator' => 'startswith', 'value' => 'PHPUnit'),
-        )), NULL, TRUE);
-        
-        $backend->delete($toDeleteIds);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -357,5 +359,18 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
                 return $filter;
             }
         }
+    }
+    
+    /**
+     * testOverwriteFilterAsUnprivilegedUser
+     * 
+     * @see 0008272: can not overwrite existing favorite without manage-right
+     */
+    public function testOverwriteFilterAsUnprivilegedUser()
+    {
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['jsmith']);
+        
+        $this->testOverwriteExistingFilter();
     }
 }

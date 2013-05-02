@@ -269,6 +269,9 @@ class Tinebase_Timemachine_ModificationLog
         try {
             $this->_table->insert($modificationArray);
         } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                $zdse->getMessage() . ' ' . print_r($modification->toArray(), TRUE));
+            
             // check if unique key constraint failed
             $filter = new Tinebase_Model_ModificationLogFilter(array(
                 array('field' => 'seq',                'operator' => 'equals',  'value' => $modification->seq),
@@ -278,8 +281,6 @@ class Tinebase_Timemachine_ModificationLog
             ));
             $result = $this->_backend->search($filter);
             if (count($result) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    $zdse->getMessage() . ' ' . print_r($modification->toArray(), TRUE));
                 throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('Seq ' . $modification->seq . ' for record ' . $modification->record_id . ' already exists');
             } else {
                 throw $zdse;

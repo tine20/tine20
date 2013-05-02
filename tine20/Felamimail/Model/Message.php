@@ -116,7 +116,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_part_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
-        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
+        'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
