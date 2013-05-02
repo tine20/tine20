@@ -459,3 +459,13 @@
     color: #aaaaaa;
 }
 
+/*------------ ExtJS clears the following default browser's styles -----------*/
+strong { 
+    font-weight: bold; 
+    font-style: inherit;
+}
+em { 
+    font-style: italic; 
+    font-weight: inherit;
+}
+
