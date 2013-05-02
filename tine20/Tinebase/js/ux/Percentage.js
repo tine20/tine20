@@ -99,7 +99,7 @@ Ext.ux.PercentRenderer = function(percent) {
         Ext.ux.PercentRenderer.template = new Ext.XTemplate(
             '<div class="x-progress-wrap PercentRenderer">',
             '<div class="x-progress-inner PercentRenderer">',
-                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
+                '<div class="x-progress-bar PercentRenderer {colorclass}" style="width:{percent}%">',
                     '<div class="PercentRendererText PercentRenderer">',
                         '<div>{percent}%</div>',
                     '</div>',
@@ -111,8 +111,11 @@ Ext.ux.PercentRenderer = function(percent) {
         '</div>'
         ).compile();
     }
-    
-    return Ext.ux.PercentRenderer.template.apply({percent: percent});
+    // this will enable a color scheme for each percentage on the progress bar
+    var colorClass = "PercentRenderer-progress-bar"; 
+    colorClass += Math.round(percent/10)+"0";
+
+    return Ext.ux.PercentRenderer.template.apply({percent: percent, colorclass: colorClass});
 };
 
 /**
