@@ -254,15 +254,16 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (after update)
      * 
-     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
      * @return  void
      */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($_updatedRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
-            Tinebase_User::getInstance()->updateContact($_updatedRecord);
-        }        
+        if ($updatedRecord->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            Tinebase_User::getInstance()->updateContact($updatedRecord);
+        }
     }
     
     /**
