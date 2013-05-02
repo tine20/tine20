@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use new filter syntax for Voipmanager_Model_Snom_PhoneFilter
  */
@@ -19,23 +19,7 @@
  */
 class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
 {
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'Phone';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Phone_Model_Call';
-    
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'query'       => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('source', 'destination'))),
-        'phone_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-    );
+    protected $_configuredModel = 'Phone_Model_Call';
 
     /**
      * is acl filter resolved?
@@ -45,8 +29,30 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_isResolved = FALSE;
     
     /**
+     * Gets the phone id filter for the first record in the given recordset
+     * 
+     * @param Tinebase_Record_RecordSet $userPhones
+     * @return Tinebase_Model_Filter_Abstract
+     */
+    protected function _getDefaultPhoneFilter($userPhones)
+    {
+        $record = $userPhones->getFirstRecord();
+        if ($record) {
+            $filter = $this->createFilter(
+                array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(
+                    array('field' => ':id', 'operator' => 'equals', 'value' => $record->getId())
+                ))
+            );
+        } else {
+            $filter = new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'equals', 'value' => 'notexists'));
+        }
+        
+        $filter->setIsImplicit(TRUE);
+        return $filter;
+    }
+    
+    /**
      * appends custom filters to a given select object
-     * - add user phone ids to filter
      * 
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
@@ -54,17 +60,6 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
      */
     public function appendFilterSql($_select, $_backend)
     {
-        // ensure acl policies
-        $this->_appendAclSqlFilter($_select);
-    }
-    
-    /**
-     * check user phones (add user phone ids to filter
-     *
-     * @param Zend_Db_Select $_select
-     */
-    protected function _appendAclSqlFilter($_select) {
-        
         if (! $this->_isResolved) {
             $phoneIdFilter = $this->_findFilter('phone_id');
             
@@ -72,16 +67,20 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
                 array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
             ));
-            $userPhoneIds = Phone_Controller_MyPhone::getInstance()->search($filter)->getArrayOfIds();
             
+            $userPhones = Phone_Controller_MyPhone::getInstance()->search($filter);
+            $userPhoneIds = $userPhones->getArrayOfIds();
+
             if ($phoneIdFilter === NULL) {
-                $phoneIdFilter = $this->createFilter('phone_id', 'in', $userPhoneIds);
-                $this->addFilter($phoneIdFilter);
+                $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
             } else {
-                $phoneIdFilter->setOperator('in');
-                $phoneIdFilter->setValue(array_intersect((array) $phoneIdFilter->getValue(), $userPhoneIds));
+                $phoneId = $phoneIdFilter->getValue();
+                $phoneId = $phoneId[0]['value'];
+                if (! in_array($phoneId, $userPhoneIds)) {
+                    $this->removeFilter('phone_id');
+                    $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
+                }
             }
-            
             $this->_isResolved = TRUE;
         }
     }

@@ -23,6 +23,11 @@ msgid_plural "Phones"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Call"
+msgid_plural "Calls"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/Phone.js:70
 msgid "Phones"
 msgstr ""
@@ -152,3 +157,28 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
 msgstr ""
+
+msgid "Calls this week"
+msgstr ""
+
+msgid "Calls last week"
+msgstr ""
+
+msgid "Calls this month"
+msgstr ""
+
+msgid "Calls last month"
+msgstr ""
+
+msgid "Incoming and outgoing calls of this week"
+msgstr ""
+
+msgid "Incoming and outgoing calls of last week"
+msgstr ""
+
+msgid "Incoming and outgoing calls of this month"
+msgstr ""
+
+msgid "Incoming and outgoing calls of last month"
+msgstr ""
+

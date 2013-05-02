@@ -27,7 +27,7 @@ class Phone_Backend_Snom_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone All Snom Backend Tests');
-        $suite->addTestSuite('Phone_Backend_Snom_CallhistoryTest');
+        $suite->addTestSuite('Phone_Backend_Snom_CallTest');
         return $suite;
     }
 }

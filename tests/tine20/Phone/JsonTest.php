@@ -187,7 +187,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         );
 
         $this->_objects['filter3'] = array(
-            array('field' => 'phone_id', 'operator' => 'equals', 'value' => $this->_objects['phone']->getId())
+            array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone']->getId())))
         );
         
         // create calls

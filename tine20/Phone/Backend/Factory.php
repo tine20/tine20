@@ -72,7 +72,7 @@ class Phone_Backend_Factory
                 break;
             case self::CALLHISTORY:
                 if (!isset(self::$_backends[$_type])) {
-                    self::$_backends[$_type] = new Phone_Backend_Snom_Callhistory();
+                    self::$_backends[$_type] = new Phone_Backend_Snom_Call();
                 }
                 $instance = self::$_backends[$_type];
                 break;
