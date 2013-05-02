@@ -235,7 +235,7 @@ class Voipmanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Voipmanager_Controller_Snom_Phone::getInstance()->resetHttpClientInfo($phoneIds);
         
         return $result;
-    }      
+    }
       
       
     /**

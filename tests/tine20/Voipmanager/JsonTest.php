@@ -123,7 +123,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get asterisk context data
      *
-     * @return array
+     * @return Voipmanager_Model_Asterisk_Context
      */
     protected function _getAsteriskContext()
     {
@@ -238,7 +238,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get asterisk SipPeer data
      *
-     * @return array
+     * @return Voipmanager_Model_Asterisk_SipPeer
      */
     protected function _getAsteriskSipPeer()
     {
@@ -604,9 +604,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($updated['id']);
     }
     
-/**
+    /**
      * test update of snom phone
-     *
      */
     public function testCreateSnomPhoneWithLines()
     {
@@ -674,12 +673,9 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      * reset http client info
      *
      * @return array
-     * 
-     * @todo this test does nothing ... add assertions
      */
     public function testResetHttpClientInfo()
     {
-        /*
         $testPhone = $this->getSnomPhone();
         
         $lineData = array();
@@ -687,25 +683,11 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         
         $returned = $this->_json->saveSnomPhone($testPhone, $lineData, $rightsData);
         
-        $this->_json->resetHttpClientInfo(array($returned['id']));
+        $result = $this->_json->resetHttpClientInfo(array($returned['id']));
+        $this->assertEquals(TRUE, $result['success']);
         
-        $location_id = $testPhone['location_id'];
-        $template_id = $testPhone['template_id'];
-        
-        $phoneTemplate = $this->_json->getSnomTemplate($template_id);
-        
-        $settings_id = $phoneTemplate['setting_id'];
-        $software_id = $phoneTemplate['software_id'];
-        
-        print_r($settings_id);
-        
-        // delete everything
-        $this->_json->deleteSnomPhones(array($returned['id']);
-        $this->_json->deleteSnomTemplates(array($template_id));
-        $this->_json->deleteSnomLocations(array($location_id));
-        $this->_json->deleteSnomSettings(array($settings_id));
-        $this->_json->deleteSnomSoftwares(array($software_id));
-        */
+        $phone = $this->_json->getSnomPhone($returned['id']);
+        $this->assertEquals(0, $phone['http_client_info_sent']);
     }
     
     /**
