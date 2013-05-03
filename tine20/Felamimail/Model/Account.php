@@ -421,12 +421,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 }
             } else {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache / use given imap username/password instead.'
-                );
-                $userCredentialCache = new Tinebase_Model_CredentialCache(array(
-                    'username' => $this->user,
-                    'password' => $this->password,
-                ));
+                    . ' Something went wrong with the CredentialsCache! Forcing logout ...');
+                Zend_Session::destroy();
+                return FALSE;
             }
             
             if ($this->type == self::TYPE_USER) {

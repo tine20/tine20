@@ -351,9 +351,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
         } else if ($_record instanceof Felamimail_Model_Account) {
-            // add usernames (imap + smtp)
-            $_record->resolveCredentials();
-            $_record->resolveCredentials(TRUE, FALSE, TRUE);
+            // add usernames
+            $_record->resolveCredentials();                   // imap
+            $_record->resolveCredentials(TRUE, FALSE, TRUE); // smtp
             
         } else if ($_record instanceof Felamimail_Model_Sieve_Vacation) {
             if (! $_record->mime) {
