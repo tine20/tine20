@@ -500,6 +500,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             typeAhead: true,
             triggerAction: 'all',
             store: comboOps,
+            editable: false,
             listeners: {
                 'specialkey': function(field, e) {
                      if(e.getKey() == e.ENTER){
