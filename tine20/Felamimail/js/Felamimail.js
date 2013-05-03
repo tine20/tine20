@@ -755,6 +755,8 @@ Tine.Felamimail.getSignature = function(id) {
         id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     }
     
+    Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + id);
+    
     var defaultAccount = app.getAccountStore().getById(id);
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
