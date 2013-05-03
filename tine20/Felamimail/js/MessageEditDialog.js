@@ -377,12 +377,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Felamimail.Model.Account} account
      */
     addSignature: function(account) {
-        if (this.draftOrTemplate || ! account) {
+        if (this.draftOrTemplate) {
             return;
         }
-
-        var signaturePosition = (account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = Tine.Felamimail.getSignature(this.record.get('account_id'));
+        
+        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
+            account = account ? account :this.app.getAccountStore().getById(accountId),
+            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
+            signature = Tine.Felamimail.getSignature(accountId);
         if (signaturePosition == 'below') {
             this.msgBody += signature;
         } else {
