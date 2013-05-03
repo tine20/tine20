@@ -175,7 +175,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_sendNotifications = FALSE;
             
             $event = parent::create($_record);
-            $this->_saveAttendee($_record);
             
             $this->_sendNotifications = $sendNotifications;
             
@@ -193,6 +192,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         return $createdEvent;
+    }
+    
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $this->_saveAttendee($_record);
     }
     
     /**
@@ -443,7 +454,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 
                 parent::update($_record);
-                $this->_saveAttendee($_record, $_record->isRescheduled($event));
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
@@ -460,6 +470,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back because: ' . $e);
             Tinebase_TransactionManager::getInstance()->rollBack();
             $this->sendNotifications($sendNotifications);
             throw $e;
@@ -473,6 +484,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         return $updatedEvent;
+    }
+    
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        $this->_saveAttendee($record, $record->isRescheduled($currentRecord));
+        // need to save new attendee set in $updatedRecord for modlog
+        $updatedRecord->attendee = clone($record->attendee);
     }
     
     /**
@@ -553,9 +579,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($diff->diff as $key => $newValue) {
             if ($key === 'attendee') {
                 if (in_array($key, $recentChanges->modified_attribute)) {
-                    // @todo implement this with 0007826: add attendee changes to modlog
+                    $attendeeDiff = $diff->diff['attendee'];
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Add ' . count($diff->diff['attendee']['added']) . ' attendee, remove ' . count($diff->diff['attendee']['removed'] . ' attendee.'));
+                        . ' Attendee diff: ' . print_r($attendeeDiff->toArray(), TRUE));
+                    foreach ($attendeeDiff['added'] as $attenderToAdd) {
+                        $attenderToAdd->setId(NULL);
+                        $event->attendee->addRecord($attenderToAdd);
+                    }
+                    foreach ($attendeeDiff['removed'] as $attenderToRemove) {
+                        $attenderInCurrentSet = Calendar_Model_Attender::getAttendee($event->attendee, $attenderToRemove);
+                        $event->attendee->removeRecord($attenderInCurrentSet);
+                    }
                 } else {
                     // remove ids of new attendee
                     $attendee = clone($exdate->attendee);

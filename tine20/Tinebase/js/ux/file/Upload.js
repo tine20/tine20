@@ -305,7 +305,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         }
         
         var defaultHeaders = {
-            "Content-Type"          : "application/x-www-form-urlencoded",
+            "Content-Type"          : "application/octet-stream",
             "X-Tine20-Request-Type" : "HTTP",
             "X-Requested-With"      : "XMLHttpRequest"
         };

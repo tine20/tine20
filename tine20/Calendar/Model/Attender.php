@@ -562,7 +562,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * get a single attendee from set of attendee
      * 
-     * @param Tinebase_Record_RecordSet $_attendee
+     * @param Tinebase_Record_RecordSet $_attendeeSet
+     * @param Calendar_Model_Attender $_attendee
      * @return Calendar_Model_Attender|NULL
      */
     public static function getAttendee($_attendeeSet, $_attendee)

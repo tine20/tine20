@@ -96,8 +96,6 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
      * set phone rights
      *
      * @param Voipmanager_Model_Snom_Phone $_phone
-     * 
-     * @todo test
      */
     public function setPhoneRights(Voipmanager_Model_Snom_Phone $_phone)
     {
@@ -110,14 +108,14 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         // delete old rights
         $this->deleteACLs($_phone->getId());
         
-        // add new rights        
+        // add new rights
         foreach ($rightsToSet as $right) {
             $right->snom_phone_id = $_phone->getId();
             $right->read_right = 1;
             $right->write_right = 1;
             $right->dial_right = 1;
             $this->createACL($right);
-        }        
+        }
     }
    
     /**
@@ -179,7 +177,6 @@ class Voipmanager_Backend_Snom_Phone extends Tinebase_Backend_Sql_Abstract
         return $result;
     }    
     
-         
     /**
      * get one phone identified by id
      * 
