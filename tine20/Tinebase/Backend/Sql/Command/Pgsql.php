@@ -125,13 +125,51 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * Even if the database backend is PostgreSQL, we have to verify
+     * if the extension Unaccent is installed and loaded.
+     * 
+     * @return boolean
+     */
+    protected function _hasUnaccentExtension()
+    {
+        $cache = Tinebase_Core::getCache();
+        $cacheId = 'PostgreSQL_Unaccent_Extension';
+        if ($cache->test($cacheId) === FALSE)
+        {
+            $tableName = 'pg_extension';
+            $cols = 'COUNT(*)';
+
+            if ($this->_adapter) {
+                $select = $this->_adapter->select();
+                $select->from($tableName, $cols);
+                $select->where("extname = 'unaccent'");             
+            }
+            //result of the verification if the extension is installed or not
+            $result = $this->_adapter->fetchOne($select);
+            $cache->save($result, $cacheId, array('pgsql','extension','unaccent'), null);
+        }
+        else
+        {
+            //I need the result of the query (there is or there isn't
+            //the extension)
+            $result = $cache->load($cacheId);
+        }
+        return $result;
+    }
+    
+    /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
      * @return string
      */
     public function getUnaccent($field)
     {
-        return ' unaccent('.$field.') ';
+        if($this->_hasUnaccentExtension() == true){
+            return ' unaccent('.$field.') ';
+        } else{
+            return $field;
+        }
+        
     }
     
     /**
