@@ -220,17 +220,31 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $eventData = $this->testCreateEvent(TRUE); 
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        );
-        
+        $filter = $this->_getEventFilterArray();
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
     }
-
+    
+    /**
+     * get filter array with container and period filter
+     * 
+     * @param string|int $containerId
+     * @return multitype:multitype:string Ambigous <number, multitype:>  multitype:string multitype:string
+     */
+    protected function _getEventFilterArray($containerId = NULL)
+    {
+        $containerId = ($containerId) ? $containerId : $this->_testCalendar->getId();
+        return array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $containerId),
+            array('field' => 'period', 'operator' => 'within', 'value' =>
+                array("from" => '2009-03-20 06:15:00', "until" => Tinebase_DateTime::now()->addDay(1)->toString())
+            )
+        );
+    }
+    
     /**
      * testSearchEvents with period filter
      * 
@@ -282,18 +296,17 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $eventData = $this->testCreateEvent(TRUE);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-            array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT),
-        );
+        $filter = $this->_getEventFilterArray();
+        $filter[] = array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT);
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         
         // check organizer filter resolving
-        $this->assertTrue(is_array($searchResultData['filter'][1]['value']), 'organizer should be resolved: ' . print_r($searchResultData['filter'][1], TRUE));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $searchResultData['filter'][1]['value']['id']);
+        $organizerfilter = $searchResultData['filter'][2];
+        $this->assertTrue(is_array($organizerfilter['value']), 'organizer should be resolved: ' . print_r($organizerfilter, TRUE));
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $organizerfilter['value']['id']);
     }
     
     /**
@@ -305,11 +318,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        );
-        
-        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $searchResultData = $this->_uit->searchEvents($this->_getEventFilterArray(), array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
@@ -624,13 +633,11 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $eventData = $this->testCreateEvent(TRUE);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
-            ))
-        );
+        $filter = $this->_getEventFilterArray();
+        $filter[] = array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+        ));
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
@@ -670,12 +677,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         ));
         $eventData['organizer'] = $this->_personasContacts['sclever']->getId();
         $eventData = $this->_uit->saveEvent($eventData);
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $scleverCal->getId()),
-            array('field' => 'period', 'operator' => 'within', 'value' => 
-                array("from" => '2009-03-20 06:15:00', "until" => '2009-03-30 06:15:00')
-            )
-        );
+        $filter = $this->_getEventFilterArray($this->_personasDefaultCals['sclever']->getId());
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
