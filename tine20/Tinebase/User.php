@@ -160,15 +160,24 @@ class Tinebase_User
         
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            try {
+                $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not add IMAP EmailUser plugin: ' . $e);
+            }
         }
         if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            try {
+                $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+                        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not add SMTP EmailUser plugin: ' . $e);
+            }
         }
         
         switch ($backendType) {
             case self::LDAP:
-                
                 // manage samba sam?
                 if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
                     $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
