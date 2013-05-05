@@ -139,6 +139,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     saving: false,
     
     /**
+     * Disable adding cf tab even if model has support for customfields
+     * @type Boolean
+     */
+    disableCfs: false,    
+    
+    /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
     /**
@@ -269,8 +275,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // init plugins
         this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? this.plugins.concat(Ext.decode(this.initialConfig.plugins)) : [];
         
-        this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
+        // added possibility to disable using customfield plugin
+        if (this.disableCfs !== true) {
+            this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+        }
         
         // init actions
         this.initActions();
@@ -651,6 +660,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @param {Boolean} closeWindow
      */
     onApplyChanges: function(closeWindow) {
+        if (this.saving) {
+            return;
+        }
+        this.saving = true;
+
         this.loadMask.show();
         
         var ticketFn = this.doApplyChanges.deferByTickets(this, [closeWindow]),
@@ -668,7 +682,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // we need to sync record before validating to let (sub) panels have 
         // current data of other panels
         this.onRecordUpdate();
-        
+
         // quit copy mode
         this.copyRecord = false;
         
@@ -706,6 +720,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 wrapTicket();
             }
         } else {
+            this.saving = false;
             this.loadMask.hide();
             Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
         }
@@ -714,6 +729,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onAfterApplyChanges: function(closeWindow) {
         this.window.rename(this.windowNamePrefix + this.record.id);
         this.loadMask.hide();
+        this.saving = false;
         
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');

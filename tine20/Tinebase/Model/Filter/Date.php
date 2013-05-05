@@ -102,6 +102,18 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             
             // special values like this week, ...
             switch($_value) {
+
+                /******** anytime ******/
+                case 'anytime':
+                    $last = $date->toString('Y-m-t');
+                    $first = '1970-01-01';
+                    
+                    $value = array(
+                        $first, 
+                        $last,
+                    );
+                    break;
+                
                 /******* week *********/
                 case 'weekNext':
                     $date->add(21, Tinebase_DateTime::MODIFIER_DAY);
@@ -135,6 +147,29 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $last,
                     );
                     break;
+                    
+                case 'monthThreeLast':
+                    $last = $date->toString('Y-m-d');
+                    $date->subMonth(3);
+                    $first = $date->toString($this->_dateFormat);
+                    
+                    $value = array(
+                        $first, 
+                        $last,
+                    );
+                    break;
+                    
+                case 'monthSixLast':
+                    $last = $date->toString('Y-m-d');
+                    $date->subMonth(6);
+                    $first = $date->toString($this->_dateFormat);
+                    
+                    $value = array(
+                        $first, 
+                        $last,
+                    );
+                    break;
+                                        
                 /******* year *********/
                 case 'yearNext':
                     $date->add(2, Tinebase_DateTime::MODIFIER_YEAR);

@@ -107,16 +107,25 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.on('click', this.saveClickedNodeState, this);
         
         Ext.each(this.contentTypes, function(ct) {
-            var modelName = ct.modelName; 
-            var recordClass = Tine[this.app.appName].Model[modelName];
+            var modelName = ct.hasOwnProperty('meta') 
+                ? ct.meta.modelName 
+                : (
+                    ct.hasOwnProperty('model')
+                        ? ct.model
+                        : ct.modelName
+                ); 
+            
+            var modelApp = ct.appName ? Tine.Tinebase.appMgr.get(ct.appName) : this.app;
+            
+            var recordClass = Tine[modelApp.appName].Model[modelName];
             var group = recordClass.getMeta('group');
             
             if (group) {
                 if(! groupNodes[group]) {
                     groupNodes[group] = new Ext.tree.TreeNode({
                         id : 'modulenode-' + recordClass.getMeta('modelName'),
-                        iconCls: this.app.appName + modelName,
-                        text: this.app.i18n._hidden(group),
+                        iconCls: modelApp.appName + modelName,
+                        text: modelApp.i18n._hidden(group),
                         leaf : false,
                         expanded: false
                     });
@@ -128,13 +137,17 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             }
             
             // check requiredRight if any
-            if ( ct.requiredRight && (!Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()))) {
-                return true;
-            }
+            // add check for model name also
+            if (
+                ct.requiredRight && 
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()) &&
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase()) &&
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase() + 's')
+            ) return true;
             
             var child = new Ext.tree.TreeNode({
                 id : 'treenode-' + recordClass.getMeta('modelName'),
-                iconCls: this.app.appName + modelName,
+                iconCls: modelApp.appName + modelName,
                 text: recordClass.getRecordsName(),
                 leaf : true
             });
@@ -147,7 +160,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
             if (ct.genericCtxActions) {
                 this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
-                    nodeName: this.app.i18n._hidden(recordClass.getMeta('recordsName')),
+                    nodeName: modelApp.i18n._hidden(recordClass.getMeta('recordsName')),
                     actions: ct.genericCtxActions,
                     scope: this,
                     backend: 'Tinebase_Container',
@@ -217,5 +230,11 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 this.app.getMainScreen().show();
             }
         }).defer(100, this);
+    },
+    
+    // added to select node of active content type
+    afterRender: function () {
+        Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
+        this.getSelectionModel().select(this.getRootNode().findChild('id', 'treenode-' + this.contentType));
     }
 });

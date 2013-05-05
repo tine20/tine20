@@ -449,6 +449,9 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
      * sets tags from an array of tag data objects (not records)
      */
     setValue: function(value){
+        // set empty value
+        value = value || []; 
+        
         // replace template fields
         Tine.Tinebase.Model.Tag.replaceTemplateField(value);
         

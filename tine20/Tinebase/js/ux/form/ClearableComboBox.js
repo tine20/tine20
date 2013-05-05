@@ -80,6 +80,16 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     },
     
     /**
+     * reset
+     */
+    reset: function () {
+        Ext.ux.form.ClearableComboBox.superclass.reset.apply(this, arguments);
+        if (this.triggers && this.disableClearer !== true) {
+            this.triggers[0].hide();
+        }
+    },
+    
+    /**
      * clear value
      */
     clearValue: function () {
@@ -144,7 +154,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             }
             
             this.selectedRecord = rec;
-            this.setRawValue(rec ? rec.get(this.displayField) : val);
+            this.setValue(val);
         }
     }
 });

@@ -89,13 +89,17 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     initActivitiesDataView: function () {
         var ActivitiesTpl = new Ext.XTemplate(
             '<tpl for=".">',
-               '<div class="x-widget-activities-activitiesitem" id="{id}">',
-                    '<div class="x-widget-activities-activitiesitem-text"',
-                    '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]} - {[this.render(values.created_by, "user")]}" >', 
-                        '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.creation_time, "timefull")]}<br/>',
-                        '{[this.encode(values.note, true)]}<hr color="#aaaaaa">',
-                    '</div>',
-                '</div>',
+                '<div class="x-ux-messagebox-msg">',
+                    '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
+                    '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc" style="font-size: 11px;">',
+                        '<div class="x-widget-activities-activitiesitem-text"',
+                        '   ext:qtip="{[this.encode(values.note)]} - {[this.render(values.creation_time, "timefull")]} - {[this.render(values.created_by, "user")]}" >', 
+                            '{[this.render(values.note_type_id, "icon")]}&nbsp;{[this.render(values.creation_time, "timefull")]}<br/>',
+                            '{[this.encode(values.note, true)]}',
+                        '</div>',
+                    '</div></div></div>',
+                    '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
+                '</div><div style="clear: both; height: 2px;"></div>',
             '</tpl>' , {
                 encode: function (value, ellipsis) {
                     var result = Ext.util.Format.nl2br(Tine.Tinebase.common.doubleEncode(value));
@@ -129,6 +133,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         );
         
         this.activities = new Ext.DataView({
+            anchor: '-20',
             tpl: ActivitiesTpl,       
             id: 'grid_activities_limited',
             store: this.recordNotesStore,
@@ -272,11 +277,10 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         addNote: function (button, event) {
 
             this.formPanel = new Ext.FormPanel({
-                layout: 'form',
                 labelAlign: 'top',
-                border: true,
+                border: false,
                 frame: true,
-                items: [{
+                items: [{                    
                     xtype: 'textarea',
                     name: 'notification',
                     fieldLabel: this.translation.gettext('Enter new note:'),
@@ -300,7 +304,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
             };
             
             this.cancelAction = new Ext.Action({
-                text: _('Cancel'),
+                text: this.translation.gettext('Cancel'),
                 iconCls: 'action_cancel',
                 minWidth: 70,
                 handler: this.onCancel,
@@ -308,7 +312,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
             });
             
             this.okAction = new Ext.Action({
-                text: _('Ok'),
+                text: this.translation.gettext('Ok'),
                 iconCls: 'action_saveAndClose',
                 minWidth: 70,
                 handler: this.onOk,
@@ -320,20 +324,11 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 width: 500,
                 height: 260,
                 modal: true,
-                
                 layout: 'fit',
                 buttonAlign: 'right',
-                plain: true,
-                bodyStyle: 'padding:5px;',
-                                
-                buttons: [
-                    this.cancelAction,
-                    this.okAction                                    
-                ],
-                
-                items: [
-                    this.formPanel
-                ]
+                border: false,    
+                buttons: this.buttons,
+                items: this.formPanel
             });
         },       
         
@@ -680,6 +675,8 @@ Tine.widgets.activities.NotesFormField = Ext.extend(Ext.form.Field, {
      * sets notes from an array of note data objects (not records)
      */
     setValue: function (value) {
+        value = value || [];
+        
         this.recordNotesStore.loadData(value);
     }
 

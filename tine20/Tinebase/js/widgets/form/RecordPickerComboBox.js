@@ -142,7 +142,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             // TODO do we need to set start & limit here?
             start: options.params.start,
             limit: options.params.limit,
-            sort: (this.sortBy) ? this.sortBy : this.valueField,
+            // if sort is not set, use display field as default sort
+            sort: (this.sortBy) ? this.sortBy : this.displayField,
             dir: 'ASC'
         };
         
@@ -241,8 +242,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             
             // value is a js object
             else if (Ext.isObject(value)) {
-                if (! this.store.getById(value)) {
-                    var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
+                var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
+                if (! this.store.getById(value.id)) {
                     this.store.addSorted(record);
                 }
                 value = value[this.valueField] || '';
@@ -261,7 +262,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             text = r.getTitle();
             this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
-                if (r.getId() == this.editDialog.record.getId()) {
+                // check if editDialog exists
+                if (this.editDialog && this.editDialog.record && r.getId() == this.editDialog.record.getId()) {
                     Ext.MessageBox.show({
                         title: _('Failure'),
                         msg: _('You tried to link a record with itself. This is not allowed!'),

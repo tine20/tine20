@@ -251,17 +251,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
     },
     
+    /**
+     * take columns property if defined, otherwise create columns from record class propery
+     * @return {}
+     */
     getColumnModel: function() {
-        var labelColumn = {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
-        if (this.labelRenderer != Ext.emptyFn) {
-            labelColumn.renderer = this.labelRenderer;
+        if (! this.columns) {
+            var labelColumn = {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
+            if (this.labelRenderer != Ext.emptyFn) {
+                labelColumn.renderer = this.labelRenderer;
+            }
+            this.columns = [ labelColumn ];
         }
         
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: false
             },
-            columns:  [ labelColumn ]
+            columns: this.columns
         });
     },
     
@@ -290,7 +297,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getSearchCombo: function() {
         var searchComboClass = (this.searchComboClass !== null) ? this.searchComboClass : Tine.Tinebase.widgets.form.RecordPickerComboBox;
         
-        return new searchComboClass(Ext.apply({
+        // added reference to searchcombo
+        this.searchCombo = new searchComboClass(Ext.apply({
             blurOnSelect: true,
             recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
             emptyText: _('Search for records ...'),
@@ -299,6 +307,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 'select': this.onAddRecordFromCombo
             }
         }, this.searchComboConfig));
+        
+        return this.searchCombo;
     },
     
     /**
@@ -308,6 +318,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Record} recordToAdd
      */
     onAddRecordFromCombo: function(picker, recordToAdd) {
+        // sometimes there are no record data given
+        if (! recordToAdd) {
+           return;
+        }
+        
         var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.recordDefaults || {}), recordToAdd.id);
         
         // check if already in
@@ -328,7 +343,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);
-        }           
+        }
     },
     
     /**

@@ -429,17 +429,17 @@ Tine.Tinebase.common = {
         } else if (accountObject.name) {
             type = 'group';
             displayName = accountObject.name;
-        } else if (record.data.name) {
+        } else if (record && record.data.name) {
             type = record.data.type;
             displayName = record.data.name;
-        } else if (record.data.account_name) {
+        } else if (record && record.data.account_name) {
             type = record.data.account_type;
             displayName = record.data.account_name;
         }
         
         iconCls = type === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
         
-        return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName);
+        return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName || '');
     },
     
     /**

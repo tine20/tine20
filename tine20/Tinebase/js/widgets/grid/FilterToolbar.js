@@ -221,7 +221,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
         
         // render static action buttons
-        for (var action in this.actions) {
+        for (action in this.actions) {
             this.actions[action].hidden = true;
             this.actions[action].render(this.bwrap);
         }
@@ -609,8 +609,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
             
             // auto add self id filter
-            this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
-            this.filterModels.push(this.ownRecordFilterModel);
+            // add own record filter by default but ignore if set
+            if (this.ownRecordFilter !== false) {
+                this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
+                this.filterModels.push(this.ownRecordFilterModel);
+            }
         }
         
         
@@ -752,7 +755,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             var firstFilter = this.addFilter();
             
             // save buttons somewhere
-            for (var action in this.actions) {
+            for (action in this.actions) {
                 this.actions[action].hide();
                 this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
             }

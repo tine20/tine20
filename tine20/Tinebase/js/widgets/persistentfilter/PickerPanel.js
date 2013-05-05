@@ -68,8 +68,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.recordCollection = this.store.queryBy(function(record, id) {
             if (record.get('application_id') == this.app.id) {
-                if(this.contentType) {
-                    var modelName = this.app.appName + '_Model_' + this.contentType + 'Filter';
+                if(this.contentType || this.filterModel) {
+                    var modelName = this.filterModel || (this.app.appName + '_Model_' + this.contentType + 'Filter');
                     if (record.get('model') == modelName) {
                         return true;
                     } else {
@@ -81,6 +81,14 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             }
             return false;
         }, this);
+        // sort filters by translated name
+        var self = this;
+        this.recordCollection.sort('ASC', function (obj1, obj2) {
+            var name1 = Ext.util.Format.htmlEncode(self.app.i18n._hidden(obj1.get('name'))),
+                name2 = Ext.util.Format.htmlEncode(self.app.i18n._hidden(obj2.get('name')));
+            
+            return name1 > name2 ? 1: -1;
+        });
         
         var sorting = 10000;
         
