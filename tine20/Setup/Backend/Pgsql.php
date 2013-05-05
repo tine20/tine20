@@ -314,9 +314,9 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         if (!empty($_declaration->primary)) {
             $identifier = SQL_TABLE_PREFIX . $_tableName . '_pkey';
         } elseif (!empty($_declaration->unique)) {
-            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name . '_key';
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name . '_key';
         } else {
-            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_key->name;
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name;
         }
         
         if ($this->_constraintExists($identifier)) {

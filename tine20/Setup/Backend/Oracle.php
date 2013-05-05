@@ -46,8 +46,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             'defaultType' => 'NUMBER',
             'defaultScale' => '0'),
         'datetime' => array(
-            'defaultType' => 'VARCHAR2',
-            'defaultLength' => 25),
+            'defaultType' => 'date'),
         'date' => array(
             'defaultType' => 'date'),
         'time' => array(
@@ -114,7 +113,6 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     protected function _getIncrementSequenceName($_tableName)
     {
         return SQL_TABLE_PREFIX . substr($_tableName, 0, 25) . self::$_sequence_postfix;
-        return $this->sequencename;
     }
     
     public function getIncrementSequence($_tableName) 
@@ -151,6 +149,13 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         return $statement;
     }
     
+    /**
+     * get create table statement
+     * 
+     *
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @return string
+     */
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract $_table)
     {
      
@@ -171,7 +176,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
         
         if (isset($_table->comment)) {
             //@todo support comments
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
+            //Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  ignoring comment because comments are currently not supported by oracle adapter.');
         }
         
         $statement .= implode(",\n", $statementSnippets) . "\n)";
@@ -406,9 +411,17 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      * 
      * @param string tableName
      */
-    public function dropTable($_tableName)
+    public function dropTable($_tableName, $_applicationId = NULL)
     {
-        parent::dropTable($_tableName);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
+        $statement = "DROP TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        $this->execQueryVoid($statement);
+        
+        if ($_applicationId !== NULL) {
+            Tinebase_Application::getInstance()->removeApplicationTable($_applicationId, $_tableName);
+        }
+
         try {
             $statement = 'DROP SEQUENCE ' . $this->_db->quoteIdentifier($this->_getIncrementSequenceName($_tableName));
             $this->execQueryVoid($statement);
