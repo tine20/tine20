@@ -341,15 +341,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function getMultipleByProperty($_value, $_property='name', $_getDeleted = FALSE, $_orderBy = NULL, $_orderDirection = 'ASC')
     {
         $columnName = $this->_db->quoteIdentifier($this->_tableName . '.' . $_property);
-        $value = empty($_value) ? array('') : (array)$_value;
-        $orderBy = $this->_tableName . '.' . ($_orderBy ? $_orderBy : $_property);
-        
-        $select = $this->_getSelect('*', $_getDeleted)
-                       ->where($columnName . 'IN (?)', $value)
-                       ->order($orderBy . ' ' . $_orderDirection);
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
+        if (! empty($_value)) {
+            $value = (array)$_value;
+            $orderBy = $this->_tableName . '.' . ($_orderBy ? $_orderBy : $_property);
+
+            $select = $this->_getSelect('*', $_getDeleted)
+                ->where($columnName . 'IN (?)', $value)
+                ->order($orderBy . ' ' . $_orderDirection);
+
+                Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        } else {
+                $select = $this->_getSelect('*', $_getDeleted)->where('1=0');
+        }
         $stmt = $this->_db->query($select);
         
         $resultSet = $this->_rawDataToRecordSet($stmt->fetchAll());
@@ -561,6 +564,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (! empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
         } else {
+            $countSelect->reset(Zend_Db_Select::COLUMNS); 
+            $countSelect->reset(Zend_Db_Select::GROUP);
+            $countSelect->columns(array('count' => 'COUNT(' . $defaultCountCol . ')'));
             $result = $this->_db->fetchOne($countSelect);
         }
         
@@ -915,6 +921,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         foreach ($_recordArray as $key => $value) {
             if (is_bool($value)) {
                 $_recordArray[$key] = ($value) ? new Zend_Db_Expr('1') : new Zend_Db_Expr('0');
+            } elseif (is_null($value)) {
+                $_recordArray[$key] = new Zend_Db_Expr('NULL');
             } elseif (is_int($value)) {
                 $_recordArray[$key] = new Zend_Db_Expr((string) $value);
             }
@@ -1273,6 +1281,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function getTablePrefix()
     {
         return $this->_tablePrefix;
+    }
+    
+    /**
+     * get table identifier
+     * 
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->_identifier;
     }
     
     /**

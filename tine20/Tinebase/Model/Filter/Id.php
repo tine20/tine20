@@ -57,9 +57,9 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          // quote field identifier
          $field = $this->_getQuotedFieldName($_backend);
          
-         if (empty($this->_value)) {
+         if (empty($this->_value) && $this->_value != '0') {
              // prevent sql error
-             if ($this->_operator == 'in') {
+             if ($this->_operator == 'in' || $this->_operator == 'equals') {
                  if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                      . ' Empty value with "in" operator (model: ' 
                      . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options'). ')');

@@ -31,6 +31,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
     protected $_operators = array(
         0 => 'contains',
         1 => 'in',
+        2 => 'equals',
+        3 => 'startswith'
     );
     
     /**
@@ -65,6 +67,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
          
          switch ($this->_operator) {
              case 'contains':
+             case 'equals':
+             case 'startswith':
                  $queries = explode(' ', $this->_value);
                  foreach ($queries as $query) {
                      $whereParts = array();
@@ -78,7 +82,15 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
                      }
                       
                      if (!empty($whereClause)) {
-                         $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
+                         if ($this->_operator == 'equals') {
+                             $_select->where($db->quoteInto($whereClause, trim($query)));
+                         }
+                         else if ($this->_operator == 'startswith') {
+                             $_select->where($db->quoteInto($whereClause, trim($query) . '%'));
+                         }
+                         else {
+                             $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
+                         }
                      }
                  }
                  break;

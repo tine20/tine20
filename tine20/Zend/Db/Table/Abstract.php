@@ -875,7 +875,8 @@ abstract class Zend_Db_Table_Abstract
                     throw new Zend_Db_Table_Exception('A table must have a primary key, but none was found');
                 }
             } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__.'::'.__LINE__."No table found");
+                Tinebase_Core::getLogger()->warn(__METHOD__.'::'.__LINE__." No table found");
+                return false;
             }
         } else if (!is_array($this->_primary)) {
             $this->_primary = array(1 => $this->_primary);

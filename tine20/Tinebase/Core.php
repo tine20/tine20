@@ -302,10 +302,16 @@ class Tinebase_Core
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
-        if (strpos($_applicationName, '_')) {
+        // modified (some model names can have both . and _ in their names and we should treat them as JS model name
+        if (strpos($_applicationName, '_') && ! strpos($_applicationName, '.')) {
             // got (complete) model name name as first param
             list($appName, $i, $modelName) = explode('_', $_applicationName, 3);
-        } else {
+        } 
+        else if (strpos($_applicationName, '.')) {
+            // got (complete) model name name as first param (JS style)
+            list($j, $appName, $i, $modelName) = explode('.', $_applicationName, 4);
+        }
+        else {
             $appName = $_applicationName;
             $modelName = $_modelName;
         }
@@ -321,6 +327,7 @@ class Tinebase_Core
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
+                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
                 // check for generic app controller
                 if (! class_exists($controllerName)) {
                     throw new Tinebase_Exception_NotFound('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
@@ -957,10 +964,12 @@ class Tinebase_Core
             if ((bool) $config->queryProfiles) {
                 $data['queryProfiles'] = array();
                 foreach($profiler->getQueryProfiles() as $profile) {
-                    $data['queryProfiles'][] = array(
-                        'query'       => $profile->getQuery(),
-                        'elapsedSecs' => $profile->getElapsedSecs(),
-                    );
+                    if ((bool) $config->queryProfilesDetails) {
+                        $data['queryProfiles'][] = array(
+                            'query'       => $profile->getQuery(),
+                            'elapsedSecs' => $profile->getElapsedSecs(),
+                        );
+                    }
                     
                     if ($profile->getElapsedSecs() > $data['longestTime']) {
                         $data['longestTime']  = $profile->getElapsedSecs();

@@ -72,11 +72,12 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $valueFilter = new Tinebase_Model_Filter_Date(array('field' => 'value', 'operator' => $_fieldOrData['operator'], 'value' => $_fieldOrData['value']['value']));
             $this->_subFilter->addFilter($valueFilter);
         } elseif ($type == 'integer') {
-       	    $valueFilter = new Tinebase_Model_Filter_Int($_fieldOrData, $_operator, $_value, $_options);
+            $valueFilter = new Tinebase_Model_Filter_Int($_fieldOrData, $_operator, $_value, $_options);
         } else {
             $valueFilter = new Tinebase_Model_Filter_Text($_fieldOrData, $_operator, $_value, $_options);
         }
         
+        $this->_valueFilter = $valueFilter;
         $this->_operators = $valueFilter->getOperators();
         $this->_opSqlMap = $valueFilter->getOpSqlMap();
         
@@ -114,7 +115,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
         
         // make sure $correlationName is a string
-        $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value['cfId'] . 'cf';
+        $correlationName = Tinebase_Record_Abstract::generateUID(5) . $this->_value['cfId'] . 'cf';
         // use only last 30 chars (oracle column name limit)
         $correlationName = substr($correlationName, -30);
         

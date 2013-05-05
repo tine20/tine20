@@ -51,7 +51,7 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
         
         include_once $fullPath;
         
-        if (!class_exists($class, false) && !interface_exists($class, false)) {
+        if (! class_exists($class, false) && !interface_exists($class, false)) {
             throw new Zend_Exception("File \"$fullPath\" does not exist or class \"$class\" was not found in the file");
         }
     }

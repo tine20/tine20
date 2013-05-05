@@ -30,11 +30,12 @@ class Tinebase_Backend_Sql_Filter_FilterGroup
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Model_Filter_FilterGroup $_filters
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     * @param  boolean                           $_appendFilterSql
      */
-    public static function appendFilters($_select, $_filters, $_backend)
+    public static function appendFilters($_select, $_filters, $_backend, $_appendFilterSql = TRUE)
     {
         // support for direct sql filter append in derived filter groups
-        if (method_exists($_filters, 'appendFilterSql')) {
+        if ($_appendFilterSql && method_exists($_filters, 'appendFilterSql')) {
             $_filters->appendFilterSql($_select, $_backend);
         }
         

@@ -93,7 +93,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         $idField = array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id';
         $db = $_backend->getAdapter();
         $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
-        $_select->where($db->quoteInto("$qField IN (?)", empty($ownIds) ? ' ' : $ownIds));
+        if (empty($ownIds)) {
+            $_select->where('1=0');
+        } else {
+            $_select->where($db->quoteInto("$qField IN (?)", $ownIds));
+        }
     }
     
     /**

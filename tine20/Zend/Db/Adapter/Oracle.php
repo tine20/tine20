@@ -130,20 +130,19 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
         // if set host, port and dbname create string connection or use tnsnames.ora name or string connection
         if (! empty($this->_config['host']) && ! empty($this->_config['port']) && ! empty($this->_config['dbname'])) {
-            if ($this->_config['isSID']) {
-                $this->_config['dbname']="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SID=\"".$this->_config['dbname']."\")))";
+            if (isset($this->_config['isSID']) && $this->_config['isSID']) {
+                $this->_config['dbname'] = "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SID=\"".$this->_config['dbname']."\")))";
             } else {
-                $this->_config['dbname']="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SERVICE_NAME=\"".$this->_config['dbname']."\")))";
+                $this->_config['dbname'] = "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=".$this->_config['host'].")(PORT=".$this->_config['port'].")))(CONNECT_DATA=(SERVICE_NAME=\"".$this->_config['dbname']."\")))";
             }
         }
 
         $connectionFuncName = ($this->_config['persistent'] == true) ? 'oci_pconnect' : 'oci_connect';
-        $connectionDatabase = (($this->_config['host'] == 'localhost' || $this->_config['host'] == '127.0.0.1') ? $this->_config['dbname'] : $this->_config['host'].'/'.$this->_config['dbname']);
         
         $this->_connection = @$connectionFuncName(
                 $this->_config['username'],
                 $this->_config['password'],
-                $connectionDatabase,
+                $this->_config['dbname'],
                 $this->_config['charset']);
                 
         // check the connection
@@ -154,12 +153,14 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception(oci_error());
         }
+        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD hh24:mi:ss'");
+        oci_execute($rs, OCI_COMMIT_ON_SUCCESS);
         $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = ',.'");
-        oci_execute($rs, OCI_DEFAULT);
-        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_SORT=BINARY_CI;");
-        oci_execute($rs, OCI_DEFAULT);
-        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_COMP=LINGUISTIC;");
-        oci_execute($rs, OCI_DEFAULT);
+        oci_execute($rs, OCI_COMMIT_ON_SUCCESS);
+//        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_SORT=BINARY_CI;");
+//        oci_execute($rs, OCI_COMMIT_ON_SUCCESS);
+//        $rs = oci_parse($this->_connection, "ALTER SESSION SET NLS_COMP=LINGUISTIC;");
+//        oci_execute($rs, OCI_COMMIT_ON_SUCCESS);
 
     }
 
@@ -666,7 +667,13 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $vals[] = $val->__toString();
                 unset($bind[$col]);
             } else {
+
+                if ($val == date('Y-m-d H:i:s',strtotime($val))) {
+                $vals[] = "TO_DATE(".':'.$col.$i.",'YYYY-MM-DD hh24:mi:ss')";
+            } else {
                 $vals[] = ':'.$col.$i;
+            }
+                
                 unset($bind[$col]);
                 $bind[':'.$col.$i] = $val;
             }
@@ -681,6 +688,77 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
         // execute the statement and return the number of affected rows
         $stmt = $this->query($sql, $bind);
+        $result = $stmt->rowCount();
+        return $result;
+    }
+    
+    /**
+     * Updates table rows with specified data based on a WHERE clause.
+     *
+     * @param  mixed        $table The table to update.
+     * @param  array        $bind  Column-value pairs.
+     * @param  mixed        $where UPDATE WHERE clause(s).
+     * @return int          The number of affected rows.
+     */
+    public function update($table, array $bind, $where = '')
+    {
+        /**
+         * Build "col = ?" pairs for the statement,
+         * except for Zend_Db_Expr which is treated literally.
+         */
+        $set = array();
+        $i = 0;
+        foreach ($bind as $col => $val) {
+            if ($val instanceof Zend_Db_Expr) {
+                $val = $val->__toString();
+                unset($bind[$col]);
+            } else {
+                if ($this->supportsParameters('positional')) {
+                    // MOD: add to_date for date column
+                    if ($val == date('Y-m-d H:i:s',strtotime($val))) {
+                        $val = "TO_DATE(".'?'.",'YYYY-MM-DD hh24:mi:ss')";
+                    } else {
+                        $val = '?';
+                    }
+                } else {
+                    if ($this->supportsParameters('named')) {
+                        unset($bind[$col]);
+                        $bind[':'.$col.$i] = $val;
+                        // MOD: add to_date for date column
+                        if ($val == date('Y-m-d H:i:s',strtotime($val))) {
+                            $val = "TO_DATE(".':'.$col.$i.",'YYYY-MM-DD hh24:mi:ss')";
+                        } else {
+                            $val = ':'.$col.$i;
+                        }
+                        $i++;
+                    } else {
+                        /** @see Zend_Db_Adapter_Exception */
+                        require_once 'Zend/Db/Adapter/Exception.php';
+                        throw new Zend_Db_Adapter_Exception(get_class($this) ." doesn't support positional or named binding");
+                    }
+                }
+            }
+            $set[] = $this->quoteIdentifier($col, true) . ' = ' . $val;
+        }
+
+        $where = $this->_whereExpr($where);
+
+        /**
+         * Build the UPDATE statement
+         */
+        $sql = "UPDATE "
+             . $this->quoteIdentifier($table, true)
+             . ' SET ' . implode(', ', $set)
+             . (($where) ? " WHERE $where" : '');
+
+        /**
+         * Execute the statement and return the number of affected rows
+         */
+        if ($this->supportsParameters('positional')) {
+            $stmt = $this->query($sql, array_values($bind));
+        } else {
+            $stmt = $this->query($sql, $bind);
+        }
         $result = $stmt->rowCount();
         return $result;
     }
@@ -724,8 +802,6 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         }
     }
 
-    
-    
     ############################ Override methods - not included in default Zend Framework class #################
     
 
@@ -792,7 +868,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      * @param  mixed  $bind An array of data to bind to the placeholders.
      * @return array
      */
-    protected function _positionalToNamedParameters($sql, $bind)
+    protected function _positionalToNamedParameters($sql, array $bind)
     {
         if ($sql instanceof Zend_Db_Select) {
             if (empty($bind)) {
@@ -804,25 +880,23 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         
         $keyCounter = 0;
         $quotedQuestionMarksCounter = 0;
-        if (is_array($bind)) {
-            foreach ($bind as $key => $value)
-            {
-                if (is_int($key)) {
-                    unset($bind[$key]);
-                    $bind[$this->_namedParamPrefix . $keyCounter] = $value;
-
-                    $position = 0;
-                    while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
-                        if ($this->_isQuoted($sql, $position)) {
-                            $quotedQuestionMarksCounter++;
-                        } else {
-                            break;
-                        }
+        foreach ($bind as $key => $value)
+        {
+            if (is_int($key)) {
+                unset($bind[$key]);
+                $bind[$this->_namedParamPrefix . $keyCounter] = $value;
+                
+                $position = 0;
+                while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
+                    if ($this->_isQuoted($sql, $position)) {
+                        $quotedQuestionMarksCounter++;
+                    } else {
+                        break;
                     }
-                    $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
-
-                    $keyCounter++;
                 }
+                $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
+                
+                $keyCounter++;
             }
         }
 

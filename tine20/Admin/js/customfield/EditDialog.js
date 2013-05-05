@@ -512,7 +512,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             layoutConfig: {
                 align: 'stretch',
                 pack: 'start'
-            },
+            }, 
             border: false,
             items: [{
                 xtype: 'columnform',
