@@ -1068,6 +1068,28 @@ class Calendar_JsonTests extends Calendar_TestCase
             }
         }
     }
+
+    /**
+     * testExdateUpdateThisAndFutureWithRruleUntil
+     * 
+     * @see 0008244: "rrule until must not be before dtstart" when updating recur exception (THISANDFUTURE)
+     */
+    public function testExdateUpdateThisAndFutureWithRruleUntil()
+    {
+        $events = $this->testCreateRecurException();
+        
+        $exception = $this->_getException($events, 1);
+        $exception['dtstart'] = Tinebase_DateTime::now()->toString();
+        $exception['dtend'] = Tinebase_DateTime::now()->addHour(1)->toString();
+        
+        // move exception
+        $updatedEvent = $this->_uit->saveEvent($exception);
+        // try to update the whole series
+        $updatedEvent['summary'] = 'new summary';
+        $updatedEvent = $this->_uit->saveEvent($updatedEvent, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
+        
+        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in event: ' . print_r($updatedEvent, TRUE));
+    }
     
     /**
      * testExdateUpdateThisAndFutureRemoveAttendee
