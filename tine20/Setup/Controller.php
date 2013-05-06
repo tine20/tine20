@@ -1721,11 +1721,8 @@ class Setup_Controller
      */
     public function isInstalled($appname)
     {
-        $result = TRUE;
         try {
-            $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = FALSE;
+            $result = Tinebase_Application::getInstance()->isInstalled($appname);
         } catch (Exception $e) {
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Application ' . $appname . ' is not installed.');
             Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e);
