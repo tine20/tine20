@@ -44,18 +44,13 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     initComponent: function() {
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
-        
         Tine.Admin.SambaMachineGridPanel.superclass.initComponent.call(this);
     },
     
     /**
      * initialises filter toolbar
      */
-    initFilterToolbar: function() {
+    initFilterPanel: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Computer Name'),    field: 'query',       operators: ['contains']}
@@ -67,7 +62,9 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
-    },    
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+    },
     
     /**
      * returns cm

@@ -28,7 +28,6 @@ Tine.widgets.grid.FilterPanel = function(config) {
     
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
-//    this.filterToolbarConfig.filterPluginCmp = this;
     
     this.filterPanels = [];
     
@@ -99,8 +98,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     cls: 'tw-ftb-filterpanel',
     layout: 'border',
     border: false,
-
-//    height: 100,
     
     initComponent: function() {
         
@@ -172,7 +169,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     addFilterPanel: function(config) {
         config = config || {};
-//        config.title = config.title ? config.title : String.format(_('Criteria {0}'), ++this.criteriaCount);
         
         var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
         filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
@@ -228,7 +224,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.fireEvent('filterpanelactivate', this, filterPanel);
     },
     
-    // NOTE: their is no spechial filterPanel, each filterpanel could be closed  at any time
+    // NOTE: there is no special filterPanel, each filterpanel could be closed  at any time
     //       ?? what does this mean for quickfilterplugin???
     //       -> we cant mirror fileds or need to mirror the field from the active tbar
     //       -> mhh, better deactivate as soon as we have more than one tbar
@@ -250,7 +246,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.criteriaText = new Ext.Panel({
             border: 0,
-//            hidden: true,
             html: '',
             bodyStyle: {
                 border: 0,
@@ -294,8 +289,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      */
     onQuickFilterClear: function() {
         this.quickFilter.reset();
+        this.quickFilter.setValue('');
+        this.syncQuickFilterFields(true, '');
         this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
-        
     },
     
     /**
@@ -303,6 +299,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      */
     onQuickFilterTrigger: function() {
         this.activeFilterPanel.onFiltertrigger.call(this.activeFilterPanel);
+        this.activeFilterPanel.onFilterRowsChange.call(this.activeFilterPanel);
     },
     
     /**
@@ -315,32 +312,51 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.quickFilter.setDisabled(btn.pressed);
         this.manageCriteriaText();
         
-        if (btn.pressed) {
-            var quickFilterValue = this.quickFilter.getValue(),
-                quickFilter;
-                
-            this.quickFilter.setValue('');
-            
-            if (quickFilterValue) {
-                // find quickfilterrow
-                this.activeFilterPanel.filterStore.each(function(filter) {
-                    if (filter.get('field') == this.quickFilterField && ! filter.get('value')) {
-                        quickFilter = filter;
-                        quickFilter.set('value', quickFilterValue);
-                        quickFilter.formFields.value.setValue(quickFilterValue);
-                        return false;
-                    }
-                }, this);
-                
-                if (! quickFilter) {
-                    quickFilter = this.activeFilterPanel.addFilter(new this.activeFilterPanel.record({field: this.quickFilterField, value: quickFilterValue}));
-                }
-            }
-            
-        }
+        this.syncQuickFilterFields(btn.pressed);
         
         this.activeFilterPanel.doLayout();
         this.manageHeight();
+    },
+    
+    /**
+     * synchronizes the quickfilter field with the  coreesponding filter of the active filter toolbar
+     * 
+     * @param {Bool} fromQuickFilter
+     * @param {String} value
+     */
+    syncQuickFilterFields: function(fromQuickFilter, value) {
+        
+        if (fromQuickFilter === undefined) {
+            fromQuickFilter = true;
+        }
+        
+        if (fromQuickFilter) {
+            var val = (value !== undefined) ? value : this.quickFilter.getValue(),
+                quickFilter;
+                
+            this.quickFilter.setValue('');
+            // find quickfilterrow
+            this.activeFilterPanel.filterStore.each(function(filter) {
+                if (filter.get('field') == this.quickFilterField) {
+                    quickFilter = filter;
+                    quickFilter.set('value', val);
+                    quickFilter.formFields.value.setValue(val);
+                    return false;
+                }
+            }, this);
+        
+            if (! quickFilter && val) {
+                quickFilter = this.activeFilterPanel.addFilter(new this.activeFilterPanel.record({field: this.quickFilterField, value: val}));
+            }
+        } else {
+            this.activeFilterPanel.filterStore.each(function(filter) {
+                if (filter.get('field') == this.quickFilterField) {
+                    this.quickFilter.setValue(filter.formFields.value.getValue());
+                    filter.set('value', '');
+                    return false;
+                }
+            }, this);
+        }
     },
     
     /**

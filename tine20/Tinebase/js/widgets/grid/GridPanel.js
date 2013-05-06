@@ -293,7 +293,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.deleteQueue = [];
         
         // init generic stuff
-        this.initGeneric();
+        if (this.modelConfig) {
+            this.initGeneric();
+        }
+        
+        this.initFilterPanel();
         
         // init store
         this.initStore();
@@ -327,47 +331,35 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * initializes generic stuff
      */
     initGeneric: function() {
+        Tine.log.debug('init generic gridpanel with config:');
+        Tine.log.debug(this.modelConfig);
         
-        if (this.modelConfig) {
-            
-            Tine.log.debug('init generic gridpanel with config:');
-            Tine.log.debug(this.modelConfig);
-            
-            var meta = this.modelConfig.meta;
-            
-            if (meta.hasOwnProperty('multiEdit') && (meta.multiEdit === true)) {
-                this.multipleEdit = true;
-                this.multipleEditRequiredRight = (meta.hasOwnProperty('multiEditRight')) ? meta.multiEditRight : null;
-            }
-            
-            // init generic filter toolbar
-            this.initGenericFilterToolbar();
+        var meta = this.modelConfig.meta;
         
-            // init generic columnModel
-            this.initGenericColumnModel();
+        if (meta.hasOwnProperty('multiEdit') && (meta.multiEdit === true)) {
+            this.multipleEdit = true;
+            this.multipleEditRequiredRight = (meta.hasOwnProperty('multiEditRight')) ? meta.multiEditRight : null;
         }
+        
+        // init generic columnModel
+        this.initGenericColumnModel();
     },
     
     /**
-     * initialises generic filter toolbar
-     * @private
+     * initialises the filter panel 
+     * 
+     * @param {Object} config
      */
-    initGenericFilterToolbar: function() {
-        var plugins = [];
-        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
-            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-            plugins.push(this.quickSearchFilterToolbarPlugin);
-        }
-        
-        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+    initFilterPanel: function(config) {
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
             app: this.app,
             recordClass: this.recordClass,
             allowSaving: true,
             filterModels: this.recordClass.getFilterModel(),
             defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
-            plugins: plugins,
-            filters: []
-        });
+            filters: this.defaultFilters || []
+        }, config || {}));
+        
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
     },
@@ -1325,19 +1317,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getFilterToolbar: function(config) {
         config = config || {};
-        var plugins = [];
-        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
-            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-            plugins.push(this.quickSearchFilterToolbarPlugin);
-        }
-
         return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
-            filters: this.defaultFilters || [],
-            plugins: plugins
+            filters: this.defaultFilters || []
         }));
     },
 

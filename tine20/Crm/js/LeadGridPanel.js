@@ -65,10 +65,6 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.gridConfig.cm = this.getColumnModel();
         
         this.defaultFilters = [ {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()} ];
-        this.filterToolbar = this.getFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
         
         this.detailsPanel = new Tine.Crm.LeadGridDetailsPanel({
             grid: this

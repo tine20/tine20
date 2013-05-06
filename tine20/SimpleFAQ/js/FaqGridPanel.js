@@ -45,36 +45,14 @@ Tine.SimpleFAQ.FaqGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.SimpleFAQ.faqBackend;
         this.gridConfig.cm = this.getColumnModel();
-        this.initFilterToolbar();
-
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
+        
+        this.defaultFilters = [{field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}];
 
         this.detailsPanel = new Tine.SimpleFAQ.FaqGridDetailsPanel({
             grid: this
         });
 
         Tine.SimpleFAQ.FaqGridPanel.superclass.initComponent.call(this);
-    },
-
-    /**
-     * initialises filter toolbar
-     *
-     * @private
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            recordClass: this.recordClass,
-            filterModels: Tine.SimpleFAQ.Model.Faq.getFilterModel(),
-            defaultFilter: 'query',
-            filters: [
-                //filter for "show entrys from active user container"
-                {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
-            ],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
 
     /**

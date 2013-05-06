@@ -25,16 +25,9 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     initComponent: function() {
-    
         this.recordProxy = Tine.Voipmanager.SnomPhoneBackend;
-                
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-        //this.initDetailsPanel();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
  
         // add context menu actions
         var action_resetHttpClientInfo = new Ext.Action({
@@ -54,22 +47,6 @@ Tine.Voipmanager.SnomPhoneGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.contextMenuItems = [action_resetHttpClientInfo, action_openPhonesWebGui];
         
         Tine.Voipmanager.SnomPhoneGridPanel.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * initialises filter toolbar
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
     
     /**

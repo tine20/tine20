@@ -35,13 +35,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
-        this.initFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
-        
         this.isLdapBackend = Tine.Tinebase.registry.get('accountBackend') == 'Ldap';
-            
         Tine.Admin.user.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -92,7 +86,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * initialises filter toolbar
      */
-    initFilterToolbar: function() {
+    initFilterPanel: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n.n_('User', 'Users', 1),    field: 'query',       operators: ['contains']}
@@ -104,7 +98,9 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
-    },    
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+    },
     
     /**
      * add custom items to action toolbar

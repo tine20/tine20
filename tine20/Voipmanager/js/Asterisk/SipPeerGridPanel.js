@@ -25,38 +25,12 @@ Tine.Voipmanager.AsteriskSipPeerGridPanel = Ext.extend(Tine.widgets.grid.GridPan
     },
     
     initComponent: function() {
-    
         this.recordProxy = Tine.Voipmanager.AsteriskSipPeerBackend;
-                
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-        //this.initDetailsPanel();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
-         
         Tine.Voipmanager.AsteriskSipPeerGridPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * initialises filter toolbar
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Name'), field: 'name' }
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
-    },    
-    
-      
+
     /**
      * returns cm
      * @private

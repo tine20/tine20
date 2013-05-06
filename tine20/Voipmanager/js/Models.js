@@ -92,7 +92,9 @@ Tine.Voipmanager.Model.SnomPhone.getDefaultData = function() {
     };
 };
 
-
+Tine.Voipmanager.Model.SnomPhone.getFilterModel = function() {
+    return [{label: _('Quick search'),    field: 'query',    operators: ['contains']}]
+};
 
 
 Tine.Voipmanager.Model.SnomLocationArray = Tine.Tinebase.Model.modlogFields.concat([
@@ -143,7 +145,11 @@ Tine.Voipmanager.Model.SnomLocation.getDefaultData = function() {
     };
 };
 
-
+Tine.Voipmanager.Model.SnomLocation.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 
 Tine.Voipmanager.Model.SnomTemplateArray = Tine.Tinebase.Model.modlogFields.concat([
@@ -180,7 +186,11 @@ Tine.Voipmanager.Model.SnomTemplate.getDefaultData = function() {
     };
 };
 
-
+Tine.Voipmanager.Model.SnomTemplate.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 
 Tine.Voipmanager.Model.SnomSoftwareArray = Tine.Tinebase.Model.modlogFields.concat([
@@ -218,7 +228,11 @@ Tine.Voipmanager.Model.SnomSoftware.getDefaultData = function() {
     };
 };
 
-
+Tine.Voipmanager.Model.SnomSoftware.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 
 Tine.Voipmanager.Model.SnomSoftwareImageArray = Tine.Tinebase.Model.modlogFields.concat([
@@ -292,7 +306,11 @@ Tine.Voipmanager.Model.SnomLine.getDefaultData = function() {
     };
 };
 
-
+Tine.Voipmanager.Model.SnomLine.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 Tine.Voipmanager.Model.SnomSettingArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
@@ -349,6 +367,12 @@ Tine.Voipmanager.Model.SnomSetting.getDefaultData = function() {
     };
 };
 
+
+Tine.Voipmanager.Model.SnomSetting.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 /**
  * Model of a right
@@ -445,7 +469,15 @@ Tine.Voipmanager.Model.AsteriskSipPeer.getDefaultData = function() {
 };
 
 
-
+Tine.Voipmanager.Model.AsteriskSipPeer.getFilterModel = function() {
+    if (! app) {
+        var app = Tine.Tinebase.appMgr.get('Voipmanager');
+    }
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']},
+        {label: app.i18n._('Name'), field: 'name' }
+    ];
+};
 
 Tine.Voipmanager.Model.AsteriskContextArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
@@ -479,7 +511,11 @@ Tine.Voipmanager.Model.AsteriskContext.getDefaultData = function() {
 };
 
 
-
+Tine.Voipmanager.Model.AsteriskContext.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
 
 
 Tine.Voipmanager.Model.AsteriskVoicemailArray = Tine.Tinebase.Model.modlogFields.concat([
@@ -534,6 +570,12 @@ Tine.Voipmanager.Model.AsteriskVoicemail.getDefaultData = function() {
     };
 };
 
+Tine.Voipmanager.Model.AsteriskVoicemail.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
+};
+
 Tine.Voipmanager.Model.AsteriskMeetmeArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'id'},
     {name: 'confno'},
@@ -564,4 +606,10 @@ Tine.Voipmanager.Model.AsteriskMeetme.getDefaultData = function() {
     return {
         
     };
+};
+
+Tine.Voipmanager.Model.AsteriskMeetme.getFilterModel = function() {
+    return [
+        {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+    ];
 };

@@ -69,8 +69,6 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
         this.felamimailApp = Tine.Tinebase.appMgr.get('Felamimail');
         
-        this.initFilterToolbar();
-        
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
         
         this.grid.on('rowdblclick', this.onRowDblClick, this);
@@ -79,13 +77,16 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     },
     
     /**
-     * init filter toolbar
+     * initialises the filter panel 
+     * 
+     * @param {Object} config
      */
-    initFilterToolbar: function() {
+    initFilterPanel: function(config) {
         this.defaultFilters = [
             {field: 'email_query', operator: 'contains', value: '@'}
         ];
-        this.filterToolbar = this.getFilterToolbar({
+        
+        Tine.Felamimail.ContactGridPanel.superclass.initFilterPanel.call(this, {
             filterFieldWidth: 100,
             filterValueWidth: 100
         });

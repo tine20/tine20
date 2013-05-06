@@ -51,11 +51,6 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     initComponent: function() {
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
-            
         Tine.Admin.accessLog.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -99,7 +94,7 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * initialises filter toolbar
      */
-    initFilterToolbar: function() {
+    initFilterPanel: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Access Log'),  field: 'query',         operators: ['contains']},
@@ -118,6 +113,8 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
     },
     
     /**
