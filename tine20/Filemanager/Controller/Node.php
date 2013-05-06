@@ -1220,7 +1220,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         $nodes = $this->getMultiple($_ids);
         foreach ($nodes as $node) {
-            if ($this->_checkACLContainer($this->_backend->getNodeContainer($_record->getId()), 'delete')) {
+            if ($this->_checkACLContainer($this->_backend->getNodeContainer($node->getId()), 'delete')) {
                 $this->_backend->deleteFileNode($node);
             } else {
                 $nodes->removeRecord($node);
