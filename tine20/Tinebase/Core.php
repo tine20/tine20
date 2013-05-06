@@ -1127,6 +1127,60 @@ class Tinebase_Core
         
         return $oldMaxExcecutionTime;
     }
+    
+    /**
+     * set php memory (max) limit
+     *
+     * @param string $_limit
+     * @return string old max memory limit
+     */
+    public static function setMemoryLimit($_limit)
+    {
+        $oldMaxMemoryLimit = ini_get('memory_limit');
+        
+        if (! empty($oldMaxMemoryLimit)) {
+            if ((bool)ini_get('safe_mode') === true) {
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' memory_limit(' . $oldMaxMemoryLimit . ') is too low. Can\'t set limit to ' 
+                        . $_limit . ' because of safe mode restrictions.');
+                }
+            } else {
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting memory limit to: ' . $_limit);
+                }
+                ini_set('memory_limit', $_limit);
+            }
+        }
+        
+        return $oldMaxMemoryLimit;
+    }
+    
+    /**
+     * log memory usage
+     *
+     */
+    public static function logMemoryUsage()
+    {
+        if (function_exists('memory_get_peak_usage')) {
+            $memory = memory_get_peak_usage(true);
+        } else {
+            $memory = memory_get_usage(true);
+        }
+        
+        return  ' Memory usage: ' . ($memory / 1024 / 1024) . ' MB';
+    }
+    
+    public static function logCacheSize()
+    {
+        if(function_exists('realpath_cache_size')) {
+            $realPathCacheSize = realpath_cache_size();
+        } else {
+            $realPathCacheSize = 'unknown';
+        }
+        
+        return ' Real patch cache size: ' . $realPathCacheSize;
+    }
 
     /******************************* REGISTRY ************************************/
 

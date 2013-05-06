@@ -20,20 +20,8 @@ Tinebase_Core::dispatchRequest();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 
-if(function_exists('memory_get_peak_usage')) {
-    $memory = memory_get_peak_usage(true);
-} else {
-    $memory = memory_get_usage(true);
-}
-
-if(function_exists('realpath_cache_size')) {
-    $realPathCacheSize = realpath_cache_size();
-} else {
-    $realPathCacheSize = 'unknown';
-}
 
 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
     Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') ' .
-        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . $time . ' seconds / MEMORY: ' .
-        $memory/1024/1024 . ' MBytes / REALPATHCACHESIZE: ' . $realPathCacheSize);
+        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . $time . ' seconds / ' .Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize());
 }
