@@ -72,8 +72,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 case 'ADR':
                     $type = null;
                     foreach($property['TYPE'] as $typeProperty) {
-                        if(strtolower($typeProperty) == 'home' || strtolower($typeProperty) == 'work') {
-                            $type = strtolower($typeProperty);
+                        // delete ,PREF added by eM Client
+                        $typeProperty = str_replace(",pref","",strtolower($typeProperty));
+                        if (($typeProperty == 'home') || ($typeProperty == 'work')) {
+                            $type = $typeProperty;
                             break;
                         }
                     }

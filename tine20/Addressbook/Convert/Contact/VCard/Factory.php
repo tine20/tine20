@@ -23,6 +23,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_KDE     = 'kde';
     const CLIENT_MACOSX  = 'macosx';
     const CLIENT_SOGO    = 'sogo';
+    const CLIENT_EMCLIENT= 'emclient';
     
     /**
      * factory function to return a selected phone backend class
@@ -56,9 +57,14 @@ class Addressbook_Convert_Contact_VCard_Factory
                 
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
                 return new Addressbook_Convert_Contact_VCard_Sogo($_version);
-                 
+                
                 break;
-                     
+                
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT:
+                return new Addressbook_Convert_Contact_VCard_EMClient($_version);
+                
+                break;
+                
         }
     }
     
@@ -91,6 +97,10 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
             $version = $matches['version'];
         
+        // eM Client addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT;
+            $version = $matches['version'];
         // generic client
         } else {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
