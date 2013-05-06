@@ -317,7 +317,7 @@ class Tinebase_Relations
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                        . ' Removing relations from result. Got exception: ' . $tea);
+                        . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $_relations->removeRecords($relations);
                     continue;
                 }
