@@ -143,15 +143,21 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
                 $select = $this->_adapter->select();
                 $select->from($tableName, $cols);
                 $select->where("extname = 'unaccent'");             
+            }          
+            //if there is no table pg_extension, returns 0 (false)
+            try{
+                //checks if unaccent extension is installed or not
+                //(1 - yes; 0 - no)
+                $result = $this->_adapter->fetchOne($select);
+            } catch(Zend_Db_Statement_Exception $e) {
+                $result = 0;
             }
-            //result of the verification if the extension is installed or not
-            $result = $this->_adapter->fetchOne($select);
             $cache->save($result, $cacheId, array('pgsql','extension','unaccent'), null);
         }
         else
         {
-            //I need the result of the query (there is or there isn't
-            //the extension)
+            //loads the result of query to verify existance of
+            //unaccent/pg_extension
             $result = $cache->load($cacheId);
         }
         return $result;
@@ -181,4 +187,5 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
      {
          return str_replace('\\', '\\\\', $value);
      }     
+     
 }
