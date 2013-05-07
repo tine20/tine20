@@ -30,7 +30,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     enableColumnMove: false,
     stripeRows: true,
     trackMouseOver: false,
-    clicksToEdit:1,
+    clicksToEdit:2,
     enableHdMenu : false,
     viewConfig : {
         forceFit:true
@@ -53,6 +53,8 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         this.store.on('strategychange', this.onStoreLoad, this);
         this.on('cellclick', this.onCellClick, this);
         this.on('afterrender', this.onAfterRender, this);
+        this.on('afteredit', this.onAfterEdit, this);
+
         Tine.widgets.dialog.DuplicateResolveGridPanel.superclass.initComponent.call(this);
     },
 
@@ -62,7 +64,66 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     },
 
     /**
+     * is called on doubleclick on a cell and sets the editor if the cell is the finalValue
+     * 
+     * @param {Ext.grid.EditorGridPanel} grid
+     * @param {number} rowIndex
+     * @param {number} colIndex
+     * @param {Ext.EventObject} e
+     */
+    onCellDblClick: function(grid, rowIndex, colIndex, e) {
+        var strategy = this.actionCombo.getValue();
+        
+        // editing is just possible if strategy "keep" is chosen, or the finalValue when choosing strategy "mergeTheirs" or "mergeMine"
+        if (! (((colIndex == 4) && (strategy == 'mergeMine' || strategy == 'mergeTheirs')) 
+            || (strategy == 'keep' && (colIndex == 2)))) {
+            return;
+        }
+        
+        var cm = this.getColumnModel();
+        var column = cm.getColumnAt(colIndex);
+        var record = this.store.getAt(rowIndex);
+        
+        var fieldDef = record.get('fieldDef');
+        
+        if (! Ext.isFunction(fieldDef.type)) {
+            switch (fieldDef.type) {
+                case 'string':
+                    column.setEditor(new Ext.form.TextField({}));
+                    break;
+                case 'date':
+                    column.setEditor(new Ext.ux.form.ClearableDateField({}));
+                    break;
+                default:
+                    // TODO: allow more types, create FieldRegistry
+                    return;
+            }
+            this.startEditing(rowIndex, colIndex);
+        } else {
+            return;
+        }
+    },
+    
+    /**
+     * is called after edit a field
+     * 
+     * @param {Ext.EventObject} e
+     */
+    onAfterEdit: function(e) {
+        var record = this.store.getAt(e.row);
+        if (e.field == 'clientValue') {
+            record.set('finalValue', e.value);
+        }
+        this.stopEditing();
+    },
+    
+    /**
      * adopt final value to the one selected
+     * 
+     * @param {Ext.grid.EditorGridPanel} grid
+     * @param {number} rowIndex
+     * @param {number} colIndex
+     * @param {Ext.EventObject} e
      */
     onCellClick: function(grid, rowIndex, colIndex, e) {
         var dataIndex = this.getColumnModel().getDataIndex(colIndex),
@@ -121,7 +182,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             }
         }
     },
-
+    
     /**
      * init our column model
      */
@@ -164,10 +225,10 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             resizable:false, 
             dataIndex: 'finalValue', 
             id: 'finalValue', 
-            menuDisabled:true, 
-            renderer: valueRendererDelegate
+            menuDisabled:true,
+            renderer: valueRendererDelegate,
+            editable: true
         }]);
-
     },
 
     /**

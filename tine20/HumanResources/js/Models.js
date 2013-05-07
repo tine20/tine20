@@ -51,7 +51,7 @@ Tine.HumanResources.Model.EmployeeArray = Tine.Tinebase.Model.modlogFields.conca
 ]);
 
 Tine.widgets.grid.RendererManager.register('HumanResources', 'Employee', 'account_id', function(value){
-    return value.accountDisplayName;
+    return value ? value.accountDisplayName : '';
 });
 
 /**
