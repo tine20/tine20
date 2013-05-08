@@ -22,18 +22,26 @@ class Tinebase_Log extends Zend_Log
      * add new log writer defined by a config object/array
      * 
      * @param Tinebase_Config_Struct|array $loggerConfig
+     * 
+     * @throws Tinebase_Exception_NotFound
      */
     public function addWriterByConfig($loggerConfig)
     {
-        $loggerConfig = ($loggerConfig instanceof Tinebase_Config_Struct) ? $loggerConfig : new Tinebase_Config_Struct($loggerConfig);
-        $filename = $loggerConfig->filename;
-        $priority = (int)$loggerConfig->priority;
+        $loggerConfig = ($loggerConfig instanceof Tinebase_Config_Struct || $loggerConfig instanceof Zend_Config)
+            ? $loggerConfig : new Tinebase_Config_Struct($loggerConfig);
+        
+        if (empty($loggerConfig->filename)) {
+            throw new Tinebase_Exception_NotFound('filename missing in logger config');
+        }
 
+        $filename = $loggerConfig->filename;
         $writer = new Zend_Log_Writer_Stream($filename);
+        
         $formatter = new Tinebase_Log_Formatter();
         $formatter->setReplacements();
         $writer->setFormatter($formatter);
 
+        $priority = (int)$loggerConfig->priority;
         $filter = new Zend_Log_Filter_Priority($priority);
         $writer->addFilter($filter);
 
