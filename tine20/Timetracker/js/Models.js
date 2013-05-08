@@ -52,7 +52,6 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
     // ngettext('timesheets list', 'timesheets lists', n);
     containerName: 'All Timesheets',
     containersName: 'timesheets lists',
-    defaultFilter: 'start_date',
     getTitle: function() {
         var timeaccount = this.get('timeaccount_id'),
             description = Ext.util.Format.ellipsis(this.get('description'), 30, true),
@@ -143,7 +142,6 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     recordName: 'Time Account',
     recordsName: 'Time Accounts',
     containerProperty: 'container_id',
-    defaultFilter: 'is_open',
     // ngettext('timeaccount list', 'timeaccount lists', n);
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',

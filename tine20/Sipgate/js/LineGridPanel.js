@@ -50,8 +50,25 @@ Tine.Sipgate.LineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Sipgate.lineBackend;
         this.gridConfig.columns = this.getColumns();
         
+        this.initFilterToolbar();
+        this.plugins.push(this.filterToolbar);
+        
         Tine.Sipgate.LineGridPanel.superclass.initComponent.call(this);
     },
+    
+    /**
+     * initializes filter toolbar
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: Tine.Sipgate.Model.Line.getFilterModel(),
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
+    },  
     
     /**
      * returns cm

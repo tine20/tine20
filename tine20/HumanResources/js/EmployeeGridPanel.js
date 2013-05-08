@@ -61,8 +61,27 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.recordProxy = Tine.HumanResources.employeeBackend
         
         this.gridConfig.columns = this.getColumns();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar(this.ftbConfig);
+        
+        this.initFilterToolbar();
+        this.plugins.push(this.filterToolbar);
         
         Tine.HumanResources.EmployeeGridPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * initialises filter toolbar
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            filterModels: Tine.HumanResources.Model.Employee.getFilterModel(),
+            defaultFilter: 'query',
+            recordClass: this.recordClass,
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
     },
     
     /**

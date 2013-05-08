@@ -21,6 +21,12 @@ Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     initComponent: function() {
         this.gridConfig.columns = this.getColumns();
+        this.initFilterToolbar();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+        this.plugins.push(this.app.getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin());
+        
         this.initDetailsPanel();
         
         Tine.RequestTracker.GridPanel.superclass.initComponent.call(this);
@@ -29,8 +35,8 @@ Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * initialises filter toolbar
      */
-    initFilterPanel: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             recordClass: this.recordClass,
             filterModels: [
                 {label: this.app.i18n._('Ticket'), field: 'query', operators: ['contains']},
@@ -46,12 +52,11 @@ Tine.RequestTracker.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             filters: [
                 {field: 'status', operator: 'greater', value: 'open'},
                 {field: 'query', operator: 'contains', value: ''}
+            ],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
-        this.plugins.push(this.app.getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin());
     },    
     
     /**

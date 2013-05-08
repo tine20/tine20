@@ -51,19 +51,37 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timesheetBackend;
-
-        this.defaultFilters = [
-            {field: 'start_date', operator: 'within', value: 'weekThis'},
-            {field: 'account_id', operator: 'equals', value: Tine.Tinebase.registry.get('currentAccount')}
-        ];
+                
         this.gridConfig.cm = this.getColumnModel();
+        this.initFilterToolbar();
         this.initDetailsPanel();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
         
         // only eval grants in action updater if user does not have the right to manage timeaccounts
         this.evalGrants = ! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
     },
+ 
+    /**
+     * initialises filter toolbar
+     * @private
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+            app: this.app,
+            recordClass: Tine.Timetracker.Model.Timesheet,
+            allowSaving: true,
+            filterModels: Tine.Timetracker.Model.Timesheet.getFilterModel().concat(this.getCustomfieldFilters()),
+            defaultFilter: 'start_date',
+            filters: [
+                {field: 'start_date', operator: 'within', value: 'weekThis'},
+                {field: 'account_id', operator: 'equals', value: Tine.Tinebase.registry.get('currentAccount')}
+            ]
+        });
+    },    
     
     /**
      * returns cm

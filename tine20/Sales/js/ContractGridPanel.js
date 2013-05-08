@@ -45,6 +45,8 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Sales.contractBackend;
         
         this.gridConfig.columns = this.getColumns();
+        this.initFilterToolbar();
+        this.plugins.push(this.filterToolbar);
         
         Tine.Sales.ContractGridPanel.superclass.initComponent.call(this);
         this.action_addInNewWindow.actionUpdater = function() {
@@ -52,6 +54,21 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_addInNewWindow.setDisabled(! defaultContainer.account_grants[this.action_addInNewWindow.initialConfig.requiredGrant]);
         }
     },
+    
+    /**
+     * initialises filter toolbar
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            recordClass: this.recordClass,
+            filterModels: Tine.Sales.Model.Contract.getFilterModel(),
+            defaultFilter: 'query',
+            filters: [],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
+    },    
     
     /**
      * returns cm

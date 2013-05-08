@@ -28,13 +28,6 @@ class Voipmanager_Model_Asterisk_VoicemailFilter extends Tinebase_Model_Filter_F
     protected $_modelName = 'Voipmanager_Model_Asterisk_Voicemail';
     
     /**
-     * @see Tinebase_Model_Filter_FilterGroup
-     *
-     * @var string
-     */
-    protected $_className = 'Voipmanager_Model_Asterisk_VoicemailFilter';
-    
-    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

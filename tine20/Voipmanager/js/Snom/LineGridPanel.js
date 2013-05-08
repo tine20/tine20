@@ -265,8 +265,5 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     
     nameRenderer: function(value) {
         return (value && value.name) ? value.name : '';
-    },
-    
-    initFilterPanel: function() {
     }
 });

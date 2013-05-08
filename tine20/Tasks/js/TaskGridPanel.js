@@ -59,11 +59,14 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
         this.recordProxy = Tine.Tasks.JsonBackend;
-        this.gridConfig.cm = this.getColumnModel();
         
-        this.defaultFilters = [
-            {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
-        ];
+        //this.actionToolbarItems = this.getToolbarItems();
+        this.gridConfig.cm = this.getColumnModel();
+        this.initFilterToolbar();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(/*this.action_showClosedToggle,*/ this.filterToolbar);
+        
         Tine.Tasks.TaskGridPanel.superclass.initComponent.call(this);
         
         // the editGrids onEditComplete calls the focusCell after a edit operation
@@ -71,6 +74,26 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // mhh! but disabling this, breaks keynav 
         //this.grid.view.focusCell = Ext.emptyFn;
     },
+    
+    /**
+     * initialises filter toolbar
+     * @private
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+            recordClass: this.recordClass,
+            app: this.app,
+            filterModels: Tine.Tasks.Model.Task.getFilterModel(),
+            defaultFilter: 'query',
+            filters: [
+                {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
+            ],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
+    },
+
     
     /**
      * returns cm

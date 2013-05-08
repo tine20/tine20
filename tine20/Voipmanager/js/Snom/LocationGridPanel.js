@@ -25,9 +25,17 @@ Tine.Voipmanager.SnomLocationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
     },
     
     initComponent: function() {
+    
         this.recordProxy = Tine.Voipmanager.SnomLocationBackend;
+                
         this.gridConfig.columns = this.getColumns();
+        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
+        //this.initDetailsPanel();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+        
         Tine.Voipmanager.SnomLocationGridPanel.superclass.initComponent.call(this);
     },
     

@@ -40,19 +40,42 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         autoExpandColumn: 'title'
     },
     copyEditAction: true,
-    defaultFilters: [{field: 'is_open', operator: 'equals', value: true}],
     
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.cm = this.getColumnModel();
+        this.initFilterToolbar();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
         
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
         
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'));
         this.action_editInNewWindow.requiredGrant = 'editGrant';
     },
+    
+    /**
+     * initialises filter toolbar
+     * 
+     * TODO created_by filter should be replaced by a 'responsible/organizer' filter like in tasks
+     */
+    initFilterToolbar: function() {
+        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
+            app: this.app,
+            recordClass: this.recordClass,
+            filterModels: Tine.Timetracker.Model.Timeaccount.getFilterModel(),
+            defaultFilter: 'is_open',
+            filters: [
+                {field: 'is_open', operator: 'equals', value: true}
+            ],
+            plugins: [
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+            ]
+        });
+    },    
     
     /**
      * returns cm

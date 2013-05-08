@@ -35,6 +35,11 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
+        this.initFilterToolbar();
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+        
         Tine.Admin.customfield.GridPanel.superclass.initComponent.call(this);
     },
     
@@ -104,7 +109,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * initialises filter toolbar
      */
-    initFilterPanel: function() {
+    initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Customfield'),       field: 'query',    operators: ['contains']},
@@ -117,8 +122,6 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
     },
     
     /**

@@ -61,6 +61,10 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Projects.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar(this.ftbConfig);
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
         
         Tine.Projects.ProjectGridPanel.superclass.initComponent.call(this);
     },
