@@ -80,4 +80,31 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         
         return $this->update($loginRecord);
     }
+
+    /**
+     * clear access log table
+     * - if $date param is ommitted, the last 60 days of access log are kept, the rest will be removed
+     * 
+     * @param Tinebase_DateTime $date
+     * @return integer deleted rows
+     * 
+     * @todo use $this->deleteByFilter($_filter)? might be slow for huge access_logs
+     */
+    public function clearTable($date = NULL)
+    {
+        $date = ($date instanceof Tinebase_DateTime) ? $date : Tinebase_DateTime::now()->subDay(60);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removing all access log entries before ' . $date->toString());
+        
+        $db = $this->_backend->getAdapter();
+        $where = array(
+            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $date->toString())
+        );
+        $deletedRows = $db->delete($this->_backend->getTablePrefix() . $this->_backend->getTableName(), $where);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $deletedRows . ' rows.');
+        
+        return $deletedRows;
+    }
 }

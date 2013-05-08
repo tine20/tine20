@@ -82,7 +82,6 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $this->_cli->clearTable($opts);
         $out = ob_get_clean();
         
-        $this->assertContains('Removing all access log entries before', $out);
         $accessLogsAfter = Admin_Controller_AccessLog::getInstance()->search();
         $this->assertGreaterThan(count($accessLogsAfter), count($accessLogsBefore));
         $this->assertEquals(0, count($accessLogsAfter));

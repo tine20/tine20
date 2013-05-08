@@ -524,15 +524,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_applyExdateDiffToRecordSet($exdate, $diff, $events);
         } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
             $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
-            $this->_applyDiff($nextRegularRecurEvent, $diff, $exdate, FALSE);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Next recur exception event: ' . print_r($nextRegularRecurEvent->toArray(), TRUE));
-            
-            $newBaseEvent = $this->createRecurException($nextRegularRecurEvent, FALSE, TRUE);
-            // @todo this should be done by createRecurException
-            $exdatesOfNewBaseEvent = $this->getRecurExceptions($newBaseEvent);
-            $this->_applyExdateDiffToRecordSet($exdate, $diff, $exdatesOfNewBaseEvent);
+            if ($nextRegularRecurEvent !== NULL && ! $nextRegularRecurEvent->dtstart->isEarlier($exdate->dtstart)) {
+                $this->_applyDiff($nextRegularRecurEvent, $diff, $exdate, FALSE);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Next recur exception event at: ' . $nextRegularRecurEvent->dtstart->toString());
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ' . print_r($nextRegularRecurEvent->toArray(), TRUE));
+                
+                $newBaseEvent = $this->createRecurException($nextRegularRecurEvent, FALSE, TRUE);
+                // @todo this should be done by createRecurException
+                $exdatesOfNewBaseEvent = $this->getRecurExceptions($newBaseEvent);
+                $this->_applyExdateDiffToRecordSet($exdate, $diff, $exdatesOfNewBaseEvent);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No upcoming occurrences found.');
+            }
         }
     }
     

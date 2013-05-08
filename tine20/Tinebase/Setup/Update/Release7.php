@@ -426,4 +426,16 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '7.5');
     }
+
+    /**
+     * update to 7.6
+     * 
+     * @see 0008318: add clear accesslog to scheduler
+     */
+    public function update_5()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '7.6');
+    }
 }

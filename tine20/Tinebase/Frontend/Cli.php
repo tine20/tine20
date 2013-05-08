@@ -223,15 +223,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if ($dateString) {
-                        echo "\nRemoving all access log entries before {$dateString} ...";
-                        $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $dateString)
-                        );
-                        $db->delete(SQL_TABLE_PREFIX . $table, $where);
-                    } else {
-                        $db->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
-                    }
+                    $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
+                    Tinebase_AccessLog::getInstance()->clearTable($date);
                     break;
                 case 'async_job':
                     $where = ($dateString) ? array(
