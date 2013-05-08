@@ -508,32 +508,16 @@ class Tinebase_Core
     public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
         $config = self::getConfig();
-        $logger = new Zend_Log();
+        $logger = new Tinebase_Log();
 
         if (isset($config->logger) && $config->logger->active) {
             try {
-                $loggerConfig = $config->logger;
-
-                $filename = $loggerConfig->filename;
-                $priority = (int)$loggerConfig->priority;
-
-                $writer = new Zend_Log_Writer_Stream($filename);
-                $formatter = new Tinebase_Log_Formatter();
-                $formatter->setReplacements();
-                $writer->setFormatter($formatter);
-                $logger->addWriter($writer);
-
-                $filter = new Zend_Log_Filter_Priority($priority);
-                $logger->addFilter($filter);
-
-                // add more filters here
-                if (isset($loggerConfig->filter->user)) {
-                    $logger->addFilter(new Tinebase_Log_Filter_User($loggerConfig->filter->user));
+                $logger->addWriterByConfig($config->logger);
+                if ($config->logger->additionalWriters) {
+                    foreach ($config->logger->additionalWriters as $writerConfig) {
+                        $logger->addWriterByConfig($writerConfig);
+                    }
                 }
-                if (isset($loggerConfig->filter->message)) {
-                    $logger->addFilter(new Zend_Log_Filter_Message($loggerConfig->filter->message));
-                }
-
             } catch (Exception $e) {
                 error_log("Tine 2.0 can't setup the configured logger! The Server responded: $e");
                 $writer = ($_defaultWriter === NULL) ? new Zend_Log_Writer_Null() : $_defaultWriter;
@@ -546,7 +530,6 @@ class Tinebase_Core
             
             $filter = new Zend_Log_Filter_Priority(Zend_Log::WARN);
             $writer->addFilter($filter);
-            
             $logger->addWriter($writer);
         }
         
@@ -1271,11 +1254,11 @@ class Tinebase_Core
     /**
      * get config from the registry
      *
-     * @return Zend_Log the logger
+     * @return Tinebase_Log the logger
      */
     public static function getLogger()
     {
-        if (! self::get(self::LOGGER) instanceof Zend_Log) {
+        if (! self::get(self::LOGGER) instanceof Tinebase_Log) {
             Tinebase_Core::setupLogger();
         }
         
