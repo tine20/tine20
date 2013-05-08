@@ -23,6 +23,13 @@ class Voipmanager_Model_Asterisk_MeetmeFilter extends Tinebase_Model_Filter_Filt
     protected $_applicationName = 'Voipmanager';
     
     /**
+     * @see Tinebase_Model_Filter_FilterGroup
+     *
+     * @var string
+     */
+    protected $_className = 'Voipmanager_Model_Asterisk_MeetmeFilter';
+    
+    /**
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'Voipmanager_Model_Asterisk_Meetme';

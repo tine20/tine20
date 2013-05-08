@@ -101,6 +101,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
     },
     
+    initFilterPanel: function() {},
+    
     /**
      * after render handler
      */

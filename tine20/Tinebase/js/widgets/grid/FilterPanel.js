@@ -482,7 +482,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     setValue: function(value) {
         // save last filter ?
-        if (this.filterToolbarConfig.app.getRegistry().get('preferences').get('defaultpersistentfilter') == '_lastusedfilter_') {
+        var prefs;
+        if ((prefs = this.filterToolbarConfig.app.getRegistry().get('preferences')) && prefs.get('defaultpersistentfilter') == '_lastusedfilter_') {
             var lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-lastusedfilter';
             
             if (Ext.encode(Ext.state.Manager.get(lastFilterStateName)) != Ext.encode(value)) {

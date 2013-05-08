@@ -28,6 +28,13 @@ class Voipmanager_Model_Snom_SoftwareFilter extends Tinebase_Model_Filter_Filter
     protected $_modelName = 'Voipmanager_Model_Snom_Software';
     
     /**
+     * @see Tinebase_Model_Filter_FilterGroup
+     *
+     * @var string
+     */
+    protected $_className = 'Voipmanager_Model_Snom_SoftwareFilter';
+    
+    /**
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(

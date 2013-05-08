@@ -25,35 +25,10 @@ Tine.Voipmanager.AsteriskVoicemailGridPanel = Ext.extend(Tine.widgets.grid.GridP
     },
     
     initComponent: function() {
-    
         this.recordProxy = Tine.Voipmanager.AsteriskVoicemailBackend;
-                
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
         this.actionToolbarItems = this.getToolbarItems();
-        //this.initDetailsPanel();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
- 
-         
         Tine.Voipmanager.AsteriskVoicemailGridPanel.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * initialises filter toolbar
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
     
     /**

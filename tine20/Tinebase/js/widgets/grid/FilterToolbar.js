@@ -697,7 +697,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
     
     /**
-     * adds a new filer row
+     * adds a new filter row
      */
     addFilter: function(filter) {
         if (! filter || arguments[1]) {
@@ -736,7 +736,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @param {Ext.Record} filter to delete
      */
     deleteFilter: function(filter) {
-        var fRow = this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']');
+        var fRow = this.bwrap ? this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']') : null;
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         var isLast = this.filterStore.getCount() == 1,
             filterModel = this.getFilterModel(filter);
@@ -760,7 +760,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
             }
         }
-        fRow.remove();
+        
+        if (fRow) {
+            fRow.remove();
+        }
         
         this.onFilterRowsChange();
         
@@ -858,25 +861,33 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @return {filterRecord}
      */
     setFilterData: function(filter, filterData) {
-        filter.beginEdit();
+        if (filter.formFields) {
+            filter.beginEdit();
+            Ext.each(['field', 'operator', 'value'], function(t) {
+                filter.set(t, filterData[t]);
+                if (Ext.isFunction(filter.formFields[t].setValue)) {
+                    filter.formFields[t].setValue(filterData[t]);
+                }
+            }, this);
+            filter.endEdit();
+        }
         
-        Ext.each(['field', 'operator', 'value'], function(t) {
-            filter.set(t, filterData[t]);
-            if (Ext.isFunction(filter.formFields[t].setValue)) {
-                filter.formFields[t].setValue(filterData[t]);
-            }
-        }, this);
-        
-        filter.endEdit();
         
         return filter;
     },
     
     setValue: function(filters) {
+        
+        if (! filters) {
+            return;
+        }
+        
         this.supressEvents = true;
         
         var oldFilters = [];
-        this.filterStore.each(function(filterRecord) {oldFilters.push(filterRecord);}, this);
+        this.filterStore.each(function(filterRecord) {
+            oldFilters.push(filterRecord);
+        }, this);
         
         var filterModel, filterData, filterRecord;
         
@@ -888,7 +899,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filters[i].value = filterData.value.value;
             }
         }
-        
+
         for (var i=0; i<filters.length; i++) {
             filterRecord = null;
             filterData = filters[i];

@@ -31,10 +31,6 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Courses.coursesBackend;
         
         this.gridConfig.columns = this.getColumns();
-        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
     },

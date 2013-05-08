@@ -312,7 +312,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.deleteQueue = [];
         
         // init generic stuff
-        this.initGeneric();
+        if (this.modelConfig) {
+            this.initGeneric();
+        }
+        
+        this.initFilterPanel();
         
         // init store
         this.initStore();
@@ -355,38 +359,29 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.multipleEdit = true;
                 this.multipleEditRequiredRight = (this.modelConfig.hasOwnProperty('multipleEditRequiredRight')) ? this.modelConfig.multipleEditRequiredRight : null;
             }
-            
-            // init generic filter toolbar
-            this.initGenericFilterToolbar();
-            // init generic columnModel
-            this.initGenericColumnModel();
         }
+        
+        // init generic columnModel
+        this.initGenericColumnModel();
     },
     
     /**
-     * initializes generic filter toolbar when used with ModelConfiguration
+     * initialises the filter panel 
      * 
-     * @private
+     * @param {Object} config
      */
-    initGenericFilterToolbar: function() {
-        if (this.modelConfig && ! this.editDialog) {
-            // check if quicksearch plugin shall be assigned, do not use if grid is nested in an editdialog
-            var plugins = [];
-            if (! this.editDialog && (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin)) {
-                this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-                plugins.push(this.quickSearchFilterToolbarPlugin);
-            }
-            
-            // create the filter toolbar
-            this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-                defaultFilter: this.recordClass.getMeta('defaultFilter'),
+    initFilterPanel: function(config) {
+        if (! this.filterToolbar) {
+            this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
+                app: this.app,
                 recordClass: this.recordClass,
-                plugins: plugins,
-                filterModels: []
-            });
+                allowSaving: true,
+                filterModels: this.modelConfig ? [] : this.recordClass.getFilterModel(),
+                defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
+                filters: this.defaultFilters || []
+            }, config || {}));
             
-            // add the filter toolbar to the gridpanel plugins
-            this.plugins = this.plugins ? this.plugins : [];
+            this.plugins = this.plugins || [];
             this.plugins.push(this.filterToolbar);
         }
     },
@@ -1391,19 +1386,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getFilterToolbar: function(config) {
         config = config || {};
-        var plugins = [];
-        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
-            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
-            plugins.push(this.quickSearchFilterToolbarPlugin);
-        }
-
         return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
-            filters: this.defaultFilters || [],
-            plugins: plugins
+            filters: this.defaultFilters || []
         }));
     },
 

@@ -128,6 +128,11 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * overwrite default - we do not have a filterpanel here
+     */
+    initFilterPanel: function() {},
+    
+    /**
      * @private
      */
     initGrid: function() {

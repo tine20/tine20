@@ -147,6 +147,10 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             
         Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, addRelations);
     },
+    /**
+     * overwrites the default function, no refactoring needed, this file will be deleted in the next release
+     */
+    initFilterPanel: function() {},
     
     /**
      * renders the different status keyfields

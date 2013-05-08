@@ -114,11 +114,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Felamimail.messageBackend;
         
         this.gridConfig.columns = this.getColumns();
-        this.initFilterToolbar();
         this.initDetailsPanel();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
         
         this.pagingConfig = {
             doRefresh: this.doRefresh.createDelegate(this)
@@ -359,18 +355,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * initialises filter toolbar
-     * 
-     * @private
+     * initializes the filterPanel, overwrites the superclass method
      */
-    initFilterToolbar: function() {
+    initFilterPanel: function() {
         this.filterToolbar = this.getFilterToolbar();
         this.filterToolbar.criteriaIgnores = [
             {field: 'query',     operator: 'contains',     value: ''},
             {field: 'id' },
             {field: 'path' }
         ];
-    },    
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
+    },
     
     /**
      * the details panel (shows message content)

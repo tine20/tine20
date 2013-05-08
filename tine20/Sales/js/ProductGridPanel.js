@@ -57,14 +57,9 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Sales.productBackend;
         
         this.actionToolbarItems = this.getToolbarItems();
-        this.contextMenuItems = [
-        ];
+        this.contextMenuItems = [];
 
         this.gridConfig.cm = this.getColumnModel();
-        this.filterToolbar = this.getFilterToolbar();
-        
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
         
         Tine.Sales.ProductGridPanel.superclass.initComponent.call(this);
         
@@ -85,24 +80,6 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
 
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Sales', 'products'));
-    },
-    
-    /**
-     * initialises filter toolbar
-     * 
-     * @return Tine.widgets.grid.FilterToolbar
-     * @private
-     */
-    getFilterToolbar: function() {
-        return new Tine.widgets.grid.FilterToolbar({
-            filterModels: Tine.Sales.Model.Product.getFilterModel(),
-            defaultFilter: 'query',
-            recordClass: this.recordClass,
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
     },
     
     /**
