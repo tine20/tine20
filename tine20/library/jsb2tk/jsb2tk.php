@@ -195,6 +195,10 @@ class jsb2tk
                     break;
             }
             
+            //changed due to a IE bug that won't load more than 31 stylesheets with <link> tags
+            //implemented solution from http://john.albin.net/ie-css-limits/993-style-test.html
+            $last_what = '';
+            $css_count = 0;
             foreach($files as $file) {
                 if (! file_exists($file->path)) {
                     throw new Exception("required file {$file->path} is missing");
@@ -202,14 +206,30 @@ class jsb2tk
                 
                 $fileURL = $file->url . ($this->_appendctime ? '?' . filectime($file->path) : '');
                 
+                if ($what=='css' && $last_what!=$what) {
+                    $html .= $this->_HTMLIndent . "<style type='text/css' title='text/css' media='all'>\n";
+                }
+                else if ($last_what=='css' && $what=='js') {
+                    $html .= $this->_HTMLIndent . "</style>\n";
+                }
+                else if ($css_count >= 30) {
+                    $html .= $this->_HTMLIndent . "</style>\n";
+                    $html .= $this->_HTMLIndent . "<style type='text/css' title='text/css' media='all'>\n";;
+                    $css_count = 0;
+                }
                 switch ($what) {
                     case 'css':
-                        $html .= $this->_HTMLIndent . '<link rel="stylesheet" type="text/css" href="' . $fileURL . '" />' . "\n";
+                        $css_count = $css_count + 1;
+                        $html .= $this->_HTMLIndent . '@import url(' . $fileURL . ');' . "\n";
                         break;
                     case 'js':
                         $html .= $this->_HTMLIndent . '<script type="text/javascript" src="' . $fileURL . '"></script>' . "\n";
                         break;
                 }
+                $last_what = $what;
+            }
+            if ($last_what=='css') {
+                $html .= $this->_HTMLIndent . "</style>\n";
             }
         }
         
