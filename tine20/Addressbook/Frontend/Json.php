@@ -77,7 +77,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $results = array();
         $contacts = $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
         foreach ($contacts["results"] as $contact) {
-            array_push($results, array("n_fileas" => $contact["n_fileas"], "emails" => $contact["email"], "email" => $contact["email"], "email_home" => $contact["email_home"]));
+            array_push($results, array("n_fileas" => $contact["n_fileas"],"n_fn" => $contact["n_fn"],"org_unit" => $contact["org_unit"], "emails" => $contact["email"], "email" => $contact["email"], "email_home" => $contact["email_home"]));
         }
 
         $dont_add = false;

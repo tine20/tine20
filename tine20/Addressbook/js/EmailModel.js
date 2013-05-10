@@ -14,7 +14,10 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
    {name: 'emails'},
    {name: 'email'},
    {name: 'email_home'},
-], {
+   {name: 'n_fn'},
+   {name: 'org_unit'}
+   ],
+   {
     appName: 'Addressbook',
     modelName: 'EmailAddress',
     titleProperty: 'name',
