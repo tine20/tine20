@@ -41,7 +41,7 @@ class Tinebase_Log extends Zend_Log
         $formatter->setReplacements();
         $writer->setFormatter($formatter);
 
-        $priority = (int)$loggerConfig->priority;
+        $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : 5;
         $filter = new Zend_Log_Filter_Priority($priority);
         $writer->addFilter($filter);
 
