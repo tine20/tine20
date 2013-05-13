@@ -1201,7 +1201,10 @@ class Setup_Controller
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
             if (array_key_exists($configName, $_data)) {
-                Tinebase_Config::getInstance()->set($configKey, $_data[$configName]);
+                // fetch current config first and preserve all values that aren't in $_data array
+                $currentConfig = Tinebase_Config::getInstance()->get($configKey, new Tinebase_Config_Struct(array()))->toArray();
+                $newConfig = array_merge($_data[$configName], array_diff_key($currentConfig, $_data[$configName]));
+                Tinebase_Config::getInstance()->set($configKey, $newConfig);
             }
         }
     }
