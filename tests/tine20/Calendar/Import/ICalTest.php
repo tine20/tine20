@@ -101,7 +101,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     }
     
     /**
-     * test for gracefull shutdown if ical is malformated
+     * test for graceful shutdown if ical is malformatted
      */
     public function testImportHordeBroken()
     {
@@ -109,8 +109,12 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             'importContainerId' => $this->_testCalendar->getId(),
         ));
         
-        $this->setExpectedException('Calendar_Exception_IcalParser');
-        $importer->importFile(dirname(__FILE__) . '/files/horde_broken.ics');
+        try {
+            $importer->importFile(dirname(__FILE__) . '/files/horde_broken.ics');
+            $this->fail('expected Calendar_Exception_IcalParser');
+        } catch (Calendar_Exception_IcalParser $ceip) {
+            $this->assertEquals('Sabre_VObject_ParseException', get_class($ceip->getParseError()));
+        }
     }
     
     public function testImportOutlook12()
