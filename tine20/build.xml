@@ -44,6 +44,8 @@
                 <exclude name="images/*" />
                 <exclude name="library/*" />
                 <exclude name="styles/*" />
+                <exclude name="themes/*" />
+                <exclude name="vendor/*" />
                 <exclude name="Zend/*" />
             </fileset>
         </foreach>
@@ -171,12 +173,9 @@
     <adhoc-task name="init"><![CDATA[
         class initTask extends Task {
             function main() {
-                set_include_path('${project.basedir}' . PATH_SEPARATOR . '${project.basedir}/library' . PATH_SEPARATOR . get_include_path());
-                require_once 'Tinebase/Helper.php';
-                require_once 'Zend/Loader/Autoloader.php';
-                $autoloader = Zend_Loader_Autoloader::getInstance();
-                $autoloader->setFallbackAutoloader(true);
-                Tinebase_Autoloader::initialize($autoloader);
+                echo `composer install`;
+                echo `composer update`;
+                require_once 'vendor/autoload.php';
             }
         }
     ]]></adhoc-task>

@@ -25,19 +25,8 @@ if (extension_loaded('iconv')) {
     iconv_set_encoding("internal_encoding", "UTF-8");
 }
 
-// set include path
-$paths = array(
-    realpath(dirname(__FILE__)),
-    realpath(dirname(__FILE__) . '/library'),
-    get_include_path()
-);
-set_include_path(implode(PATH_SEPARATOR, $paths));
-
-// intialize autoloader
-require_once 'Zend/Loader/Autoloader.php';
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->setFallbackAutoloader(true);
-Tinebase_Autoloader::initialize($autoloader);
+// intialize composers autoloader
+require 'vendor/autoload.php';
 
 // activate our own error handler after autoloader initialization
 set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_STRICT);

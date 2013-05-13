@@ -1,0 +1,31 @@
+{
+    "name": "tine20/server",
+    "description": "Tine 2.0 Server",
+    "type": "project",
+    "keywords": ["Groupware", "Collaboration", "CRM", "Calendar", "Addressbook", "Teamwork", "Tasks", "Timetracking"],
+    "homepage": "http://www.tine20.org",
+    "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
+    "repositories": [{
+        "type": "git",
+        "url": "http://git.syncroton.org/Syncroton"
+    }],
+    "require": {
+        "syncroton/syncroton": "dev-master",
+        "ezyang/htmlpurifier": "v4.5.0",
+        "codeplex/phpexcel": "1.7.8",
+        "sabre/dav" : "1.8.*"
+    },
+    "autoload": {
+        "files": ["Tinebase/Helper.php"],
+        "psr-0": {
+            "": ["", "library", "../tests/tine20"],
+            "TimeZoneConvert": "library/TimeZoneConvert/lib/",
+            "qCal": "library/qCal/lib"
+        },
+        "classmap": [
+            "library/idnaconvert"
+        ]
+    },
+    "include-path-desc": "ZF still needs include path as it does not consequently use autoloading internally",
+    "include-path": ["", "library"]
+}
