@@ -1228,15 +1228,26 @@ class Tinebase_Core
     }
 
     /**
-     * get configured loglevel
+     * get max configured loglevel
      * 
      * @return Int
+     * 
+     * @todo move that to Tinebase_Log
      */
     public static function getLogLevel()
     {
         if (! self::get(self::LOGLEVEL)) {
             $config = self::getConfig();
             $logLevel = isset($config->logger) && $config->logger->priority ? (int)$config->logger->priority : Zend_Log::EMERG;
+            if ($config->logger && $config->logger->additionalWriters) {
+                foreach ($config->logger->additionalWriters as $writerConfig) {
+                    $writerConfig = ($writerConfig instanceof Tinebase_Config_Struct || $writerConfig instanceof Zend_Config)
+                        ? $writerConfig : new Tinebase_Config_Struct($writerConfig);
+                    if ($writerConfig->priority && $writerConfig->priority > $logLevel) {
+                        $logLevel = (int) $writerConfig->priority;
+                    }
+                }
+            }
             self::set(self::LOGLEVEL, $logLevel);
         }
         return self::get(self::LOGLEVEL);
