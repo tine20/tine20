@@ -520,6 +520,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
+     * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
+     *   -- record_type=Addressbook_Model_Contact modification_time=2013-05-08 modification_account=3263
+     * 
      * @param Zend_Console_Getopt $opts
      */
     public function undo(Zend_Console_Getopt $opts)
@@ -528,18 +531,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $data = $this->_parseArgs($opts, array('record_type', 'modification_time', 'modification_account'));
+        $data = $this->_parseArgs($opts, array('modification_time'));
         
         // build filter from params
         $filterData = array();
+        $allowedFilters = array('record_type', 'modification_time', 'modification_account', 'record_id');
         foreach ($data as $key => $value) {
-            $operator = ($key === 'modification_time') ? 'within' : 'equals';
-            $filterData[] = array('field' => $key, 'operator' => $operator, 'value' => $value);
+            if (in_array($key, $allowedFilters)) {
+                $operator = ($key === 'modification_time') ? 'within' : 'equals';
+                $filterData[] = array('field' => $key, 'operator' => $operator, 'value' => $value);
+            }
         }
         $filter = new Tinebase_Model_ModificationLogFilter($filterData);
         
         $dryrun = $opts->d;
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, FALSE, $dryrun);
+        $overwrite = (isset($data['overwrite']) && $data['overwrite']) ? TRUE : FALSE;
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun);
         
         if (! $dryrun) {
             echo 'Reverted ' . $result['totalcount'] . " change(s)\n";

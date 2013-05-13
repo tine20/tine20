@@ -270,7 +270,7 @@ class Tinebase_Application
      * return if application is installed (and enabled)
      *
      * @param  Tinebase_Model_Application|string  $applicationId  the application name/id/object
-     * @param  booelan $checkEnabled (FALSE by default)
+     * @param  boolean $checkEnabled (FALSE by default)
      * 
      * @return boolean
      */
