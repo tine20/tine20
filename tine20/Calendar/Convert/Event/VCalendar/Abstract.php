@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -377,7 +377,25 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
         }
         
-        // parse the event exceptions
+        // TODO only do this for events with rrule?
+        // if (! empty($event->rrule)) {
+        
+        $this->_parseEventExceptions($event, $vcalendar);
+        $event->isValid(true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
+        
+        return $event;
+    }
+    
+    /**
+     * parse event exceptions and add them to tine event record
+     * 
+     * @param Calendar_Model_Event $event
+     * @param Sabre_VObject_Component $vcalendar
+     */
+    protected function _parseEventExceptions($event, $vcalendar)
+    {
         $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         foreach ($vcalendar->VEVENT as $vevent) {
             if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
@@ -406,12 +424,32 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 $event->exdate->addRecord($recurException);
             }
         }
+    }
+    
+    /**
+     * converts vcalendar to Tinebase_Record_RecordSet of Calendar_Model_Event
+     * 
+     * @param  mixed                 $_blob   the vcalendar to parse
+     * @return Tinebase_Record_RecordSet
+     */
+    public function toTine20RecordSet($_blob)
+    {
+        $vcalendar = self::getVcal($_blob);
         
-        $event->isValid(true);
+        $result = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
+        foreach ($vcalendar->VEVENT as $vevent) {
+            if (! isset($vevent->{'RECURRENCE-ID'})) {
+                $event = new Calendar_Model_Event();
+                $this->_convertVevent($vevent, $event);
+                if (! empty($event->rrule)) {
+                    $this->_parseEventExceptions($event, $vcalendar);
+                }
+                $result->addRecord($event);
+            }
+        }
         
-        return $event;
+        return $result;
     }
     
     /**
@@ -452,6 +490,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
     {
+        // convert to utf-8
+        $blob = mbConvertTo($blob);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' ' . $blob);
         

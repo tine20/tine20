@@ -114,7 +114,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        // don't check if event is trasparent
+        // don't check if event is transparent
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
             return;
         }
@@ -128,12 +128,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         $periods = array();
-        foreach($eventSet as $event) {
+        foreach ($eventSet as $event) {
             $periods[] = array('from' => $event->dtstart, 'until' => $event->dtend);
         }
         
         $fbInfo = $this->getFreeBusyInfo($periods, $_event->attendee, $ignoreUIDs);
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($fbInfo->toArray(), true));
         
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();

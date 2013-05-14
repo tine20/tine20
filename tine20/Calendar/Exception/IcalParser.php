@@ -44,7 +44,7 @@ class Calendar_Exception_IcalParser extends Exception
      * 
      * @return Exception
      */
-    public function getFreeBusyInfo()
+    public function getParseError()
     {
         return $this->_parseError;
     }
