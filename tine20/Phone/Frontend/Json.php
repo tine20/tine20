@@ -74,7 +74,6 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Phone_Controller_Call::getInstance(), 'Phone_Model_CallFilter');
     }
     
-
     /**
      * get one phone identified by phoneId
      *
@@ -87,8 +86,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     } 
     
     /**
-     * save one phone
-     * -  if $recordData['id'] is empty the phone gets added, otherwise it gets updated
+     * save user phone
      *
      * @param array $recordData an array of phone properties
      * @return array
@@ -96,7 +94,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveMyPhone($recordData)
     {
         $voipController = Phone_Controller_MyPhone::getInstance();
-        $recordData['template_id'] = $recordData['template_id']['id'];
+        unset($recordData['template_id']);
         $phone = new Phone_Model_MyPhone();
         $phone->setFromArray($recordData);
         

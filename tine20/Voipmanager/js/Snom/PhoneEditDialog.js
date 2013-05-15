@@ -65,8 +65,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * 
      */
     initComponent: function() {
-        
-        this.recordProxy =  (this.recordProxy == null) ? Tine.Voipmanager.SnomPhoneBackend : this.recordProxy;
+        this.recordProxy = (this.recordProxy == null) ? Tine.Voipmanager.SnomPhoneBackend : this.recordProxy;
         
         // why the hack is this a jsonStore???
         this.rightsStore =  new Ext.data.JsonStore({
@@ -91,7 +90,6 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * record load (get rights and put them into the store)
      */
     onRecordLoad: function() {
-        
         var rights = this.record.get('rights') || [];
         this.rightsStore.loadData({results: rights});
         

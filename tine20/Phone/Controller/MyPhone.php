@@ -5,13 +5,13 @@
  * @package     Phone
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * MyPhone controller class for Voipmanager Management application
+ * MyPhone controller class for Phone application
  * 
  * @package     Phone
  * @subpackage  Controller
@@ -38,7 +38,7 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
     private function __clone() 
     {
     }
-            
+    
     /**
      * holds the instance of the singleton
      *

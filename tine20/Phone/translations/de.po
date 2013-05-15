@@ -184,3 +184,9 @@ msgstr "Ein- und ausgehende Gespräche von diesem Monat"
 
 msgid "Incoming and outgoing calls of last month"
 msgstr "Ein- und ausgehende Gespräche vom letzten Monat"
+
+msgid "No phone selected"
+msgstr "Es ist kein Telefon ausgewählt"
+
+msgid "Please select the desired phone in the tree!"
+msgstr "Bitte wählen Sie das gewünschte Telefon im Baum aus!"

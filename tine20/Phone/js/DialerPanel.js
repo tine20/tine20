@@ -42,7 +42,7 @@ Tine.Phone.DialerPanel = Ext.extend(Ext.form.FormPanel, {
         this.translation.textdomain('Phone');
         
         // set stores
-        this.phoneStore = Tine.Phone.loadPhoneStore();
+        this.phoneStore = Tine.Tinebase.appMgr.get('Phone').userPhonesStore;
         
         //this.setLineStore(this.phoneStore.getAt(0).id);
         this.setLineStore(null);
