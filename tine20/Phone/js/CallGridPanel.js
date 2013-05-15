@@ -39,13 +39,6 @@ Tine.Phone.CallGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     editPhoneSettingsAction: null,
     
     /**
-     * holds the users' phones
-     * 
-     * @type {Ext.data.Store}
-     */
-    phoneStore: null,
-    
-    /**
      * initializes the component
      */
     initComponent: function() {
@@ -162,10 +155,7 @@ Tine.Phone.CallGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onDialNumber: function() {
         var record = this.grid.getSelectionModel().getSelected();
         var number = record ? record.get('destination') : false;
-        
-        if (Tine.Phone.utils.isCallable(number)) {
-            Tine.Phone.dialPhoneNumber(number);
-        }
+        Tine.Phone.dialPhoneNumber(number);
     },
     
     /**
@@ -206,18 +196,19 @@ Tine.Phone.CallGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onEditPhoneSettings: function() {
         var node = this.phoneTreePanel.getActiveNode();
         if (node) {
+            var rp = Tine.Phone.myphoneBackend;
+                rp.recordReader = function(response) {
+                    var record = new Tine.Phone.Model.MyPhone(Ext.decode(response.responseText));
+                    var recordId = record.get(record.idProperty);
+                    record.id = recordId ? recordId : 0;
+                    return record;
+                };
+                
             var popupWindow = Tine.Voipmanager.SnomPhoneEditDialog.openWindow({
+                    recordProxy: rp,
                     record: node.attributes.record,
-                    recordProxy: Tine.Phone.MyPhoneBackend,
-                    listeners: {
-                        scope: this,
-                        'update': function(encodedRecord) {
-                            // TODO update registry?
-                            var record = new Tine.Voipmanager.Model.SnomPhone(Ext.util.JSON.decode(encodedRecord));
-                            this.phoneStore.add([record]);
-                            this.updatePhoneTreePanel();
-                        }
-                    }
+                    appName: 'Phone',
+                    modelName: 'MyPhone'
                 });
             
         } else {

@@ -273,10 +273,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     protected function _resolveRightsAndLines($_phone)
     {
-        $filter = new Voipmanager_Model_Snom_LineFilter(array(
-            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $_phone->id)
-        ));
-        $_phone->lines  = Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
+        $_phone->lines  = $this->_getLines($_phone);
         
         if ($_phone instanceof Voipmanager_Model_Snom_Phone) {
             $_phone->rights = $this->_backend->getPhoneRights($_phone->id);
@@ -286,6 +283,21 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
                 $right->account_name = $user->accountDisplayName;
             }
         }
+    }
+    
+    /**
+     * return phone lines
+     * 
+     * @param Voipmanager_Model_Snom_Phone|Phone_Model_MyPhone $phone
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getLines($phone)
+    {
+        $filter = new Voipmanager_Model_Snom_LineFilter(array(
+            array('field' => 'snomphone_id', 'operator' => 'equals', 'value' => $phone->id)
+        ));
+        
+        return Voipmanager_Controller_Snom_Line::getInstance()->search($filter);
     }
     
     /**
