@@ -449,7 +449,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
-        // move event origin to shared (origin and display where the same)
+        // move event origin to shared (origin and display were the same)
         Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", stream_get_contents($event->get()));
         $oldEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
         $oldEvent->delete();
@@ -459,7 +459,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($loadedEvent->getRecord()->attendee);
         $this->assertEquals($this->objects['initialContainer']->getId(), $ownAttendee->displaycontainer_id, 'display container must not change');
-        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status, 'event must not be declined');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status, 'event must not be declined: ' . print_r($ownAttendee->toArray(), TRUE));
     }
     
     /**
