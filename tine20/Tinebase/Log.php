@@ -21,7 +21,7 @@ class Tinebase_Log extends Zend_Log
     /**
      * add new log writer defined by a config object/array
      * 
-     * @param Tinebase_Config_Struct|array $loggerConfig
+     * @param Tinebase_Config_Struct|Zend_Config|array $loggerConfig
      * 
      * @throws Tinebase_Exception_NotFound
      */
@@ -41,7 +41,7 @@ class Tinebase_Log extends Zend_Log
         $formatter->setReplacements();
         $writer->setFormatter($formatter);
 
-        $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : 5;
+        $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : Zend_Log::EMERG;
         $filter = new Zend_Log_Filter_Priority($priority);
         $writer->addFilter($filter);
 
@@ -54,5 +54,26 @@ class Tinebase_Log extends Zend_Log
         }
         
         $this->addWriter($writer);
+    }
+    
+    /**
+     * get max log priority
+     * 
+     * @param Tinebase_Config_Struct|Zend_Config $loggerConfig
+     * @return integer
+     */
+    public static function getMaxLogLevel($loggerConfig)
+    {
+        $logLevel = $loggerConfig && $loggerConfig->priority ? (int)$loggerConfig->priority : Zend_Log::EMERG;
+        if ($loggerConfig && $loggerConfig->additionalWriters) {
+            foreach ($loggerConfig->additionalWriters as $writerConfig) {
+                $writerConfig = ($writerConfig instanceof Tinebase_Config_Struct || $writerConfig instanceof Zend_Config)
+                    ? $writerConfig : new Tinebase_Config_Struct($writerConfig);
+                if ($writerConfig->priority && $writerConfig->priority > $logLevel) {
+                    $logLevel = (int) $writerConfig->priority;
+                }
+            }
+        }
+        return $logLevel;
     }
 }
