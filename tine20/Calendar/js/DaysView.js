@@ -745,13 +745,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         event.dirty = true;
         this.store.add(event);
         this.fireEvent('addEvent', event);
-
-        //this.store.resumeEvents();
-        //this.store.fireEvent.call(this.store, 'add', this.store, [event], this.store.indexOf(event));
     },
     
     onAppActivate: function(app) {
         if (app === this.app) {
+            this.redrawWholeDayEvents();
+            
             // get Preference
 //            try {
 //                var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
@@ -771,15 +770,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         Tine.Calendar.DaysView.superclass.onResize.apply(this, arguments);
         
         this.updateDayHeaders();
-        
-        // redraw whole day events
+        this.redrawWholeDayEvents();
+    },
+    
+    redrawWholeDayEvents: function() {
         (function(){this.store.each(function(event) {
             if (event.ui && event.get('is_all_day_event')) {
                 this.removeEvent(event);
                 this.insertEvent(event);
             }
         }, this)}).defer(50, this);
-        
     },
     
     onClick: function(e) {
