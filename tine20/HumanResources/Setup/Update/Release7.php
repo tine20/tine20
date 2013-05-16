@@ -427,4 +427,15 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setApplicationVersion('HumanResources', '7.10');
     }
     
+
+    /**
+     * update 7.10 -> 7.11
+     *
+     * - Update import / export definitions
+     */
+    public function update_10()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('HumanResources'));
+        $this->setApplicationVersion('HumanResources', '7.11');
+    }
 }
