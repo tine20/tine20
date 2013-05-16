@@ -1218,7 +1218,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         // check recent changes (needs to contain attendee change)
         $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
         $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $this->assertGreaterThan(3, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
+        $this->assertGreaterThan(2, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
         $this->assertTrue(in_array('attendee', $recentChanges->modified_attribute), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
         
         $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
