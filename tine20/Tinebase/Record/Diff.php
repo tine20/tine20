@@ -54,7 +54,7 @@ class Tinebase_Record_Diff extends Tinebase_Record_Abstract
     public function toArray($_recursive = TRUE)
     {
         $recordArray = parent::toArray($_recursive);
-        if ($_recursive) {
+        if ($_recursive && isset($recordArray['diff'])) {
             foreach ($recordArray['diff'] as $property => $value) {
                 if ($this->_hasToArray($value)) {
                     $recordArray['diff'][$property] = $value->toArray();

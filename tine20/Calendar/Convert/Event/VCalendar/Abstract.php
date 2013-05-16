@@ -103,7 +103,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $event->setTimezone($event->originator_tz);
         
         $vevent = new Sabre_VObject_Component('VEVENT');
-                
+        
         $lastModifiedDatTime = $event->last_modified_time ? $event->last_modified_time : $event->creation_time;
         
         $created = new Sabre_VObject_Element_DateTime('CREATED');
@@ -784,15 +784,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     if (isset($_vevent->EXDATE)) {
                         $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                         
-                        foreach($_vevent->EXDATE as $exdate) {
-                            foreach($exdate->getDateTimes() as $exception) {
+                        foreach ($_vevent->EXDATE as $exdate) {
+                            foreach ($exdate->getDateTimes() as $exception) {
                                 if (isset($exdate['VALUE']) && strtoupper($exdate['VALUE']) == 'DATE') {
                                     $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
                                 } else {
                                     $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), $exception->getTimezone());
                                 }
                                 $recurid->setTimezone(new DateTimeZone('UTC'));
-                                                        
+                                
                                 $eventException = new Calendar_Model_Event(array(
                                     'recurid'    => $recurid,
                                     'is_deleted' => true

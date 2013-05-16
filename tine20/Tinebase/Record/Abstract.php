@@ -1028,9 +1028,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
             } else if ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
-                $subdiv = $ownField->diff($recordField);
-                if (is_object($subdiv) && ! $subdiv->isEmpty()) {
-                    $diff[$fieldName] = $subdiv;
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+                    ' Doing subdiff for field ' . $fieldName);
+                $subdiff = $ownField->diff($recordField);
+                if (is_object($subdiff) && ! $subdiff->isEmpty()) {
+                    $diff[$fieldName] = $subdiff;
                 }
                 continue;
             } else if ($ownField == $recordField) {

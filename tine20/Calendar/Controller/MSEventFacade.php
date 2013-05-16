@@ -344,7 +344,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // update exceptions
         foreach($exceptions as $exception) {
-            // do not attemt to set status of an deleted instance
+            // do not attempt to set status of an deleted instance
             if ($exception->is_deleted) continue;
             
             $exceptionAttendee = Calendar_Model_Attender::getAttendee($exception->attendee, $_attendee);
@@ -543,7 +543,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected function _toiTIP($_event)
     {
         if ($_event instanceof Tinebase_Record_RecordSet) {
-            foreach($_event as $idx => $event) {
+            foreach ($_event as $idx => $event) {
                 try {
                     $_event[$idx] = $this->_toiTIP($event);
                 } catch (Tinebase_Exception_AccessDenied $ade) {
@@ -786,7 +786,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
-     * prepares an exception instance for persitence
+     * prepares an exception instance for persistence
      * 
      * @param  Calendar_Model_Event $_baseEvent
      * @param  Calendar_Model_Event $_exception

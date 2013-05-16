@@ -254,7 +254,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         // decline exception -> no implicit fallout as exception is still in initialContainer via displaycal
         $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
         $exception->attendee[0]->status = Calendar_Model_Attender::STATUS_DECLINED;
-        Calendar_Controller_Event::getInstance()->update($exception);
+        $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
         $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
@@ -262,10 +262,10 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         // delete attendee from exception -> implicit fallout exception is not longer in displaycal
         $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
         $exception->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        Calendar_Controller_Event::getInstance()->update($exception);
+        $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted');
+        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted from event ' . print_r($event->getRecord()->toArray(), TRUE));
         
         // save back event -> implicit delete must not be deleted on server
         $event->put($vcalendar);

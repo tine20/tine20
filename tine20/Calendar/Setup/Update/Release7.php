@@ -47,4 +47,59 @@ class Calendar_Setup_Update_Release7 extends Setup_Update_Abstract
         $release6->update_1();
         $this->setApplicationVersion('Calendar', '7.2');
     }
+    
+    /**
+     * add modlog columns to cal_attendee
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function update_2()
+    {
+        $modlogCols = array(
+                '<field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>',
+                '<field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>',
+                '<field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>',
+                '<field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>',
+                '<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>',
+                '<field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>',
+                '<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>',
+                '<field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'
+        );
+        foreach ($modlogCols as $col) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($col);
+            $this->_backend->addCol('cal_attendee', $declaration);
+        }
+        $this->setTableVersion('cal_attendee', 4);
+        $this->setApplicationVersion('Calendar', '7.3');
+    }
 }
