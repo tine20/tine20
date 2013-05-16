@@ -803,8 +803,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         }
                     
                         $event->exdate = $exdates;
-                    }     
-                                   
+                    }
+                    
                     break;
                     
                 case 'TRANSP':
@@ -897,12 +897,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 default:
-                
+                    // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
+                    // we just assume that the event/recur series has only one snooze time 
+                    if (preg_match('/^X-MOZ-SNOOZE-TIME-[0-9]+$/', $property->name)) {
+                        $snoozeTime = $this->_convertToTinebaseDateTime($property);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                            . ' Found snooze time for recur occurrence: ' . $snoozeTime->toString());
+                    }
                     break;
             }
         }
         
-        // merge old and new attendees
+        // merge old and new attendee
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         
         if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
@@ -929,23 +935,26 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     /**
      * get datetime from sabredav datetime property (user TZ is fallback)
      * 
-     * @param Sabre_VObject_Element_DateTime $dateTime
+     * @param Sabre_VObject_Property $dateTimeProperty
      * @param boolean $_useUserTZ
      * @return Tinebase_DateTime
      * 
      * @todo try to guess some common timezones
      */
-    protected function _convertToTinebaseDateTime(Sabre_VObject_Element_DateTime $dateTimeProperty, $_useUserTZ = FALSE)
+    protected function _convertToTinebaseDateTime(Sabre_VObject_Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $dateTime = $dateTimeProperty->getDateTime();
         
-        // convert to Tinebase_DateTime
+        if ($dateTimeProperty instanceof Sabre_VObject_Element_DateTime) {
+            $dateTime = $dateTimeProperty->getDateTime();
+            $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
+            $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
+        } else {
+            $result = new Tinebase_DateTime($dateTimeProperty->value);
+        }
+        
         date_default_timezone_set($defaultTimezone);
-        
-        $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
-        $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         
         return $result;
     }

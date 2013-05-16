@@ -73,7 +73,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
@@ -125,7 +125,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $existingEvent = $this->testCreateEventWithInternalOrganizer();
         $existingRecord = $existingEvent->getRecord();
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingEvent->getRecord()->uid . '.ics', $vcalendar);
         
@@ -149,7 +149,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         }
     
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
+        $vcalendarStream = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
@@ -190,13 +190,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly.ics');
+        $vcalendarStream = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly.ics');
         $id = '353de608-4b50-41e6-9f6c-35889584fe8d';
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
         $existingEvent = $event->getRecord();
         
         // put exception
-        $vcalendarStreamException = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly_exception.ics');
+        $vcalendarStreamException = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_weekly_exception.ics');
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $existingEvent);
         $event->put($vcalendarStreamException);
         
@@ -210,7 +210,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_persona_attendee.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_persona_attendee.ics');
         
 //         $prefs = new Calendar_Preference();
 //         $prefs->setValueForUser(Calendar_Preference::DEFAULTCALENDAR, '', $this->_personas['pwulf']->getId());
@@ -228,7 +228,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/iphone.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/iphone.ics');
         
         
         $id = Tinebase_Record_Abstract::generateUID();
@@ -247,7 +247,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         // create event in shared calendar test user is attendee
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
+        $vcalendarStream = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_daily.ics');
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendarStream);
         
@@ -417,7 +417,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -444,7 +444,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
@@ -469,7 +469,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -501,7 +501,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -541,7 +541,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -558,7 +558,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -590,7 +590,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
@@ -641,14 +641,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      * @param string $_filename  file to open
      * @return string
      */
-    protected function _getVCalendar($_filename)
+    public static function getVCalendar($_filename)
     {
         $vcalendar = file_get_contents($_filename);
         
         $unittestUserEmail = Tinebase_Core::getUser()->accountEmailAddress;
         $vcalendar = preg_replace(
             array(
-                '/l.kneschke@metaway\n s.de/', 
+                '/l.kneschke@metaway\n s.de/',
                 '/unittest@\n tine20.org/',
                 '/un\n ittest@tine20.org/',
                 '/unittest@tine20.org/',
