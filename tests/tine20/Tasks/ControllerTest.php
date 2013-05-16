@@ -83,7 +83,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
             'location'             => 'here and there',
             'organizer'            => 4,
             'priority'             => 2,
-            //'status'               => 'NEEDS-ACTION',
+            'status'               => 'NEEDS-ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);

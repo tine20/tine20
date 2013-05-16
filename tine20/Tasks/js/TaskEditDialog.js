@@ -218,6 +218,7 @@ Ext.namespace('Tine.Tasks');
                             keyFieldName: 'taskStatus',
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'status',
+                            allowBlank: false,
                             listeners: {scope: this, 'change': this.handleCompletedDate}
                         }), 
                         new Ext.ux.form.DateTimeField({

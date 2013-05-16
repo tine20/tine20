@@ -53,7 +53,7 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
             'location'             => 'here and there',
             'organizer'            => Tinebase_Core::getUser()->getId(),
             'priority'             => 2,
-            //'status'               => 'NEEDS-ACTION',
+            'status'               => 'NEEDS-ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ));

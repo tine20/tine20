@@ -45,8 +45,7 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
             'location'             => 'here and there',
             'organizer'            => 4,
             'priority'             => Tasks_Model_Priority::NORMAL,
-            // @todo why is the status missing?
-            //'status'               => 'NEEDS_ACTION',
+            'status'               => 'NEEDS_ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);
