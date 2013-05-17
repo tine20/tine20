@@ -121,6 +121,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
+     * @param string $field
      * @return string
      */
     public function getUnaccent($field)

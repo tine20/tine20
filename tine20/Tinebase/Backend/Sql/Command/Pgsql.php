@@ -126,39 +126,18 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     
     /**
      * Even if the database backend is PostgreSQL, we have to verify
-     * if the extension Unaccent is installed and loaded.
+     *  if the extension Unaccent is installed and loaded. 
+     *  This is done in Tinebase_Core::checkUnaccentExtension.
      * 
      * @return boolean
      */
     protected function _hasUnaccentExtension()
     {
-        $cache = Tinebase_Core::getCache();
-        $cacheId = 'PostgreSQL_Unaccent_Extension';
-        if ($cache->test($cacheId) === FALSE)
-        {
-            $tableName = 'pg_extension';
-            $cols = 'COUNT(*)';
-
-            if ($this->_adapter) {
-                $select = $this->_adapter->select();
-                $select->from($tableName, $cols);
-                $select->where("extname = 'unaccent'");             
-            }          
-            //if there is no table pg_extension, returns 0 (false)
-            try{
-                //checks if unaccent extension is installed or not
-                //(1 - yes; 0 - no)
-                $result = $this->_adapter->fetchOne($select);
-            } catch(Zend_Db_Statement_Exception $e) {
-                $result = 0;
-            }
-            $cache->save($result, $cacheId, array('pgsql','extension','unaccent'), null);
-        }
-        else
-        {
-            //loads the result of query to verify existance of
-            //unaccent/pg_extension
-            $result = $cache->load($cacheId);
+        $session = Tinebase_Core::getSession();
+        if ($session && isset($session->dbcapabilites) && array_key_exists('unaccent', $session->dbcapabilites['unaccent'])) {
+            $result = $session->dbcapabilites['unaccent'];
+        } else {
+            $result = Tinebase_Core::checkUnaccentExtension($this->_adapter);
         }
         return $result;
     }
@@ -166,16 +145,16 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
+     * @param string $field
      * @return string
      */
     public function getUnaccent($field)
     {
-        if($this->_hasUnaccentExtension() == true){
+        if ($this->_hasUnaccentExtension()){
             return ' unaccent('.$field.') ';
         } else{
             return $field;
         }
-        
     }
     
     /**

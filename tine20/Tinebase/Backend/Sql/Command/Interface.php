@@ -77,6 +77,7 @@ interface Tinebase_Backend_Sql_Command_Interface
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
+     * @param string $field
      * @return string
      */
     public function getUnaccent($field);

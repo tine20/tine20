@@ -737,8 +737,26 @@ class Tinebase_Core
         
         self::set(self::SESSION, $session);
         self::set(self::SESSIONID, session_id());
-        
+        self::setDbCapabilitiesInSession($session);
     }
+    
+    /**
+     * set database capabilities in session
+     * 
+     * @param Zend_Session_Namespace $session
+     */
+    public static function setDbCapabilitiesInSession($session)
+    {
+        if (! isset($session->dbcapabilities)) {
+            $db = Tinebase_Core::getDb();
+            $capabilities = array();
+            if ($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+                $capabilities['unaccent'] = Tinebase_Core::checkUnaccentExtension($db);
+            }
+            $session->dbcapabilities = $capabilities;
+        }
+    }
+    
     /**
      * set session options
      * 
@@ -870,8 +888,10 @@ class Tinebase_Core
             } else {
                 $dbBackend = constant($constName);
             }
-
-            switch($dbBackend) {
+            
+            self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating ' . $dbBackend . ' DB adapter');
+            
+            switch ($dbBackend) {
                 case self::PDO_MYSQL:
                     foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
                         if (! defined($pdoConstant)) {
@@ -894,6 +914,7 @@ class Tinebase_Core
                     } catch (Exception $e) {
                         self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
                     }
+                    
                     break;
                     
                 case self::PDO_OCI:
@@ -934,6 +955,37 @@ class Tinebase_Core
         } else {
             die ('database section not found in central configuration file');
         }
+    }
+
+    /**
+     * get value of session variable "unaccent"
+     * 
+     * @param Zend_Db_Adapter_Abstract $db
+     * @return boolean $valueUnaccent
+     * 
+     * @todo should be moved to pgsql adapter / helper functions
+     */
+    public static function checkUnaccentExtension($db)
+    {
+        $tableName = 'pg_extension';
+        $cols = 'COUNT(*)';
+
+        $select = $db->select()
+            ->from($tableName, $cols)
+            ->where("extname = 'unaccent'");
+
+        // if there is no table pg_extension, returns 0 (false)
+        try {
+            // checks if unaccent extension is installed or not
+            // (1 - yes; unaccent found)
+            $result = (bool) $db->fetchOne($select);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // (0 - no; unaccent not found)
+            self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Unaccent extension disabled (' . $zdse->getMessage() . ')');
+            $result = FALSE;
+        }
+        
+        return $result;
     }
 
     /**
