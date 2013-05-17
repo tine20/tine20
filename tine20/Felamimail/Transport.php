@@ -6,7 +6,7 @@
  * @subpackage  Transport
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -19,6 +19,22 @@
  */
 class Felamimail_Transport extends Zend_Mail_Transport_Smtp 
 {
+    /**
+     * Constructor.
+     *
+     * @param  string $host OPTIONAL (Default: 127.0.0.1)
+     * @param  array|null $config OPTIONAL (Default: null)
+     * @return void
+     */
+    public function __construct($host = '127.0.0.1', Array $config = array())
+    {
+        // remove empty helo dns name to force default (localhost)
+        if (empty($config['name'])) {
+            unset($config['name']);
+        }
+        parent::__construct($host, $config);
+    }
+    
     /**
      * get mail body as string
      *
