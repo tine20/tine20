@@ -770,16 +770,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         Tine.Calendar.DaysView.superclass.onResize.apply(this, arguments);
         
         this.updateDayHeaders();
-        this.redrawWholeDayEvents();
+        this.redrawWholeDayEvents.defer(50, this);
     },
     
     redrawWholeDayEvents: function() {
-        (function(){this.store.each(function(event) {
+        this.store.each(function(event) {
             if (event.ui && event.get('is_all_day_event')) {
                 this.removeEvent(event);
                 this.insertEvent(event);
             }
-        }, this)}).defer(50, this);
+        }, this);
     },
     
     onClick: function(e) {
