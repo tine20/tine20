@@ -155,6 +155,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
     
+            if (method_exists($controller, 'modlogActive')) {
+                $modlogActive = $controller->modlogActive(FALSE);
+            }
             $foreignRecords = $controller->getMultiple($foreignIds);
             $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $foreignRecords->convertDates = true;

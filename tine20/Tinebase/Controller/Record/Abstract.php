@@ -76,6 +76,27 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_resolveCustomFields = FALSE;
 
     /**
+     * clear customfields cache on create / update
+     * 
+     * @var boolean
+     */
+    protected $_clearCustomFieldsCache = FALSE;
+    
+    /**
+     * Do we update relation to this record
+     * 
+     * @var boolean
+     */
+    protected $_doRelationUpdate = TRUE;
+    
+    /**
+     * Do we force sent modlog for this record
+     * 
+     * @var boolean
+     */
+    protected $_doForceModlogInfo = FALSE;
+
+    /**
      * send notifications?
      *
      * @var boolean
@@ -139,6 +160,15 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         list($appName, $i, $modelName) = explode('_', $_model);
         return Tinebase_Core::getApplicationInstance($appName, $modelName);
+    }
+    
+    /**
+     * returns backend for this controller
+     * 
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
     }
 
     /*********** get / search / count **************/
@@ -291,14 +321,39 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * set/get relation update
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function doRelationUpdate()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_doRelationUpdate', $value);
+    }
+    
+    /**
+     * set/get force modlog info
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function doForceModlogInfo()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_doForceModlogInfo', $value);
+    }
+
+    /**
      * get by id
      *
      * @param string $_id
      * @param int $_containerId
+     * @param bool         $_getRelatedData
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
     {
         $this->_checkRight('get');
         
@@ -317,7 +372,11 @@ abstract class Tinebase_Controller_Record_Abstract
         } else {
             $record = $this->_backend->get($_id);
             $this->_checkGrant($record, 'get');
-            $this->_getRelatedData($record);
+            
+            // get related data only on request (defaults to TRUE)
+            if ($_getRelatedData) {
+                $this->_getRelatedData($record);
+            }
             
             if ($record->has('notes')) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
@@ -451,8 +510,11 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $this->_checkGrant($_record, 'create');
 
+            // added _doForceModlogInfo behavior
             if ($_record->has('created_by')) {
+                $origRecord = clone ($_record);
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
+                $this->_forceModlogInfo($_record, $origRecord, 'create');
             }
 
             $this->_inspectBeforeCreate($_record);
@@ -474,6 +536,10 @@ abstract class Tinebase_Controller_Record_Abstract
 
         } catch (Exception $e) {
             $this->_handleRecordCreateOrUpdateException($e);
+        }
+
+        if ($this->_clearCustomFieldsCache) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
         }
 
         return $this->get($createdRecord);
@@ -617,6 +683,51 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * Force modlog info if set
+     *  
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_origRecord
+     * @param string $_action
+     * @return  void
+     */
+    protected function _forceModlogInfo(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_origRecord, $_action = NULL)
+    {
+        if ($this->_doForceModlogInfo && ! empty($_origRecord)) {
+            // on create
+            if ($_action == 'create') {
+                if (! empty($_origRecord->created_by)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - created_by: ' . $_origRecord->created_by);
+                    $_record->created_by = $_origRecord->created_by;
+                }
+                if (! empty($_origRecord->creation_time)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - creation_time: ' . $_origRecord->creation_time);
+                    $_record->creation_time = $_origRecord->creation_time;
+                }
+                if (! empty($_origRecord->last_modified_by)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - last_modified_by: ' . $_origRecord->last_modified_by);
+                    $_record->last_modified_by = $_origRecord->last_modified_by;
+                }
+                if (! empty($_origRecord->last_modified_time)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - last_modified_time: ' . $_origRecord->last_modified_time);
+                    $_record->last_modified_time = $_origRecord->last_modified_time;
+                }
+            }
+            
+            // on update
+            if ($_action == 'update') {
+                if (! empty($_origRecord->last_modified_by)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - last_modified_by: ' . $_origRecord->last_modified_by);
+                    $_record->last_modified_by = $_origRecord->last_modified_by;
+                }
+                if (! empty($_origRecord->last_modified_time)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Force modlog - last_modified_time: ' . $_origRecord->last_modified_time);
+                    $_record->last_modified_time = $_origRecord->last_modified_time;
+                }
+            }
+        }   
+    }
+    
+    /**
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
@@ -644,8 +755,11 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
 
+        // add _doForceModlogInfo behavior
+            $origRecord = clone ($_record);
             $this->_updateACLCheck($_record, $currentRecord);
             $this->_concurrencyManagement($_record, $currentRecord);
+            $this->_forceModlogInfo($_record, $origRecord, 'update');
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             
             // NOTE removed the duplicate check because we can not remove the changed record yet
@@ -681,6 +795,11 @@ abstract class Tinebase_Controller_Record_Abstract
         } catch (Exception $e) {
             $this->_handleRecordCreateOrUpdateException($e);
         }
+
+        if ($this->_clearCustomFieldsCache) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        }
+
         return $this->get($updatedRecord->getId());
     }
     
@@ -976,6 +1095,10 @@ abstract class Tinebase_Controller_Record_Abstract
     
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
         
+        if ($this->_clearCustomFieldsCache) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        }
+        
         return $this->_updateMultipleResult;
     }
     
@@ -1126,6 +1249,10 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . print_r($e->getMessage(), true));
             throw $e;
         }
+        
+        if ($this->_clearCustomFieldsCache) {
+             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
+        }
 
         // returns deleted records
         return $records;
@@ -1259,7 +1386,12 @@ abstract class Tinebase_Controller_Record_Abstract
                         if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
                             list($appName, $i, $itemName) = explode('_', $relation->related_model);
                             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-                            $appController->delete($relation->related_id);
+
+                            try {
+                                $appController->delete($relation->related_id);
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error deleting: ' . $e->getMessage());
+                            }
                         }
                     }
                 }

@@ -283,6 +283,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             'accountLastName'       => $translate->_('unknown'),
             'accountFirstName'      => $translate->_('unknown'),
             'accountFullName'       => $translate->_('unknown'),
+            'accountStatus'         => $translate->_('unknown'),
         );
         
         if ($_accountClass === 'Tinebase_Model_FullUser') {
@@ -416,14 +417,24 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     {
         $userIds = array();
         foreach ((array)$_userProperties as $property) {
-            $userIds = array_merge($userIds, $_records->$property);
+            // don't break if property is not in record
+            try {
+                $userIds = array_merge($userIds, $_records->$property);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Records of class ' . get_class($_records->getFirstRecord()) . ' does not have property ' . $property);
+            }
         }
-
+        
         $userIds = array_unique($userIds);
         foreach ($userIds as $index => $userId) {
             if (empty($userId)) {
                 unset ($userIds[$index]);
             }
+        }
+                
+        // if no data return
+        if (empty($userIds)) {
+            return;
         }
         
         $users = $this->getMultiple($userIds);
