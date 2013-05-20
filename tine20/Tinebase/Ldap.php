@@ -86,7 +86,7 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function fetchBinaryAttribute($_dn, $_filter, $_attribute)
     {
-        $searchResult = @ldap_search($this->getResource(), $_dn, $_filter, $_attributes, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
+        $searchResult = @ldap_search($this->getResource(), $_dn, $_filter, $_attribute, $this->_attrsOnly, $this->_sizeLimit, $this->_timeLimit);
         
         if($searchResult === FALSE) {
             throw new Exception(ldap_error($this->getResource()));
@@ -101,7 +101,7 @@ class Tinebase_Ldap extends Zend_Ldap
         
         $entry = ldap_first_entry($this->getResource(), $searchResult);
         
-        return ldap_get_values_len($this->getResource(), $entry, $attribute);
+        return ldap_get_values_len($this->getResource(), $entry, $_attribute);
     }
     
     /**
