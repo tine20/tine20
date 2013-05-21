@@ -31,6 +31,13 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_appName = 'Voipmanager';
     
     /**
+     * the phone which will be created
+     * 
+     * @var Voipmanager_Model_Snom_Phone
+     */
+    protected $_phone = NULL;
+    
+    /**
      * the constructor
      *
      */
@@ -59,6 +66,43 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate()
     {
         $this->_createSnomPhone();
+        $this->_createCalls();
+    }
+    
+    protected function _createCalls()
+    {
+        $lineId = $this->_phone->lines[0]['id'];
+        $phoneId = $this->_phone->getId();
+        
+        $d1 = Tinebase_DateTime::now()->subDay()->setTime(12,00,00);
+        $d2 = clone $d1;
+        $d2->addSecond(10);
+        $d3 = clone $d2;
+        $d3->addMinute(20);
+        $i = 1;
+        
+        while ($i<20) {
+            $call = array(
+                'line_id'      => $lineId,
+                'phone_id'     => $phoneId,
+                'callerid'     => $i * 100,
+                'start'        => $d1,
+                'connected'    => $d2,
+                'disconnected' => $d3,
+                'duration'     => $d3->getTimestamp() - $d2->getTimestamp(),
+                'ringing'      => $i,
+                'direction'    => ($i%2) ? 'in' : 'out',
+                'source'       => '+49123456789',
+                'destination'  => '+44567890123',
+            );
+            Phone_Controller_Call::getInstance()->create(new Phone_Model_Call($call));
+            
+            $d1->addMinute(20)->subSecond($i);
+            $d2->addMinute(20)->addSecond($i);
+            $d3->addMinute(20)->addSecond($i*1);;
+            
+            $i++;
+        }
     }
     
     /**
@@ -90,7 +134,7 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'web_language' => 'English'
         ));
         
-        Voipmanager_Controller_Snom_Phone::getInstance()->create(new Voipmanager_Model_Snom_Phone(array(
+        $this->_phone = Voipmanager_Controller_Snom_Phone::getInstance()->create(new Voipmanager_Model_Snom_Phone(array(
             'description'       => Tinebase_Record_Abstract::generateUID(),
             'macaddress'        => substr(Tinebase_Record_Abstract::generateUID(), 0, 12),
             'location_id'       => $returnedLocation['id'],
