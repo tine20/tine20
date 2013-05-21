@@ -89,7 +89,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     protected function _convertHelper($filename)
     {
-        $vcalendar = $this->_getVCalendar($filename);
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar($filename);
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $event = $converter->toTine20Model($vcalendar);
         
@@ -103,7 +103,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20ModelFromICloud()
     {
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/calendarserver_external_invitation.ics');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/calendarserver_external_invitation.ics');
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $event = $converter->toTine20Model($vcalendar);
     
@@ -124,7 +124,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20ModelFromLotusNotes()
     {
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lotusnotes_external_invitation.ics');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lotusnotes_external_invitation.ics');
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $event = $converter->toTine20Model($vcalendar);
     
@@ -143,7 +143,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     */
     public function testConvertToTine20ModelWithBadTZ()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_badTZ.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_badTZ.ics', 'r');
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $event = $converter->toTine20Model($vcalendarStream);
         
@@ -162,7 +162,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             $this->markTestSkipped('no primary smtp domain configured');
         }
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
     
         $vcalendar = preg_replace('/lars@kneschke.de/', 'users@' . $smtpConfig['primarydomain'], $vcalendar);
     
@@ -182,7 +182,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     */
     public function testConvertToTine20ModelWithStatus()
     {
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $vcalendar = str_replace('LOCATION:Hamburg', 'STATUS:CONFIRMED', $vcalendar);
@@ -204,7 +204,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function _testConvertFromIcalToTine20Model()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
@@ -229,7 +229,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertAllDayEventToTine20Model()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_allday.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_allday.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
@@ -254,7 +254,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertRepeatingDailyEventToTine20Model()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
@@ -279,7 +279,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertRepeatingAllDayDailyEventToTine20Model()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_repeating_allday.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_repeating_allday.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
@@ -334,7 +334,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $event = $this->testConvertRepeatingDailyEventToTine20Model();
         
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
     
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
@@ -357,7 +357,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20ModelWithUpdate()
     {
-        $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
@@ -366,7 +366,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         // status_authkey must be kept after second convert
         $event->attendee[0]->quantity = 10;
         
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         // remove alarm part from vcalendar
         $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
         
@@ -563,7 +563,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     
     public function testConvertToTine20ModelWithCustomAlarm()
     {
-        $vcalendar = $this->_getVCalendar(dirname(__FILE__) . '/../../../Import/files/event_with_custom_alarm.ics');
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/event_with_custom_alarm.ics');
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
@@ -578,21 +578,6 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals('2012-02-14 17:00:00', $alarm->alarm_time->toString());
     }
     
-   /**
-    * return vcalendar as string and replace organizers email address with emailaddess of current user
-    *
-    * @param string $_filename  file to open
-    * @return string
-    */
-    protected function _getVCalendar($_filename)
-    {
-        $vcalendar = file_get_contents($_filename);
-    
-        $vcalendar = preg_replace('/l.kneschke@metaway\n s.de/', Tinebase_Core::getUser()->accountEmailAddress, $vcalendar);
-    
-        return $vcalendar;
-    }
-
     /**
      * testConvertFromGoogleToTine20Model
      * 
