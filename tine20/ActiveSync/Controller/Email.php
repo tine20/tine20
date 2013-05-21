@@ -498,7 +498,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     {
         $storeResponse = new Syncroton_Model_StoreResponse();
         
-        if (!isset($store->query['and']) && !isset($store->query['and']['freetext'])) {
+        if (!isset($store->query['and']) || !isset($store->query['and']['freeText'])) {
             $storeResponse->total = 0;
             return $storeResponse;
         }
@@ -506,7 +506,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
         $filter = new $this->_contentFilterClass(array(array(
             'field'     => 'query',
             'operator'  => 'contains',
-            'value'     => $store->query['and']['freetext']
+            'value'     => $store->query['and']['freeText']
         )));
         
         if (isset($store->query['and']['collections'])) {
