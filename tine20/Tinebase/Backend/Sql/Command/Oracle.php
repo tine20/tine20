@@ -119,6 +119,17 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     }
     
     /**
+     * prepare value for case insensitive search
+     * 
+     * @param string $value
+     * @return string
+     */
+    public function prepareForILike($value)
+    {
+        return ' UPPER (' . $value . ')';
+    }
+    
+    /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
      * @param string $field

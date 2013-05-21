@@ -34,7 +34,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
         2 => 'equals',
         3 => 'startswith'
     );
-    
+
     /**
      * set options 
      *
@@ -49,7 +49,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
         
         $this->_options = $_options;
     }
-    
+
     /**
      * appends sql to given select statement
      *
@@ -62,9 +62,9 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
              $_select->where('1=1/* empty query */');
              return;
          }
-        
+
          $db = Tinebase_Core::getDb();
-         
+
          switch ($this->_operator) {
              case 'contains':
              case 'equals':
@@ -73,8 +73,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
                  foreach ($queries as $query) {
                      $whereParts = array();
                      foreach ($this->_options['fields'] as $qField) {
-                         $whereParts[] = Tinebase_Backend_Sql_Command::factory($db)->getUnaccent($db->quoteIdentifier($_backend->getTableName()
-                             . '.' . $qField)) . ' ' . Tinebase_Backend_Sql_Command::factory($db)->getLike() . Tinebase_Backend_Sql_Command::factory($db)->getUnaccent(' ?');
+                         // if field has . in name, then we already have tablename
+                        if (strpos($qField, '.') !== FALSE) {
+                            $whereParts[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent($db->quoteIdentifier($qField))) . ' ' . Tinebase_Backend_Sql_Command::factory($db)->getLike() . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent('(?)'));
+                        }
+                        else {
+                            $whereParts[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent($db->quoteIdentifier($_backend->getTableName() . '.' . $qField))) . ' ' . Tinebase_Backend_Sql_Command::factory($db)->getLike() . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent('(?)'));
+                        }
                      }
                      $whereClause = '';
                      if (!empty($whereParts)) {
@@ -96,7 +101,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
                  break;
              case 'in':
                  foreach ($this->_options['fields'] as $qField) {
-                     $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' IN (?)', (array) $this->_value);
+                    // if field has . in name, then we allready have tablename
+                    if (strpos($qField, '.') !== FALSE) {
+                        $whereParts[] = $db->quoteInto($db->quoteIdentifier($qField) . ' IN (?)', (array) $this->_value);
+                    }
+                    else {
+                         $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' IN (?)', (array) $this->_value);
+                    }
                  }
                  if (! empty($whereParts)) {
                      $whereClause = implode(' OR ', $whereParts);

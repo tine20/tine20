@@ -119,8 +119,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $this->rowNameMapping['accountFirstName'], 
                 $this->rowNameMapping['accountLoginName']
             );
+            // prepare for case insensitive search
+            $db = Tinebase_Core::getDb();
             foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = $this->_db->quoteIdentifier($defaultValue) . 'LIKE ?';
+                $whereStatement[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('?');
             }
         
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
@@ -932,11 +934,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
+     * fetch FullUser by default
+     *
      * @param     string|array $_id Ids
      * @param   string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
-    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User') 
+    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_FullUser') 
     {
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($_accountClass);

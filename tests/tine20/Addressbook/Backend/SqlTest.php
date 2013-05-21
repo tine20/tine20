@@ -96,6 +96,20 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         return $contact;
     }
+    
+    /**
+     * try to add a contact
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    public function testCreateSpecialNameContact()
+    {
+        $contact = $this->_backend->create(self::getTestSpecialNameContact($this->_container));
+        
+        $this->assertTrue(!empty($contact->id));
+        
+        return $contact;
+    }    
 
     /**
      * try to get a contact
@@ -161,6 +175,36 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         return $contact;
     }
+    
+    /**
+     * test search results
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    public function testSearchSpecialNameContact()
+    {
+        $contact = $this->testCreateSpecialNameContact();
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array(
+                'field' => 'container_id',     'operator' => 'equals',         'value' => $contact->container_id,
+                'field' => 'n_family',         'operator' => 'equalsspecial',  'value' => 'Horvat-Čuka'
+            )
+        ));
+        
+        $contacts = $this->_backend->search($filter);
+        $this->assertTrue(count($contacts) >= 1, 'empty search');
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array(
+                'field' => 'container_id',     'operator' => 'equals',         'value' => $contact->container_id,
+                'field' => 'n_given',          'operator' => 'equalsspecial',  'value' => 'Ana Maria'
+            )
+        ));
+        
+        $contacts = $this->_backend->search($filter);
+        $this->assertTrue(count($contacts) >= 1, 'empty search');
+    }    
     
     /**
      * test if image is in contact
@@ -279,9 +323,60 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         ));
 
         return $contact;
+    }     
+ 
+    /**
+     * create test contact
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    public static function getTestSpecialNameContact(Tinebase_Model_Container $container)
+    {
+        $contact = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'HR',
+            'adr_one_locality'      => 'Šibenik',
+            'adr_one_postalcode'    => '2200',
+            'adr_one_region'        => 'Bilice',
+            'adr_one_street'        => 'Snajperska 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'HR',
+            'adr_two_locality'      => 'Zagreb',
+            'adr_two_postalcode'    => '10xxx',
+            'adr_two_region'        => 'Zagreb',
+            'adr_two_street'        => 'Pick 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
+            'email'                 => 'unittests2@tine20.org',
+            'email_home'            => 'unittests2@tine20.org',
+            'jpegphoto'             => '',
+            'note'                  => 'Bla Bla Bla',
+            'container_id'          => $container->id,
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Horvat Čuka',
+            'n_fileas'              => 'Horvat Čuka, Ana-Maria',
+            'n_given'               => 'Ana-Maria',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+385TELASSISTENT',
+            'tel_car'               => '+385TELCAR',
+            'tel_cell'              => '+385TELCELL',
+            'tel_cell_private'      => '+385TELCELLPRIVATE',
+            'tel_fax'               => '+385TELFAX',
+            'tel_fax_home'          => '+385TELFAXHOME',
+            'tel_home'              => '+385TELHOME',
+            'tel_pager'             => '+385TELPAGER',
+            'tel_work'              => '+385TELWORK',
+        ));
+        return $contact;
     }
 }        
-
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_Backend_SqlTest::main') {
     Addressbook_Backend_SqlTest::main();

@@ -75,6 +75,14 @@ interface Tinebase_Backend_Sql_Command_Interface
     public function getLike();
     
     /**
+     * prepare value for case insensitive search
+     * 
+     * @param string $value
+     * @return string
+     */
+    public function prepareForILike($value);
+    
+    /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
      * @param string $field

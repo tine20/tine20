@@ -119,6 +119,17 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * prepare value for case insensitive search
+     * 
+     * @param string $value
+     * @return string
+     */
+    public function prepareForILike($value)
+    {
+        return $value;
+    }
+    
+    /**
      * returns field without accents (diacritic signs) - for Pgsql;
      * 
      * @param string $field

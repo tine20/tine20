@@ -125,6 +125,17 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * prepare value for case insensitive search
+     * 
+     * @param string $value
+     * @return string
+     */
+    public function prepareForILike($value)
+    {
+        return $value;
+    }
+    
+    /**
      * Even if the database backend is PostgreSQL, we have to verify
      *  if the extension Unaccent is installed and loaded. 
      *  This is done in Tinebase_Core::checkUnaccentExtension.
