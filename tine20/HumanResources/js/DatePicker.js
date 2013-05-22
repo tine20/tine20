@@ -201,6 +201,11 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {Object} t
      */
     handleDateClick: function(e, t) {
+        
+        if (!(!this.disabled && t.dateValue && !Ext.fly(t.parentNode).hasClass('x-date-disabled'))) {
+            return;
+        }
+        
         var date = new Date(t.dateValue),
             existing;
             
