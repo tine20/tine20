@@ -126,7 +126,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
     */
     public function getRequestMethod()
     {
-        if ($this->_method && isset($_REQUEST['method'])) {
+        if (isset($_REQUEST['method'])) {
             $this->_method = $_REQUEST['method'];
         }
         
