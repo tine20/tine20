@@ -184,10 +184,16 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     onCellClick: function(grid, row, col, e) {
         var contact = this.store.getAt(row),
             typeToSet = this.grid.getColumnModel().getDataIndex(col)
-            
+        
+        if (['to', 'cc', 'bcc', 'none'].indexOf(typeToSet) === -1) {
+            // some other column has been clicked
+            return;
+        }
+        
         if (! contact.hasEmail() && typeToSet !== 'none') {
             this.setTypeRadio(contact, 'none');
         } else {
+            this.setTypeRadio(contact, typeToSet);
             this.updateRecipients(contact, typeToSet);
         }
     },
@@ -213,6 +219,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         }, this);
         
         if (! found && typeToSet !== 'none') {
+            Tine.log.debug('Tine.Felamimail.ContactGridPanel::updateRecipients() - adding email ' + email + ' to ' + typeToSet);
             this.messageRecord.data[typeToSet].push(email);
         }
     },
