@@ -69,6 +69,13 @@ class Tinebase_Record_Iterator
     protected $_recordIds = NULL;
     
     /**
+     * total record count
+     * 
+     * @var array
+     */
+    protected $_totalCount = NULL;
+    
+    /**
      * options array
      * 
      * @var array
@@ -108,6 +115,14 @@ class Tinebase_Record_Iterator
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Created new Iterator with options: ' . print_r($this->_options, TRUE));
+    }
+    
+    /**
+     * Get total count
+     */
+    public function getTotalCount()
+    {
+        return $this->_totalCount;
     }
 
     /**
@@ -151,8 +166,9 @@ class Tinebase_Record_Iterator
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Getting record ids using filter: ' . print_r($this->_filter->toArray(), TRUE));
             $this->_recordIds = $this->_controller->search($this->_filter, NULL, FALSE, TRUE, $this->_options['searchAction']);
+            $this->_totalCount = count($this->_recordIds);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Found ' . count($this->_recordIds) . ' total records to process.');
+                . ' Found ' . $this->_totalCount . ' total records to process.');
             if (empty($this->_recordIds)) {
                 return new Tinebase_Record_RecordSet($this->_filter->getModelName());
             }
