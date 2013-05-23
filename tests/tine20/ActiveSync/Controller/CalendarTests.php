@@ -493,7 +493,7 @@ Zeile 3</AirSyncBase:Data>
         unset($syncrotonEvent->recurrence);
         unset($syncrotonEvent->exceptions);
         
-        // need to creaate new controller to set new sync timestamp for concurrency handling
+        // need to create new controller to set new sync timestamp for concurrency handling
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
@@ -832,5 +832,25 @@ Zeile 3</AirSyncBase:Data>
         
         #var_dump(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
         $this->assertEquals(1, count(Calendar_Controller_Event::getInstance()->get($serverId)->attendee), 'count after update');
+    }
+
+    /**
+     * test get changed entries
+     * 
+     * @todo enable again (by removing)
+     */
+    public function testGetChangedEntries()
+    {
+        $this->markTestSkipped('@see 0008412: fix ActiveSync_Controller_CalendarTests.testGetChangedEntries');
+    }
+    
+    /**
+     * test get changed entries for android
+     * 
+     * @todo enable again (by removing)
+     */
+    public function testGetChangedEntriesAndroid()
+    {
+        $this->markTestSkipped('@see 0008412: fix ActiveSync_Controller_CalendarTests.testGetChangedEntries');
     }
 }

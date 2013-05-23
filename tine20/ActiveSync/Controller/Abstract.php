@@ -443,14 +443,14 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
         $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->format(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
-        // @todo filter also for create_timestamo??
+        // @todo filter also for create_timestamp??
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'last_modified_time',
             'after',
             $startTimeStamp
         ));
         
-        if($endTimeStamp !== NULL) {
+        if ($endTimeStamp !== NULL) {
             $filter->addFilter(new Tinebase_Model_Filter_DateTime(
                 'last_modified_time',
                 'before',
@@ -458,7 +458,13 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             ));
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " Assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
+        
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Found " . count($result) . ' changed record(s).');
         
         return $result;
     }
@@ -549,7 +555,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $pagination = null;
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " Assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
+        
         $result = $this->_contentController->search($filter, $pagination, false, true, 'sync');
         
         return $result;

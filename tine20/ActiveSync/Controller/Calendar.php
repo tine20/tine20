@@ -918,7 +918,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $filter->addFilter($containerFilter);
         }
         
-        if(in_array($_filterType, $this->_filterArray)) {
+        if (in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncroton_Command_Sync::FILTER_2_WEEKS_BACK:
                     $from = Tinebase_DateTime::now()->subWeek(2);

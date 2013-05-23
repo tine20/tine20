@@ -211,23 +211,6 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($this->_specialFolderName, $allSyncrotonFolders, "key {$this->_specialFolderName} not found in " . print_r($allSyncrotonFolders, true));
     }
     
-    /**
-     * test search tasks
-     */
-    #public function testGetFolder()
-    #{
-    #    // create at least one folder with sync grants
-    #    $syncAbleFolder    = $this->_getContainerWithSyncGrant();
-    #    
-    #    $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
-    #    
-    #    $folder = $controller->getFolder($syncAbleFolder);
-    #    
-    #    //var_dump($folder);
-    #    
-    #    $this->assertArrayHasKey($syncAbleFolder->getId(), $folder);
-    #}
-    
     public function testDeleteEntry()
     {
         $syncrotonFolder = $this->testCreateFolder();
@@ -254,6 +237,9 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), 'jdszfegd63gfrk');
     }
     
+    /**
+     * test get changed entries
+     */
     public function testGetChangedEntries()
     {
         $syncrotonFolder = $this->testCreateFolder();
@@ -267,22 +253,24 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $this->assertContains($serverId, $changedEntries);
     }
     
+    /**
+     * test get changed entries for android
+     */
     public function testGetChangedEntriesAndroid()
     {
         $syncrotonFolder = $this->testCreateFolder();
     
         list($serverId, $syncrotonContact) = $this->testUpdateEntry($syncrotonFolder);
     
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID), new Tinebase_DateTime(null, null, 'de_DE'));
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID), Tinebase_DateTime::now());
     
-        $changedEntries = $controller->getChangedEntries($this->_specialFolderName, new DateTime('2000-01-01'));
+        $changedEntries = $controller->getChangedEntries($this->_specialFolderName, new Tinebase_DateTime('2000-01-01'));
     
-        $this->assertContains($serverId, $changedEntries);
+        $this->assertContains($serverId, $changedEntries, 'did not get changed record id in ' . print_r($changedEntries, TRUE));
     }
     
     /**
      * test convert from XML to Tine 2.0 model
-     * 
      */
     abstract public function testCreateEntry($syncrotonFolder = null);
     
