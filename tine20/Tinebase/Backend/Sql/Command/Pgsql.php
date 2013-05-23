@@ -134,10 +134,10 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     protected function _hasUnaccentExtension()
     {
         $session = Tinebase_Core::getSession();
-        if ($session && isset($session->dbcapabilites) && array_key_exists('unaccent', $session->dbcapabilites['unaccent'])) {
-            $result = $session->dbcapabilites['unaccent'];
+        if ($session instanceof Zend_Session_Namespace && isset($session->dbcapabilities) && array_key_exists('unaccent', $session->dbcapabilities['unaccent'])) {
+            $result = $session->dbcapabilities['unaccent'];
         } else {
-            $result = Tinebase_Core::checkUnaccentExtension($this->_adapter);
+            $result = 0;
         }
         return $result;
     }
