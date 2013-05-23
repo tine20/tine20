@@ -1,13 +1,14 @@
 # 
 # Translators:
+# ihorvat <ivana.horvat@globalnet.hr>, 2013
 # onebeat <onebeat.hr@gmail.com>, 2013
 # fvisic <visicfilip@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-27 14:14+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-05-17 10:42+0000\n"
+"Last-Translator: ihorvat <ivana.horvat@globalnet.hr>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -144,7 +145,7 @@ msgstr "Status za sudjelovanje je dostupan"
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
-msgstr ""
+msgstr "Mogući statusi sudionika sastanka. Imajte na umu da bi dodatni sudionici sastanka mogli utjecati na ostale kalendare sustava prilikom izvoza ili sinkronizacije."
 
 #: Config.php:65
 msgid "Attendee Roles Available"
@@ -154,7 +155,7 @@ msgstr ""
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
-msgstr ""
+msgstr "Moguće uloge sudionika sastanaka. Imajte na umu da dodatne uloge sudionika mogu utjecati na ostale kalendare u sustavu prilikom izvoza ili sinkronizacije."
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
 msgid "Calendar"
@@ -286,7 +287,7 @@ msgstr "Nikada"
 
 #: Preference.php:169
 msgid "On invitation and cancellation only"
-msgstr ""
+msgstr "Samo kod pozivanja i otkazivanja"
 
 #: Preference.php:169
 msgid "On time changes"
@@ -344,7 +345,7 @@ msgstr "Unesite opis..."
 
 #: js/ResourceEditDialog.js:117
 msgid "Grants"
-msgstr ""
+msgstr "Dozvole"
 
 #: js/PerspectiveCombo.js:84 js/EventEditDialog.js:179
 msgid "non-blocking"
@@ -352,7 +353,7 @@ msgstr "nije blokirajući"
 
 #: js/PerspectiveCombo.js:110
 msgid "Displayed in"
-msgstr ""
+msgstr "Prikaži u"
 
 #: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
@@ -404,7 +405,7 @@ msgstr "Godišnje"
 
 #: js/RrulePanel.js:178
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
+msgstr "Iznimke od ponavljajućeg događaja ne mogu i same imati ponavljanja"
 
 #: js/RrulePanel.js:240
 msgid "at"
@@ -701,7 +702,7 @@ msgstr "ponavljajući događaj"
 
 #: js/EventDetailsPanel.js:91 js/EventUI.js:247
 msgid "recurring event exception"
-msgstr ""
+msgstr "iznimka od ponavljanja događaja"
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:373
@@ -730,11 +731,11 @@ msgstr "Tjedan {0}:"
 
 #: js/AttendeeFilterGrid.js:28
 msgid "Add attendee"
-msgstr ""
+msgstr "Dodaj sudionike"
 
 #: js/AttendeeFilterGrid.js:59
 msgid "Check to filter for this attendee"
-msgstr ""
+msgstr "Označite za filtriranje ovog sudionika"
 
 #: js/AttendeeGridPanel.js:26
 msgid "Click here to invite another attender..."
@@ -781,7 +782,7 @@ msgstr "(kao član grupe)"
 
 #: js/AttendeeGridPanel.js:586
 msgid "External Attendee"
-msgstr ""
+msgstr "Vanjski sudionici"
 
 #: js/WestPanel.js:32
 msgid "Mini Calendar"
@@ -983,7 +984,7 @@ msgstr "%1$s je odbio/la događaj \"%2$s\" u %3$s"
 
 #: Controller/EventNotifications.php:302
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Odgovor o mogućem dolasku od %1$s za događaj \"%2$s\" u %3$s"
 
 #: Controller/EventNotifications.php:306
 msgid "No response from %1$s for event \"%2$s\" at %3$s"

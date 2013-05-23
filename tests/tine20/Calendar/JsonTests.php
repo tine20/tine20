@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -185,7 +185,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->dtstart->addHour(5);
         $event->dtend->addHour(5);
         $event->description = 'are you kidding?';
-        
         
         $eventData = $event->toArray();
         foreach ($eventData['attendee'] as $key => $attenderData) {
@@ -1231,6 +1230,78 @@ class Calendar_JsonTests extends Calendar_TestCase
             } else {
                 $this->assertEquals(4, count($event['attendee']), 'Attendee count mismatch: ' . print_r($event, TRUE));
             }
+        }
+    }
+
+    /**
+     * testConcurrentAttendeeChangeAdd
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeAdd()
+    {
+        $eventData = $this->testCreateEvent();
+        $numAttendee = count($eventData['attendee']);
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['pwulf']->getId(),
+        );
+        $this->_uit->saveEvent($eventData);
+        
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['jsmith']->getId(),
+        );
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $this->assertEquals(4, count($event['attendee']), 'both new attendee (pwulf + jsmith) should be added: ' . print_r($event['attendee'], TRUE));
+    }
+
+    /**
+     * testConcurrentAttendeeChangeRemove
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeRemove()
+    {
+        $eventData = $this->testCreateEvent();
+        $currentAttendee = $eventData['attendee'];
+        unset($eventData['attendee'][1]);
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $eventData['attendee'] = $currentAttendee;
+        $numAttendee = count($eventData['attendee']);
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['pwulf']->getId(),
+        );
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $this->assertEquals(2, count($event['attendee']), 'one attendee should added and one removed: ' . print_r($event['attendee'], TRUE));
+    }
+
+    /**
+     * testConcurrentAttendeeChangeUpdate
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeUpdate()
+    {
+        $eventData = $this->testCreateEvent();
+        $currentAttendee = $eventData['attendee'];
+        $adminIndex = ($eventData['attendee'][0]['user_id']['n_fn'] === 'Susan Clever') ? 1 : 0;
+        $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 1);
+        $this->assertEquals(1, count($loggedMods), 'attender modification has not been logged');
+        
+        $eventData['attendee'] = $currentAttendee;
+        $scleverIndex = ($adminIndex === 1) ? 0 : 1;
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $eventData['attendee'][$scleverIndex]['status_authkey'] = $attendeeBackend->get($eventData['attendee'][$scleverIndex]['id'])->status_authkey;
+        $eventData['attendee'][$scleverIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $event = $this->_uit->saveEvent($eventData);
+
+        foreach ($event['attendee'] as $attender) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender['status'], 'both attendee status should be TENTATIVE: ' . print_r($attender, TRUE));
         }
     }
 }

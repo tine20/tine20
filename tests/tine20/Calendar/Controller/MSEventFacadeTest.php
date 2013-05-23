@@ -353,7 +353,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     
     /**
      * sclever declines event exception.
-     * => from her iTIP perspective, with the filter, this is an fallout than
+     * => from her iTIP perspective, with the filter, this is an fallout
      */
     public function testPerspectiveExceptionFallout()
     {
@@ -388,7 +388,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->_uit->setCalendarUser($currUser);
         
         $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
-        $this->assertNull($persistentException);
+        $this->assertNull($persistentException, 'exdate without sclever should be marked as deleted: ' . (($persistentException) ? print_r($persistentException->toArray()) : ''));
     }
     
     public function testMissingEmailAttendee()

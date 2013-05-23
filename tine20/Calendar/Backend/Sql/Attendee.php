@@ -34,4 +34,10 @@ class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Calendar_Model_Attender';
     
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
 }

@@ -1,13 +1,14 @@
 # 
 # Translators:
+# antacs <antonio-carlos.silva@serpro.gov.br>, 2013
 # DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 # gustavotonini <GUSTAVOTONINI@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-03-12 22:09+0000\n"
-"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
+"PO-Revision-Date: 2013-05-07 19:46+0000\n"
+"Last-Translator: antacs <antonio-carlos.silva@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +29,7 @@ msgstr "Criar novos calendários compartilhados"
 
 #: Acl/Rights.php:107
 msgid "manage shared calendars favorites"
-msgstr "gerneciar calendários favoritos compartilhados"
+msgstr "gerenciar calendários favoritos compartilhados"
 
 #: Acl/Rights.php:108
 msgid "Create or update shared calendars favorites"
@@ -375,7 +376,7 @@ msgstr "Adicionando {0} Participante ao evento"
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
-msgstr "Recorrentes"
+msgstr "Recorrências"
 
 #: js/RrulePanel.js:36
 msgid "No recurring rule defined"
@@ -656,7 +657,7 @@ msgstr "Conflito de Agendamento"
 
 #: js/MainScreenCenterPanel.js:1176
 msgid "The following attendee are busy at the requested time:"
-msgstr "O seguinte atendente está ocupado na hora solicitada:"
+msgstr "O seguinte participante está ocupado na hora solicitada:"
 
 #: js/MainScreenCenterPanel.js:1180
 msgid "Ignore Conflict"
@@ -668,7 +669,7 @@ msgstr "Editar Evento"
 
 #: js/MainScreenCenterPanel.js:1182
 msgid "Cancel this action"
-msgstr "Cancelar este ação"
+msgstr "Cancelar esta ação"
 
 #: js/calendarRenderer.js:30
 msgid ""
