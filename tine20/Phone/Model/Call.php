@@ -62,7 +62,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
                 'type'       => 'record',
                 'config' => array(
                     'appName'     => 'Voipmanager',
-                    'modelName'   => 'Snom_Phone',
+                    'modelName'   => 'Snom_Line',
                     'idProperty'  => 'id',
                 )
              ),
@@ -84,25 +84,28 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
             'start'                 => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Start', // _('Start')
-                'type'       => 'date',
+                'type'       => 'datetime',
             ),
             'connected'             => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Connected', // _('Connected')
-                'type'       => 'date',
+                'type'       => 'datetime',
             ),
             'disconnected'          => array(
                 'label'      => 'Disconnected', // _('Disconnected')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'type'       => 'date',
+                'type'       => 'datetime',
             ),
             'duration'              => array(
                 'label'      => 'Duration', // _('Duration')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', Zend_Filter_Input::DEFAULT_VALUE => 0)
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'type'       => 'integer',
+                'specialType' => 'seconds'
             ),
             'ringing'               => array(
-                'label'      => 'Ringing', // _('Ringing')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', Zend_Filter_Input::DEFAULT_VALUE => 0)
+                'label'       => 'Ringing', // _('Ringing')
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int', Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'type'        => 'integer',
             ),
             'direction'             => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, array('InArray', array(self::TYPE_INCOMING, self::TYPE_OUTGOING))),

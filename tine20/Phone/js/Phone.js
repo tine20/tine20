@@ -115,6 +115,9 @@ Tine.widgets.grid.RendererManager.register('Phone', 'Call', 'destination', funct
     return Ext.util.Format.htmlEncode(v);
 });
 
+Tine.widgets.grid.RendererManager.register('Phone', 'Call', 'line_id', function(v) {
+    return (v && v.hasOwnProperty('linenumber')) ? v.linenumber : '';
+});
 
 /***************************** utils ****************************************/
 
