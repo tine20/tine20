@@ -151,7 +151,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         $session = Tinebase_Core::getSession();
         if ($session && is_object($session)) {
-            $session->{self::SESSION_NAMESPACE}[$cache->getId()] = $cache;
+            $session->{self::SESSION_NAMESPACE}[$cache->getId()] = $cache->toArray();
         }
     }
     
@@ -160,9 +160,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      * -> needs to check if entry exists (some adapters can have static ids)
      * 
      * @param Tinebase_Model_CredentialCache $cache
-     * @param boolean $_saveInSession
      */
-    protected function _persistCache(Tinebase_Model_CredentialCache $cache, $_saveInSession = TRUE)
+    protected function _persistCache(Tinebase_Model_CredentialCache $cache)
     {
         try {
             $this->create($cache);
@@ -202,7 +201,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         $session = Tinebase_Core::getSession();
         $credentialSessionCache = ($session && is_object($session)) ? $session->{self::SESSION_NAMESPACE} : NULL;
         if (isset($credentialSessionCache) && isset($credentialSessionCache[$id])) {
-            $result = $credentialSessionCache[$id];
+            $result = new Tinebase_Model_CredentialCache($credentialSessionCache[$id]);
         } else {
             $result = $this->get($id);
             $this->_saveInSession($result);

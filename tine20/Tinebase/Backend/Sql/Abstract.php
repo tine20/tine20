@@ -1035,7 +1035,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);
-                
+        
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
@@ -1046,7 +1046,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_record->has('customfields')) {
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
-                
+        
         $this->_updateForeignKeys('update', $_record);
         
         $result = $this->get($id, true);
