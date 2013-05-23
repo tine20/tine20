@@ -327,7 +327,10 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 layout: 'fit',
                 buttonAlign: 'right',
                 border: false,    
-                buttons: this.buttons,
+                buttons: [      
+                   this.cancelAction,
+                   this.okAction
+                ],
                 items: this.formPanel
             });
         },       
