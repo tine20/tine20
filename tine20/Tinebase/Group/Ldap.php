@@ -445,8 +445,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             );
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
             return;
-        }            
-            
+        }
+        
         try {
             $accountMetaData = $this->_getAccountMetaData($_accountId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -667,7 +667,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         );
 
         if (count($result) !== 1) {
-            throw new Exception("user with userid $_userId not found");
+            throw new Tinebase_Exception_NotFound("user with userid $_userId not found");
         }
 
         return $result->getFirst();
@@ -680,7 +680,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      * @param boolean $throwExceptionOnMissingAccounts
      * @return array of strings
      */
-    protected function _getAccountsMetaData(array $_accountIds, $throwExceptionOnMissingAccounts)
+    protected function _getAccountsMetaData(array $_accountIds, $throwExceptionOnMissingAccounts = TRUE)
     {
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
