@@ -1,12 +1,13 @@
 # 
 # Translators:
+# sardyna12 <sardyna12@gmail.com>, 2013
 # Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-19 06:24+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-04-29 15:59+0000\n"
+"Last-Translator: sardyna12 <sardyna12@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,19 +20,19 @@ msgstr ""
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
-msgstr "edycja kont pocztowych"
+msgstr "zarządzanie kontami pocztowymi"
 
 #: Acl/Rights.php:107
 msgid "Edit and delete email accounts"
-msgstr "edycja i usuwanie kont pocztowych"
+msgstr "Edycja i usuwanie kont pocztowych"
 
 #: Acl/Rights.php:110
 msgid "Add email accounts"
-msgstr "dodawanie kont pocztowych"
+msgstr "Dodawanie kont pocztowych"
 
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
-msgstr "tworzenie nowych kont pocztowych"
+msgstr "Tworzenie nowych kont pocztowych"
 
 #: Model/Message.php:269
 msgid "Reading Confirmation:"
@@ -121,7 +122,7 @@ msgstr "Częstotliwość aktualizacji poczty"
 
 #: Preference.php:111
 msgid "How often should Felamimail check for new Emails (in minutes)."
-msgstr ""
+msgstr "Jak często program Felamimail powinien sprawdzać czy są nowe wiadomości (w minutach)."
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -191,8 +192,8 @@ msgstr "Nowy {0}"
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Katalog"
-msgstr[1] "Katalog"
-msgstr[2] "Katalog"
+msgstr[1] "Katalogi"
+msgstr[2] "Katalogi"
 
 #: js/TreeContextMenu.js:64
 msgid "Please enter the name of the new {0}:"
@@ -294,7 +295,7 @@ msgstr "Błąd SMTP"
 
 #: js/Felamimail.js:866
 msgid "No connection to SMTP server."
-msgstr "Brak połączenia z serwerem SMTP"
+msgstr "Brak połączenia z serwerem SMTP."
 
 #: js/Felamimail.js:874
 msgid "Sieve Error"
@@ -969,7 +970,7 @@ msgstr "Host"
 
 #: js/AccountEditDialog.js:163
 msgid "Port (Default: 143 / SSL: 993)"
-msgstr "Port (domyślnie 143 / SSL: 993)"
+msgstr "Port (domyślnie: 143 / SSL: 993)"
 
 #: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
 #: js/AccountEditDialog.js:266
@@ -1027,7 +1028,7 @@ msgstr "Filtr"
 
 #: js/AccountEditDialog.js:261
 msgid "Port (Default: 2000)"
-msgstr "Port (domyślnie 2000)"
+msgstr "Port (domyślnie: 2000)"
 
 #: js/AccountEditDialog.js:281
 msgid "Other Settings"
@@ -1035,11 +1036,11 @@ msgstr "Inne ustawienia"
 
 #: js/AccountEditDialog.js:288
 msgid "Sent Folder Name"
-msgstr "Katalog: Wysłane"
+msgstr "Nazwa folderu: Wysłane"
 
 #: js/AccountEditDialog.js:294
 msgid "Trash Folder Name"
-msgstr "Katalog: Kosz"
+msgstr "Nazwa folderu: Kosz"
 
 #: js/AccountEditDialog.js:300
 msgid "Drafts Folder Name"
@@ -1051,7 +1052,7 @@ msgstr "Nazwa folderu: Szablony"
 
 #: js/AccountEditDialog.js:312
 msgid "Display Format"
-msgstr "Format edycji"
+msgstr "Format wyświetlania"
 
 #: js/AccountEditDialog.js:323
 msgid "HTML"
