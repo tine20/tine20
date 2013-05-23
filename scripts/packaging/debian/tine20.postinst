@@ -56,7 +56,7 @@ if [ "$1" = "configure" ]; then
     
     if [ ! -e "$tine20ConfigFile" ] ; then
         cp /usr/share/doc/tine20-tinebase/examples/config.inc.php.dist "$tine20ConfigFile"
-        chmod 0640       "$tine20ConfigFile"
+        chmod 0660       "$tine20ConfigFile"
         chown 0:www-data "$tine20ConfigFile"
 
         db_get tine20/setupuser
