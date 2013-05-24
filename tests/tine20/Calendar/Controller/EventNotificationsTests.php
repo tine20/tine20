@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -739,6 +739,48 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
+     * testRecuringAlarmAfterSeriesEnds
+     * 
+     * @see 0008386: alarm is sent for recur series that is already over
+     */
+    public function testRecuringAlarmAfterSeriesEnds()
+    {
+        $event = $this->_getEvent();
+        
+        // lets flush mailer so next flushing ist faster!
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        
+        // make sure next occurence contains now
+        // next occurance now+29min 
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(28);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // save again with rrule until (stops 10 minutes before current dtstart)
+        $persistentEvent->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtstart->addDay(1)->subMinute(10)->toString();
+        $persistentEvent = $this->_eventController->update($persistentEvent);
+        
+        $this->assertEquals(1, count($persistentEvent->alarms));
+        $this->assertEquals('Nothing to send, series is over', $persistentEvent->alarms->getFirstRecord()->sent_message,
+            'alarm adoption failed: ' . print_r($persistentEvent->alarms->getFirstRecord()->toArray(), TRUE));
+        
+        // assert no alarm
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $messages = self::getMessages();
+        $this->assertEquals(0, count($messages), 'no message should be sent');
+    }
+    
+    /**
      * get test alarm emails
      * 
      * @param boolean $deleteThem
@@ -819,7 +861,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             $mailsForPersona = array();
             $personaEmail = $this->_personas[trim($personaName)]->accountEmailAddress;
             
-            foreach($messages as $message) {
+            foreach ($messages as $message) {
                 if (array_value(0, $message->getRecipients()) == $personaEmail) {
                     array_push($mailsForPersona, $message);
                 }

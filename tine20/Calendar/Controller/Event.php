@@ -1152,22 +1152,25 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
    /**
-    * adopt alarm time to next occurance for recurring events
+    * adopt alarm time to next occurrence for recurring events
     *
     * @param Tinebase_Record_Abstract $_record
     * @param Tinebase_Model_Alarm $_alarm
     * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
     * @return void
-    * @throws Tinebase_Exception_InvalidArgument
     */
     public function adoptAlarmTime(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         if ($_record->rrule) {
-        
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                 ' Adopting alarm time for next recur occurrence (by ' . $_nextBy . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                 ' ' . print_r($_record->toArray(), TRUE));
+            
             if ($_nextBy == 'time') {
                 // NOTE: this also finds instances running right now
                 $from = Tinebase_DateTime::now();
-        
+            
             } else {
                 $recurid = $_alarm->getOption('recurid');
                 $instanceStart = $recurid ? new Tinebase_DateTime(substr($recurid, -19)) : clone $_record->dtstart;
@@ -1176,19 +1179,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // make sure we hit the next instance
                 $from = $instanceStart->add($eventLength)->addMinute(1);
             }
-            // this would break if minutes_before > interval
-            //$from->addMinute((int) $_alarm->getOption('minutes_before'));
-        
+            
             // compute next
             $exceptions = $this->getRecurExceptions($_record);
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $from);
-        
+            
+            if ($nextOccurrence === NULL && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                 ' Recur series is over, no more alarms pending');
+            
             // save recurid so we know for which recurrance the alarm is for
             $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
-        
+            
             $_alarm->sent_status = $nextOccurrence ? Tinebase_Model_Alarm::STATUS_PENDING : Tinebase_Model_Alarm::STATUS_SUCCESS;
             $_alarm->sent_message = $nextOccurrence ?  '' : 'Nothing to send, series is over';
-        
+            
             $eventStart = $nextOccurrence ? clone $nextOccurrence->dtstart : $_record->dtstart;
         } else {
             $eventStart = clone $_record->dtstart;
