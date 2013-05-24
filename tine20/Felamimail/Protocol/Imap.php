@@ -277,4 +277,33 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
             }
         }
     }
+    
+    /**
+     *
+     * @param array $_params Parameters for authentication
+     * @param string $_method Sasl method
+     * @return array Response from server
+     * @throws Exception 
+     */
+    public function saslAuthenticate($_params, $_method = 'PLAIN')
+    {
+        
+        switch ($_method)
+        {
+            case 'PLAIN' :
+                /*
+                * $_params:
+                * authcid = an identity associated with the authentication credentials
+                * authzid = an identity to act as 
+                * password = password for authcid identity
+                */
+                $authzid = isset($_params['authzid']) ? $_params['authzid'] : '';
+                $authcid = isset($_params['authcid']) ? $_params['authcid'] : '';
+                $password = isset($_params['password']) ? $_params['password'] : '';
+                $auth = array(base64_encode($authzid.chr(0x00).$authcid.chr(0x00).$password));
+                return $this->requestAndResponse("AUTHENTICATE $_method", $auth, true);
+            default :
+                throw new Exception("Sasl method $_method not implemented!");
+        }
+    }
 }

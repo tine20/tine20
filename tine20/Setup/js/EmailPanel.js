@@ -260,7 +260,13 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                             name: 'imap_cyrus_password',
                             fieldLabel: this.app.i18n._('Cyrus Admin Password'),
                             inputType: 'password'
-                        }]
+                        },
+                        Ext.applyIf({
+                                name: 'imap_cyrus_useProxyAuth',
+                                fieldLabel: this.app.i18n._('Use proxy auth'),
+                                store: [[0, this.app.i18n._('No')], [1, this.app.i18n._('Yes')]],
+                                value: 0
+                        }, commonComboConfig)]
                     }, {
                         // dovecot config options
                         id: this.imapBackendIdPrefix + 'dovecot_imap',
