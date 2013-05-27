@@ -567,6 +567,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $numberString = Zend_Locale_Format::toFloat(1234.56);
         
         $registryData =  array(
+            // ModSsl
+            'modSsl'           => Tinebase_Auth_ModSsl::hasModSsl(),
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(
@@ -592,7 +594,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'thousandSeparator' => $numberString[1],
             'decimalSeparator'  => $numberString[5]
         );
-
+        
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $user = Tinebase_Core::getUser();
             $userContactArray = array();
@@ -639,7 +641,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getAllRegistryData()
     {
         $registryData = array();
-
+        
         if (Tinebase_Core::getUser()) {
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();

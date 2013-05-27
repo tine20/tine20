@@ -97,7 +97,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $this->_initUser($user, $accessLog, $_password);
             $result = true;
         } else {
-            $this->_loginFailed($_loginname, $accessLog);
+            $this->_loginFailed($_loginname ? $_loginname : $authResultIdentity, $accessLog);
             $result = false;
         } 
         

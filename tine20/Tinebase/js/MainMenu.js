@@ -245,6 +245,14 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 method : 'Tinebase.logout'
             },
             callback : function(options, Success, response) {
+                // clear the authenticated mod_ssl session
+                if (document.all == null) {
+                    if (window.crypto) {
+                        window.crypto.logout();
+                    }
+                } else {
+                    document.execCommand('ClearAuthenticationCache');
+                }
                 // remove the event handler
                 // the reload() trigers the unload event
                 var redirect = (Tine.Tinebase.registry.get('redirectUrl'));

@@ -62,6 +62,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * @return {Ext.FromPanel}
      */
     getLoginPanel: function () {
+
+        var modSsl = Tine.Tinebase.registry.get('modSsl');
+        
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
@@ -90,10 +93,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     fieldLabel: _('Username'),
                     id: 'username',
                     name: 'username',
-                    allowBlank: false,
+                    allowBlank: modSsl ? false : true,
                     validateOnBlur: false,
                     selectOnFocus: true,
                     value: this.defaultUsername ? this.defaultUsername : undefined,
+                    disabled: modSsl ? true : false,
                     listeners: {
                         render: function (field) {
                             field.focus(false, 250);
@@ -110,9 +114,18 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     //allowBlank: false,
                     selectOnFocus: true,
                     value: this.defaultPassword,
+                    disabled: modSsl ? true : false,
                     listeners: {
                         render: this.setLastLoginUser.createDelegate(this) 
                     }
+                }, {
+                    xtype: 'displayfield',
+                    style: {
+                        align: 'center',
+                        marginTop: '10px'
+                    },
+                    value: _('Certificate detected. Please, press Login button to proceed.'),
+                    hidden: modSsl ? false : true
                 }],
                 buttonAlign: 'right',
                 buttons: [{
@@ -392,9 +405,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 alert(_('Connection lost, please check your network!'));
                             }).defer(1000);
                         } else {
+                            var modSsl = Tine.Tinebase.registry.get('modSsl');
+                            var resultMsg = modSsl ? _('There was an error verifying your certificate!!!') : 
+                                _('Your username and/or your password are wrong!!!');
                             Ext.MessageBox.show({
                                 title: _('Login failure'),
-                                msg: _('Your username and/or your password are wrong!!!'),
+                                msg: resultMsg,
                                 buttons: Ext.MessageBox.OK,
                                 icon: Ext.MessageBox.ERROR,
                                 fn: function () {

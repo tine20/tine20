@@ -39,6 +39,12 @@ class Tinebase_Auth
     const IMAP = 'Imap';
 
     /**
+     * constant for DigitalCertificate auth / SSL
+     *
+     */
+    const MODSSL = 'ModSsl';
+
+    /**
      * General Failure
      */
     const FAILURE                       =  Zend_Auth_Result::FAILURE;
@@ -202,12 +208,13 @@ class Tinebase_Auth
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
         
+        $username = empty($_username) ? $result->getIdentity() : $_username;
         if ($result->isValid()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Authentication of '. $_username . ' succeeded');
+                . ' Authentication of '. $username . ' succeeded');
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Authentication of '. $_username . ' failed');
+                . ' Authentication of '. $username . ' failed');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Failure messages: ' . print_r($result->getMessages(), TRUE));
         }
@@ -259,7 +266,15 @@ class Tinebase_Auth
      */
     public function setBackend()
     {
-        $backendType = self::getConfiguredBackend();
+        // test mod_ssl server variables
+        if (Zend_Auth_Adapter_ModSsl::hasModSsl()) {
+            self::setBackendType(self::MODSSL);
+            $backendType =  self::MODSSL;
+        }
+        else {
+            $backendType = self::getConfiguredBackend();
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
         $this->_backend = Tinebase_Auth_Factory::factory($backendType);
     }
