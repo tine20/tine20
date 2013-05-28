@@ -617,7 +617,17 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     onAddRecordFromCombo: function() {
         var record = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue());
         
-        this.onAddRecord(record);
+        if (! record) {
+            return;
+        }
+        
+        if (Ext.isArray(this.constrainsConfig[this.activeModel])) {
+            var relconf = {type: this.constrainsConfig[this.activeModel][0]['type']};
+        } else {
+            var relconf = {};
+        }
+        
+        this.onAddRecord(record, relconf);
         
         this.getActiveSearchCombo().collapse();
         this.getActiveSearchCombo().reset();
